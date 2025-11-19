@@ -4,6 +4,7 @@ const TenderController = require('../controllers/procurement/TenderController');
 const OfferController = require('../controllers/procurement/OfferController');
 const InvoiceController = require('../controllers/procurement/InvoiceController');
 const ReviewController = require('../controllers/procurement/ReviewController');
+const TenderAwardController = require('../controllers/procurement/TenderAwardController');
 const AuthorizationGuard = require('../security/AuthorizationGuard');
 const { Permissions } = require('../config/Roles');
 
@@ -111,6 +112,31 @@ router.post('/reviews',
 
 router.get('/reviews/user/:userId', 
     ReviewController.getUserReviews.bind(ReviewController)
+);
+
+// Tender Award - Partial/Multi-Supplier Award
+router.post('/tenders/:tenderId/award/initialize',
+    AuthorizationGuard.authenticateToken.bind(AuthorizationGuard),
+    AuthorizationGuard.requirePermission(Permissions.CREATE_TENDER).bind(AuthorizationGuard),
+    TenderAwardController.initializeAward.bind(TenderAwardController)
+);
+
+router.post('/tenders/:tenderId/award/line-items/:lineItemId/distribute',
+    AuthorizationGuard.authenticateToken.bind(AuthorizationGuard),
+    AuthorizationGuard.requirePermission(Permissions.APPROVE_OFFER).bind(AuthorizationGuard),
+    TenderAwardController.distributeLineItem.bind(TenderAwardController)
+);
+
+router.get('/tenders/:tenderId/award',
+    AuthorizationGuard.authenticateToken.bind(AuthorizationGuard),
+    AuthorizationGuard.requirePermission(Permissions.VIEW_TENDER).bind(AuthorizationGuard),
+    TenderAwardController.getAwardDetails.bind(TenderAwardController)
+);
+
+router.post('/tenders/:tenderId/award/finalize',
+    AuthorizationGuard.authenticateToken.bind(AuthorizationGuard),
+    AuthorizationGuard.requirePermission(Permissions.APPROVE_OFFER).bind(AuthorizationGuard),
+    TenderAwardController.finalizeAward.bind(TenderAwardController)
 );
 
 module.exports = router;

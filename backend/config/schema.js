@@ -240,6 +240,23 @@ const schemaQueries = [
         updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
     );`,
 
+    `CREATE TABLE IF NOT EXISTS tender_award_line_items (
+        id SERIAL PRIMARY KEY,
+        tender_id INTEGER REFERENCES tenders(id) ON DELETE CASCADE,
+        line_item_id VARCHAR(50) NOT NULL,
+        item_description TEXT NOT NULL,
+        total_quantity DECIMAL(15, 2) NOT NULL,
+        unit VARCHAR(50),
+        awarded_offers JSONB DEFAULT '[]',
+        status VARCHAR(20) DEFAULT 'pending',
+        notes TEXT,
+        created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+        created_by INTEGER REFERENCES users(id),
+        updated_by INTEGER REFERENCES users(id),
+        UNIQUE(tender_id, line_item_id)
+    );`,
+
     `CREATE TABLE IF NOT EXISTS mfa_codes (
         id SERIAL PRIMARY KEY,
         user_id INTEGER REFERENCES users(id),
@@ -292,7 +309,9 @@ const schemaQueries = [
     `CREATE INDEX IF NOT EXISTS idx_mfa_codes_user ON mfa_codes(user_id);`,
     `CREATE INDEX IF NOT EXISTS idx_supplier_verifications_user ON supplier_verifications(user_id);`,
     `CREATE INDEX IF NOT EXISTS idx_supplier_verifications_status ON supplier_verifications(verification_status);`,
-    `CREATE INDEX IF NOT EXISTS idx_encryption_keys_active ON encryption_keys(is_active);`
+    `CREATE INDEX IF NOT EXISTS idx_encryption_keys_active ON encryption_keys(is_active);`,
+    `CREATE INDEX IF NOT EXISTS idx_tender_award_items_tender ON tender_award_line_items(tender_id);`,
+    `CREATE INDEX IF NOT EXISTS idx_tender_award_items_status ON tender_award_line_items(status);`
 ];
 
 async function initializeSchema(pool) {

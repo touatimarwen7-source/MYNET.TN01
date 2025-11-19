@@ -40,19 +40,9 @@ app.use('/api/procurement', procurementRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/search', searchRoutes);
 
-app.use((err, req, res, next) => {
-    console.error('Error:', err.stack);
-    res.status(500).json({
-        error: 'Internal server error',
-        message: err.message
-    });
-});
+const ErrorHandler = require('./middleware/errorHandler');
 
-app.use((req, res) => {
-    res.status(404).json({
-        error: 'Not found',
-        message: 'The requested endpoint does not exist'
-    });
-});
+app.use(ErrorHandler.notFound);
+app.use(ErrorHandler.handle);
 
 module.exports = app;

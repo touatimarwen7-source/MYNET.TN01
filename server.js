@@ -1,3 +1,4 @@
+
 require('dotenv').config();
 const app = require('./backend/app');
 const { initializeDb } = require('./backend/config/db');
@@ -25,7 +26,7 @@ async function startServer() {
         app.listen(PORT, '0.0.0.0', () => {
             console.log('========================================');
             console.log(`🚀 Server running on port ${PORT}`);
-            console.log(`📍 Access API at: http://localhost:${PORT}`);
+            console.log(`📍 Access API at: http://0.0.0.0:${PORT}`);
             console.log('========================================');
             console.log('Available endpoints:');
             console.log('  - POST /api/auth/register');

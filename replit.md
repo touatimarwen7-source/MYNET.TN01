@@ -1,168 +1,404 @@
-# MyNet.tn - Procurement & Tender Management System
+# MyNet.tn - نظام المناقصات والمشتريات الاحترافي
 
-## Overview
+## 📊 نظرة عامة على المشروع
 
-MyNet.tn is a comprehensive procurement and tender management system built for the Tunisian market. The platform facilitates the entire procurement lifecycle - from tender creation and publication, through supplier bidding, to purchase order generation. The system supports multiple user roles (Admin, Buyer, Supplier, Accountant, Viewer) with granular permission controls to ensure secure and compliant procurement processes.
+MyNet.tn هو نظام متكامل لإدارة المناقصات والعطاءات والمشتريات الحكومية والخاصة للسوق التونسي.
 
-The backend is built as a REST API using Node.js and Express, with PostgreSQL as the primary database and Redis for caching and session management.
+**الحالة**: MVP (نموذج أولي عامل) - 45% من المتطلبات الكاملة
+**آخر تحديث**: نوفمبر 2025
+**الإصدار**: 1.0.0
 
-## User Preferences
+---
 
-Preferred communication style: Simple, everyday language.
+## 🏗️ الهندسة المعمارية
 
-## System Architecture
+### Backend: Node.js + Express + PostgreSQL
+- **الإطار**: Express.js للـ REST API
+- **قاعدة البيانات**: PostgreSQL (Neon) مع SSL
+- **المصادقة**: JWT (Access: 1h, Refresh: 7d)
+- **التشفير**: AES-256-GCM + PBKDF2
+- **الخدمات**: 7 services متقدمة
+- **المتحكمات**: 3 controllers منظمة
+- **الطرق**: 20+ endpoints
 
-### Backend Architecture
+### Frontend: React + Vite
+- **الإطار**: React 19 مع Vite
+- **التنقل**: React Router v6
+- **طلبات HTTP**: Axios مع Interceptors
+- **التصميم**: CSS3 مع RTL كامل
+- **الصفحات**: 7 صفحات جاهزة
 
-**Framework**: Node.js with Express.js for RESTful API endpoints
+---
 
-**Language**: JavaScript (with plans noted for TypeScript migration based on attached assets)
+## ✨ المميزات المطبقة الحالية
 
-**Application Structure**: Layered architecture with clear separation of concerns:
-- **Models Layer**: Domain entities (User, Tender, Offer, PurchaseOrder) extending a common BaseEntity for audit fields
-- **Services Layer**: Business logic encapsulation (TenderService, OfferService, UserService, SearchService, NotificationService)
-- **Controllers Layer**: Request handling organized by domain (auth, procurement, admin)
-- **Routes Layer**: API endpoint definitions with middleware chains
-- **Security Layer**: Authentication and authorization guards with permission-based access control
+### ✅ الأمان (5/10)
+- ✅ تسجيل دخول عبر البريد/كلمة المرور
+- ✅ JWT Tokens مع انتهاء صلاحية
+- ✅ PBKDF2 Password Hashing (1000 iterations)
+- ✅ AES-256-GCM Encryption
+- ✅ RBAC (5 أدوار محددة)
+- ❌ Multi-Factor Authentication (ناقص)
+- ❌ Audit Log مع IP Address (ناقص)
 
-**Design Patterns**:
-- Service layer pattern for business logic isolation
-- Repository pattern implied through service database access
-- Role-based access control (RBAC) with granular permissions
-- Soft deletes on all entities (is_deleted flag)
-- Audit trail tracking (created_by, updated_by, created_at, updated_at)
+### ✅ إدارة المناقصات (6/10)
+- ✅ CRUD للمناقصات
+- ✅ تصفية حسب الفئة والحالة
+- ✅ توليد أرقام فريدة آمنة
+- ✅ نشر وإغلاق المناقصات
+- ❌ Service Location (ناقص)
+- ❌ إرفاق وثائق (ناقص)
+- ❌ الترسية الجزئية (ناقص)
+- ❌ منع التعديل بعد أول عرض (ناقص)
 
-### Authentication & Authorization
+### ✅ العروض (6/10)
+- ✅ CRUD للعروض
+- ✅ تقييم العروض
+- ✅ اختيار الفائز
+- ✅ رفض العروض
+- ❌ نظام التقييم (ناقص)
+- ❌ حساب درجة الامتثال (ناقص)
 
-**Token Management**: JWT-based authentication with separate access and refresh tokens
-- Access tokens expire in 1 hour
-- Refresh tokens expire in 7 days
-- KeyManagementService handles token generation and verification
+### ✅ البحث (7/10)
+- ✅ بحث عن المناقصات
+- ✅ بحث عن الموردين
+- ✅ تصفية متقدمة
+- ✅ pagination
 
-**Password Security**: PBKDF2 with random salt
-- 1000 iterations
-- SHA-512 hashing algorithm
-- Salt and hash stored separately
+### ✅ الواجهة (8/10)
+- ✅ تصميم عربي RTL
+- ✅ 7 صفحات React
+- ✅ Navigation سهل
+- ✅ رسائل خطأ واضحة
 
-**Authorization Model**: Permission-based system with predefined roles
-- Roles: ADMIN, BUYER, SUPPLIER, ACCOUNTANT, VIEWER
-- Permissions mapped to roles in RolePermissions configuration
-- AuthorizationGuard middleware enforces authentication and permission requirements
-- Routes protected with `authenticateToken`, `requireRole`, and `requirePermission` guards
+### ❌ المراسلة والتقييم (0/10)
+- ❌ ChatService
+- ❌ نظام التقييم
+- ❌ WebSockets
 
-### Data Storage
+### ❌ المالية (0/10)
+- ❌ إدارة الاشتراكات
+- ❌ التكامل مع Stripe
+- ❌ Webhooks
 
-**Primary Database**: PostgreSQL (hosted on Neon)
-- Connection pooling via pg library
-- SSL required for connections
-- Schema initialization on server startup
+### ❌ الإدارة (0/10)
+- ❌ أرشفة الوثائق
+- ❌ تنظيف البيانات
 
-**Database Schema**:
-- **users**: User accounts with role-based access, company information, verification status
-- **tenders**: Tender/RFP records with budgets, deadlines, requirements (JSONB), evaluation criteria (JSONB)
-- **offers**: Supplier bids linked to tenders with technical/financial proposals, attachments (JSONB)
-- **purchase_orders**: Generated from accepted offers with line items (JSONB)
-- **notifications**: System notifications for users
-- All tables include soft delete flags and audit timestamps
+---
 
-**Caching Layer**: Redis integration for performance optimization
-- Session management
-- Search result caching (planned)
-- Notification queuing (planned)
+## 📁 هيكل المشروع
 
-### API Structure
+```
+workspace/
+├── backend/                    # API Backend
+│   ├── config/                 # التكوينات
+│   │   ├── db.js              # اتصال PostgreSQL
+│   │   ├── schema.js          # إنشاء الجداول
+│   │   └── Roles.js           # الأدوار والصلاحيات
+│   ├── security/               # نظام الأمان
+│   │   ├── KeyManagementService.js
+│   │   ├── AuthorizationGuard.js
+│   │   └── MFAService.js       # (موجود لكن غير مستخدم)
+│   ├── models/                 # نماذج البيانات
+│   │   ├── BaseEntity.js
+│   │   ├── User.js
+│   │   ├── Tender.js
+│   │   └── ... (8 نماذج أخرى)
+│   ├── services/               # الخدمات
+│   │   ├── UserService.js
+│   │   ├── TenderService.js
+│   │   ├── OfferService.js
+│   │   ├── SearchService.js
+│   │   ├── AuditLogService.js
+│   │   └── NotificationService.js
+│   ├── controllers/            # المتحكمات
+│   │   ├── authController.js
+│   │   ├── procurementController.js
+│   │   └── adminController.js
+│   ├── routes/                 # الطرق
+│   │   ├── authRoutes.js
+│   │   ├── procurementRoutes.js
+│   │   └── ... (4 routes أخرى)
+│   ├── middleware/             # الوسائط
+│   │   └── errorHandler.js
+│   ├── utils/                  # الأدوات
+│   │   └── validators.js
+│   ├── server.js               # نقطة الدخول
+│   ├── app.js                  # تطبيق Express
+│   ├── package.json
+│   └── README.md
+│
+├── frontend/                   # React Frontend
+│   ├── src/
+│   │   ├── pages/              # 7 صفحات React
+│   │   │   ├── Login.jsx
+│   │   │   ├── Register.jsx
+│   │   │   ├── TenderList.jsx
+│   │   │   ├── TenderDetail.jsx
+│   │   │   ├── CreateTender.jsx
+│   │   │   ├── MyOffers.jsx
+│   │   │   └── Profile.jsx
+│   │   ├── api.js              # خدمة الاتصالات
+│   │   ├── App.jsx             # التطبيق الرئيسي
+│   │   ├── App.css             # الأنماط
+│   │   ├── main.jsx
+│   │   └── index.css
+│   ├── public/
+│   │   └── index.html
+│   ├── package.json
+│   ├── vite.config.js
+│   └── .env
+│
+├── README.md                   # توثيق شامل
+├── COMPREHENSIVE_REVIEW.md     # المراجعة الشاملة
+├── STRUCTURE.md                # شرح البنية
+├── replit.md                   # هذا الملف
+└── .env
+```
 
-**Endpoint Organization**:
-- `/api/auth/*` - Authentication and profile management
-- `/api/procurement/*` - Tender and offer management
-- `/api/admin/*` - Administrative functions (user management, statistics)
-- `/api/search/*` - Advanced search for tenders and suppliers
+---
 
-**Response Format**: Consistent JSON structure with success/error indicators
-```json
+## 🚀 البدء السريع
+
+### تشغيل Backend:
+```bash
+cd /home/runner/workspace
+PORT=5000 npm run dev
+```
+
+### تشغيل Frontend:
+```bash
+cd /home/runner/workspace/frontend
+npm run dev
+```
+
+**الوصول**: http://localhost:5000
+
+---
+
+## 🔐 الأمان والمصادقة
+
+### تسجيل جديد:
+```bash
+POST /api/auth/register
 {
-  "success": true,
-  "message": "Operation description",
-  "data": {}
+  "username": "user1",
+  "email": "user@example.com",
+  "password": "Pass123!",
+  "full_name": "محمد علي",
+  "role": "supplier" | "buyer"
 }
 ```
 
-**Error Handling**: Centralized error middleware with specific handling for:
-- Validation errors (400)
-- Authentication failures (401)
-- Authorization failures (403)
-- Resource conflicts (409)
-- Database constraint violations
-- Generic server errors (500)
+### تسجيل دخول:
+```bash
+POST /api/auth/login
+{
+  "email": "user@example.com",
+  "password": "Pass123!"
+}
+Response:
+{
+  "user": { ... },
+  "accessToken": "eyJhbGc...",
+  "refreshToken": "eyJhbGc..."
+}
+```
 
-### Business Logic Features
+---
 
-**Tender Lifecycle**:
-1. Draft creation by buyers
-2. Publication with deadline setting
-3. Supplier offer submission
-4. Offer evaluation with scoring
-5. Winner selection
-6. Purchase order generation
-7. Archiving/closing
+## 📊 قاعدة البيانات
 
-**Unique Identifier Generation**: Collision-safe identifier system using cryptographic randomness
-- Tenders: `TND-YYYYMMDD-RANDOMHEX` (e.g., TND-20251119-5A3F8E2D)
-- Offers: `OFF-YYYYMMDD-RANDOMHEX` (e.g., OFF-20251119-B8C2D14F)
-- Format: Date (YYYYMMDD) + 8-character hex string from 4 random bytes
-- Ensures uniqueness even under concurrent requests (addressed Nov 2025)
+### الجداول (10):
+1. `users` - المستخدمون
+2. `tenders` - المناقصات
+3. `offers` - العروض
+4. `purchase_orders` - أوامر الشراء
+5. `invoices` - الفواتير
+6. `notifications` - الإشعارات
+7. `messages` - الرسائل
+8. `reviews` - التقييمات
+9. `tender_history` - سجل المناقصات
+10. `audit_logs` - سجلات التدقيق
 
-**Search Capabilities**:
-- Keyword search across title and description
-- Filtering by category, status, budget range
-- Pagination support (limit/offset)
-- Public tender visibility controls
+---
 
-**Validation Layer**: Input validation utilities for:
-- Email format validation
-- Password strength requirements (minimum 6 characters)
-- Phone number format
-- Tender data completeness and logic (budget ranges, deadline validity)
-- Offer data requirements
+## 📝 API Endpoints الرئيسية
 
-## External Dependencies
+### المصادقة:
+- `POST /api/auth/register` - التسجيل
+- `POST /api/auth/login` - تسجيل الدخول
+- `GET /api/auth/profile` - الملف الشخصي
+- `PUT /api/auth/profile` - تحديث الملف الشخصي
 
-### Third-Party Packages
+### المناقصات:
+- `GET /api/procurement/tenders` - قائمة المناقصات
+- `POST /api/procurement/tenders` - إنشاء مناقصة
+- `GET /api/procurement/tenders/:id` - تفاصيل المناقصة
+- `PUT /api/procurement/tenders/:id` - تحديث المناقصة
+- `POST /api/procurement/tenders/:id/publish` - نشر المناقصة
+- `POST /api/procurement/tenders/:id/close` - إغلاق المناقصة
 
-**Core Dependencies**:
-- `express` (^4.18.2) - Web application framework
-- `pg` (^8.11.3) - PostgreSQL client for Node.js
-- `jsonwebtoken` (^9.0.2) - JWT token creation and verification
-- `dotenv` (^16.0.3) - Environment variable management
-- `redis` (^4.6.14) - Redis client with support for Bloom filters, graphs, and other modules
+### العروض:
+- `POST /api/procurement/offers` - تقديم عرض
+- `GET /api/procurement/my-offers` - عروضي
+- `POST /api/procurement/offers/:id/evaluate` - تقييم العرض
+- `POST /api/procurement/offers/:id/select-winner` - اختيار الفائز
 
-**Development Dependencies**:
-- `nodemon` (^2.0.22) - Development server with hot reloading
+### البحث:
+- `GET /api/search/tenders` - بحث عن المناقصات
+- `GET /api/search/suppliers` - بحث عن الموردين
 
-### External Services
+---
 
-**Database**: Neon PostgreSQL
-- Serverless PostgreSQL hosting
-- SSL-required connections
-- Connection string via `DATABASE_URL` environment variable
+## 📋 قائمة المتطلبات المتبقية
 
-**Caching**: Redis (connection details in environment)
-- Used for session management
-- Planned usage for search caching and async messaging
+### الأولوية 🔴 (حرج):
+1. **Multi-Factor Authentication (MFA)** - للمشترين قبل فتح الأظرفة
+2. **IP Address في Audit Log** - لتتبع شامل
+3. **منع التعديل بعد أول عرض** - حماية البيانات
+4. **نظام التقييم** - تقييم الموردين
 
-### Environment Configuration
+### الأولوية 🟠 (عالية):
+1. إدارة الاشتراكات
+2. التكامل مع Stripe/HyperPay
+3. إرفاق وثائق متعددة
+4. Service Location
+5. Webhooks آمنة
 
-Required environment variables:
-- `DATABASE_URL` - Neon PostgreSQL connection string
-- `JWT_SECRET` - Secret key for access token signing (auto-generated if missing)
-- `JWT_REFRESH_SECRET` - Secret key for refresh token signing (auto-generated if missing)
-- `PORT` - Server port (defaults to 5000)
-- `NODE_ENV` - Environment mode (development/production)
+### الأولوية 🟡 (متوسطة):
+1. ChatService مع WebSockets
+2. الترسية الجزئية
+3. تحليل العروض الآلي
+4. نظام تصنيف الامتثال
+5. التنبيهات الذكية
+6. أرشفة الوثائق
 
-### Future Integration Points
+---
 
-Based on repository structure and attached assets, planned integrations include:
-- File storage service for tender/offer attachments
-- Email notification service
-- Payment gateway for subscription management (webhooks structure present)
-- Advanced search with full-text indexing
+## 🧪 الاختبار
+
+### اختبار تسجيل جديد:
+```bash
+curl -X POST http://localhost:5000/api/auth/register \
+  -H "Content-Type: application/json" \
+  -d '{
+    "username": "testuser",
+    "email": "test@example.com",
+    "password": "Test123!",
+    "full_name": "اسم اختبار",
+    "role": "supplier"
+  }'
+```
+
+### اختبار تسجيل دخول:
+```bash
+curl -X POST http://localhost:5000/api/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "test@example.com",
+    "password": "Test123!"
+  }'
+```
+
+---
+
+## 🎯 الأدوار والصلاحيات
+
+### 1. Admin (مدير النظام)
+- ✅ إدارة جميع المستخدمين
+- ✅ إحصائيات النظام
+- ✅ سجلات التدقيق
+
+### 2. Buyer (مشتري)
+- ✅ إنشاء ونشر المناقصات
+- ✅ تقييم العروض
+- ✅ اختيار الفائز
+- ✅ إنشاء أوامر شراء
+
+### 3. Supplier (مورد)
+- ✅ تقديم العروض
+- ✅ إدارة عروضه
+- ✅ الاطلاع على تقييماته
+
+### 4. Accountant (محاسب)
+- ✅ إدارة الفواتير
+- ✅ تقارير مالية
+
+### 5. Viewer (مشاهد)
+- ✅ عرض المناقصات العامة فقط
+
+---
+
+## 📦 التبعيات الرئيسية
+
+### Backend:
+- express (4.18.2)
+- pg (8.11.3)
+- jsonwebtoken (9.0.2)
+- dotenv (16.0.3)
+- redis (4.6.14)
+
+### Frontend:
+- react (19.2.0)
+- react-dom (19.2.0)
+- react-router-dom (6.20.0)
+- axios (1.6.0)
+- vite (7.2.4)
+
+---
+
+## 🚢 النشر والإنتاج
+
+### متطلبات الإنتاج:
+1. **قاعدة البيانات**: PostgreSQL 12+
+2. **Node.js**: v16+
+3. **HTTPS**: SSL Certificate إلزامي
+4. **بيئة**: NODE_ENV=production
+
+### متغيرات البيئة المطلوبة:
+```env
+DATABASE_URL=postgresql://user:pass@host:5432/db
+JWT_SECRET=your_secret_key_here
+JWT_REFRESH_SECRET=your_refresh_secret_here
+PORT=5000
+NODE_ENV=production
+```
+
+---
+
+## 💡 التطوير المستقبلي
+
+### المرحلة 2 (أسبوع):
+- [ ] إضافة MFA
+- [ ] تحسين Audit Log
+- [ ] نظام التقييم
+- [ ] منع التعديل
+
+### المرحلة 3 (أسبوعين):
+- [ ] إدارة الاشتراكات
+- [ ] بوابة دفع
+- [ ] إرفاق وثائق
+- [ ] تنبيهات متقدمة
+
+### المرحلة 4 (شهر):
+- [ ] ChatService
+- [ ] تحليل آلي
+- [ ] الترسية الجزئية
+- [ ] تكامل ERP
+
+---
+
+## 📞 الدعم
+
+للمساعدة والإبلاغ عن الأخطاء:
+- راجع COMPREHENSIVE_REVIEW.md للتفاصيل الكاملة
+- تحقق من README.md للتعليمات العامة
+- راجع STRUCTURE.md لفهم البنية
+
+---
+
+**آخر تحديث**: 20 نوفمبر 2025
+**الإصدار**: 1.0.0 MVP
+**الحالة**: جاهز للاختبار والتطوير الإضافي

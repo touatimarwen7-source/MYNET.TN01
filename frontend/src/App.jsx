@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { I18nextProvider } from 'react-i18next';
-import i18n from './i18n';
+import './i18n';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import TenderList from './pages/TenderList';
@@ -85,13 +84,12 @@ function App() {
   }
 
   return (
-    <I18nextProvider i18n={i18n}>
-      <DarkModeProvider>
-        <ToastContext.Provider value={{ addToast }}>
-          <Router>
-          <div className="app">
-          <ToastContainer toasts={toasts} removeToast={removeToast} />
-        <nav className="navbar">
+    <DarkModeProvider>
+      <ToastContext.Provider value={{ addToast }}>
+        <Router>
+        <div className="app">
+        <ToastContainer toasts={toasts} removeToast={removeToast} />
+      <nav className="navbar">
           <div className="nav-container">
             <div className="nav-brand">
               <h1>MyNet.tn</h1>
@@ -238,7 +236,6 @@ function App() {
       </Router>
         </ToastContext.Provider>
       </DarkModeProvider>
-    </I18nextProvider>
   );
 }
 

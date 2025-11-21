@@ -44,8 +44,10 @@ export default function CreateTenderImproved() {
 
   const saveDraft = async () => {
     try {
+      if (!tenderData.title && !tenderData.summary) return;
       setAutoSaveStatus('Sauvegarde en cours...');
-      await axios.post('http://localhost:3000/api/procurement/tenders/draft', tenderData, {
+      const backendData = transformDataForBackend?.() || {};
+      await axios.post('http://localhost:3000/api/procurement/tenders', backendData, {
         headers: { Authorization: `Bearer ${localStorage.getItem('accessToken')}` }
       });
       setAutoSaveStatus('Sauvegardé automatiquement');
@@ -131,11 +133,34 @@ export default function CreateTenderImproved() {
     if (validateStep()) setStep(step + 1);
   };
 
+  const transformDataForBackend = () => {
+    return {
+      title: tenderData.title,
+      description: tenderData.summary,
+      category: tenderData.categories.join(', '),
+      budget_min: 0,
+      budget_max: tenderData.budgetMax || 0,
+      currency: tenderData.currency,
+      deadline: tenderData.submissionDeadline,
+      opening_date: tenderData.decryptionDate,
+      requirements: {
+        documents: tenderData.requiredDocuments,
+        eligibility: tenderData.minEligibility,
+        items: tenderData.items
+      },
+      attachments: documentFiles.map(f => f.name),
+      is_public: true,
+      evaluation_criteria: tenderData.weights,
+      status: 'draft'
+    };
+  };
+
   const handleSubmit = async () => {
     if (!validateStep()) return;
 
     try {
-      await axios.post('http://localhost:3000/api/procurement/tenders', tenderData, {
+      const backendData = transformDataForBackend();
+      const response = await axios.post('http://localhost:3000/api/procurement/tenders', backendData, {
         headers: { Authorization: `Bearer ${localStorage.getItem('accessToken')}` }
       });
       alert("Appel d'offres créé avec succès et alertes envoyées aux fournisseurs qualifiés");
@@ -147,9 +172,10 @@ export default function CreateTenderImproved() {
         requiredDocuments: [], minEligibility: [], geographicLocation: '',
         awardType: 'full', allowNegotiation: false
       });
+      setDocumentFiles([]);
       setStep(1);
     } catch (error) {
-      const errorMsg = error.response?.data?.error || 'Une erreur est survenue lors de la publication';
+      const errorMsg = error.response?.data?.error || error.message || 'Une erreur est survenue lors de la publication';
       alert('Erreur: ' + errorMsg);
     }
   };

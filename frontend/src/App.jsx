@@ -52,17 +52,32 @@ function App() {
   };
 
   useEffect(() => {
-    const token = localStorage.getItem('accessToken');
-    if (token) {
-      try {
-        const tokenData = JSON.parse(atob(token.split('.')[1]));
-        setUser(tokenData);
-      } catch (error) {
-        console.error('Erreur lors du décodage du jeton:', error);
-        localStorage.removeItem('accessToken');
+    const checkAuth = () => {
+      const token = localStorage.getItem('accessToken');
+      if (token) {
+        try {
+          const tokenData = JSON.parse(atob(token.split('.')[1]));
+          setUser(tokenData);
+        } catch (error) {
+          console.error('Erreur lors du décodage du jeton:', error);
+          localStorage.removeItem('accessToken');
+          setUser(null);
+        }
+      } else {
+        setUser(null);
       }
-    }
-    setLoading(false);
+      setLoading(false);
+    };
+    
+    checkAuth();
+    
+    // Écouter l'événement authChanged depuis Login/Register
+    const handleAuthChange = () => {
+      checkAuth();
+    };
+    
+    window.addEventListener('authChanged', handleAuthChange);
+    return () => window.removeEventListener('authChanged', handleAuthChange);
   }, []);
 
   // Configurer la surveillance de l'inactivité - alerte après 15 minutes d'inactivité

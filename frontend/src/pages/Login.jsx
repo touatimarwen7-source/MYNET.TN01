@@ -23,8 +23,16 @@ export default function Login() {
       const response = await authAPI.login({ email, password });
       localStorage.setItem('accessToken', response.data.accessToken);
       localStorage.setItem('refreshToken', response.data.refreshToken);
+      
+      // Déclencher un événement personnalisé pour mettre à jour l'authentification
+      window.dispatchEvent(new Event('authChanged'));
+      
       addToast('Connexion réussie', 'success', 2000);
-      navigate('/tenders');
+      
+      // Petite pause avant navigation pour s'assurer que l'état est mis à jour
+      setTimeout(() => {
+        navigate('/tenders');
+      }, 100);
     } catch (err) {
       addToast('Erreur de connexion. Vérifiez vos identifiants.', 'error', 3000);
     } finally {

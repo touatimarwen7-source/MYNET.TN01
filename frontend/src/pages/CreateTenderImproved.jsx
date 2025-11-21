@@ -43,18 +43,7 @@ export default function CreateTenderImproved() {
   }, [tenderData]);
 
   const saveDraft = async () => {
-    try {
-      if (!tenderData.title && !tenderData.summary) return;
-      setAutoSaveStatus('Sauvegarde en cours...');
-      const backendData = transformDataForBackend?.() || {};
-      await axios.post('http://localhost:3000/api/procurement/tenders', backendData, {
-        headers: { Authorization: `Bearer ${localStorage.getItem('accessToken')}` }
-      });
-      setAutoSaveStatus('Sauvegardé automatiquement');
-      setTimeout(() => setAutoSaveStatus(''), 3000);
-    } catch (error) {
-      setAutoSaveStatus('');
-    }
+    return;
   };
 
   const handleInputChange = (e) => {
@@ -111,7 +100,7 @@ export default function CreateTenderImproved() {
     if (step === 2) {
       if (!tenderData.submissionDeadline) newErrors.submissionDeadline = "La date d'expiration est requise";
       if (!tenderData.decryptionDate) newErrors.decryptionDate = "La date d'ouverture est requise";
-      if (new Date(tenderData.decryptionDate) <= new Date(tenderData.submissionDeadline)) {
+      if (tenderData.submissionDeadline && tenderData.decryptionDate && new Date(tenderData.decryptionDate) <= new Date(tenderData.submissionDeadline)) {
         newErrors.decryptionDate = "La date d'ouverture doit être après la date d'expiration";
       }
       if (!tenderData.questionsEndDate) newErrors.questionsEndDate = "La fin de la période de questions est requise";
@@ -160,9 +149,14 @@ export default function CreateTenderImproved() {
 
     try {
       const backendData = transformDataForBackend();
+      console.log('Sending to backend:', backendData);
+      console.log('Authorization token:', localStorage.getItem('accessToken')?.substring(0, 20) + '...');
+      
       const response = await axios.post('http://localhost:3000/api/procurement/tenders', backendData, {
         headers: { Authorization: `Bearer ${localStorage.getItem('accessToken')}` }
       });
+      
+      console.log('Response:', response.data);
       alert("Appel d'offres créé avec succès et alertes envoyées aux fournisseurs qualifiés");
       setTenderData({
         title: '', categories: [], summary: '', budgetMax: 0, currency: 'TND',
@@ -175,6 +169,11 @@ export default function CreateTenderImproved() {
       setDocumentFiles([]);
       setStep(1);
     } catch (error) {
+      console.error('Error details:', {
+        status: error.response?.status,
+        data: error.response?.data,
+        message: error.message
+      });
       const errorMsg = error.response?.data?.error || error.message || 'Une erreur est survenue lors de la publication';
       alert('Erreur: ' + errorMsg);
     }

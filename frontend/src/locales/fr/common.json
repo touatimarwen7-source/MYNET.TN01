@@ -1,105 +1,141 @@
 {
-  "nav": {
+  "common": {
+    "appName": "MyNet.tn",
+    "language": "Langue",
+    "french": "Français",
+    "english": "English",
+    "arabic": "العربية"
+  },
+  "navigation": {
     "home": "Accueil",
-    "tenders": "Appels d'offres",
-    "myOffers": "Mes offres",
+    "tenders": "Appels d'Offres",
+    "myTenders": "Mes Appels",
+    "browse": "Parcourir",
+    "dashboard": "Tableau de Bord",
     "profile": "Profil",
     "logout": "Déconnexion",
     "login": "Connexion",
     "register": "Inscription",
-    "dashboard": "Tableau de bord",
-    "createTender": "Créer un appel d'offres",
-    "supplierSearch": "Rechercher",
-    "notifications": "Notifications",
-    "catalog": "Mon catalogue",
-    "admin": "Administration"
+    "about": "À Propos",
+    "contact": "Contact",
+    "terms": "Conditions d'Utilisation",
+    "privacy": "Confidentialité"
   },
-  "header": {
-    "appName": "MyNet.tn",
-    "appSubtitle": "Système de gestion des appels d'offres et des achats",
-    "welcome": "Bienvenue",
-    "language": "Langue"
-  },
-  "tender": {
-    "title": "Appels d'offres",
-    "list": "Liste des appels d'offres",
-    "create": "Créer un appel d'offres",
-    "viewDetails": "Voir les détails",
-    "participate": "Participer et soumettre une offre",
-    "deadline": "Date limite",
-    "budget": "Budget",
-    "category": "Catégorie",
-    "status": "Statut",
-    "published": "Publié",
-    "closed": "Fermé",
-    "draft": "Brouillon",
-    "description": "Description",
-    "requirements": "Exigences"
-  },
-  "offer": {
-    "title": "Offres",
-    "myOffers": "Mes offres",
-    "submitOffer": "Soumettre une offre",
-    "amount": "Montant",
-    "status": "Statut",
-    "submitted": "Soumise",
-    "accepted": "Acceptée",
-    "rejected": "Rejetée",
-    "pending": "En attente",
-    "encrypted": "Chiffré"
-  },
-  "form": {
-    "email": "E-mail",
-    "password": "Mot de passe",
-    "submit": "Soumettre",
-    "cancel": "Annuler",
-    "save": "Enregistrer",
-    "delete": "Supprimer",
-    "edit": "Modifier",
-    "loading": "Chargement...",
-    "required": "Champ obligatoire"
+  "validation": {
+    "required": "Ce champ est obligatoire",
+    "invalidEmail": "Veuillez entrer une adresse email valide",
+    "passwordTooShort": "Le mot de passe doit contenir au moins 8 caractères",
+    "passwordMismatch": "Les mots de passe ne correspondent pas",
+    "invalidPhone": "Veuillez entrer un numéro de téléphone valide",
+    "minLength": "Minimum {{min}} caractères requis",
+    "maxLength": "Maximum {{max}} caractères autorisés",
+    "numberRequired": "Ce champ doit être un nombre",
+    "positiveNumber": "Veuillez entrer un nombre positif",
+    "dateFuture": "La date doit être dans le futur",
+    "datePast": "La date doit être dans le passé",
+    "urlInvalid": "Veuillez entrer une URL valide"
   },
   "messages": {
-    "success": "Succès",
-    "error": "Erreur",
-    "warning": "Avertissement",
+    "success": "Opération réussie!",
+    "error": "Une erreur s'est produite",
+    "warning": "Attention",
     "info": "Information",
-    "loadingTenders": "Chargement des appels d'offres...",
-    "noTenders": "Aucun appel d'offres trouvé",
-    "tenderNotFound": "Appel d'offres non trouvé"
+    "savingDraft": "Sauvegarde du brouillon...",
+    "draftSaved": "Brouillon sauvegardé",
+    "loading": "Chargement...",
+    "submitting": "Envoi en cours...",
+    "confirmDelete": "Êtes-vous sûr? Cette action ne peut pas être annulée.",
+    "deleted": "Supprimé avec succès",
+    "updated": "Mise à jour réussie",
+    "created": "Créé avec succès",
+    "submitted": "Envoyé avec succès"
   },
-  "auth": {
-    "login": "Connexion",
-    "register": "Inscription",
-    "email": "E-mail",
-    "password": "Mot de passe",
-    "confirmPassword": "Confirmer le mot de passe",
-    "rememberMe": "Se souvenir de moi",
-    "forgotPassword": "Mot de passe oublié ?",
-    "noAccount": "Pas encore de compte ?",
-    "haveAccount": "Vous avez déjà un compte ?"
+  "forms": {
+    "createTender": {
+      "title": "Créer un Appel d'Offres",
+      "basicInfo": "Informations Générales",
+      "tenderId": "Numéro de l'Appel",
+      "tenderTitle": "Titre",
+      "summary": "Résumé",
+      "budgetMax": "Budget Maximum",
+      "currency": "Devise",
+      "categories": "Catégories",
+      "deadline": "Date Limite",
+      "items": "Articles",
+      "documents": "Documents",
+      "review": "Vérification",
+      "next": "Suivant",
+      "previous": "Précédent",
+      "save": "Enregistrer",
+      "submit": "Soumettre",
+      "cancel": "Annuler"
+    },
+    "bidSubmission": {
+      "title": "Soumettre une Offre",
+      "price": "Prix Proposé",
+      "deliveryDays": "Délai de Livraison",
+      "qualityScore": "Score de Qualité",
+      "documents": "Pièces Jointes",
+      "submit": "Soumettre l'Offre"
+    },
+    "login": {
+      "title": "Connexion",
+      "email": "Email",
+      "password": "Mot de Passe",
+      "rememberMe": "Se souvenir de moi",
+      "forgotPassword": "Mot de passe oublié?",
+      "login": "Se Connecter",
+      "noAccount": "Pas encore de compte?",
+      "register": "S'inscrire"
+    },
+    "register": {
+      "title": "Inscription",
+      "fullName": "Nom Complet",
+      "email": "Email",
+      "password": "Mot de Passe",
+      "confirmPassword": "Confirmer le Mot de Passe",
+      "company": "Entreprise",
+      "role": "Rôle",
+      "terms": "J'accepte les conditions d'utilisation",
+      "register": "S'inscrire",
+      "haveAccount": "Vous avez déjà un compte?",
+      "login": "Se Connecter"
+    },
+    "contact": {
+      "title": "Contactez-Nous",
+      "name": "Nom",
+      "email": "Email",
+      "phone": "Téléphone",
+      "subject": "Sujet",
+      "message": "Message",
+      "submit": "Envoyer",
+      "success": "Votre message a été envoyé avec succès"
+    }
   },
-  "role": {
-    "buyer": "Acheteur",
-    "supplier": "Fournisseur",
-    "admin": "Administrateur",
-    "accountant": "Comptable",
-    "viewer": "Lecteur"
+  "tender": {
+    "status": {
+      "draft": "Brouillon",
+      "active": "Active",
+      "closed": "Fermée",
+      "awarded": "Attribuée",
+      "cancelled": "Annulée"
+    },
+    "offer": {
+      "status": {
+        "pending": "En Attente",
+        "submitted": "Soumise",
+        "received": "Reçue",
+        "evaluated": "Évaluée",
+        "selected": "Sélectionnée",
+        "rejected": "Rejetée"
+      }
+    }
   },
-  "auditLog": {
-    "title": "Journal d'audit",
-    "subtitle": "Modifications immuables",
-    "allEvents": "Tous les événements",
-    "create": "Créer",
-    "update": "Mettre à jour",
-    "delete": "Supprimer",
-    "publish": "Publier",
-    "close": "Fermer",
-    "dateTime": "Date et heure",
-    "user": "Utilisateur",
-    "eventType": "Type d'événement",
-    "details": "Détails",
-    "ipAddress": "Adresse IP",
-    "noRecords": "Aucun enregistrement"
+  "dashboard": {
+    "welcome": "Bienvenue",
+    "activeTenders": "Appels Actifs",
+    "totalOffers": "Offres Totales",
+    "earnings": "Revenus",
+    "recentActivity": "Activité Récente"
   }
 }

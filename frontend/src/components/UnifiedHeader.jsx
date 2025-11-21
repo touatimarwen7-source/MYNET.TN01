@@ -6,16 +6,21 @@ export default function UnifiedHeader() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [userRole, setUserRole] = useState(null);
+  const [userName, setUserName] = useState('Utilisateur');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [language, setLanguage] = useState('fr');
+  const [notifications, setNotifications] = useState(3);
   const location = useLocation();
   const navigate = useNavigate();
 
-  // Check authentication on mount and when auth changes
   useEffect(() => {
     const checkAuth = () => {
       const token = localStorage.getItem('accessToken');
       const role = localStorage.getItem('userRole');
+      const name = localStorage.getItem('userName') || 'Utilisateur';
       setIsAuthenticated(!!token);
       setUserRole(role);
+      setUserName(name);
     };
 
     checkAuth();
@@ -23,12 +28,10 @@ export default function UnifiedHeader() {
     return () => window.removeEventListener('authChanged', checkAuth);
   }, []);
 
-  // Determine if we're on a public page
   const isPublicPage = ['/', '/about', '/features', '/pricing', '/contact'].includes(
     location.pathname
   );
 
-  // Navigation links for public pages
   const publicLinks = [
     { label: 'Accueil', href: '/' },
     { label: 'À Propos', href: '/about' },
@@ -37,17 +40,24 @@ export default function UnifiedHeader() {
     { label: 'Contact', href: '/contact' }
   ];
 
-  // Navigation links for authenticated pages
   const authenticatedLinks = [
-    { label: '📊 Tableau de Bord', href: '/dashboard', icon: '📊' },
-    { label: '📋 Appels d\'Offres', href: '/tenders', icon: '📋' },
-    { label: '💼 Mon Profil', href: '/profile', icon: '💼' }
+    { label: '📊 Tableau de Bord', href: '/dashboard' },
+    { label: '📋 Appels d\'Offres', href: '/tenders' },
+    { label: '💼 Mon Profil', href: '/profile' }
   ];
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      navigate(`/search?q=${encodeURIComponent(searchQuery)}`);
+    }
+  };
 
   const handleLogout = () => {
     localStorage.removeItem('accessToken');
     localStorage.removeItem('refreshToken');
     localStorage.removeItem('userRole');
+    localStorage.removeItem('userName');
     window.dispatchEvent(new Event('authChanged'));
     navigate('/login');
   };
@@ -59,61 +69,99 @@ export default function UnifiedHeader() {
   return (
     <header className="unified-header">
       <div className="header-container">
-        {/* Logo & Brand */}
-        <div className="header-brand">
-          <a href="/" className="brand-logo">
-            <span className="brand-icon">🌐</span>
-            <span className="brand-text">MyNet.tn</span>
-          </a>
+        {/* LEFT SECTION: Logo & Navigation */}
+        <div className="header-left">
+          <div className="header-brand">
+            <a href="/" className="brand-logo">
+              <span className="brand-icon">🌐</span>
+              <span className="brand-text">MyNet.tn</span>
+            </a>
+          </div>
+
+          <nav className="header-nav">
+            {isPublicPage || !isAuthenticated ? (
+              <>
+                {publicLinks.map((link) => (
+                  <a
+                    key={link.href}
+                    href={link.href}
+                    className={`nav-link ${location.pathname === link.href ? 'active' : ''}`}
+                  >
+                    {link.label}
+                  </a>
+                ))}
+              </>
+            ) : (
+              <>
+                {authenticatedLinks.map((link) => (
+                  <a
+                    key={link.href}
+                    href={link.href}
+                    className={`nav-link ${location.pathname === link.href ? 'active' : ''}`}
+                  >
+                    {link.label}
+                  </a>
+                ))}
+              </>
+            )}
+          </nav>
         </div>
 
-        {/* Desktop Navigation */}
-        <nav className="header-nav">
-          {isPublicPage || !isAuthenticated ? (
-            // Public Navigation
-            <>
-              {publicLinks.map((link) => (
-                <a
-                  key={link.href}
-                  href={link.href}
-                  className={`nav-link ${
-                    location.pathname === link.href ? 'active' : ''
-                  }`}
-                >
-                  {link.label}
-                </a>
-              ))}
-            </>
-          ) : (
-            // Authenticated Navigation
-            <>
-              {authenticatedLinks.map((link) => (
-                <a
-                  key={link.href}
-                  href={link.href}
-                  className={`nav-link ${
-                    location.pathname === link.href ? 'active' : ''
-                  }`}
-                >
-                  {link.label}
-                </a>
-              ))}
-            </>
-          )}
-        </nav>
+        {/* CENTER SECTION: Global Search */}
+        {isAuthenticated && (
+          <form className="header-search" onSubmit={handleSearch}>
+            <span className="search-icon">🔍</span>
+            <input
+              type="text"
+              placeholder="Rechercher appels d'offres..."
+              className="search-input"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+          </form>
+        )}
 
-        {/* Header Actions */}
-        <div className="header-actions">
+        {/* RIGHT SECTION: Actions & Profile */}
+        <div className="header-right">
           {isAuthenticated ? (
-            // Authenticated Actions
             <>
-              <span className="user-info">👤 {userRole === 'buyer' ? 'Acheteur' : 'Fournisseur'}</span>
-              <button className="btn-logout" onClick={handleLogout}>
-                🚪 Déconnexion
+              {/* Notifications */}
+              <button className="icon-btn notification-btn" title="Notifications">
+                <span className="icon">🔔</span>
+                {notifications > 0 && (
+                  <span className="badge">{notifications}</span>
+                )}
+              </button>
+
+              {/* Language Switcher */}
+              <select
+                className="language-switcher"
+                value={language}
+                onChange={(e) => setLanguage(e.target.value)}
+                title="Changer la langue"
+              >
+                <option value="fr">🇫🇷 FR</option>
+                <option value="en">🇬🇧 EN</option>
+                <option value="ar">🇹🇳 AR</option>
+              </select>
+
+              {/* Profile Menu */}
+              <div className="profile-menu">
+                <span className="profile-avatar">👤</span>
+                <div className="profile-info">
+                  <span className="profile-name">{userName}</span>
+                  <span className="profile-role">
+                    {userRole === 'buyer' ? '🏢 Acheteur' : '🏭 Fournisseur'}
+                  </span>
+                </div>
+              </div>
+
+              {/* Logout Button */}
+              <button className="btn-logout" onClick={handleLogout} title="Déconnexion">
+                🚪
               </button>
             </>
           ) : (
-            // Public Actions
             <>
               <a href="/login" className="btn-login">
                 🔐 Connexion
@@ -140,9 +188,21 @@ export default function UnifiedHeader() {
       {/* Mobile Menu */}
       {mobileMenuOpen && (
         <div className="mobile-menu">
+          {isAuthenticated && (
+            <form className="mobile-search" onSubmit={handleSearch}>
+              <span className="search-icon">🔍</span>
+              <input
+                type="text"
+                placeholder="Rechercher..."
+                className="search-input"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+            </form>
+          )}
+
           <nav className="mobile-nav">
             {isPublicPage || !isAuthenticated ? (
-              // Public Mobile Navigation
               <>
                 {publicLinks.map((link) => (
                   <a
@@ -158,7 +218,6 @@ export default function UnifiedHeader() {
                 ))}
               </>
             ) : (
-              // Authenticated Mobile Navigation
               <>
                 {authenticatedLinks.map((link) => (
                   <a
@@ -179,7 +238,20 @@ export default function UnifiedHeader() {
           <div className="mobile-actions">
             {isAuthenticated ? (
               <>
-                <span className="mobile-user-info">👤 {userRole === 'buyer' ? 'Acheteur' : 'Fournisseur'}</span>
+                <div className="mobile-profile">
+                  <span className="profile-avatar">👤</span>
+                  <div>
+                    <div className="profile-name">{userName}</div>
+                    <div className="profile-role">
+                      {userRole === 'buyer' ? '🏢 Acheteur' : '🏭 Fournisseur'}
+                    </div>
+                  </div>
+                </div>
+                <select className="language-switcher" value={language} onChange={(e) => setLanguage(e.target.value)}>
+                  <option value="fr">🇫🇷 Français</option>
+                  <option value="en">🇬🇧 English</option>
+                  <option value="ar">🇹🇳 العربية</option>
+                </select>
                 <button className="btn-logout" onClick={handleLogout}>
                   🚪 Déconnexion
                 </button>

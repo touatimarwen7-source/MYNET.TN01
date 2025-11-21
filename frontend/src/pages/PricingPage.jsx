@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { setPageTitle } from '../utils/pageTitle';
-import PublicNavbar from '../components/PublicNavbar';
+
 import '../styles/pricingpage.css';
 
 export default function PricingPage() {
@@ -74,7 +74,7 @@ export default function PricingPage() {
 
   return (
     <>
-      <PublicNavbar />
+      
       <div className="pricing-page">
       {/* Hero Section */}
       <section className="pricing-hero">

@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { setPageTitle } from '../utils/pageTitle';
-import PublicNavbar from '../components/PublicNavbar';
+
 import '../styles/aboutpage.css';
 
 export default function AboutPage() {
@@ -8,7 +8,7 @@ export default function AboutPage() {
 
   return (
     <>
-      <PublicNavbar />
+      
       <div className="about-page">
       {/* Hero Section */}
       <section className="about-hero">

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { setPageTitle } from '../utils/pageTitle';
-import PublicNavbar from '../components/PublicNavbar';
+
 import DynamicAdvertisement from '../components/DynamicAdvertisement';
 import HowItWorks from '../components/HowItWorks';
 import LeadGenerationForm from '../components/LeadGenerationForm';
@@ -27,7 +27,7 @@ export default function HomePage() {
 
   return (
     <>
-      <PublicNavbar />
+      
       <div className="homepage">
       {/* Hero Section - Optimized for Marketing */}
       <section className="hero-section">

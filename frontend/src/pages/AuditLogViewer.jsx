@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import { setPageTitle } from '../utils/pageTitle';
 
 export default function AuditLogViewer() {
   const [logs, setLogs] = useState([]);
@@ -8,13 +9,14 @@ export default function AuditLogViewer() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    setPageTitle('Logs d\'Audit');
     fetchLogs();
   }, [filter]);
 
   const fetchLogs = async () => {
     try {
       const queryParams = new URLSearchParams(Object.entries(filter).filter(([_, v]) => v));
-      const response = await axios.get(`http://localhost:5000/api/admin/audit-logs?${queryParams}`, {
+      const response = await axios.get(`http://localhost:3000/api/admin/audit-logs?${queryParams}`, {
         headers: { Authorization: `Bearer ${localStorage.getItem('accessToken')}` }
       });
       setLogs(response.data.logs || []);
@@ -27,9 +29,9 @@ export default function AuditLogViewer() {
 
   const handleExport = async (format) => {
     try {
-      const response = await axios.get(`http://localhost:5000/api/admin/audit-logs/export/${format}`, {
+      const response = await axios.get(`http://localhost:3000/api/admin/audit-logs/export/${format}`, {
         headers: { Authorization: `Bearer ${localStorage.getItem('accessToken')}` },
-        responseType: format === 'csv' ? 'blob' : 'blob'
+        responseType: 'blob'
       });
       const url = window.URL.createObjectURL(new Blob([response.data]));
       const link = document.createElement('a');
@@ -39,128 +41,87 @@ export default function AuditLogViewer() {
       link.click();
       link.parentElement.removeChild(link);
     } catch (error) {
-      alert('خطأ في التصدير');
+      alert('Erreur lors de l\'export des logs');
     }
   };
-
-  const DiffView = ({ oldValue, newValue }) => (
-    <div className="diff-view">
-      <div className="diff-old">
-        <h4>القيمة القديمة:</h4>
-        <pre>{JSON.stringify(oldValue, null, 2)}</pre>
-      </div>
-      <div className="diff-new">
-        <h4>القيمة الجديدة:</h4>
-        <pre>{JSON.stringify(newValue, null, 2)}</pre>
-      </div>
-    </div>
-  );
 
   if (loading) return <div className="loading">Chargement en cours...</div>;
 
   return (
     <div className="audit-log-viewer">
-      <h1>سجل التدقيق الشامل</h1>
+      <h1>📋 Journal d'Audit Complet</h1>
 
-      {/* المرشحات */}
       <div className="filters-panel">
         <div className="filter-group">
-          <label>الإجراء:</label>
-          <select 
-            value={filter.action} 
-            onChange={(e) => setFilter({...filter, action: e.target.value})}
-          >
-            <option value="">الكل</option>
-            <option value="CREATE">إنشاء</option>
-            <option value="UPDATE">تحديث</option>
-            <option value="DELETE">حذف</option>
+          <label>Action:</label>
+          <select value={filter.action} onChange={(e) => setFilter({...filter, action: e.target.value})}>
+            <option value="">Tous</option>
+            <option value="CREATE">Créer</option>
+            <option value="UPDATE">Modifier</option>
+            <option value="DELETE">Supprimer</option>
             <option value="APPROVE">Approuver</option>
-            <option value="LOGIN">دخول</option>
+            <option value="LOGIN">Connexion</option>
           </select>
         </div>
 
         <div className="filter-group">
-          <label>من:</label>
-          <input 
-            type="date" 
-            value={filter.date_from}
-            onChange={(e) => setFilter({...filter, date_from: e.target.value})}
-          />
+          <label>Date début:</label>
+          <input type="date" value={filter.date_from} onChange={(e) => setFilter({...filter, date_from: e.target.value})} />
         </div>
 
         <div className="filter-group">
-          <label>إلى:</label>
-          <input 
-            type="date" 
-            value={filter.date_to}
-            onChange={(e) => setFilter({...filter, date_to: e.target.value})}
-          />
+          <label>Date fin:</label>
+          <input type="date" value={filter.date_to} onChange={(e) => setFilter({...filter, date_to: e.target.value})} />
         </div>
+
+        <button className="btn btn-primary" onClick={fetchLogs}>Filtrer</button>
+        <button className="btn btn-secondary" onClick={() => handleExport('csv')}>📥 CSV</button>
+        <button className="btn btn-secondary" onClick={() => handleExport('json')}>📥 JSON</button>
       </div>
 
-      {/* أزرار التصدير */}
-      <div className="export-buttons">
-        <button className="btn btn-secondary" onClick={() => handleExport('csv')}>
-          📥 تصدير CSV
-        </button>
-        <button className="btn btn-secondary" onClick={() => handleExport('jsonl')}>
-          📥 تصدير JSON-L
-        </button>
-      </div>
-
-      {/* جدول السجلات */}
-      {logs.length === 0 ? (
-        <p className="empty-state">لا توجد سجلات</p>
-      ) : (
-        <div className="logs-table-wrapper">
-          <table className="logs-table">
-            <thead>
-              <tr>
-                <th>الإجراء</th>
-                <th>المستخدم</th>
-                <th>الكائن</th>
-                <th>عنوان IP</th>
-                <th>Date والوقت</th>
-                <th></th>
+      <div className="logs-table">
+        <table>
+          <thead>
+            <tr>
+              <th>Heure</th>
+              <th>Utilisateur</th>
+              <th>Action</th>
+              <th>Ressource</th>
+              <th>Statut</th>
+              <th>Adresse IP</th>
+            </tr>
+          </thead>
+          <tbody>
+            {logs.map((log, idx) => (
+              <tr key={idx} onClick={() => setSelectedLog(log)} className="clickable">
+                <td>{new Date(log.timestamp).toLocaleString('fr-FR')}</td>
+                <td>{log.user_email}</td>
+                <td><span className="action-badge">{log.action}</span></td>
+                <td>{log.resource_type}: {log.resource_id}</td>
+                <td><span className={`status-${log.status}`}>{log.status}</span></td>
+                <td>{log.ip_address}</td>
               </tr>
-            </thead>
-            <tbody>
-              {logs.map((log, idx) => (
-                <tr key={idx}>
-                  <td><span className={`action-badge action-${log.action}`}>{log.action}</span></td>
-                  <td>{log.user_email}</td>
-                  <td>{log.entity_type} #{log.entity_id}</td>
-                  <td>{log.ip_address}</td>
-                  <td>{new Date(log.created_at).toLocaleString('ar-TN')}</td>
-                  <td>
-                    <button 
-                      className="btn-details"
-                      onClick={() => setSelectedLog(log)}
-                    >
-                      Voir les Détails
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
+            ))}
+          </tbody>
+        </table>
+      </div>
 
-      {/* Diff View Modal */}
       {selectedLog && (
-        <div className="modal-overlay" onClick={() => setSelectedLog(null)}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <div className="modal-header">
-              <h2>مقارنة التغييرات</h2>
-              <button className="btn-close" onClick={() => setSelectedLog(null)}>×</button>
-            </div>
-            <div className="modal-body">
-              <DiffView 
-                oldValue={selectedLog.old_value} 
-                newValue={selectedLog.new_value}
-              />
-            </div>
+        <div className="log-detail">
+          <h3>Détails de l'événement</h3>
+          <div className="detail-content">
+            <p><strong>Utilisateur:</strong> {selectedLog.user_email}</p>
+            <p><strong>Action:</strong> {selectedLog.action}</p>
+            <p><strong>Heure:</strong> {new Date(selectedLog.timestamp).toLocaleString('fr-FR')}</p>
+            <p><strong>Ressource:</strong> {selectedLog.resource_type} ({selectedLog.resource_id})</p>
+            <p><strong>Adresse IP:</strong> {selectedLog.ip_address}</p>
+            <p><strong>Statut:</strong> {selectedLog.status}</p>
+            {selectedLog.details && (
+              <details>
+                <summary>Détails techniques</summary>
+                <pre>{JSON.stringify(selectedLog.details, null, 2)}</pre>
+              </details>
+            )}
           </div>
         </div>
       )}

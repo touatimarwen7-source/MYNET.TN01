@@ -1,27 +1,27 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import { setPageTitle } from '../utils/pageTitle';
 
 export default function ArchiveManagement() {
   const [settings, setSettings] = useState({
     documentArchivePeriodDays: 90,
-    requireMFAForChanges: true
+    autoArchiveEnabled: true
   });
   const [archiveJobs, setArchiveJobs] = useState([]);
-  const [mfaVerified, setMfaVerified] = useState(false);
-  const [mfaCode, setMfaCode] = useState('');
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    setPageTitle('Gestion des Archives');
     fetchSettings();
     fetchArchiveJobs();
   }, []);
 
   const fetchSettings = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/api/admin/archive-settings', {
+      const response = await axios.get('http://localhost:3000/api/admin/archive-settings', {
         headers: { Authorization: `Bearer ${localStorage.getItem('accessToken')}` }
       });
-      setSettings(response.data.settings);
+      setSettings(response.data.settings || settings);
     } catch (error) {
       console.error('Erreur:', error);
     } finally {
@@ -31,7 +31,7 @@ export default function ArchiveManagement() {
 
   const fetchArchiveJobs = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/api/admin/archive-jobs', {
+      const response = await axios.get('http://localhost:3000/api/admin/archive-jobs', {
         headers: { Authorization: `Bearer ${localStorage.getItem('accessToken')}` }
       });
       setArchiveJobs(response.data.jobs || []);
@@ -40,34 +40,28 @@ export default function ArchiveManagement() {
     }
   };
 
-  const handleMFAVerify = async () => {
+  const handleSaveSettings = async () => {
     try {
-      const response = await axios.post(
-        'http://localhost:5000/api/auth/mfa/verify-login',
-        { code: mfaCode },
-        { headers: { Authorization: `Bearer ${localStorage.getItem('accessToken')}` } }
-      );
-      setMfaVerified(true);
-      setMfaCode('');
-      alert('تم التحقق من MFA بنجاح');
+      await axios.put('http://localhost:3000/api/admin/archive-settings', settings, {
+        headers: { Authorization: `Bearer ${localStorage.getItem('accessToken')}` }
+      });
+      alert('Paramètres d\'archivage sauvegardés');
+      fetchSettings();
     } catch (error) {
-      alert('خطأ: كود MFA غير صحيح');
+      alert('Erreur: ' + error.response?.data?.error);
     }
   };
 
-  const handleSaveSettings = async () => {
-    if (settings.requireMFAForChanges && !mfaVerified) {
-      alert('يجب التحقق من MFA أولاً');
-      return;
-    }
-
+  const handleTriggerArchive = async () => {
+    if (!confirm('Êtes-vous sûr de vouloir déclencher l\'archivage maintenant?')) return;
     try {
-      await axios.put('http://localhost:5000/api/admin/archive-settings', settings, {
+      await axios.post('http://localhost:3000/api/admin/archive-trigger', {}, {
         headers: { Authorization: `Bearer ${localStorage.getItem('accessToken')}` }
       });
-      alert('تم حفظ الإعدادات بنجاح');
+      alert('Archivage déclenché');
+      fetchArchiveJobs();
     } catch (error) {
-      alert('خطأ: ' + error.response?.data?.error);
+      alert('Erreur: ' + error.response?.data?.error);
     }
   };
 
@@ -75,102 +69,75 @@ export default function ArchiveManagement() {
 
   return (
     <div className="archive-management">
-      <h1>إدارة الأرشفة والبيانات</h1>
+      <h1>📦 Gestion des Archives</h1>
 
-      {/* إعدادات الأرشفة */}
       <div className="settings-section">
-        <h2>إعدادات الأرشفة</h2>
-
+        <h2>Paramètres d'Archivage</h2>
+        
         <div className="form-group">
-          <label>فترة الاحتفاظ بالوثائق (بالأيام):</label>
-          <input 
-            type="number" 
+          <label>Période de rétention (jours):</label>
+          <input
+            type="number"
             value={settings.documentArchivePeriodDays}
             onChange={(e) => setSettings({...settings, documentArchivePeriodDays: parseInt(e.target.value)})}
             min="30"
-            max="365"
+            max="2555"
           />
-          <p className="help-text">الوثائق الأقدم من هذه الفترة سيتم أرشفتها تلقائياً</p>
+          <p className="help-text">Les documents plus anciens que cette période seront archivés</p>
         </div>
 
-        <div className="form-group checkbox">
-          <input 
-            type="checkbox" 
-            checked={settings.requireMFAForChanges}
-            onChange={(e) => setSettings({...settings, requireMFAForChanges: e.target.checked})}
-          />
-          <label>مطلوب MFA عند تغيير الإعدادات</label>
+        <div className="form-group">
+          <label>
+            <input
+              type="checkbox"
+              checked={settings.autoArchiveEnabled}
+              onChange={(e) => setSettings({...settings, autoArchiveEnabled: e.target.checked})}
+            />
+            Activer l'archivage automatique
+          </label>
         </div>
 
-        {/* التحقق من MFA */}
-        {settings.requireMFAForChanges && !mfaVerified && (
-          <div className="mfa-verification">
-            <h3>التحقق من MFA</h3>
-            <div className="form-group">
-              <label>أدخل كود MFA:</label>
-              <input 
-                type="text" 
-                value={mfaCode}
-                onChange={(e) => setMfaCode(e.target.value)}
-                placeholder="000000"
-                maxLength="6"
-              />
-            </div>
-            <button className="btn btn-primary" onClick={handleMFAVerify}>
-              التحقق
-            </button>
-          </div>
-        )}
-
-        {mfaVerified && (
-          <div className="mfa-verified">
-            <p>✓ تم التحقق من MFA</p>
-          </div>
-        )}
-
-        <button className="btn btn-success" onClick={handleSaveSettings}>
-          حفظ الإعدادات
-        </button>
+        <button className="btn btn-primary" onClick={handleSaveSettings}>💾 Sauvegarder</button>
+        <button className="btn btn-success" onClick={handleTriggerArchive}>🔄 Déclencher l'Archivage</button>
       </div>
 
-      {/* حالة عمليات الأرشفة */}
       <div className="archive-jobs-section">
-        <h2>عمليات الأرشفة</h2>
-
-        {archiveJobs.length === 0 ? (
-          <p className="empty-state">لا توجد عمليات أرشفة</p>
-        ) : (
-          <div className="jobs-list">
+        <h2>Historique des Archivages</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Documents Archivés</th>
+              <th>Statut</th>
+              <th>Durée</th>
+            </tr>
+          </thead>
+          <tbody>
             {archiveJobs.map((job, idx) => (
-              <div key={idx} className={`job-card status-${job.status}`}>
-                <div className="job-header">
-                  <h3>{job.name}</h3>
-                  <span className="status-badge">{job.status}</span>
-                </div>
-                <div className="job-info">
-                  <p><strong>Date:</strong> {new Date(job.created_at).toLocaleDateString('fr-FR')}</p>
-                  <p><strong>Fichiers:</strong> {job.files_count}</p>
-                  <p><strong>الحجم:</strong> {(job.size_mb).toFixed(2)} MB</p>
-                </div>
-
-                {job.error && (
-                  <div className="error-message">
-                    <strong>خطأ:</strong> {job.error}
-                  </div>
-                )}
-
-                {job.status === 'in_progress' && (
-                  <div className="progress-bar">
-                    <div 
-                      className="progress-fill" 
-                      style={{width: `${job.progress}%`}}
-                    ></div>
-                  </div>
-                )}
-              </div>
+              <tr key={idx}>
+                <td>{new Date(job.created_at).toLocaleString('fr-FR')}</td>
+                <td>{job.documents_count || 0}</td>
+                <td><span className={`status-${job.status}`}>{job.status}</span></td>
+                <td>{job.duration || '-'}ms</td>
+              </tr>
             ))}
+          </tbody>
+        </table>
+      </div>
+
+      <div className="storage-info">
+        <h2>📊 Informations de Stockage</h2>
+        <div className="info-grid">
+          <div className="info-item">
+            <strong>Espace Utilisé:</strong> {(settings.storage_used || 0).toFixed(2)} GB
           </div>
-        )}
+          <div className="info-item">
+            <strong>Limite de Stockage:</strong> {(settings.storage_limit || 100).toFixed(2)} GB
+          </div>
+          <div className="info-item">
+            <strong>Dernière Archivage:</strong> {settings.last_archive_date ? new Date(settings.last_archive_date).toLocaleDateString('fr-FR') : 'Jamais'}
+          </div>
+        </div>
       </div>
     </div>
   );

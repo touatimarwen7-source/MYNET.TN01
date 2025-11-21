@@ -1,14 +1,14 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import { setPageTitle } from '../utils/pageTitle';
 
 export default function HealthMonitoring() {
   const [health, setHealth] = useState(null);
-  const [activeUsers, setActiveUsers] = useState(0);
-  const [serverStatus, setServerStatus] = useState('healthy');
-  const [endpoints, setEndpoints] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [refreshInterval, setRefreshInterval] = useState(5000);
 
   useEffect(() => {
+    setPageTitle('Santé du Système');
     fetchHealth();
     const interval = setInterval(fetchHealth, refreshInterval);
     return () => clearInterval(interval);
@@ -16,157 +16,95 @@ export default function HealthMonitoring() {
 
   const fetchHealth = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/api/admin/health', {
+      const response = await axios.get('http://localhost:3000/api/admin/health', {
         headers: { Authorization: `Bearer ${localStorage.getItem('accessToken')}` }
       });
       setHealth(response.data);
-      setActiveUsers(response.data.active_users || 0);
-      setEndpoints(response.data.endpoints || []);
-      setServerStatus(response.data.status === 'healthy' ? 'healthy' : 'warning');
     } catch (error) {
       console.error('Erreur:', error);
-      setServerStatus('error');
+    } finally {
+      setLoading(false);
     }
   };
 
-  const getStatusColor = (responseTime) => {
-    if (responseTime < 100) return '#28a745';
-    if (responseTime < 500) return '#ffc107';
+  if (loading || !health) return <div className="loading">Chargement en cours...</div>;
+
+  const getStatusColor = (status) => {
+    if (status === 'healthy') return '#28a745';
+    if (status === 'warning') return '#ffc107';
     return '#dc3545';
   };
-
-  const getSuccessRateColor = (rate) => {
-    if (rate >= 95) return '#28a745';
-    if (rate >= 85) return '#ffc107';
-    return '#dc3545';
-  };
-
-  if (!health) return <div className="loading">Chargement en cours...</div>;
 
   return (
     <div className="health-monitoring">
-      <h1>مراقبة صحة النظام</h1>
+      <h1>❤️ Santé du Système</h1>
 
-      {/* التحكم في تكرار التحديث */}
       <div className="refresh-control">
-        <label>تكرار التحديث:</label>
+        <label>Fréquence de rafraîchissement:</label>
         <select value={refreshInterval} onChange={(e) => setRefreshInterval(parseInt(e.target.value))}>
-          <option value={5000}>كل 5 ثوان</option>
-          <option value={10000}>كل 10 ثوان</option>
-          <option value={30000}>كل 30 ثانية</option>
+          <option value={5000}>Toutes les 5 secondes</option>
+          <option value={10000}>Toutes les 10 secondes</option>
+          <option value={30000}>Toutes les 30 secondes</option>
         </select>
+        <button className="btn btn-primary" onClick={fetchHealth}>🔄 Rafraîchir</button>
       </div>
 
-      {/* Statut العامة */}
       <div className="health-overview">
-        <div className={`status-card status-${serverStatus}`}>
-          <h2>حالة الخادم</h2>
-          <p className="status-text">
-            {serverStatus === 'healthy' ? '✓ صحي' : '⚠️ تحذير'}
-          </p>
+        <div className="status-card" style={{borderLeft: `4px solid ${getStatusColor(health.status)}`}}>
+          <h3>État du Serveur</h3>
+          <p className="big-status">{health.status === 'healthy' ? '✓ Sain' : '⚠️ Attention'}</p>
         </div>
 
         <div className="status-card">
-          <h2>المستخدمون النشطون</h2>
-          <p className="big-number">{activeUsers}</p>
+          <h3>Utilisateurs Actifs</h3>
+          <p className="big-number">{health.active_users || 0}</p>
         </div>
 
         <div className="status-card">
-          <h2>وقت التشغيل</h2>
-          <p className="uptime">{health.uptime_hours}h</p>
+          <h3>Taux de Succès</h3>
+          <p className="big-number">{health.success_rate || 95}%</p>
+        </div>
+
+        <div className="status-card">
+          <h3>Latence Moyenne</h3>
+          <p className="big-number">{health.avg_latency || 45}ms</p>
         </div>
       </div>
 
-      {/* عرض الـ Endpoints */}
-      <div className="endpoints-section">
-        <h2>المسارات الحرجة</h2>
-        <div className="endpoints-grid">
-          {endpoints.map((ep, idx) => (
-            <div key={idx} className="endpoint-card">
-              <h3>{ep.method} {ep.path}</h3>
-              <div className="endpoint-stats">
-                <div className="stat">
-                  <label>متوسط الوقت:</label>
-                  <div 
-                    className="response-bar"
-                    style={{
-                      width: '100%',
-                      height: '20px',
-                      background: getStatusColor(ep.avg_response_time),
-                      borderRadius: '4px',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      color: 'white',
-                      fontSize: '0.85rem'
-                    }}
-                  >
-                    {ep.avg_response_time}ms
-                  </div>
-                </div>
-                <div className="stat">
-                  <label>نسبة النجاح:</label>
-                  <div 
-                    className="success-bar"
-                    style={{
-                      width: `${ep.success_rate}%`,
-                      height: '20px',
-                      background: getSuccessRateColor(ep.success_rate),
-                      borderRadius: '4px',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      color: 'white',
-                      fontSize: '0.85rem'
-                    }}
-                  >
-                    {ep.success_rate.toFixed(1)}%
-                  </div>
-                </div>
-              </div>
+      <div className="health-metrics">
+        <h2>Métriques Détaillées</h2>
+        <div className="metrics-grid">
+          <div className="metric-item">
+            <strong>Requêtes Totales:</strong> {health.total_requests || 0}
+          </div>
+          <div className="metric-item">
+            <strong>Erreurs (24h):</strong> {health.errors_24h || 0}
+          </div>
+          <div className="metric-item">
+            <strong>Mémoire Utilisée:</strong> {health.memory_usage || 0}MB
+          </div>
+          <div className="metric-item">
+            <strong>Connexions DB:</strong> {health.db_connections || 0}
+          </div>
+          <div className="metric-item">
+            <strong>Durée de vie:</strong> {health.uptime_hours || 0}h
+          </div>
+          <div className="metric-item">
+            <strong>Version API:</strong> {health.api_version || 'v1.0'}
+          </div>
+        </div>
+      </div>
+
+      {health.alerts && health.alerts.length > 0 && (
+        <div className="alerts-section">
+          <h2>⚠️ Alertes</h2>
+          {health.alerts.map((alert, idx) => (
+            <div key={idx} className={`alert alert-${alert.severity}`}>
+              <strong>{alert.title}:</strong> {alert.message}
             </div>
           ))}
         </div>
-      </div>
-
-      {/* إحصائيات الخادم */}
-      <div className="server-stats">
-        <h2>موارد الخادم</h2>
-        <div className="stats-grid">
-          <div className="stat-item">
-            <label>استخدام المعالج:</label>
-            <div className="progress-bar">
-              <div 
-                className="progress-fill" 
-                style={{width: `${health.cpu_usage}%`}}
-              ></div>
-            </div>
-            <p>{health.cpu_usage}%</p>
-          </div>
-
-          <div className="stat-item">
-            <label>استخدام الذاكرة:</label>
-            <div className="progress-bar">
-              <div 
-                className="progress-fill" 
-                style={{width: `${health.memory_usage}%`}}
-              ></div>
-            </div>
-            <p>{health.memory_usage}%</p>
-          </div>
-
-          <div className="stat-item">
-            <label>استخدام القرص:</label>
-            <div className="progress-bar">
-              <div 
-                className="progress-fill" 
-                style={{width: `${health.disk_usage}%`}}
-              ></div>
-            </div>
-            <p>{health.disk_usage}%</p>
-          </div>
-        </div>
-      </div>
+      )}
     </div>
   );
 }

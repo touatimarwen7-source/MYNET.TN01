@@ -1,15 +1,112 @@
 const PDFDocument = require('pdfkit');
+const QRCode = require('qrcode');
 const { getPool } = require('../config/db');
-const path = require('path');
-const fs = require('fs');
 
 class PDFService {
-    async generateTenderDocument(tenderId) {
+    // رأس ثابت
+    addHeader(pdf, title, referenceNumber) {
+        pdf.fontSize(14).font('Helvetica-Bold').text('MyNet.tn', { align: 'left' });
+        pdf.fontSize(9).text('Platform de Gestion des Marchés Publics', { align: 'left' });
+        pdf.moveUp(0.8);
+        pdf.fontSize(16).font('Helvetica-Bold').text(title, { align: 'right' });
+        pdf.fontSize(10).text(`الرقم المرجعي: ${referenceNumber}`, { align: 'right' });
+        pdf.moveTo(50, pdf.y + 10).lineTo(550, pdf.y + 10).stroke();
+        pdf.moveDown(1);
+    }
+
+    // تذييل ثابت
+    addFooter(pdf, pageNum) {
+        pdf.moveTo(50, pdf.page.height - 70).lineTo(550, pdf.page.height - 70).stroke();
+        pdf.fontSize(8);
+        pdf.text('MyNet.tn - نظام إدارة المناقصات والمشتريات', 50, pdf.page.height - 60, { align: 'center' });
+        pdf.text(`صفحة ${pageNum}`, pdf.page.width / 2, pdf.page.height - 50, { align: 'center' });
+        pdf.text(`تاريخ التوليد: ${new Date().toLocaleString('ar-TN')}`, pdf.page.width / 2, pdf.page.height - 40, { align: 'center' });
+        pdf.text('وثيقة سرية - قابلة للتدقيق والتحقق', pdf.page.width / 2, pdf.page.height - 30, { align: 'center' });
+    }
+
+    // علامة مائية
+    addWatermark(pdf, text, isDraft = false) {
+        if (!isDraft) return;
+        
+        const fontSize = 60;
+        const opacity = 0.1;
+        
+        pdf.save();
+        pdf.opacity(opacity);
+        pdf.fontSize(fontSize).font('Helvetica-Bold').rotate(-45, {
+            origin: [pdf.page.width / 2, pdf.page.height / 2]
+        }).text('مسودة - DRAFT', {
+            align: 'center',
+            valign: 'center'
+        });
+        pdf.restore();
+    }
+
+    // إضافة QR Code
+    async addQRCode(pdf, url, x, y, size = 100) {
+        try {
+            const qrCode = await QRCode.toDataURL(url, { width: size });
+            pdf.image(qrCode, x, y, { width: size, height: size });
+        } catch (error) {
+            console.error('Error generating QR code:', error.message);
+        }
+    }
+
+    // جدول احترافي
+    createTable(pdf, data, columns, options = {}) {
+        const { startX = 50, startY = pdf.y, width = 500, rowHeight = 25 } = options;
+        const columnWidth = width / columns.length;
+
+        // رأس الجدول
+        pdf.fillColor('#2c3e50').rect(startX, startY, width, rowHeight).fill();
+        pdf.fillColor('white').fontSize(10).font('Helvetica-Bold');
+
+        columns.forEach((col, i) => {
+            pdf.text(col, startX + (i * columnWidth) + 5, startY + 5, {
+                width: columnWidth - 10,
+                align: 'right'
+            });
+        });
+
+        // صفوف الجدول
+        pdf.fillColor('black').font('Helvetica').fontSize(9);
+        let currentY = startY + rowHeight;
+        let rowCount = 0;
+
+        data.forEach((row, idx) => {
+            // فاصل صفحات إذا لزم الأمر
+            if (currentY > pdf.page.height - 100) {
+                pdf.addPage();
+                currentY = 50;
+                this.addFooter(pdf, pdf.bufferedPageRange().count);
+            }
+
+            const isEvenRow = idx % 2 === 0;
+            if (isEvenRow) {
+                pdf.fillColor('#ecf0f1').rect(startX, currentY, width, rowHeight).fill();
+                pdf.fillColor('black');
+            }
+
+            columns.forEach((col, i) => {
+                const value = row[col.toLowerCase().replace(/\s+/g, '_')] || '';
+                pdf.text(String(value), startX + (i * columnWidth) + 5, currentY + 5, {
+                    width: columnWidth - 10,
+                    align: 'right'
+                });
+            });
+
+            currentY += rowHeight;
+        });
+
+        return currentY;
+    }
+
+    async generateTenderDocument(tenderId, isDraft = false) {
         const pool = getPool();
 
         try {
             const result = await pool.query(
-                `SELECT t.*, u.company_name, u.full_name
+                `SELECT t.*, u.company_name, u.full_name, u.phone, u.email
                  FROM tenders t
                  LEFT JOIN users u ON t.buyer_id = u.id
                  WHERE t.id = $1`,
@@ -27,50 +124,63 @@ class PDFService {
                 bufferPages: true
             });
 
-            // Header
-            pdf.fontSize(20).font('Helvetica-Bold').text('وثيقة المناقصة', { align: 'right' });
-            pdf.moveDown(0.5);
-            pdf.fontSize(12).text(`رقم المناقصة: ${tender.tender_number}`, { align: 'right' });
-            pdf.fontSize(10).text(`تاريخ الإنشاء: ${new Date(tender.created_at).toLocaleDateString('ar-TN')}`, { align: 'right' });
-            pdf.moveTo(50, pdf.y + 10).lineTo(550, pdf.y + 10).stroke();
-            pdf.moveDown(1);
+            // رأس
+            this.addHeader(pdf, 'وثيقة المناقصة', tender.tender_number);
+            this.addWatermark(pdf, 'DRAFT', isDraft);
 
-            // Tender Details
-            pdf.fontSize(14).font('Helvetica-Bold').text('تفاصيل المناقصة', { align: 'right' });
-            pdf.moveDown(0.5);
-            pdf.fontSize(11).font('Helvetica');
+            // معلومات أساسية
+            pdf.fontSize(11).font('Helvetica-Bold').text('المعلومات الأساسية', { align: 'right' });
+            pdf.moveDown(0.3);
 
-            const details = [
+            const basicInfo = [
                 { label: 'العنوان:', value: tender.title },
-                { label: 'الوصف:', value: tender.description },
                 { label: 'الفئة:', value: tender.category },
                 { label: 'الحالة:', value: tender.status },
-                { label: 'الميزانية الدنيا:', value: `${tender.budget_min} ${tender.currency}` },
-                { label: 'الميزانية العليا:', value: `${tender.budget_max} ${tender.currency}` },
-                { label: 'تاريخ النشر:', value: new Date(tender.publish_date).toLocaleDateString('ar-TN') },
-                { label: 'تاريخ الإغلاق:', value: new Date(tender.deadline).toLocaleDateString('ar-TN') },
-                { label: 'تاريخ الفتح:', value: new Date(tender.opening_date).toLocaleDateString('ar-TN') }
+                { label: 'العملة:', value: tender.currency }
             ];
 
-            details.forEach(detail => {
-                pdf.text(`${detail.label} ${detail.value}`, { align: 'right' });
-                pdf.moveDown(0.4);
+            pdf.fontSize(10).font('Helvetica');
+            basicInfo.forEach(item => {
+                pdf.text(`${item.label} ${item.value}`, { align: 'right' });
+                pdf.moveDown(0.3);
             });
+            pdf.moveDown(0.5);
 
+            // معلومات مالية
+            pdf.fontSize(11).font('Helvetica-Bold').text('البيانات المالية', { align: 'right' });
+            pdf.moveDown(0.3);
+            pdf.fontSize(10).font('Helvetica');
+            pdf.text(`الميزانية الدنيا: ${tender.budget_min} ${tender.currency}`, { align: 'right' });
+            pdf.text(`الميزانية العليا: ${tender.budget_max} ${tender.currency}`, { align: 'right' });
+            pdf.moveDown(0.5);
+
+            // التواريخ
+            pdf.fontSize(11).font('Helvetica-Bold').text('التواريخ الحرجة', { align: 'right' });
+            pdf.moveDown(0.3);
+            pdf.fontSize(10).font('Helvetica');
+            pdf.text(`النشر: ${new Date(tender.publish_date).toLocaleDateString('ar-TN')}`, { align: 'right' });
+            pdf.text(`الإغلاق: ${new Date(tender.deadline).toLocaleDateString('ar-TN')}`, { align: 'right' });
+            pdf.text(`الفتح: ${new Date(tender.opening_date).toLocaleDateString('ar-TN')}`, { align: 'right' });
             pdf.moveDown(1);
 
-            // Buyer Information
-            pdf.fontSize(14).font('Helvetica-Bold').text('معلومات المشتري', { align: 'right' });
-            pdf.moveDown(0.5);
-            pdf.fontSize(11).font('Helvetica');
+            // معلومات المشتري
+            pdf.fontSize(11).font('Helvetica-Bold').text('معلومات المشتري', { align: 'right' });
+            pdf.moveDown(0.3);
+            pdf.fontSize(10).font('Helvetica');
             pdf.text(`الشركة: ${tender.company_name}`, { align: 'right' });
             pdf.text(`المسؤول: ${tender.full_name}`, { align: 'right' });
+            pdf.text(`الهاتف: ${tender.phone}`, { align: 'right' });
+            pdf.text(`البريد: ${tender.email}`, { align: 'right' });
             pdf.moveDown(1);
 
-            // Footer
-            pdf.fontSize(9).text('---', { align: 'center' });
-            pdf.text(`تم إنشاء هذا المستند بشكل آلي بواسطة نظام MyNet.tn في ${new Date().toLocaleString('ar-TN')}`, { align: 'center' });
-            pdf.text('هذا المستند سري وقابل للتدقيق (Audit-Ready)', { align: 'center' });
+            // QR Code للتحقق
+            const verifyUrl = `https://mynet.tn/verify/tender/${tenderId}`;
+            await this.addQRCode(pdf, verifyUrl, pdf.page.width - 150, pdf.y, 80);
+            pdf.fontSize(8).text('امسح هذا الرمز للتحقق من صحة الوثيقة', 
+                pdf.page.width - 150, pdf.y + 85, { width: 100, align: 'center' });
+
+            // تذييل
+            this.addFooter(pdf, 1);
 
             return pdf;
         } catch (error) {
@@ -78,12 +188,13 @@ class PDFService {
         }
     }
 
-    async generateOfferEvaluationReport(offerId) {
+    async generateOfferEvaluationReport(offerId, isDraft = false) {
         const pool = getPool();
 
         try {
             const result = await pool.query(
-                `SELECT o.*, t.title as tender_title, s.company_name as supplier_name
+                `SELECT o.*, t.title as tender_title, t.tender_number,
+                        s.company_name as supplier_name, s.average_rating
                  FROM offers o
                  LEFT JOIN tenders t ON o.tender_id = t.id
                  LEFT JOIN users s ON o.supplier_id = s.id
@@ -102,49 +213,51 @@ class PDFService {
                 bufferPages: true
             });
 
-            // Header
-            pdf.fontSize(18).font('Helvetica-Bold').text('تقرير تقييم العرض', { align: 'right' });
-            pdf.moveDown(0.5);
-            pdf.fontSize(11).text(`رقم العرض: ${offer.offer_number}`, { align: 'right' });
-            pdf.fontSize(11).text(`المناقصة: ${offer.tender_title}`, { align: 'right' });
-            pdf.moveTo(50, pdf.y + 10).lineTo(550, pdf.y + 10).stroke();
-            pdf.moveDown(1);
+            // رأس
+            this.addHeader(pdf, 'تقرير تقييم العرض', offer.offer_number);
+            this.addWatermark(pdf, 'DRAFT', isDraft);
 
-            // Offer Details
-            pdf.fontSize(13).font('Helvetica-Bold').text('بيانات العرض', { align: 'right' });
-            pdf.moveDown(0.5);
-            pdf.fontSize(11).font('Helvetica');
-
-            const offerDetails = [
+            // بيانات العرض
+            pdf.fontSize(11).font('Helvetica-Bold').text('بيانات العرض', { align: 'right' });
+            pdf.moveDown(0.3);
+            pdf.fontSize(10).font('Helvetica');
+            
+            const offerData = [
+                { label: 'المناقصة:', value: `${offer.tender_number} - ${offer.tender_title}` },
                 { label: 'المورد:', value: offer.supplier_name },
-                { label: 'المبلغ الإجمالي:', value: `${offer.total_amount} TND` },
+                { label: 'التقييم:', value: `${offer.average_rating}/5 نجوم` },
+                { label: 'المبلغ:', value: `${offer.total_amount} TND` },
                 { label: 'وقت التسليم:', value: offer.delivery_time },
                 { label: 'شروط الدفع:', value: offer.payment_terms },
                 { label: 'الحالة:', value: offer.status },
                 { label: 'درجة التقييم:', value: offer.evaluation_score || 'قيد التقييم' },
-                { label: 'ملاحظات التقييم:', value: offer.evaluation_notes || 'لا توجد ملاحظات' }
+                { label: 'الملاحظات:', value: offer.evaluation_notes || 'بدون ملاحظات' }
             ];
 
-            offerDetails.forEach(detail => {
-                pdf.text(`${detail.label} ${detail.value}`, { align: 'right' });
-                pdf.moveDown(0.4);
+            offerData.forEach(item => {
+                pdf.text(`${item.label} ${item.value}`, { align: 'right' });
+                pdf.moveDown(0.3);
             });
-
             pdf.moveDown(1);
 
-            // Status
+            // حالة الترسية
             if (offer.is_winner) {
-                pdf.fontSize(13).font('Helvetica-Bold').fillColor('green').text('✓ هذا العرض فائز', { align: 'center' });
+                pdf.fillColor('green').fontSize(12).font('Helvetica-Bold')
+                    .text('✓ هذا العرض فائز', { align: 'center' });
             } else {
-                pdf.fontSize(13).font('Helvetica-Bold').fillColor('red').text('✗ هذا العرض لم يفز', { align: 'center' });
+                pdf.fillColor('red').fontSize(12).font('Helvetica-Bold')
+                    .text('✗ هذا العرض لم يفز', { align: 'center' });
             }
+            pdf.fillColor('black');
 
-            pdf.fillColor('black').moveDown(1);
+            // QR Code
+            const verifyUrl = `https://mynet.tn/verify/offer/${offerId}`;
+            await this.addQRCode(pdf, verifyUrl, pdf.page.width - 150, pdf.y + 30, 80);
+            pdf.fontSize(8).text('امسح هنا للتحقق', 
+                pdf.page.width - 150, pdf.y + 110, { width: 100, align: 'center' });
 
-            // Footer
-            pdf.fontSize(9).text('---', { align: 'center' });
-            pdf.text(`تم إنشاء هذا التقرير في ${new Date().toLocaleString('ar-TN')}`, { align: 'center' });
-            pdf.text('وثيقة رسمية - محمية بحماية التوقيع الرقمي', { align: 'center' });
+            // تذييل
+            this.addFooter(pdf, 1);
 
             return pdf;
         } catch (error) {
@@ -157,7 +270,7 @@ class PDFService {
 
         try {
             const result = await pool.query(
-                `SELECT t.title, t.tender_number, u.company_name, u.full_name
+                `SELECT t.title, t.tender_number, u.company_name
                  FROM tenders t
                  LEFT JOIN users u ON u.id = $1
                  WHERE t.id = $2`,
@@ -175,42 +288,49 @@ class PDFService {
                 bufferPages: true
             });
 
-            // Decorative Header
-            pdf.fontSize(10).text('═══════════════════════════════════════', { align: 'center' });
-            pdf.fontSize(16).font('Helvetica-Bold').text('شهادة الترسية', { align: 'center' });
-            pdf.fontSize(10).text('═══════════════════════════════════════', { align: 'center' });
+            // عنوان احترافي
+            pdf.fontSize(32).font('Helvetica-Bold').text('🏆', { align: 'center' });
+            pdf.fontSize(24).text('شهادة الترسية', { align: 'center' });
+            pdf.fontSize(10).text('═══════════════════════════════════', { align: 'center' });
             pdf.moveDown(1);
 
-            // Body
+            // النص الرئيسي
             pdf.fontSize(12).font('Helvetica');
             pdf.text('تشهد هذه الشهادة بأن:', { align: 'center' });
-            pdf.moveDown(1);
+            pdf.moveDown(0.5);
 
-            pdf.fontSize(14).font('Helvetica-Bold').text(data.company_name, { align: 'center' });
+            pdf.fontSize(16).font('Helvetica-Bold').text(data.company_name, { align: 'center' });
             pdf.moveDown(0.5);
 
             pdf.fontSize(12).font('Helvetica');
-            pdf.text('فاز بالمناقصة رقم:', { align: 'center' });
-            pdf.fontSize(13).font('Helvetica-Bold').text(data.tender_number, { align: 'center' });
-            pdf.moveDown(0.5);
+            pdf.text('فاز بالمناقصة:', { align: 'center' });
+            pdf.fontSize(14).font('Helvetica-Bold').text(data.tender_number, { align: 'center' });
+            pdf.moveDown(0.3);
 
             pdf.fontSize(12).font('Helvetica');
             pdf.text('الموضوع:', { align: 'center' });
             pdf.fontSize(13).font('Helvetica-Bold').text(data.title, { align: 'center' });
             pdf.moveDown(2);
 
-            // Date
-            pdf.fontSize(11);
-            pdf.text(`تاريخ الترسية: ${new Date().toLocaleDateString('ar-TN')}`, { align: 'center' });
-            pdf.moveDown(1);
+            // التاريخ
+            pdf.fontSize(11).text(`تاريخ الترسية: ${new Date().toLocaleDateString('ar-TN')}`, { align: 'center' });
+            pdf.moveDown(2);
 
-            // Footer
-            pdf.fontSize(9).text('═══════════════════════════════════════', { align: 'center' });
-            pdf.text('وثيقة رسمية صادرة عن نظام MyNet.tn', { align: 'center' });
+            // QR Code
+            const verifyUrl = `https://mynet.tn/verify/award/${tenderId}/${supplierId}`;
+            await this.addQRCode(pdf, verifyUrl, (pdf.page.width - 100) / 2, pdf.y, 100);
+
+            // توقيع
+            pdf.moveDown(3);
+            pdf.fontSize(10).text('_____________________', { align: 'center' });
+            pdf.fontSize(9).text('التوقيع الرسمي', { align: 'center' });
+
+            // تذييل
+            this.addFooter(pdf, 1);
 
             return pdf;
         } catch (error) {
-            throw new Error(`Failed to generate award certificate: ${error.message}`);
+            throw new Error(`Failed to generate certificate: ${error.message}`);
         }
     }
 
@@ -219,7 +339,7 @@ class PDFService {
 
         try {
             const offersResult = await pool.query(
-                `SELECT o.*, t.title as tender_title
+                `SELECT o.offer_number, t.title, o.total_amount, o.status, o.created_at
                  FROM offers o
                  LEFT JOIN tenders t ON o.tender_id = t.id
                  WHERE o.supplier_id = $1 
@@ -234,36 +354,38 @@ class PDFService {
                 bufferPages: true
             });
 
-            // Header
-            pdf.fontSize(16).font('Helvetica-Bold').text('تقرير سجل المعاملات', { align: 'right' });
-            pdf.fontSize(10).text(`من: ${startDate} إلى: ${endDate}`, { align: 'right' });
-            pdf.moveTo(50, pdf.y + 10).lineTo(550, pdf.y + 10).stroke();
+            // رأس
+            this.addHeader(pdf, 'تقرير سجل المعاملات', `${startDate} إلى ${endDate}`);
+
+            // ملخص
+            pdf.fontSize(11).font('Helvetica-Bold').text('ملخص المعاملات', { align: 'right' });
+            pdf.moveDown(0.3);
+            pdf.fontSize(10).font('Helvetica');
+            pdf.text(`إجمالي العروض: ${offersResult.rows.length}`, { align: 'right' });
+            pdf.text(`الفترة: من ${startDate} إلى ${endDate}`, { align: 'right' });
             pdf.moveDown(1);
 
-            // Table Header
-            pdf.fontSize(10).font('Helvetica-Bold');
-            pdf.text('رقم العرض', 55, pdf.y, { width: 100 });
-            pdf.text('المناقصة', 155, pdf.y);
-            pdf.text('المبلغ', 350, pdf.y);
-            pdf.text('الحالة', 450, pdf.y);
-            pdf.moveDown(0.7);
-            pdf.moveTo(50, pdf.y).lineTo(550, pdf.y).stroke();
-            pdf.moveDown(0.5);
+            // جدول العروض
+            if (offersResult.rows.length > 0) {
+                const tableData = offersResult.rows.map(row => ({
+                    offer_number: row.offer_number,
+                    title: row.title,
+                    amount: `${row.total_amount} TND`,
+                    status: row.status,
+                    date: new Date(row.created_at).toLocaleDateString('ar-TN')
+                }));
 
-            // Table Body
-            pdf.fontSize(9).font('Helvetica');
-            offersResult.rows.forEach(offer => {
-                pdf.text(offer.offer_number, 55, pdf.y, { width: 100 });
-                pdf.text(offer.tender_title, 155, pdf.y, { width: 190 });
-                pdf.text(`${offer.total_amount} TND`, 350, pdf.y);
-                pdf.text(offer.status, 450, pdf.y);
-                pdf.moveDown(0.6);
-            });
+                this.createTable(pdf, tableData, 
+                    ['رقم العرض', 'المناقصة', 'المبلغ', 'الحالة', 'التاريخ'],
+                    { width: 500, rowHeight: 20 }
+                );
+            }
 
-            pdf.moveDown(1);
-            pdf.fontSize(9).text('---', { align: 'center' });
-            pdf.text(`إجمالي العروض: ${offersResult.rows.length}`, { align: 'center' });
-            pdf.text(`تم إنشاء التقرير في: ${new Date().toLocaleString('ar-TN')}`, { align: 'center' });
+            pdf.moveDown(2);
+            pdf.fontSize(9).text(`تم إنشاء التقرير: ${new Date().toLocaleString('ar-TN')}`, { align: 'center' });
+
+            // تذييل
+            this.addFooter(pdf, 1);
 
             return pdf;
         } catch (error) {

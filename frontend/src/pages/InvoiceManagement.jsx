@@ -29,7 +29,7 @@ export default function InvoiceManagement() {
       await axios.put(`http://localhost:5000/api/procurement/invoices/${invoiceId}/approve`, {}, {
         headers: { Authorization: `Bearer ${localStorage.getItem('accessToken')}` }
       });
-      alert('تم الموافقة على الفاتورة');
+      alert('تم الApprouver على الفاتورة');
       fetchInvoices();
     } catch (error) {
       alert('خطأ: ' + error.response?.data?.error);
@@ -41,7 +41,7 @@ export default function InvoiceManagement() {
       await axios.put(`http://localhost:5000/api/procurement/invoices/${invoiceId}/reject`, {}, {
         headers: { Authorization: `Bearer ${localStorage.getItem('accessToken')}` }
       });
-      alert('تم رفض الفاتورة');
+      alert('تم Rejeter الفاتورة');
       fetchInvoices();
     } catch (error) {
       alert('خطأ: ' + error.response?.data?.error);
@@ -64,7 +64,7 @@ export default function InvoiceManagement() {
 
   return (
     <div className="invoice-management">
-      <h1>إدارة الفواتير</h1>
+      <h1>Gestion des Factures</h1>
 
       {/* التصفية */}
       <div className="filters">
@@ -72,42 +72,42 @@ export default function InvoiceManagement() {
           className={`filter-btn ${filter === 'pending' ? 'active' : ''}`}
           onClick={() => setFilter('pending')}
         >
-          قيد الانتظار
+          En Attente
         </button>
         <button 
           className={`filter-btn ${filter === 'approved' ? 'active' : ''}`}
           onClick={() => setFilter('approved')}
         >
-          موافق عليها
+          Approuvées
         </button>
         <button 
           className={`filter-btn ${filter === 'rejected' ? 'active' : ''}`}
           onClick={() => setFilter('rejected')}
         >
-          مرفوضة
+          Rejetées
         </button>
         <button 
           className={`filter-btn ${filter === 'paid' ? 'active' : ''}`}
           onClick={() => setFilter('paid')}
         >
-          مدفوعة
+          Payées
         </button>
       </div>
 
-      {/* جدول الفواتير */}
+      {/* Tableau des Factures */}
       {invoices.length === 0 ? (
-        <p className="empty-state">لا توجد فواتير في هذه الفئة</p>
+        <p className="empty-state">Aucune facture في هذه Catégorie</p>
       ) : (
         <div className="invoices-table-wrapper">
           <table className="invoices-table">
             <thead>
               <tr>
-                <th>رقم الفاتورة</th>
+                <th>Numéro de Facture</th>
                 <th>المورد</th>
-                <th>المبلغ</th>
-                <th>التاريخ</th>
-                <th>الحالة</th>
-                <th>الإجراءات</th>
+                <th>Montant</th>
+                <th>Date</th>
+                <th>Statut</th>
+                <th>Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -125,13 +125,13 @@ export default function InvoiceManagement() {
                           className="btn-approve"
                           onClick={() => handleApprove(invoice.id)}
                         >
-                          موافقة
+                          Approuver
                         </button>
                         <button 
                           className="btn-reject"
                           onClick={() => handleReject(invoice.id)}
                         >
-                          رفض
+                          Rejeter
                         </button>
                       </>
                     )}
@@ -140,7 +140,7 @@ export default function InvoiceManagement() {
                         className="btn-erp"
                         onClick={() => handlePushToERP(invoice.id)}
                       >
-                        إرسال ERP
+                        Envoyer à l'ERP
                       </button>
                     )}
                   </td>

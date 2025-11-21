@@ -43,7 +43,7 @@ export default function AdminDashboard() {
       link.click();
       link.parentChild.removeChild(link);
     } catch (error) {
-      alert('خطأ في تصدير السجلات: ' + error.message);
+      alert("Erreur lors de l'export des journaux: " + error.message);
     }
   };
 
@@ -53,35 +53,35 @@ export default function AdminDashboard() {
     <div className="admin-dashboard">
       <h1>Tableau de Contrôle de la Plateforme</h1>
 
-      {/* حالة الصحة */}
+      {/* État de Santé */}
       {health && (
         <div className={`health-card status-${health.status}`}>
-          <h2>حالة الخادم</h2>
+          <h2>État de Santé du Serveur</h2>
           <div className="health-metrics">
             <div className="metric">
               <span>État du Système:</span>
               <strong className={`status-${health.status}`}>{health.status}</strong>
             </div>
             <div className="metric">
-              <span>نسبة النجاح:</span>
+              <span>Taux de Succès:</span>
               <strong>{health.successRate}%</strong>
             </div>
             <div className="metric">
-              <span>متوسط الاستجابة:</span>
+              <span>Latence Moyenne:</span>
               <strong>{health.avgLatency}ms</strong>
             </div>
             <div className="metric">
-              <span>عدد الطلبات:</span>
+              <span>Nombre de Requêtes:</span>
               <strong>{health.totalRequests}</strong>
             </div>
           </div>
         </div>
       )}
 
-      {/* التنبيهات الحرجة */}
+      {/* Alertes Critiques */}
       {alerts.length > 0 && (
         <div className="alerts-section">
-          <h2>التنبيهات الحرجة</h2>
+          <h2>Alertes Critiques</h2>
           {alerts.map((alert, idx) => (
             <div key={idx} className={`alert alert-${alert.severity}`}>
               <strong>{alert.path}</strong>: {alert.message}
@@ -90,7 +90,7 @@ export default function AdminDashboard() {
         </div>
       )}
 
-      {/* إحصائيات المسارات */}
+      {/* Statistiques des Itinéraires */}
       <div className="paths-section">
         <h2>أداء المسارات</h2>
         <table className="paths-table">
@@ -119,8 +119,8 @@ export default function AdminDashboard() {
 
       {/* تصدير السجلات */}
       <div className="export-section">
-        <h2>تصدير سجلات التدقيق</h2>
-        <p>تصدير السجلات للامتثال الرقابي:</p>
+        <h2>Exporter les Journaux d'Audit</h2>
+        <p>Exporter les journaux pour la conformité réglementaire:</p>
         <button onClick={() => handleExportAuditLogs('csv')} className="btn btn-primary">
           تصدير CSV
         </button>

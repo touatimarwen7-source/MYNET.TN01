@@ -47,15 +47,15 @@ export default function SupplierSearch() {
 
   const TenderCard = ({ tender, isRecommended }) => (
     <div className={`tender-card ${isRecommended ? 'recommended' : ''}`}>
-      {isRecommended && <span className="badge-recommended">مقترح لك</span>}
+      {isRecommended && <span className="badge-recommended">Recommandé pour vous</span>}
       <h3>{tender.title}</h3>
       <div className="tender-info">
-        <p><strong>الفئة:</strong> {tender.category}</p>
-        <p><strong>الموقع:</strong> {tender.location}</p>
-        <p><strong>الميزانية:</strong> {tender.budget_max} {tender.currency}</p>
-        <p><strong>تاريخ الإغلاق:</strong> {new Date(tender.closing_date).toLocaleDateString('fr-FR')}</p>
+        <p><strong>Catégorie:</strong> {tender.category}</p>
+        <p><strong>Localisation:</strong> {tender.location}</p>
+        <p><strong>Budget:</strong> {tender.budget_max} {tender.currency}</p>
+        <p><strong>Date d'Expiration:</strong> {new Date(tender.closing_date).toLocaleDateString('fr-FR')}</p>
       </div>
-      <button className="btn-bid">عرض التفاصيل</button>
+      <button className="btn-bid">Voir les Détails</button>
     </div>
   );
 
@@ -63,33 +63,33 @@ export default function SupplierSearch() {
 
   return (
     <div className="supplier-search">
-      <h1>البحث عن المناقصات</h1>
+      <h1>Recherche d'Appels d'Offres</h1>
 
-      {/* المرشحات الذكية */}
+      {/* Filtres Intelligents */}
       <div className="filters-panel">
         <div className="filter-group">
-          <label>الفئة:</label>
+          <label>Catégorie:</label>
           <select name="category" value={filters.category} onChange={handleFilterChange}>
-            <option value="">جميع الفئات</option>
-            <option value="supplies">إمدادات</option>
-            <option value="services">خدمات</option>
-            <option value="construction">بناء</option>
-            <option value="technology">تكنولوجيا</option>
+            <option value="">Toutes les Catégories</option>
+            <option value="supplies">Fournitures</option>
+            <option value="services">Services</option>
+            <option value="construction">Construction</option>
+            <option value="technology">Technologie</option>
           </select>
         </div>
 
         <div className="filter-group">
-          <label>الموقع:</label>
+          <label>Localisation:</label>
           <select name="location" value={filters.location} onChange={handleFilterChange}>
-            <option value="">جميع المواقع</option>
-            <option value="tunis">تونس</option>
-            <option value="sfax">صفاقس</option>
-            <option value="sousse">سوسة</option>
+            <option value="">Tous les Emplacements</option>
+            <option value="tunis">Tunis</option>
+            <option value="sfax">Sfax</option>
+            <option value="sousse">Sousse</option>
           </select>
         </div>
 
         <div className="filter-group">
-          <label>الميزانية:</label>
+          <label>Budget:</label>
           <input 
             type="number" 
             name="budgetMin" 

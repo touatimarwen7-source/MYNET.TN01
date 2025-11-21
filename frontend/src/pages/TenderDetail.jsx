@@ -62,8 +62,8 @@ export default function TenderDetail() {
 
         <div style={{ marginTop: '1.5rem', lineHeight: '1.8' }}>
           <p><strong>الوصف:</strong> {tender.description}</p>
-          <p><strong>الفئة:</strong> {tender.category}</p>
-          <p><strong>الميزانية:</strong> {tender.budget_min} - {tender.budget_max} {tender.currency}</p>
+          <p><strong>Catégorie:</strong> {tender.category}</p>
+          <p><strong>Budget:</strong> {tender.budget_min} - {tender.budget_max} {tender.currency}</p>
           <p><strong>آخر تعديل:</strong> {new Date(tender.updated_at).toLocaleDateString('fr-FR')}</p>
           
           {tender.deadline && (
@@ -105,9 +105,9 @@ export default function TenderDetail() {
             {offers.map(offer => (
               <div key={offer.id} className="card">
                 <p><strong>المورد:</strong> {offer.full_name}</p>
-                <p><strong>المبلغ:</strong> {offer.total_amount} {offer.currency}</p>
+                <p><strong>Montant:</strong> {offer.total_amount} {offer.currency}</p>
                 <p><strong>وقت التسليم:</strong> {offer.delivery_time}</p>
-                <p><strong>الحالة:</strong> {offer.status}</p>
+                <p><strong>Statut:</strong> {offer.status}</p>
               </div>
             ))}
           </div>

@@ -32,7 +32,7 @@ export default function UserManagement() {
         { enabled },
         { headers: { Authorization: `Bearer ${localStorage.getItem('accessToken')}` } }
       );
-      alert('تم تحديث الحالة بنجاح');
+      alert('تم تحديث Statut بنجاح');
       fetchUsers();
     } catch (error) {
       alert('خطأ: ' + error.response?.data?.error);
@@ -46,7 +46,7 @@ export default function UserManagement() {
         {},
         { headers: { Authorization: `Bearer ${localStorage.getItem('accessToken')}` } }
       );
-      alert('تم الموافقة على KYC');
+      alert('تم الApprouver على KYC');
       fetchUsers();
     } catch (error) {
       alert('خطأ: ' + error.response?.data?.error);
@@ -60,7 +60,7 @@ export default function UserManagement() {
         {},
         { headers: { Authorization: `Bearer ${localStorage.getItem('accessToken')}` } }
       );
-      alert('تم رفض KYC');
+      alert('تم Rejeter KYC');
       fetchUsers();
     } catch (error) {
       alert('خطأ: ' + error.response?.data?.error);
@@ -86,7 +86,7 @@ export default function UserManagement() {
         </div>
 
         <div className="filter-group">
-          <label>الحالة:</label>
+          <label>Statut:</label>
           <select value={filter.status} onChange={(e) => setFilter({...filter, status: e.target.value})}>
             <option value="">الكل</option>
             <option value="active">نشط</option>
@@ -107,8 +107,8 @@ export default function UserManagement() {
                 <th>البريد</th>
                 <th>الدور</th>
                 <th>KYC</th>
-                <th>الحالة</th>
-                <th>الإجراءات</th>
+                <th>Statut</th>
+                <th>Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -139,13 +139,13 @@ export default function UserManagement() {
                             className="btn-approve"
                             onClick={() => handleApproveKYC(user.id)}
                           >
-                            الموافقة
+                            الApprouver
                           </button>
                           <button 
                             className="btn-reject"
                             onClick={() => handleRejectKYC(user.id)}
                           >
-                            رفض
+                            Rejeter
                           </button>
                         </>
                       )}

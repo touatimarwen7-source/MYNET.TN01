@@ -96,26 +96,26 @@ export default function CreateTenderImproved() {
     const newErrors = {};
     
     if (step === 1) {
-      if (!tenderData.title) newErrors.title = 'العنوان مطلوب';
-      if (tenderData.categories.length === 0) newErrors.categories = 'اختر فئة واحدة على الأقل';
-      if (!tenderData.summary) newErrors.summary = 'الملخص مطلوب';
+      if (!tenderData.title) newErrors.title = "Le titre est requis";
+      if (tenderData.categories.length === 0) newErrors.categories = "Choisissez au moins une catégorie";
+      if (!tenderData.summary) newErrors.summary = "Le résumé est requis";
     }
 
     if (step === 2) {
-      if (!tenderData.submissionDeadline) newErrors.submissionDeadline = 'تاريخ الإغلاق مطلوب';
-      if (!tenderData.decryptionDate) newErrors.decryptionDate = 'تاريخ الفتح مطلوب';
+      if (!tenderData.submissionDeadline) newErrors.submissionDeadline = "La date d'expiration est requise";
+      if (!tenderData.decryptionDate) newErrors.decryptionDate = "La date d'ouverture est requise";
       if (new Date(tenderData.decryptionDate) <= new Date(tenderData.submissionDeadline)) {
-        newErrors.decryptionDate = 'يجب أن يكون تاريخ الفتح بعد تاريخ الإغلاق';
+        newErrors.decryptionDate = "La date d'ouverture doit être après la date d'expiration";
       }
-      if (!tenderData.questionsEndDate) newErrors.questionsEndDate = 'نهاية فترة الاستفسارات مطلوبة';
+      if (!tenderData.questionsEndDate) newErrors.questionsEndDate = "La fin de la période de questions est requise";
     }
 
     if (step === 3) {
-      if (tenderData.items.length === 0) newErrors.items = 'يجب إضافة بند واحد على الأقل';
+      if (tenderData.items.length === 0) newErrors.items = "Vous devez ajouter au moins un article";
     }
 
     if (step === 4) {
-      if (!tenderData.geographicLocation) newErrors.geographicLocation = 'اختر الموقع الجغرافي';
+      if (!tenderData.geographicLocation) newErrors.geographicLocation = "Choisissez une localisation géographique";
     }
 
     setErrors(newErrors);
@@ -133,7 +133,7 @@ export default function CreateTenderImproved() {
       await axios.post('http://localhost:5000/api/procurement/tenders', tenderData, {
         headers: { Authorization: `Bearer ${localStorage.getItem('accessToken')}` }
       });
-      alert('تم إنشاء المناقصة بنجاح وإرسال التنبيهات للموردين المؤهلين');
+      alert("Appel d'offres créé avec succès et alertes envoyées aux fournisseurs qualifiés");
       setTenderData({
         title: '', categories: [], summary: '', budgetMax: 0, currency: 'TND',
         documents: [], submissionDeadline: '', decryptionDate: '',
@@ -148,7 +148,7 @@ export default function CreateTenderImproved() {
     }
   };
 
-  const categories = ['إمدادات', 'خدمات', 'بناء وتشييد', 'استشارات', 'صيانة'];
+  const categories = ['Fournitures', 'Services', 'Construction وتشييد', 'استشارات', 'صيانة'];
   const units = ['Unit', 'كجم', 'طن', 'ساعة', 'يوم', 'قطعة'];
 
   return (
@@ -219,7 +219,7 @@ export default function CreateTenderImproved() {
 
           <div className="form-row">
             <div className="form-group">
-              <label>الميزانية التقديرية (اختياري)</label>
+              <label>Budget التقديرية (اختياري)</label>
               <input
                 type="number"
                 name="budgetMax"
@@ -231,7 +231,7 @@ export default function CreateTenderImproved() {
             <div className="form-group">
               <label>العملة</label>
               <select name="currency" value={tenderData.currency} onChange={handleInputChange}>
-                <option value="TND">د.ت (تونسي)</option>
+                <option value="TND">د.ت (Tunisي)</option>
                 <option value="USD">$ (دولار أمريكي)</option>
                 <option value="EUR">€ (يورو)</option>
               </select>
@@ -260,7 +260,7 @@ export default function CreateTenderImproved() {
 
           <div className="form-row">
             <div className="form-group">
-              <label>تاريخ الإغلاق (آخر موعد لتقديم العروض) *</label>
+              <label>Date d'Expiration (آخر موعد لتقديم العروض) *</label>
               <input
                 type="datetime-local"
                 name="submissionDeadline"
@@ -488,10 +488,10 @@ export default function CreateTenderImproved() {
           </div>
 
           <div className="form-group">
-            <label>الموقع الجغرافي للخدمة *</label>
+            <label>Localisation الجغرافي للخدمة *</label>
             <select name="geographicLocation" value={tenderData.geographicLocation} onChange={handleInputChange}>
-              <option value="">اختر الموقع</option>
-              <option value="tunisia">تونس</option>
+              <option value="">اختر Localisation</option>
+              <option value="tunisia">Tunis</option>
               <option value="regional">إقليمي (شمال أفريقيا)</option>
               <option value="international">دولي</option>
             </select>
@@ -547,12 +547,12 @@ export default function CreateTenderImproved() {
               <p><strong>العنوان:</strong> {tenderData.title}</p>
               <p><strong>الفئات:</strong> {tenderData.categories.join(', ')}</p>
               <p><strong>الملخص:</strong> {tenderData.summary}</p>
-              <p><strong>الميزانية:</strong> {tenderData.budgetMax} {tenderData.currency}</p>
+              <p><strong>Budget:</strong> {tenderData.budgetMax} {tenderData.currency}</p>
             </div>
 
             <div className="review-section">
               <h3>📅 الجدولة</h3>
-              <p><strong>تاريخ الإغلاق:</strong> {new Date(tenderData.submissionDeadline).toLocaleString('ar-TN')}</p>
+              <p><strong>Date d'Expiration:</strong> {new Date(tenderData.submissionDeadline).toLocaleString('ar-TN')}</p>
               <p><strong>تاريخ الفتح:</strong> {new Date(tenderData.decryptionDate).toLocaleString('ar-TN')}</p>
               <p><strong>فترة الاستفسارات:</strong> من {new Date(tenderData.questionsStartDate).toLocaleDateString('fr-FR')} إلى {new Date(tenderData.questionsEndDate).toLocaleDateString('fr-FR')}</p>
               <p><strong>صلاحية العرض:</strong> {tenderData.bidValidityDays} يوم</p>
@@ -589,7 +589,7 @@ export default function CreateTenderImproved() {
 
             <div className="review-section">
               <h3>🛡️ الأهلية والأمان</h3>
-              <p><strong>الموقع:</strong> {tenderData.geographicLocation}</p>
+              <p><strong>Localisation:</strong> {tenderData.geographicLocation}</p>
               <p><strong>نوع الترسية:</strong> {tenderData.awardType === 'full' ? 'ترسية كاملة' : 'ترسية جزئية'}</p>
               <p><strong>التفاوض:</strong> {tenderData.allowNegotiation ? 'مسموح' : 'غير مسموح'}</p>
             </div>

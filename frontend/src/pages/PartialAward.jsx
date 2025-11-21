@@ -38,7 +38,7 @@ export default function PartialAward() {
   const validateAwards = () => {
     const totalAwarded = Object.values(awards).reduce((sum, val) => sum + val, 0);
     if (tender && totalAwarded > tender.budget_max) {
-      setError(`إجمالي الكميات المترسية يتجاوز الميزانية المسموحة`);
+      setError("Le montant total dépasse le budget autorisé");
       return false;
     }
     setError('');
@@ -57,29 +57,29 @@ export default function PartialAward() {
         }));
 
       await procurementAPI.submitAwards(tenderId, awardData);
-      alert('Attribution soumise avec succès');
+      alert("Attribution soumise avec succès");
     } catch (err) {
-      setError(err.response?.data?.error || 'Erreur lors de la soumission de l'''attribution');
+      setError(err.response?.data?.error || "Erreur lors de la soumission de l'attribution");
     }
   };
 
   if (loading) return <div className="loading">Chargement en cours...</div>;
-  if (!tender) return <div className="alert alert-error">لم يتم العثور على المناقصة</div>;
+  if (!tender) return <div className="alert alert-error">Appel d'offres non trouvé</div>;
 
   return (
     <div className="partial-award-container">
-      <h2>الترسية الجزئية - {tender.title}</h2>
+      <h2>Attribution Partielle - {tender.title}</h2>
       {error && <div className="alert alert-error">{error}</div>}
 
       <div className="award-table-wrapper">
         <table className="award-table">
           <thead>
             <tr>
-              <th>المورد</th>
-              <th>السعر المقترح</th>
-              <th>وقت التسليم</th>
-              <th>الكمية المقررة</th>
-              <th>الإجمالي</th>
+              <th>Fournisseur</th>
+              <th>Prix Proposé</th>
+              <th>Délai de Livraison</th>
+              <th>Quantité Allouée</th>
+              <th>Total</th>
             </tr>
           </thead>
           <tbody>
@@ -107,15 +107,15 @@ export default function PartialAward() {
       </div>
 
       <div className="award-summary">
-        <p><strong>إجمالي المبلغ المترسي:</strong> {Object.entries(awards).reduce((sum, [id, qty]) => {
+        <p><strong>Montant Total Attribué:</strong> {Object.entries(awards).reduce((sum, [id, qty]) => {
           const offer = offers.find(o => o.id === parseInt(id));
           return sum + (qty * (offer?.total_amount || 0));
         }, 0).toFixed(2)}</p>
-        <p><strong>الميزانية المتاحة:</strong> {tender.budget_max} {tender.currency}</p>
+        <p><strong>Budget Disponible:</strong> {tender.budget_max} {tender.currency}</p>
       </div>
 
       <button className="btn btn-primary" onClick={handleSubmitAwards}>
-        تأكيد الترسية
+        Confirmer l'Attribution
       </button>
     </div>
   );

@@ -141,7 +141,7 @@ export default function SupplierProfile() {
           {showPublicProfile && (
             <div className="public-profile-preview">
               <h3>{profile?.company_name}</h3>
-              <p><strong>الموقع:</strong> {profile?.location}</p>
+              <p><strong>Localisation:</strong> {profile?.location}</p>
               <p><strong>مجالات الخبرة:</strong> {categories.join(', ')}</p>
               <p><strong>التقييم:</strong> ⭐ {profile?.average_rating || 0}/5</p>
             </div>

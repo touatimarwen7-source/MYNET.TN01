@@ -128,7 +128,7 @@ export default function TeamManagement() {
                 <th>الاسم</th>
                 <th>البريد الإلكتروني</th>
                 <th>الدور</th>
-                <th>الإجراءات</th>
+                <th>Actions</th>
               </tr>
             </thead>
             <tbody>

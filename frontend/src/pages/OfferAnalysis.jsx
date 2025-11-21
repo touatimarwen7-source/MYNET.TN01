@@ -27,7 +27,7 @@ export default function OfferAnalysis() {
 
   if (loading) return <div className="loading">Chargement en cours...</div>;
 
-  // حساب الإحصائيات
+  // Calcul des Statistiques
   const prices = offers.map(o => o.total_amount || 0);
   const avgPrice = prices.length > 0 ? (prices.reduce((a, b) => a + b, 0) / prices.length).toFixed(2) : 0;
   const minPrice = Math.min(...prices);
@@ -36,7 +36,7 @@ export default function OfferAnalysis() {
 
   return (
     <div className="offer-analysis-container">
-      <h1>تحليل العروض - {tender?.title}</h1>
+      <h1>Analyse des Offres - {tender?.title}</h1>
 
       {/* مصفوفة المقارنة */}
       <div className="comparison-section">
@@ -48,7 +48,7 @@ export default function OfferAnalysis() {
               <th>السعر المقترح</th>
               <th>وقت التسليم</th>
               <th>درجة الامتثال %</th>
-              <th>الحالة</th>
+              <th>Statut</th>
             </tr>
           </thead>
           <tbody>
@@ -107,7 +107,7 @@ export default function OfferAnalysis() {
 
       {/* سجل التدقيق المصغر */}
       <div className="audit-section">
-        <h2>سجل الإجراءات</h2>
+        <h2>سجل Actions</h2>
         <div className="audit-mini">
           <p>✓ تم فتح الأظرفة في: {new Date(tender?.opening_date).toLocaleString('ar-TN')}</p>
           <p>✓ عدد العروض المستلمة: {offers.length}</p>

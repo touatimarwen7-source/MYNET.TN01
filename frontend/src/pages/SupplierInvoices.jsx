@@ -28,7 +28,7 @@ export default function SupplierInvoices() {
 
   return (
     <div className="supplier-invoices">
-      <h1>إدارة الفواتير</h1>
+      <h1>Gestion des Factures</h1>
 
       {/* التصفية */}
       <div className="filters">
@@ -42,35 +42,35 @@ export default function SupplierInvoices() {
           className={`filter-btn ${filter === 'pending' ? 'active' : ''}`}
           onClick={() => setFilter('pending')}
         >
-          قيد الانتظار
+          En Attente
         </button>
         <button 
           className={`filter-btn ${filter === 'approved' ? 'active' : ''}`}
           onClick={() => setFilter('approved')}
         >
-          موافق عليها
+          Approuvées
         </button>
         <button 
           className={`filter-btn ${filter === 'paid' ? 'active' : ''}`}
           onClick={() => setFilter('paid')}
         >
-          مدفوعة
+          Payées
         </button>
       </div>
 
-      {/* جدول الفواتير */}
+      {/* Tableau des Factures */}
       {invoices.length === 0 ? (
-        <p className="empty-state">لا توجد فواتير</p>
+        <p className="empty-state">Aucune facture</p>
       ) : (
         <div className="invoices-table-wrapper">
           <table className="invoices-table">
             <thead>
               <tr>
-                <th>رقم الفاتورة</th>
+                <th>Numéro de Facture</th>
                 <th>أمر الشراء</th>
-                <th>المبلغ</th>
-                <th>التاريخ</th>
-                <th>الحالة</th>
+                <th>Montant</th>
+                <th>Date</th>
+                <th>Statut</th>
               </tr>
             </thead>
             <tbody>

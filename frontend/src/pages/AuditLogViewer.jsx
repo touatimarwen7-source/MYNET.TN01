@@ -74,7 +74,7 @@ export default function AuditLogViewer() {
             <option value="CREATE">إنشاء</option>
             <option value="UPDATE">تحديث</option>
             <option value="DELETE">حذف</option>
-            <option value="APPROVE">موافقة</option>
+            <option value="APPROVE">Approuver</option>
             <option value="LOGIN">دخول</option>
           </select>
         </div>
@@ -120,7 +120,7 @@ export default function AuditLogViewer() {
                 <th>المستخدم</th>
                 <th>الكائن</th>
                 <th>عنوان IP</th>
-                <th>التاريخ والوقت</th>
+                <th>Date والوقت</th>
                 <th></th>
               </tr>
             </thead>
@@ -137,7 +137,7 @@ export default function AuditLogViewer() {
                       className="btn-details"
                       onClick={() => setSelectedLog(log)}
                     >
-                      عرض التفاصيل
+                      Voir les Détails
                     </button>
                   </td>
                 </tr>

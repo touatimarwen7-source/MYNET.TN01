@@ -25,7 +25,7 @@ export default function BuyerDashboard() {
       const tenderRes = await procurementAPI.getTenders({ status: 'active' });
       const tenders = tenderRes.data.tenders || [];
       
-      // حساب الإحصائيات
+      // Calcul des Statistiques
       let totalBids = 0;
       let totalBudget = 0;
       let totalSpent = 0;
@@ -91,7 +91,7 @@ export default function BuyerDashboard() {
             <span className={`traffic-light ${getStatus(stats.totalSavings)}`}></span>
           </div>
           <p className="kpi-value">{stats.totalSavings}%</p>
-          <p className="kpi-label">من الميزانية</p>
+          <p className="kpi-label">من Budget</p>
         </div>
 
         <div className="kpi-card">
@@ -115,7 +115,7 @@ export default function BuyerDashboard() {
               <div key={tender.id} className="tender-item">
                 <div className="tender-info">
                   <h3>{tender.title}</h3>
-                  <p>الفئة: {tender.category}</p>
+                  <p>Catégorie: {tender.category}</p>
                 </div>
                 <div className="tender-meta">
                   <span className={`status status-${tender.status}`}>{tender.status}</span>
@@ -129,7 +129,7 @@ export default function BuyerDashboard() {
 
       {/* Traffic Light Legend */}
       <div className="legend">
-        <h3>مؤشرات الحالة</h3>
+        <h3>مؤشرات Statut</h3>
         <div className="legend-items">
           <div className="legend-item">
             <span className="traffic-light green"></span>

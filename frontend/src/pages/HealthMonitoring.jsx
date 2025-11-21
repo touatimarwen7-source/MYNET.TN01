@@ -57,7 +57,7 @@ export default function HealthMonitoring() {
         </select>
       </div>
 
-      {/* الحالة العامة */}
+      {/* Statut العامة */}
       <div className="health-overview">
         <div className={`status-card status-${serverStatus}`}>
           <h2>حالة الخادم</h2>

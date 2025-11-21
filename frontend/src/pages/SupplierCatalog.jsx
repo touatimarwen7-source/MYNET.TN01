@@ -62,7 +62,7 @@ export default function SupplierCatalog() {
 
   return (
     <div className="supplier-catalog">
-      <h1>إدارة المنتجات والخدمات</h1>
+      <h1>إدارة المنتجات والServices</h1>
 
       <button 
         className="btn btn-primary add-product-btn"
@@ -87,16 +87,16 @@ export default function SupplierCatalog() {
           </div>
 
           <div className="form-group">
-            <label>الفئة:</label>
+            <label>Catégorie:</label>
             <select 
               value={newProduct.category}
               onChange={(e) => setNewProduct({...newProduct, category: e.target.value})}
               required
             >
-              <option value="">اختر الفئة</option>
-              <option value="supplies">إمدادات</option>
-              <option value="services">خدمات</option>
-              <option value="construction">بناء</option>
+              <option value="">اختر Catégorie</option>
+              <option value="supplies">Fournitures</option>
+              <option value="services">Services</option>
+              <option value="construction">Construction</option>
             </select>
           </div>
 
@@ -141,7 +141,7 @@ export default function SupplierCatalog() {
           products.map(product => (
             <div key={product.id} className="product-card">
               <h3>{product.name}</h3>
-              <p><strong>الفئة:</strong> {product.category}</p>
+              <p><strong>Catégorie:</strong> {product.category}</p>
               <p>{product.description}</p>
               <p className="price">{product.price} د.ت</p>
               <div className="actions">

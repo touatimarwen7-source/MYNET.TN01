@@ -209,7 +209,7 @@ export default function SubmitBid() {
 
   return (
     <div className="submit-bid-form">
-      {/* شريط الأمان والحالة */}
+      {/* شريط الأمان وStatut */}
       <div className={`security-status-bar ${timeWarning ? 'warning' : ''} ${isExpired ? 'expired' : ''}`}>
         <div className="status-item countdown">
           <span className="label">⏱️ الوقت المتبقي:</span>

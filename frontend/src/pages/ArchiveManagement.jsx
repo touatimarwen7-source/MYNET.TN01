@@ -148,7 +148,7 @@ export default function ArchiveManagement() {
                   <span className="status-badge">{job.status}</span>
                 </div>
                 <div className="job-info">
-                  <p><strong>التاريخ:</strong> {new Date(job.created_at).toLocaleDateString('fr-FR')}</p>
+                  <p><strong>Date:</strong> {new Date(job.created_at).toLocaleDateString('fr-FR')}</p>
                   <p><strong>Fichiers:</strong> {job.files_count}</p>
                   <p><strong>الحجم:</strong> {(job.size_mb).toFixed(2)} MB</p>
                 </div>

@@ -1,6 +1,7 @@
-@import './styles/modernColors.css';
-@import './styles/microInteractions.css';
-@import './styles/luxuryDesign.css';
+/* ================================================
+   Global Base Styles
+   MUI Institutional Theme Foundation
+   ================================================ */
 
 * {
   margin: 0;
@@ -14,42 +15,158 @@ html, body, #root {
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   direction: ltr;
   background: #fafafa;
-  color: #333333;
+  color: #2c2c2c;
   min-height: 100vh;
 }
 
+/* ================================================
+   Link Styling - Institutional
+   ================================================ */
 a {
-  color: var(--color-action);
+  color: #0052a3;
   text-decoration: none;
-  transition: all var(--transition-fast);
+  transition: color 150ms ease-in-out;
   position: relative;
 }
 
 a:hover {
-  color: var(--color-action-hover);
+  color: #003d7a;
 }
 
-a::after {
-  content: '';
-  position: absolute;
-  bottom: -2px;
-  left: 0;
-  width: 0;
-  height: 2px;
-  background: var(--color-action);
-  transition: width var(--transition-normal);
+a:focus {
+  outline: 2px solid #0052a3;
+  outline-offset: 2px;
 }
 
-a:hover::after {
-  width: 100%;
-}
-
+/* ================================================
+   Button Base Styling
+   ================================================ */
 button {
-  font-family: inherit;
+  font-family: 'Roboto', inherit;
   cursor: pointer;
+  border: none;
+  background: none;
+  padding: 0;
+}
+
+/* ================================================
+   Input Base Styling
+   ================================================ */
+input,
+textarea,
+select {
+  font-family: 'Roboto', inherit;
+  font-size: 14px;
+}
+
+/* ================================================
+   Form Elements
+   ================================================ */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="date"],
+input[type="time"],
+textarea,
+select {
+  background: #ffffff;
+  border: 1px solid #d8d8d8;
+  border-radius: 2px;
+  padding: 12px 16px;
+  font-size: 14px;
+  color: #2c2c2c;
+  min-height: 44px;
+  transition: border-color 150ms ease-in-out;
+}
+
+input[type="text"]:hover,
+input[type="email"]:hover,
+input[type="password"]:hover,
+input[type="date"]:hover,
+input[type="time"]:hover,
+textarea:hover,
+select:hover {
+  border-color: #b0b0b0;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus,
+input[type="date"]:focus,
+input[type="time"]:focus,
+textarea:focus,
+select:focus {
+  outline: none;
+  border-color: #0052a3;
+  box-shadow: 0 0 0 2px rgba(0, 82, 163, 0.1);
+}
+
+/* ================================================
+   Scrollbar Styling
+   ================================================ */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f5f5f5;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #b0b0b0;
+  border-radius: 2px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #8a8a8a;
+}
+
+/* ================================================
+   Selection Styling
+   ================================================ */
+::selection {
+  background-color: #e8f0f7;
+  color: #0052a3;
+}
+
+::-moz-selection {
+  background-color: #e8f0f7;
+  color: #0052a3;
+}
+
+/* ================================================
+   Utility Classes (Optional)
+   ================================================ */
+.text-primary {
+  color: #0052a3;
+}
+
+.text-success {
+  color: #1b5428;
+}
+
+.text-error {
+  color: #b32b1b;
+}
+
+.text-warning {
+  color: #d4900f;
+}
+
+.bg-light {
+  background-color: #f5f5f5;
+}
+
+.bg-lighter {
+  background-color: #fafafa;
+}
+
+.border-divider {
+  border-color: #d8d8d8;
 }

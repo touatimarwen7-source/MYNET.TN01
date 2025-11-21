@@ -31,11 +31,15 @@ import SubscriptionTiers from './pages/SubscriptionTiers';
 import FeatureControl from './pages/FeatureControl';
 import UserManagement from './pages/UserManagement';
 import { setupInactivityTimer } from './utils/security';
+import { useToast } from './components/ToastContainer';
+import ToastContainer from './components/ToastContainer';
+import { ToastContext } from './contexts/ToastContext';
 import './App.css';
 
 function App() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const { toasts, addToast, removeToast } = useToast();
 
   useEffect(() => {
     const token = localStorage.getItem('accessToken');
@@ -69,8 +73,10 @@ function App() {
   }
 
   return (
-    <Router>
-      <div className="app">
+    <ToastContext.Provider value={{ addToast }}>
+      <Router>
+        <div className="app">
+          <ToastContainer toasts={toasts} removeToast={removeToast} />
         <nav className="navbar">
           <div className="nav-container">
             <div className="nav-brand">

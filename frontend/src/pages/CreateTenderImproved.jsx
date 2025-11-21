@@ -5,35 +5,37 @@ export default function CreateTenderImproved() {
   const [step, setStep] = useState(1);
   const [tenderData, setTenderData] = useState({
     title: '',
-    description: '',
-    category: '',
-    location: '',
-    opening_date: '',
-    closing_date: '',
-    budget_max: 0,
+    categories: [],
+    summary: '',
+    budgetMax: 0,
     currency: 'TND',
-    items: []
+    documents: [],
+    submissionDeadline: '',
+    decryptionDate: '',
+    questionsStartDate: '',
+    questionsEndDate: '',
+    bidValidityDays: 90,
+    alertSystem: '48',
+    items: [],
+    weights: { price: 40, compliance: 30, delivery: 20, sustainability: 10 },
+    requiredDocuments: [],
+    minEligibility: [],
+    geographicLocation: '',
+    awardType: 'full',
+    allowNegotiation: false
   });
-  const [holidays, setHolidays] = useState([]);
-  const [dateConflict, setDateConflict] = useState('');
+
   const [autoSaveStatus, setAutoSaveStatus] = useState('');
+  const [errors, setErrors] = useState({});
+  const [documentFiles, setDocumentFiles] = useState([]);
 
   // Auto-Save كل 30 ثانية
   useEffect(() => {
     const interval = setInterval(() => {
-      if (tenderData.title || tenderData.description) {
-        saveDraft();
-      }
+      if (tenderData.title || tenderData.summary) saveDraft();
     }, 30000);
     return () => clearInterval(interval);
   }, [tenderData]);
-
-  // التحقق من تضارب التواريخ
-  useEffect(() => {
-    if (tenderData.opening_date && tenderData.closing_date) {
-      checkDateConflict();
-    }
-  }, [tenderData.opening_date, tenderData.closing_date]);
 
   const saveDraft = async () => {
     try {
@@ -48,279 +50,575 @@ export default function CreateTenderImproved() {
     }
   };
 
-  const checkDateConflict = async () => {
-    try {
-      const response = await axios.post(
-        'http://localhost:5000/api/procurement/check-date-conflict',
-        {
-          start_date: tenderData.opening_date,
-          end_date: tenderData.closing_date
-        },
-        { headers: { Authorization: `Bearer ${localStorage.getItem('accessToken')}` } }
-      );
-      
-      if (response.data.conflict) {
-        setDateConflict(`⚠️ تحذير: ${response.data.message}`);
-      } else {
-        setDateConflict('');
-      }
-    } catch (error) {
-      console.error('خطأ:', error);
-    }
-  };
-
   const handleInputChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value, type, checked } = e.target;
     setTenderData(prev => ({
       ...prev,
-      [name]: value
+      [name]: type === 'checkbox' ? checked : value
+    }));
+  };
+
+  const handleCategoryToggle = (category) => {
+    setTenderData(prev => ({
+      ...prev,
+      categories: prev.categories.includes(category)
+        ? prev.categories.filter(c => c !== category)
+        : [...prev.categories, category]
     }));
   };
 
   const handleAddItem = () => {
     setTenderData(prev => ({
       ...prev,
-      items: [...prev.items, { name: '', quantity: 0, specifications: '' }]
+      items: [...prev.items, { name: '', quantity: 0, unit: 'Unit', specifications: '', unitPrice: 0 }]
     }));
   };
 
   const handleItemChange = (index, field, value) => {
     const newItems = [...tenderData.items];
     newItems[index][field] = value;
+    setTenderData(prev => ({ ...prev, items: newItems }));
+  };
+
+  const handleWeightChange = (field, value) => {
     setTenderData(prev => ({
       ...prev,
-      items: newItems
+      weights: { ...prev.weights, [field]: parseFloat(value) }
     }));
   };
 
+  const handleDocumentUpload = (e) => {
+    const files = Array.from(e.target.files);
+    setDocumentFiles([...documentFiles, ...files]);
+  };
+
+  const validateStep = () => {
+    const newErrors = {};
+    
+    if (step === 1) {
+      if (!tenderData.title) newErrors.title = 'العنوان مطلوب';
+      if (tenderData.categories.length === 0) newErrors.categories = 'اختر فئة واحدة على الأقل';
+      if (!tenderData.summary) newErrors.summary = 'الملخص مطلوب';
+    }
+
+    if (step === 2) {
+      if (!tenderData.submissionDeadline) newErrors.submissionDeadline = 'تاريخ الإغلاق مطلوب';
+      if (!tenderData.decryptionDate) newErrors.decryptionDate = 'تاريخ الفتح مطلوب';
+      if (new Date(tenderData.decryptionDate) <= new Date(tenderData.submissionDeadline)) {
+        newErrors.decryptionDate = 'يجب أن يكون تاريخ الفتح بعد تاريخ الإغلاق';
+      }
+      if (!tenderData.questionsEndDate) newErrors.questionsEndDate = 'نهاية فترة الاستفسارات مطلوبة';
+    }
+
+    if (step === 3) {
+      if (tenderData.items.length === 0) newErrors.items = 'يجب إضافة بند واحد على الأقل';
+    }
+
+    if (step === 4) {
+      if (!tenderData.geographicLocation) newErrors.geographicLocation = 'اختر الموقع الجغرافي';
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleNextStep = () => {
+    if (validateStep()) setStep(step + 1);
+  };
+
   const handleSubmit = async () => {
+    if (!validateStep()) return;
+
     try {
       await axios.post('http://localhost:5000/api/procurement/tenders', tenderData, {
         headers: { Authorization: `Bearer ${localStorage.getItem('accessToken')}` }
       });
-      alert('تم إنشاء المناقصة بنجاح');
+      alert('تم إنشاء المناقصة بنجاح وإرسال التنبيهات للموردين المؤهلين');
+      setTenderData({
+        title: '', categories: [], summary: '', budgetMax: 0, currency: 'TND',
+        documents: [], submissionDeadline: '', decryptionDate: '',
+        questionsStartDate: '', questionsEndDate: '', bidValidityDays: 90,
+        alertSystem: '48', items: [], weights: { price: 40, compliance: 30, delivery: 20, sustainability: 10 },
+        requiredDocuments: [], minEligibility: [], geographicLocation: '',
+        awardType: 'full', allowNegotiation: false
+      });
+      setStep(1);
     } catch (error) {
       alert('خطأ: ' + error.response?.data?.error);
     }
   };
 
+  const categories = ['إمدادات', 'خدمات', 'بناء وتشييد', 'استشارات', 'صيانة'];
+  const units = ['Unit', 'كجم', 'طن', 'ساعة', 'يوم', 'قطعة'];
+
   return (
-    <div className="create-tender-improved">
-      <h1>إنشاء مناقصة جديدة</h1>
+    <div className="create-tender-professional">
+      <h1>📑 إنشاء مناقصة احترافية</h1>
 
       {/* شريط التقدم */}
       <div className="progress-steps">
-        <div className={`step ${step >= 1 ? 'active' : ''}`}>1. المعلومات الأساسية</div>
-        <div className={`step ${step >= 2 ? 'active' : ''}`}>2. التفاصيل والتواريخ</div>
-        <div className={`step ${step >= 3 ? 'active' : ''}`}>3. البنود والمواصفات</div>
-        <div className={`step ${step >= 4 ? 'active' : ''}`}>4. المراجعة</div>
+        {[1, 2, 3, 4, 5].map(s => (
+          <div key={s} className={`step ${step >= s ? 'active' : ''} ${step === s ? 'current' : ''}`}>
+            {s}. {['البيانات', 'الجدولة', 'البنود', 'الأهلية', 'المراجعة'][s - 1]}
+          </div>
+        ))}
       </div>
 
-      {/* حالة الحفظ التلقائي */}
       {autoSaveStatus && (
         <div className={`auto-save-status ${autoSaveStatus.includes('✓') ? 'success' : 'error'}`}>
           {autoSaveStatus}
         </div>
       )}
 
-      {/* الخطوة 1 */}
+      {/* الخطوة 1: البيانات الأساسية */}
       {step === 1 && (
         <div className="step-content">
-          <h2>المعلومات الأساسية</h2>
+          <h2>الخطوة 1: البيانات الأساسية والتصنيف</h2>
+
           <div className="form-group">
-            <label>عنوان المناقصة:</label>
-            <input 
+            <label>عنوان المناقصة *</label>
+            <input
               type="text"
               name="title"
               value={tenderData.title}
               onChange={handleInputChange}
-              placeholder="مثال: توريد أجهزة كمبيوتر"
+              placeholder="مثال: توريد خوادم سحابية Enterprise"
+              maxLength="200"
             />
+            {errors.title && <span className="error">{errors.title}</span>}
           </div>
 
           <div className="form-group">
-            <label>الوصف:</label>
-            <textarea 
-              name="description"
-              value={tenderData.description}
+            <label>فئات المشتريات * (اختر واحدة أو أكثر)</label>
+            <div className="checkbox-group">
+              {categories.map(cat => (
+                <label key={cat}>
+                  <input
+                    type="checkbox"
+                    checked={tenderData.categories.includes(cat)}
+                    onChange={() => handleCategoryToggle(cat)}
+                  />
+                  {cat}
+                </label>
+              ))}
+            </div>
+            {errors.categories && <span className="error">{errors.categories}</span>}
+          </div>
+
+          <div className="form-group">
+            <label>ملخص المناقصة *</label>
+            <textarea
+              name="summary"
+              value={tenderData.summary}
               onChange={handleInputChange}
-              rows={5}
-              placeholder="وصف تفصيلي للمناقصة"
+              placeholder="وصف موجز لمتطلبات المشروع والنطاق"
+              rows={4}
             />
+            {errors.summary && <span className="error">{errors.summary}</span>}
           </div>
 
           <div className="form-row">
             <div className="form-group">
-              <label>الفئة:</label>
-              <select name="category" value={tenderData.category} onChange={handleInputChange}>
-                <option value="">اختر الفئة</option>
-                <option value="supplies">إمدادات</option>
-                <option value="services">خدمات</option>
-                <option value="construction">بناء</option>
-              </select>
+              <label>الميزانية التقديرية (اختياري)</label>
+              <input
+                type="number"
+                name="budgetMax"
+                value={tenderData.budgetMax}
+                onChange={handleInputChange}
+                placeholder="0"
+              />
             </div>
-
             <div className="form-group">
-              <label>الموقع:</label>
-              <select name="location" value={tenderData.location} onChange={handleInputChange}>
-                <option value="">اختر الموقع</option>
-                <option value="tunis">تونس</option>
-                <option value="sfax">صفاقس</option>
-                <option value="sousse">سوسة</option>
+              <label>العملة</label>
+              <select name="currency" value={tenderData.currency} onChange={handleInputChange}>
+                <option value="TND">د.ت (تونسي)</option>
+                <option value="USD">$ (دولار أمريكي)</option>
+                <option value="EUR">€ (يورو)</option>
               </select>
             </div>
+          </div>
+
+          <div className="form-group">
+            <label>الوثائق العامة (اختياري)</label>
+            <input type="file" multiple onChange={handleDocumentUpload} />
+            <p className="help-text">يدعم: PDF, DOCX, Excel</p>
+            {documentFiles.length > 0 && (
+              <ul className="file-list">
+                {documentFiles.map((f, i) => (
+                  <li key={i}>{f.name}</li>
+                ))}
+              </ul>
+            )}
           </div>
         </div>
       )}
 
-      {/* الخطوة 2 */}
+      {/* الخطوة 2: الجدولة والتواريخ */}
       {step === 2 && (
         <div className="step-content">
-          <h2>التفاصيل والتواريخ</h2>
-          
+          <h2>الخطوة 2: الجدولة والتواريخ الحرجة</h2>
+
           <div className="form-row">
             <div className="form-group">
-              <label>تاريخ الفتح:</label>
-              <input 
+              <label>تاريخ الإغلاق (آخر موعد لتقديم العروض) *</label>
+              <input
                 type="datetime-local"
-                name="opening_date"
-                value={tenderData.opening_date}
+                name="submissionDeadline"
+                value={tenderData.submissionDeadline}
                 onChange={handleInputChange}
               />
+              {errors.submissionDeadline && <span className="error">{errors.submissionDeadline}</span>}
             </div>
 
             <div className="form-group">
-              <label>تاريخ الإغلاق:</label>
-              <input 
+              <label>تاريخ الفتح (فك التشفير) *</label>
+              <input
                 type="datetime-local"
-                name="closing_date"
-                value={tenderData.closing_date}
+                name="decryptionDate"
+                value={tenderData.decryptionDate}
                 onChange={handleInputChange}
               />
+              {errors.decryptionDate && <span className="error">{errors.decryptionDate}</span>}
             </div>
           </div>
 
-          {dateConflict && (
-            <div className="alert alert-warning">{dateConflict}</div>
-          )}
-
           <div className="form-row">
             <div className="form-group">
-              <label>الميزانية القصوى:</label>
-              <input 
-                type="number"
-                name="budget_max"
-                value={tenderData.budget_max}
+              <label>بداية فترة الاستفسارات *</label>
+              <input
+                type="datetime-local"
+                name="questionsStartDate"
+                value={tenderData.questionsStartDate}
                 onChange={handleInputChange}
               />
             </div>
 
             <div className="form-group">
-              <label>العملة:</label>
-              <select name="currency" value={tenderData.currency} onChange={handleInputChange}>
-                <option value="TND">د.ت</option>
-                <option value="USD">$</option>
-                <option value="EUR">€</option>
+              <label>نهاية فترة الاستفسارات *</label>
+              <input
+                type="datetime-local"
+                name="questionsEndDate"
+                value={tenderData.questionsEndDate}
+                onChange={handleInputChange}
+              />
+              {errors.questionsEndDate && <span className="error">{errors.questionsEndDate}</span>}
+            </div>
+          </div>
+
+          <div className="form-row">
+            <div className="form-group">
+              <label>فترة صلاحية العرض (بالأيام)</label>
+              <input
+                type="number"
+                name="bidValidityDays"
+                value={tenderData.bidValidityDays}
+                onChange={handleInputChange}
+                min="30"
+                max="365"
+              />
+            </div>
+
+            <div className="form-group">
+              <label>نظام التنبيهات</label>
+              <select name="alertSystem" value={tenderData.alertSystem} onChange={handleInputChange}>
+                <option value="24">تنبيه قبل 24 ساعة</option>
+                <option value="48">تنبيه قبل 48 ساعة</option>
+                <option value="72">تنبيه قبل 72 ساعة</option>
               </select>
             </div>
           </div>
         </div>
       )}
 
-      {/* الخطوة 3 */}
+      {/* الخطوة 3: البنود والمواصفات */}
       {step === 3 && (
         <div className="step-content">
-          <h2>البنود والمواصفات</h2>
-          
-          {tenderData.items.map((item, idx) => (
-            <div key={idx} className="item-card">
-              <h3>البند {idx + 1}</h3>
-              <div className="form-group">
-                <label>اسم البند:</label>
-                <input 
-                  type="text"
-                  value={item.name}
-                  onChange={(e) => handleItemChange(idx, 'name', e.target.value)}
-                  placeholder="مثال: شاشة 27 بوصة"
-                />
-              </div>
+          <h2>الخطوة 3: متطلبات البنود الفنية والمالية</h2>
 
-              <div className="form-row">
-                <div className="form-group">
-                  <label>الكمية:</label>
-                  <input 
-                    type="number"
-                    value={item.quantity}
-                    onChange={(e) => handleItemChange(idx, 'quantity', e.target.value)}
-                  />
+          <div className="items-section">
+            {tenderData.items.map((item, idx) => (
+              <div key={idx} className="item-card">
+                <h3>البند {idx + 1}</h3>
+                <div className="form-row">
+                  <div className="form-group full">
+                    <label>وصف البند/الاسم</label>
+                    <input
+                      type="text"
+                      value={item.name}
+                      onChange={(e) => handleItemChange(idx, 'name', e.target.value)}
+                      placeholder="خادم Dell PowerEdge R650"
+                    />
+                  </div>
+                </div>
+
+                <div className="form-row">
+                  <div className="form-group">
+                    <label>الكمية المطلوبة</label>
+                    <input
+                      type="number"
+                      value={item.quantity}
+                      onChange={(e) => handleItemChange(idx, 'quantity', e.target.value)}
+                      min="1"
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label>وحدة القياس</label>
+                    <select value={item.unit} onChange={(e) => handleItemChange(idx, 'unit', e.target.value)}>
+                      {units.map(u => (
+                        <option key={u} value={u}>{u}</option>
+                      ))}
+                    </select>
+                  </div>
+                  <div className="form-group">
+                    <label>السعر الوحدوي (اختياري)</label>
+                    <input
+                      type="number"
+                      value={item.unitPrice}
+                      onChange={(e) => handleItemChange(idx, 'unitPrice', e.target.value)}
+                      placeholder="0"
+                    />
+                  </div>
                 </div>
 
                 <div className="form-group">
-                  <label>المواصفات التقنية:</label>
-                  <input 
-                    type="text"
+                  <label>المواصفات التقنية</label>
+                  <textarea
                     value={item.specifications}
                     onChange={(e) => handleItemChange(idx, 'specifications', e.target.value)}
-                    placeholder="مثال: دقة 4K، لون عالي"
+                    placeholder="تفاصيل تقنية: CPU، Memory، Storage، الضمان، إلخ"
+                    rows={3}
                   />
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
 
           <button className="btn btn-secondary" onClick={handleAddItem}>
             + إضافة بند جديد
           </button>
+          {errors.items && <span className="error">{errors.items}</span>}
+
+          <div className="weighting-section">
+            <h3>نظام ترجيح معايير التقييم</h3>
+            <p>تحديد الأوزان (يجب أن تساوي 100%):</p>
+            <div className="form-row">
+              <div className="form-group">
+                <label>السعر: {tenderData.weights.price}%</label>
+                <input
+                  type="number"
+                  value={tenderData.weights.price}
+                  onChange={(e) => handleWeightChange('price', e.target.value)}
+                  min="0"
+                  max="100"
+                />
+              </div>
+              <div className="form-group">
+                <label>الامتثال: {tenderData.weights.compliance}%</label>
+                <input
+                  type="number"
+                  value={tenderData.weights.compliance}
+                  onChange={(e) => handleWeightChange('compliance', e.target.value)}
+                  min="0"
+                  max="100"
+                />
+              </div>
+              <div className="form-group">
+                <label>التسليم: {tenderData.weights.delivery}%</label>
+                <input
+                  type="number"
+                  value={tenderData.weights.delivery}
+                  onChange={(e) => handleWeightChange('delivery', e.target.value)}
+                  min="0"
+                  max="100"
+                />
+              </div>
+              <div className="form-group">
+                <label>الاستدامة: {tenderData.weights.sustainability}%</label>
+                <input
+                  type="number"
+                  value={tenderData.weights.sustainability}
+                  onChange={(e) => handleWeightChange('sustainability', e.target.value)}
+                  min="0"
+                  max="100"
+                />
+              </div>
+            </div>
+            <p className="info">
+              المجموع: {tenderData.weights.price + tenderData.weights.compliance + tenderData.weights.delivery + tenderData.weights.sustainability}%
+            </p>
+          </div>
         </div>
       )}
 
-      {/* الخطوة 4 - المراجعة */}
+      {/* الخطوة 4: الأهلية والأمان */}
       {step === 4 && (
         <div className="step-content">
-          <h2>مراجعة المناقصة</h2>
-          
-          <div className="review-section">
-            <h3>{tenderData.title}</h3>
-            <p>{tenderData.description}</p>
-            <p><strong>الفئة:</strong> {tenderData.category}</p>
-            <p><strong>الموقع:</strong> {tenderData.location}</p>
-            <p><strong>الميزانية:</strong> {tenderData.budget_max} {tenderData.currency}</p>
-            <p><strong>من:</strong> {new Date(tenderData.opening_date).toLocaleString('ar-TN')}</p>
-            <p><strong>إلى:</strong> {new Date(tenderData.closing_date).toLocaleString('ar-TN')}</p>
-            
-            <h4>البنود:</h4>
-            <ul>
-              {tenderData.items.map((item, idx) => (
-                <li key={idx}>{item.name} × {item.quantity}</li>
-              ))}
-            </ul>
+          <h2>الخطوة 4: شروط الأهلية والأمان</h2>
+
+          <div className="form-group">
+            <label>الحد الأدنى للأهلية (اختياري)</label>
+            <div className="checkbox-group">
+              <label>
+                <input
+                  type="checkbox"
+                  checked={tenderData.minEligibility.includes('registered')}
+                  onChange={() => {
+                    const updated = tenderData.minEligibility.includes('registered')
+                      ? tenderData.minEligibility.filter(e => e !== 'registered')
+                      : [...tenderData.minEligibility, 'registered'];
+                    setTenderData(prev => ({ ...prev, minEligibility: updated }));
+                  }}
+                />
+                المورد مسجل في النظام لمدة 6 أشهر على الأقل
+              </label>
+              <label>
+                <input
+                  type="checkbox"
+                  checked={tenderData.minEligibility.includes('certified')}
+                  onChange={() => {
+                    const updated = tenderData.minEligibility.includes('certified')
+                      ? tenderData.minEligibility.filter(e => e !== 'certified')
+                      : [...tenderData.minEligibility, 'certified'];
+                    setTenderData(prev => ({ ...prev, minEligibility: updated }));
+                  }}
+                />
+                يمتلك شهادات جودة معترف بها
+              </label>
+            </div>
+          </div>
+
+          <div className="form-group">
+            <label>الموقع الجغرافي للخدمة *</label>
+            <select name="geographicLocation" value={tenderData.geographicLocation} onChange={handleInputChange}>
+              <option value="">اختر الموقع</option>
+              <option value="tunisia">تونس</option>
+              <option value="regional">إقليمي (شمال أفريقيا)</option>
+              <option value="international">دولي</option>
+            </select>
+            {errors.geographicLocation && <span className="error">{errors.geographicLocation}</span>}
+          </div>
+
+          <div className="form-group">
+            <label>شروط الترسية</label>
+            <div className="radio-group">
+              <label>
+                <input
+                  type="radio"
+                  name="awardType"
+                  value="full"
+                  checked={tenderData.awardType === 'full'}
+                  onChange={handleInputChange}
+                />
+                الترسية بالكامل لأفضل عرض (أقل سعر)
+              </label>
+              <label>
+                <input
+                  type="radio"
+                  name="awardType"
+                  value="partial"
+                  checked={tenderData.awardType === 'partial'}
+                  onChange={handleInputChange}
+                />
+                الترسية الجزئية حسب البنود والامتثال
+              </label>
+            </div>
+          </div>
+
+          <div className="form-group checkbox">
+            <input
+              type="checkbox"
+              name="allowNegotiation"
+              checked={tenderData.allowNegotiation}
+              onChange={handleInputChange}
+            />
+            <label>السماح بإعادة التفاوض مع الموردين المؤهلين</label>
+          </div>
+        </div>
+      )}
+
+      {/* الخطوة 5: المراجعة والنشر */}
+      {step === 5 && (
+        <div className="step-content">
+          <h2>الخطوة 5: المراجعة والنشر</h2>
+
+          <div className="review-summary">
+            <div className="review-section">
+              <h3>📋 البيانات الأساسية</h3>
+              <p><strong>العنوان:</strong> {tenderData.title}</p>
+              <p><strong>الفئات:</strong> {tenderData.categories.join(', ')}</p>
+              <p><strong>الملخص:</strong> {tenderData.summary}</p>
+              <p><strong>الميزانية:</strong> {tenderData.budgetMax} {tenderData.currency}</p>
+            </div>
+
+            <div className="review-section">
+              <h3>📅 الجدولة</h3>
+              <p><strong>تاريخ الإغلاق:</strong> {new Date(tenderData.submissionDeadline).toLocaleString('ar-TN')}</p>
+              <p><strong>تاريخ الفتح:</strong> {new Date(tenderData.decryptionDate).toLocaleString('ar-TN')}</p>
+              <p><strong>فترة الاستفسارات:</strong> من {new Date(tenderData.questionsStartDate).toLocaleDateString('ar-TN')} إلى {new Date(tenderData.questionsEndDate).toLocaleDateString('ar-TN')}</p>
+              <p><strong>صلاحية العرض:</strong> {tenderData.bidValidityDays} يوم</p>
+            </div>
+
+            <div className="review-section">
+              <h3>📦 البنود ({tenderData.items.length})</h3>
+              <table className="items-review-table">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>الوصف</th>
+                    <th>الكمية</th>
+                    <th>الوحدة</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {tenderData.items.map((item, idx) => (
+                    <tr key={idx}>
+                      <td>{idx + 1}</td>
+                      <td>{item.name}</td>
+                      <td>{item.quantity}</td>
+                      <td>{item.unit}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            <div className="review-section">
+              <h3>⚖️ معايير التقييم</h3>
+              <p>السعر: {tenderData.weights.price}% | الامتثال: {tenderData.weights.compliance}% | التسليم: {tenderData.weights.delivery}% | الاستدامة: {tenderData.weights.sustainability}%</p>
+            </div>
+
+            <div className="review-section">
+              <h3>🛡️ الأهلية والأمان</h3>
+              <p><strong>الموقع:</strong> {tenderData.geographicLocation}</p>
+              <p><strong>نوع الترسية:</strong> {tenderData.awardType === 'full' ? 'ترسية كاملة' : 'ترسية جزئية'}</p>
+              <p><strong>التفاوض:</strong> {tenderData.allowNegotiation ? 'مسموح' : 'غير مسموح'}</p>
+            </div>
+
+            <div className="alert alert-info">
+              ✓ تم التحقق من اكتمال النموذج<br/>
+              بعد النشر، سيتم إرسال التنبيهات الفوري للموردين المؤهلين
+            </div>
           </div>
         </div>
       )}
 
       {/* أزرار التنقل */}
       <div className="step-buttons">
-        <button 
+        <button
           className="btn btn-secondary"
           onClick={() => setStep(Math.max(1, step - 1))}
           disabled={step === 1}
         >
-          السابق
+          ← السابق
         </button>
 
-        {step < 4 ? (
-          <button 
-            className="btn btn-primary"
-            onClick={() => setStep(step + 1)}
-          >
-            التالي
+        {step < 5 ? (
+          <button className="btn btn-primary" onClick={handleNextStep}>
+            التالي →
           </button>
         ) : (
-          <button 
-            className="btn btn-success"
-            onClick={handleSubmit}
-          >
-            إنشاء المناقصة
+          <button className="btn btn-success" onClick={handleSubmit}>
+            ✓ نشر المناقصة
           </button>
         )}
       </div>

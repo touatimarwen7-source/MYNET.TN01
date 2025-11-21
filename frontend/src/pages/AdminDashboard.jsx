@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { setPageTitle } from '../utils/pageTitle';
 import DashboardCards from '../components/DashboardCards';
 import '../styles/dashboard-header.css';
+import '../styles/dashboardCards.css';
+import '../styles/dashboard-general.css';
 
 export default function AdminDashboard() {
   const [stats, setStats] = useState({

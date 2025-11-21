@@ -6,6 +6,8 @@ import DashboardCards from '../components/DashboardCards';
 import QuickActions from '../components/QuickActions';
 import ImportantDocuments from '../components/ImportantDocuments';
 import '../styles/dashboard-header.css';
+import '../styles/dashboardCards.css';
+import '../styles/dashboard-general.css';
 
 export default function SupplierDashboard() {
   const navigate = useNavigate();

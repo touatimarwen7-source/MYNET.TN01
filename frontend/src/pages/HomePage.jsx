@@ -5,6 +5,7 @@ import { setPageTitle } from '../utils/pageTitle';
 import DynamicAdvertisement from '../components/DynamicAdvertisement';
 import HowItWorks from '../components/HowItWorks';
 import LeadGenerationForm from '../components/LeadGenerationForm';
+import HeroSearch from '../components/HeroSearch';
 import '../styles/homepage.css';
 
 export default function HomePage() {
@@ -38,6 +39,10 @@ export default function HomePage() {
             MyNet.tn connecte acheteurs et fournisseurs en toute confiance avec chiffrement AES-256, 
             analyse IA, et processus 100% transparent. Plus de collusion, plus d'inefficacité.
           </p>
+          
+          {/* Hero Search Component */}
+          <HeroSearch />
+          
           <div className="hero-stats">
             <div className="stat">
               <strong>50M+ TND</strong>

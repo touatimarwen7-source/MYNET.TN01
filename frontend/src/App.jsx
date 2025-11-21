@@ -32,8 +32,6 @@ import NotificationCenter from './pages/NotificationCenter';
 import CreateOffer from './pages/CreateOffer';
 import SupplierCatalog from './pages/SupplierCatalog';
 import SupplierProfile from './pages/SupplierProfile';
-import TenderPreferencesSettings from './pages/TenderPreferencesSettings';
-import TenderSecuritySettings from './pages/TenderSecuritySettings';
 import SupplierInvoices from './pages/SupplierInvoices';
 import AdminDashboard from './pages/AdminDashboard';
 import MFASetup from './pages/MFASetup';

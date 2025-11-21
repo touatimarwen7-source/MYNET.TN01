@@ -6,8 +6,7 @@ import DynamicAdvertisement from '../components/DynamicAdvertisement';
 import HowItWorks from '../components/HowItWorks';
 import LeadGenerationForm from '../components/LeadGenerationForm';
 import HeroSearch from '../components/HeroSearch';
-import '../styles/design-system.css';
-import '../styles/hero-section-enhanced.css';
+import '../styles/hero-section-search-only.css';
 import '../styles/homepage.css';
 
 export default function HomePage() {
@@ -32,45 +31,9 @@ export default function HomePage() {
     <>
       
       <div className="homepage">
-      {/* Hero Section - Optimized for Marketing */}
-      <section className="hero-section">
-        <div className="hero-content">
-          <h1 className="hero-title">🚀 Révolutionnez Vos Achats B2B</h1>
-          <p className="hero-usp">La plateforme d'e-tendering la plus sécurisée et transparente du Maghreb</p>
-          <p className="hero-description">
-            MyNet.tn connecte acheteurs et fournisseurs en toute confiance avec chiffrement AES-256, 
-            analyse IA, et processus 100% transparent. Plus de collusion, plus d'inefficacité.
-          </p>
-          
-          {/* Hero Search Component */}
-          <HeroSearch />
-          
-          <div className="hero-stats">
-            <div className="stat">
-              <strong>50M+ TND</strong>
-              <span>Volume annuel</span>
-            </div>
-            <div className="stat">
-              <strong>1200+</strong>
-              <span>Organisations</span>
-            </div>
-            <div className="stat">
-              <strong>99.99%</strong>
-              <span>Disponibilité</span>
-            </div>
-          </div>
-          <button className="cta-button primary" onClick={handleFreeTrialClick}>
-            ✨ Essai Gratuit 30 Jours
-          </button>
-          <button className="cta-button secondary" onClick={handleLearnMoreClick}>
-            En Savoir Plus →
-          </button>
-        </div>
-        <div className="hero-image">
-          <div className="hero-illustration">
-            <div className="illustration-box glow">🛡️🔐💡</div>
-          </div>
-        </div>
+      {/* Hero Section - Search Only */}
+      <section className="hero-section-search">
+        <HeroSearch />
       </section>
 
       {/* Dynamic Advertisement Section */}

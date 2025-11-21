@@ -11,15 +11,16 @@
 }
 
 .navbar {
-  background: var(--gradient-primary);
+  background: rgba(13, 40, 73, 0.8);
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
   color: white;
   padding: var(--spacing-lg) 0;
-  box-shadow: var(--shadow-xl);
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.16);
   position: sticky;
   top: 0;
   z-index: 100;
-  border-bottom: 2px solid rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   animation: slideDown 0.5s ease-out;
 }
 
@@ -139,14 +140,15 @@
 }
 
 .form-container {
-  background: rgba(255, 255, 255, 0.95);
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
   padding: 2rem;
-  border-radius: var(--border-radius-lg);
-  box-shadow: var(--shadow-xl);
-  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.18);
   max-width: 500px;
   margin: 2rem auto;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
   animation: slideUp 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 

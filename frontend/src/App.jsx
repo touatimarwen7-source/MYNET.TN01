@@ -21,6 +21,8 @@ import BuyerDashboard from './pages/BuyerDashboard';
 import InvoiceManagement from './pages/InvoiceManagement';
 import CreateTenderImproved from './pages/CreateTenderImproved';
 import TenderChat from './pages/TenderChat';
+import TenderSecuritySettings from './pages/TenderSecuritySettings';
+import TenderPreferencesSettings from './pages/TenderPreferencesSettings';
 import TeamManagement from './pages/TeamManagement';
 import SupplierSearch from './pages/SupplierSearch';
 import SupplierDashboard from './pages/SupplierDashboard';
@@ -30,6 +32,8 @@ import NotificationCenter from './pages/NotificationCenter';
 import CreateOffer from './pages/CreateOffer';
 import SupplierCatalog from './pages/SupplierCatalog';
 import SupplierProfile from './pages/SupplierProfile';
+import TenderPreferencesSettings from './pages/TenderPreferencesSettings';
+import TenderSecuritySettings from './pages/TenderSecuritySettings';
 import SupplierInvoices from './pages/SupplierInvoices';
 import AdminDashboard from './pages/AdminDashboard';
 import MFASetup from './pages/MFASetup';
@@ -143,6 +147,8 @@ function App() {
 
             {/* Appels d'offres */}
             <Route path="/tenders" element={<TenderList />} />
+            <Route path="/tender/security" element={<TenderSecuritySettings />} />
+            <Route path="/tender/preferences" element={<TenderPreferencesSettings />} />
             <Route path="/tender/:id" element={<TenderDetail />} />
             <Route path="/tender/:id/audit-log" element={<AuditLog />} />
             <Route path="/tender/:id/award" element={<PartialAward />} />

@@ -13,7 +13,7 @@ export default function SupplierInvoices() {
   const fetchInvoices = async () => {
     setLoading(true);
     try {
-      const response = await axios.get(`http://localhost:5000/api/supplier/invoices?status=${filter}`, {
+      const response = await axios.get(`/api/supplier/invoices?status=${filter}`, {
         headers: { Authorization: `Bearer ${localStorage.getItem('accessToken')}` }
       });
       setInvoices(response.data.invoices || []);

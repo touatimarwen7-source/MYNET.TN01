@@ -22,7 +22,7 @@ export default function TenderChat({ tenderId }) {
 
   const fetchMessages = async () => {
     try {
-      const response = await axios.get(`http://localhost:5000/api/tender/${tenderId}/messages`, {
+      const response = await axios.get(`/api/tender/${tenderId}/messages`, {
         headers: { Authorization: `Bearer ${localStorage.getItem('accessToken')}` }
       });
       setMessages(response.data.messages || []);
@@ -39,7 +39,7 @@ export default function TenderChat({ tenderId }) {
 
     try {
       const response = await axios.post(
-        `http://localhost:5000/api/tender/${tenderId}/messages`,
+        `/api/tender/${tenderId}/messages`,
         { content: newMessage },
         { headers: { Authorization: `Bearer ${localStorage.getItem('accessToken')}` } }
       );

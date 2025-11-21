@@ -12,7 +12,7 @@ export default function MFASetup() {
 
   const handleSetupMFA = async () => {
     try {
-      const response = await axios.post('http://localhost:5000/api/auth/mfa/setup', {}, {
+      const response = await axios.post('/api/auth/mfa/setup', {}, {
         headers: { Authorization: `Bearer ${localStorage.getItem('accessToken')}` }
       });
       setSecret(response.data.secret);
@@ -31,7 +31,7 @@ export default function MFASetup() {
     }
 
     try {
-      await axios.post('http://localhost:5000/api/auth/mfa/verify-setup', 
+      await axios.post('/api/auth/mfa/verify-setup', 
         { token, secret, backupCodes },
         { headers: { Authorization: `Bearer ${localStorage.getItem('accessToken')}` } }
       );

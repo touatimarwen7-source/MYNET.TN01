@@ -55,7 +55,7 @@ export default function SubmitBid() {
 
   const fetchTender = async () => {
     try {
-      const response = await axios.get(`http://localhost:5000/api/procurement/tenders/${tenderId}`, {
+      const response = await axios.get(`/api/procurement/tenders/${tenderId}`, {
         headers: { Authorization: `Bearer ${localStorage.getItem('accessToken')}` }
       });
       setTender(response.data.tender);
@@ -79,7 +79,7 @@ export default function SubmitBid() {
 
   const fetchCatalogProducts = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/api/supplier/catalog', {
+      const response = await axios.get('/api/supplier/catalog', {
         headers: { Authorization: `Bearer ${localStorage.getItem('accessToken')}` }
       });
       setCatalogProducts(response.data.products || []);
@@ -185,7 +185,7 @@ export default function SubmitBid() {
         totalBidValue: bidData.lineItems.reduce((sum, item) => sum + item.totalPrice, 0)
       };
 
-      const response = await axios.post('http://localhost:5000/api/bids/submit', submitData, {
+      const response = await axios.post('/api/bids/submit', submitData, {
         headers: { Authorization: `Bearer ${localStorage.getItem('accessToken')}` }
       });
 

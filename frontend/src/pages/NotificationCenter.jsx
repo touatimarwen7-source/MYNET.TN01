@@ -14,7 +14,7 @@ export default function NotificationCenter() {
 
   const fetchNotifications = async () => {
     try {
-      const response = await axios.get(`http://localhost:5000/api/notifications?priority=${filter}`, {
+      const response = await axios.get(`/api/notifications?priority=${filter}`, {
         headers: { Authorization: `Bearer ${localStorage.getItem('accessToken')}` }
       });
       setNotifications(response.data.notifications || []);
@@ -32,7 +32,7 @@ export default function NotificationCenter() {
   const handleFrequency = async (newFrequency) => {
     setFrequency(newFrequency);
     try {
-      await axios.put(`http://localhost:5000/api/settings/notification-frequency`, 
+      await axios.put(`/api/settings/notification-frequency`, 
         { frequency: newFrequency },
         { headers: { Authorization: `Bearer ${localStorage.getItem('accessToken')}` } }
       );

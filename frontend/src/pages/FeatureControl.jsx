@@ -23,7 +23,7 @@ export default function FeatureControl() {
 
   const fetchFeatures = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/api/admin/feature-control', {
+      const response = await axios.get('/api/admin/feature-control', {
         headers: { Authorization: `Bearer ${localStorage.getItem('accessToken')}` }
       });
       setFeatures(response.data.features || []);
@@ -38,7 +38,7 @@ export default function FeatureControl() {
   const handleToggleFeature = async (tierId, featureId, enabled) => {
     try {
       await axios.put(
-        `http://localhost:5000/api/admin/feature-control/${tierId}/${featureId}`,
+        `/api/admin/feature-control/${tierId}/${featureId}`,
         { enabled },
         { headers: { Authorization: `Bearer ${localStorage.getItem('accessToken')}` } }
       );

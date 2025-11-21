@@ -492,18 +492,18 @@
 
 .add-interest-form {
   display: flex;
-  gap: var(--space-3);
+  gap: var(--space-2);
   align-items: center;
   margin-top: var(--space-6);
 }
 
 .add-interest-form .form-input {
-  flex: 1;
-  height: 44px;
-  padding: var(--space-3) var(--space-4) !important;
+  flex: 2;
+  height: 40px;
+  padding: var(--space-2) var(--space-3) !important;
   border: 2px solid var(--neutral-200) !important;
   border-radius: var(--radius-lg) !important;
-  font-size: var(--fs-base) !important;
+  font-size: var(--fs-sm) !important;
   font-family: var(--font-sans) !important;
 }
 
@@ -517,9 +517,9 @@
 }
 
 .add-interest-form .btn {
-  height: 44px;
-  padding: var(--space-3) var(--space-5) !important;
-  font-size: var(--fs-sm) !important;
+  height: 40px;
+  padding: var(--space-2) var(--space-3) !important;
+  font-size: var(--fs-xs) !important;
   font-weight: var(--fw-600) !important;
   white-space: nowrap;
   flex-shrink: 0;

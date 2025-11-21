@@ -37,15 +37,15 @@
 
 .search-tab:hover {
   background-color: #efefef;
-  border-color: #1a2b4d;
-  color: #1a2b4d;
+  border-color: #00a8e8;
+  color: #00a8e8;
 }
 
 .search-tab.active {
-  background-color: #1a2b4d;
-  border-color: #1a2b4d;
+  background-color: #00a8e8;
+  border-color: #00a8e8;
   color: white;
-  box-shadow: 0 2px 8px rgba(26, 43, 77, 0.2);
+  box-shadow: 0 2px 8px rgba(0, 168, 232, 0.3);
 }
 
 .tab-icon {
@@ -115,7 +115,7 @@
   cursor: pointer;
   width: 18px;
   height: 18px;
-  accent-color: #1a2b4d;
+  accent-color: #00a8e8;
   flex-shrink: 0;
 }
 
@@ -129,7 +129,7 @@
 }
 
 .radio-option input[type="radio"]:checked + label {
-  color: #1a2b4d;
+  color: #00a8e8;
   font-weight: 600;
 }
 
@@ -178,8 +178,8 @@
 .search-input:focus,
 .search-select:focus {
   outline: none;
-  border-color: #1a2b4d;
-  box-shadow: 0 0 0 3px rgba(26, 43, 77, 0.08);
+  border-color: #00a8e8;
+  box-shadow: 0 0 0 3px rgba(0, 168, 232, 0.1);
   background-color: #fff;
 }
 
@@ -203,7 +203,7 @@
 .search-button {
   width: 100%;
   padding: 1rem;
-  background-color: #1a2b4d;
+  background: linear-gradient(135deg, #00a8e8 0%, #00d4ff 100%);
   color: white;
   border: none;
   border-radius: 3px;
@@ -220,8 +220,8 @@
 }
 
 .search-button:hover {
-  background-color: #0f1a2e;
-  box-shadow: 0 4px 12px rgba(26, 43, 77, 0.3);
+  background: linear-gradient(135deg, #0086b3 0%, #0099cc 100%);
+  box-shadow: 0 4px 12px rgba(0, 168, 232, 0.4);
   transform: translateY(-2px);
 }
 

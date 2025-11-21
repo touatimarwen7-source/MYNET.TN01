@@ -3,7 +3,7 @@
 .hero-section-search {
   position: relative;
   padding: 4rem 2rem;
-  background: linear-gradient(135deg, #1a2b4d 0%, #2d4a7b 100%);
+  background: linear-gradient(135deg, #00a8e8 0%, #00d4ff 100%);
   min-height: 500px;
   display: flex;
   align-items: center;
@@ -18,7 +18,7 @@
   right: -10%;
   width: 600px;
   height: 600px;
-  background: radial-gradient(circle, rgba(90, 159, 212, 0.1) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.15) 0%, transparent 70%);
   border-radius: 50%;
   pointer-events: none;
   z-index: 0;
@@ -31,7 +31,7 @@
   left: -5%;
   width: 400px;
   height: 400px;
-  background: radial-gradient(circle, rgba(90, 159, 212, 0.08) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
   border-radius: 50%;
   pointer-events: none;
   z-index: 0;

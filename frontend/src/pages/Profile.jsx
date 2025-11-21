@@ -211,9 +211,9 @@ export default function Profile({ user }) {
 
             {/* Activity Section */}
             <div className="profile-section animate-slide-up">
-              <h3 className="section-title">📊 نشاط الحساب</h3>
+              <h3 className="section-title">📊 Activité Récente</h3>
               {activity.length === 0 ? (
-                <div className="empty-state">لا توجد أنشطة حالياً</div>
+                <div className="empty-state">Aucune activité pour le moment</div>
               ) : (
                 <div className="activity-timeline">
                   {activity.slice(0, 5).map((item, idx) => (
@@ -233,11 +233,11 @@ export default function Profile({ user }) {
 
             {/* Interests Section */}
             <div className="profile-section animate-slide-up">
-              <h3 className="section-title">❤️ الاهتمامات والتفضيلات</h3>
+              <h3 className="section-title">❤️ Intérêts et Préférences</h3>
               <div className="interests-container">
                 <div className="interests-list">
                   {interests.length === 0 ? (
-                    <div className="empty-state">لم تضف أي اهتمامات حتى الآن</div>
+                    <div className="empty-state">Aucun intérêt ajouté</div>
                   ) : (
                     interests.map((interest, idx) => (
                       <div key={idx} className="interest-tag">
@@ -259,7 +259,7 @@ export default function Profile({ user }) {
                     value={newInterest}
                     onChange={(e) => setNewInterest(e.target.value)}
                     onKeyPress={(e) => e.key === 'Enter' && addInterest()}
-                    placeholder="أضف اهتماماً جديداً..."
+                    placeholder="Ajouter un intérêt..."
                     className="form-input"
                   />
                   <button 
@@ -274,31 +274,31 @@ export default function Profile({ user }) {
 
             {/* Search Tools Section */}
             <div className="profile-section animate-slide-up">
-              <h3 className="section-title">🔍 أدوات البحث المتقدم</h3>
+              <h3 className="section-title">🔍 Outils de Recherche Avancée</h3>
               <div className="tools-grid">
                 <div className="tool-card">
                   <div className="tool-icon">📋</div>
-                  <h4>بحث متقدم عن المناقصات</h4>
-                  <p>ابحث عن المناقصات حسب الفئة والميزانية والموقع</p>
-                  <button className="btn btn-outline btn-sm">استخدام</button>
+                  <h4>Recherche Avancée des Appels d'Offres</h4>
+                  <p>Recherchez les appels d'offres par catégorie, budget et localisation</p>
+                  <button className="btn btn-outline btn-sm">Utiliser</button>
                 </div>
                 <div className="tool-card">
                   <div className="tool-icon">🏢</div>
                   <h4>بحث عن الفرنيسة</h4>
-                  <p>اعثر على الفرنيسة المتخصصة في مجالك</p>
-                  <button className="btn btn-outline btn-sm">استخدام</button>
+                  <p>Trouvez les fournisseurs spécialisés dans votre domaine</p>
+                  <button className="btn btn-outline btn-sm">Utiliser</button>
                 </div>
                 <div className="tool-card">
                   <div className="tool-icon">📊</div>
                   <h4>تحليل السوق</h4>
-                  <p>احصل على تحليلات وإحصائيات السوق</p>
-                  <button className="btn btn-outline btn-sm">استخدام</button>
+                  <p>Obtenez des analyses et des statistiques du marché</p>
+                  <button className="btn btn-outline btn-sm">Utiliser</button>
                 </div>
                 <div className="tool-card">
                   <div className="tool-icon">⭐</div>
                   <h4>التوصيات</h4>
-                  <p>احصل على توصيات مخصصة بناءً على تفضيلاتك</p>
-                  <button className="btn btn-outline btn-sm">استخدام</button>
+                  <p>Obtenez des recommandations personnalisées basées sur vos préférences</p>
+                  <button className="btn btn-outline btn-sm">Utiliser</button>
                 </div>
               </div>
             </div>
@@ -306,12 +306,12 @@ export default function Profile({ user }) {
             {/* Alerts Section */}
             <div className="profile-section animate-slide-up">
               <div className="alerts-header">
-                <h3 className="section-title">🔔 نظام التنبهات</h3>
+                <h3 className="section-title">🔔 Système d'Alertes</h3>
                 <button 
                   className="btn btn-primary btn-sm"
                   onClick={() => setShowAlertForm(!showAlertForm)}
                 >
-                  {showAlertForm ? '✕ إغلاق' : '➕ إضافة تنبيه'}
+                  {showAlertForm ? '✕ Fermer' : '➕ Ajouter une Alerte'}
                 </button>
               </div>
 
@@ -319,16 +319,16 @@ export default function Profile({ user }) {
                 <div className="alert-form animate-slide-down">
                   <div className="form-row">
                     <div className="form-group">
-                      <label className="form-label">نوع التنبيه</label>
+                      <label className="form-label">Type d'alerte</label>
                       <select 
                         value={alertData.type}
                         onChange={(e) => setAlertData({...alertData, type: e.target.value})}
                         className="form-input"
                       >
-                        <option value="tender">المناقصات</option>
+                        <option value="tender">Appels d'Offres</option>
                         <option value="award">الجوائز</option>
-                        <option value="supplier">الفرنيسة الجدد</option>
-                        <option value="market">تحديثات السوق</option>
+                        <option value="supplier">Nouveaux Fournisseurs</option>
+                        <option value="market">Mises à jour du marché</option>
                       </select>
                     </div>
                     <div className="form-group">
@@ -346,20 +346,20 @@ export default function Profile({ user }) {
                     onClick={addAlert}
                     className="btn btn-primary"
                   >
-                    حفظ التنبيه
+                    Enregistrer l'alerte
                   </button>
                 </div>
               )}
 
               <div className="alerts-list">
                 {alerts.length === 0 ? (
-                  <div className="empty-state">لا توجد تنبهات مفعلة</div>
+                  <div className="empty-state">Aucune alerte activée</div>
                 ) : (
                   alerts.map((alert) => (
                     <div key={alert.id} className="alert-item">
                       <div className="alert-content">
                         <p className="alert-type">
-                          {alert.type === 'tender' ? '📝 المناقصات' : 
+                          {alert.type === 'tender' ? '📝 Appels d'Offres' : 
                            alert.type === 'award' ? '🏆 الجوائز' :
                            alert.type === 'supplier' ? '🏢 الفرنيسة' : '📊 السوق'}
                         </p>
@@ -384,14 +384,14 @@ export default function Profile({ user }) {
                 className="btn btn-primary btn-lg hover-lift"
                 onClick={() => setEditing(true)}
               >
-                ✏️ تعديل الملف الشخصي
+                ✏️ Modifier le Profil
               </button>
             </div>
           </>
         ) : (
           /* Edit Form */
           <div className="profile-edit-form animate-scale-in">
-            <h2 className="form-title">تعديل ملفك الشخصي</h2>
+            <h2 className="form-title">Modifier votre Profil</h2>
             
             <form onSubmit={handleSubmit} className="form-container">
               {/* Personal Information Section */}
@@ -467,14 +467,14 @@ export default function Profile({ user }) {
                     setError('');
                   }}
                 >
-                  ✕ إلغاء
+                  ✕ Annuler
                 </button>
                 <button 
                   type="submit" 
                   className="btn btn-primary"
                   disabled={loading}
                 >
-                  {loading ? '⏳ جاري الحفظ...' : '💾 حفظ التعديلات'}
+                  {loading ? '⏳ Enregistrement en cours...' : '💾 Enregistrer les modifications'}
                 </button>
               </div>
             </form>

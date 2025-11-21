@@ -17,7 +17,7 @@ export default function SupplierProfile() {
   const [activity, setActivity] = useState([]);
 
   useEffect(() => {
-    setPageTitle('ملف الفرنيسة');
+    setPageTitle('ملف الFournisseur');
     fetchProfile();
     fetchActivity();
   }, []);
@@ -33,7 +33,7 @@ export default function SupplierProfile() {
       setCategories(response.data.categories || []);
       setStats(response.data.stats || {});
     } catch (error) {
-      setError('خطأ في تحميل الملف الشخصي');
+      setError('Erreur lors du chargement du profil');
     } finally {
       setLoading(false);
     }
@@ -46,7 +46,7 @@ export default function SupplierProfile() {
       });
       setActivity(response.data.activity || []);
     } catch (error) {
-      console.error('خطأ في تحميل النشاط');
+      console.error('Erreur lors du chargement de l'activité');
     }
   };
 
@@ -65,7 +65,7 @@ export default function SupplierProfile() {
           'Content-Type': 'multipart/form-data'
         }
       });
-      setSuccess('تم رفع المستند بنجاح ✓');
+      setSuccess('Document téléchargé avec succès ✓');
       setTimeout(() => setSuccess(''), 3000);
       fetchProfile();
     } catch (error) {
@@ -74,12 +74,12 @@ export default function SupplierProfile() {
   };
 
   const handleDeleteDocument = async (docId) => {
-    if (!confirm('هل أنت متأكد من رغبتك في حذف هذا المستند؟')) return;
+    if (!confirm('Êtes-vous sûr de vouloir supprimer ce document?')) return;
     try {
       await axios.delete(`http://localhost:3000/api/supplier/documents/${docId}`, {
         headers: { Authorization: `Bearer ${localStorage.getItem('accessToken')}` }
       });
-      setSuccess('تم حذف المستند ✓');
+      setSuccess('Document supprimé ✓');
       setTimeout(() => setSuccess(''), 3000);
       fetchProfile();
     } catch (error) {
@@ -94,7 +94,7 @@ export default function SupplierProfile() {
       });
       setProfile(editData);
       setEditing(false);
-      setSuccess('تم تحديث الملف الشخصي بنجاح ✓');
+      setSuccess('Profil mis à jour avec succès ✓');
       setTimeout(() => setSuccess(''), 3000);
     } catch (error) {
       setError('خطأ: ' + error.response?.data?.error);
@@ -113,8 +113,8 @@ export default function SupplierProfile() {
     <div className="page-container">
       {/* Page Header */}
       <div className="page-header animate-slide-down">
-        <h1 className="page-title">🏢 ملف الفرنيسة</h1>
-        <p className="page-subtitle">أدر ملفك المهني والوثائق والدومينات المتخصصة</p>
+        <h1 className="page-title">🏢 ملف الFournisseur</h1>
+        <p className="page-subtitle">Gérez votre profil professionnel, vos documents et domaines de spécialisation</p>
       </div>
 
       {/* Alerts */}
@@ -139,7 +139,7 @@ export default function SupplierProfile() {
               <div className="profile-avatar">🏢</div>
               <div className="profile-header-info">
                 <h2 className="profile-name">{profile.company_name}</h2>
-                <p className="profile-role">فرنيسة متخصصة</p>
+                <p className="profile-role">Fournisseur متخصصة</p>
               </div>
               {!editing && (
                 <button 
@@ -237,7 +237,7 @@ export default function SupplierProfile() {
                     <p className="info-value">{stats.submissions || 0}</p>
                   </div>
                   <div className="info-item">
-                    <label className="info-label">🏆 الجوائز</label>
+                    <label className="info-label">🏆 الPrix</label>
                     <p className="info-value">{stats.awards || 0}</p>
                   </div>
                 </div>
@@ -247,7 +247,7 @@ export default function SupplierProfile() {
 
           {/* Statistics Section */}
           <div className="profile-section animate-slide-up">
-            <h3 className="section-title">📊 إحصائيات الشركة</h3>
+            <h3 className="section-title">📊 Statistiques de l'Entreprise</h3>
             <div className="stats-grid">
               <div className="stat-card">
                 <div className="stat-icon">📝</div>
@@ -257,26 +257,26 @@ export default function SupplierProfile() {
               <div className="stat-card">
                 <div className="stat-icon">🏆</div>
                 <div className="stat-number">{stats.won_awards || 0}</div>
-                <div className="stat-label">الجوائز المكتسبة</div>
+                <div className="stat-label">Prix Gagnés</div>
               </div>
               <div className="stat-card">
                 <div className="stat-icon">⭐</div>
                 <div className="stat-number">{(profile.average_rating || 0).toFixed(1)}</div>
-                <div className="stat-label">التقييم العام</div>
+                <div className="stat-label">Évaluation Générale</div>
               </div>
               <div className="stat-card">
                 <div className="stat-icon">👥</div>
                 <div className="stat-number">{stats.review_count || 0}</div>
-                <div className="stat-label">عدد التقييمات</div>
+                <div className="stat-label">Nombre d'évaluations</div>
               </div>
             </div>
           </div>
 
           {/* Activity Section */}
           <div className="profile-section animate-slide-up">
-            <h3 className="section-title">📈 النشاط الأخير</h3>
+            <h3 className="section-title">📈 Activité Récente</h3>
             {activity.length === 0 ? (
-              <div className="empty-state">لا يوجد نشاط حالياً</div>
+              <div className="empty-state">Aucune activité pour le moment</div>
             ) : (
               <div className="activity-timeline">
                 {activity.slice(0, 5).map((item, idx) => (
@@ -296,10 +296,10 @@ export default function SupplierProfile() {
 
           {/* Expertise Areas */}
           <div className="profile-section animate-slide-up">
-            <h3 className="section-title">🎯 الدومينات المتخصصة</h3>
+            <h3 className="section-title">🎯 Domaines de Spécialisation</h3>
             <div className="categories-tags">
               {categories.length === 0 ? (
-                <div className="empty-state">لم يتم تحديد أي دومين متخصص</div>
+                <div className="empty-state">Aucun domaine défini</div>
               ) : (
                 categories.map((cat, idx) => (
                   <span key={idx} className="badge badge-primary">{cat}</span>
@@ -320,23 +320,23 @@ export default function SupplierProfile() {
                   accept=".pdf,.jpg,.jpeg,.png"
                   className="upload-input"
                 />
-                <span className="upload-button">📤 رفع مستند</span>
+                <span className="upload-button">📤 Télécharger un Document</span>
               </label>
-              <p className="upload-help">PDF, JPG أو PNG • الحد الأقصى 10 MB</p>
+              <p className="upload-help">PDF, JPG ou PNG • Maximum 10 MB</p>
             </div>
 
             {documents.length === 0 ? (
-              <div className="empty-state">لم يتم رفع أي مستندات</div>
+              <div className="empty-state">Aucun document téléchargé</div>
             ) : (
               <div className="documents-table-wrapper">
                 <table className="documents-table">
                   <thead>
                     <tr>
-                      <th>النوع</th>
-                      <th>تاريخ الرفع</th>
-                      <th>الانتهاء</th>
-                      <th>الحالة</th>
-                      <th>الإجراء</th>
+                      <th>Type</th>
+                      <th>Date de téléchargement</th>
+                      <th>Expiration</th>
+                      <th>Statut</th>
+                      <th>Action</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -351,16 +351,16 @@ export default function SupplierProfile() {
                           <td>{new Date(doc.expiry_date).toLocaleDateString('ar-TN')}</td>
                           <td>
                             {isExpiringSoon ? (
-                              <span className="badge badge-warning">⚠️ {daysLeft} يوم</span>
+                              <span className="badge badge-warning">⚠️ {daysLeft} jours</span>
                             ) : (
-                              <span className="badge badge-success">✓ صحيح</span>
+                              <span className="badge badge-success">✓ Valide</span>
                             )}
                           </td>
                           <td>
                             <button 
                               className="btn btn-sm btn-outline"
                               onClick={() => handleDeleteDocument(doc.id)}
-                              title="حذف"
+                              title="Supprimer"
                             >
                               🗑️
                             </button>
@@ -376,12 +376,12 @@ export default function SupplierProfile() {
 
           {/* Public Profile Preview */}
           <div className="profile-section animate-slide-up">
-            <h3 className="section-title">🌐 المعلومات العامة</h3>
+            <h3 className="section-title">🌐 Informations Publiques</h3>
             <button 
               className="btn btn-outline"
               onClick={() => setShowPublicProfile(!showPublicProfile)}
             >
-              {showPublicProfile ? '🔒 إخفاء' : '👁️ عرض البيانات العامة'}
+              {showPublicProfile ? '🔒 Masquer' : '👁️ Afficher les Données Publiques'}
             </button>
 
             {showPublicProfile && (
@@ -391,9 +391,9 @@ export default function SupplierProfile() {
                   <p className="preview-location">📍 {profile.location}</p>
                 </div>
                 <div className="preview-content">
-                  <p><strong>الدومينات:</strong> {categories.join(', ') || '—'}</p>
+                  <p><strong>Domaines:</strong> {categories.join(', ') || '—'}</p>
                   <p><strong>التقييم:</strong> ⭐ {profile.average_rating || 0}/5</p>
-                  <p><strong>الجوائز المكتسبة:</strong> 🏆 {stats.won_awards || 0}</p>
+                  <p><strong>Prix Gagnés:</strong> 🏆 {stats.won_awards || 0}</p>
                 </div>
               </div>
             )}

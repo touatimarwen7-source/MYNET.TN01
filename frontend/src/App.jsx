@@ -18,6 +18,7 @@ import TeamManagement from './pages/TeamManagement';
 import SupplierSearch from './pages/SupplierSearch';
 import SubmitBid from './pages/SubmitBid';
 import NotificationCenter from './pages/NotificationCenter';
+import CreateOffer from './pages/CreateOffer';
 import SupplierCatalog from './pages/SupplierCatalog';
 import SupplierProfile from './pages/SupplierProfile';
 import SupplierInvoices from './pages/SupplierInvoices';
@@ -158,6 +159,10 @@ function App() {
             <Route 
               path="/my-offers" 
               element={user?.role === 'supplier' ? <MyOffers /> : <Navigate to="/tenders" />} 
+            />
+            <Route 
+              path="/create-offer/:tenderId" 
+              element={user?.role === 'supplier' ? <CreateOffer /> : <Navigate to="/tenders" />} 
             />
 
             {/* الإدارة */}

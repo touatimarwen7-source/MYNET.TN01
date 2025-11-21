@@ -4,6 +4,7 @@ import { setPageTitle } from '../utils/pageTitle';
 import UpgradeModal from './UpgradeModal';
 import { useSubscriptionTier } from '../hooks/useSubscriptionTier';
 import '../styles/sidebar.css';
+import '../styles/sidebar-unified.css';
 
 export default function Sidebar({ user, onLogout }) {
   const navigate = useNavigate();

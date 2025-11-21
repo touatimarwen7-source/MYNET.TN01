@@ -15,13 +15,13 @@
   border-radius: 12px;
   font-size: 24px;
   cursor: pointer;
-  box-shadow: 0 8px 24px rgba(0, 212, 255, 0.3);
+  box-shadow: 0 8px 24px rgba(0, 168, 232, 0.3);
   transition: all 0.3s ease;
 }
 
 .sidebar-toggle:hover {
   transform: scale(1.05);
-  box-shadow: 0 12px 32px rgba(0, 212, 255, 0.4);
+  box-shadow: 0 12px 32px rgba(0, 168, 232, 0.4);
 }
 
 /* Sidebar Container */
@@ -33,7 +33,7 @@
   height: 100vh;
   background: linear-gradient(180deg, rgba(20, 25, 35, 0.95) 0%, rgba(15, 20, 30, 0.98) 100%);
   backdrop-filter: blur(10px);
-  border-right: 1px solid rgba(0, 212, 255, 0.1);
+  border-right: 1px solid rgba(0, 168, 232, 0.1);
   overflow-y: auto;
   overflow-x: hidden;
   z-index: 999;
@@ -52,12 +52,12 @@
 }
 
 .sidebar::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, rgba(0, 212, 255, 0.5), rgba(100, 255, 218, 0.5));
+  background: linear-gradient(180deg, rgba(0, 168, 232, 0.5), rgba(100, 255, 218, 0.5));
   border-radius: 3px;
 }
 
 .sidebar::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(180deg, rgba(0, 212, 255, 0.8), rgba(100, 255, 218, 0.8));
+  background: linear-gradient(180deg, rgba(0, 168, 232, 0.8), rgba(100, 255, 218, 0.8));
 }
 
 /* Sidebar Header */
@@ -68,7 +68,7 @@
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  background: linear-gradient(135deg, rgba(0, 168, 232, 0.08) 0%, rgba(0, 212, 255, 0.04) 100%);
+  background: linear-gradient(135deg, rgba(0, 168, 232, 0.08) 0%, rgba(0, 168, 232, 0.04) 100%);
   box-shadow: 0 4px 12px rgba(0, 168, 232, 0.1);
 }
 
@@ -86,7 +86,7 @@
 
 .logo-icon {
   font-size: 28px;
-  filter: drop-shadow(0 0 8px rgba(0, 212, 255, 0.5));
+  filter: drop-shadow(0 0 8px rgba(0, 168, 232, 0.5));
 }
 
 .logo-text {
@@ -103,7 +103,7 @@
 .role-badge {
   font-size: 10px;
   padding: 6px 12px;
-  background: linear-gradient(135deg, rgba(0, 168, 232, 0.25), rgba(0, 212, 255, 0.15));
+  background: linear-gradient(135deg, rgba(0, 168, 232, 0.25), rgba(0, 168, 232, 0.15));
   border: 1.5px solid rgba(0, 168, 232, 0.4);
   border-radius: 20px;
   color: #00d4ff;
@@ -127,8 +127,8 @@
   width: 44px;
   height: 44px;
   border-radius: 12px;
-  background: linear-gradient(135deg, rgba(0, 212, 255, 0.3), rgba(100, 255, 218, 0.2));
-  border: 2px solid rgba(0, 212, 255, 0.2);
+  background: linear-gradient(135deg, rgba(0, 168, 232, 0.3), rgba(100, 255, 218, 0.2));
+  border: 2px solid rgba(0, 168, 232, 0.2);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -226,14 +226,14 @@
 }
 
 .menu-item.expanded {
-  background: rgba(0, 212, 255, 0.05);
+  background: rgba(0, 168, 232, 0.05);
   color: #00d4ff;
 }
 
 .menu-icon {
   font-size: 18px;
   flex-shrink: 0;
-  filter: drop-shadow(0 0 4px rgba(0, 212, 255, 0.3));
+  filter: drop-shadow(0 0 4px rgba(0, 168, 232, 0.3));
 }
 
 .menu-label {
@@ -244,7 +244,7 @@
 .menu-arrow {
   font-size: 18px;
   transition: transform 0.3s ease;
-  color: rgba(0, 212, 255, 0.5);
+  color: rgba(0, 168, 232, 0.5);
 }
 
 .menu-item.expanded .menu-arrow {
@@ -255,8 +255,8 @@
 /* Submenu */
 .submenu {
   padding: 8px 0;
-  background: rgba(0, 212, 255, 0.03);
-  border-left: 2px solid rgba(0, 212, 255, 0.1);
+  background: rgba(0, 168, 232, 0.03);
+  border-left: 2px solid rgba(0, 168, 232, 0.1);
   animation: slideDown 0.3s ease;
 }
 
@@ -303,7 +303,7 @@
 }
 
 .submenu-dot {
-  color: rgba(0, 212, 255, 0.4);
+  color: rgba(0, 168, 232, 0.4);
   font-weight: bold;
 }
 
@@ -331,7 +331,7 @@
 }
 
 .submenu-item.disabled .submenu-dot {
-  color: rgba(0, 212, 255, 0.2);
+  color: rgba(0, 168, 232, 0.2);
 }
 
 /* Upgrade Badge Small */

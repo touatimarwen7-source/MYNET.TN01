@@ -17,7 +17,7 @@ export default function SupplierProfile() {
   const [activity, setActivity] = useState([]);
 
   useEffect(() => {
-    setPageTitle('ملف الFournisseur');
+    setPageTitle('Profil du Fournisseur');
     fetchProfile();
     fetchActivity();
   }, []);
@@ -46,7 +46,7 @@ export default function SupplierProfile() {
       });
       setActivity(response.data.activity || []);
     } catch (error) {
-      console.error('Erreur lors du chargement de l'activité');
+      console.error(`Erreur lors du chargement de l'activité`);
     }
   };
 
@@ -69,7 +69,7 @@ export default function SupplierProfile() {
       setTimeout(() => setSuccess(''), 3000);
       fetchProfile();
     } catch (error) {
-      setError('خطأ: ' + error.response?.data?.error);
+      setError('Erreur: ' + error.response?.data?.error);
     }
   };
 
@@ -83,7 +83,7 @@ export default function SupplierProfile() {
       setTimeout(() => setSuccess(''), 3000);
       fetchProfile();
     } catch (error) {
-      setError('خطأ: ' + error.response?.data?.error);
+      setError('Erreur: ' + error.response?.data?.error);
     }
   };
 
@@ -97,7 +97,7 @@ export default function SupplierProfile() {
       setSuccess('Profil mis à jour avec succès ✓');
       setTimeout(() => setSuccess(''), 3000);
     } catch (error) {
-      setError('خطأ: ' + error.response?.data?.error);
+      setError('Erreur: ' + error.response?.data?.error);
     }
   };
 

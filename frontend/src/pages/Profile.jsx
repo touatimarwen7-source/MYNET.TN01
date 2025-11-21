@@ -245,7 +245,7 @@ export default function Profile({ user }) {
                         <button 
                           className="remove-btn"
                           onClick={() => removeInterest(idx)}
-                          title="حذف"
+                          title="Supprimer"
                         >
                           ✕
                         </button>
@@ -284,13 +284,13 @@ export default function Profile({ user }) {
                 </div>
                 <div className="tool-card">
                   <div className="tool-icon">🏢</div>
-                  <h4>بحث عن الفرنيسة</h4>
+                  <h4>Recherche de Fournisseurs</h4>
                   <p>Trouvez les fournisseurs spécialisés dans votre domaine</p>
                   <button className="btn btn-outline btn-sm">Utiliser</button>
                 </div>
                 <div className="tool-card">
                   <div className="tool-icon">📊</div>
-                  <h4>تحليل السوق</h4>
+                  <h4>Analyse du Marché</h4>
                   <p>Obtenez des analyses et des statistiques du marché</p>
                   <button className="btn btn-outline btn-sm">Utiliser</button>
                 </div>
@@ -326,18 +326,18 @@ export default function Profile({ user }) {
                         className="form-input"
                       >
                         <option value="tender">Appels d'Offres</option>
-                        <option value="award">الجوائز</option>
+                        <option value="award"> PrixPrix</option>
                         <option value="supplier">Nouveaux Fournisseurs</option>
                         <option value="market">Mises à jour du marché</option>
                       </select>
                     </div>
                     <div className="form-group">
-                      <label className="form-label">الكلمة المفتاحية</label>
+                      <label className="form-label">Mot clé</label>
                       <input
                         type="text"
                         value={alertData.keyword}
                         onChange={(e) => setAlertData({...alertData, keyword: e.target.value})}
-                        placeholder="مثال: البناء، الإنشاءات..."
+                        placeholder="Exemple: Construction, Bâtiment..."
                         className="form-input"
                       />
                     </div>
@@ -359,16 +359,16 @@ export default function Profile({ user }) {
                     <div key={alert.id} className="alert-item">
                       <div className="alert-content">
                         <p className="alert-type">
-                          {alert.type === 'tender' ? '📝 Appels d'Offres' : 
-                           alert.type === 'award' ? '🏆 الجوائز' :
-                           alert.type === 'supplier' ? '🏢 الفرنيسة' : '📊 السوق'}
+                          {alert.type === 'tender' ? `📝 Appels d'Offres` : 
+                           alert.type === 'award' ? `🏆 Prix` :
+                           alert.type === 'supplier' ? `🏢 Fournisseurs` : `📊 Marché`}
                         </p>
-                        <p className="alert-keyword">الكلمة: <strong>{alert.keyword}</strong></p>
+                        <p className="alert-keyword">Mot clé: <strong>{alert.keyword}</strong></p>
                       </div>
                       <button 
                         className="btn btn-sm btn-outline"
                         onClick={() => removeAlert(alert.id)}
-                        title="حذف"
+                        title="Supprimer"
                       >
                         🗑️
                       </button>

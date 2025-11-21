@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import { procurementAPI } from '../api';
 import { setPageTitle } from '../utils/pageTitle';
 
 export default function CreateTenderImproved() {
@@ -149,14 +149,7 @@ export default function CreateTenderImproved() {
 
     try {
       const backendData = transformDataForBackend();
-      
-      const apiUrl = process.env.NODE_ENV === 'production' 
-        ? '/api/procurement/tenders'
-        : '/api/procurement/tenders';
-      
-      const response = await axios.post(apiUrl, backendData, {
-        headers: { Authorization: `Bearer ${localStorage.getItem('accessToken')}` }
-      });
+      const response = await procurementAPI.createTender(backendData);
       
       alert("Appel d'offres créé avec succès et alertes envoyées aux fournisseurs qualifiés");
       setTenderData({
@@ -170,6 +163,7 @@ export default function CreateTenderImproved() {
       setDocumentFiles([]);
       setStep(1);
     } catch (error) {
+      console.error('Erreur:', error);
       const errorMsg = error.response?.data?.error || error.message || 'Une erreur est survenue lors de la publication';
       alert('Erreur: ' + errorMsg);
     }

@@ -45,13 +45,13 @@ export default function CreateTenderImproved() {
   const saveDraft = async () => {
     try {
       setAutoSaveStatus('Sauvegarde en cours...');
-      await axios.post('http://localhost:5000/api/procurement/tender-draft', tenderData, {
+      await axios.post('http://localhost:3000/api/procurement/tenders/draft', tenderData, {
         headers: { Authorization: `Bearer ${localStorage.getItem('accessToken')}` }
       });
       setAutoSaveStatus('Sauvegardé automatiquement');
       setTimeout(() => setAutoSaveStatus(''), 3000);
     } catch (error) {
-      setAutoSaveStatus('✗ Erreur lors de la sauvegarde');
+      setAutoSaveStatus('');
     }
   };
 
@@ -135,7 +135,7 @@ export default function CreateTenderImproved() {
     if (!validateStep()) return;
 
     try {
-      await axios.post('http://localhost:5000/api/procurement/tenders', tenderData, {
+      await axios.post('http://localhost:3000/api/procurement/tenders', tenderData, {
         headers: { Authorization: `Bearer ${localStorage.getItem('accessToken')}` }
       });
       alert("Appel d'offres créé avec succès et alertes envoyées aux fournisseurs qualifiés");

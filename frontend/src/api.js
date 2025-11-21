@@ -1,11 +1,7 @@
 import axios from 'axios';
 
-// Get Replit domain or use localhost for local development
-const REPLIT_DOMAIN = window.location.hostname === 'localhost' 
-  ? 'http://localhost:3000'
-  : `https://${window.location.hostname.replace('5000', '3000')}`;
-
-const API_BASE_URL = `${REPLIT_DOMAIN}/api`;
+// API Base URL - connects to backend
+const API_BASE_URL = '/api';
 
 const api = axios.create({
   baseURL: API_BASE_URL,

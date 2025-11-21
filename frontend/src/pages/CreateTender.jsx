@@ -1,5 +1,23 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import {
+  Container,
+  Box,
+  Card,
+  CardContent,
+  TextField,
+  Button,
+  Typography,
+  Alert,
+  CircularProgress,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  Stack,
+} from '@mui/material';
+import SaveIcon from '@mui/icons-material/Save';
+import CancelIcon from '@mui/icons-material/Cancel';
 import { procurementAPI } from '../api';
 
 export default function CreateTender() {
@@ -38,97 +56,145 @@ export default function CreateTender() {
   };
 
   return (
-    <div className="form-container" style={{ maxWidth: '700px' }}>
-      <h2>Créer un appel d'offres</h2>
-      {error && <div className="alert alert-error">{error}</div>}
-      
-      <form onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label>Titre *</label>
-          <input
-            type="text"
-            name="title"
-            value={formData.title}
-            onChange={handleChange}
-            required
-          />
-        </div>
+    <Box sx={{ backgroundColor: '#fafafa', paddingY: '40px' }}>
+      <Container maxWidth="md">
+        <Card sx={{ border: '1px solid #e0e0e0' }}>
+          <CardContent sx={{ padding: '40px' }}>
+            <Typography variant="h2" sx={{ fontSize: '28px', fontWeight: 500, color: '#212121', marginBottom: '8px' }}>
+              Créer un Appel d'Offres
+            </Typography>
+            <Typography sx={{ color: '#616161', marginBottom: '32px' }}>
+              Remplissez les détails de votre appel d'offres ci-dessous
+            </Typography>
 
-        <div className="form-group">
-          <label>Description *</label>
-          <textarea
-            name="description"
-            value={formData.description}
-            onChange={handleChange}
-            rows="4"
-            required
-          />
-        </div>
+            {error && (
+              <Alert severity="error" sx={{ marginBottom: '24px' }}>
+                {error}
+              </Alert>
+            )}
 
-        <div className="form-group">
-          <label>Catégorie</label>
-          <select name="category" value={formData.category} onChange={handleChange}>
-            <option value="technology">Technologie</option>
-            <option value="supplies">Fournitures</option>
-            <option value="construction">Construction</option>
-            <option value="services">Services</option>
-          </select>
-        </div>
+            <Box component="form" onSubmit={handleSubmit} sx={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+              <TextField
+                fullWidth
+                label="Titre"
+                name="title"
+                value={formData.title}
+                onChange={handleChange}
+                placeholder="Titre de l'appel d'offres"
+                required
+                disabled={loading}
+              />
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
-          <div className="form-group">
-            <label>Budget minimum</label>
-            <input
-              type="number"
-              name="budget_min"
-              value={formData.budget_min}
-              onChange={handleChange}
-            />
-          </div>
+              <TextField
+                fullWidth
+                label="Description"
+                name="description"
+                value={formData.description}
+                onChange={handleChange}
+                placeholder="Décrivez le projet en détail"
+                multiline
+                rows={4}
+                required
+                disabled={loading}
+              />
 
-          <div className="form-group">
-            <label>Budget maximum</label>
-            <input
-              type="number"
-              name="budget_max"
-              value={formData.budget_max}
-              onChange={handleChange}
-            />
-          </div>
-        </div>
+              <FormControl fullWidth disabled={loading}>
+                <InputLabel>Catégorie</InputLabel>
+                <Select
+                  name="category"
+                  value={formData.category}
+                  onChange={handleChange}
+                  label="Catégorie"
+                >
+                  <MenuItem value="technology">Technologie</MenuItem>
+                  <MenuItem value="supplies">Fournitures</MenuItem>
+                  <MenuItem value="construction">Construction</MenuItem>
+                  <MenuItem value="services">Services</MenuItem>
+                </Select>
+              </FormControl>
 
-        <div className="form-group">
-          <label>Devise</label>
-          <select name="currency" value={formData.currency} onChange={handleChange}>
-            <option value="TND">Dinar tunisien</option>
-            <option value="USD">Dollar américain</option>
-            <option value="EUR">Euro</option>
-          </select>
-        </div>
+              <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr' }, gap: '16px' }}>
+                <TextField
+                  label="Budget Minimum"
+                  name="budget_min"
+                  type="number"
+                  value={formData.budget_min}
+                  onChange={handleChange}
+                  disabled={loading}
+                />
+                <TextField
+                  label="Budget Maximum"
+                  name="budget_max"
+                  type="number"
+                  value={formData.budget_max}
+                  onChange={handleChange}
+                  disabled={loading}
+                />
+              </Box>
 
-        <div className="form-group">
-          <label>Date de fermeture</label>
-          <input
-            type="datetime-local"
-            name="deadline"
-            value={formData.deadline}
-            onChange={handleChange}
-          />
-        </div>
+              <FormControl fullWidth disabled={loading}>
+                <InputLabel>Devise</InputLabel>
+                <Select
+                  name="currency"
+                  value={formData.currency}
+                  onChange={handleChange}
+                  label="Devise"
+                >
+                  <MenuItem value="TND">Dinar Tunisien</MenuItem>
+                  <MenuItem value="USD">Dollar Américain</MenuItem>
+                  <MenuItem value="EUR">Euro</MenuItem>
+                </Select>
+              </FormControl>
 
-        <div style={{ display: 'flex', gap: '1rem' }}>
-          <button className="btn btn-primary" disabled={loading}>
-            {loading ? 'Sauvegarde en cours...' : 'Créer l\'appel d\'offres'}
-          </button>
-          <button 
-            type="button" 
-            className="btn btn-secondary"
-            onClick={() => navigate('/tenders')}
-          >
-            Annuler
-          </button>
-        </div>
-      </form>
-    </div>
+              <TextField
+                label="Date de Fermeture"
+                name="deadline"
+                type="datetime-local"
+                value={formData.deadline}
+                onChange={handleChange}
+                InputLabelProps={{ shrink: true }}
+                disabled={loading}
+              />
+
+              <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
+                <Button
+                  variant="contained"
+                  type="submit"
+                  disabled={loading}
+                  startIcon={loading ? <CircularProgress size={20} /> : <SaveIcon />}
+                  sx={{
+                    flex: 1,
+                    backgroundColor: '#1565c0',
+                    textTransform: 'none',
+                    fontWeight: 600,
+                    minHeight: '44px',
+                    '&:hover': { backgroundColor: '#0d47a1' },
+                  }}
+                >
+                  {loading ? 'Création en cours...' : 'Créer l\'Appel d\'Offres'}
+                </Button>
+                <Button
+                  variant="outlined"
+                  type="button"
+                  onClick={() => navigate('/tenders')}
+                  disabled={loading}
+                  startIcon={<CancelIcon />}
+                  sx={{
+                    flex: 1,
+                    color: '#1565c0',
+                    borderColor: '#1565c0',
+                    textTransform: 'none',
+                    fontWeight: 600,
+                    minHeight: '44px',
+                  }}
+                >
+                  Annuler
+                </Button>
+              </Stack>
+            </Box>
+          </CardContent>
+        </Card>
+      </Container>
+    </Box>
   );
 }

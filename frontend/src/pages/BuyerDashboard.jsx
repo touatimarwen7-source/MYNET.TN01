@@ -1,12 +1,30 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import {
+  Container,
+  Box,
+  Card,
+  CardContent,
+  Grid,
+  Button,
+  Typography,
+  Table,
+  TableHead,
+  TableBody,
+  TableRow,
+  TableCell,
+  Paper,
+  CircularProgress,
+  LinearProgress,
+  Chip,
+} from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
+import VisibilityIcon from '@mui/icons-material/Visibility';
 import { procurementAPI } from '../api';
 import { setPageTitle } from '../utils/pageTitle';
-import DashboardCards from '../components/DashboardCards';
-import QuickActions from '../components/QuickActions';
-import ImportantDocuments from '../components/ImportantDocuments';
-import PaymentOrders from '../components/PaymentOrders';
 
 export default function BuyerDashboard() {
+  const navigate = useNavigate();
   const [stats, setStats] = useState({
     activeTenders: 0,
     totalBids: 0,
@@ -29,7 +47,6 @@ export default function BuyerDashboard() {
       const tenderRes = await procurementAPI.getMyTenders({ status: 'active' });
       const tenders = tenderRes.data.tenders || [];
       
-      // Calcul des Statistiques
       let totalBids = 0;
       let totalBudget = 0;
       let totalSpent = 0;
@@ -49,7 +66,7 @@ export default function BuyerDashboard() {
         bidVelocity: bidVelocity
       });
       
-      setRecentTenders(tenders.slice(0, 5));
+      setRecentTenders(tenders.slice(0, 10));
     } catch (error) {
       console.error('Erreur lors du chargement des données:', error);
     } finally {
@@ -57,222 +74,180 @@ export default function BuyerDashboard() {
     }
   };
 
-  if (loading) return <div className="loading">Chargement en cours...</div>;
+  if (loading) {
+    return (
+      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '60vh' }}>
+        <CircularProgress sx={{ color: '#1565c0' }} />
+      </Box>
+    );
+  }
 
-  const getStatus = (savings) => {
-    if (savings >= 20) return 'excellent';
-    if (savings >= 10) return 'good';
-    return 'normal';
-  };
-
-  // Cartes de résumé des services
-  const summaryCards = [
-    {
-      icon: '📋',
-      label: 'Appels d\'Offres',
-      value: stats.activeTenders,
-      subtitle: 'Appels actifs',
-      status: 'active',
-      type: 'metric'
-    },
-    {
-      icon: '📊',
-      label: 'Total Offres',
-      value: stats.totalBids,
-      subtitle: 'Offres reçues',
-      status: 'active',
-      type: 'metric'
-    },
-    {
-      icon: '💰',
-      label: 'Économies',
-      value: `${stats.totalSavings}%`,
-      subtitle: 'Du budget',
-      progress: parseInt(stats.totalSavings) || 0,
-      status: parseInt(stats.totalSavings) >= 15 ? 'active' : 'pending',
-      type: 'metric'
-    },
-    {
-      icon: '⚡',
-      label: 'Vélocité',
-      value: `${stats.bidVelocity}x`,
-      subtitle: 'Offres/Appel',
-      status: 'active',
-      type: 'metric'
-    }
-  ];
-
-  // Actions rapides pour acheteur
-  const quickActions = [
-    {
-      icon: '➕',
-      label: 'Créer Appel',
-      priority: 'high',
-      path: '/create-tender',
-      description: 'Créer un nouvel appel d\'offres'
-    },
-    {
-      icon: '📂',
-      label: 'Voir Appels',
-      path: '/tenders',
-      description: 'Consulter tous les appels'
-    },
-    {
-      icon: '📊',
-      label: 'Analytiques',
-      path: '/tender-analysis',
-      description: 'Consulter l\'analyse des offres'
-    },
-    {
-      icon: '👥',
-      label: 'Mon Équipe',
-      path: '/team-management',
-      description: 'Gérer les membres de l\'équipe'
-    }
-  ];
-
-  // Documents importants
-  const importantDocs = [
-    {
-      icon: '📄',
-      title: 'Factures en Attente',
-      meta: '3 factures',
-      priority: 'high',
-      details: '3 factures en attente de validation pour appels en cours',
-      action: { label: 'Consulter', path: '/invoices' }
-    },
-    {
-      icon: '✅',
-      title: 'Résultats Prêts',
-      meta: '2 appels',
-      priority: 'medium',
-      details: '2 résultats de ترسية prêts à être téléchargés',
-      action: { label: 'Télécharger', path: '/award-results' }
-    },
-    {
-      icon: '🔄',
-      title: 'Évaluations en Cours',
-      meta: '5 appels',
-      priority: 'normal',
-      details: 'Suivi des évaluations en cours pour 5 appels d\'offres'
-    }
-  ];
+  const StatCard = ({ label, value, subtitle, icon, progress }) => (
+    <Card sx={{ border: '1px solid #e0e0e0' }}>
+      <CardContent sx={{ padding: '24px' }}>
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '16px' }}>
+          <Typography sx={{ fontSize: '48px' }}>{icon}</Typography>
+          <Typography sx={{ fontSize: '28px', fontWeight: 600, color: '#1565c0' }}>
+            {value}
+          </Typography>
+        </Box>
+        <Typography sx={{ fontSize: '14px', fontWeight: 600, color: '#212121' }}>
+          {label}
+        </Typography>
+        <Typography sx={{ fontSize: '12px', color: '#616161', marginTop: '4px' }}>
+          {subtitle}
+        </Typography>
+        {progress !== undefined && (
+          <LinearProgress variant="determinate" value={progress} sx={{ marginTop: '12px' }} />
+        )}
+      </CardContent>
+    </Card>
+  );
 
   return (
-    <div className="buyer-dashboard">
-      {/* Professional Dashboard Header */}
-      <div className="dashboard-header">
-        <div className="header-content">
-          <h1>Tableau de Bord Acheteur</h1>
-          <p className="header-subtitle">Gérez vos appels d'offres et vos achats</p>
-        </div>
-        <div className="header-meta">
-          <span className="meta-item">Appels Actifs: <strong>{stats.activeTenders}</strong></span>
-          <span className="meta-item">Offres Reçues: <strong>{stats.totalBids}</strong></span>
-        </div>
-      </div>
+    <Box sx={{ backgroundColor: '#fafafa', paddingY: '40px' }}>
+      <Container maxWidth="lg">
+        {/* Header */}
+        <Box sx={{ marginBottom: '32px' }}>
+          <Typography variant="h2" sx={{ fontSize: '32px', fontWeight: 500, color: '#212121', marginBottom: '8px' }}>
+            Tableau de Bord Acheteur
+          </Typography>
+          <Typography sx={{ color: '#616161', marginBottom: '16px' }}>
+            Gérez vos appels d'offres et vos achats
+          </Typography>
+          <Button
+            variant="contained"
+            startIcon={<AddIcon />}
+            onClick={() => navigate('/create-tender')}
+            sx={{
+              backgroundColor: '#1565c0',
+              textTransform: 'none',
+              fontWeight: 600,
+              '&:hover': { backgroundColor: '#0d47a1' },
+            }}
+          >
+            Créer un Appel d'Offres
+          </Button>
+        </Box>
 
-      {/* Summary Cards */}
-      <div className="dashboard-section">
-        <h2>Vue d'ensemble</h2>
-        <DashboardCards cards={summaryCards} />
-      </div>
+        {/* Stats Cards */}
+        <Grid container spacing={3} sx={{ marginBottom: '32px' }}>
+          <Grid item xs={12} sm={6} md={3}>
+            <StatCard 
+              label="Appels d'Offres Actifs"
+              value={stats.activeTenders}
+              subtitle="En cours"
+              icon="📋"
+            />
+          </Grid>
+          <Grid item xs={12} sm={6} md={3}>
+            <StatCard 
+              label="Offres Reçues"
+              value={stats.totalBids}
+              subtitle="Total"
+              icon="📊"
+            />
+          </Grid>
+          <Grid item xs={12} sm={6} md={3}>
+            <StatCard 
+              label="Économies"
+              value={`${stats.totalSavings}%`}
+              subtitle="Du budget"
+              icon="💰"
+              progress={Math.min(parseInt(stats.totalSavings) || 0, 100)}
+            />
+          </Grid>
+          <Grid item xs={12} sm={6} md={3}>
+            <StatCard 
+              label="Vélocité"
+              value={`${stats.bidVelocity}x`}
+              subtitle="Offres/Appel"
+              icon="⚡"
+            />
+          </Grid>
+        </Grid>
 
-      {/* Quick Actions */}
-      <div className="dashboard-section">
-        <h2>Actions Rapides</h2>
-        <QuickActions actions={quickActions} />
-      </div>
-
-      {/* Important Documents */}
-      <div className="dashboard-section">
-        <ImportantDocuments documents={importantDocs} title="Documents Importants" />
-      </div>
-
-      {/* KPIs Grid - Legacy */}
-      <div className="kpis-grid">
-        <div className="kpi-card">
-          <div className="kpi-header">
-            <h3>Appels d'offres Actifs</h3>
-            <span className="traffic-light green"></span>
-          </div>
-          <p className="kpi-value">{stats.activeTenders}</p>
-          <p className="kpi-label">Appel d'offre en cours</p>
-        </div>
-
-        <div className="kpi-card">
-          <div className="kpi-header">
-            <h3>Total des Offres</h3>
-            <span className="traffic-light blue"></span>
-          </div>
-          <p className="kpi-value">{stats.totalBids}</p>
-          <p className="kpi-label">Offres reçues</p>
-        </div>
-
-        <div className={`kpi-card highlight status-${getStatus(stats.totalSavings)}`}>
-          <div className="kpi-header">
-            <h3>Économies Réalisées</h3>
-            <span className={`traffic-light ${getStatus(stats.totalSavings)}`}></span>
-          </div>
-          <p className="kpi-value">{stats.totalSavings}%</p>
-          <p className="kpi-label">du Budget</p>
-        </div>
-
-        <div className="kpi-card">
-          <div className="kpi-header">
-            <h3>Vélocité des Offres</h3>
-            <span className="traffic-light orange"></span>
-          </div>
-          <p className="kpi-value">{stats.bidVelocity}</p>
-          <p className="kpi-label">Offre/Appel</p>
-        </div>
-      </div>
-
-      {/* Recent Tenders */}
-      <div className="recent-section">
-        <h2>Appels d'offres Récents</h2>
-        {recentTenders.length === 0 ? (
-          <p className="empty-state">Aucun appel d'offres actuellement</p>
-        ) : (
-          <div className="tenders-list">
-            {recentTenders.map(tender => (
-              <div key={tender.id} className="tender-item">
-                <div className="tender-info">
-                  <h3>{tender.title}</h3>
-                  <p>Catégorie: {tender.category}</p>
-                </div>
-                <div className="tender-meta">
-                  <span className={`status status-${tender.status}`}>{tender.status}</span>
-                  <span className="amount">{tender.budget_max} {tender.currency}</span>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
-
-      {/* Traffic Light Legend */}
-      <div className="legend">
-        <h3>Indicateurs de Statut</h3>
-        <div className="legend-items">
-          <div className="legend-item">
-            <span className="traffic-light green"></span>
-            <span>Excellent</span>
-          </div>
-          <div className="legend-item">
-            <span className="traffic-light blue"></span>
-            <span>Bon</span>
-          </div>
-          <div className="legend-item">
-            <span className="traffic-light orange"></span>
-            <span>Moyen</span>
-          </div>
-          <div className="legend-item">
-            <span className="traffic-light red"></span>
-            <span>Critique</span>
-          </div>
-        </div>
-      </div>
-    </div>
+        {/* Recent Tenders */}
+        <Card sx={{ border: '1px solid #e0e0e0' }}>
+          <CardContent sx={{ padding: 0 }}>
+            <Box sx={{ padding: '24px', borderBottom: '1px solid #e0e0e0' }}>
+              <Typography variant="h4" sx={{ fontSize: '18px', fontWeight: 600, color: '#212121' }}>
+                Appels d'Offres Récents
+              </Typography>
+            </Box>
+            <Paper sx={{ border: 'none', borderRadius: 0, overflow: 'hidden' }}>
+              <Table>
+                <TableHead sx={{ backgroundColor: '#f5f5f5' }}>
+                  <TableRow sx={{ height: '56px' }}>
+                    <TableCell sx={{ fontWeight: 600, color: '#1565c0', textTransform: 'uppercase', fontSize: '12px' }}>
+                      Titre
+                    </TableCell>
+                    <TableCell sx={{ fontWeight: 600, color: '#1565c0', textTransform: 'uppercase', fontSize: '12px' }} align="right">
+                      Budget
+                    </TableCell>
+                    <TableCell sx={{ fontWeight: 600, color: '#1565c0', textTransform: 'uppercase', fontSize: '12px' }}>
+                      Statut
+                    </TableCell>
+                    <TableCell sx={{ fontWeight: 600, color: '#1565c0', textTransform: 'uppercase', fontSize: '12px' }} align="center">
+                      Action
+                    </TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {recentTenders.length === 0 ? (
+                    <TableRow>
+                      <TableCell colSpan={4} sx={{ textAlign: 'center', padding: '32px', color: '#999' }}>
+                        Aucun appel d'offres pour le moment
+                      </TableCell>
+                    </TableRow>
+                  ) : (
+                    recentTenders.map((tender) => (
+                      <TableRow
+                        key={tender.id}
+                        sx={{
+                          height: '56px',
+                          borderBottom: '1px solid #e0e0e0',
+                          '&:hover': { backgroundColor: '#fafafa' },
+                        }}
+                      >
+                        <TableCell sx={{ color: '#212121', fontSize: '14px', fontWeight: 500 }}>
+                          {tender.title}
+                        </TableCell>
+                        <TableCell sx={{ color: '#1565c0', fontSize: '14px', fontWeight: 600 }} align="right">
+                          {tender.budget_max} TND
+                        </TableCell>
+                        <TableCell>
+                          <Chip
+                            label={tender.status === 'active' ? 'Actif' : 'Clôturé'}
+                            sx={{
+                              backgroundColor: tender.status === 'active' ? '#e8f5e9' : '#ffebee',
+                              color: tender.status === 'active' ? '#1b5e20' : '#c62828',
+                            }}
+                          />
+                        </TableCell>
+                        <TableCell align="center">
+                          <Button
+                            size="small"
+                            startIcon={<VisibilityIcon />}
+                            onClick={() => navigate(`/tender/${tender.id}`)}
+                            sx={{
+                              color: '#1565c0',
+                              textTransform: 'none',
+                              fontWeight: 500,
+                            }}
+                          >
+                            Voir
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    ))
+                  )}
+                </TableBody>
+              </Table>
+            </Paper>
+          </CardContent>
+        </Card>
+      </Container>
+    </Box>
   );
 }

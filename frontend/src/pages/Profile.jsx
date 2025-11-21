@@ -1,4 +1,39 @@
 import { useState, useEffect } from 'react';
+import {
+  Container,
+  Box,
+  Card,
+  CardContent,
+  Button,
+  TextField,
+  Typography,
+  Stack,
+  Chip,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  Alert,
+  CircularProgress,
+  Paper,
+  Grid,
+  Tab,
+  Tabs,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
+} from '@mui/material';
+import EditIcon from '@mui/icons-material/Edit';
+import SaveIcon from '@mui/icons-material/Save';
+import CancelIcon from '@mui/icons-material/Cancel';
+import VerifiedIcon from '@mui/icons-material/Verified';
+import HistoryIcon from '@mui/icons-material/History';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { authAPI } from '../api';
 import { setPageTitle } from '../utils/pageTitle';
 
@@ -19,6 +54,7 @@ export default function Profile({ user }) {
   const [showAlertForm, setShowAlertForm] = useState(false);
   const [alertData, setAlertData] = useState({ type: 'tender', keyword: '' });
   const [activity, setActivity] = useState([]);
+  const [tabValue, setTabValue] = useState(0);
 
   useEffect(() => {
     fetchProfile();
@@ -34,7 +70,7 @@ export default function Profile({ user }) {
       setInterests(response.data.user.interests || []);
       setAlerts(response.data.user.alerts || []);
     } catch (err) {
-      setError(err.response?.data?.error || `Erreur lors de la récupération du profil`);
+      setError(err.response?.data?.error || 'Erreur lors de la récupération du profil');
     } finally {
       setLoading(false);
     }
@@ -66,9 +102,9 @@ export default function Profile({ user }) {
       const response = await authAPI.updateProfile(formData);
       setProfile(response.data.user);
       setEditing(false);
-      setSuccess(`Les modifications ont été enregistrées avec succès`);
+      setSuccess('Les modifications ont été enregistrées avec succès');
     } catch (err) {
-      setError(err.response?.data?.error || `Erreur lors de l'enregistrement des modifications`);
+      setError(err.response?.data?.error || 'Erreur lors de l\'enregistrement des modifications');
     } finally {
       setLoading(false);
     }
@@ -104,382 +140,351 @@ export default function Profile({ user }) {
 
   if (loading) {
     return (
-      <div className="page-container">
-        <div className="loading-skeleton" style={{ height: '400px', borderRadius: '12px' }}></div>
-      </div>
+      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '60vh' }}>
+        <CircularProgress sx={{ color: '#1565c0' }} />
+      </Box>
     );
   }
 
   if (!profile) {
     return (
-      <div className="page-container">
-        <div className="alert alert-danger">Profil non disponible</div>
-      </div>
+      <Container maxWidth="lg" sx={{ paddingY: '40px' }}>
+        <Alert severity="error">Profil non disponible</Alert>
+      </Container>
     );
   }
 
   return (
-    <div className="page-container">
-      {/* Page Header */}
-      <div className="page-header animate-slide-down">
-        <h1 className="page-title">Mon Profil Professionnel</h1>
-        <p className="page-subtitle">Gérez vos informations de compte et vos paramètres professionnels</p>
-      </div>
+    <Box sx={{ backgroundColor: '#fafafa', paddingY: '40px' }}>
+      <Container maxWidth="lg">
+        {/* Header */}
+        <Box sx={{ marginBottom: '32px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <Box>
+            <Typography variant="h2" sx={{ fontSize: '32px', fontWeight: 500, color: '#212121' }}>
+              Mon Profil Professionnel
+            </Typography>
+            <Typography sx={{ color: '#616161', marginTop: '8px' }}>
+              Gérez vos informations de compte et vos paramètres professionnels
+            </Typography>
+          </Box>
+          <Button
+            variant="contained"
+            startIcon={editing ? <CancelIcon /> : <EditIcon />}
+            onClick={() => setEditing(!editing)}
+            sx={{
+              backgroundColor: editing ? '#f57c00' : '#1565c0',
+              textTransform: 'none',
+              fontWeight: 600,
+              '&:hover': {
+                backgroundColor: editing ? '#e65100' : '#0d47a1',
+              },
+            }}
+          >
+            {editing ? 'Annuler' : 'Modifier'}
+          </Button>
+        </Box>
 
-      {/* Alerts */}
-      {error && (
-        <div className="alert alert-danger animate-slide-up">
-          <span>⚠</span>
-          <div>{error}</div>
-        </div>
-      )}
-      {success && (
-        <div className="alert alert-success animate-slide-up">
-          <span>✔</span>
-          <div>{success}</div>
-        </div>
-      )}
+        {error && <Alert severity="error" sx={{ marginBottom: '24px' }}>{error}</Alert>}
+        {success && <Alert severity="success" sx={{ marginBottom: '24px' }}>{success}</Alert>}
 
-      <div className="profile-layout">
-        {!editing ? (
-          <>
-            {/* Profile Card - Main Info */}
-            <div className="profile-card animate-scale-in">
-              <div className="profile-card-header">
-                <div className="profile-avatar">
-                  {profile.full_name ? profile.full_name.charAt(0).toUpperCase() : 'U'}
-                </div>
-                <div className="profile-header-info">
-                  <h2 className="profile-name">{profile.full_name || profile.username}</h2>
-                  <p className="profile-role">{profile.role === 'buyer' ? 'Acheteur' : profile.role === 'supplier' ? 'Fournisseur' : 'Administrateur'}</p>
-                </div>
-              </div>
-
-              <div className="profile-info-grid">
-                {/* Personal Information */}
-                <div className="info-group">
-                  <div className="info-item">
-                    <label className="info-label">Adresse Email</label>
-                    <p className="info-value">{profile.email}</p>
-                  </div>
-                  <div className="info-item">
-                    <label className="info-label">Nom d'Utilisateur</label>
-                    <p className="info-value">{profile.username}</p>
-                  </div>
-                  <div className="info-item">
-                    <label className="info-label">Numéro de Téléphone</label>
-                    <p className="info-value">{profile.phone || '—'}</p>
-                  </div>
-                </div>
-
-                {/* Company Information */}
-                <div className="info-group">
-                  <div className="info-item">
-                    <label className="info-label">Raison Sociale</label>
-                    <p className="info-value">{profile.company_name || '—'}</p>
-                  </div>
-                  <div className="info-item">
-                    <label className="info-label">Numéro d'Enregistrement</label>
-                    <p className="info-value">{profile.company_registration || '—'}</p>
-                  </div>
-                  <div className="info-item">
-                    <label className="info-label">Statut de Vérification</label>
-                    <div className="info-value">
-                      {profile.is_verified ? (
-                        <span className="badge badge-success">Vérifié</span>
-                      ) : (
-                        <span className="badge badge-warning">En Attente de Vérification</span>
-                      )}
-                    </div>
-                  </div>
-                </div>
-
-                {/* Account Information */}
-                <div className="info-group">
-                  <div className="info-item">
-                    <label className="info-label">Date de Création</label>
-                    <p className="info-value">{new Date(profile.created_at).toLocaleDateString('fr-FR', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
-                  </div>
-                  <div className="info-item">
-                    <label className="info-label">Dernière Modification</label>
-                    <p className="info-value">{new Date(profile.updated_at || profile.created_at).toLocaleDateString('fr-FR')}</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Activity Section */}
-            <div className="profile-section animate-slide-up">
-              <h3 className="section-title">Historique d'Activité</h3>
-              {activity.length === 0 ? (
-                <div className="empty-state">Aucune activité disponible pour le moment pour le moment</div>
-              ) : (
-                <div className="activity-timeline">
-                  {activity.slice(0, 5).map((item, idx) => (
-                    <div key={idx} className="activity-item">
-                      <div className="activity-icon">
-                        {item.type === 'login' ? '📥' : item.type === 'update' ? '📝' : item.type === 'tender' ? '📄' : '🎯'}
-                      </div>
-                      <div className="activity-content">
-                        <p className="activity-title">{item.description || item.type}</p>
-                        <p className="activity-date">{new Date(item.created_at).toLocaleDateString('fr-FR')}</p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-
-            {/* Interests Section */}
-            <div className="profile-section animate-slide-up">
-              <h3 className="section-title">Secteurs d'Intérêt</h3>
-              <div className="interests-container">
-                <div className="interests-list">
-                  {interests.length === 0 ? (
-                    <div className="empty-state">Aucun domaine actuellement défini</div>
-                  ) : (
-                    interests.map((interest, idx) => (
-                      <div key={idx} className="interest-tag">
-                        <span>{interest}</span>
-                        <button 
-                          className="remove-btn"
-                          onClick={() => removeInterest(idx)}
-                          title="Supprimer l'élément"
-                        >
-                          ✕
-                        </button>
-                      </div>
-                    ))
-                  )}
-                </div>
-                <div className="add-interest-form">
-                  <input
-                    type="text"
-                    value={newInterest}
-                    onChange={(e) => setNewInterest(e.target.value)}
-                    onKeyPress={(e) => e.key === 'Enter' && addInterest()}
-                    placeholder="Ajouter..."
-                    className="form-input"
-                  />
-                  <button 
-                    onClick={addInterest}
-                    className="interest-add-btn"
-                  >
-                    Ajouter
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            {/* Search Tools Section */}
-            <div className="profile-section animate-slide-up">
-              <h3 className="section-title">Services Disponibles</h3>
-              <div className="tools-grid">
-                <div className="tool-card">
-                  <div className="tool-icon">📋</div>
-                  <h4>Recherche Avancée des Appels d'Offres Publics</h4>
-                  <p>Recherchez les appels d'offres par catégorie, budget et localisation</p>
-                  <button className="btn btn-outline btn-sm">Accéder</button>
-                </div>
-                <div className="tool-card">
-                  <div className="tool-icon">🏢</div>
-                  <h4>Recherche de Fournisseurs</h4>
-                  <p>Trouvez les fournisseurs spécialisés dans votre domaine</p>
-                  <button className="btn btn-outline btn-sm">Accéder</button>
-                </div>
-                <div className="tool-card">
-                  <div className="tool-icon">📊</div>
-                  <h4>Analyse du Marché</h4>
-                  <p>Obtenez des analyses et des statistiques du marché</p>
-                  <button className="btn btn-outline btn-sm">Accéder</button>
-                </div>
-                <div className="tool-card">
-                  <div className="tool-icon">⭐</div>
-                  <h4>Recommandations</h4>
-                  <p>Obtenez des recommandations personnalisées basées sur vos préférences</p>
-                  <button className="btn btn-outline btn-sm">Accéder</button>
-                </div>
-              </div>
-            </div>
-
-            {/* Alerts Section */}
-            <div className="profile-section animate-slide-up">
-              <div className="alerts-header">
-                <h3 className="section-title">Système de Notifications</h3>
-                <button 
-                  className="btn btn-primary btn-sm"
-                  onClick={() => setShowAlertForm(!showAlertForm)}
-                >
-                  {showAlertForm ? 'Fermer' : 'Ajouter une Notification'}
-                </button>
-              </div>
-
-              {showAlertForm && (
-                <div className="alert-form animate-slide-down">
-                  <div className="form-row">
-                    <div className="form-group">
-                      <label className="form-label">Type de Notification</label>
-                      <select 
-                        value={alertData.type}
-                        onChange={(e) => setAlertData({...alertData, type: e.target.value})}
-                        className="form-input"
-                      >
-                        <option value="tender">Appels d'Offres Publics</option>
-                        <option value="award">Attributions de Marchés</option>
-                        <option value="supplier">Nouveaux Fournisseurs</option>
-                        <option value="market">Alertes de Marché</option>
-                      </select>
-                    </div>
-                    <div className="form-group">
-                      <label className="form-label">Mot clé</label>
-                      <input
-                        type="text"
-                        value={alertData.keyword}
-                        onChange={(e) => setAlertData({...alertData, keyword: e.target.value})}
-                        placeholder="Exemple: Construction, Bâtiment..."
-                        className="form-input"
-                      />
-                    </div>
-                  </div>
-                  <button 
-                    onClick={addAlert}
-                    className="btn btn-primary"
-                  >
-                    Configurer
-                  </button>
-                </div>
-              )}
-
-              <div className="alerts-list">
-                {alerts.length === 0 ? (
-                  <div className="empty-state">Aucune notification actuellement configurée</div>
-                ) : (
-                  alerts.map((alert) => (
-                    <div key={alert.id} className="alert-item">
-                      <div className="alert-content">
-                        <p className="alert-type">
-                          {alert.type === 'tender' ? `📄 Appels d'Offres Publics` : 
-                           alert.type === 'award' ? `🏆 Prix` :
-                           alert.type === 'supplier' ? `🏢 Fournisseurs` : `📊 Marché`}
-                        </p>
-                        <p className="alert-keyword">Mot clé: <strong>{alert.keyword}</strong></p>
-                      </div>
-                      <button 
-                        className="btn btn-sm btn-outline"
-                        onClick={() => removeAlert(alert.id)}
-                        title="Supprimer l'élément"
-                      >
-                        🗑️
-                      </button>
-                    </div>
-                  ))
-                )}
-              </div>
-            </div>
-
-            {/* Edit Button */}
-            <div className="profile-actions">
-              <button 
-                className="btn btn-primary btn-lg hover-lift"
-                onClick={() => setEditing(true)}
+        {/* Profile Card */}
+        <Card sx={{ marginBottom: '32px', border: '1px solid #e0e0e0' }}>
+          <CardContent sx={{ padding: '32px' }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', marginBottom: '32px', gap: '24px' }}>
+              <Box
+                sx={{
+                  width: '80px',
+                  height: '80px',
+                  borderRadius: '50%',
+                  backgroundColor: '#1565c0',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: 'white',
+                  fontSize: '32px',
+                  fontWeight: 600,
+                }}
               >
-                Modifier votre Profil
-              </button>
-            </div>
-          </>
-        ) : (
-          /* Edit Form */
-          <div className="profile-edit-form animate-scale-in">
-            <h2 className="form-title">Modifier Votre Profil Professionnel</h2>
-            
-            <form onSubmit={handleSubmit} className="form-container">
-              {/* Personal Information Section */}
-              <div className="form-section">
-                <h3 className="form-section-title">Informations Personnelles</h3>
-                
-                <div className="form-row">
-                  <div className="form-group">
-                    <label className="form-label">Nom Complet</label>
-                    <input
-                      type="text"
-                      name="full_name"
-                      value={formData.full_name || ''}
-                      onChange={handleChange}
-                      className="form-input"
-                      placeholder="Votre nom complet"
+                {profile.full_name ? profile.full_name.charAt(0).toUpperCase() : 'U'}
+              </Box>
+              <Box>
+                <Typography variant="h3" sx={{ fontSize: '24px', fontWeight: 600, color: '#212121' }}>
+                  {profile.full_name || profile.username}
+                </Typography>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '8px' }}>
+                  <Chip
+                    label={profile.role === 'buyer' ? 'Acheteur' : profile.role === 'supplier' ? 'Fournisseur' : 'Administrateur'}
+                    sx={{ backgroundColor: '#1565c0', color: 'white', fontWeight: 600 }}
+                  />
+                  {profile.is_verified && (
+                    <Chip
+                      icon={<VerifiedIcon />}
+                      label="Vérifié"
+                      sx={{ backgroundColor: '#2e7d32', color: 'white', fontWeight: 600 }}
                     />
-                  </div>
+                  )}
+                </Box>
+              </Box>
+            </Box>
 
-                  <div className="form-group">
-                    <label className="form-label">Numéro de Téléphone</label>
-                    <input
-                      type="tel"
-                      name="phone"
-                      value={formData.phone || ''}
-                      onChange={handleChange}
-                      className="form-input"
-                      placeholder="+216 XX XXX XXX"
-                    />
-                  </div>
-                </div>
-              </div>
-
-              {/* Company Information Section */}
-              <div className="form-section">
-                <h3 className="form-section-title">Informations Professionnelles</h3>
-                
-                <div className="form-row">
-                  <div className="form-group">
-                    <label className="form-label">Raison Sociale</label>
-                    <input
-                      type="text"
-                      name="company_name"
-                      value={formData.company_name || ''}
-                      onChange={handleChange}
-                      className="form-input"
-                      placeholder="Dénomination de votre entreprise"
-                    />
-                  </div>
-
-                  <div className="form-group">
-                    <label className="form-label">Numéro d'Enregistrement</label>
-                    <input
-                      type="text"
-                      name="company_registration"
-                      value={formData.company_registration || ''}
-                      onChange={handleChange}
-                      className="form-input"
-                      placeholder="Matricule fiscal"
-                    />
-                  </div>
-                </div>
-              </div>
-
-              {/* Form Actions */}
-              <div className="form-actions">
-                <button 
-                  type="button" 
-                  className="btn btn-secondary"
-                  onClick={() => {
-                    setEditing(false);
-                    setFormData(profile);
-                    setError('');
+            {!editing ? (
+              <Grid container spacing={3}>
+                <Grid item xs={12} md={6}>
+                  <Typography sx={{ fontSize: '12px', fontWeight: 600, color: '#616161', textTransform: 'uppercase', marginBottom: '8px' }}>
+                    Email
+                  </Typography>
+                  <Typography sx={{ fontSize: '16px', color: '#212121', fontWeight: 500 }}>
+                    {profile.email}
+                  </Typography>
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  <Typography sx={{ fontSize: '12px', fontWeight: 600, color: '#616161', textTransform: 'uppercase', marginBottom: '8px' }}>
+                    Téléphone
+                  </Typography>
+                  <Typography sx={{ fontSize: '16px', color: '#212121', fontWeight: 500 }}>
+                    {profile.phone || '—'}
+                  </Typography>
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  <Typography sx={{ fontSize: '12px', fontWeight: 600, color: '#616161', textTransform: 'uppercase', marginBottom: '8px' }}>
+                    Entreprise
+                  </Typography>
+                  <Typography sx={{ fontSize: '16px', color: '#212121', fontWeight: 500 }}>
+                    {profile.company_name || '—'}
+                  </Typography>
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  <Typography sx={{ fontSize: '12px', fontWeight: 600, color: '#616161', textTransform: 'uppercase', marginBottom: '8px' }}>
+                    Enregistrement
+                  </Typography>
+                  <Typography sx={{ fontSize: '16px', color: '#212121', fontWeight: 500 }}>
+                    {profile.company_registration || '—'}
+                  </Typography>
+                </Grid>
+              </Grid>
+            ) : (
+              <Box component="form" onSubmit={handleSubmit} sx={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                <TextField
+                  fullWidth
+                  label="Email"
+                  name="email"
+                  value={formData.email || ''}
+                  onChange={handleChange}
+                  disabled
+                />
+                <TextField
+                  fullWidth
+                  label="Nom Complet"
+                  name="full_name"
+                  value={formData.full_name || ''}
+                  onChange={handleChange}
+                />
+                <TextField
+                  fullWidth
+                  label="Téléphone"
+                  name="phone"
+                  value={formData.phone || ''}
+                  onChange={handleChange}
+                />
+                <TextField
+                  fullWidth
+                  label="Entreprise"
+                  name="company_name"
+                  value={formData.company_name || ''}
+                  onChange={handleChange}
+                />
+                <TextField
+                  fullWidth
+                  label="Numéro d'Enregistrement"
+                  name="company_registration"
+                  value={formData.company_registration || ''}
+                  onChange={handleChange}
+                />
+                <Button
+                  variant="contained"
+                  type="submit"
+                  startIcon={<SaveIcon />}
+                  sx={{
+                    backgroundColor: '#2e7d32',
+                    textTransform: 'none',
+                    fontWeight: 600,
+                    '&:hover': { backgroundColor: '#1b5e20' },
                   }}
                 >
-                  ✕ Annuler
-                </button>
-                <button 
-                  type="submit" 
-                  className="btn btn-primary"
-                  disabled={loading}
+                  Enregistrer
+                </Button>
+              </Box>
+            )}
+          </CardContent>
+        </Card>
+
+        {/* Tabs */}
+        <Box sx={{ borderBottom: '1px solid #e0e0e0', marginBottom: '24px' }}>
+          <Tabs value={tabValue} onChange={(e, v) => setTabValue(v)}>
+            <Tab label="Secteurs d'Intérêt" />
+            <Tab label="Alertes de Recherche" />
+            <Tab label="Historique d'Activité" />
+          </Tabs>
+        </Box>
+
+        {/* Tab 1: Interests */}
+        {tabValue === 0 && (
+          <Card sx={{ border: '1px solid #e0e0e0' }}>
+            <CardContent sx={{ padding: '24px' }}>
+              <Typography variant="h4" sx={{ fontSize: '18px', fontWeight: 600, color: '#212121', marginBottom: '16px' }}>
+                Secteurs d'Intérêt
+              </Typography>
+              <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '24px' }}>
+                {interests.length === 0 ? (
+                  <Typography sx={{ color: '#999', fontStyle: 'italic' }}>Aucun secteur défini</Typography>
+                ) : (
+                  interests.map((interest, idx) => (
+                    <Chip
+                      key={idx}
+                      label={interest}
+                      onDelete={() => removeInterest(idx)}
+                      sx={{ backgroundColor: '#e3f2fd', color: '#1565c0' }}
+                    />
+                  ))
+                )}
+              </Box>
+              <Box sx={{ display: 'flex', gap: '8px' }}>
+                <TextField
+                  size="small"
+                  placeholder="Ajouter un secteur..."
+                  value={newInterest}
+                  onChange={(e) => setNewInterest(e.target.value)}
+                  onKeyPress={(e) => e.key === 'Enter' && addInterest()}
+                />
+                <Button
+                  variant="contained"
+                  onClick={addInterest}
+                  sx={{
+                    backgroundColor: '#2e7d32',
+                    textTransform: 'none',
+                    fontWeight: 600,
+                  }}
                 >
-                  {loading ? 'Enregistrement...' : 'Enregistrer'}
-                </button>
-              </div>
-            </form>
-          </div>
+                  Ajouter
+                </Button>
+              </Box>
+            </CardContent>
+          </Card>
         )}
-      </div>
-    </div>
+
+        {/* Tab 2: Alerts */}
+        {tabValue === 1 && (
+          <Card sx={{ border: '1px solid #e0e0e0' }}>
+            <CardContent sx={{ padding: '24px' }}>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+                <Typography variant="h4" sx={{ fontSize: '18px', fontWeight: 600, color: '#212121' }}>
+                  Alertes de Recherche
+                </Typography>
+                <Button
+                  variant="contained"
+                  onClick={() => setShowAlertForm(!showAlertForm)}
+                  sx={{
+                    backgroundColor: '#1565c0',
+                    textTransform: 'none',
+                    fontWeight: 600,
+                  }}
+                >
+                  {showAlertForm ? 'Annuler' : 'Nouvelle Alerte'}
+                </Button>
+              </Box>
+
+              {showAlertForm && (
+                <Box sx={{ backgroundColor: '#f5f5f5', padding: '16px', borderRadius: '4px', marginBottom: '16px' }}>
+                  <FormControl fullWidth size="small" sx={{ marginBottom: '12px' }}>
+                    <InputLabel>Type</InputLabel>
+                    <Select
+                      value={alertData.type}
+                      label="Type"
+                      onChange={(e) => setAlertData({ ...alertData, type: e.target.value })}
+                    >
+                      <MenuItem value="tender">Appel d'Offres</MenuItem>
+                      <MenuItem value="supplier">Fournisseur</MenuItem>
+                    </Select>
+                  </FormControl>
+                  <TextField
+                    fullWidth
+                    size="small"
+                    placeholder="Mot-clé..."
+                    value={alertData.keyword}
+                    onChange={(e) => setAlertData({ ...alertData, keyword: e.target.value })}
+                    sx={{ marginBottom: '12px' }}
+                  />
+                  <Button
+                    variant="contained"
+                    onClick={addAlert}
+                    sx={{
+                      backgroundColor: '#2e7d32',
+                      textTransform: 'none',
+                      fontWeight: 600,
+                    }}
+                  >
+                    Créer Alerte
+                  </Button>
+                </Box>
+              )}
+
+              <Stack spacing={2}>
+                {alerts.length === 0 ? (
+                  <Typography sx={{ color: '#999', fontStyle: 'italic' }}>Aucune alerte configurée</Typography>
+                ) : (
+                  alerts.map(alert => (
+                    <Paper key={alert.id} sx={{ padding: '12px', backgroundColor: '#f5f5f5' }}>
+                      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <Box>
+                          <Typography sx={{ fontWeight: 600, color: '#212121' }}>{alert.keyword}</Typography>
+                          <Typography sx={{ fontSize: '12px', color: '#616161' }}>{alert.type === 'tender' ? 'Appel d\'Offres' : 'Fournisseur'} • {alert.created_at}</Typography>
+                        </Box>
+                        <Button
+                          size="small"
+                          startIcon={<DeleteIcon />}
+                          onClick={() => removeAlert(alert.id)}
+                          sx={{ color: '#c62828' }}
+                        >
+                          Supprimer
+                        </Button>
+                      </Box>
+                    </Paper>
+                  ))
+                )}
+              </Stack>
+            </CardContent>
+          </Card>
+        )}
+
+        {/* Tab 3: Activity */}
+        {tabValue === 2 && (
+          <Card sx={{ border: '1px solid #e0e0e0' }}>
+            <CardContent sx={{ padding: '24px' }}>
+              <Typography variant="h4" sx={{ fontSize: '18px', fontWeight: 600, color: '#212121', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <HistoryIcon sx={{ color: '#1565c0' }} />
+                Historique d'Activité
+              </Typography>
+              <List>
+                {activity.length === 0 ? (
+                  <Typography sx={{ color: '#999', fontStyle: 'italic', padding: '16px' }}>Aucune activité disponible</Typography>
+                ) : (
+                  activity.slice(0, 10).map((item, idx) => (
+                    <ListItem key={idx}>
+                      <ListItemIcon sx={{ minWidth: 40, color: '#1565c0' }}>
+                        {item.type === 'login' ? '📥' : item.type === 'update' ? '📝' : item.type === 'tender' ? '📄' : '🎯'}
+                      </ListItemIcon>
+                      <ListItemText
+                        primary={item.description || item.type}
+                        secondary={new Date(item.created_at).toLocaleDateString('fr-FR')}
+                      />
+                    </ListItem>
+                  ))
+                )}
+              </List>
+            </CardContent>
+          </Card>
+        )}
+      </Container>
+    </Box>
   );
 }

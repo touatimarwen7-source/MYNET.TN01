@@ -18,6 +18,7 @@ import AuditLog from './pages/AuditLog';
 import PartialAward from './pages/PartialAward';
 import OfferAnalysis from './pages/OfferAnalysis';
 import BuyerDashboard from './pages/BuyerDashboard';
+import BuyerActiveTenders from './pages/BuyerActiveTenders';
 import InvoiceManagement from './pages/InvoiceManagement';
 import CreateTenderImproved from './pages/CreateTenderImproved';
 import TenderChat from './pages/TenderChat';
@@ -55,6 +56,7 @@ import './styles/responsive-modern.css';
 import './styles/professional-formatting.css';
 import './styles/financial-corporate.css';
 import './styles/unified-theme.css';
+import './styles/buyer-active-tenders.css';
 import './App.css';
 
 function App() {
@@ -156,6 +158,10 @@ function App() {
             <Route 
               path="/buyer-dashboard" 
               element={user?.role === 'buyer' ? <BuyerDashboard /> : <Navigate to="/tenders" />} 
+            />
+            <Route 
+              path="/buyer-active-tenders" 
+              element={user?.role === 'buyer' ? <BuyerActiveTenders /> : <Navigate to="/tenders" />} 
             />
             <Route 
               path="/create-tender" 

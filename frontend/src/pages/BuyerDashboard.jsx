@@ -4,6 +4,7 @@ import { setPageTitle } from '../utils/pageTitle';
 import DashboardCards from '../components/DashboardCards';
 import QuickActions from '../components/QuickActions';
 import ImportantDocuments from '../components/ImportantDocuments';
+import PaymentOrders from '../components/PaymentOrders';
 import '../styles/dashboard-header.css';
 import '../styles/dashboardCards.css';
 import '../styles/dashboard-general.css';

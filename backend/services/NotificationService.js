@@ -68,29 +68,62 @@ class NotificationService {
         }
     }
 
-    async notifyTenderPublished(tenderId, tenderTitle, buyerId) {
+    async notifyTenderPublished(tenderId, tenderTitle, buyerId, tenderData = null) {
         const pool = getPool();
         
         try {
             const suppliers = await pool.query(
-                `SELECT id FROM users WHERE role = 'supplier' AND is_active = TRUE AND is_deleted = FALSE`
+                `SELECT id, preferred_categories, service_locations, minimum_budget 
+                 FROM users WHERE role = 'supplier' AND is_active = TRUE AND is_deleted = FALSE`
             );
             
+            let notifiedCount = 0;
+            
             for (const supplier of suppliers.rows) {
-                await this.createNotification(
-                    supplier.id,
-                    'tender_published',
-                    'New Tender Available',
-                    `A new tender "${tenderTitle}" has been published`,
-                    'tender',
-                    tenderId
-                );
+                const isMatched = this.matchSupplierWithTender(supplier, tenderData);
+                
+                if (isMatched) {
+                    await this.createNotification(
+                        supplier.id,
+                        'tender_published',
+                        'New Tender Available',
+                        `A new tender "${tenderTitle}" matches your preferences`,
+                        'tender',
+                        tenderId
+                    );
+                    notifiedCount++;
+                }
             }
             
-            return { success: true, notified: suppliers.rows.length };
+            return { success: true, notified: notifiedCount, total_suppliers: suppliers.rows.length };
         } catch (error) {
             console.error('Failed to notify suppliers:', error.message);
+            return { success: false, error: error.message };
         }
+    }
+    
+    matchSupplierWithTender(supplier, tenderData) {
+        if (!tenderData) return true;
+        
+        const supplierCategories = supplier.preferred_categories || [];
+        const supplierLocations = supplier.service_locations || [];
+        const supplierMinBudget = supplier.minimum_budget || 0;
+        
+        const tenderCategory = tenderData.category;
+        const tenderLocation = tenderData.service_location;
+        const tenderBudgetMin = tenderData.budget_min;
+        
+        const categoryMatches = supplierCategories.length === 0 || 
+                               supplierCategories.includes(tenderCategory);
+        
+        const locationMatches = supplierLocations.length === 0 || 
+                               supplierLocations.includes(tenderLocation);
+        
+        const budgetMatches = tenderBudgetMin >= supplierMinBudget;
+        
+        const isVerified = supplier.is_verified !== false;
+        
+        return categoryMatches && locationMatches && budgetMatches && isVerified;
     }
 
     async notifyOfferSubmitted(tenderId, offerId, buyerId) {

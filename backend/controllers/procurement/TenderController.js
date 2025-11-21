@@ -106,10 +106,17 @@ class TenderController {
 
             const tender = await TenderService.publishTender(id, req.user.userId);
 
+            const tenderData = {
+                category: tender.category,
+                service_location: tender.service_location,
+                budget_min: tender.budget_min
+            };
+
             await NotificationService.notifyTenderPublished(
                 tender.id, 
                 tender.title, 
-                req.user.userId
+                req.user.userId,
+                tenderData
             );
 
             res.status(200).json({

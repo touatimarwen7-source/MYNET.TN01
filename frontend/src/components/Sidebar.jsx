@@ -304,7 +304,7 @@ export default function Sidebar({ user, onLogout }) {
             onClick={onLogout}
           >
             <span className="logout-icon">🚪</span>
-            <span>Déconnexion</span>
+            <span>Se Déconnecter</span>
           </button>
         </div>
       </aside>

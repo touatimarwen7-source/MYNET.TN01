@@ -17,7 +17,7 @@ export default function SupplierProfile() {
   const [activity, setActivity] = useState([]);
 
   useEffect(() => {
-    setPageTitle('Profil du Fournisseur');
+    setPageTitle('Profil Professionnel');
     fetchProfile();
     fetchActivity();
   }, []);
@@ -113,8 +113,8 @@ export default function SupplierProfile() {
     <div className="page-container">
       {/* Page Header */}
       <div className="page-header animate-slide-down">
-        <h1 className="page-title">🏢 Profil du Fournisseur</h1>
-        <p className="page-subtitle">Gérez votre profil professionnel, vos documents et domaines de spécialisation</p>
+        <h1 className="page-title">🏢 Profil Professionnel</h1>
+        <p className="page-subtitle">Gérez vos données professionnelles, documents et domaines de spécialisation</p>
       </div>
 
       {/* Alerts */}
@@ -237,7 +237,7 @@ export default function SupplierProfile() {
                     <p className="info-value">{stats.submissions || 0}</p>
                   </div>
                   <div className="info-item">
-                    <label className="info-label">🎖️ الPrix</label>
+                    <label className="info-label">✓ الPrix</label>
                     <p className="info-value">{stats.awards || 0}</p>
                   </div>
                 </div>
@@ -247,7 +247,7 @@ export default function SupplierProfile() {
 
           {/* Statistics Section */}
           <div className="profile-section animate-slide-up">
-            <h3 className="section-title">📈 Statistiques de l'Entreprise</h3>
+            <h3 className="section-title">📊 Statistiques Opérationnelles</h3>
             <div className="stats-grid">
               <div className="stat-card">
                 <div className="stat-icon">📄</div>
@@ -255,7 +255,7 @@ export default function SupplierProfile() {
                 <div className="stat-label">المناقصات</div>
               </div>
               <div className="stat-card">
-                <div className="stat-icon">🎖️</div>
+                <div className="stat-icon">✓</div>
                 <div className="stat-number">{stats.won_awards || 0}</div>
                 <div className="stat-label">Prix Gagnés</div>
               </div>
@@ -274,15 +274,15 @@ export default function SupplierProfile() {
 
           {/* Activity Section */}
           <div className="profile-section animate-slide-up">
-            <h3 className="section-title">📈 Activité Récente</h3>
+            <h3 className="section-title">📋 Journal d'Activité</h3>
             {activity.length === 0 ? (
-              <div className="empty-state">Aucune activité pour le moment</div>
+              <div className="empty-state">Aucune activité disponible</div>
             ) : (
               <div className="activity-timeline">
                 {activity.slice(0, 5).map((item, idx) => (
                   <div key={idx} className="activity-item">
                     <div className="activity-icon">
-                      {item.type === 'bid' ? '📤' : item.type === 'award' ? '🎖️' : item.type === 'review' ? '⭐' : '🎯'}
+                      {item.type === 'bid' ? '📤' : item.type === 'award' ? '✓' : item.type === 'review' ? '⭐' : '🎯'}
                     </div>
                     <div className="activity-content">
                       <p className="activity-title">{item.description || item.type}</p>
@@ -326,7 +326,7 @@ export default function SupplierProfile() {
             </div>
 
             {documents.length === 0 ? (
-              <div className="empty-state">Aucun document téléchargé</div>
+              <div className="empty-state">Aucun document disponible</div>
             ) : (
               <div className="documents-table-wrapper">
                 <table className="documents-table">
@@ -376,7 +376,7 @@ export default function SupplierProfile() {
 
           {/* Public Profile Preview */}
           <div className="profile-section animate-slide-up">
-            <h3 className="section-title">🌐 Informations Publiques</h3>
+            <h3 className="section-title">🌐 Informations Visibles Publiquement</h3>
             <button 
               className="btn btn-outline"
               onClick={() => setShowPublicProfile(!showPublicProfile)}
@@ -393,7 +393,7 @@ export default function SupplierProfile() {
                 <div className="preview-content">
                   <p><strong>Domaines:</strong> {categories.join(', ') || '—'}</p>
                   <p><strong>التقييم:</strong> ⭐ {profile.average_rating || 0}/5</p>
-                  <p><strong>Prix Gagnés:</strong> 🎖️ {stats.won_awards || 0}</p>
+                  <p><strong>Prix Gagnés:</strong> ✓ {stats.won_awards || 0}</p>
                 </div>
               </div>
             )}

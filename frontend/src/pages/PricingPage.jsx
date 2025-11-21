@@ -328,7 +328,7 @@ export default function PricingPage() {
           </div>
 
           <div className="admin-controls-info">
-            <h3>ℹ️ À Propos des Contrôles d'Administration</h3>
+            <h3>ℹ️ À Propos de MyNet.tn des Contrôles d'Administration</h3>
             <p>
               Les administrateurs MyNet.tn peuvent configurer certaines limites et fonctionnalités 
               par forfait pour adapter la plateforme à leurs besoins spécifiques. Les fonctionnalités 

@@ -50,6 +50,7 @@ import './styles/forms-modern.css';
 import './styles/pages-modern.css';
 import './styles/animations-modern.css';
 import './styles/responsive-modern.css';
+import './styles/professional-formatting.css';
 import './styles/unified-theme.css';
 import './App.css';
 

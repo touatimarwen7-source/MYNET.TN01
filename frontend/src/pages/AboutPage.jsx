@@ -4,7 +4,7 @@ import { setPageTitle } from '../utils/pageTitle';
 import '../styles/aboutpage.css';
 
 export default function AboutPage() {
-  setPageTitle('À Propos');
+  setPageTitle('À Propos de MyNet.tn');
 
   return (
     <>
@@ -13,7 +13,7 @@ export default function AboutPage() {
       {/* Hero Section */}
       <section className="about-hero">
         <div className="hero-content">
-          <h1>À Propos de MyNet.tn</h1>
+          <h1>À Propos de MyNet.tn de MyNet.tn</h1>
           <p className="hero-subtitle">Transforming Public Procurement in Tunisia</p>
         </div>
       </section>

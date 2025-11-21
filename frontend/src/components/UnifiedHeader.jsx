@@ -137,8 +137,8 @@ export default function UnifiedHeader() {
               </div>
 
               {/* Logout Button */}
-              <button className="btn-logout" onClick={handleLogout} title="Déconnexion">
-                Déconnexion
+              <button className="btn-logout" onClick={handleLogout} title="Se Déconnecter">
+                Se Déconnecter
               </button>
             </>
           ) : (
@@ -215,7 +215,7 @@ export default function UnifiedHeader() {
                   </div>
                 </div>
                 <button className="btn-logout" onClick={handleLogout}>
-                  Déconnexion
+                  Se Déconnecter
                 </button>
               </>
             ) : (

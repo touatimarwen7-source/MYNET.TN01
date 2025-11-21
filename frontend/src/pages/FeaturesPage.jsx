@@ -21,7 +21,7 @@ export default function FeaturesPage() {
       {/* Solutions pour l'Acheteur */}
       <section className="buyer-solutions">
         <div className="container">
-          <h2>🏢 Solutions pour l'Acheteur</h2>
+          <h2>Solutions pour l'Acheteur</h2>
           <p className="section-intro">Outils avancés pour optimiser votre processus d'achat</p>
 
           <div className="solutions-grid">
@@ -34,11 +34,11 @@ export default function FeaturesPage() {
                 Scores de conformité, détection d'anomalies, et recommandations intelligentes.
               </p>
               <ul className="features-list">
-                <li>✓ Scoring automatique des offres</li>
-                <li>✓ Détection des incohérences</li>
-                <li>✓ Analyse comparative en temps réel</li>
-                <li>✓ Recommandations basées sur l'historique</li>
-                <li>✓ Rapports d'analyse détaillés</li>
+                <li>Scoring automatique des offres</li>
+                <li>Détection des incohérences</li>
+                <li>Analyse comparative en temps réel</li>
+                <li>Recommandations basées sur l'historique</li>
+                <li>Rapports d'analyse détaillés</li>
               </ul>
             </div>
 
@@ -51,11 +51,11 @@ export default function FeaturesPage() {
                 spécifiques pour optimiser les risques et bénéficier de la meilleure qualité.
               </p>
               <ul className="features-list">
-                <li>✓ Attribution multi-fournisseurs</li>
-                <li>✓ Règles de partage personnalisées</li>
-                <li>✓ Optimisation des quantités</li>
-                <li>✓ Gestion des préférences régionales</li>
-                <li>✓ Historique complet des attributions</li>
+                <li>Attribution multi-fournisseurs</li>
+                <li>Règles de partage personnalisées</li>
+                <li>Optimisation des quantités</li>
+                <li>Gestion des préférences régionales</li>
+                <li>Historique complet des attributions</li>
               </ul>
             </div>
 
@@ -68,11 +68,11 @@ export default function FeaturesPage() {
                 automatique des données et élimination des tâches manuelles.
               </p>
               <ul className="features-list">
-                <li>✓ Synchronisation bidirectionnelle</li>
-                <li>✓ API REST et webhooks</li>
-                <li>✓ Import/Export des données</li>
-                <li>✓ Support SAP, Oracle, NetSuite</li>
-                <li>✓ Flux de travail automatisés</li>
+                <li>Synchronisation bidirectionnelle</li>
+                <li>API REST et webhooks</li>
+                <li>Import/Export des données</li>
+                <li>Support SAP, Oracle, NetSuite</li>
+                <li>Flux de travail automatisés</li>
               </ul>
             </div>
 
@@ -85,11 +85,11 @@ export default function FeaturesPage() {
                 interactifs et des rapports prédictifs pour mieux décider.
               </p>
               <ul className="features-list">
-                <li>✓ KPI en temps réel</li>
-                <li>✓ Tableaux de bord personnalisés</li>
-                <li>✓ Rapports prédictifs</li>
-                <li>✓ Tendances du marché</li>
-                <li>✓ Export en PDF/Excel</li>
+                <li>KPI en temps réel</li>
+                <li>Tableaux de bord personnalisés</li>
+                <li>Rapports prédictifs</li>
+                <li>Tendances du marché</li>
+                <li>Export en PDF/Excel</li>
               </ul>
             </div>
 
@@ -102,11 +102,11 @@ export default function FeaturesPage() {
                 annotations et flux de commentaires sur chaque appel d'offres.
               </p>
               <ul className="features-list">
-                <li>✓ Chat en temps réel par AO</li>
-                <li>✓ Annotations et commentaires</li>
-                <li>✓ Flux de travail collaboratif</li>
-                <li>✓ Notifications intelligentes</li>
-                <li>✓ Historique de discussion complet</li>
+                <li>Chat en temps réel par AO</li>
+                <li>Annotations et commentaires</li>
+                <li>Flux de travail collaboratif</li>
+                <li>Notifications intelligentes</li>
+                <li>Historique de discussion complet</li>
               </ul>
             </div>
 
@@ -119,11 +119,11 @@ export default function FeaturesPage() {
                 avec authentification fine et traçabilité complète.
               </p>
               <ul className="features-list">
-                <li>✓ Stockage sécurisé illimité</li>
-                <li>✓ Versioning automatique</li>
-                <li>✓ Permissions granulaires</li>
-                <li>✓ Recherche full-text</li>
-                <li>✓ Archivage 7 ans</li>
+                <li>Stockage sécurisé illimité</li>
+                <li>Versioning automatique</li>
+                <li>Permissions granulaires</li>
+                <li>Recherche full-text</li>
+                <li>Archivage 7 ans</li>
               </ul>
             </div>
           </div>
@@ -146,11 +146,11 @@ export default function FeaturesPage() {
                 qui correspondent à votre profil et vos domaines d'expertise.
               </p>
               <ul className="features-list">
-                <li>✓ Filtrage par catégorie</li>
-                <li>✓ Alertes par localisation</li>
-                <li>✓ Notifications prioritaires</li>
-                <li>✓ Calendrier d'alertes</li>
-                <li>✓ Email + SMS + APP</li>
+                <li>Filtrage par catégorie</li>
+                <li>Alertes par localisation</li>
+                <li>Notifications prioritaires</li>
+                <li>Calendrier d'alertes</li>
+                <li>Email + SMS + APP</li>
               </ul>
             </div>
 
@@ -163,11 +163,11 @@ export default function FeaturesPage() {
                 détaillées, images, prix et stocks en temps réel.
               </p>
               <ul className="features-list">
-                <li>✓ Ajout rapide de produits</li>
-                <li>✓ Gestion du stock</li>
-                <li>✓ Tarifs multi-niveaux</li>
-                <li>✓ Variations et options</li>
-                <li>✓ Approvisionnement automatique</li>
+                <li>Ajout rapide de produits</li>
+                <li>Gestion du stock</li>
+                <li>Tarifs multi-niveaux</li>
+                <li>Variations et options</li>
+                <li>Approvisionnement automatique</li>
               </ul>
             </div>
 
@@ -180,11 +180,11 @@ export default function FeaturesPage() {
                 Chiffrement sécurisé et protection contre les modifications.
               </p>
               <ul className="features-list">
-                <li>✓ Formulaire pré-rempli</li>
-                <li>✓ Calculatrices intégrées</li>
-                <li>✓ Chiffrement AES-256</li>
-                <li>✓ Brouillons auto-sauvegardés</li>
-                <li>✓ Pièces jointes sécurisées</li>
+                <li>Formulaire pré-rempli</li>
+                <li>Calculatrices intégrées</li>
+                <li>Chiffrement AES-256</li>
+                <li>Brouillons auto-sauvegardés</li>
+                <li>Pièces jointes sécurisées</li>
               </ul>
             </div>
 
@@ -197,11 +197,11 @@ export default function FeaturesPage() {
                 commentaires des acheteurs et historique complet.
               </p>
               <ul className="features-list">
-                <li>✓ Tableau de bord des offres</li>
-                <li>✓ Statuts en temps réel</li>
-                <li>✓ Commentaires de l'acheteur</li>
-                <li>✓ Tendances d'acceptation</li>
-                <li>✓ Rapports de performance</li>
+                <li>Tableau de bord des offres</li>
+                <li>Statuts en temps réel</li>
+                <li>Commentaires de l'acheteur</li>
+                <li>Tendances d'acceptation</li>
+                <li>Rapports de performance</li>
               </ul>
             </div>
 
@@ -214,11 +214,11 @@ export default function FeaturesPage() {
                 basé sur vos performances réelles et retours clients.
               </p>
               <ul className="features-list">
-                <li>✓ Rating transparent</li>
-                <li>✓ Retours des clients</li>
-                <li>✓ Historique de performance</li>
-                <li>✓ Taux d'acceptation</li>
-                <li>✓ Délais de livraison</li>
+                <li>Rating transparent</li>
+                <li>Retours des clients</li>
+                <li>Historique de performance</li>
+                <li>Taux d'acceptation</li>
+                <li>Délais de livraison</li>
               </ul>
             </div>
 
@@ -231,11 +231,11 @@ export default function FeaturesPage() {
                 et suivez vos paiements avec notifications automatiques.
               </p>
               <ul className="features-list">
-                <li>✓ Génération factures auto</li>
-                <li>✓ Conformité fiscale TN</li>
-                <li>✓ Suivi des paiements</li>
-                <li>✓ Rappels automatiques</li>
-                <li>✓ Intégration bancaire</li>
+                <li>Génération factures auto</li>
+                <li>Conformité fiscale TN</li>
+                <li>Suivi des paiements</li>
+                <li>Rappels automatiques</li>
+                <li>Intégration bancaire</li>
               </ul>
             </div>
           </div>
@@ -245,7 +245,7 @@ export default function FeaturesPage() {
       {/* Comparative Features */}
       <section className="comparative-section">
         <div className="container">
-          <h2>🔄 Fonctionnalités Communes</h2>
+          <h2>Fonctionnalités Communes</h2>
           <p className="section-intro">Outils disponibles pour tous les utilisateurs</p>
 
           <div className="common-features-grid">

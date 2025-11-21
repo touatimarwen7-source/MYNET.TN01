@@ -134,7 +134,7 @@ export default function CreateOffer() {
     e.preventDefault();
 
     if (isDeadlinePassed) {
-      setError(`❌ L'envoi a échoué. L'appel d'offres est fermé depuis ${new Date(tender.deadline).toLocaleDateString('fr-FR')} à ${new Date(tender.deadline).toLocaleTimeString('fr-FR')}`);
+      setError(`L'envoi a échoué. L'appel d'offres est fermé depuis ${new Date(tender.deadline).toLocaleDateString('fr-FR')} à ${new Date(tender.deadline).toLocaleTimeString('fr-FR')}`);
       return;
     }
 
@@ -175,8 +175,8 @@ export default function CreateOffer() {
       }, 2500);
     } catch (err) {
       const errorMsg = err.response?.data?.error || err.message;
-      setError('❌ Erreur lors de l\'envoi de l\'offre: ' + errorMsg);
-      addToast('❌ Erreur lors de l\'envoi de l\'offre', 'error', 4000);
+      setError('Erreur lors de l\'envoi de l\'offre: ' + errorMsg);
+      addToast('Erreur lors de l\'envoi de l\'offre', 'error', 4000);
     } finally {
       setSubmitting(false);
     }
@@ -216,7 +216,7 @@ export default function CreateOffer() {
       )}
 
       <div className="card" style={{ marginTop: '1rem' }}>
-        <h2>📝 Formulaire de soumission d'offre sécurisée</h2>
+        <h2>Formulaire de soumission d'offre sécurisée</h2>
         <p style={{ color: '#666' }}>
           <strong>Appel d'offres:</strong> {tender.title}
         </p>
@@ -247,7 +247,7 @@ export default function CreateOffer() {
           {/* Étape 1: Informations de base */}
           {step === 1 && (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-              <h3>📋 Informations de base de l'offre</h3>
+              <h3>Informations de base de l'offre</h3>
 
               <div>
                 <label><strong>Numéro de référence du fournisseur (optionnel)</strong></label>
@@ -349,7 +349,7 @@ export default function CreateOffer() {
                         <th style={{ padding: '0.75rem', textAlign: 'right', borderBottom: '1px solid #ddd' }}>Description</th>
                         <th style={{ padding: '0.75rem', textAlign: 'right', borderBottom: '1px solid #ddd' }}>Quantité</th>
                         <th style={{ padding: '0.75rem', textAlign: 'right', borderBottom: '1px solid #ddd' }}>Unité</th>
-                        <th style={{ padding: '0.75rem', textAlign: 'right', borderBottom: '1px solid #ddd' }}>🔒 Prix unitaire</th>
+                        <th style={{ padding: '0.75rem', textAlign: 'right', borderBottom: '1px solid #ddd' }}>Prix unitaire</th>
                         <th style={{ padding: '0.75rem', textAlign: 'right', borderBottom: '1px solid #ddd' }}>Total</th>
                         <th style={{ padding: '0.75rem', textAlign: 'center', borderBottom: '1px solid #ddd' }}>Catalogue</th>
                       </tr>
@@ -425,7 +425,7 @@ export default function CreateOffer() {
               <h3>✅ Révision finale et envoi sécurisé</h3>
 
               <div style={{ padding: '1.5rem', backgroundColor: '#f9f9f9', borderRadius: '8px', border: '1px solid #ddd' }}>
-                <h4>📊 Résumé de l'offre</h4>
+                <h4>Résumé de l'offre</h4>
                 <div style={{ lineHeight: '1.8', fontSize: '0.95rem' }}>
                   <p><strong>Numéro de référence:</strong> {offerData.supplier_ref_number || 'Aucun'}</p>
                   <p><strong>Période de validité:</strong> {offerData.validity_period_days} jours</p>
@@ -439,7 +439,7 @@ export default function CreateOffer() {
               </div>
 
               <div style={{ padding: '1rem', backgroundColor: '#fff3cd', border: '1px solid #ffc107', borderRadius: '4px', color: '#856404' }}>
-                <strong>🔒 Alerte de sécurité:</strong>
+                <strong>Alerte de sécurité:</strong>
                 <p>Toutes les données financières de votre offre seront chiffrées avec AES-256. Seul l'acheteur pourra déchiffrer et accéder aux détails financiers.</p>
               </div>
 
@@ -452,7 +452,7 @@ export default function CreateOffer() {
                     style={{ marginTop: '0.25rem' }}
                   />
                   <span>
-                    <strong>✓ Engagement d'envoi</strong>
+                    <strong>Engagement d'envoi</strong>
                     <p style={{ margin: '0.5rem 0 0 0', fontSize: '0.9rem' }}>
                       Je confirme que j'ai lu et compris tous les termes et conditions de l'appel d'offres, et que cette offre est valable pour la période indiquée ci-dessus.
                     </p>
@@ -482,7 +482,7 @@ export default function CreateOffer() {
                     opacity: submitting || !offerData.commitment ? 0.6 : 1
                   }}
                 >
-                  {submitting ? '⏳ Chiffrement et envoi de l\'offre en cours...' : '🔐 Chiffrer et envoyer l\'offre maintenant'}
+                  {submitting ? 'Chiffrement et envoi de l\'offre en cours...' : '🔐 Chiffrer et envoyer l\'offre maintenant'}
                 </button>
               </div>
             </div>

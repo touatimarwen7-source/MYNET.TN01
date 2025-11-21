@@ -35,7 +35,7 @@ export default function Profile({ user }) {
       setInterests(response.data.user.interests || []);
       setAlerts(response.data.user.alerts || []);
     } catch (err) {
-      setError(err.response?.data?.error || 'Erreur lors du chargement du profil');
+      setError(err.response?.data?.error || `Erreur lors de la récupération du profil`);
     } finally {
       setLoading(false);
     }
@@ -67,9 +67,9 @@ export default function Profile({ user }) {
       const response = await authAPI.updateProfile(formData);
       setProfile(response.data.user);
       setEditing(false);
-      setSuccess('Profil mis à jour avec succès');
+      setSuccess(`Les modifications ont été enregistrées avec succès`);
     } catch (err) {
-      setError(err.response?.data?.error || 'Erreur lors de la mise à jour du profil');
+      setError(err.response?.data?.error || `Erreur lors de l'enregistrement des modifications`);
     } finally {
       setLoading(false);
     }
@@ -114,7 +114,7 @@ export default function Profile({ user }) {
   if (!profile) {
     return (
       <div className="page-container">
-        <div className="alert alert-danger">Profil non trouvé</div>
+        <div className="alert alert-danger">Profil non disponible</div>
       </div>
     );
   }
@@ -213,7 +213,7 @@ export default function Profile({ user }) {
             <div className="profile-section animate-slide-up">
               <h3 className="section-title">Historique d'Activité</h3>
               {activity.length === 0 ? (
-                <div className="empty-state">Aucune activité disponible pour le moment</div>
+                <div className="empty-state">Aucune activité disponible pour le moment pour le moment</div>
               ) : (
                 <div className="activity-timeline">
                   {activity.slice(0, 5).map((item, idx) => (
@@ -237,7 +237,7 @@ export default function Profile({ user }) {
               <div className="interests-container">
                 <div className="interests-list">
                   {interests.length === 0 ? (
-                    <div className="empty-state">Aucun domaine d'intérêt défini</div>
+                    <div className="empty-state">Aucun domaine actuellement défini</div>
                   ) : (
                     interests.map((interest, idx) => (
                       <div key={idx} className="interest-tag">
@@ -245,7 +245,7 @@ export default function Profile({ user }) {
                         <button 
                           className="remove-btn"
                           onClick={() => removeInterest(idx)}
-                          title="Supprimer"
+                          title="Supprimer l'élément"
                         >
                           ✕
                         </button>
@@ -311,7 +311,7 @@ export default function Profile({ user }) {
                   className="btn btn-primary btn-sm"
                   onClick={() => setShowAlertForm(!showAlertForm)}
                 >
-                  {showAlertForm ? 'Fermer' : 'Créer une Notification'}
+                  {showAlertForm ? 'Fermer' : 'Ajouter une Notification'}
                 </button>
               </div>
 
@@ -328,7 +328,7 @@ export default function Profile({ user }) {
                         <option value="tender">Appels d'Offres Publics</option>
                         <option value="award">Attributions de Marchés</option>
                         <option value="supplier">Nouveaux Fournisseurs</option>
-                        <option value="market">Notifications du Marché</option>
+                        <option value="market">Alertes de Marché</option>
                       </select>
                     </div>
                     <div className="form-group">
@@ -353,7 +353,7 @@ export default function Profile({ user }) {
 
               <div className="alerts-list">
                 {alerts.length === 0 ? (
-                  <div className="empty-state">Aucune notification configurée</div>
+                  <div className="empty-state">Aucune notification actuellement configurée</div>
                 ) : (
                   alerts.map((alert) => (
                     <div key={alert.id} className="alert-item">
@@ -368,7 +368,7 @@ export default function Profile({ user }) {
                       <button 
                         className="btn btn-sm btn-outline"
                         onClick={() => removeAlert(alert.id)}
-                        title="Supprimer"
+                        title="Supprimer l'élément"
                       >
                         🗑️
                       </button>
@@ -474,7 +474,7 @@ export default function Profile({ user }) {
                   className="btn btn-primary"
                   disabled={loading}
                 >
-                  {loading ? '⏳ Traitement en cours......' : '💾 Enregistrer les Modifications'}
+                  {loading ? 'Enregistrement...' : 'Enregistrer'}
                 </button>
               </div>
             </form>

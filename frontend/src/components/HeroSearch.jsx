@@ -27,7 +27,7 @@ export default function HeroSearch() {
   ];
 
   const regions = [
-    { value: 'all', label: 'Toutes les Régions' },
+    { value: 'all', label: 'Ensemble du Territoire' },
     { value: 'tunis', label: 'Tunis' },
     { value: 'ariana', label: 'Ariana' },
     { value: 'ben-arous', label: 'Ben Arous' },
@@ -57,15 +57,15 @@ export default function HeroSearch() {
   const getButtonText = () => {
     switch(activeTab) {
       case 'markets':
-        return 'Lancer la Recherche - Nouveaux Marchés';
+        return 'Effectuer la Recherche - Nouveaux Marchés';
       case 'tenders':
-        return 'Lancer la Recherche - Appels d\'Offres';
+        return 'Effectuer la Recherche - Appels d\'Offres';
       case 'awards':
-        return 'Lancer la Recherche - Attributions';
+        return 'Effectuer la Recherche - Attributions';
       case 'data':
-        return 'Lancer la Recherche - Données Essentielles';
+        return 'Effectuer la Recherche - Données Essentielles';
       default:
-        return 'Lancer la Recherche';
+        return 'Effectuer la Recherche';
     }
   };
 
@@ -150,13 +150,13 @@ export default function HeroSearch() {
           {/* Keywords Input */}
           <div className="search-field keywords-field">
             <label htmlFor="keywords-input" className="field-label">
-              Mots-clés ou Organisme
+              Mots-clés ou Organisme Public
             </label>
             <div className="input-wrapper">
               <input
                 id="keywords-input"
                 type="text"
-                placeholder="Ex: Plomberie, informatique, construction..."
+                placeholder="Exemple: Construction, Informatique, Services"
                 value={searchData.keywords}
                 onChange={handleKeywordsChange}
                 className="search-input"

@@ -25,7 +25,7 @@ export default function AdminGuide() {
           </div>
 
           <div className="steps">
-            <h3>📋 Étapes de Connexion:</h3>
+            <h3>Étapes de Connexion:</h3>
             <ol>
               <li>Rendez-vous sur la page de <a href="/login">Connexion</a></li>
               <li>Entrez l'email: <code>admin@mynet.tn</code></li>
@@ -41,13 +41,13 @@ export default function AdminGuide() {
 
           <div className="features-grid">
             <div className="feature-card">
-              <h3>📊 Tableau de Bord</h3>
+              <h3>Tableau de Bord</h3>
               <p>Vue d'ensemble des statistiques et métriques clés du système</p>
               <a href="/admin" className="btn-small">Accéder →</a>
             </div>
 
             <div className="feature-card">
-              <h3>📋 Logs d'Audit</h3>
+              <h3>Logs d'Audit</h3>
               <p>Consulter l'historique complet de toutes les opérations</p>
               <a href="/admin/audit-logs" className="btn-small">Accéder →</a>
             </div>

@@ -53,11 +53,11 @@ export default function HomePage() {
               Publiez vos appels d'offres, recevez les meilleures propositions, évaluez les fournisseurs et finalisez vos contrats en toute confiance.
             </p>
             <ul className="role-features">
-              <li>✓ Créer des appels d'offres</li>
-              <li>✓ Gérer les soumissions</li>
-              <li>✓ Analyser les offres</li>
-              <li>✓ Émettre des bons de commande</li>
-              <li>✓ Gérer l'équipe d'achat</li>
+              <li>Créer des appels d'offres</li>
+              <li>Gérer les soumissions</li>
+              <li>Analyser les offres</li>
+              <li>Émettre des bons de commande</li>
+              <li>Gérer l'équipe d'achat</li>
             </ul>
             <button 
               className="role-button"
@@ -75,11 +75,11 @@ export default function HomePage() {
               Découvrez les opportunités de marché, soumettez vos offres compétitives, et développez votre activité avec des clients de confiance.
             </p>
             <ul className="role-features">
-              <li>✓ Parcourir les appels d'offres</li>
-              <li>✓ Soumettre des offres</li>
-              <li>✓ Gérer votre catalogue</li>
-              <li>✓ Suivre les évaluations</li>
-              <li>✓ Recevoir les commandes</li>
+              <li>Parcourir les appels d'offres</li>
+              <li>Soumettre des offres</li>
+              <li>Gérer votre catalogue</li>
+              <li>Suivre les évaluations</li>
+              <li>Recevoir les commandes</li>
             </ul>
             <button 
               className="role-button"

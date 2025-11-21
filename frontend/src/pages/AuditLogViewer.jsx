@@ -49,7 +49,7 @@ export default function AuditLogViewer() {
 
   return (
     <div className="audit-log-viewer">
-      <h1>📋 Journal d'Audit Complet</h1>
+      <h1>Journal d'Audit Complet</h1>
 
       <div className="filters-panel">
         <div className="filter-group">
@@ -75,8 +75,8 @@ export default function AuditLogViewer() {
         </div>
 
         <button className="btn btn-primary" onClick={fetchLogs}>Filtrer</button>
-        <button className="btn btn-secondary" onClick={() => handleExport('csv')}>📥 CSV</button>
-        <button className="btn btn-secondary" onClick={() => handleExport('json')}>📥 JSON</button>
+        <button className="btn btn-secondary" onClick={() => handleExport('csv')}>CSV</button>
+        <button className="btn btn-secondary" onClick={() => handleExport('json')}>JSON</button>
       </div>
 
       <div className="logs-table">

@@ -46,13 +46,13 @@ export default function HealthMonitoring() {
           <option value={10000}>Toutes les 10 secondes</option>
           <option value={30000}>Toutes les 30 secondes</option>
         </select>
-        <button className="btn btn-primary" onClick={fetchHealth}>🔄 Rafraîchir</button>
+        <button className="btn btn-primary" onClick={fetchHealth}>Rafraîchir</button>
       </div>
 
       <div className="health-overview">
         <div className="status-card" style={{borderLeft: `4px solid ${getStatusColor(health.status)}`}}>
           <h3>État du Serveur</h3>
-          <p className="big-status">{health.status === 'healthy' ? '✓ Sain' : '⚠️ Attention'}</p>
+          <p className="big-status">{health.status === 'healthy' ? 'Sain' : '⚠️ Attention'}</p>
         </div>
 
         <div className="status-card">

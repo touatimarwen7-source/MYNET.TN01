@@ -33,7 +33,7 @@ export default function SupplierProfile() {
       setCategories(response.data.categories || []);
       setStats(response.data.stats || {});
     } catch (error) {
-      setError('Erreur lors du chargement du profil');
+      setError('Erreur lors de la récupération du profil');
     } finally {
       setLoading(false);
     }
@@ -46,7 +46,7 @@ export default function SupplierProfile() {
       });
       setActivity(response.data.activity || []);
     } catch (error) {
-      console.error(`Erreur lors du chargement de l'activité`);
+      console.error(`Erreur lors de la récupération de l'activité`);
     }
   };
 
@@ -65,7 +65,7 @@ export default function SupplierProfile() {
           'Content-Type': 'multipart/form-data'
         }
       });
-      setSuccess('Document téléchargé avec succès ✓');
+      setSuccess('Document enregistré avec succès ✓');
       setTimeout(() => setSuccess(''), 3000);
       fetchProfile();
     } catch (error) {
@@ -74,12 +74,12 @@ export default function SupplierProfile() {
   };
 
   const handleDeleteDocument = async (docId) => {
-    if (!confirm('Êtes-vous sûr de vouloir supprimer ce document?')) return;
+    if (!confirm('Confirmez-vous la suppression de ce document?')) return;
     try {
       await axios.delete(`http://localhost:3000/api/supplier/documents/${docId}`, {
         headers: { Authorization: `Bearer ${localStorage.getItem('accessToken')}` }
       });
-      setSuccess('Document supprimé ✓');
+      setSuccess('Document supprimé avec succès ✓');
       setTimeout(() => setSuccess(''), 3000);
       fetchProfile();
     } catch (error) {
@@ -94,7 +94,7 @@ export default function SupplierProfile() {
       });
       setProfile(editData);
       setEditing(false);
-      setSuccess('Profil mis à jour avec succès ✓');
+      setSuccess('Les modifications ont été enregistrées avec succès ✓');
       setTimeout(() => setSuccess(''), 3000);
     } catch (error) {
       setError('Erreur: ' + error.response?.data?.error);
@@ -276,7 +276,7 @@ export default function SupplierProfile() {
           <div className="profile-section animate-slide-up">
             <h3 className="section-title">📋 Journal d'Activité</h3>
             {activity.length === 0 ? (
-              <div className="empty-state">Aucune activité disponible pour le moment</div>
+              <div className="empty-state">Aucune activité disponible pour le moment pour le moment</div>
             ) : (
               <div className="activity-timeline">
                 {activity.slice(0, 5).map((item, idx) => (
@@ -299,7 +299,7 @@ export default function SupplierProfile() {
             <h3 className="section-title">🎯 Domaines de Spécialisation</h3>
             <div className="categories-tags">
               {categories.length === 0 ? (
-                <div className="empty-state">Aucun domaine défini</div>
+                <div className="empty-state">Aucun domaine actuellement défini</div>
               ) : (
                 categories.map((cat, idx) => (
                   <span key={idx} className="badge badge-primary">{cat}</span>
@@ -326,7 +326,7 @@ export default function SupplierProfile() {
             </div>
 
             {documents.length === 0 ? (
-              <div className="empty-state">Aucun document disponible</div>
+              <div className="empty-state">Aucun document actuellement disponible</div>
             ) : (
               <div className="documents-table-wrapper">
                 <table className="documents-table">

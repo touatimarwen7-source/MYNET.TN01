@@ -153,7 +153,7 @@ export default function AboutPage() {
           
           <div className="compliance-grid">
             <div className="compliance-card">
-              <h3>🔒 Chiffrement des Données</h3>
+              <h3>Chiffrement des Données</h3>
               <div className="detail">
                 <p><strong>Standard:</strong> AES-256-GCM</p>
                 <p className="description">
@@ -175,7 +175,7 @@ export default function AboutPage() {
             </div>
 
             <div className="compliance-card">
-              <h3>📊 Hash Sécurisé</h3>
+              <h3>Hash Sécurisé</h3>
               <div className="detail">
                 <p><strong>Standard:</strong> PBKDF2 + Salt Unique</p>
                 <p className="description">
@@ -197,7 +197,7 @@ export default function AboutPage() {
             </div>
 
             <div className="compliance-card">
-              <h3>📋 Audit Trail Complet</h3>
+              <h3>Audit Trail Complet</h3>
               <div className="detail">
                 <p><strong>Standard:</strong> Logging Immuable</p>
                 <p className="description">
@@ -208,7 +208,7 @@ export default function AboutPage() {
             </div>
 
             <div className="compliance-card">
-              <h3>🔄 Infra Sécurisée</h3>
+              <h3>Infra Sécurisée</h3>
               <div className="detail">
                 <p><strong>Standard:</strong> Neon PostgreSQL</p>
                 <p className="description">
@@ -225,7 +225,7 @@ export default function AboutPage() {
               <div className="layer">
                 <strong>Couche 1: Réseau</strong>
                 <ul>
-                  <li>🌐 HTTPS/TLS 1.3 obligatoire</li>
+                  <li>HTTPS/TLS 1.3 obligatoire</li>
                   <li>🔥 Firewall applicatif (WAF)</li>
                   <li>🚨 Protection DDoS avancée</li>
                   <li>📡 Rate limiting par IP</li>
@@ -237,8 +237,8 @@ export default function AboutPage() {
                 <ul>
                   <li>✔️ Validation d'input stricte</li>
                   <li>🛡️ Protection XSS/CSRF</li>
-                  <li>🔒 SQL injection prevention</li>
-                  <li>🎯 Sanitisation des données</li>
+                  <li>SQL injection prevention</li>
+                  <li>Sanitisation des données</li>
                 </ul>
               </div>
 
@@ -255,10 +255,10 @@ export default function AboutPage() {
               <div className="layer">
                 <strong>Couche 4: Accès</strong>
                 <ul>
-                  <li>👤 RBAC granulaire</li>
-                  <li>🔔 Alertes d'accès anormal</li>
-                  <li>📱 MFA obligatoire admin</li>
-                  <li>📊 Monitoring 24/7</li>
+                  <li>RBAC granulaire</li>
+                  <li>Alertes d'accès anormal</li>
+                  <li>MFA obligatoire admin</li>
+                  <li>Monitoring 24/7</li>
                 </ul>
               </div>
             </div>
@@ -276,42 +276,42 @@ export default function AboutPage() {
               <div className="cert-icon">🏛️</div>
               <h3>Ministère du Commerce</h3>
               <p className="cert-detail">Partenariat officiel pour les appels d'offres gouvernementaux</p>
-              <p className="status">✓ Accrédité</p>
+              <p className="status">Accrédité</p>
             </div>
 
             <div className="accreditation-card">
               <div className="cert-icon">📊</div>
               <h3>Banque Centrale de Tunisie</h3>
               <p className="cert-detail">Supervision des standards de sécurité financière</p>
-              <p className="status">✓ Conformité Certifiée</p>
+              <p className="status">Conformité Certifiée</p>
             </div>
 
             <div className="accreditation-card">
               <div className="cert-icon">🔐</div>
               <h3>ISO 27001 Certified</h3>
               <p className="cert-detail">Gestion de la sécurité de l'information</p>
-              <p className="status">✓ Valide jusqu'en 2026</p>
+              <p className="status">Valide jusqu'en 2026</p>
             </div>
 
             <div className="accreditation-card">
               <div className="cert-icon">⚖️</div>
               <h3>RGPD Compliant</h3>
               <p className="cert-detail">Protection des données personnelles</p>
-              <p className="status">✓ Conforme</p>
+              <p className="status">Conforme</p>
             </div>
 
             <div className="accreditation-card">
               <div className="cert-icon">🌐</div>
               <h3>TIA (Agence Tunisienne d'Internet)</h3>
               <p className="cert-detail">Partenaire technologique pour infrastructure numérique</p>
-              <p className="status">✓ Accrédité</p>
+              <p className="status">Accrédité</p>
             </div>
 
             <div className="accreditation-card">
               <div className="cert-icon">🏢</div>
               <h3>CONECT (Confédération)</h3>
               <p className="cert-detail">Support des PME pour adoption des technologies digitales</p>
-              <p className="status">✓ Partenaire Officiel</p>
+              <p className="status">Partenaire Officiel</p>
             </div>
           </div>
 
@@ -333,7 +333,7 @@ export default function AboutPage() {
                 <span className="partner-role">Database Managée PostgreSQL</span>
               </div>
               <div className="partner">
-                <span className="partner-name">📧 SendGrid</span>
+                <span className="partner-name">SendGrid</span>
                 <span className="partner-role">Email Service Deliverability</span>
               </div>
             </div>
@@ -368,7 +368,7 @@ export default function AboutPage() {
         <div className="container">
           <h2>Des Questions sur la Sécurité ou la Conformité?</h2>
           <p>Notre équipe de conformité est disponible pour discuter de vos besoins spécifiques</p>
-          <button className="cta-button">📧 Contacter l'Équipe Compliance</button>
+          <button className="cta-button">Contacter l'Équipe Compliance</button>
         </div>
       </section>
     </div>

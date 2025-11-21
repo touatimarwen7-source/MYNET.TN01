@@ -48,7 +48,7 @@ export default function CreateTenderImproved() {
       await axios.post('http://localhost:5000/api/procurement/tender-draft', tenderData, {
         headers: { Authorization: `Bearer ${localStorage.getItem('accessToken')}` }
       });
-      setAutoSaveStatus('✓ Sauvegardé automatiquement');
+      setAutoSaveStatus('Sauvegardé automatiquement');
       setTimeout(() => setAutoSaveStatus(''), 3000);
     } catch (error) {
       setAutoSaveStatus('✗ Erreur lors de la sauvegarde');
@@ -341,7 +341,7 @@ export default function CreateTenderImproved() {
           <h2>Étape 3: Articles et Spécifications</h2>
 
           <button onClick={handleAddItem} className="btn-add-item">
-            ➕ Ajouter un Article
+            Ajouter un Article
           </button>
 
           {tenderData.items.map((item, idx) => (
@@ -545,7 +545,7 @@ export default function CreateTenderImproved() {
           </button>
         ) : (
           <button onClick={handleSubmit} className="btn-success">
-            ✓ Publier l'Appel d'Offres
+            Publier l'Appel d'Offres
           </button>
         )}
       </div>

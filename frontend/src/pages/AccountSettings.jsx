@@ -44,7 +44,7 @@ export default function AccountSettings() {
 
   return (
     <div className="account-settings">
-      <h1>⚙️ Paramètres du Compte</h1>
+      <h1>Paramètres du Compte</h1>
 
       <div className="settings-section">
         <h2>📬 Notifications</h2>
@@ -99,7 +99,7 @@ export default function AccountSettings() {
         </div>
       </div>
 
-      <button className="btn btn-primary" onClick={handleSave}>💾 Sauvegarder les Paramètres</button>
+      <button className="btn btn-primary" onClick={handleSave}>Sauvegarder les Paramètres</button>
     </div>
   );
 }

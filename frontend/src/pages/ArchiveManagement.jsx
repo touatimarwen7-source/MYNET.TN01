@@ -97,8 +97,8 @@ export default function ArchiveManagement() {
           </label>
         </div>
 
-        <button className="btn btn-primary" onClick={handleSaveSettings}>💾 Sauvegarder</button>
-        <button className="btn btn-success" onClick={handleTriggerArchive}>🔄 Déclencher l'Archivage</button>
+        <button className="btn btn-primary" onClick={handleSaveSettings}>Sauvegarder</button>
+        <button className="btn btn-success" onClick={handleTriggerArchive}>Déclencher l'Archivage</button>
       </div>
 
       <div className="archive-jobs-section">
@@ -126,7 +126,7 @@ export default function ArchiveManagement() {
       </div>
 
       <div className="storage-info">
-        <h2>📊 Informations de Stockage</h2>
+        <h2>Informations de Stockage</h2>
         <div className="info-grid">
           <div className="info-item">
             <strong>Espace Utilisé:</strong> {(settings.storage_used || 0).toFixed(2)} GB

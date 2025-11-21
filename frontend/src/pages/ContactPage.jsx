@@ -51,7 +51,7 @@ export default function ContactPage() {
           <aside className="contact-sidebar">
             {/* Company Info */}
             <div className="info-card">
-              <h3>🏢 Siège Social</h3>
+              <h3>Siège Social</h3>
               <div className="info-item">
                 <strong>MyNet.tn</strong>
                 <p>Immeuble Tunisiana Business Center</p>
@@ -62,7 +62,7 @@ export default function ContactPage() {
 
             {/* Phone Numbers */}
             <div className="info-card">
-              <h3>📱 Téléphone</h3>
+              <h3>Téléphone</h3>
               <div className="info-item">
                 <p><strong>Support Technique:</strong></p>
                 <a href="tel:+21671123456">+216 71 123 456</a>
@@ -75,7 +75,7 @@ export default function ContactPage() {
 
             {/* Email */}
             <div className="info-card">
-              <h3>📧 Email</h3>
+              <h3>Email</h3>
               <div className="info-item">
                 <p><strong>Support Général:</strong></p>
                 <a href="mailto:support@mynet.tn">support@mynet.tn</a>
@@ -117,7 +117,7 @@ export default function ContactPage() {
                 className={`tab-btn ${activeTab === 'general' ? 'active' : ''}`}
                 onClick={() => setActiveTab('general')}
               >
-                📝 Demande Générale
+                Demande Générale
               </button>
               <button 
                 className={`tab-btn ${activeTab === 'technical' ? 'active' : ''}`}
@@ -141,7 +141,7 @@ export default function ContactPage() {
 
                 {submitted && (
                   <div className="success-message">
-                    ✓ Merci! Votre message a été envoyé avec succès. Nous vous recontacterons bientôt.
+                    Merci! Votre message a été envoyé avec succès. Nous vous recontacterons bientôt.
                   </div>
                 )}
 
@@ -211,7 +211,7 @@ export default function ContactPage() {
                   ></textarea>
                 </div>
 
-                <button type="submit" className="submit-btn">📤 Envoyer</button>
+                <button type="submit" className="submit-btn">Envoyer</button>
               </form>
             )}
 
@@ -223,7 +223,7 @@ export default function ContactPage() {
 
                 {submitted && (
                   <div className="success-message">
-                    ✓ Ticket créé! Référence: #TK{new Date().getTime()} - Nous le traiterons rapidement.
+                    Ticket créé! Référence: #TK{new Date().getTime()} - Nous le traiterons rapidement.
                   </div>
                 )}
 
@@ -307,7 +307,7 @@ export default function ContactPage() {
 
                 {submitted && (
                   <div className="success-message">
-                    ✓ Votre demande légale a été reçue. Notre équipe légale vous contactera sous 2 jours ouvrables.
+                    Votre demande légale a été reçue. Notre équipe légale vous contactera sous 2 jours ouvrables.
                   </div>
                 )}
 

@@ -23,6 +23,12 @@ import SupplierProfile from './pages/SupplierProfile';
 import SupplierInvoices from './pages/SupplierInvoices';
 import AdminDashboard from './pages/AdminDashboard';
 import MFASetup from './pages/MFASetup';
+import AuditLogViewer from './pages/AuditLogViewer';
+import HealthMonitoring from './pages/HealthMonitoring';
+import ArchiveManagement from './pages/ArchiveManagement';
+import SubscriptionTiers from './pages/SubscriptionTiers';
+import FeatureControl from './pages/FeatureControl';
+import UserManagement from './pages/UserManagement';
 import { setupInactivityTimer } from './utils/security';
 import './App.css';
 
@@ -158,6 +164,30 @@ function App() {
             <Route 
               path="/admin" 
               element={user?.role === 'admin' ? <AdminDashboard /> : <Navigate to="/tenders" />} 
+            />
+            <Route 
+              path="/admin/audit-logs" 
+              element={user?.role === 'admin' ? <AuditLogViewer /> : <Navigate to="/tenders" />} 
+            />
+            <Route 
+              path="/admin/health" 
+              element={user?.role === 'admin' ? <HealthMonitoring /> : <Navigate to="/tenders" />} 
+            />
+            <Route 
+              path="/admin/archive" 
+              element={user?.role === 'admin' ? <ArchiveManagement /> : <Navigate to="/tenders" />} 
+            />
+            <Route 
+              path="/admin/tiers" 
+              element={user?.role === 'admin' ? <SubscriptionTiers /> : <Navigate to="/tenders" />} 
+            />
+            <Route 
+              path="/admin/features" 
+              element={user?.role === 'admin' ? <FeatureControl /> : <Navigate to="/tenders" />} 
+            />
+            <Route 
+              path="/admin/users" 
+              element={user?.role === 'admin' ? <UserManagement /> : <Navigate to="/tenders" />} 
             />
 
             {/* الملف الشخصي والأمان */}

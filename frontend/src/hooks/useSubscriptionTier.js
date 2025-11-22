@@ -3,7 +3,8 @@ import { useState, useCallback } from 'react';
 export const useSubscriptionTier = (userSubscription) => {
   const [upgradeModal, setUpgradeModal] = useState({
     isOpen: false,
-    featureKey: null
+    featureKey: null,
+    currentTier: { id: 'enterprise', name: 'Enterprise' }
   });
 
   // ✅ Toutes les fonctionnalités sont disponibles pour tous
@@ -16,14 +17,14 @@ export const useSubscriptionTier = (userSubscription) => {
   }, []);
 
   const closeUpgradeModal = useCallback(() => {
-    setUpgradeModal({
-      isOpen: false,
-      featureKey: null
-    });
+    setUpgradeModal(prev => ({
+      ...prev,
+      isOpen: false
+    }));
   }, []);
 
   return {
-    currentTier: 'enterprise', // Tier maximum pour tous
+    currentTier: { id: 'enterprise', name: 'Enterprise' },
     checkFeatureAccess,
     handleLockedFeatureClick,
     closeUpgradeModal,

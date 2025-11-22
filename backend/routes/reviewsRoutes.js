@@ -3,14 +3,24 @@ const authMiddleware = require('../middleware/authMiddleware');
 
 const router = express.Router();
 
-// Add a review
+// Add a review - ISSUE FIX #3: Add input validation
 router.post('/', authMiddleware, async (req, res) => {
   try {
     const { reviewed_user_id, tender_id, rating, comment } = req.body;
     const reviewer_id = req.user.id;
 
-    if (!reviewed_user_id || !rating || rating < 1 || rating > 5) {
-      return res.status(400).json({ error: 'Invalid rating or user' });
+    // ISSUE FIX #3: Comprehensive validation
+    if (!reviewed_user_id) {
+      return res.status(400).json({ error: 'reviewed_user_id is required' });
+    }
+    if (!rating || rating < 1 || rating > 5 || !Number.isInteger(rating)) {
+      return res.status(400).json({ error: 'Rating must be an integer between 1 and 5' });
+    }
+    if (!comment || comment.trim().length === 0) {
+      return res.status(400).json({ error: 'Comment cannot be empty' });
+    }
+    if (comment.length > 5000) {
+      return res.status(400).json({ error: 'Comment too long (max 5000 chars)' });
     }
 
     const db = req.app.get('db');
@@ -44,8 +54,8 @@ router.post('/', authMiddleware, async (req, res) => {
   }
 });
 
-// Get reviews for a user
-router.get('/user/:userId', async (req, res) => {
+// Get reviews for a user - ISSUE FIX #1: Add authentication
+router.get('/user/:userId', authMiddleware, async (req, res) => {
   try {
     const { userId } = req.params;
     const db = req.app.get('db');
@@ -161,7 +171,7 @@ router.put('/:reviewId', authMiddleware, async (req, res) => {
   }
 });
 
-// Delete review
+// Delete review - ISSUE FIX #5: Use soft delete + authorization
 router.delete('/:reviewId', authMiddleware, async (req, res) => {
   try {
     const { reviewId } = req.params;
@@ -177,20 +187,22 @@ router.delete('/:reviewId', authMiddleware, async (req, res) => {
     }
 
     const review = checkResult.rows[0];
-    if (review.reviewer_id !== req.user.id) {
-      return res.status(403).json({ error: 'Unauthorized' });
+    // ISSUE FIX #2: Add authorization check
+    if (review.reviewer_id !== req.user.id && req.user.role !== 'admin') {
+      return res.status(403).json({ error: 'Unauthorized - only reviewer or admin can delete' });
     }
 
+    // ISSUE FIX #5: Soft delete instead of hard delete
     await db.query(
       'UPDATE reviews SET is_deleted = true WHERE id = $1',
       [reviewId]
     );
 
-    // Update user average rating
+    // Update user average rating (exclude deleted reviews)
     await db.query(`
       UPDATE users 
       SET average_rating = (
-        SELECT AVG(rating) FROM reviews WHERE reviewed_user_id = $1
+        SELECT AVG(rating) FROM reviews WHERE reviewed_user_id = $1 AND is_deleted = false
       )
       WHERE id = $1
     `, [review.reviewed_user_id]);

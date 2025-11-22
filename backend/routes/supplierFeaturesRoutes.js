@@ -3,8 +3,8 @@ const authMiddleware = require('../middleware/authMiddleware');
 
 const router = express.Router();
 
-// Get supplier features
-router.get('/supplier/:supplierId', async (req, res) => {
+// Get supplier features - ISSUE FIX #1: Add authentication
+router.get('/supplier/:supplierId', authMiddleware, async (req, res) => {
   try {
     const { supplierId } = req.params;
     const db = req.app.get('db');
@@ -21,10 +21,22 @@ router.get('/supplier/:supplierId', async (req, res) => {
   }
 });
 
-// Add feature
+// Add feature - ISSUE FIX #3: Add input validation
 router.post('/', authMiddleware, async (req, res) => {
   try {
     const { supplier_id, feature_name, description } = req.body;
+    
+    // ISSUE FIX #3: Validation
+    if (!supplier_id || !feature_name) {
+      return res.status(400).json({ error: 'supplier_id and feature_name are required' });
+    }
+    if (feature_name.length < 3 || feature_name.length > 255) {
+      return res.status(400).json({ error: 'feature_name must be 3-255 characters' });
+    }
+    if (description && description.length > 1000) {
+      return res.status(400).json({ error: 'description too long (max 1000 chars)' });
+    }
+    
     const db = req.app.get('db');
 
     const result = await db.query(`

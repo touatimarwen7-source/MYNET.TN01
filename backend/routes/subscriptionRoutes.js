@@ -3,8 +3,8 @@ const authMiddleware = require('../middleware/authMiddleware');
 
 const router = express.Router();
 
-// Get available plans
-router.get('/plans', async (req, res) => {
+// Get available plans - ISSUE FIX #1: Add authentication
+router.get('/plans', authMiddleware, async (req, res) => {
   try {
     const db = req.app.get('db');
     const result = await db.query(
@@ -35,11 +35,25 @@ router.get('/my-subscription', authMiddleware, async (req, res) => {
   }
 });
 
-// Subscribe to plan
+// Subscribe to plan - ISSUE FIX #2 #3: Add authorization + validation
 router.post('/subscribe', authMiddleware, async (req, res) => {
   try {
     const { plan_id } = req.body;
+    
+    if (!plan_id) {
+      return res.status(400).json({ error: 'plan_id is required' });
+    }
+    
     const db = req.app.get('db');
+
+    // ISSUE FIX #2: Check plan exists
+    const planCheck = await db.query(
+      'SELECT * FROM subscription_plans WHERE id = $1',
+      [plan_id]
+    );
+    if (planCheck.rows.length === 0) {
+      return res.status(404).json({ error: 'Plan not found' });
+    }
 
     const result = await db.query(`
       INSERT INTO user_subscriptions (user_id, plan_id, status, start_date, end_date)

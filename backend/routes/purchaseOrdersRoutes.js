@@ -3,10 +3,19 @@ const authMiddleware = require('../middleware/authMiddleware');
 
 const router = express.Router();
 
-// Create PO from offer
+// Create PO from offer - ISSUE FIX #3: Add input validation
 router.post('/', authMiddleware, async (req, res) => {
   try {
     const { offer_id, notes } = req.body;
+    
+    // ISSUE FIX #3: Validation
+    if (!offer_id) {
+      return res.status(400).json({ error: 'offer_id is required' });
+    }
+    if (notes && notes.length > 2000) {
+      return res.status(400).json({ error: 'notes too long (max 2000 chars)' });
+    }
+    
     const db = req.app.get('db');
 
     // Get offer details
@@ -94,12 +103,31 @@ router.get('/:poId', authMiddleware, async (req, res) => {
   }
 });
 
-// Update PO status
+// Update PO status - ISSUE FIX #2 #3: Add authorization + validation
 router.put('/:poId/status', authMiddleware, async (req, res) => {
   try {
     const { poId } = req.params;
     const { status } = req.body;
+    
+    // ISSUE FIX #3: Validation
+    if (!status || !['pending', 'confirmed', 'delivered', 'cancelled'].includes(status)) {
+      return res.status(400).json({ error: 'Invalid status value' });
+    }
+    
     const db = req.app.get('db');
+
+    // ISSUE FIX #2: Authorization check
+    const poResult = await db.query(
+      'SELECT * FROM purchase_orders WHERE id = $1',
+      [poId]
+    );
+    if (poResult.rows.length === 0) {
+      return res.status(404).json({ error: 'PO not found' });
+    }
+    const po = poResult.rows[0];
+    if (po.buyer_id !== req.user.id && po.supplier_id !== req.user.id && req.user.role !== 'admin') {
+      return res.status(403).json({ error: 'Unauthorized' });
+    }
 
     const result = await db.query(`
       UPDATE purchase_orders 
@@ -114,13 +142,27 @@ router.put('/:poId/status', authMiddleware, async (req, res) => {
   }
 });
 
-// Delete PO
+// Delete PO - ISSUE FIX #2 #5: Add authorization + soft delete
 router.delete('/:poId', authMiddleware, async (req, res) => {
   try {
     const { poId } = req.params;
     const db = req.app.get('db');
 
-    await db.query('DELETE FROM purchase_orders WHERE id = $1', [poId]);
+    // ISSUE FIX #2: Authorization - only buyer or admin can delete
+    const poResult = await db.query(
+      'SELECT * FROM purchase_orders WHERE id = $1',
+      [poId]
+    );
+    if (poResult.rows.length === 0) {
+      return res.status(404).json({ error: 'PO not found' });
+    }
+    const po = poResult.rows[0];
+    if (po.buyer_id !== req.user.id && req.user.role !== 'admin') {
+      return res.status(403).json({ error: 'Unauthorized - only buyer or admin can delete' });
+    }
+
+    // ISSUE FIX #5: Soft delete instead of hard delete
+    await db.query('UPDATE purchase_orders SET is_deleted = true WHERE id = $1', [poId]);
     res.json({ success: true });
   } catch (error) {
     res.status(500).json({ error: error.message });

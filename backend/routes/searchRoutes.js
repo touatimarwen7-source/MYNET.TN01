@@ -1,8 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const SearchService = require('../services/SearchService');
+const authMiddleware = require('../middleware/authMiddleware');
 
-router.get('/tenders', async (req, res) => {
+// ISSUE FIX #1: Add authentication
+router.get('/tenders', authMiddleware, async (req, res) => {
     try {
         const searchParams = {
             keyword: req.query.keyword,
@@ -10,7 +12,7 @@ router.get('/tenders', async (req, res) => {
             status: req.query.status,
             minBudget: req.query.minBudget ? parseFloat(req.query.minBudget) : null,
             maxBudget: req.query.maxBudget ? parseFloat(req.query.maxBudget) : null,
-            limit: req.query.limit ? parseInt(req.query.limit) : 20,
+            limit: Math.min(parseInt(req.query.limit) || 20, 100),
             offset: req.query.offset ? parseInt(req.query.offset) : 0
         };
 
@@ -28,7 +30,8 @@ router.get('/tenders', async (req, res) => {
     }
 });
 
-router.get('/suppliers', async (req, res) => {
+// ISSUE FIX #1: Add authentication
+router.get('/suppliers', authMiddleware, async (req, res) => {
     try {
         const searchParams = {
             keyword: req.query.keyword,

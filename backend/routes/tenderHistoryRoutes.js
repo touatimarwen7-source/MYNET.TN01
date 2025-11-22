@@ -1,8 +1,9 @@
 const express = require('express');
+const authMiddleware = require('../middleware/authMiddleware');
 const router = express.Router();
 
-// Get tender history
-router.get('/tender/:tenderId', async (req, res) => {
+// Get tender history - ISSUE FIX #1: Add authentication
+router.get('/tender/:tenderId', authMiddleware, async (req, res) => {
   try {
     const { tenderId } = req.params;
     const db = req.app.get('db');

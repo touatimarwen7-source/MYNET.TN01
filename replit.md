@@ -20,7 +20,8 @@ The platform utilizes a React frontend (Vite) and a Node.js backend with a Postg
 - **Frontend**: React 18 + Vite 7.2.4 + Material-UI v7.3.5.
 - **Backend**: Node.js 20 + Express + PostgreSQL.
 - **Authentication**: JWT tokens + httpOnly cookies, with enhanced 3-layer token persistence.
-- **Security**: CSRF protection, CSP headers, XSS protection, AES-256 encryption for sensitive financial data.
+- **Security**: CORS protection, CSRF headers, XSS protection, AES-256 encryption for sensitive financial data, rate limiting (100 req/15min), brute-force protection (5 attempts/15min), input validation, soft deletes for compliance.
+- **Packages Added**: cors (v2.8.5), express-rate-limit (v8.2.1)
 - **Supply Chain Workflow**: Implements four multi-step wizard forms: CreateTender, CreateBid, CreateSupplyRequest, and CreateInvoice, all with auto-save, draft recovery, validation, and progress tracking.
 - **Dynamic Company Profile**: `CompanyProfile.jsx` dynamically displays company information across 8 sections with full API integration. `CompanyProfileAdmin.jsx` allows editing company data.
 - **Advanced Filtering & Search**: Suppliers can be searched and filtered by query, category, minimum rating, and location.
@@ -30,10 +31,20 @@ The platform utilizes a React frontend (Vite) and a Node.js backend with a Postg
 
 ## Recent Changes (November 22, 2025)
 
+### 🔒 Security Fixes & Hardening (CRITICAL - 7 Issues Fixed)
+- **Authentication**: Added authMiddleware to 5 public endpoints (search, reviews, plans, features, history)
+- **Authorization**: Added ownership checks on delete/update (messages, reviews, POs, subscriptions)
+- **Input Validation**: Added comprehensive validation on all POST/PUT operations (rating 1-5, empty content checks, length limits)
+- **Soft Deletes**: Changed hard DELETE to soft DELETE (is_deleted flag) on messages & POs for audit compliance
+- **CORS/CSRF Protection**: Added CORS middleware with FRONTEND_URL origin, security headers (X-Frame-Options, XSS-Protection)
+- **Rate Limiting**: Added express-rate-limit (100 req/15min general, 5 login attempts/15min brute-force protection)
+- **Pagination Limits**: Added Math.min(limit, 100) to prevent memory exhaustion
+
 ### Purchase Orders System - PO management
 - Backend API: 5 endpoints for PO lifecycle
 - Frontend page: `PurchaseOrders.jsx` with status filtering
 - Create PO from offers, track status (pending/confirmed/delivered)
+- Authorization checks on update/delete (buyer/admin only)
 
 ### Audit Logs System - Compliance tracking
 - Backend API: Admin audit log viewing
@@ -44,6 +55,7 @@ The platform utilizes a React frontend (Vite) and a Node.js backend with a Postg
 - Backend API: Plan management and user subscriptions
 - Support for multiple subscription tiers
 - Active subscription tracking
+- Authentication required on all endpoints
 
 ### Messaging System - Complete user-to-user communication
 - 3 Frontend Pages: Inbox, Compose, MessageDetail
@@ -51,6 +63,7 @@ The platform utilizes a React frontend (Vite) and a Node.js backend with a Postg
 - User search/autocomplete for recipients
 - Mark-as-read, pagination, search functionality
 - Related entity linking support
+- Soft delete on message deletion
 
 ### Reviews & Ratings System - Supplier feedback
 - Frontend: `SupplierReviews.jsx` with rating statistics
@@ -58,6 +71,7 @@ The platform utilizes a React frontend (Vite) and a Node.js backend with a Postg
 - 5-star rating system with distribution charts
 - Auto-update average ratings
 - Edit/delete own reviews
+- Input validation (rating 1-5, comment required/max 5000 chars)
 
 ### Direct Supply Request System - Direct procurement
 - 3 Frontend Pages: Create, View Sent, View Received
@@ -65,6 +79,7 @@ The platform utilizes a React frontend (Vite) and a Node.js backend with a Postg
 - 4-step wizard for creating requests
 - Accept/reject supplier requests
 - Real-time status updates
+- Input validation (title 3-255, quantity/budget > 0)
 
 ## Database Structure (22 tables)
 - **Active**: users, tenders, offers, invoices, user_profiles, notifications, purchase_requests, supplier_verifications, mfa_codes, reviews, messages, purchase_orders
@@ -73,4 +88,10 @@ The platform utilizes a React frontend (Vite) and a Node.js backend with a Postg
 ## External Dependencies
 - **Database**: PostgreSQL (Neon).
 - **Frontend Libraries**: Material-UI (MUI) v7.3.5, React Router DOM, Axios, i18next.
-- **Backend Libraries**: Express, Node.js 20.
+- **Backend Libraries**: Express, Node.js 20, cors (v2.8.5), express-rate-limit (v8.2.1).
+
+## Security Audit Status
+- **Audited**: Nov 22, 2025
+- **Critical Issues**: 17 identified, 7 fixed ✅
+- **Status**: 🟡 IMPROVED (Database constraints & FK still needed for 100% compliance)
+- **Remaining Issues**: Database constraints (unique emails, check budget > 0), foreign keys, atomic transactions, exclude is_deleted from SELECT queries

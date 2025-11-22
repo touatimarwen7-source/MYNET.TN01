@@ -3,14 +3,24 @@ const authMiddleware = require('../middleware/authMiddleware');
 
 const router = express.Router();
 
-// Send a message
+// Send a message - ISSUE FIX #3: Add input validation
 router.post('/', authMiddleware, async (req, res) => {
   try {
     const { receiver_id, subject, content, related_entity_type, related_entity_id } = req.body;
     const sender_id = req.user.id;
 
-    if (!receiver_id || !content) {
-      return res.status(400).json({ error: 'receiver_id and content are required' });
+    // ISSUE FIX #3: Comprehensive validation
+    if (!receiver_id) {
+      return res.status(400).json({ error: 'receiver_id is required' });
+    }
+    if (!content || content.trim().length === 0) {
+      return res.status(400).json({ error: 'Message content cannot be empty' });
+    }
+    if (content.length > 10000) {
+      return res.status(400).json({ error: 'Message too long (max 10000 chars)' });
+    }
+    if (subject && subject.length > 255) {
+      return res.status(400).json({ error: 'Subject too long (max 255 chars)' });
     }
 
     if (sender_id === parseInt(receiver_id)) {
@@ -202,7 +212,7 @@ router.get('/count/unread', authMiddleware, async (req, res) => {
   }
 });
 
-// Delete message (soft delete via update)
+// Delete message - ISSUE FIX #2 #5: Add authorization + soft delete
 router.delete('/:messageId', authMiddleware, async (req, res) => {
   try {
     const { messageId } = req.params;
@@ -218,12 +228,13 @@ router.delete('/:messageId', authMiddleware, async (req, res) => {
     }
 
     const message = checkResult.rows[0];
+    // ISSUE FIX #2: Authorization - only sender/receiver can delete
     if (message.sender_id !== req.user.id && message.receiver_id !== req.user.id) {
-      return res.status(403).json({ error: 'Unauthorized' });
+      return res.status(403).json({ error: 'Unauthorized - cannot delete other users messages' });
     }
 
-    // For now, just remove it (you could implement soft delete later)
-    await db.query('DELETE FROM messages WHERE id = $1', [messageId]);
+    // ISSUE FIX #5: Soft delete (preserve audit trail)
+    await db.query('UPDATE messages SET is_deleted = true WHERE id = $1', [messageId]);
 
     res.json({ success: true, message: 'Message deleted' });
   } catch (error) {

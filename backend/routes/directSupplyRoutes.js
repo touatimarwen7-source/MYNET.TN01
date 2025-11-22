@@ -31,7 +31,7 @@ router.get('/suppliers', authMiddleware, async (req, res) => {
   }
 });
 
-// Create direct supply request
+// Create direct supply request - ISSUE FIX #3: Add input validation
 router.post('/create-request', authMiddleware, async (req, res) => {
   try {
     // Only buyers can create supply requests
@@ -42,9 +42,24 @@ router.post('/create-request', authMiddleware, async (req, res) => {
     const { supplier_id, title, description, category, quantity, unit, budget, notes } = req.body;
     const buyer_id = req.user.id;
     
-    // Validation
+    // ISSUE FIX #3: Comprehensive validation
     if (!supplier_id || !title || !category || !budget) {
       return res.status(400).json({ error: 'Missing required fields' });
+    }
+    if (title.length < 3 || title.length > 255) {
+      return res.status(400).json({ error: 'Title must be 3-255 characters' });
+    }
+    if (quantity && quantity <= 0) {
+      return res.status(400).json({ error: 'Quantity must be greater than 0' });
+    }
+    if (budget <= 0) {
+      return res.status(400).json({ error: 'Budget must be greater than 0' });
+    }
+    if (!['pending', 'accepted', 'rejected', 'completed'].includes(category)) {
+      // Category validation - allow valid categories
+      if (category.length === 0) {
+        return res.status(400).json({ error: 'Category cannot be empty' });
+      }
     }
 
     const db = req.app.get('db');

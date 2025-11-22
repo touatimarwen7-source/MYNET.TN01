@@ -45,7 +45,18 @@ The platform utilizes a React frontend (Vite) and a Node.js backend with a Postg
 
 ## Recent Changes (November 22, 2025)
 
-### 🆕 TURN 5: COMPLETE SUPER ADMIN PERMISSIONS MIGRATION
+### 🆕 TURN 6: COMPLETE SEPARATION - PURCHASE ORDERS ADMIN-FREE
+
+#### Purchase Orders Separated from Admin Control:
+- **✅ No Admin Interference**: أزلنا جميع سماح الإدارة من PO endpoints
+- **✅ Buyer-Supplier Only**: فقط المشترين والمزودين يمكنهم إدارة POs
+- **✅ 2 Endpoints Fixed**: PUT /:poId/status و DELETE /:poId
+- **✅ Complete Separation**: فصل كامل بين Purchase Orders والإدارة
+
+#### File Modified:
+- **backend/routes/purchaseOrdersRoutes.js**: Removed admin/super_admin access from PO operations
+
+### TURN 5: COMPLETE SUPER ADMIN PERMISSIONS MIGRATION
 - **✅ All Admin Permissions**: Super Admin يملك جميع صلاحيات Admin الآن
 - **✅ 59 Admin Endpoints**: متاحة لـ super_admin و admin
 - **✅ Files Modified**: 3 files (adminRoutes, purchaseOrdersRoutes, reviewsRoutes)

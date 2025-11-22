@@ -19,6 +19,8 @@ const subscriptionRoutes = require('./routes/subscriptionRoutes');
 const tenderHistoryRoutes = require('./routes/tenderHistoryRoutes');
 const supplierFeaturesRoutes = require('./routes/supplierFeaturesRoutes');
 const { ipMiddleware } = require('./middleware/ipMiddleware');
+const loggingMiddleware = require('./middleware/loggingMiddleware');
+const ErrorHandler = require('./middleware/errorHandler');
 
 const app = express();
 
@@ -60,6 +62,9 @@ app.use('/api/auth/login', loginLimiter);
 app.use('/api/auth/register', loginLimiter);
 
 app.use(ipMiddleware);
+
+// ISSUE FIX #9: Add logging middleware
+app.use(loggingMiddleware);
 
 app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');
@@ -108,9 +113,8 @@ app.use('/api/search', searchRoutes);
 app.use('/api/documents/pdf', pdfRoutes);
 app.use('/api/webhooks', stripeWebhookRoutes);
 
-const ErrorHandler = require('./middleware/errorHandler');
-
+// ISSUE FIX #9: Add error handling middleware
 app.use(ErrorHandler.notFound);
-app.use(ErrorHandler.handle);
+app.use((err, req, res, next) => ErrorHandler.handle(err, req, res, next));
 
 module.exports = app;

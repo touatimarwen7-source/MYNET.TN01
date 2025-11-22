@@ -61,9 +61,10 @@ router.get('/my-orders', authMiddleware, async (req, res) => {
     const offset = (page - 1) * limit;
     const db = req.app.get('db');
 
+    // ISSUE FIX #8: Exclude deleted POs
     let query = `
       SELECT * FROM purchase_orders 
-      WHERE buyer_id = $1 OR supplier_id = $1
+      WHERE (buyer_id = $1 OR supplier_id = $1) AND is_deleted = false
     `;
     const params = [req.user.id];
 
@@ -88,8 +89,9 @@ router.get('/:poId', authMiddleware, async (req, res) => {
     const { poId } = req.params;
     const db = req.app.get('db');
 
+    // ISSUE FIX #8: Exclude deleted POs
     const result = await db.query(
-      'SELECT * FROM purchase_orders WHERE id = $1',
+      'SELECT * FROM purchase_orders WHERE id = $1 AND is_deleted = false',
       [poId]
     );
 

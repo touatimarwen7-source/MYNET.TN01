@@ -134,6 +134,7 @@ router.get('/:messageId', authMiddleware, async (req, res) => {
     const { messageId } = req.params;
     const db = req.app.get('db');
 
+    // ISSUE FIX #8: Exclude deleted messages
     const result = await db.query(`
       SELECT 
         m.*,
@@ -141,7 +142,7 @@ router.get('/:messageId', authMiddleware, async (req, res) => {
         u.full_name as sender_name
       FROM messages m
       LEFT JOIN users u ON m.sender_id = u.id
-      WHERE m.id = $1 AND (m.receiver_id = $2 OR m.sender_id = $2)
+      WHERE m.id = $1 AND (m.receiver_id = $2 OR m.sender_id = $2) AND m.is_deleted = false
     `, [messageId, req.user.id]);
 
     if (result.rows.length === 0) {
@@ -172,7 +173,7 @@ router.put('/:messageId/read', authMiddleware, async (req, res) => {
     const db = req.app.get('db');
 
     const checkResult = await db.query(
-      'SELECT * FROM messages WHERE id = $1',
+      'SELECT * FROM messages WHERE id = $1 AND is_deleted = false',
       [messageId]
     );
 
@@ -185,8 +186,9 @@ router.put('/:messageId/read', authMiddleware, async (req, res) => {
       return res.status(403).json({ error: 'Unauthorized' });
     }
 
+    // ISSUE FIX #8: Exclude deleted messages
     await db.query(
-      'UPDATE messages SET is_read = true WHERE id = $1',
+      'UPDATE messages SET is_read = true WHERE id = $1 AND is_deleted = false',
       [messageId]
     );
 
@@ -201,8 +203,9 @@ router.get('/count/unread', authMiddleware, async (req, res) => {
   try {
     const db = req.app.get('db');
 
+    // ISSUE FIX #8: Exclude deleted messages from unread count
     const result = await db.query(
-      'SELECT COUNT(*) FROM messages WHERE receiver_id = $1 AND is_read = false',
+      'SELECT COUNT(*) FROM messages WHERE receiver_id = $1 AND is_read = false AND is_deleted = false',
       [req.user.id]
     );
 

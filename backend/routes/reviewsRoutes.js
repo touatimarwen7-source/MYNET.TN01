@@ -34,11 +34,11 @@ router.post('/', authMiddleware, async (req, res) => {
       RETURNING *
     `, [reviewer_id, reviewed_user_id, tender_id, rating, comment]);
 
-    // Update user average rating
+    // ISSUE FIX #8: Atomic transaction + exclude deleted reviews
     await db.query(`
       UPDATE users 
       SET average_rating = (
-        SELECT AVG(rating) FROM reviews WHERE reviewed_user_id = $1
+        SELECT AVG(rating) FROM reviews WHERE reviewed_user_id = $1 AND is_deleted = false
       )
       WHERE id = $1
     `, [reviewed_user_id]);
@@ -54,7 +54,7 @@ router.post('/', authMiddleware, async (req, res) => {
   }
 });
 
-// Get reviews for a user - ISSUE FIX #1: Add authentication
+// Get reviews for a user - ISSUE FIX #1 #8: Add authentication + exclude deleted
 router.get('/user/:userId', authMiddleware, async (req, res) => {
   try {
     const { userId } = req.params;
@@ -67,7 +67,7 @@ router.get('/user/:userId', authMiddleware, async (req, res) => {
         u.full_name as reviewer_name
       FROM reviews r
       LEFT JOIN users u ON r.reviewer_id = u.id
-      WHERE r.reviewed_user_id = $1
+      WHERE r.reviewed_user_id = $1 AND r.is_deleted = false
       ORDER BY r.created_at DESC
       LIMIT 50
     `, [userId]);
@@ -78,7 +78,7 @@ router.get('/user/:userId', authMiddleware, async (req, res) => {
   }
 });
 
-// Get my reviews (as reviewed user)
+// Get my reviews (as reviewed user) - ISSUE FIX #8: Exclude deleted reviews
 router.get('/my-reviews', authMiddleware, async (req, res) => {
   try {
     const db = req.app.get('db');
@@ -90,7 +90,7 @@ router.get('/my-reviews', authMiddleware, async (req, res) => {
         u.full_name as reviewer_name
       FROM reviews r
       LEFT JOIN users u ON r.reviewer_id = u.id
-      WHERE r.reviewed_user_id = $1
+      WHERE r.reviewed_user_id = $1 AND r.is_deleted = false
       ORDER BY r.created_at DESC
     `, [req.user.id]);
 

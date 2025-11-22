@@ -37,19 +37,25 @@ export default function Login() {
     try {
       const response = await authAPI.login({ email, password });
       
-      // Store tokens securely
-      TokenManager.setAccessToken(response.data.accessToken, response.data.expiresIn);
-      if (response.data.refreshTokenId) {
-        TokenManager.setRefreshTokenId(response.data.refreshTokenId);
+      // Store tokens securely (expiresIn in seconds, default 900 = 15 minutes)
+      const expiresIn = response.data.expiresIn || 900;
+      TokenManager.setAccessToken(response.data.accessToken, expiresIn);
+      
+      // Store refresh token (handle both refreshToken and refreshTokenId)
+      const refreshToken = response.data.refreshToken || response.data.refreshTokenId;
+      if (refreshToken) {
+        TokenManager.setRefreshTokenId(refreshToken);
       }
       
+      // Trigger auth state update
       window.dispatchEvent(new Event('authChanged'));
       
       addToast('Connexion réussie', 'success', 2000);
       
+      // Navigate after token is saved
       setTimeout(() => {
         navigate('/tenders');
-      }, 100);
+      }, 50);
     } catch (err) {
       setError('Erreur de connexion. Vérifiez vos identifiants.');
       addToast('Erreur de connexion', 'error', 3000);

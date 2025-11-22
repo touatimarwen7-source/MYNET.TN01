@@ -529,6 +529,161 @@ const institutionalTheme = createTheme({
             backgroundColor: '#f5f5f5',
           },
         },
+        /* ===== AboutPage ===== */
+        '.about-page-wrapper': {
+          width: '100%',
+          backgroundColor: '#F9F9F9',
+        },
+        '.about-hero-section': {
+          backgroundColor: '#0056B3',
+          color: '#FFFFFF',
+          padding: '60px 20px',
+          textAlign: 'center',
+          boxShadow: 'none',
+        },
+        '.about-hero-title': {
+          fontSize: '44px !important',
+          fontWeight: '600 !important',
+          marginBottom: '16px !important',
+          color: '#FFFFFF',
+        },
+        '.about-hero-subtitle': {
+          fontSize: '18px',
+          color: '#e3f2fd',
+          fontWeight: 400,
+        },
+        '.about-main-container': {
+          paddingY: '60px',
+        },
+        '.about-story-section': {
+          marginBottom: '60px',
+        },
+        '.about-section-title': {
+          fontSize: '32px !important',
+          fontWeight: '600 !important',
+          color: '#212121',
+          marginBottom: '40px !important',
+          textAlign: 'center',
+        },
+        '.about-story-grid': {
+          marginBottom: '40px',
+        },
+        '.about-story-card': {
+          height: '100%',
+          border: '1px solid #E0E0E0',
+          backgroundColor: '#FFFFFF',
+          borderRadius: '4px',
+          boxShadow: 'none',
+          transition: 'all 200ms ease-in-out',
+          '&:hover': {
+            borderColor: '#0056B3',
+            backgroundColor: '#f9f9f9',
+          },
+        },
+        '.about-card-content': {
+          padding: '32px',
+          textAlign: 'center',
+        },
+        '.about-card-emoji': {
+          fontSize: '48px !important',
+          marginBottom: '16px !important',
+          display: 'block',
+        },
+        '.about-card-title': {
+          fontSize: '18px !important',
+          fontWeight: '600 !important',
+          color: '#212121',
+          marginBottom: '12px !important',
+        },
+        '.about-card-text': {
+          color: '#616161',
+          lineHeight: 1.8,
+          fontSize: '14px',
+        },
+        '.about-values-section': {
+          marginBottom: '60px',
+        },
+        '.about-value-card': {
+          height: '100%',
+          border: '1px solid #E0E0E0',
+          backgroundColor: '#FFFFFF',
+          borderRadius: '4px',
+          boxShadow: 'none',
+          textAlign: 'center',
+          transition: 'all 200ms ease-in-out',
+          '&:hover': {
+            borderColor: '#0056B3',
+            backgroundColor: '#f9f9f9',
+          },
+        },
+        '.about-value-content': {
+          padding: '24px',
+        },
+        '.about-value-emoji': {
+          fontSize: '44px !important',
+          marginBottom: '12px !important',
+          display: 'block',
+        },
+        '.about-value-title': {
+          fontSize: '16px !important',
+          fontWeight: '600 !important',
+          color: '#212121',
+          marginBottom: '8px !important',
+        },
+        '.about-value-text': {
+          color: '#616161',
+          fontSize: '14px',
+        },
+        '.about-team-section': {
+          marginBottom: '60px',
+        },
+        '.about-team-card': {
+          border: '1px solid #E0E0E0',
+          backgroundColor: '#FFFFFF',
+          borderRadius: '4px',
+          boxShadow: 'none',
+          transition: 'all 200ms ease-in-out',
+          '&:hover': {
+            borderColor: '#0056B3',
+            backgroundColor: '#f9f9f9',
+          },
+        },
+        '.about-team-content': {
+          padding: '24px',
+          display: 'flex',
+          gap: '20px',
+        },
+        '.about-team-avatar': {
+          width: '80px',
+          height: '80px',
+          borderRadius: '50%',
+          backgroundColor: '#0056B3',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          color: '#FFFFFF',
+          fontSize: '32px',
+          flexShrink: 0,
+        },
+        '.about-team-info': {
+          flex: 1,
+        },
+        '.about-team-name': {
+          fontSize: '16px !important',
+          fontWeight: '600 !important',
+          color: '#212121',
+        },
+        '.about-team-role': {
+          fontSize: '12px',
+          color: '#0056B3',
+          fontWeight: '600',
+          marginBottom: '8px',
+        },
+        '.about-team-bio': {
+          fontSize: '14px',
+          color: '#616161',
+          lineHeight: 1.6,
+        },
       },
     },
 

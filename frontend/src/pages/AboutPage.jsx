@@ -6,8 +6,6 @@ import {
   CardContent,
   Typography,
   Grid,
-  Stack,
-  Chip,
 } from '@mui/material';
 import { setPageTitle } from '../utils/pageTitle';
 
@@ -17,42 +15,35 @@ export default function AboutPage() {
   }, []);
 
   return (
-    <Box sx={{ backgroundColor: '#fafafa' }}>
+    <Box className="about-page-wrapper">
       {/* Hero Section */}
-      <Box
-        sx={{
-          backgroundColor: 'linear-gradient(135deg, #0056B3 0%, #0d47a1 100%)',
-          color: 'white',
-          padding: '60px 20px',
-          textAlign: 'center',
-        }}
-      >
+      <Box className="about-hero-section">
         <Container maxWidth="lg">
-          <Typography variant="h1" sx={{ fontSize: '44px', fontWeight: 600, marginBottom: '16px' }}>
+          <Typography variant="h1" className="about-hero-title">
             À Propos de MyNet.tn
           </Typography>
-          <Typography sx={{ fontSize: '18px', color: '#e3f2fd' }}>
+          <Typography className="about-hero-subtitle">
             Transforming Public Procurement in Tunisia
           </Typography>
         </Container>
       </Box>
 
-      <Container maxWidth="lg" sx={{ paddingY: '60px' }}>
+      <Container maxWidth="lg" className="about-main-container">
         {/* Story Section */}
-        <Box sx={{ marginBottom: '60px' }}>
-          <Typography variant="h2" sx={{ fontSize: '32px', fontWeight: 600, color: '#212121', marginBottom: '40px', textAlign: 'center' }}>
+        <Box className="about-story-section">
+          <Typography variant="h2" className="about-section-title">
             📖 Notre Histoire et Vision
           </Typography>
 
-          <Grid container spacing={2} sx={{ marginBottom: '40px' }}>
+          <Grid container spacing={2} className="about-story-grid">
             <Grid item xs={12} md={4}>
-              <Card sx={{ height: '100%', border: '1px solid #e0e0e0', transition: 'all 0.3s', '&:hover': { boxShadow: 'none' } }}>
-                <CardContent sx={{ padding: '32px' }}>
-                  <Typography sx={{ fontSize: '48px', marginBottom: '16px', textAlign: 'center' }}>⚠️</Typography>
-                  <Typography variant="h4" sx={{ fontSize: '18px', fontWeight: 600, color: '#212121', marginBottom: '12px' }}>
+              <Card className="about-story-card">
+                <CardContent className="about-card-content">
+                  <Typography className="about-card-emoji">⚠️</Typography>
+                  <Typography variant="h4" className="about-card-title">
                     Le Problème
                   </Typography>
-                  <Typography sx={{ color: '#616161', lineHeight: 1.8 }}>
+                  <Typography className="about-card-text">
                     En Tunisie, les marchés publics étaient fragilisés par manque de transparence, absence de normes uniformes et risques élevés de collusion.
                   </Typography>
                 </CardContent>
@@ -60,13 +51,13 @@ export default function AboutPage() {
             </Grid>
 
             <Grid item xs={12} md={4}>
-              <Card sx={{ height: '100%', border: '1px solid #e0e0e0', transition: 'all 0.3s', '&:hover': { boxShadow: 'none' } }}>
-                <CardContent sx={{ padding: '32px' }}>
-                  <Typography sx={{ fontSize: '48px', marginBottom: '16px', textAlign: 'center' }}>✨</Typography>
-                  <Typography variant="h4" sx={{ fontSize: '18px', fontWeight: 600, color: '#212121', marginBottom: '12px' }}>
+              <Card className="about-story-card">
+                <CardContent className="about-card-content">
+                  <Typography className="about-card-emoji">✨</Typography>
+                  <Typography variant="h4" className="about-card-title">
                     Notre Solution
                   </Typography>
-                  <Typography sx={{ color: '#616161', lineHeight: 1.8 }}>
+                  <Typography className="about-card-text">
                     Une plateforme numérique entièrement sécurisée, transparente et conforme aux standards internationaux utilisant l'IA et la blockchain.
                   </Typography>
                 </CardContent>
@@ -74,13 +65,13 @@ export default function AboutPage() {
             </Grid>
 
             <Grid item xs={12} md={4}>
-              <Card sx={{ height: '100%', border: '1px solid #e0e0e0', transition: 'all 0.3s', '&:hover': { boxShadow: 'none' } }}>
-                <CardContent sx={{ padding: '32px' }}>
-                  <Typography sx={{ fontSize: '48px', marginBottom: '16px', textAlign: 'center' }}>🎯</Typography>
-                  <Typography variant="h4" sx={{ fontSize: '18px', fontWeight: 600, color: '#212121', marginBottom: '12px' }}>
+              <Card className="about-story-card">
+                <CardContent className="about-card-content">
+                  <Typography className="about-card-emoji">🎯</Typography>
+                  <Typography variant="h4" className="about-card-title">
                     Notre Vision
                   </Typography>
-                  <Typography sx={{ color: '#616161', lineHeight: 1.8 }}>
+                  <Typography className="about-card-text">
                     Être la plateforme de référence pour la gestion des appels d'offres en Afrique du Nord où chaque entreprise a accès aux mêmes opportunités.
                   </Typography>
                 </CardContent>
@@ -90,8 +81,8 @@ export default function AboutPage() {
         </Box>
 
         {/* Values Section */}
-        <Box sx={{ marginBottom: '60px' }}>
-          <Typography variant="h2" sx={{ fontSize: '32px', fontWeight: 600, color: '#212121', marginBottom: '40px', textAlign: 'center' }}>
+        <Box className="about-values-section">
+          <Typography variant="h2" className="about-section-title">
             Nos Valeurs Fondamentales
           </Typography>
 
@@ -103,13 +94,13 @@ export default function AboutPage() {
               { icon: '🚀', title: 'Innovation', desc: 'Technologie de pointe pour un avenir meilleur' },
             ].map((value, idx) => (
               <Grid item xs={12} sm={6} md={3} key={idx}>
-                <Card sx={{ height: '100%', border: '1px solid #e0e0e0', textAlign: 'center' }}>
-                  <CardContent sx={{ padding: '24px' }}>
-                    <Typography sx={{ fontSize: '44px', marginBottom: '12px' }}>{value.icon}</Typography>
-                    <Typography variant="h4" sx={{ fontSize: '16px', fontWeight: 600, color: '#212121', marginBottom: '8px' }}>
+                <Card className="about-value-card">
+                  <CardContent className="about-value-content">
+                    <Typography className="about-value-emoji">{value.icon}</Typography>
+                    <Typography variant="h4" className="about-value-title">
                       {value.title}
                     </Typography>
-                    <Typography sx={{ color: '#616161', fontSize: '14px' }}>
+                    <Typography className="about-value-text">
                       {value.desc}
                     </Typography>
                   </CardContent>
@@ -120,8 +111,8 @@ export default function AboutPage() {
         </Box>
 
         {/* Team Section */}
-        <Box>
-          <Typography variant="h2" sx={{ fontSize: '32px', fontWeight: 600, color: '#212121', marginBottom: '40px', textAlign: 'center' }}>
+        <Box className="about-team-section">
+          <Typography variant="h2" className="about-section-title">
             👥 L'Équipe Dirigeante
           </Typography>
 
@@ -133,32 +124,17 @@ export default function AboutPage() {
               { name: 'Leila Saibi', role: 'Directrice du Développement', bio: 'Expert en partenariats publics-privés' },
             ].map((member, idx) => (
               <Grid item xs={12} md={6} key={idx}>
-                <Card sx={{ border: '1px solid #e0e0e0' }}>
-                  <CardContent sx={{ padding: '24px', display: 'flex', gap: '20px' }}>
-                    <Box
-                      sx={{
-                        width: '80px',
-                        height: '80px',
-                        borderRadius: '50%',
-                        backgroundColor: '#0056B3',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        color: 'white',
-                        fontSize: '32px',
-                        flexShrink: 0,
-                      }}
-                    >
-                      👨‍💼
-                    </Box>
-                    <Box>
-                      <Typography variant="h4" sx={{ fontSize: '16px', fontWeight: 600, color: '#212121' }}>
+                <Card className="about-team-card">
+                  <CardContent className="about-team-content">
+                    <Box className="about-team-avatar">👨‍💼</Box>
+                    <Box className="about-team-info">
+                      <Typography variant="h4" className="about-team-name">
                         {member.name}
                       </Typography>
-                      <Typography sx={{ fontSize: '12px', color: '#0056B3', fontWeight: 600, marginBottom: '8px' }}>
+                      <Typography className="about-team-role">
                         {member.role}
                       </Typography>
-                      <Typography sx={{ fontSize: '14px', color: '#616161', lineHeight: 1.6 }}>
+                      <Typography className="about-team-bio">
                         {member.bio}
                       </Typography>
                     </Box>

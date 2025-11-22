@@ -195,13 +195,18 @@ frontend/
 ### Code Quality
 ```
 index.css:              16 lignes (reset uniquement)
-theme.js:              1073 lignes (source unique de vérité)
+theme.js:              1228 lignes (source unique de vérité)
 Fichiers CSS:          0 (aucun CSS external)
 Build time:            ~12-16 secondes
 Bundle size:           770.67 KB (gzip: 224.56 KB)
 Modules:               1091 transformed
 Errors:                0 ✅
 Warnings:              Grid deprecation (informatif)
+
+Components avec className + globalStyles:
+├─ HeroSearch:         9 className
+├─ DynamicAdvertisement: 9 className
+└─ AboutPage:          39 className (0 inline sx)
 ```
 
 ### Design Compliance

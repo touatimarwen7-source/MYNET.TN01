@@ -331,6 +331,116 @@ const institutionalTheme = createTheme({
         '::-webkit-scrollbar-corner': {
           background: '#F9F9F9',
         },
+        /* ===== HeroSearch Container ===== */
+        '.hero-search-container': {
+          width: '100%',
+          padding: '24px',
+          backgroundColor: '#FFFFFF',
+          borderBottom: '1px solid #E0E0E0',
+          borderRadius: '0px',
+          boxShadow: 'none',
+        },
+        /* Search Tabs Wrapper */
+        '.search-tabs-wrapper': {
+          display: 'flex',
+          gap: '8px',
+          marginBottom: '24px',
+          flexWrap: 'wrap',
+        },
+        /* Search Tab Button */
+        '.search-tab-button': {
+          padding: '12px 20px !important',
+          fontSize: '14px !important',
+          fontWeight: '500 !important',
+          textTransform: 'none !important',
+          whiteSpace: 'nowrap',
+          border: '1px solid #E0E0E0 !important',
+          borderRadius: '4px !important',
+          transition: 'all 200ms ease-in-out',
+          '&.MuiButton-outlined': {
+            backgroundColor: '#F9F9F9',
+            color: '#212121',
+            borderColor: '#E0E0E0',
+            '&:hover': {
+              backgroundColor: '#f5f5f5',
+              borderColor: '#0056B3',
+              color: '#0056B3',
+            },
+          },
+          '&.MuiButton-contained': {
+            backgroundColor: '#0056B3 !important',
+            color: '#FFFFFF !important',
+            borderColor: '#0056B3 !important',
+            '&:hover': {
+              backgroundColor: '#003d7a !important',
+            },
+          },
+        },
+        /* Search Form Stack */
+        '.search-form-stack': {
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '16px',
+        },
+        /* Category Filter */
+        '.search-category-filter': {
+          width: '100%',
+          '& .MuiFormLabel-root': {
+            fontSize: '14px',
+            fontWeight: '600 !important',
+            color: '#212121',
+            marginBottom: '8px',
+            display: 'block',
+          },
+          '& .MuiRadio-root': {
+            color: '#0056B3',
+            '&.Mui-checked': {
+              color: '#0056B3',
+            },
+          },
+        },
+        /* Keywords Field */
+        '.search-keywords-field': {
+          flex: 1,
+          minWidth: '250px',
+          '& .MuiOutlinedInput-root': {
+            backgroundColor: '#FFFFFF',
+            borderRadius: '4px',
+          },
+          '& .MuiOutlinedInput-input::placeholder': {
+            color: '#9e9e9e',
+            opacity: 1,
+          },
+        },
+        /* Region Select */
+        '.search-region-select': {
+          flex: 1,
+          minWidth: '250px',
+          backgroundColor: '#FFFFFF !important',
+          borderRadius: '4px !important',
+          '& .MuiOutlinedInput-root': {
+            backgroundColor: '#FFFFFF',
+          },
+        },
+        /* Submit Button */
+        '.search-submit-button': {
+          backgroundColor: '#0056B3 !important',
+          color: '#FFFFFF !important',
+          padding: '12px 24px !important',
+          fontSize: '14px !important',
+          fontWeight: '500 !important',
+          minHeight: '40px',
+          textTransform: 'none !important',
+          textAlign: 'center',
+          display: 'flex !important',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: '8px',
+          borderRadius: '4px !important',
+          '&:hover': {
+            backgroundColor: '#003d7a !important',
+          },
+        },
       },
     },
 

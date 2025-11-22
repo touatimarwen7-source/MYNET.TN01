@@ -1,5 +1,21 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import {
+  Box,
+  Button,
+  TextField,
+  Select,
+  MenuItem,
+  FormControlLabel,
+  Radio,
+  RadioGroup,
+  FormControl,
+  FormLabel,
+  Paper,
+  Stack,
+} from '@mui/material';
+import SearchIcon from '@mui/icons-material/Search';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
 
 export default function HeroSearch() {
   const navigate = useNavigate();
@@ -105,93 +121,87 @@ export default function HeroSearch() {
   };
 
   return (
-    <div className="hero-search-container">
+    <Paper elevation={0} className="hero-search-container">
       {/* Search Type Tabs */}
-      <div className="search-tabs">
+      <Stack direction="row" spacing={1} className="search-tabs-wrapper">
         {searchTabs.map(tab => (
-          <button
+          <Button
             key={tab.id}
-            type="button"
-            className={`search-tab ${activeTab === tab.id ? 'active' : ''}`}
+            variant={activeTab === tab.id ? 'contained' : 'outlined'}
             onClick={() => handleTabChange(tab.id)}
+            className="search-tab-button"
           >
-            <span className="tab-label">{tab.label}</span>
-          </button>
+            {tab.label}
+          </Button>
         ))}
-      </div>
+      </Stack>
 
-      <form onSubmit={handleSearch} className="hero-search-form">
-        {/* Category Filter */}
-        <div className="search-filters">
-          <div className="filter-group">
-            <label className="filter-label">Catégorie</label>
-            <div className="filter-options">
+      {/* Search Form */}
+      <form onSubmit={handleSearch}>
+        <Stack spacing={2} className="search-form-stack">
+          {/* Category Filter */}
+          <FormControl component="fieldset" className="search-category-filter">
+            <FormLabel component="legend">Catégorie</FormLabel>
+            <RadioGroup
+              row
+              value={searchData.category}
+              onChange={handleCategoryChange}
+            >
               {categories.map(cat => (
-                <div key={cat.value} className="radio-option">
-                  <input
-                    type="radio"
-                    id={`cat-${cat.value}`}
-                    name="category"
-                    value={cat.value}
-                    checked={searchData.category === cat.value}
-                    onChange={handleCategoryChange}
-                  />
-                  <label htmlFor={`cat-${cat.value}`}>{cat.label}</label>
-                </div>
+                <FormControlLabel
+                  key={cat.value}
+                  value={cat.value}
+                  control={<Radio />}
+                  label={cat.label}
+                />
               ))}
-            </div>
-          </div>
-        </div>
+            </RadioGroup>
+          </FormControl>
 
-        {/* Search Fields */}
-        <div className="search-fields">
-          {/* Keywords Input */}
-          <div className="search-field keywords-field">
-            <label htmlFor="keywords-input" className="field-label">
-              Mots-clés ou Organisme Public
-            </label>
-            <div className="input-wrapper">
-              <input
-                id="keywords-input"
-                type="text"
-                placeholder="Exemple: Construction, Informatique, Services"
-                value={searchData.keywords}
-                onChange={handleKeywordsChange}
-                className="search-input"
-              />
-              <span className="input-icon">🔍</span>
-            </div>
-          </div>
+          {/* Search Fields */}
+          <Stack direction={{ xs: 'column', md: 'row' }} spacing={2}>
+            {/* Keywords Input */}
+            <TextField
+              label="Mots-clés ou Organisme Public"
+              placeholder="Exemple: Construction, Informatique, Services"
+              value={searchData.keywords}
+              onChange={handleKeywordsChange}
+              variant="outlined"
+              fullWidth
+              className="search-keywords-field"
+              InputProps={{
+                endAdornment: <SearchIcon />,
+              }}
+            />
 
-          {/* Region Select */}
-          <div className="search-field region-field">
-            <label htmlFor="region-select" className="field-label">
-              Zone Géographique
-            </label>
-            <div className="select-wrapper">
-              <select
-                id="region-select"
-                value={searchData.region}
-                onChange={handleRegionChange}
-                className="search-select"
-              >
-                {regions.map(region => (
-                  <option key={region.value} value={region.value}>
-                    {region.label}
-                  </option>
-                ))}
-              </select>
-              <span className="select-icon">📍</span>
-            </div>
-          </div>
-        </div>
+            {/* Region Select */}
+            <Select
+              value={searchData.region}
+              onChange={handleRegionChange}
+              displayEmpty
+              className="search-region-select"
+              startAdornment={<LocationOnIcon />}
+            >
+              {regions.map(region => (
+                <MenuItem key={region.value} value={region.value}>
+                  {region.label}
+                </MenuItem>
+              ))}
+            </Select>
+          </Stack>
 
-        {/* Search Button */}
-        <button type="submit" className="search-button">
-          <span className="button-icon">🔎</span>
-          <span>{getButtonText()}</span>
-        </button>
+          {/* Search Button */}
+          <Button
+            type="submit"
+            variant="contained"
+            fullWidth
+            className="search-submit-button"
+            startIcon={<SearchIcon />}
+          >
+            {getButtonText()}
+          </Button>
+        </Stack>
       </form>
-    </div>
+    </Paper>
   );
 }

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   Box,
   Button,
@@ -12,66 +12,144 @@ import {
   Grid,
   Typography,
   Alert,
-  LinearProgress
+  LinearProgress,
+  CircularProgress
 } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
-import AddIcon from '@mui/icons-material/Add';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import DeleteIcon from '@mui/icons-material/Delete';
+import adminAPI from '../../services/adminAPI';
+import { errorHandler } from '../../utils/errorHandler';
 
+/**
+ * ContentManager Component
+ * Manage static pages and file uploads
+ * @returns {JSX.Element}
+ */
 export default function ContentManager() {
-  const [pages, setPages] = useState([
-    { id: 1, title: 'À Propos', slug: 'about', lastModified: '2024-01-20', status: 'published' },
-    { id: 2, title: 'Conditions d\'Utilisation', slug: 'terms', lastModified: '2024-01-15', status: 'published' },
-    { id: 3, title: 'Politique de Confidentialité', slug: 'privacy', lastModified: '2024-01-10', status: 'published' },
-  ]);
-  const [files, setFiles] = useState([
-    { id: 1, name: 'Guide-Utilisateur.pdf', size: '2.5 MB', uploadedDate: '2024-01-18' },
-    { id: 2, name: 'Logo-MyNet.png', size: '450 KB', uploadedDate: '2024-01-15' },
-  ]);
+  const [pages, setPages] = useState([]);
+  const [files, setFiles] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [openPageDialog, setOpenPageDialog] = useState(false);
   const [editingPage, setEditingPage] = useState(null);
   const [pageContent, setPageContent] = useState('');
   const [successMsg, setSuccessMsg] = useState('');
+  const [errorMsg, setErrorMsg] = useState('');
   const [uploading, setUploading] = useState(false);
+  const [saving, setSaving] = useState(false);
 
+  // Fetch data on mount
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  /**
+   * Fetch pages and files
+   */
+  const fetchData = async () => {
+    try {
+      setLoading(true);
+      const [pagesRes, filesRes] = await Promise.all([
+        adminAPI.content.getPages(),
+        adminAPI.content.getFiles()
+      ]);
+      setPages(pagesRes.data || pagesRes);
+      setFiles(filesRes.data || filesRes);
+      setErrorMsg('');
+    } catch (error) {
+      const formatted = errorHandler.getUserMessage(error);
+      setErrorMsg(formatted.message || 'Erreur lors du chargement');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  /**
+   * Open edit dialog for page
+   */
   const handleEditPage = (page) => {
     setEditingPage(page);
     setPageContent(page.content || '');
     setOpenPageDialog(true);
   };
 
-  const handleSavePage = () => {
-    setPages(pages.map(p =>
-      p.id === editingPage.id
-        ? { ...p, content: pageContent, lastModified: new Date().toISOString().split('T')[0] }
-        : p
-    ));
-    setSuccessMsg(`Page "${editingPage.title}" mise à jour`);
-    setOpenPageDialog(false);
-    setTimeout(() => setSuccessMsg(''), 3000);
-  };
+  /**
+   * Save page content via API
+   */
+  const handleSavePage = async () => {
+    if (!editingPage) return;
 
-  const handleFileUpload = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      setUploading(true);
-      setTimeout(() => {
-        setFiles([...files, {
-          id: Math.max(...files.map(f => f.id), 0) + 1,
-          name: file.name,
-          size: `${(file.size / 1024 / 1024).toFixed(2)} MB`,
-          uploadedDate: new Date().toISOString().split('T')[0]
-        }]);
-        setSuccessMsg(`Fichier "${file.name}" téléchargé`);
-        setUploading(false);
-        setTimeout(() => setSuccessMsg(''), 3000);
-      }, 1000);
+    try {
+      setSaving(true);
+      await adminAPI.content.updatePage(editingPage.id, pageContent);
+      setPages(pages.map(p =>
+        p.id === editingPage.id
+          ? { ...p, content: pageContent, lastModified: new Date().toISOString().split('T')[0] }
+          : p
+      ));
+      setSuccessMsg(`Page "${editingPage.title}" mise à jour`);
+      setOpenPageDialog(false);
+      setTimeout(() => setSuccessMsg(''), 3000);
+    } catch (error) {
+      const formatted = errorHandler.getUserMessage(error);
+      setErrorMsg(formatted.message || 'Erreur lors de la sauvegarde');
+    } finally {
+      setSaving(false);
     }
   };
+
+  /**
+   * Handle file upload
+   */
+  const handleFileUpload = async (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    try {
+      setUploading(true);
+      const response = await adminAPI.content.uploadFile(file);
+      setFiles([...files, response.data || {
+        id: Math.max(...files.map(f => f.id || 0), 0) + 1,
+        name: file.name,
+        size: `${(file.size / 1024 / 1024).toFixed(2)} MB`,
+        uploadedDate: new Date().toISOString().split('T')[0]
+      }]);
+      setSuccessMsg(`Fichier "${file.name}" téléchargé`);
+      setTimeout(() => setSuccessMsg(''), 3000);
+    } catch (error) {
+      const formatted = errorHandler.getUserMessage(error);
+      setErrorMsg(formatted.message || 'Erreur lors du téléchargement');
+    } finally {
+      setUploading(false);
+      event.target.value = '';
+    }
+  };
+
+  /**
+   * Delete file via API
+   */
+  const handleDeleteFile = async (fileId) => {
+    if (!window.confirm('Êtes-vous sûr?')) return;
+
+    try {
+      await adminAPI.content.deleteFile(fileId);
+      setFiles(files.filter(f => f.id !== fileId));
+      setSuccessMsg('Fichier supprimé');
+      setTimeout(() => setSuccessMsg(''), 3000);
+    } catch (error) {
+      const formatted = errorHandler.getUserMessage(error);
+      setErrorMsg(formatted.message || 'Erreur lors de la suppression');
+    }
+  };
+
+  if (loading) {
+    return <CircularProgress sx={{ color: '#0056B3' }} />;
+  }
 
   return (
     <Box>
       {successMsg && <Alert severity="success" sx={{ marginBottom: '16px' }}>{successMsg}</Alert>}
+      {errorMsg && <Alert severity="error" sx={{ marginBottom: '16px' }}>{errorMsg}</Alert>}
 
       <Typography variant="h6" sx={{ marginBottom: '16px', fontWeight: 600 }}>
         Gestion des Pages
@@ -95,6 +173,7 @@ export default function ContentManager() {
                   fullWidth
                   onClick={() => handleEditPage(page)}
                   sx={{ backgroundColor: '#0056B3' }}
+                  disabled={saving || uploading}
                 >
                   Éditer
                 </Button>
@@ -113,6 +192,7 @@ export default function ContentManager() {
           type="file"
           id="file-upload"
           onChange={handleFileUpload}
+          disabled={uploading}
           style={{ display: 'none' }}
         />
         <label htmlFor="file-upload">
@@ -121,6 +201,7 @@ export default function ContentManager() {
             startIcon={<CloudUploadIcon />}
             variant="contained"
             sx={{ backgroundColor: '#0056B3' }}
+            disabled={uploading}
           >
             Télécharger un Fichier
           </Button>
@@ -130,29 +211,40 @@ export default function ContentManager() {
       {uploading && <LinearProgress sx={{ marginBottom: '16px' }} />}
 
       <Box sx={{ backgroundColor: '#F5F5F5', borderRadius: '8px', padding: '16px' }}>
-        {files.map(file => (
-          <Box
-            key={file.id}
-            sx={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              padding: '12px 0',
-              borderBottom: '1px solid #E0E0E0',
-              '&:last-child': { borderBottom: 'none' }
-            }}
-          >
-            <Box>
-              <Typography sx={{ fontWeight: 500, fontSize: '14px' }}>{file.name}</Typography>
-              <Typography variant="caption" sx={{ color: '#616161' }}>
-                {file.size} • {file.uploadedDate}
-              </Typography>
+        {files.length === 0 ? (
+          <Typography sx={{ color: '#616161' }}>Aucun fichier</Typography>
+        ) : (
+          files.map(file => (
+            <Box
+              key={file.id}
+              sx={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                padding: '12px 0',
+                borderBottom: '1px solid #E0E0E0',
+                '&:last-child': { borderBottom: 'none' }
+              }}
+            >
+              <Box>
+                <Typography sx={{ fontWeight: 500, fontSize: '14px' }}>{file.name}</Typography>
+                <Typography variant="caption" sx={{ color: '#616161' }}>
+                  {file.size} • {file.uploadedDate}
+                </Typography>
+              </Box>
+              <Button
+                size="small"
+                variant="outlined"
+                startIcon={<DeleteIcon />}
+                onClick={() => handleDeleteFile(file.id)}
+                disabled={uploading || saving}
+                sx={{ color: '#C62828', borderColor: '#C62828' }}
+              >
+                Supprimer
+              </Button>
             </Box>
-            <Button size="small" variant="outlined">
-              Télécharger
-            </Button>
-          </Box>
-        ))}
+          ))
+        )}
       </Box>
 
       <Dialog open={openPageDialog} onClose={() => setOpenPageDialog(false)} maxWidth="md" fullWidth>
@@ -166,12 +258,18 @@ export default function ContentManager() {
             onChange={(e) => setPageContent(e.target.value)}
             placeholder="Entrez le contenu de la page..."
             variant="outlined"
+            disabled={saving}
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setOpenPageDialog(false)}>Annuler</Button>
-          <Button onClick={handleSavePage} variant="contained" sx={{ backgroundColor: '#0056B3' }}>
-            Enregistrer
+          <Button onClick={() => setOpenPageDialog(false)} disabled={saving}>Annuler</Button>
+          <Button
+            onClick={handleSavePage}
+            variant="contained"
+            sx={{ backgroundColor: '#0056B3' }}
+            disabled={saving}
+          >
+            {saving ? <CircularProgress size={20} sx={{ color: '#FFF' }} /> : 'Enregistrer'}
           </Button>
         </DialogActions>
       </Dialog>

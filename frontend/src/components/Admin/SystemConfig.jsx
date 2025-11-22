@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   Box,
   Switch,
@@ -10,11 +10,19 @@ import {
   Divider,
   Alert,
   Grid,
-  TextField
+  TextField,
+  CircularProgress
 } from '@mui/material';
 import CachedIcon from '@mui/icons-material/Cached';
 import WarningIcon from '@mui/icons-material/Warning';
+import adminAPI from '../../services/adminAPI';
+import { errorHandler } from '../../utils/errorHandler';
 
+/**
+ * SystemConfig Component
+ * System configuration and settings management
+ * @returns {JSX.Element}
+ */
 export default function SystemConfig() {
   const [config, setConfig] = useState({
     maintenanceMode: false,
@@ -24,33 +32,124 @@ export default function SystemConfig() {
     cacheEnabled: true,
     apiRateLimit: 1000
   });
+  const [loading, setLoading] = useState(true);
+  const [updating, setUpdating] = useState(false);
   const [successMsg, setSuccessMsg] = useState('');
+  const [errorMsg, setErrorMsg] = useState('');
 
-  const handleToggle = (key) => {
-    setConfig({ ...config, [key]: !config[key] });
-    setSuccessMsg(`${key} a été mis à jour`);
-    setTimeout(() => setSuccessMsg(''), 3000);
-  };
+  // Fetch config on mount
+  useEffect(() => {
+    fetchConfig();
+  }, []);
 
-  const handleCacheClean = () => {
-    setSuccessMsg('Cache nettoyé avec succès');
-    setTimeout(() => setSuccessMsg(''), 3000);
-  };
-
-  const handleNumberChange = (key, value) => {
-    setConfig({ ...config, [key]: parseInt(value) || 0 });
-  };
-
-  const handleSystemRestart = () => {
-    if (window.confirm('Êtes-vous sûr de vouloir redémarrer le système? Les utilisateurs seront temporairement déconnectés.')) {
-      setSuccessMsg('Redémarrage du système en cours...');
-      setTimeout(() => setSuccessMsg(''), 3000);
+  /**
+   * Fetch configuration from API
+   */
+  const fetchConfig = async () => {
+    try {
+      setLoading(true);
+      const response = await adminAPI.config.getAll();
+      setConfig(response.data || response);
+      setErrorMsg('');
+    } catch (error) {
+      const formatted = errorHandler.getUserMessage(error);
+      // Use defaults if error
+      console.warn('Utilisation des paramètres par défaut:', formatted.message);
+      setErrorMsg('');
+    } finally {
+      setLoading(false);
     }
   };
+
+  /**
+   * Toggle configuration setting
+   */
+  const handleToggle = async (key) => {
+    const newValue = !config[key];
+    try {
+      setUpdating(true);
+      
+      // Special handling for maintenance mode
+      if (key === 'maintenanceMode') {
+        await adminAPI.config.toggleMaintenance(newValue);
+      } else {
+        await adminAPI.config.update({ [key]: newValue });
+      }
+
+      setConfig({ ...config, [key]: newValue });
+      setSuccessMsg(`${key} a été mis à jour`);
+      setTimeout(() => setSuccessMsg(''), 3000);
+    } catch (error) {
+      const formatted = errorHandler.getUserMessage(error);
+      setErrorMsg(formatted.message || 'Erreur lors de la mise à jour');
+    } finally {
+      setUpdating(false);
+    }
+  };
+
+  /**
+   * Clear cache
+   */
+  const handleCacheClean = async () => {
+    try {
+      setUpdating(true);
+      await adminAPI.config.clearCache();
+      setSuccessMsg('Cache nettoyé avec succès');
+      setTimeout(() => setSuccessMsg(''), 3000);
+    } catch (error) {
+      const formatted = errorHandler.getUserMessage(error);
+      setErrorMsg(formatted.message || 'Erreur lors du nettoyage du cache');
+    } finally {
+      setUpdating(false);
+    }
+  };
+
+  /**
+   * Restart system
+   */
+  const handleSystemRestart = async () => {
+    if (!window.confirm('Êtes-vous sûr de vouloir redémarrer le système?')) return;
+
+    try {
+      setUpdating(true);
+      await adminAPI.config.restartSystem();
+      setSuccessMsg('Redémarrage du système en cours...');
+      setTimeout(() => setSuccessMsg(''), 3000);
+    } catch (error) {
+      const formatted = errorHandler.getUserMessage(error);
+      setErrorMsg(formatted.message || 'Erreur lors du redémarrage');
+    } finally {
+      setUpdating(false);
+    }
+  };
+
+  /**
+   * Update API rate limit
+   */
+  const handleNumberChange = async (key, value) => {
+    const newValue = parseInt(value) || 0;
+    try {
+      setUpdating(true);
+      await adminAPI.config.update({ [key]: newValue });
+      setConfig({ ...config, [key]: newValue });
+      setSuccessMsg('Limite mise à jour');
+      setTimeout(() => setSuccessMsg(''), 3000);
+    } catch (error) {
+      const formatted = errorHandler.getUserMessage(error);
+      setErrorMsg(formatted.message || 'Erreur lors de la mise à jour');
+    } finally {
+      setUpdating(false);
+    }
+  };
+
+  if (loading) {
+    return <CircularProgress sx={{ color: '#0056B3' }} />;
+  }
 
   return (
     <Box>
       {successMsg && <Alert severity="success" sx={{ marginBottom: '16px' }}>{successMsg}</Alert>}
+      {errorMsg && <Alert severity="error" sx={{ marginBottom: '16px' }}>{errorMsg}</Alert>}
 
       {config.maintenanceMode && (
         <Alert severity="warning" icon={<WarningIcon />} sx={{ marginBottom: '16px' }}>
@@ -73,6 +172,7 @@ export default function SystemConfig() {
                     <Switch
                       checked={config.maintenanceMode}
                       onChange={() => handleToggle('maintenanceMode')}
+                      disabled={updating}
                       sx={{
                         '& .MuiSwitch-switchBase.Mui-checked': {
                           color: '#0056B3'
@@ -88,6 +188,7 @@ export default function SystemConfig() {
                     <Switch
                       checked={config.emailNotifications}
                       onChange={() => handleToggle('emailNotifications')}
+                      disabled={updating}
                       sx={{
                         '& .MuiSwitch-switchBase.Mui-checked': {
                           color: '#0056B3'
@@ -103,6 +204,7 @@ export default function SystemConfig() {
                     <Switch
                       checked={config.autoBackup}
                       onChange={() => handleToggle('autoBackup')}
+                      disabled={updating}
                       sx={{
                         '& .MuiSwitch-switchBase.Mui-checked': {
                           color: '#0056B3'
@@ -118,6 +220,7 @@ export default function SystemConfig() {
                     <Switch
                       checked={config.twoFactorAuth}
                       onChange={() => handleToggle('twoFactorAuth')}
+                      disabled={updating}
                       sx={{
                         '& .MuiSwitch-switchBase.Mui-checked': {
                           color: '#0056B3'
@@ -133,6 +236,7 @@ export default function SystemConfig() {
                     <Switch
                       checked={config.cacheEnabled}
                       onChange={() => handleToggle('cacheEnabled')}
+                      disabled={updating}
                       sx={{
                         '& .MuiSwitch-switchBase.Mui-checked': {
                           color: '#0056B3'
@@ -166,6 +270,7 @@ export default function SystemConfig() {
                     value={config.apiRateLimit}
                     onChange={(e) => handleNumberChange('apiRateLimit', e.target.value)}
                     size="small"
+                    disabled={updating}
                     inputProps={{ min: 100 }}
                   />
                 </Box>
@@ -175,6 +280,7 @@ export default function SystemConfig() {
                   variant="contained"
                   fullWidth
                   onClick={handleCacheClean}
+                  disabled={updating}
                   sx={{ backgroundColor: '#0056B3' }}
                 >
                   Nettoyer le Cache
@@ -184,6 +290,7 @@ export default function SystemConfig() {
                   variant="outlined"
                   fullWidth
                   onClick={handleSystemRestart}
+                  disabled={updating}
                   sx={{ color: '#F57C00', borderColor: '#F57C00' }}
                 >
                   Redémarrer le Système

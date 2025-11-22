@@ -1,22 +1,37 @@
 import { useEffect } from 'react';
-import { Container, Box, Card, CardContent, Typography, Alert } from '@mui/material';
+import { Container, Box, Card, CardContent, CardHeader, List, ListItem, ListItemText, Switch, Typography } from '@mui/material';
 import { setPageTitle } from '../utils/pageTitle';
 
 export default function FeatureControl() {
+  const features = [
+    { name: 'الطلبات العامة', enabled: true },
+    { name: 'العروض المباشرة', enabled: true },
+    { name: 'نظام المزادات', enabled: false },
+    { name: 'التقارير المتقدمة', enabled: true },
+    { name: 'المنتدى', enabled: false },
+    { name: 'API الخارجي', enabled: false }
+  ];
+
   useEffect(() => {
-    setPageTitle('Page');
+    setPageTitle('التحكم بالميزات');
   }, []);
 
   return (
-    <Box sx={{ backgroundColor: '#fafafa', paddingY: '40px' }}>
-      <Container maxWidth="lg">
-        <Card sx={{ border: '1px solid #e0e0e0' }}>
-          <CardContent sx={{ padding: '40px', textAlign: 'center' }}>
-            <Typography variant="h2" sx={{ fontSize: '32px', fontWeight: 500, color: '#212121', marginBottom: '16px' }}>
-              FeatureControl
-            </Typography>
-            <Alert severity="success" sx={{ backgroundColor: '#e8f5e9', color: '#1b5e20', border: '1px solid #2e7d32' }}>
-            </Alert>
+    <Box sx={{ backgroundColor: '#F9F9F9', paddingY: '40px', minHeight: '80vh' }}>
+      <Container maxWidth="md">
+        <Typography variant="h2" sx={{ fontSize: '32px', fontWeight: 600, color: '#0056B3', mb: 3 }}>
+          التحكم بالميزات
+        </Typography>
+        <Card sx={{ border: '1px solid #E0E0E0' }}>
+          <CardHeader title="الميزات المتاحة" />
+          <CardContent>
+            <List>
+              {features.map((f, idx) => (
+                <ListItem key={idx} secondaryAction={<Switch checked={f.enabled} />}>
+                  <ListItemText primary={f.name} />
+                </ListItem>
+              ))}
+            </List>
           </CardContent>
         </Card>
       </Container>

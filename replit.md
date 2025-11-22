@@ -226,6 +226,83 @@ Typographie:           Roboto 100%
 
 ---
 
+## 🎨 Material-UI Icons (MUI Icons) - Système Unifié
+
+### Installation Complétée ✅
+```
+Package: @mui/icons-material
+Status: ✅ Installed
+Version: Latest (from MUI)
+```
+
+### Configuration Uniforme
+```
+Style Pattern: FILLED (Default - 100% Platform)
+├─ Filled: ✅ UTILISÉ (défaut - pas de suffix)
+├─ Outlined: ❌ Non utilisé
+├─ Rounded: ❌ Non utilisé
+├─ TwoTone: ❌ Non utilisé
+└─ Sharp: ❌ Non utilisé
+
+Couleur: Tous les Icons = #0056B3 (Primary Blue)
+Taille: fontSize: '20px' (standard)
+```
+
+### Icons Implémentées dans Sidebar
+```
+Menu Principal (Unified Icons):
+├─ Dashboard:     DashboardIcon
+├─ Appels Offres: ShoppingCartIcon
+├─ Finances:      AccountBalanceIcon
+├─ Opérations:    BuildIcon
+├─ Équipe:        GroupIcon
+├─ Notifications: NotificationsIcon
+├─ Profil:        PersonIcon
+├─ Catalogue:     InventoryIcon (Supplier)
+├─ Utilisateurs:  PeopleAltIcon (Admin)
+├─ Facturation:   PaymentIcon (Admin)
+└─ Système:       SettingsIcon (Admin)
+```
+
+### Autres Icônes Utilisées en Plateforme
+```
+Navigation & Actions:
+├─ ExpandLessIcon:    Collapse menu
+├─ ExpandMoreIcon:    Expand menu
+├─ LogoutIcon:        Logout button
+├─ MenuIcon:          Mobile toggle
+├─ SearchIcon:        Search actions
+├─ LocationOnIcon:    Location selection
+├─ NavigateNextIcon:  Next/Arrow actions
+└─ [30+ other icons]: Distributed across pages
+```
+
+### Standards de Styling des Icons
+```
+✅ FAIRE:
+   • Utiliser `color="primary"` pour couleur #0056B3
+   • Utiliser `fontSize="small"` | "medium" | "large"
+   • Utiliser `sx={{ marginRight: '12px' }}` pour spacing
+   • Tous les icons en Filled variant
+
+❌ NE PAS FAIRE:
+   • Mélanger styles d'icons (Filled + Outlined)
+   • Utiliser inline styles pour les icons
+   • Custom CSS pour les icons
+   • Icons sans alignement cohérent
+```
+
+### Integration avec Theme.js
+```
+✅ Tous les icons utilisent:
+   • Couleur: theme.palette.primary.main (#0056B3)
+   • Taille: theme.spacing (8px multiples)
+   • Espacement: Grille 8px standard
+   • Pas de CSS séparé pour icons
+```
+
+---
+
 ## 🚀 État Production
 
 **Status**: ✅ **PRODUCTION-READY**

@@ -19,11 +19,43 @@ import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import LogoutIcon from '@mui/icons-material/Logout';
 import MenuIcon from '@mui/icons-material/Menu';
+import DashboardIcon from '@mui/icons-material/Dashboard';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
+import BuildIcon from '@mui/icons-material/Build';
+import GroupIcon from '@mui/icons-material/Group';
+import NotificationsIcon from '@mui/icons-material/Notifications';
+import PersonIcon from '@mui/icons-material/Person';
+import InventoryIcon from '@mui/icons-material/Inventory';
+import PaymentIcon from '@mui/icons-material/Payment';
+import SettingsIcon from '@mui/icons-material/Settings';
+import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
+import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
+import ReceiptIcon from '@mui/icons-material/Receipt';
+import MonitorHeartIcon from '@mui/icons-material/MonitorHeart';
+import HistoryIcon from '@mui/icons-material/History';
+import LockIcon from '@mui/icons-material/Lock';
+import StorageIcon from '@mui/icons-material/Storage';
 import { setPageTitle } from '../utils/pageTitle';
 import UpgradeModal from './UpgradeModal';
 import { useSubscriptionTier } from '../hooks/useSubscriptionTier';
 
 const DRAWER_WIDTH = 280;
+
+// Map menu IDs to icons
+const iconMap = {
+  dashboard: DashboardIcon,
+  tenders: ShoppingCartIcon,
+  finances: AccountBalanceIcon,
+  operations: BuildIcon,
+  team: GroupIcon,
+  notifications: NotificationsIcon,
+  profile: PersonIcon,
+  catalog: InventoryIcon,
+  users: PeopleAltIcon,
+  billing: PaymentIcon,
+  system: SettingsIcon,
+};
 
 export default function Sidebar({ user, onLogout }) {
   const navigate = useNavigate();
@@ -257,86 +289,91 @@ export default function Sidebar({ user, onLogout }) {
 
       {/* Navigation Menu */}
       <List sx={{ flex: 1, padding: '8px 0', overflowY: 'auto' }}>
-        {menu.map(item => (
-          <Box key={item.id}>
-            {item.subItems.length > 0 ? (
-              <>
+        {menu.map(item => {
+          const IconComponent = iconMap[item.id];
+          return (
+            <Box key={item.id}>
+              {item.subItems.length > 0 ? (
+                <>
+                  <ListItemButton
+                    onClick={() => toggleMenu(item.id)}
+                    sx={{
+                      padding: '12px 16px',
+                      margin: '4px 8px',
+                      borderRadius: '4px',
+                      color: '#212121',
+                      '&:hover': { backgroundColor: '#f5f5f5' },
+                    }}
+                  >
+                    {IconComponent && <IconComponent sx={{ marginRight: '12px', fontSize: '20px', color: '#0056B3' }} />}
+                    <ListItemText
+                      primary={item.label}
+                      sx={{ margin: 0, '& .MuiTypography-root': { fontSize: '14px', fontWeight: 500 } }}
+                    />
+                    {expandedMenus[item.id] ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+                  </ListItemButton>
+
+                  <Collapse in={expandedMenus[item.id]} timeout="auto" unmountOnExit>
+                    <List component="div" disablePadding>
+                      {item.subItems.map((subItem, idx) => (
+                        <ListItemButton
+                          key={idx}
+                          onClick={() => handleNavigation(subItem.path, subItem.label)}
+                          sx={{
+                            paddingRight: '16px',
+                            paddingTop: '8px',
+                            paddingBottom: '8px',
+                            marginRight: '8px',
+                            marginLeft: '8px',
+                            marginTop: '2px',
+                            marginBottom: '2px',
+                            borderRadius: '4px',
+                            backgroundColor: isMenuItemActive(subItem.path) ? '#e3f2fd' : 'transparent',
+                            borderLeft: isMenuItemActive(subItem.path) ? '4px solid #0056B3' : 'none',
+                            paddingLeft: isMenuItemActive(subItem.path) ? '44px' : '48px',
+                            color: isMenuItemActive(subItem.path) ? '#0056B3' : '#616161',
+                            '&:hover': {
+                              backgroundColor: '#f5f5f5',
+                              color: '#0056B3',
+                            },
+                          }}
+                        >
+                          <ListItemText
+                            primary={subItem.label}
+                            sx={{ margin: 0, '& .MuiTypography-root': { fontSize: '13px', fontWeight: 400 } }}
+                          />
+                        </ListItemButton>
+                      ))}
+                    </List>
+                  </Collapse>
+                </>
+              ) : (
                 <ListItemButton
-                  onClick={() => toggleMenu(item.id)}
+                  onClick={() => handleNavigation(item.path, item.label)}
                   sx={{
                     padding: '12px 16px',
                     margin: '4px 8px',
                     borderRadius: '4px',
-                    color: '#212121',
-                    '&:hover': { backgroundColor: '#f5f5f5' },
+                    backgroundColor: isMenuItemActive(item.path) ? '#e3f2fd' : 'transparent',
+                    borderLeft: isMenuItemActive(item.path) ? '4px solid #0056B3' : 'none',
+                    paddingLeft: isMenuItemActive(item.path) ? '12px' : '16px',
+                    color: isMenuItemActive(item.path) ? '#0056B3' : '#212121',
+                    '&:hover': {
+                      backgroundColor: '#f5f5f5',
+                      color: '#0056B3',
+                    },
                   }}
                 >
+                  {IconComponent && <IconComponent sx={{ marginRight: '12px', fontSize: '20px', color: '#0056B3' }} />}
                   <ListItemText
                     primary={item.label}
                     sx={{ margin: 0, '& .MuiTypography-root': { fontSize: '14px', fontWeight: 500 } }}
                   />
-                  {expandedMenus[item.id] ? <ExpandLessIcon /> : <ExpandMoreIcon />}
                 </ListItemButton>
-
-                <Collapse in={expandedMenus[item.id]} timeout="auto" unmountOnExit>
-                  <List component="div" disablePadding>
-                    {item.subItems.map((subItem, idx) => (
-                      <ListItemButton
-                        key={idx}
-                        onClick={() => handleNavigation(subItem.path, subItem.label)}
-                        sx={{
-                          paddingRight: '16px',
-                          paddingTop: '8px',
-                          paddingBottom: '8px',
-                          marginRight: '8px',
-                          marginLeft: '8px',
-                          marginTop: '2px',
-                          marginBottom: '2px',
-                          borderRadius: '4px',
-                          backgroundColor: isMenuItemActive(subItem.path) ? '#e3f2fd' : 'transparent',
-                          borderLeft: isMenuItemActive(subItem.path) ? '4px solid #0056B3' : 'none',
-                          paddingLeft: isMenuItemActive(subItem.path) ? '44px' : '48px',
-                          color: isMenuItemActive(subItem.path) ? '#0056B3' : '#616161',
-                          '&:hover': {
-                            backgroundColor: '#f5f5f5',
-                            color: '#0056B3',
-                          },
-                        }}
-                      >
-                        <ListItemText
-                          primary={subItem.label}
-                          sx={{ margin: 0, '& .MuiTypography-root': { fontSize: '13px', fontWeight: 400 } }}
-                        />
-                      </ListItemButton>
-                    ))}
-                  </List>
-                </Collapse>
-              </>
-            ) : (
-              <ListItemButton
-                onClick={() => handleNavigation(item.path, item.label)}
-                sx={{
-                  padding: '12px 16px',
-                  margin: '4px 8px',
-                  borderRadius: '4px',
-                  backgroundColor: isMenuItemActive(item.path) ? '#e3f2fd' : 'transparent',
-                  borderLeft: isMenuItemActive(item.path) ? '4px solid #0056B3' : 'none',
-                  paddingLeft: isMenuItemActive(item.path) ? '12px' : '16px',
-                  color: isMenuItemActive(item.path) ? '#0056B3' : '#212121',
-                  '&:hover': {
-                    backgroundColor: '#f5f5f5',
-                    color: '#0056B3',
-                  },
-                }}
-              >
-                <ListItemText
-                  primary={item.label}
-                  sx={{ margin: 0, '& .MuiTypography-root': { fontSize: '14px', fontWeight: 500 } }}
-                />
-              </ListItemButton>
-            )}
-          </Box>
-        ))}
+              )}
+            </Box>
+          );
+        })}
       </List>
 
       {/* Footer */}

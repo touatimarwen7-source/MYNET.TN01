@@ -35,7 +35,14 @@ export default function Login() {
     setLoading(true);
 
     try {
+      console.log('Attempting login with email:', email);
       const response = await authAPI.login({ email, password });
+      
+      console.log('Login response:', response);
+      
+      if (!response || !response.data) {
+        throw new Error('Réponse du serveur invalide');
+      }
       
       if (!response.data.accessToken) {
         throw new Error('Pas de token reçu du serveur');
@@ -64,8 +71,13 @@ export default function Login() {
       navigate('/tenders', { replace: true });
       
     } catch (err) {
-      console.error('Login error:', err);
-      setError('Erreur de connexion. Vérifiez vos identifiants.');
+      console.error('Login error details:', {
+        message: err.message,
+        response: err.response?.data,
+        status: err.response?.status,
+        error: err
+      });
+      setError(err.response?.data?.error || 'Erreur de connexion. Vérifiez vos identifiants.');
       addToast('Erreur de connexion', 'error', 3000);
     } finally {
       setLoading(false);

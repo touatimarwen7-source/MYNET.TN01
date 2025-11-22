@@ -88,16 +88,22 @@ const processQueue = (error, token = null) => {
  */
 axiosInstance.interceptors.request.use(
   (config) => {
-    // Check if access token is expired - reject if so
-    if (!TokenManager.isTokenValid()) {
+    // Public endpoints that don't need token
+    const publicEndpoints = ['/auth/login', '/auth/register', '/auth/refresh-token'];
+    const isPublicEndpoint = publicEndpoints.some(endpoint => 
+      config.url === endpoint || config.url?.includes(endpoint)
+    );
+
+    // Check if access token is expired (but not for public endpoints)
+    if (!isPublicEndpoint && !TokenManager.isTokenValid()) {
       TokenManager.clearTokens();
       window.location.href = '/login';
       return Promise.reject(new Error('Token expired'));
     }
 
-    // Add access token
+    // Add access token only if available and not for login/register
     const token = TokenManager.getAccessToken();
-    if (token) {
+    if (token && !isPublicEndpoint) {
       config.headers.Authorization = `Bearer ${token}`;
     }
 
@@ -111,8 +117,8 @@ axiosInstance.interceptors.request.use(
     config.headers['X-Requested-With'] = 'XMLHttpRequest';
     config.headers['X-Content-Type-Options'] = 'nosniff';
 
-    // Check if token should be refreshed proactively
-    if (TokenManager.shouldRefreshToken() && !isRefreshing) {
+    // Check if token should be refreshed proactively (only if we have a token)
+    if (token && TokenManager.shouldRefreshToken() && !isRefreshing) {
       // Silently refresh in background
       refreshAccessToken().catch((err) => {
       });

@@ -1,21 +1,25 @@
 /**
- * Secure Token Manager Service
- * Handles storage and retrieval of authentication tokens
- * Uses multiple storage layers: memory -> sessionStorage -> localStorage (for iframe compatibility)
+ * Enhanced Token Manager for Replit iframe compatibility
+ * Uses in-memory storage as primary to avoid iframe restrictions
+ * Falls back to sessionStorage/localStorage for persistence
  */
 
 const TOKEN_KEY = 'access_token';
 const TOKEN_EXPIRY_KEY = 'token_expiry';
+const USER_DATA_KEY = 'user_data';
 
-// Memory storage for access token (fastest - survives while tab is open)
+// In-memory storage (primary for Replit iframe)
 let memoryAccessToken = null;
 let tokenExpiryTime = null;
+let memoryUserData = null;
+
+// Store listener callbacks for cross-tab sync
+let authChangeListeners = [];
 
 class TokenManager {
   /**
    * Store access token with expiry time
-   * @param {string} token - Access token
-   * @param {number} expiresIn - Token expiry in seconds (default: 900 = 15 min)
+   * Primary: in-memory | Backup: sessionStorage + localStorage
    */
   static setAccessToken(token, expiresIn = 900) {
     if (!token || typeof token !== 'string') {
@@ -25,43 +29,44 @@ class TokenManager {
 
     const tokenExpiryMs = Date.now() + expiresIn * 1000;
     
-    // Set in memory FIRST
+    // Set in memory FIRST (fastest, no iframe issues)
     memoryAccessToken = token;
     tokenExpiryTime = tokenExpiryMs;
-    console.log('Token set in memory, expires in:', expiresIn, 'seconds, expiry time:', new Date(tokenExpiryMs));
+    console.log('✅ Token stored in memory, expires in:', expiresIn, 'seconds');
     
-    // Persist to sessionStorage
+    // Try to persist to sessionStorage (most iframe-compatible)
     try {
       sessionStorage.setItem(TOKEN_KEY, token);
       sessionStorage.setItem(TOKEN_EXPIRY_KEY, String(tokenExpiryMs));
-      console.log('Token persisted to sessionStorage');
+      console.log('✅ Token persisted to sessionStorage');
     } catch (e) {
-      console.warn('sessionStorage unavailable:', e);
+      console.warn('⚠️ sessionStorage unavailable:', e.message);
     }
     
-    // Also try localStorage as backup
+    // Try to persist to localStorage as backup
     try {
       localStorage.setItem(TOKEN_KEY, token);
       localStorage.setItem(TOKEN_EXPIRY_KEY, String(tokenExpiryMs));
-      console.log('Token persisted to localStorage');
+      console.log('✅ Token persisted to localStorage');
     } catch (e) {
-      console.warn('localStorage unavailable:', e);
+      console.warn('⚠️ localStorage unavailable:', e.message);
     }
+
+    // Notify listeners
+    this._notifyListeners();
   }
 
   /**
-   * Get access token from memory or storage
-   * @returns {string|null} Access token or null if expired/missing
+   * Get access token from memory (fastest) or storage
+   * Ensures token is ALWAYS available in memory
    */
   static getAccessToken() {
-    // Check memory first (fastest)
-    if (memoryAccessToken) {
-      if (this.isTokenValid()) {
-        return memoryAccessToken;
-      }
+    // Check memory first (fastest, always works)
+    if (memoryAccessToken && this.isTokenValid()) {
+      return memoryAccessToken;
     }
 
-    // Fall back to sessionStorage (most compatible with Replit iframe)
+    // Try to restore from sessionStorage
     try {
       const token = sessionStorage.getItem(TOKEN_KEY);
       const expiryStr = sessionStorage.getItem(TOKEN_EXPIRY_KEY);
@@ -69,21 +74,18 @@ class TokenManager {
       if (token && expiryStr) {
         const expiryTime = parseInt(expiryStr, 10);
         if (!isNaN(expiryTime) && Date.now() < expiryTime) {
-          // Restore to memory
+          // Restore to memory for next call
           memoryAccessToken = token;
           tokenExpiryTime = expiryTime;
+          console.log('✅ Token restored from sessionStorage to memory');
           return token;
-        } else {
-          // Token is expired, clear it
-          sessionStorage.removeItem(TOKEN_KEY);
-          sessionStorage.removeItem(TOKEN_EXPIRY_KEY);
         }
       }
     } catch (e) {
-      console.warn('Error retrieving token from sessionStorage:', e);
+      // sessionStorage may be blocked in iframe
     }
 
-    // Fall back to localStorage if sessionStorage fails
+    // Try to restore from localStorage
     try {
       const token = localStorage.getItem(TOKEN_KEY);
       const expiryStr = localStorage.getItem(TOKEN_EXPIRY_KEY);
@@ -94,42 +96,33 @@ class TokenManager {
           // Restore to memory
           memoryAccessToken = token;
           tokenExpiryTime = expiryTime;
+          console.log('✅ Token restored from localStorage to memory');
           return token;
-        } else {
-          // Token is expired, clear it
-          localStorage.removeItem(TOKEN_KEY);
-          localStorage.removeItem(TOKEN_EXPIRY_KEY);
         }
       }
     } catch (e) {
-      console.warn('Error retrieving token from localStorage:', e);
+      // localStorage may be blocked
     }
 
-    // Token expired or missing - set memory to null but don't clear storage multiple times
+    // No token found or expired
     memoryAccessToken = null;
+    tokenExpiryTime = null;
     return null;
   }
 
   /**
    * Check if token is valid (not expired)
-   * @returns {boolean}
+   * Always checks memory first
    */
   static isTokenValid() {
-    if (!tokenExpiryTime) {
-      try {
-        // Check sessionStorage first
-        let storedExpiry = sessionStorage.getItem(TOKEN_EXPIRY_KEY);
-        if (!storedExpiry) {
-          storedExpiry = localStorage.getItem(TOKEN_EXPIRY_KEY);
-        }
-        if (storedExpiry) {
-          tokenExpiryTime = parseInt(storedExpiry, 10);
-        }
-      } catch (e) {
-        // storage unavailable
-      }
+    if (!memoryAccessToken || !tokenExpiryTime) {
+      return false;
     }
-    const isValid = tokenExpiryTime && !isNaN(tokenExpiryTime) && Date.now() < tokenExpiryTime;
+    const isValid = Date.now() < tokenExpiryTime;
+    if (!isValid) {
+      memoryAccessToken = null;
+      tokenExpiryTime = null;
+    }
     return isValid;
   }
 
@@ -139,33 +132,81 @@ class TokenManager {
   static clearTokens() {
     memoryAccessToken = null;
     tokenExpiryTime = null;
-    
+    memoryUserData = null;
+
+    // Try to clear from storage
     try {
       sessionStorage.removeItem(TOKEN_KEY);
       sessionStorage.removeItem(TOKEN_EXPIRY_KEY);
+      sessionStorage.removeItem(USER_DATA_KEY);
     } catch (e) {
-      console.warn('Error clearing sessionStorage:', e);
+      // Ignore errors
     }
-    
+
     try {
       localStorage.removeItem(TOKEN_KEY);
       localStorage.removeItem(TOKEN_EXPIRY_KEY);
+      localStorage.removeItem(USER_DATA_KEY);
     } catch (e) {
-      console.warn('Error clearing localStorage:', e);
+      // Ignore errors
     }
-    
-    // Also clear CSRF token
+
+    console.log('✅ All tokens cleared');
+    this._notifyListeners();
+  }
+
+  /**
+   * Store user data
+   */
+  static setUserData(userData) {
+    memoryUserData = userData;
+
     try {
-      const CSRFProtection = require('../utils/csrfProtection').default;
-      CSRFProtection.clearToken();
-    } catch (err) {
-      // CSRFProtection may not be loaded yet
+      sessionStorage.setItem(USER_DATA_KEY, JSON.stringify(userData));
+    } catch (e) {
+      // Ignore
+    }
+
+    try {
+      localStorage.setItem(USER_DATA_KEY, JSON.stringify(userData));
+    } catch (e) {
+      // Ignore
     }
   }
 
   /**
+   * Get user data
+   */
+  static getUserData() {
+    if (memoryUserData) {
+      return memoryUserData;
+    }
+
+    try {
+      const userData = sessionStorage.getItem(USER_DATA_KEY);
+      if (userData) {
+        memoryUserData = JSON.parse(userData);
+        return memoryUserData;
+      }
+    } catch (e) {
+      // Ignore
+    }
+
+    try {
+      const userData = localStorage.getItem(USER_DATA_KEY);
+      if (userData) {
+        memoryUserData = JSON.parse(userData);
+        return memoryUserData;
+      }
+    } catch (e) {
+      // Ignore
+    }
+
+    return null;
+  }
+
+  /**
    * Get time until token expiry
-   * @returns {number} Milliseconds until expiry
    */
   static getTimeUntilExpiry() {
     if (!tokenExpiryTime) return 0;
@@ -173,8 +214,7 @@ class TokenManager {
   }
 
   /**
-   * Check if token needs refresh (expires in less than 2 minutes)
-   * @returns {boolean}
+   * Check if token needs refresh
    */
   static shouldRefreshToken() {
     return this.getTimeUntilExpiry() < 2 * 60 * 1000;
@@ -182,15 +222,12 @@ class TokenManager {
 
   /**
    * Decode JWT token (basic decode without verification)
-   * @param {string} token - JWT token
-   * @returns {object|null} Decoded payload or null if invalid
    */
   static decodeToken(token) {
     try {
       if (!token) return null;
       const parts = token.split('.');
       if (parts.length !== 3) return null;
-
       const decoded = JSON.parse(atob(parts[1]));
       return decoded;
     } catch (err) {
@@ -200,26 +237,100 @@ class TokenManager {
 
   /**
    * Get user info from token
-   * @returns {object|null} User info { userId, email, role, etc }
    */
   static getUserFromToken() {
     const token = this.getAccessToken();
     if (!token) return null;
-    
-    const decoded = this.decodeToken(token);
-    return decoded || null;
+    return this.decodeToken(token);
   }
 
   /**
-   * Store refresh token ID (not used in this implementation as backend uses httpOnly cookies)
+   * Register listener for auth changes
    */
+  static onAuthChange(callback) {
+    authChangeListeners.push(callback);
+    return () => {
+      authChangeListeners = authChangeListeners.filter(cb => cb !== callback);
+    };
+  }
+
+  /**
+   * Notify all listeners of auth change
+   */
+  static _notifyListeners() {
+    authChangeListeners.forEach(cb => {
+      try {
+        cb({
+          token: memoryAccessToken,
+          user: memoryUserData,
+          isAuthenticated: !!memoryAccessToken && this.isTokenValid()
+        });
+      } catch (e) {
+        console.error('Error in auth change listener:', e);
+      }
+    });
+  }
+
+  /**
+   * Restore tokens from storage (call on app init)
+   */
+  static restoreFromStorage() {
+    let restored = false;
+
+    // Try sessionStorage first
+    try {
+      const token = sessionStorage.getItem(TOKEN_KEY);
+      const expiryStr = sessionStorage.getItem(TOKEN_EXPIRY_KEY);
+      const userDataStr = sessionStorage.getItem(USER_DATA_KEY);
+
+      if (token && expiryStr) {
+        const expiryTime = parseInt(expiryStr, 10);
+        if (!isNaN(expiryTime) && Date.now() < expiryTime) {
+          memoryAccessToken = token;
+          tokenExpiryTime = expiryTime;
+          if (userDataStr) {
+            memoryUserData = JSON.parse(userDataStr);
+          }
+          restored = true;
+          console.log('✅ Tokens restored from sessionStorage');
+        }
+      }
+    } catch (e) {
+      // Ignore
+    }
+
+    // Try localStorage if sessionStorage didn't work
+    if (!restored) {
+      try {
+        const token = localStorage.getItem(TOKEN_KEY);
+        const expiryStr = localStorage.getItem(TOKEN_EXPIRY_KEY);
+        const userDataStr = localStorage.getItem(USER_DATA_KEY);
+
+        if (token && expiryStr) {
+          const expiryTime = parseInt(expiryStr, 10);
+          if (!isNaN(expiryTime) && Date.now() < expiryTime) {
+            memoryAccessToken = token;
+            tokenExpiryTime = expiryTime;
+            if (userDataStr) {
+              memoryUserData = JSON.parse(userDataStr);
+            }
+            restored = true;
+            console.log('✅ Tokens restored from localStorage');
+          }
+        }
+      } catch (e) {
+        // Ignore
+      }
+    }
+
+    return restored;
+  }
+
+  // Compatibility methods
   static setRefreshTokenId(refreshTokenId) {
     // Backend handles refresh tokens via httpOnly cookies
   }
 
-  /**
-   * Get refresh token ID
-   */
   static getRefreshTokenId() {
     return null;
   }

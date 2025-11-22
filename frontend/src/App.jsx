@@ -98,6 +98,9 @@ function App() {
   useEffect(() => {
     const checkAuth = () => {
       try {
+        // First, try to restore tokens from storage
+        TokenManager.restoreFromStorage();
+        
         const token = TokenManager.getAccessToken();
         console.log('Checking auth, token exists:', !!token);
         
@@ -117,8 +120,6 @@ function App() {
         }
       } catch (error) {
         console.error('Auth check error:', error);
-        // Don't clear tokens on general errors - only on authentication errors
-        // Just set user to null for now
         setUser(null);
       } finally {
         setLoading(false);
@@ -132,6 +133,7 @@ function App() {
       console.log('Auth changed event fired', event.detail);
       if (event.detail) {
         // If user data is passed directly, use it
+        TokenManager.setUserData(event.detail);
         setUser(event.detail);
       } else {
         // Otherwise check token

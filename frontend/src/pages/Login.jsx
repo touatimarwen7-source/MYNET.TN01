@@ -62,6 +62,9 @@ export default function Login() {
       const userData = response.data.user;
       console.log('Login successful, user data:', userData);
       
+      // Store user data in TokenManager for persistence across navigation
+      TokenManager.setUserData(userData);
+      
       addToast('Connexion réussie', 'success', 2000);
       
       // Dispatch event with user data for immediate update

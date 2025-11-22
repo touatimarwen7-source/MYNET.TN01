@@ -35,10 +35,10 @@ const FALLBACK_PAGES = [
   { 
     id: 1, 
     slug: 'home', 
-    title: 'الصفحة الرئيسية', 
-    content: 'محتوى الصفحة الرئيسية', 
-    description: 'الصفحة الرئيسية للمنصة',
-    meta_keywords: 'صفحة رئيسية, مناقصات',
+    title: 'Accueil', 
+    content: 'Contenu de la page d\'accueil', 
+    description: 'Page d\'accueil de la plateforme',
+    meta_keywords: 'accueil, appels d\'offres',
     status: 'published',
     created_at: '2024-11-20',
     updated_at: '2024-11-20'
@@ -46,10 +46,10 @@ const FALLBACK_PAGES = [
   { 
     id: 2, 
     slug: 'about', 
-    title: 'من نحن', 
-    content: 'معلومات عن الشركة', 
-    description: 'معلومات حول المنصة',
-    meta_keywords: 'عن المنصة, الشركة',
+    title: 'À Propos', 
+    content: 'Informations sur l\'entreprise', 
+    description: 'Informations sur la plateforme',
+    meta_keywords: 'à propos, entreprise',
     status: 'published',
     created_at: '2024-11-15',
     updated_at: '2024-11-15'
@@ -57,10 +57,10 @@ const FALLBACK_PAGES = [
   { 
     id: 3, 
     slug: 'terms', 
-    title: 'الشروط والأحكام', 
-    content: 'شروط وأحكام الخدمة', 
-    description: 'شروط وأحكام الخدمة',
-    meta_keywords: 'شروط, أحكام',
+    title: 'Conditions d\'Utilisation', 
+    content: 'Termes et conditions de service', 
+    description: 'Termes et conditions de service',
+    meta_keywords: 'conditions, termes',
     status: 'published',
     created_at: '2024-11-10',
     updated_at: '2024-11-10'
@@ -101,7 +101,7 @@ export default function StaticPagesManager() {
       setErrorMsg('');
     } catch (error) {
       const formatted = errorHandler.getUserMessage(error);
-      setErrorMsg(formatted.message || 'خطأ في التحميل');
+      setErrorMsg(formatted.message || 'Erreur de chargement');
       setPages(FALLBACK_PAGES);
     } finally {
       setLoading(false);
@@ -145,7 +145,7 @@ export default function StaticPagesManager() {
 
   const handleSavePage = async () => {
     if (!formData.title || !formData.slug) {
-      setErrorMsg('العنوان والـ slug مطلوبان');
+      setErrorMsg('Le titre et le slug sont requis');
       return;
     }
 
@@ -166,7 +166,7 @@ export default function StaticPagesManager() {
           };
         }
         setPages([...pages, savedPage]);
-        setSuccessMsg(`تم إنشاء الصفحة "${formData.title}"`);
+        setSuccessMsg(`Page créée "${formData.title}"`);
       } else {
         try {
           const res = await adminAPI.content.updatePage(editingPage.id, formData);
@@ -181,36 +181,35 @@ export default function StaticPagesManager() {
         setPages(pages.map(p =>
           p.id === editingPage.id ? savedPage : p
         ));
-        setSuccessMsg(`تم تحديث الصفحة "${formData.title}"`);
+        setSuccessMsg(`Page mise à jour "${formData.title}"`);
       }
 
       setOpenPageDialog(false);
       setTimeout(() => setSuccessMsg(''), 3000);
     } catch (error) {
       const formatted = errorHandler.getUserMessage(error);
-      setErrorMsg(formatted.message || 'خطأ في الحفظ');
+      setErrorMsg(formatted.message || 'Erreur lors de la sauvegarde');
     } finally {
       setSaving(false);
     }
   };
 
   const handleDeletePage = async (pageId, pageTitle) => {
-    if (!window.confirm(`هل تريد حذف الصفحة "${pageTitle}"؟`)) return;
+    if (!window.confirm(`Êtes-vous sûr de vouloir supprimer la page "${pageTitle}"?`)) return;
 
     try {
       setSaving(true);
       try {
         await adminAPI.content.deletePage(pageId);
       } catch {
-        // حدّث محلياً في حالة الفشل
       }
       
       setPages(pages.filter(p => p.id !== pageId));
-      setSuccessMsg('تم حذف الصفحة');
+      setSuccessMsg('Page supprimée');
       setTimeout(() => setSuccessMsg(''), 3000);
     } catch (error) {
       const formatted = errorHandler.getUserMessage(error);
-      setErrorMsg(formatted.message || 'خطأ في الحذف');
+      setErrorMsg(formatted.message || 'Erreur lors de la suppression');
     } finally {
       setSaving(false);
     }
@@ -225,14 +224,13 @@ export default function StaticPagesManager() {
       {successMsg && <Alert severity="success" sx={{ mb: 2 }}>{successMsg}</Alert>}
       {errorMsg && <Alert severity="error" sx={{ mb: 2 }}>{errorMsg}</Alert>}
 
-      {/* Header */}
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
         <Box>
           <Typography variant="h6" sx={{ fontWeight: 600, mb: 0.5 }}>
-            إدارة الصفحات الثابتة
+            Gestion des Pages Statiques
           </Typography>
           <Typography variant="caption" sx={{ color: '#616161' }}>
-            {pages.length} صفحة
+            {pages.length} page(s)
           </Typography>
         </Box>
         <Button
@@ -242,7 +240,7 @@ export default function StaticPagesManager() {
           disabled={saving}
           sx={{ backgroundColor: '#0056B3' }}
         >
-          صفحة جديدة
+          Nouvelle Page
         </Button>
       </Box>
 
@@ -251,18 +249,18 @@ export default function StaticPagesManager() {
         <Table>
           <TableHead sx={{ backgroundColor: '#F5F5F5' }}>
             <TableRow>
-              <TableCell sx={{ fontWeight: 600, color: '#212121' }}>العنوان</TableCell>
+              <TableCell sx={{ fontWeight: 600, color: '#212121' }}>Titre</TableCell>
               <TableCell sx={{ fontWeight: 600, color: '#212121' }}>Slug</TableCell>
-              <TableCell sx={{ fontWeight: 600, color: '#212121' }}>الحالة</TableCell>
-              <TableCell sx={{ fontWeight: 600, color: '#212121' }}>آخر تعديل</TableCell>
-              <TableCell align="right" sx={{ fontWeight: 600, color: '#212121' }}>الإجراءات</TableCell>
+              <TableCell sx={{ fontWeight: 600, color: '#212121' }}>État</TableCell>
+              <TableCell sx={{ fontWeight: 600, color: '#212121' }}>Dernière Modification</TableCell>
+              <TableCell align="right" sx={{ fontWeight: 600, color: '#212121' }}>Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {pages.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={5} sx={{ textAlign: 'center', py: 3, color: '#616161' }}>
-                  لا توجد صفحات
+                  Aucune page
                 </TableCell>
               </TableRow>
             ) : (
@@ -272,7 +270,7 @@ export default function StaticPagesManager() {
                     <Box>
                       <Typography sx={{ fontWeight: 500, fontSize: '14px' }}>{page.title}</Typography>
                       <Typography variant="caption" sx={{ color: '#616161' }}>
-                        {page.description || 'بدون وصف'}
+                        {page.description || 'Sans description'}
                       </Typography>
                     </Box>
                   </TableCell>
@@ -283,7 +281,7 @@ export default function StaticPagesManager() {
                   </TableCell>
                   <TableCell>
                     <Chip
-                      label={page.status === 'published' ? 'منشورة' : 'مسودة'}
+                      label={page.status === 'published' ? 'Publiée' : 'Brouillon'}
                       size="small"
                       sx={{
                         backgroundColor: page.status === 'published' ? '#E8F5E9' : '#FFF9C4',
@@ -321,64 +319,58 @@ export default function StaticPagesManager() {
         </Table>
       </TableContainer>
 
-      {/* Form Dialog */}
       <Dialog open={openPageDialog} onClose={() => !saving && setOpenPageDialog(false)} maxWidth="md" fullWidth>
         <DialogTitle>
-          {isCreating ? 'صفحة جديدة' : `تعديل: ${editingPage?.title}`}
+          {isCreating ? 'Nouvelle Page' : `Modifier: ${editingPage?.title}`}
         </DialogTitle>
         <DialogContent sx={{ py: 3 }}>
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-            {/* Title */}
             <TextField
               fullWidth
-              label="عنوان الصفحة"
+              label="Titre de la Page"
               value={formData.title}
               onChange={(e) => handleFormChange('title', e.target.value)}
-              placeholder="أدخل عنوان الصفحة..."
+              placeholder="Entrez le titre de la page..."
               disabled={saving}
               size="small"
             />
 
-            {/* Slug */}
             <TextField
               fullWidth
               label="Slug (URL)"
               value={formData.slug}
               onChange={(e) => handleFormChange('slug', e.target.value.toLowerCase().replace(/\s+/g, '-'))}
-              placeholder="الرابط الإنجليزي (مثال: about-us)"
+              placeholder="Exemple: about-us"
               disabled={saving}
               size="small"
-              helperText="يستخدم في الرابط: /pages/{slug}"
+              helperText="Utilisé dans le lien: /pages/{slug}"
             />
 
-            {/* Description */}
             <TextField
               fullWidth
-              label="الوصف"
+              label="Description"
               value={formData.description}
               onChange={(e) => handleFormChange('description', e.target.value)}
-              placeholder="وصف قصير للصفحة..."
+              placeholder="Brève description de la page..."
               disabled={saving}
               multiline
               rows={2}
               size="small"
             />
 
-            {/* Meta Keywords */}
             <TextField
               fullWidth
-              label="الكلمات الدالة (Meta Keywords)"
+              label="Mots-clés (Meta Keywords)"
               value={formData.meta_keywords}
               onChange={(e) => handleFormChange('meta_keywords', e.target.value)}
-              placeholder="كلمات البحث مفصولة بفواصل"
+              placeholder="Mots-clés séparés par des virgules"
               disabled={saving}
               size="small"
-              helperText="للتحسين في محركات البحث"
+              helperText="Pour l\'optimisation des moteurs de recherche"
             />
 
-            {/* Status */}
             <Box sx={{ display: 'flex', gap: 2 }}>
-              <Typography sx={{ fontWeight: 500, fontSize: '14px', pt: 1 }}>الحالة:</Typography>
+              <Typography sx={{ fontWeight: 500, fontSize: '14px', pt: 1 }}>État:</Typography>
               <Box sx={{ display: 'flex', gap: 1 }}>
                 {['published', 'draft'].map(status => (
                   <Button
@@ -393,19 +385,18 @@ export default function StaticPagesManager() {
                       borderColor: '#0056B3'
                     }}
                   >
-                    {status === 'published' ? 'منشورة' : 'مسودة'}
+                    {status === 'published' ? 'Publiée' : 'Brouillon'}
                   </Button>
                 ))}
               </Box>
             </Box>
 
-            {/* Content */}
             <TextField
               fullWidth
-              label="محتوى الصفحة"
+              label="Contenu de la Page"
               value={formData.content}
               onChange={(e) => handleFormChange('content', e.target.value)}
-              placeholder="أدخل محتوى الصفحة..."
+              placeholder="Entrez le contenu de la page..."
               disabled={saving}
               multiline
               rows={15}
@@ -415,7 +406,7 @@ export default function StaticPagesManager() {
         </DialogContent>
         <DialogActions sx={{ p: 2, gap: 1 }}>
           <Button onClick={() => setOpenPageDialog(false)} disabled={saving}>
-            إلغاء
+            Annuler
           </Button>
           <Button
             onClick={handleSavePage}
@@ -423,7 +414,7 @@ export default function StaticPagesManager() {
             sx={{ backgroundColor: '#0056B3' }}
             disabled={saving}
           >
-            {saving ? <CircularProgress size={20} sx={{ color: '#FFF' }} /> : (isCreating ? 'إنشاء' : 'حفظ')}
+            {saving ? <CircularProgress size={20} sx={{ color: '#FFF' }} /> : (isCreating ? 'Créer' : 'Enregistrer')}
           </Button>
         </DialogActions>
       </Dialog>

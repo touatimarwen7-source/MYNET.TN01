@@ -45,12 +45,11 @@ export default function UserRoleManagement() {
   const [errorMsg, setErrorMsg] = useState('');
   const [updating, setUpdating] = useState(false);
 
-  // Fallback users data
   const FALLBACK_USERS = [
     {
       id: 1,
       email: 'buyer1@test.tn',
-      company: 'شركة الشراء الأولى',
+      company: 'Entreprise Acheteur 1',
       role: 'buyer',
       status: 'active',
       joinedDate: '2024-11-01'
@@ -58,7 +57,7 @@ export default function UserRoleManagement() {
     {
       id: 2,
       email: 'supplier1@test.tn',
-      company: 'شركة التوريد الأولى',
+      company: 'Entreprise Fournisseur 1',
       role: 'supplier',
       status: 'active',
       joinedDate: '2024-11-02'
@@ -66,7 +65,7 @@ export default function UserRoleManagement() {
     {
       id: 3,
       email: 'admin@test.tn',
-      company: 'الإدارة',
+      company: 'Administration',
       role: 'admin',
       status: 'active',
       joinedDate: '2024-11-03'
@@ -74,7 +73,7 @@ export default function UserRoleManagement() {
     {
       id: 4,
       email: 'supplier2@test.tn',
-      company: 'شركة التوريد الثانية',
+      company: 'Entreprise Fournisseur 2',
       role: 'supplier',
       status: 'active',
       joinedDate: '2024-11-04'
@@ -82,7 +81,7 @@ export default function UserRoleManagement() {
     {
       id: 5,
       email: 'buyer2@test.tn',
-      company: 'شركة الشراء الثانية',
+      company: 'Entreprise Acheteur 2',
       role: 'buyer',
       status: 'blocked',
       joinedDate: '2024-11-05'
@@ -100,13 +99,12 @@ export default function UserRoleManagement() {
         const response = await adminAPI.users.getAll(currentPage, ITEMS_PER_PAGE, search);
         setUsers(response.data || response);
       } catch {
-        // استخدم fallback data
         setUsers(FALLBACK_USERS);
       }
       setErrorMsg('');
     } catch (error) {
       const formatted = errorHandler.getUserMessage(error);
-      setErrorMsg(formatted.message || 'خطأ في تحميل المستخدمين');
+      setErrorMsg(formatted.message || 'Erreur lors du chargement des utilisateurs');
       setUsers(FALLBACK_USERS);
     } finally {
       setLoading(false);
@@ -140,18 +138,17 @@ export default function UserRoleManagement() {
       try {
         await adminAPI.users.updateRole(editingUser.id, selectedRole);
       } catch {
-        // في حالة الفشل، حدّث البيانات محلياً
       }
       
       setUsers(users.map(u =>
         u.id === editingUser.id ? { ...u, role: selectedRole } : u
       ));
-      setSuccessMsg(`تم تحديث دور ${editingUser.email}`);
+      setSuccessMsg(`Rôle mis à jour pour ${editingUser.email}`);
       setOpenDialog(false);
       setTimeout(() => setSuccessMsg(''), 3000);
     } catch (error) {
       const formatted = errorHandler.getUserMessage(error);
-      setErrorMsg(formatted.message || 'خطأ في التحديث');
+      setErrorMsg(formatted.message || 'Erreur lors de la mise à jour');
     } finally {
       setUpdating(false);
     }
@@ -164,17 +161,16 @@ export default function UserRoleManagement() {
       try {
         await adminAPI.users.toggleBlock(userId, newStatus === 'blocked');
       } catch {
-        // في حالة الفشل، حدّث البيانات محلياً
       }
       
       setUsers(users.map(u =>
         u.id === userId ? { ...u, status: newStatus } : u
       ));
-      setSuccessMsg(`تم ${newStatus === 'blocked' ? 'حظر' : 'فتح'} المستخدم`);
+      setSuccessMsg(`Utilisateur ${newStatus === 'blocked' ? 'bloqué' : 'débloqué'}`);
       setTimeout(() => setSuccessMsg(''), 3000);
     } catch (error) {
       const formatted = errorHandler.getUserMessage(error);
-      setErrorMsg(formatted.message || 'خطأ في تغيير الحالة');
+      setErrorMsg(formatted.message || 'Erreur lors du changement de statut');
     } finally {
       setUpdating(false);
     }
@@ -184,41 +180,39 @@ export default function UserRoleManagement() {
     try {
       setUpdating(true);
       const user = users.find(u => u.email === email);
-      if (!user) throw new Error('المستخدم غير موجود');
+      if (!user) throw new Error('Utilisateur non trouvé');
       
       try {
         await adminAPI.users.resetPassword(user.id);
       } catch {
-        // في حالة الفشل، عرّف النجاح محلياً
       }
       
-      setSuccessMsg(`تم إرسال بريد إعادة تعيين إلى ${email}`);
+      setSuccessMsg(`Email de réinitialisation envoyé à ${email}`);
       setTimeout(() => setSuccessMsg(''), 3000);
     } catch (error) {
       const formatted = errorHandler.getUserMessage(error);
-      setErrorMsg(formatted.message || 'خطأ في إرسال البريد');
+      setErrorMsg(formatted.message || 'Erreur lors de l\'envoi de l\'email');
     } finally {
       setUpdating(false);
     }
   };
 
   const handleDeleteUser = async (userId, email) => {
-    if (!window.confirm(`هل أنت متأكد من حذف ${email}؟`)) return;
+    if (!window.confirm(`Êtes-vous sûr de vouloir supprimer ${email}?`)) return;
 
     try {
       setUpdating(true);
       try {
         await adminAPI.users.delete(userId);
       } catch {
-        // في حالة الفشل، حدّث البيانات محلياً
       }
       
       setUsers(users.filter(u => u.id !== userId));
-      setSuccessMsg(`تم حذف ${email}`);
+      setSuccessMsg(`Utilisateur ${email} supprimé`);
       setTimeout(() => setSuccessMsg(''), 3000);
     } catch (error) {
       const formatted = errorHandler.getUserMessage(error);
-      setErrorMsg(formatted.message || 'خطأ في الحذف');
+      setErrorMsg(formatted.message || 'Erreur lors de la suppression');
     } finally {
       setUpdating(false);
     }
@@ -226,16 +220,16 @@ export default function UserRoleManagement() {
 
   const getRoleLabel = (role) => {
     const labels = {
-      buyer: 'مشتري',
-      supplier: 'موردّ',
-      admin: 'مسؤول',
-      super_admin: 'مسؤول أعلى'
+      buyer: 'Acheteur',
+      supplier: 'Fournisseur',
+      admin: 'Administrateur',
+      super_admin: 'Super Administrateur'
     };
     return labels[role] || role;
   };
 
   const getStatusLabel = (status) => {
-    return status === 'active' ? 'نشط' : 'محظور';
+    return status === 'active' ? 'Actif' : 'Bloqué';
   };
 
   return (
@@ -245,7 +239,7 @@ export default function UserRoleManagement() {
 
       <Box sx={{ mb: 3, display: 'flex', gap: 1.5 }}>
         <TextField
-          placeholder="البحث بالبريد أو الشركة..."
+          placeholder="Rechercher par email ou entreprise..."
           value={search}
           onChange={(e) => {
             setSearch(e.target.value);
@@ -261,21 +255,21 @@ export default function UserRoleManagement() {
         />
       </Box>
 
-      {loading ? <LoadingSpinner message="جاري تحميل المستخدمين..." /> : (
+      {loading ? <LoadingSpinner message="Chargement des utilisateurs..." /> : (
         <>
           {filteredUsers.length === 0 ? (
-            <Alert severity="info">لا توجد نتائج</Alert>
+            <Alert severity="info">Aucun résultat trouvé</Alert>
           ) : (
             <Paper sx={{ border: '1px solid #E0E0E0', borderRadius: '8px', overflow: 'hidden', boxShadow: 'none' }}>
               <Table>
                 <TableHead sx={{ backgroundColor: '#F5F5F5' }}>
                   <TableRow>
-                    <TableCell sx={{ fontWeight: 600, color: '#0056B3' }}>البريد الإلكتروني</TableCell>
-                    <TableCell sx={{ fontWeight: 600, color: '#0056B3' }}>الشركة</TableCell>
-                    <TableCell sx={{ fontWeight: 600, color: '#0056B3' }}>الدور</TableCell>
-                    <TableCell sx={{ fontWeight: 600, color: '#0056B3' }}>الحالة</TableCell>
-                    <TableCell sx={{ fontWeight: 600, color: '#0056B3' }}>تاريخ الانضمام</TableCell>
-                    <TableCell sx={{ fontWeight: 600, color: '#0056B3' }} align="center">الإجراءات</TableCell>
+                    <TableCell sx={{ fontWeight: 600, color: '#0056B3' }}>Email</TableCell>
+                    <TableCell sx={{ fontWeight: 600, color: '#0056B3' }}>Entreprise</TableCell>
+                    <TableCell sx={{ fontWeight: 600, color: '#0056B3' }}>Rôle</TableCell>
+                    <TableCell sx={{ fontWeight: 600, color: '#0056B3' }}>Statut</TableCell>
+                    <TableCell sx={{ fontWeight: 600, color: '#0056B3' }}>Date d\'Adhésion</TableCell>
+                    <TableCell sx={{ fontWeight: 600, color: '#0056B3' }} align="center">Actions</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -306,16 +300,16 @@ export default function UserRoleManagement() {
                       <TableCell sx={{ fontSize: '13px' }}>{user.joinedDate}</TableCell>
                       <TableCell align="center">
                         <Box sx={{ display: 'flex', gap: 0.5, justifyContent: 'center' }}>
-                          <IconButton size="small" onClick={() => handleEditRole(user)} disabled={updating} title="تعديل">
+                          <IconButton size="small" onClick={() => handleEditRole(user)} disabled={updating} title="Modifier">
                             <EditIcon sx={{ fontSize: '18px', color: '#0056B3' }} />
                           </IconButton>
-                          <IconButton size="small" onClick={() => handleBlockUser(user.id, user.status)} disabled={updating} title={user.status === 'active' ? 'حظر' : 'فتح'}>
+                          <IconButton size="small" onClick={() => handleBlockUser(user.id, user.status)} disabled={updating} title={user.status === 'active' ? 'Bloquer' : 'Débloquer'}>
                             <BlockIcon sx={{ fontSize: '18px', color: '#F57C00' }} />
                           </IconButton>
-                          <IconButton size="small" onClick={() => handleResetPassword(user.email)} disabled={updating} title="إعادة تعيين كلمة المرور">
+                          <IconButton size="small" onClick={() => handleResetPassword(user.email)} disabled={updating} title="Réinitialiser le mot de passe">
                             <LockResetIcon sx={{ fontSize: '18px', color: '#0056B3' }} />
                           </IconButton>
-                          <IconButton size="small" onClick={() => handleDeleteUser(user.id, user.email)} disabled={updating} title="حذف">
+                          <IconButton size="small" onClick={() => handleDeleteUser(user.id, user.email)} disabled={updating} title="Supprimer">
                             <DeleteForeverIcon sx={{ fontSize: '18px', color: '#C62828' }} />
                           </IconButton>
                         </Box>
@@ -340,19 +334,19 @@ export default function UserRoleManagement() {
       )}
 
       <Dialog open={openDialog} onClose={() => setOpenDialog(false)} maxWidth="sm" fullWidth>
-        <DialogTitle>تعديل دور المستخدم</DialogTitle>
+        <DialogTitle>Modifier le Rôle de l\'Utilisateur</DialogTitle>
         <DialogContent sx={{ py: 3 }}>
           <Select fullWidth value={selectedRole} onChange={(e) => setSelectedRole(e.target.value)} disabled={updating}>
-            <MenuItem value="buyer">مشتري</MenuItem>
-            <MenuItem value="supplier">موردّ</MenuItem>
-            <MenuItem value="admin">مسؤول</MenuItem>
-            <MenuItem value="super_admin">مسؤول أعلى</MenuItem>
+            <MenuItem value="buyer">Acheteur</MenuItem>
+            <MenuItem value="supplier">Fournisseur</MenuItem>
+            <MenuItem value="admin">Administrateur</MenuItem>
+            <MenuItem value="super_admin">Super Administrateur</MenuItem>
           </Select>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setOpenDialog(false)} disabled={updating}>إلغاء</Button>
+          <Button onClick={() => setOpenDialog(false)} disabled={updating}>Annuler</Button>
           <Button onClick={handleSaveRole} variant="contained" sx={{ backgroundColor: '#0056B3' }} disabled={updating}>
-            {updating ? <CircularProgress size={20} sx={{ color: '#FFF' }} /> : 'حفظ'}
+            {updating ? <CircularProgress size={20} sx={{ color: '#FFF' }} /> : 'Enregistrer'}
           </Button>
         </DialogActions>
       </Dialog>

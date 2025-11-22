@@ -37,7 +37,6 @@ export default function AdminAnalytics() {
       setLoading(true);
       setError('');
 
-      // المحاولة الأولى: جلب البيانات من API
       try {
         const [statsRes, activitiesRes] = await Promise.all([
           adminAPI.analytics.getStats(),
@@ -46,30 +45,29 @@ export default function AdminAnalytics() {
         setStats(statsRes.data || statsRes);
         setActivities(activitiesRes.data || activitiesRes);
       } catch {
-        // Fallback: استخدام بيانات محلية
         setStats([
-          { label: 'المستخدمون النشطون', value: '1,254', change: '+12%', icon: <PeopleIcon />, color: '#0056B3' },
-          { label: 'الطلبات المفتوحة', value: '342', change: '+8%', icon: <TrendingUpIcon />, color: '#2E7D32' },
-          { label: 'العروض المرسلة', value: '1,847', change: '+25%', icon: <StorageIcon />, color: '#F57C00' },
-          { label: 'الأخطاء', value: '3', change: '-2%', icon: <ErrorIcon />, color: '#C62828' }
+          { label: 'Utilisateurs Actifs', value: '1,254', change: '+12%', icon: <PeopleIcon />, color: '#0056B3' },
+          { label: 'Appels d\'Offres Ouverts', value: '342', change: '+8%', icon: <TrendingUpIcon />, color: '#2E7D32' },
+          { label: 'Offres Envoyées', value: '1,847', change: '+25%', icon: <StorageIcon />, color: '#F57C00' },
+          { label: 'Erreurs', value: '3', change: '-2%', icon: <ErrorIcon />, color: '#C62828' }
         ]);
         
         setActivities([
-          { event: 'مستخدم جديد مسجل', timestamp: 'قبل ساعتين', user: 'شركة XYZ' },
-          { event: 'طلب عرض جديد', timestamp: 'قبل 5 ساعات', user: 'المسؤول' },
-          { event: 'عرض مرسل', timestamp: 'قبل 8 ساعات', user: 'شركة ABC' },
-          { event: 'نسخة احتياطية', timestamp: 'اليوم 02:30', user: 'النظام' }
+          { event: 'Nouvel utilisateur enregistré', timestamp: 'Il y a 2 heures', user: 'Entreprise XYZ' },
+          { event: 'Nouvel appel d\'offre', timestamp: 'Il y a 5 heures', user: 'Administrateur' },
+          { event: 'Offre envoyée', timestamp: 'Il y a 8 heures', user: 'Entreprise ABC' },
+          { event: 'Sauvegarde système', timestamp: 'Aujourd\'hui 02:30', user: 'Système' }
         ]);
       }
 
       setResourceUsage([
-        { label: 'معالج CPU', usage: 65 },
-        { label: 'الذاكرة', usage: 48 },
-        { label: 'التخزين', usage: 72 },
-        { label: 'النطاق الترددي', usage: 42 }
+        { label: 'Processeur (CPU)', usage: 65 },
+        { label: 'Mémoire', usage: 48 },
+        { label: 'Stockage', usage: 72 },
+        { label: 'Bande Passante', usage: 42 }
       ]);
     } catch (err) {
-      setError('خطأ في جلب البيانات');
+      setError('Erreur lors du chargement des données');
       setStats([]);
     } finally {
       setLoading(false);
@@ -81,24 +79,27 @@ export default function AdminAnalytics() {
   }
 
   const displayStats = stats.length > 0 ? stats : [
-    { label: 'المستخدمون النشطون', value: '1,254', change: '+12%', icon: <PeopleIcon />, color: '#0056B3' },
-    { label: 'الطلبات المفتوحة', value: '342', change: '+8%', icon: <TrendingUpIcon />, color: '#2E7D32' },
-    { label: 'العروض المرسلة', value: '1,847', change: '+25%', icon: <StorageIcon />, color: '#F57C00' },
-    { label: 'الأخطاء', value: '3', change: '-2%', icon: <ErrorIcon />, color: '#C62828' }
+    { label: 'Utilisateurs Actifs', value: '1,254', change: '+12%', icon: <PeopleIcon />, color: '#0056B3' },
+    { label: 'Appels d\'Offres Ouverts', value: '342', change: '+8%', icon: <TrendingUpIcon />, color: '#2E7D32' },
+    { label: 'Offres Envoyées', value: '1,847', change: '+25%', icon: <StorageIcon />, color: '#F57C00' },
+    { label: 'Erreurs', value: '3', change: '-2%', icon: <ErrorIcon />, color: '#C62828' }
   ];
 
   const displayActivities = activities.length > 0 ? activities : [
-    { event: 'مستخدم جديد مسجل', timestamp: 'قبل ساعتين', user: 'شركة XYZ' },
-    { event: 'طلب عرض جديد', timestamp: 'قبل 5 ساعات', user: 'المسؤول' },
-    { event: 'عرض مرسل', timestamp: 'قبل 8 ساعات', user: 'شركة ABC' },
-    { event: 'نسخة احتياطية', timestamp: 'اليوم 02:30', user: 'النظام' }
+    { event: 'Nouvel utilisateur enregistré', timestamp: 'Il y a 2 heures', user: 'Entreprise XYZ' },
+    { event: 'Nouvel appel d\'offre', timestamp: 'Il y a 5 heures', user: 'Administrateur' },
+    { event: 'Offre envoyée', timestamp: 'Il y a 8 heures', user: 'Entreprise ABC' },
+    { event: 'Sauvegarde système', timestamp: 'Aujourd\'hui 02:30', user: 'Système' }
   ];
 
   return (
     <Box>
       {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
 
-      {/* الإحصائيات الرئيسية */}
+      <Typography variant="h6" sx={{ fontWeight: 600, mb: 2, color: '#0056B3' }}>
+        Statistiques Principales
+      </Typography>
+
       <Grid container spacing={2} sx={{ mb: 4 }}>
         {displayStats.map((stat, idx) => (
           <Grid item xs={12} sm={6} md={3} key={idx}>
@@ -122,9 +123,8 @@ export default function AdminAnalytics() {
         ))}
       </Grid>
 
-      {/* استخدام الموارد */}
-      <Typography variant="h6" sx={{ fontWeight: 600, mb: 2 }}>
-        استخدام الموارد
+      <Typography variant="h6" sx={{ fontWeight: 600, mb: 2, color: '#0056B3', mt: 4 }}>
+        Utilisation des Ressources
       </Typography>
 
       <Grid container spacing={2} sx={{ mb: 4 }}>
@@ -147,18 +147,17 @@ export default function AdminAnalytics() {
         ))}
       </Grid>
 
-      {/* الأنشطة الحديثة */}
-      <Typography variant="h6" sx={{ fontWeight: 600, mb: 2 }}>
-        الأنشطة الحديثة
+      <Typography variant="h6" sx={{ fontWeight: 600, mb: 2, color: '#0056B3', mt: 4 }}>
+        Activités Récentes
       </Typography>
 
       <Paper sx={{ border: '1px solid #E0E0E0', borderRadius: '8px', overflow: 'hidden', boxShadow: 'none' }}>
         <Table>
           <TableHead sx={{ backgroundColor: '#F5F5F5' }}>
             <TableRow>
-              <TableCell sx={{ fontWeight: 600, color: '#0056B3' }}>الحدث</TableCell>
-              <TableCell sx={{ fontWeight: 600, color: '#0056B3' }}>المستخدم</TableCell>
-              <TableCell sx={{ fontWeight: 600, color: '#0056B3' }}>الوقت</TableCell>
+              <TableCell sx={{ fontWeight: 600, color: '#0056B3' }}>Événement</TableCell>
+              <TableCell sx={{ fontWeight: 600, color: '#0056B3' }}>Utilisateur</TableCell>
+              <TableCell sx={{ fontWeight: 600, color: '#0056B3' }}>Heure</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>

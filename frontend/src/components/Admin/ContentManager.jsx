@@ -16,24 +16,24 @@ export default function ContentManager() {
 
   const tabs = [
     {
-      label: '📄 الصفحات الثابتة',
+      label: 'Pages Statiques',
       icon: <ArticleIcon />,
       component: <StaticPagesManager />
     },
     {
-      label: '📁 الملفات',
+      label: 'Fichiers',
       icon: <StorageIcon />,
-      component: <Box sx={{ p: 2 }}><Typography sx={{ color: '#616161' }}>قيد التطوير...</Typography></Box>
+      component: <Box sx={{ p: 2 }}><Typography sx={{ color: '#616161' }}>En développement...</Typography></Box>
     },
     {
-      label: '🖼️ الصور',
+      label: 'Images',
       icon: <ImageIcon />,
-      component: <Box sx={{ p: 2 }}><Typography sx={{ color: '#616161' }}>قيد التطوير...</Typography></Box>
+      component: <Box sx={{ p: 2 }}><Typography sx={{ color: '#616161' }}>En développement...</Typography></Box>
     },
     {
-      label: '📋 الوثائق',
+      label: 'Documents',
       icon: <DescriptionIcon />,
-      component: <Box sx={{ p: 2 }}><Typography sx={{ color: '#616161' }}>قيد التطوير...</Typography></Box>
+      component: <Box sx={{ p: 2 }}><Typography sx={{ color: '#616161' }}>En développement...</Typography></Box>
     }
   ];
 
@@ -68,7 +68,6 @@ export default function ContentManager() {
         ))}
       </Tabs>
 
-      {/* Tab Content */}
       <Box sx={{ p: 3 }}>
         {tabs[currentTab].component}
       </Box>

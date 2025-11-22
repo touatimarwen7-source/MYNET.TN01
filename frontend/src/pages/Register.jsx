@@ -255,7 +255,7 @@ export default function Register() {
               </Box>
 
               {/* Role Selection Cards */}
-              <Box sx={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+              <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
                 {/* Buyer Option */}
                 <Card
                   sx={{

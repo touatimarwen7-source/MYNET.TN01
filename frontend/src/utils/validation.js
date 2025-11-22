@@ -1,43 +1,78 @@
 /**
  * Input Validation Utilities
- * - Manual validation functions
- * - Zod schema validation for forms
+ * 
+ * Features:
+ * - Manual field validation functions (email, phone, numbers, etc)
+ * - Zod schema definitions for form validation
+ * - Error code mapping for validation failures
+ * - XSS prevention with string sanitization
+ * 
+ * @module validation
+ * @requires zod - TypeScript-first schema validation
  */
 
 import { z } from 'zod';
 
 export const validation = {
-  // Email validation
+  /**
+   * Validate email format
+   * @param {string} email - Email address to validate
+   * @returns {boolean} True if valid email
+   */
   isValidEmail: (email) => {
     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return regex.test(email) && email.length <= 255;
   },
 
-  // Phone validation (International format)
+  /**
+   * Validate international phone format
+   * @param {string} phone - Phone number to validate
+   * @returns {boolean} True if valid phone
+   */
   isValidPhone: (phone) => {
     const regex = /^[\d\s+\-()]{7,}$/;
     return regex.test(phone.trim());
   },
 
-  // Number validation
+  /**
+   * Validate number within range
+   * @param {number|string} value - Value to validate
+   * @param {number} min - Minimum value (default: 0)
+   * @param {number} max - Maximum value (default: Infinity)
+   * @returns {boolean} True if valid number in range
+   */
   isValidNumber: (value, min = 0, max = Infinity) => {
     const num = parseFloat(value);
     return !isNaN(num) && num >= min && num <= max;
   },
 
-  // String length validation
+  /**
+   * Validate string length
+   * @param {string} str - String to validate
+   * @param {number} min - Minimum length (default: 1)
+   * @param {number} max - Maximum length (default: 255)
+   * @returns {boolean} True if valid length
+   */
   isValidLength: (str, min = 1, max = 255) => {
     const trimmed = str.trim();
     return trimmed.length >= min && trimmed.length <= max;
   },
 
-  // Date validation
+  /**
+   * Validate date format
+   * @param {string} dateString - Date string to validate
+   * @returns {boolean} True if valid date
+   */
   isValidDate: (dateString) => {
     const date = new Date(dateString);
     return date instanceof Date && !isNaN(date);
   },
 
-  // URL validation
+  /**
+   * Validate URL format
+   * @param {string} url - URL to validate
+   * @returns {boolean} True if valid URL
+   */
   isValidUrl: (url) => {
     try {
       new URL(url);
@@ -47,7 +82,13 @@ export const validation = {
     }
   },
 
-  // File validation
+  /**
+   * Validate file (size + type)
+   * @param {File} file - File to validate
+   * @param {number} maxSizeMB - Max file size in MB (default: 10)
+   * @param {string[]} allowedTypes - Allowed MIME types (default: any)
+   * @returns {boolean} True if valid file
+   */
   isValidFile: (file, maxSizeMB = 10, allowedTypes = []) => {
     const maxSize = maxSizeMB * 1024 * 1024;
     
@@ -58,13 +99,23 @@ export const validation = {
     return true;
   },
 
-  // Currency amount validation
+  /**
+   * Validate currency amount
+   * @param {number|string} amount - Amount to validate
+   * @param {number} maxAmount - Maximum amount (default: 999999999)
+   * @returns {boolean} True if valid amount > 0
+   */
   isValidAmount: (amount, maxAmount = 999999999) => {
     const num = parseFloat(amount);
     return !isNaN(num) && num > 0 && num <= maxAmount;
   },
 
-  // Sanitize string (XSS prevention)
+  /**
+   * Sanitize string for XSS prevention
+   * Escapes HTML special characters
+   * @param {string} str - String to sanitize
+   * @returns {string} Sanitized string
+   */
   sanitizeString: (str) => {
     if (typeof str !== 'string') return '';
     return str

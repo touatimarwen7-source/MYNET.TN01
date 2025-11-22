@@ -1,12 +1,20 @@
 /**
  * Axios Configuration with Security & Caching Features
  * 
- * - Automatic token injection
- * - Automatic token refresh
- * - CSRF protection headers
- * - Request caching (stale-while-revalidate)
- * - Token expiration check
- * - Error handling
+ * Handles:
+ * - Automatic Bearer token injection
+ * - Automatic CSRF token headers
+ * - Token expiration verification
+ * - Automatic token refresh (2 min before expiry)
+ * - Response caching (5-minute stale-while-revalidate)
+ * - 401/403 handling with redirect
+ * - Request timeout (30s)
+ * - httpOnly cookie support
+ * 
+ * @module axiosConfig
+ * @requires axios - HTTP client
+ * @requires TokenManager - Token storage/retrieval
+ * @requires CSRFProtection - CSRF token management
  */
 
 import axios from 'axios';

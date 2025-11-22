@@ -315,7 +315,7 @@ export default function CreateInvoice() {
   // Step 2
   const Step2Content = () => (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-      <Paper sx={{ padding: '16px', backgroundColor: '#f5f5f5' }}>
+      <Paper sx={{ padding: '16px', backgroundColor: 'action.hover' }}>
         <Typography variant="h6" sx={{ fontSize: '14px', fontWeight: 600, marginBottom: '12px' }}>
           Ajouter un Article
         </Typography>
@@ -388,15 +388,15 @@ export default function CreateInvoice() {
       </Paper>
 
       {items.length > 0 && (
-        <TableContainer component={Paper} sx={{ backgroundColor: '#ffffff' }}>
+        <TableContainer component={Paper} sx={{ backgroundColor: 'background.paper' }}>
           <Table size="small">
             <TableHead>
-              <TableRow sx={{ backgroundColor: '#f5f5f5' }}>
-                <TableCell sx={{ fontWeight: 600, color: '#0056B3' }}>Description</TableCell>
-                <TableCell align="right" sx={{ fontWeight: 600, color: '#0056B3' }}>Quantité</TableCell>
-                <TableCell align="right" sx={{ fontWeight: 600, color: '#0056B3' }}>Prix Unit.</TableCell>
-                <TableCell align="right" sx={{ fontWeight: 600, color: '#0056B3' }}>Total</TableCell>
-                <TableCell align="center" sx={{ fontWeight: 600, color: '#0056B3' }}>Action</TableCell>
+              <TableRow sx={{ backgroundColor: 'action.hover' }}>
+                <TableCell sx={{ fontWeight: 600, color: 'primary.main' }}>Description</TableCell>
+                <TableCell align="right" sx={{ fontWeight: 600, color: 'primary.main' }}>Quantité</TableCell>
+                <TableCell align="right" sx={{ fontWeight: 600, color: 'primary.main' }}>Prix Unit.</TableCell>
+                <TableCell align="right" sx={{ fontWeight: 600, color: 'primary.main' }}>Total</TableCell>
+                <TableCell align="center" sx={{ fontWeight: 600, color: 'primary.main' }}>Action</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -428,8 +428,8 @@ export default function CreateInvoice() {
   // Step 3
   const Step3Content = () => (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-      <Paper sx={{ padding: '16px', backgroundColor: '#f5f5f5' }}>
-        <Typography variant="h6" sx={{ fontSize: '14px', fontWeight: 600, marginBottom: '12px', color: '#0056B3' }}>
+      <Paper sx={{ padding: '16px', backgroundColor: 'action.hover' }}>
+        <Typography variant="h6" sx={{ fontSize: '14px', fontWeight: 600, marginBottom: '12px', color: 'primary.main' }}>
           Calcul des Totaux
         </Typography>
         <Stack spacing={1} sx={{ fontSize: '13px' }}>
@@ -443,7 +443,7 @@ export default function CreateInvoice() {
           </Box>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', fontSize: '15px' }}>
             <strong>Total:</strong>
-            <strong style={{ color: '#0056B3' }}>{formData.total_amount.toFixed(2)} {formData.currency}</strong>
+            <strong style={{ color: 'primary.main' }}>{formData.total_amount.toFixed(2)} {formData.currency}</strong>
           </Box>
         </Stack>
       </Paper>
@@ -571,17 +571,17 @@ export default function CreateInvoice() {
         component="label"
         startIcon={<UploadIcon />}
         disabled={loading}
-        sx={{ color: '#0056B3', borderColor: '#0056B3' }}
+        sx={{ color: 'primary.main', borderColor: '#0056B3' }}
       >
         Télécharger des documents
         <input type="file" multiple hidden onChange={handleFileUpload} />
       </Button>
 
       {selectedFiles.length > 0 && (
-        <TableContainer component={Paper} sx={{ backgroundColor: '#ffffff' }}>
+        <TableContainer component={Paper} sx={{ backgroundColor: 'background.paper' }}>
           <Table size="small">
             <TableHead>
-              <TableRow sx={{ backgroundColor: '#f5f5f5' }}>
+              <TableRow sx={{ backgroundColor: 'action.hover' }}>
                 <TableCell sx={{ fontWeight: 600 }}>Nom du document</TableCell>
                 <TableCell align="right" sx={{ fontWeight: 600 }}>Taille</TableCell>
                 <TableCell align="center" sx={{ fontWeight: 600 }}>Action</TableCell>
@@ -615,7 +615,7 @@ export default function CreateInvoice() {
   const Step7Content = () => (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
       {formData.payment_method === 'bank_transfer' && (
-        <Paper sx={{ padding: '16px', backgroundColor: '#f5f5f5' }}>
+        <Paper sx={{ padding: '16px', backgroundColor: 'action.hover' }}>
           <Typography variant="h6" sx={{ fontSize: '14px', fontWeight: 600, marginBottom: '12px' }}>
             Détails Bancaires
           </Typography>
@@ -677,8 +677,8 @@ export default function CreateInvoice() {
         ✓ Tous les détails ont été complétés. Prêt à envoyer la facture.
       </Alert>
 
-      <Paper sx={{ padding: '16px', backgroundColor: '#f5f5f5' }}>
-        <Typography variant="h6" sx={{ color: '#0056B3', marginBottom: '12px', fontSize: '14px' }}>
+      <Paper sx={{ padding: '16px', backgroundColor: 'action.hover' }}>
+        <Typography variant="h6" sx={{ color: 'primary.main', marginBottom: '12px', fontSize: '14px' }}>
           Résumé de la Facture
         </Typography>
         <Stack spacing={1} sx={{ fontSize: '13px' }}>
@@ -718,7 +718,7 @@ export default function CreateInvoice() {
               sx={{ 
                 fontSize: '28px', 
                 fontWeight: 500, 
-                color: '#0056B3', 
+                color: 'primary.main', 
                 marginBottom: '8px',
                 display: 'flex',
                 alignItems: 'center',
@@ -729,7 +729,7 @@ export default function CreateInvoice() {
             </Typography>
             <Typography 
               sx={{ 
-                color: '#616161', 
+                color: 'text.secondary', 
                 marginBottom: '32px',
                 fontSize: '14px'
               }}
@@ -773,7 +773,7 @@ export default function CreateInvoice() {
                 onClick={handlePrevious}
                 disabled={activeStep === 0 || loading}
                 sx={{
-                  color: '#0056B3',
+                  color: 'primary.main',
                   borderColor: '#0056B3',
                   textTransform: 'none',
                   fontWeight: 600,
@@ -842,7 +842,7 @@ export default function CreateInvoice() {
               startIcon={<SaveIcon />}
               sx={{
                 marginTop: '16px',
-                color: '#616161',
+                color: 'text.secondary',
                 textTransform: 'none'
               }}
             >
@@ -859,7 +859,7 @@ export default function CreateInvoice() {
             </Typography>
           </DialogContent>
           <DialogActions>
-            <Button onClick={() => setShowExitDialog(false)} sx={{ color: '#0056B3' }}>
+            <Button onClick={() => setShowExitDialog(false)} sx={{ color: 'primary.main' }}>
               Continuer
             </Button>
             <Button

@@ -444,3 +444,13 @@ export default App;
 /* Added imports in main App.jsx */
 // Financial corporate styling import (add at end of imports if not present)
 // Already added in CSS imports
+
+// Global CSS override for MUI Box
+const globalBoxStyles = {
+  '& .MuiBox-root': {
+    '&[style*="display: flex"]': {
+      // تطبيق default spacing
+      gap: 'inherit'
+    }
+  }
+};

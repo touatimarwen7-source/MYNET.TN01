@@ -270,7 +270,7 @@ export default function CreateSupplyRequest() {
   // Step 2 & 3: Items
   const StepItemsContent = () => (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-      <Paper sx={{ padding: '16px', backgroundColor: '#f5f5f5' }}>
+      <Paper sx={{ padding: '16px', backgroundColor: 'action.hover' }}>
         <Typography variant="h6" sx={{ fontSize: '14px', fontWeight: 600, marginBottom: '12px' }}>
           Ajouter un Article
         </Typography>
@@ -343,15 +343,15 @@ export default function CreateSupplyRequest() {
       </Paper>
 
       {items.length > 0 && (
-        <TableContainer component={Paper} sx={{ backgroundColor: '#ffffff' }}>
+        <TableContainer component={Paper} sx={{ backgroundColor: 'background.paper' }}>
           <Table size="small">
             <TableHead>
-              <TableRow sx={{ backgroundColor: '#f5f5f5' }}>
-                <TableCell sx={{ fontWeight: 600, color: '#0056B3' }}>Description</TableCell>
-                <TableCell align="right" sx={{ fontWeight: 600, color: '#0056B3' }}>Quantité</TableCell>
-                <TableCell align="right" sx={{ fontWeight: 600, color: '#0056B3' }}>Prix Unit.</TableCell>
-                <TableCell align="right" sx={{ fontWeight: 600, color: '#0056B3' }}>Total</TableCell>
-                <TableCell align="center" sx={{ fontWeight: 600, color: '#0056B3' }}>Action</TableCell>
+              <TableRow sx={{ backgroundColor: 'action.hover' }}>
+                <TableCell sx={{ fontWeight: 600, color: 'primary.main' }}>Description</TableCell>
+                <TableCell align="right" sx={{ fontWeight: 600, color: 'primary.main' }}>Quantité</TableCell>
+                <TableCell align="right" sx={{ fontWeight: 600, color: 'primary.main' }}>Prix Unit.</TableCell>
+                <TableCell align="right" sx={{ fontWeight: 600, color: 'primary.main' }}>Total</TableCell>
+                <TableCell align="center" sx={{ fontWeight: 600, color: 'primary.main' }}>Action</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -373,9 +373,9 @@ export default function CreateSupplyRequest() {
                   </TableCell>
                 </TableRow>
               ))}
-              <TableRow sx={{ backgroundColor: '#f5f5f5' }}>
+              <TableRow sx={{ backgroundColor: 'action.hover' }}>
                 <TableCell colSpan={3} sx={{ fontWeight: 600 }}>Total</TableCell>
-                <TableCell align="right" sx={{ fontWeight: 600, color: '#0056B3' }}>
+                <TableCell align="right" sx={{ fontWeight: 600, color: 'primary.main' }}>
                   {formData.total_amount.toFixed(2)} TND
                 </TableCell>
                 <TableCell />
@@ -461,17 +461,17 @@ export default function CreateSupplyRequest() {
         component="label"
         startIcon={<UploadIcon />}
         disabled={loading}
-        sx={{ color: '#0056B3', borderColor: '#0056B3' }}
+        sx={{ color: 'primary.main', borderColor: '#0056B3' }}
       >
         Télécharger des documents
         <input type="file" multiple hidden onChange={handleFileUpload} />
       </Button>
 
       {selectedFiles.length > 0 && (
-        <TableContainer component={Paper} sx={{ backgroundColor: '#ffffff' }}>
+        <TableContainer component={Paper} sx={{ backgroundColor: 'background.paper' }}>
           <Table size="small">
             <TableHead>
-              <TableRow sx={{ backgroundColor: '#f5f5f5' }}>
+              <TableRow sx={{ backgroundColor: 'action.hover' }}>
                 <TableCell sx={{ fontWeight: 600 }}>Nom du document</TableCell>
                 <TableCell align="right" sx={{ fontWeight: 600 }}>Taille</TableCell>
                 <TableCell align="center" sx={{ fontWeight: 600 }}>Action</TableCell>
@@ -567,8 +567,8 @@ export default function CreateSupplyRequest() {
         ✓ Tous les détails ont été complétés. Prêt à envoyer la demande de fourniture.
       </Alert>
 
-      <Paper sx={{ padding: '16px', backgroundColor: '#f5f5f5' }}>
-        <Typography variant="h6" sx={{ color: '#0056B3', marginBottom: '12px', fontSize: '14px' }}>
+      <Paper sx={{ padding: '16px', backgroundColor: 'action.hover' }}>
+        <Typography variant="h6" sx={{ color: 'primary.main', marginBottom: '12px', fontSize: '14px' }}>
           Résumé de la Demande
         </Typography>
         <Stack spacing={1} sx={{ fontSize: '13px' }}>
@@ -615,7 +615,7 @@ export default function CreateSupplyRequest() {
               sx={{ 
                 fontSize: '28px', 
                 fontWeight: 500, 
-                color: '#0056B3', 
+                color: 'primary.main', 
                 marginBottom: '8px',
                 display: 'flex',
                 alignItems: 'center',
@@ -626,7 +626,7 @@ export default function CreateSupplyRequest() {
             </Typography>
             <Typography 
               sx={{ 
-                color: '#616161', 
+                color: 'text.secondary', 
                 marginBottom: '32px',
                 fontSize: '14px'
               }}
@@ -670,7 +670,7 @@ export default function CreateSupplyRequest() {
                 onClick={handlePrevious}
                 disabled={activeStep === 0 || loading}
                 sx={{
-                  color: '#0056B3',
+                  color: 'primary.main',
                   borderColor: '#0056B3',
                   textTransform: 'none',
                   fontWeight: 600,
@@ -739,7 +739,7 @@ export default function CreateSupplyRequest() {
               startIcon={<SaveIcon />}
               sx={{
                 marginTop: '16px',
-                color: '#616161',
+                color: 'text.secondary',
                 textTransform: 'none'
               }}
             >
@@ -756,7 +756,7 @@ export default function CreateSupplyRequest() {
             </Typography>
           </DialogContent>
           <DialogActions>
-            <Button onClick={() => setShowExitDialog(false)} sx={{ color: '#0056B3' }}>
+            <Button onClick={() => setShowExitDialog(false)} sx={{ color: 'primary.main' }}>
               Continuer
             </Button>
             <Button

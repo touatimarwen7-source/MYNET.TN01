@@ -298,7 +298,7 @@ export default function CreateBid() {
           variant="outlined"
           onClick={addTechnicalDetail}
           disabled={loading || !newTechnicalDetail.trim()}
-          sx={{ color: '#0056B3', borderColor: '#0056B3', minWidth: '44px' }}
+          sx={{ color: 'primary.main', borderColor: '#0056B3', minWidth: '44px' }}
         >
           <AddIcon />
         </Button>
@@ -311,7 +311,7 @@ export default function CreateBid() {
               key={index}
               label={detail}
               onDelete={() => removeTechnicalDetail(index)}
-              sx={{ backgroundColor: '#e3f2fd', color: '#0056B3' }}
+              sx={{ backgroundColor: '#e3f2fd', color: 'primary.main' }}
             />
           ))}
         </Box>
@@ -378,7 +378,7 @@ export default function CreateBid() {
         disabled={loading}
       />
 
-      <Typography sx={{ fontSize: '12px', color: '#616161' }}>
+      <Typography sx={{ fontSize: '12px', color: 'text.secondary' }}>
         🔒 Vos données financières seront chiffrées avec AES-256 et déchiffrées uniquement par l'acheteur.
       </Typography>
     </Box>
@@ -469,7 +469,7 @@ export default function CreateBid() {
         component="label"
         startIcon={<UploadIcon />}
         disabled={loading}
-        sx={{ color: '#0056B3', borderColor: '#0056B3' }}
+        sx={{ color: 'primary.main', borderColor: '#0056B3' }}
       >
         Télécharger des documents
         <input
@@ -481,13 +481,13 @@ export default function CreateBid() {
       </Button>
 
       {selectedFiles.length > 0 && (
-        <TableContainer component={Paper} sx={{ backgroundColor: '#ffffff' }}>
+        <TableContainer component={Paper} sx={{ backgroundColor: 'background.paper' }}>
           <Table size="small">
             <TableHead>
-              <TableRow sx={{ backgroundColor: '#f5f5f5' }}>
-                <TableCell sx={{ fontWeight: 600, color: '#212121' }}>Nom du document</TableCell>
-                <TableCell align="right" sx={{ fontWeight: 600, color: '#212121' }}>Taille</TableCell>
-                <TableCell align="center" sx={{ fontWeight: 600, color: '#212121' }}>Action</TableCell>
+              <TableRow sx={{ backgroundColor: 'action.hover' }}>
+                <TableCell sx={{ fontWeight: 600, color: 'text.primary' }}>Nom du document</TableCell>
+                <TableCell align="right" sx={{ fontWeight: 600, color: 'text.primary' }}>Taille</TableCell>
+                <TableCell align="center" sx={{ fontWeight: 600, color: 'text.primary' }}>Action</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -500,7 +500,7 @@ export default function CreateBid() {
                       size="small"
                       onClick={() => removeAttachment(index)}
                       disabled={loading}
-                      sx={{ color: '#d32f2f' }}
+                      sx={{ color: 'error.main' }}
                     >
                       <DeleteIcon fontSize="small" />
                     </IconButton>
@@ -517,8 +517,8 @@ export default function CreateBid() {
   // Step 7: Declaration
   const Step7Content = () => (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-      <Paper sx={{ padding: '16px', backgroundColor: '#e8f5e9' }}>
-        <Typography variant="h6" sx={{ color: '#1b5e20', marginBottom: '12px' }}>
+      <Paper sx={{ padding: '16px', backgroundColor: 'success.light' }}>
+        <Typography variant="h6" sx={{ color: 'success.dark', marginBottom: '12px' }}>
           Déclarations obligatoires
         </Typography>
         
@@ -556,12 +556,12 @@ export default function CreateBid() {
   // Step 8: Final Review
   const Step8Content = () => (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-      <Alert severity="success" sx={{ backgroundColor: '#e8f5e9', color: '#1b5e20' }}>
+      <Alert severity="success" sx={{ backgroundColor: 'success.light', color: 'success.dark' }}>
         ✓ Toutes les étapes ont été complétées. Prêt à soumettre l'offre.
       </Alert>
 
-      <Paper sx={{ padding: '16px', backgroundColor: '#f5f5f5' }}>
-        <Typography variant="h6" sx={{ color: '#0056B3', marginBottom: '12px' }}>
+      <Paper sx={{ padding: '16px', backgroundColor: 'action.hover' }}>
+        <Typography variant="h6" sx={{ color: 'primary.main', marginBottom: '12px' }}>
           Résumé de l'offre
         </Typography>
         <Stack spacing={1} sx={{ fontSize: '13px' }}>
@@ -610,7 +610,7 @@ export default function CreateBid() {
               sx={{ 
                 fontSize: '28px', 
                 fontWeight: 500, 
-                color: '#0056B3', 
+                color: 'primary.main', 
                 marginBottom: '8px',
                 display: 'flex',
                 alignItems: 'center',
@@ -619,12 +619,12 @@ export default function CreateBid() {
             >
               {STEPS[activeStep].icon} {STEPS[activeStep].label}
               {STEPS[activeStep].secure && (
-                <LockIcon sx={{ fontSize: '20px', color: '#d32f2f' }} />
+                <LockIcon sx={{ fontSize: '20px', color: 'error.main' }} />
               )}
             </Typography>
             <Typography 
               sx={{ 
-                color: '#616161', 
+                color: 'text.secondary', 
                 marginBottom: '32px',
                 fontSize: '14px'
               }}
@@ -657,7 +657,7 @@ export default function CreateBid() {
 
             {/* Auto-save Notification */}
             {autoSaved && (
-              <Alert severity="success" sx={{ marginBottom: '16px', backgroundColor: '#e8f5e9', color: '#2e7d32' }}>
+              <Alert severity="success" sx={{ marginBottom: '16px', backgroundColor: 'success.light', color: '#2e7d32' }}>
                 ✓ Brouillon enregistré automatiquement
               </Alert>
             )}
@@ -687,7 +687,7 @@ export default function CreateBid() {
                 onClick={handlePrevious}
                 disabled={activeStep === 0 || loading}
                 sx={{
-                  color: '#0056B3',
+                  color: 'primary.main',
                   borderColor: '#0056B3',
                   textTransform: 'none',
                   fontWeight: 600,
@@ -742,7 +742,7 @@ export default function CreateBid() {
                 disabled={loading}
                 startIcon={<CancelIcon />}
                 sx={{
-                  color: '#d32f2f',
+                  color: 'error.main',
                   borderColor: '#d32f2f',
                   textTransform: 'none',
                   fontWeight: 600,
@@ -761,7 +761,7 @@ export default function CreateBid() {
               startIcon={<SaveIcon />}
               sx={{
                 marginTop: '16px',
-                color: '#616161',
+                color: 'text.secondary',
                 textTransform: 'none'
               }}
             >
@@ -779,7 +779,7 @@ export default function CreateBid() {
             </Typography>
           </DialogContent>
           <DialogActions>
-            <Button onClick={() => setShowExitDialog(false)} sx={{ color: '#0056B3' }}>
+            <Button onClick={() => setShowExitDialog(false)} sx={{ color: 'primary.main' }}>
               Continuer
             </Button>
             <Button
@@ -787,7 +787,7 @@ export default function CreateBid() {
                 setShowExitDialog(false);
                 navigate(`/tender/${tenderId}`);
               }}
-              sx={{ color: '#d32f2f' }}
+              sx={{ color: 'error.main' }}
             >
               Quitter
             </Button>

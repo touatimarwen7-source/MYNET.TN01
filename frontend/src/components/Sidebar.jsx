@@ -285,7 +285,6 @@ export default function Sidebar({ user, onLogout }) {
                         key={idx}
                         onClick={() => handleNavigation(subItem.path, subItem.label)}
                         sx={{
-                          paddingLeft: '48px',
                           paddingRight: '16px',
                           paddingTop: '8px',
                           paddingBottom: '8px',

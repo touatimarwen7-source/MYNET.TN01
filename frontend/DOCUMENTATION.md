@@ -14,11 +14,11 @@
 
 ### Overview
 
-The application uses a comprehensive error handling system with centralized error codes and messages.
+The application uses a comprehensive error handling system with centralized error codes and messages in **French**.
 
 **Key Features:**
 - ✅ Centralized error codes (A001, V001, N001, etc.)
-- ✅ User-friendly Arabic error messages
+- ✅ User-friendly French error messages
 - ✅ Error severity levels (error, warning, info)
 - ✅ HTTP status code mapping
 - ✅ Retry logic for transient failures
@@ -29,9 +29,9 @@ The application uses a comprehensive error handling system with centralized erro
 
 ```javascript
 {
-  code: 'A001',           // Unique error identifier
-  message: 'Arabic...',   // User-friendly message (Arabic)
-  severity: 'error'       // 'error' | 'warning' | 'info'
+  code: 'A001',                  // Unique error identifier
+  message: 'Message français',   // User-friendly message (French)
+  severity: 'error'              // 'error' | 'warning' | 'info'
 }
 ```
 
@@ -43,7 +43,7 @@ import { errorHandler } from './utils/errorHandler';
 // Get error message from exception
 const error = new Error('Something failed');
 const formatted = errorHandler.getUserMessage(error);
-// → { code: 'S001', message: 'حدث خطأ...', severity: 'error' }
+// → { code: 'S001', message: 'Une erreur système s\'est produite...', severity: 'error' }
 
 // Format validation errors
 const validationErrors = { email: 'Invalid email' };
@@ -80,63 +80,63 @@ if (error) {
 
 | Code | Message | Severity |
 |------|---------|----------|
-| A001 | بيانات اعتماد غير صحيحة | error |
-| A002 | حسابك مقفول | error |
-| A003 | الرمز المميز غير صحيح | error |
-| A004 | انتهت صلاحية الجلسة | warning |
-| A005 | غير مصرح لك بالوصول | error |
-| A006 | انتهت جلستك | warning |
+| A001 | Identifiants incorrects. Veuillez vérifier votre email et votre mot de passe. | error |
+| A002 | Votre compte est verrouillé. Veuillez réessayer plus tard. | error |
+| A003 | Le jeton est invalide ou expiré. | error |
+| A004 | Votre session a expiré. Veuillez vous reconnecter. | warning |
+| A005 | Vous n'êtes pas autorisé à accéder à cette ressource. | error |
+| A006 | Votre session a expiré. Vous serez redirigé vers la page de connexion. | warning |
 
 ### Validation Errors (V001-V099)
 
 | Code | Message | Severity |
 |------|---------|----------|
-| V001 | صيغة البريد غير صحيحة | error |
-| V002 | كلمة المرور قصيرة جداً | error |
-| V003 | كلمة المرور ضعيفة | warning |
-| V004 | هذا الحقل مطلوب | error |
-| V005 | الصيغة غير صحيحة | error |
-| V006 | هذا العنصر موجود بالفعل | error |
+| V001 | Le format de l'email est invalide. | error |
+| V002 | Le mot de passe doit contenir au moins 8 caractères. | error |
+| V003 | Le mot de passe est faible. Utilisez des majuscules, des chiffres et des caractères spéciaux. | warning |
+| V004 | Ce champ est obligatoire. | error |
+| V005 | Le format est invalide. | error |
+| V006 | Cet élément existe déjà. | error |
 
 ### Network Errors (N001-N099)
 
 | Code | Message | Severity |
 |------|---------|----------|
-| N001 | انقطع الاتصال | warning |
-| N002 | لا يوجد اتصال بالإنترنت | error |
-| N003 | خادم الويب غير متاح | error |
-| N004 | الخدمة غير متاحة | warning |
-| N005 | تجاوزت حد الطلبات | warning |
-| N006 | فشل الطلب | error |
+| N001 | La connexion a été perdue. Veuillez réessayer. | warning |
+| N002 | Vous n'avez pas de connexion Internet. | error |
+| N003 | Le serveur Web n'est pas disponible. Veuillez réessayer plus tard. | error |
+| N004 | Le service n'est pas disponible pour le moment. | warning |
+| N005 | Vous avez dépassé la limite de requêtes. Veuillez réessayer plus tard. | warning |
+| N006 | La requête a échoué. Veuillez réessayer. | error |
 
 ### Business Logic Errors (B001-B099)
 
 | Code | Message | Severity |
 |------|---------|----------|
-| B001 | الطلب غير موجود | error |
-| B002 | العرض غير موجود | error |
-| B003 | الميزانية غير كافية | error |
-| B004 | لقد قدمت عرضاً بالفعل | warning |
-| B005 | انتهت مهلة الطلب | error |
-| B006 | ليس لديك صلاحيات كافية | error |
+| B001 | L'appel d'offres n'a pas été trouvé. | error |
+| B002 | L'offre n'a pas été trouvée. | error |
+| B003 | Le budget est insuffisant. | error |
+| B004 | Vous avez déjà soumis une offre pour cet appel d'offres. | warning |
+| B005 | La date limite de cet appel d'offres est dépassée. | error |
+| B006 | Vous n'avez pas les permissions suffisantes pour effectuer cette action. | error |
 
 ### File Errors (F001-F099)
 
 | Code | Message | Severity |
 |------|---------|----------|
-| F001 | حجم الملف كبير جداً | error |
-| F002 | نوع الملف غير مدعوم | error |
-| F003 | فشل تحميل الملف | error |
-| F004 | فشل تحميل الملف | error |
+| F001 | La taille du fichier est trop grande. La limite maximale est de 10 Mo. | error |
+| F002 | Le type de fichier n'est pas supporté. | error |
+| F003 | Le téléchargement du fichier a échoué. Veuillez réessayer. | error |
+| F004 | Le téléchargement du fichier a échoué. | error |
 
 ### System Errors (S001-S099)
 
 | Code | Message | Severity |
 |------|---------|----------|
-| S001 | حدث خطأ في النظام | error |
-| S002 | خطأ في قاعدة البيانات | error |
-| S003 | خطأ في الذاكرة المؤقتة | warning |
-| S004 | خطأ في التكوين | error |
+| S001 | Une erreur système s'est produite. Veuillez réessayer plus tard. | error |
+| S002 | Erreur de base de données. | error |
+| S003 | Erreur de cache. | warning |
+| S004 | Erreur de configuration. | error |
 
 ---
 
@@ -315,8 +315,9 @@ CSRFProtection.clearToken() → void
 
 1. **Always add JSDoc** - Every function needs JSDoc with @param, @returns, @example
 2. **Use error codes** - Never hardcode error messages, use error codes
-3. **Consistent naming** - camelCase for functions, UPPER_CASE for constants
-4. **Comments** - Add comments for complex logic, not obvious code
+3. **French messages** - All user-facing messages must be in French
+4. **Consistent naming** - camelCase for functions, UPPER_CASE for constants
+5. **Comments** - Add comments for complex logic, not obvious code
 
 ### Error Handling
 
@@ -393,24 +394,27 @@ frontend/src/
 
 1. Edit `utils/errorCodes.js`
 2. Add to appropriate category (A, V, N, B, F, S)
-3. Update HTTP_ERROR_MAP if needed
-4. Document in this file
+3. Write message in French
+4. Update HTTP_ERROR_MAP if needed
+5. Document in this file
 
 ### Adding New Functions
 
 1. Add complete JSDoc with @param, @returns
 2. Add @example with usage
 3. Use error codes if throwing errors
-4. Update this documentation
+4. Write French error messages
+5. Update this documentation
 
 ### Updating Error Messages
 
 1. Edit `utils/errorCodes.js`
-2. Always provide Arabic translations
+2. Always provide French translations
 3. Keep messages user-friendly and concise
 4. Update HTTP_ERROR_MAP if needed
 
 ---
 
-**Last Updated**: November 22, 2025
-**Maintained By**: Development Team
+**Last Updated**: November 22, 2025  
+**Language**: French (Français)  
+**Status**: Production Ready ✅

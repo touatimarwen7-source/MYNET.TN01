@@ -12,32 +12,32 @@
 export const AUTH_ERRORS = {
   INVALID_CREDENTIALS: {
     code: 'A001',
-    message: 'بيانات اعتماد غير صحيحة. تحقق من بريدك الإلكتروني وكلمة المرور.',
+    message: 'Identifiants incorrects. Veuillez vérifier votre email et votre mot de passe.',
     severity: 'error'
   },
   ACCOUNT_LOCKED: {
     code: 'A002',
-    message: 'حسابك مقفول. حاول مرة أخرى لاحقاً.',
+    message: 'Votre compte est verrouillé. Veuillez réessayer plus tard.',
     severity: 'error'
   },
   INVALID_TOKEN: {
     code: 'A003',
-    message: 'الرمز المميز غير صحيح أو انتهت صلاحيته.',
+    message: 'Le jeton est invalide ou expiré.',
     severity: 'error'
   },
   TOKEN_EXPIRED: {
     code: 'A004',
-    message: 'انتهت صلاحية الجلسة. يرجى تسجيل الدخول مجدداً.',
+    message: 'Votre session a expiré. Veuillez vous reconnecter.',
     severity: 'warning'
   },
   UNAUTHORIZED: {
     code: 'A005',
-    message: 'غير مصرح لك بالوصول إلى هذا المورد.',
+    message: 'Vous n\'êtes pas autorisé à accéder à cette ressource.',
     severity: 'error'
   },
   SESSION_EXPIRED: {
     code: 'A006',
-    message: 'انتهت جلستك. سيتم إعادة توجيهك لتسجيل الدخول.',
+    message: 'Votre session a expiré. Vous serez redirigé vers la page de connexion.',
     severity: 'warning'
   }
 };
@@ -48,32 +48,32 @@ export const AUTH_ERRORS = {
 export const VALIDATION_ERRORS = {
   INVALID_EMAIL: {
     code: 'V001',
-    message: 'صيغة البريد الإلكتروني غير صحيحة.',
+    message: 'Le format de l\'email est invalide.',
     severity: 'error'
   },
   PASSWORD_TOO_SHORT: {
     code: 'V002',
-    message: 'كلمة المرور يجب أن تكون 8 أحرف على الأقل.',
+    message: 'Le mot de passe doit contenir au moins 8 caractères.',
     severity: 'error'
   },
   WEAK_PASSWORD: {
     code: 'V003',
-    message: 'كلمة المرور ضعيفة. استخدم أحرف كبيرة وأرقام وأحرف خاصة.',
+    message: 'Le mot de passe est faible. Utilisez des majuscules, des chiffres et des caractères spéciaux.',
     severity: 'warning'
   },
   REQUIRED_FIELD: {
     code: 'V004',
-    message: 'هذا الحقل مطلوب.',
+    message: 'Ce champ est obligatoire.',
     severity: 'error'
   },
   INVALID_FORMAT: {
     code: 'V005',
-    message: 'الصيغة غير صحيحة.',
+    message: 'Le format est invalide.',
     severity: 'error'
   },
   FIELD_ALREADY_EXISTS: {
     code: 'V006',
-    message: 'هذا العنصر موجود بالفعل.',
+    message: 'Cet élément existe déjà.',
     severity: 'error'
   }
 };
@@ -84,32 +84,32 @@ export const VALIDATION_ERRORS = {
 export const NETWORK_ERRORS = {
   NETWORK_TIMEOUT: {
     code: 'N001',
-    message: 'انقطع الاتصال. حاول مرة أخرى.',
+    message: 'La connexion a été perdue. Veuillez réessayer.',
     severity: 'warning'
   },
   NO_INTERNET: {
     code: 'N002',
-    message: 'لا يوجد اتصال بالإنترنت.',
+    message: 'Vous n\'avez pas de connexion Internet.',
     severity: 'error'
   },
   BAD_GATEWAY: {
     code: 'N003',
-    message: 'خادم الويب غير متاح. حاول لاحقاً.',
+    message: 'Le serveur Web n\'est pas disponible. Veuillez réessayer plus tard.',
     severity: 'error'
   },
   SERVICE_UNAVAILABLE: {
     code: 'N004',
-    message: 'الخدمة غير متاحة حالياً.',
+    message: 'Le service n\'est pas disponible pour le moment.',
     severity: 'warning'
   },
   RATE_LIMIT: {
     code: 'N005',
-    message: 'لقد تجاوزت حد الطلبات. حاول مرة أخرى لاحقاً.',
+    message: 'Vous avez dépassé la limite de requêtes. Veuillez réessayer plus tard.',
     severity: 'warning'
   },
   REQUEST_FAILED: {
     code: 'N006',
-    message: 'فشل الطلب. حاول مرة أخرى.',
+    message: 'La requête a échoué. Veuillez réessayer.',
     severity: 'error'
   }
 };
@@ -120,32 +120,32 @@ export const NETWORK_ERRORS = {
 export const BUSINESS_ERRORS = {
   TENDER_NOT_FOUND: {
     code: 'B001',
-    message: 'الطلب غير موجود.',
+    message: 'L\'appel d\'offres n\'a pas été trouvé.',
     severity: 'error'
   },
   OFFER_NOT_FOUND: {
     code: 'B002',
-    message: 'العرض غير موجود.',
+    message: 'L\'offre n\'a pas été trouvée.',
     severity: 'error'
   },
   INSUFFICIENT_BUDGET: {
     code: 'B003',
-    message: 'الميزانية غير كافية.',
+    message: 'Le budget est insuffisant.',
     severity: 'error'
   },
   DUPLICATE_OFFER: {
     code: 'B004',
-    message: 'لقد قدمت عرضاً بالفعل على هذا الطلب.',
+    message: 'Vous avez déjà soumis une offre pour cet appel d\'offres.',
     severity: 'warning'
   },
   TENDER_CLOSED: {
     code: 'B005',
-    message: 'انتهت مهلة الطلب.',
+    message: 'La date limite de cet appel d\'offres est dépassée.',
     severity: 'error'
   },
   PERMISSION_DENIED: {
     code: 'B006',
-    message: 'ليس لديك صلاحيات كافية لتنفيذ هذا الإجراء.',
+    message: 'Vous n\'avez pas les permissions suffisantes pour effectuer cette action.',
     severity: 'error'
   }
 };
@@ -156,22 +156,22 @@ export const BUSINESS_ERRORS = {
 export const FILE_ERRORS = {
   FILE_TOO_LARGE: {
     code: 'F001',
-    message: 'حجم الملف كبير جداً. الحد الأقصى 10 ميجابايت.',
+    message: 'La taille du fichier est trop grande. La limite maximale est de 10 Mo.',
     severity: 'error'
   },
   INVALID_FILE_TYPE: {
     code: 'F002',
-    message: 'نوع الملف غير مدعوم.',
+    message: 'Le type de fichier n\'est pas supporté.',
     severity: 'error'
   },
   UPLOAD_FAILED: {
     code: 'F003',
-    message: 'فشل تحميل الملف. حاول مرة أخرى.',
+    message: 'Le téléchargement du fichier a échoué. Veuillez réessayer.',
     severity: 'error'
   },
   DOWNLOAD_FAILED: {
     code: 'F004',
-    message: 'فشل تحميل الملف.',
+    message: 'Le téléchargement du fichier a échoué.',
     severity: 'error'
   }
 };
@@ -182,22 +182,22 @@ export const FILE_ERRORS = {
 export const SYSTEM_ERRORS = {
   INTERNAL_SERVER_ERROR: {
     code: 'S001',
-    message: 'حدث خطأ في النظام. يرجى المحاولة لاحقاً.',
+    message: 'Une erreur système s\'est produite. Veuillez réessayer plus tard.',
     severity: 'error'
   },
   DATABASE_ERROR: {
     code: 'S002',
-    message: 'خطأ في قاعدة البيانات.',
+    message: 'Erreur de base de données.',
     severity: 'error'
   },
   CACHE_ERROR: {
     code: 'S003',
-    message: 'خطأ في الذاكرة المؤقتة.',
+    message: 'Erreur de cache.',
     severity: 'warning'
   },
   CONFIGURATION_ERROR: {
     code: 'S004',
-    message: 'خطأ في التكوين.',
+    message: 'Erreur de configuration.',
     severity: 'error'
   }
 };
@@ -258,7 +258,7 @@ export function formatError(error) {
   if (!error) {
     return {
       code: 'UNKNOWN',
-      message: 'حدث خطأ غير معروف.',
+      message: 'Une erreur inconnue s\'est produite.',
       severity: 'error'
     };
   }

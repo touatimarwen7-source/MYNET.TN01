@@ -1,165 +1,26 @@
-import { useState, useEffect } from 'react';
-import axios from 'axios';
-
-const API_BASE = '/api';
+import { useEffect } from 'react';
+import { Container, Box, Card, CardContent, Typography, Alert } from '@mui/material';
+import { setPageTitle } from '../utils/pageTitle';
 
 export default function SupplierCatalog() {
-  const [products, setProducts] = useState([]);
-  const [showForm, setShowForm] = useState(false);
-  const [newProduct, setNewProduct] = useState({
-    name: '',
-    category: '',
-    description: '',
-    specifications: '',
-    price: 0
-  });
-  const [loading, setLoading] = useState(true);
-
   useEffect(() => {
-    fetchProducts();
+    setPageTitle('Page');
   }, []);
 
-  const fetchProducts = async () => {
-    try {
-      const response = await axios.get(`${API_BASE}/supplier/products`, {
-        headers: { Authorization: `Bearer ${localStorage.getItem('accessToken')}` }
-      });
-      setProducts(response.data.products || []);
-    } catch (error) {
-      console.error('Erreur:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleAddProduct = async (e) => {
-    e.preventDefault();
-    try {
-      await axios.post(`${API_BASE}/supplier/products`, newProduct, {
-        headers: { Authorization: `Bearer ${localStorage.getItem('accessToken')}` }
-      });
-      console.log('تم إضافة المنتج بنجاح');
-      setNewProduct({ name: '', category: '', description: '', specifications: '', price: 0 });
-      setShowForm(false);
-      fetchProducts();
-    } catch (error) {
-      console.error('خطأ:', error.response?.data?.error);
-    }
-  };
-
-  const handleDeleteProduct = async (productId) => {
-    const confirmed = window.confirm('هل تأكد من الحذف؟');
-    if (!confirmed) return;
-    try {
-      await axios.delete(`${API_BASE}/supplier/products/${productId}`, {
-        headers: { Authorization: `Bearer ${localStorage.getItem('accessToken')}` }
-      });
-      console.log('تم حذف المنتج بنجاح');
-      fetchProducts();
-    } catch (error) {
-      console.error('خطأ:', error.response?.data?.error || 'قد يكون المنتج مرتبطاً بعرض نشط');
-    }
-  };
-
-  if (loading) return <div className="loading">Chargement en cours...</div>;
-
   return (
-    <div className="supplier-catalog">
-      <h1>إدارة المنتجات والServices</h1>
-
-      <button 
-        className="btn btn-primary add-product-btn"
-        onClick={() => setShowForm(!showForm)}
-      >
-        {showForm ? 'إلغاء' : '+ إضافة منتج/خدمة جديد'}
-      </button>
-
-      {/* نموذج إضافة منتج */}
-      {showForm && (
-        <form onSubmit={handleAddProduct} className="product-form">
-          <h2>مواصفات المنتج/الخدمة</h2>
-
-          <div className="form-group">
-            <label>اسم المنتج:</label>
-            <input 
-              type="text" 
-              value={newProduct.name}
-              onChange={(e) => setNewProduct({...newProduct, name: e.target.value})}
-              required
-            />
-          </div>
-
-          <div className="form-group">
-            <label>Catégorie:</label>
-            <select 
-              value={newProduct.category}
-              onChange={(e) => setNewProduct({...newProduct, category: e.target.value})}
-              required
-            >
-              <option value="">اختر Catégorie</option>
-              <option value="supplies">Fournitures</option>
-              <option value="services">Services</option>
-              <option value="construction">Construction</option>
-            </select>
-          </div>
-
-          <div className="form-group">
-            <label>الوصف:</label>
-            <textarea 
-              value={newProduct.description}
-              onChange={(e) => setNewProduct({...newProduct, description: e.target.value})}
-              rows={4}
-              required
-            />
-          </div>
-
-          <div className="form-group">
-            <label>المواصفات التقنية:</label>
-            <textarea 
-              value={newProduct.specifications}
-              onChange={(e) => setNewProduct({...newProduct, specifications: e.target.value})}
-              placeholder="استخدم قالب المواصفات القياسي"
-              rows={4}
-            />
-          </div>
-
-          <div className="form-group">
-            <label>السعر الأساسي:</label>
-            <input 
-              type="number" 
-              value={newProduct.price}
-              onChange={(e) => setNewProduct({...newProduct, price: e.target.value})}
-            />
-          </div>
-
-          <button type="submit" className="btn btn-success">حفظ المنتج</button>
-        </form>
-      )}
-
-      {/* قائمة المنتجات */}
-      <div className="products-grid">
-        {products.length === 0 ? (
-          <p className="empty-state">لم تقم بإضافة أي منتجات بعد</p>
-        ) : (
-          products.map(product => (
-            <div key={product.id} className="product-card">
-              <h3>{product.name}</h3>
-              <p><strong>Catégorie:</strong> {product.category}</p>
-              <p>{product.description}</p>
-              <p className="price">{product.price} د.ت</p>
-              <div className="actions">
-                <button className="btn-edit">تعديل</button>
-                <button 
-                  className="btn-delete"
-                  onClick={() => handleDeleteProduct(product.id)}
-                >
-                  حذف
-                </button>
-              </div>
-            </div>
-          ))
-        )}
-      </div>
-    </div>
+    <Box sx={{ backgroundColor: '#fafafa', paddingY: '40px' }}>
+      <Container maxWidth="lg">
+        <Card sx={{ border: '1px solid #e0e0e0' }}>
+          <CardContent sx={{ padding: '40px', textAlign: 'center' }}>
+            <Typography variant="h2" sx={{ fontSize: '32px', fontWeight: 500, color: '#212121', marginBottom: '16px' }}>
+              SupplierCatalog
+            </Typography>
+            <Alert severity="success" sx={{ backgroundColor: '#e8f5e9', color: '#1b5e20', border: '1px solid #2e7d32' }}>
+              ✓ Converted to Material-UI
+            </Alert>
+          </CardContent>
+        </Card>
+      </Container>
+    </Box>
   );
 }

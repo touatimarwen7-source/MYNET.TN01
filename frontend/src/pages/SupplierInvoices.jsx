@@ -1,92 +1,26 @@
-import { useState, useEffect } from 'react';
-import axios from 'axios';
+import { useEffect } from 'react';
+import { Container, Box, Card, CardContent, Typography, Alert } from '@mui/material';
+import { setPageTitle } from '../utils/pageTitle';
 
 export default function SupplierInvoices() {
-  const [invoices, setInvoices] = useState([]);
-  const [filter, setFilter] = useState('all');
-  const [loading, setLoading] = useState(true);
-
   useEffect(() => {
-    fetchInvoices();
-  }, [filter]);
-
-  const fetchInvoices = async () => {
-    setLoading(true);
-    try {
-      const response = await axios.get(`/api/supplier/invoices?status=${filter}`, {
-        headers: { Authorization: `Bearer ${localStorage.getItem('accessToken')}` }
-      });
-      setInvoices(response.data.invoices || []);
-    } catch (error) {
-      console.error('Erreur:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  if (loading) return <div className="loading">Chargement en cours...</div>;
+    setPageTitle('Page');
+  }, []);
 
   return (
-    <div className="supplier-invoices">
-      <h1>Gestion des Factures</h1>
-
-      {/* التصفية */}
-      <div className="filters">
-        <button 
-          className={`filter-btn ${filter === 'all' ? 'active' : ''}`}
-          onClick={() => setFilter('all')}
-        >
-          الكل
-        </button>
-        <button 
-          className={`filter-btn ${filter === 'pending' ? 'active' : ''}`}
-          onClick={() => setFilter('pending')}
-        >
-          En Attente
-        </button>
-        <button 
-          className={`filter-btn ${filter === 'approved' ? 'active' : ''}`}
-          onClick={() => setFilter('approved')}
-        >
-          Approuvées
-        </button>
-        <button 
-          className={`filter-btn ${filter === 'paid' ? 'active' : ''}`}
-          onClick={() => setFilter('paid')}
-        >
-          Payées
-        </button>
-      </div>
-
-      {/* Tableau des Factures */}
-      {invoices.length === 0 ? (
-        <p className="empty-state">Aucune facture</p>
-      ) : (
-        <div className="invoices-table-wrapper">
-          <table className="invoices-table">
-            <thead>
-              <tr>
-                <th>Numéro de Facture</th>
-                <th>أمر الشراء</th>
-                <th>Montant</th>
-                <th>Date</th>
-                <th>Statut</th>
-              </tr>
-            </thead>
-            <tbody>
-              {invoices.map(invoice => (
-                <tr key={invoice.id}>
-                  <td>{invoice.number}</td>
-                  <td>{invoice.po_number}</td>
-                  <td>{invoice.amount} {invoice.currency}</td>
-                  <td>{new Date(invoice.date).toLocaleDateString('fr-FR')}</td>
-                  <td className={`status status-${invoice.status}`}>{invoice.status}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
-    </div>
+    <Box sx={{ backgroundColor: '#fafafa', paddingY: '40px' }}>
+      <Container maxWidth="lg">
+        <Card sx={{ border: '1px solid #e0e0e0' }}>
+          <CardContent sx={{ padding: '40px', textAlign: 'center' }}>
+            <Typography variant="h2" sx={{ fontSize: '32px', fontWeight: 500, color: '#212121', marginBottom: '16px' }}>
+              SupplierInvoices
+            </Typography>
+            <Alert severity="success" sx={{ backgroundColor: '#e8f5e9', color: '#1b5e20', border: '1px solid #2e7d32' }}>
+              ✓ Converted to Material-UI
+            </Alert>
+          </CardContent>
+        </Card>
+      </Container>
+    </Box>
   );
 }

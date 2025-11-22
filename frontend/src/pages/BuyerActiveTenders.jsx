@@ -1,5 +1,27 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import {
+  Container,
+  Box,
+  Card,
+  CardContent,
+  Button,
+  TextField,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  Typography,
+  Grid,
+  Alert,
+  CircularProgress,
+  Chip,
+  Stack,
+} from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
+import EditIcon from '@mui/icons-material/Edit';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import LockIcon from '@mui/icons-material/Lock';
 import { procurementAPI } from '../api';
 import { formatDate, parseDate } from '../utils/dateFormatter';
 import { setPageTitle } from '../utils/pageTitle';
@@ -25,7 +47,7 @@ export default function BuyerActiveTenders() {
       const response = await procurementAPI.getMyTenders({ status: 'active' });
       setTenders(response.data.tenders || []);
     } catch (err) {
-      console.error('Erreur lors de la récupération des appels d\'offres actifs:', err);
+      console.error('Erreur:', err);
     } finally {
       setLoading(false);
     }
@@ -43,148 +65,163 @@ export default function BuyerActiveTenders() {
     return 0;
   });
 
-  const handleViewTender = (tenderId) => {
-    navigate(`/tender/${tenderId}`);
-  };
-
-  const handleEditTender = (tenderId) => {
-    navigate(`/tender/${tenderId}/edit`);
-  };
-
   const handleCloseTender = async (tenderId) => {
     if (window.confirm('Êtes-vous sûr de vouloir clôturer cet appel d\'offres ?')) {
       try {
         await procurementAPI.closeTender(tenderId);
         fetchActiveTenders();
       } catch (err) {
-        console.error('Erreur lors de la clôture:', err);
+        console.error('Erreur:', err);
       }
     }
   };
 
   if (loading) {
-    return <div className="loading">Chargement des appels d'offres actifs...</div>;
+    return (
+      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '60vh' }}>
+        <CircularProgress sx={{ color: '#1565c0' }} />
+      </Box>
+    );
   }
 
   return (
-    <div className="page buyer-active-tenders-page">
-      <div className="page-header corporate">
-        <div className="header-content">
-          <h1>📋 Appels d'Offres Actifs</h1>
-          <p className="subtitle">Gérez vos appels d'offres en cours</p>
-        </div>
-        <button 
-          onClick={() => navigate('/create-tender')}
-          className="btn btn-primary-corporate"
-        >
-          ➕ Créer Nouvel Appel
-        </button>
-      </div>
-
-      <div className="filters-section corporate">
-        <div className="search-group">
-          <input
-            type="text"
-            placeholder="Rechercher par titre ou description..."
-            value={filter}
-            onChange={(e) => setFilter(e.target.value)}
-            className="input-search-corporate"
-          />
-        </div>
-        <div className="sort-group">
-          <label>Trier par:</label>
-          <select 
-            value={sortBy}
-            onChange={(e) => setSortBy(e.target.value)}
-            className="select-corporate"
-          >
-            <option value="created_at">Date de création (récent)</option>
-            <option value="deadline">Date limite (urgent)</option>
-            <option value="budget">Budget (élevé)</option>
-          </select>
-        </div>
-      </div>
-
-      {sortedTenders.length === 0 ? (
-        <div className="empty-state corporate">
-          <div className="empty-icon">📋</div>
-          <h3>Aucun appel d'offres actif</h3>
-          <p>Vous n'avez pas d'appels d'offres actifs pour le moment.</p>
-          <button 
+    <Box sx={{ backgroundColor: '#fafafa', paddingY: '40px' }}>
+      <Container maxWidth="lg">
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '32px' }}>
+          <Box>
+            <Typography variant="h2" sx={{ fontSize: '32px', fontWeight: 500, color: '#212121', marginBottom: '8px' }}>
+              📋 Appels d'Offres Actifs
+            </Typography>
+            <Typography sx={{ color: '#616161' }}>
+              Gérez vos appels d'offres en cours
+            </Typography>
+          </Box>
+          <Button
+            variant="contained"
+            startIcon={<AddIcon />}
             onClick={() => navigate('/create-tender')}
-            className="btn btn-primary-corporate"
+            sx={{
+              backgroundColor: '#1565c0',
+              textTransform: 'none',
+              fontWeight: 600,
+              '&:hover': { backgroundColor: '#0d47a1' },
+            }}
           >
-            Créer votre premier appel
-          </button>
-        </div>
-      ) : (
-        <div className="tenders-grid corporate">
-          {sortedTenders.map((tender) => (
-            <div key={tender.id} className="tender-card corporate">
-              <div className="card-header">
-                <h3 className="tender-title">{tender.title}</h3>
-                <span className="status-badge active">Actif</span>
-              </div>
+            Créer Appel
+          </Button>
+        </Box>
 
-              <div className="card-body">
-                <p className="tender-description">{tender.description?.substring(0, 100)}...</p>
-                
-                <div className="tender-meta">
-                  <div className="meta-item">
-                    <label>Catégorie:</label>
-                    <span>{tender.category}</span>
-                  </div>
-                  <div className="meta-item">
-                    <label>Budget:</label>
-                    <span className="budget-value">{tender.budget_max?.toLocaleString()} {tender.currency}</span>
-                  </div>
-                </div>
-
-                <div className="tender-dates">
-                  <div className="date-item">
-                    <label>Date limite:</label>
-                    <span>{formatDate(tender.deadline)}</span>
-                  </div>
-                  <div className="date-item">
-                    <label>Créé le:</label>
-                    <span>{formatDate(tender.created_at)}</span>
-                  </div>
-                </div>
-
-                {tender.offers_count && (
-                  <div className="offers-info">
-                    <span className="offers-count">📊 {tender.offers_count} offre(s) reçue(s)</span>
-                  </div>
-                )}
-              </div>
-
-              <div className="card-footer">
-                <button
-                  onClick={() => handleViewTender(tender.id)}
-                  className="btn btn-small btn-primary-corporate"
-                  title="Voir les détails"
+        <Card sx={{ marginBottom: '32px', border: '1px solid #e0e0e0' }}>
+          <CardContent sx={{ padding: '24px' }}>
+            <Stack spacing={2}>
+              <TextField
+                fullWidth
+                placeholder="Rechercher par titre ou description..."
+                value={filter}
+                onChange={(e) => setFilter(e.target.value)}
+                variant="outlined"
+              />
+              <FormControl fullWidth>
+                <InputLabel>Trier par</InputLabel>
+                <Select
+                  value={sortBy}
+                  onChange={(e) => setSortBy(e.target.value)}
+                  label="Trier par"
                 >
-                  Voir Détails
-                </button>
-                <button
-                  onClick={() => handleEditTender(tender.id)}
-                  className="btn btn-small btn-secondary-corporate"
-                  title="Modifier"
-                >
-                  ✏️ Modifier
-                </button>
-                <button
-                  onClick={() => handleCloseTender(tender.id)}
-                  className="btn btn-small btn-danger-corporate"
-                  title="Clôturer l'appel"
-                >
-                  🔒 Clôturer
-                </button>
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
-    </div>
+                  <MenuItem value="created_at">Date de création (récent)</MenuItem>
+                  <MenuItem value="deadline">Date limite (urgent)</MenuItem>
+                  <MenuItem value="budget">Budget (élevé)</MenuItem>
+                </Select>
+              </FormControl>
+            </Stack>
+          </CardContent>
+        </Card>
+
+        {sortedTenders.length === 0 ? (
+          <Alert severity="info" sx={{ backgroundColor: '#e3f2fd', color: '#0d47a1', border: '1px solid #1565c0' }}>
+            Aucun appel d'offres actif. Créez votre premier appel maintenant!
+          </Alert>
+        ) : (
+          <Grid container spacing={3}>
+            {sortedTenders.map((tender) => (
+              <Grid item xs={12} md={6} key={tender.id}>
+                <Card sx={{ border: '1px solid #e0e0e0', height: '100%', display: 'flex', flexDirection: 'column' }}>
+                  <CardContent sx={{ padding: '24px', flex: 1 }}>
+                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '12px' }}>
+                      <Typography variant="h4" sx={{ fontSize: '18px', fontWeight: 600, color: '#212121', flex: 1 }}>
+                        {tender.title}
+                      </Typography>
+                      <Chip label="Actif" sx={{ backgroundColor: '#e8f5e9', color: '#1b5e20' }} />
+                    </Box>
+
+                    <Typography sx={{ color: '#616161', marginBottom: '16px', fontSize: '14px' }}>
+                      {tender.description?.substring(0, 100)}...
+                    </Typography>
+
+                    <Stack spacing={2} sx={{ marginBottom: '16px' }}>
+                      <Box>
+                        <Typography sx={{ fontSize: '12px', fontWeight: 600, color: '#616161' }}>Catégorie</Typography>
+                        <Typography sx={{ color: '#212121' }}>{tender.category}</Typography>
+                      </Box>
+                      <Box>
+                        <Typography sx={{ fontSize: '12px', fontWeight: 600, color: '#616161' }}>Budget</Typography>
+                        <Typography sx={{ color: '#1565c0', fontWeight: 600 }}>
+                          {tender.budget_max?.toLocaleString()} {tender.currency}
+                        </Typography>
+                      </Box>
+                      <Box>
+                        <Typography sx={{ fontSize: '12px', fontWeight: 600, color: '#616161' }}>Date limite</Typography>
+                        <Typography sx={{ color: '#212121' }}>{formatDate(tender.deadline)}</Typography>
+                      </Box>
+                      {tender.offers_count && (
+                        <Box>
+                          <Typography sx={{ fontSize: '12px', fontWeight: 600, color: '#616161' }}>Offres reçues</Typography>
+                          <Typography sx={{ color: '#1565c0', fontWeight: 600 }}>📊 {tender.offers_count}</Typography>
+                        </Box>
+                      )}
+                    </Stack>
+                  </CardContent>
+
+                  <Box sx={{ padding: '16px 24px', borderTop: '1px solid #e0e0e0', display: 'flex', gap: '8px' }}>
+                    <Button
+                      size="small"
+                      variant="contained"
+                      startIcon={<VisibilityIcon />}
+                      onClick={() => navigate(`/tender/${tender.id}`)}
+                      sx={{
+                        flex: 1,
+                        backgroundColor: '#1565c0',
+                        textTransform: 'none',
+                        '&:hover': { backgroundColor: '#0d47a1' },
+                      }}
+                    >
+                      Voir
+                    </Button>
+                    <Button
+                      size="small"
+                      variant="outlined"
+                      startIcon={<EditIcon />}
+                      onClick={() => navigate(`/tender/${tender.id}/edit`)}
+                      sx={{ flex: 1, color: '#1565c0', borderColor: '#1565c0', textTransform: 'none' }}
+                    >
+                      Modifier
+                    </Button>
+                    <Button
+                      size="small"
+                      variant="outlined"
+                      startIcon={<LockIcon />}
+                      onClick={() => handleCloseTender(tender.id)}
+                      sx={{ flex: 1, color: '#f57c00', borderColor: '#f57c00', textTransform: 'none' }}
+                    >
+                      Clôturer
+                    </Button>
+                  </Box>
+                </Card>
+              </Grid>
+            ))}
+          </Grid>
+        )}
+      </Container>
+    </Box>
   );
 }

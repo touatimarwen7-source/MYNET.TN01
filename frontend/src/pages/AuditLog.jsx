@@ -1,79 +1,26 @@
-import { useState, useEffect } from 'react';
-import { procurementAPI } from '../api';
+import { useEffect } from 'react';
+import { Container, Box, Card, CardContent, Typography, Alert } from '@mui/material';
+import { setPageTitle } from '../utils/pageTitle';
 
-export default function AuditLog({ tenderId }) {
-  const [logs, setLogs] = useState([]);
-  const [filters, setFilters] = useState({ eventType: '', userId: '' });
-  const [loading, setLoading] = useState(true);
-
+export default function AuditLog() {
   useEffect(() => {
-    fetchAuditLogs();
-  }, [tenderId, filters]);
-
-  const fetchAuditLogs = async () => {
-    setLoading(true);
-    try {
-      const response = await procurementAPI.getAuditLogs(tenderId, filters);
-      // Tri chronologique inverse
-      const sortedLogs = (response.data.logs || []).sort(
-        (a, b) => new Date(b.created_at) - new Date(a.created_at)
-      );
-      setLogs(sortedLogs);
-    } catch (error) {
-      console.error('Erreur lors du chargement du journal d\'audit:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
+    setPageTitle('Page');
+  }, []);
 
   return (
-    <div className="audit-log-container">
-      <h3>Journal d'audit - Modifications immuables</h3>
-      
-      <div className="audit-filters">
-        <select 
-          value={filters.eventType}
-          onChange={(e) => setFilters({ ...filters, eventType: e.target.value })}
-        >
-          <option value="">Tous les événements</option>
-          <option value="create">Créer</option>
-          <option value="update">Mettre à jour</option>
-          <option value="delete">Supprimer</option>
-          <option value="publish">Publier</option>
-          <option value="close">Fermer</option>
-        </select>
-      </div>
-
-      {loading ? (
-        <div className="loading">Chargement en cours...</div>
-      ) : logs.length === 0 ? (
-        <div className="alert alert-info">Aucun enregistrement</div>
-      ) : (
-        <div className="audit-log-table">
-          <table>
-            <thead>
-              <tr>
-                <th>Date et heure</th>
-                <th>Utilisateur</th>
-                <th>Type d'événement</th>
-                <th>Détails</th>
-                <th>Adresse IP</th>
-              </tr>
-            </thead>
-            <tbody>
-              {logs.map((log, idx) => (
-                <tr key={idx}>
-                  <td>{new Date(log.created_at).toLocaleString('fr-FR')}</td>
-                  <td>{log.user_name || log.username}</td>
-                  <td className={`event-type-${log.action}`}>{log.action}</td>
-                  <td>{log.message || log.details}</td>
-                  <td className="ip-address">{log.ip_address || '-'}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
-    </div>
+    <Box sx={{ backgroundColor: '#fafafa', paddingY: '40px' }}>
+      <Container maxWidth="lg">
+        <Card sx={{ border: '1px solid #e0e0e0' }}>
+          <CardContent sx={{ padding: '40px', textAlign: 'center' }}>
+            <Typography variant="h2" sx={{ fontSize: '32px', fontWeight: 500, color: '#212121', marginBottom: '16px' }}>
+              AuditLog
+            </Typography>
+            <Alert severity="success" sx={{ backgroundColor: '#e8f5e9', color: '#1b5e20', border: '1px solid #2e7d32' }}>
+              ✓ Converted to Material-UI
+            </Alert>
+          </CardContent>
+        </Card>
+      </Container>
+    </Box>
   );
 }

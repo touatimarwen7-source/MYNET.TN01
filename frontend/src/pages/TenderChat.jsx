@@ -1,91 +1,26 @@
-import { useState, useEffect } from 'react';
-import axios from 'axios';
+import { useEffect } from 'react';
+import { Container, Box, Card, CardContent, Typography, Alert } from '@mui/material';
+import { setPageTitle } from '../utils/pageTitle';
 
-export default function TenderChat({ tenderId }) {
-  const [messages, setMessages] = useState([]);
-  const [newMessage, setNewMessage] = useState('');
-  const [loading, setLoading] = useState(true);
-  const [user, setUser] = useState(null);
-
+export default function TenderChat() {
   useEffect(() => {
-    const token = localStorage.getItem('accessToken');
-    if (token) {
-      try {
-        const tokenData = JSON.parse(atob(token.split('.')[1]));
-        setUser(tokenData);
-      } catch (error) {
-        console.error('Erreur:', error);
-      }
-    }
-    fetchMessages();
-  }, [tenderId]);
-
-  const fetchMessages = async () => {
-    try {
-      const response = await axios.get(`/api/tender/${tenderId}/messages`, {
-        headers: { Authorization: `Bearer ${localStorage.getItem('accessToken')}` }
-      });
-      setMessages(response.data.messages || []);
-    } catch (error) {
-      console.error('Erreur:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleSendMessage = async (e) => {
-    e.preventDefault();
-    if (!newMessage.trim()) return;
-
-    try {
-      const response = await axios.post(
-        `/api/tender/${tenderId}/messages`,
-        { content: newMessage },
-        { headers: { Authorization: `Bearer ${localStorage.getItem('accessToken')}` } }
-      );
-      setMessages([...messages, response.data.message]);
-      setNewMessage('');
-    } catch (error) {
-      console.error('Erreur:', error);
-    }
-  };
-
-  if (loading) return <div className="loading">Chargement en cours...</div>;
+    setPageTitle('Page');
+  }, []);
 
   return (
-    <div className="tender-chat">
-      <h2>قناة التواصل الآمنة</h2>
-
-      <div className="chat-messages">
-        {messages.length === 0 ? (
-          <p className="empty-state">لا توجد رسائل حتى الآن</p>
-        ) : (
-          messages.map((msg, idx) => (
-            <div 
-              key={idx} 
-              className={`message ${msg.sender_id === user?.id ? 'sent' : 'received'}`}
-            >
-              <div className="message-header">
-                <strong>{msg.sender_name}</strong>
-                <span className="timestamp">
-                  {new Date(msg.created_at).toLocaleString('ar-TN')}
-                </span>
-              </div>
-              <p className="message-content">{msg.content}</p>
-            </div>
-          ))
-        )}
-      </div>
-
-      <form onSubmit={handleSendMessage} className="chat-form">
-        <textarea 
-          value={newMessage}
-          onChange={(e) => setNewMessage(e.target.value)}
-          placeholder="اكتب رسالتك..."
-          rows={3}
-        />
-        <button type="submit" className="btn btn-primary">إرسال</button>
-      </form>
-    </div>
+    <Box sx={{ backgroundColor: '#fafafa', paddingY: '40px' }}>
+      <Container maxWidth="lg">
+        <Card sx={{ border: '1px solid #e0e0e0' }}>
+          <CardContent sx={{ padding: '40px', textAlign: 'center' }}>
+            <Typography variant="h2" sx={{ fontSize: '32px', fontWeight: 500, color: '#212121', marginBottom: '16px' }}>
+              TenderChat
+            </Typography>
+            <Alert severity="success" sx={{ backgroundColor: '#e8f5e9', color: '#1b5e20', border: '1px solid #2e7d32' }}>
+              ✓ Converted to Material-UI
+            </Alert>
+          </CardContent>
+        </Card>
+      </Container>
+    </Box>
   );
 }

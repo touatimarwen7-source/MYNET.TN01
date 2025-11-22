@@ -1,4 +1,29 @@
 import { useState, useEffect } from 'react';
+import {
+  Container,
+  Box,
+  Card,
+  CardContent,
+  Button,
+  Typography,
+  TextField,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  Table,
+  TableHead,
+  TableBody,
+  TableRow,
+  TableCell,
+  Paper,
+  LinearProgress,
+  Stack,
+  Grid,
+} from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
+import CancelIcon from '@mui/icons-material/Cancel';
+import EditIcon from '@mui/icons-material/Edit';
 import { setPageTitle } from '../utils/pageTitle';
 
 export default function BudgetManagement() {
@@ -34,89 +59,164 @@ export default function BudgetManagement() {
   const totalSpent = budgets.reduce((sum, b) => sum + b.spent, 0);
   const totalRemaining = budgets.reduce((sum, b) => sum + b.remaining, 0);
 
+  const StatCard = ({ label, value, color }) => (
+    <Card sx={{ border: '1px solid #e0e0e0' }}>
+      <CardContent sx={{ padding: '24px' }}>
+        <Typography sx={{ fontSize: '12px', fontWeight: 600, color: '#616161', marginBottom: '8px' }}>
+          {label}
+        </Typography>
+        <Typography sx={{ fontSize: '24px', fontWeight: 600, color }}>
+          {value.toLocaleString()} TND
+        </Typography>
+      </CardContent>
+    </Card>
+  );
+
   return (
-    <div className="page budget-management-page">
-      <div className="page-header corporate">
-        <div className="header-content">
-          <h1>💰 Gestion des Budgets</h1>
-          <p className="subtitle">Suivez et gérez vos allocations budgétaires</p>
-        </div>
-        <button onClick={() => setShowForm(!showForm)} className="btn btn-primary-corporate">
-          ➕ Nouveau Budget
-        </button>
-      </div>
+    <Box sx={{ backgroundColor: '#fafafa', paddingY: '40px' }}>
+      <Container maxWidth="lg">
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '32px' }}>
+          <Box>
+            <Typography variant="h2" sx={{ fontSize: '32px', fontWeight: 500, color: '#212121', marginBottom: '8px' }}>
+              💰 Gestion des Budgets
+            </Typography>
+            <Typography sx={{ color: '#616161' }}>
+              Suivez et gérez vos allocations budgétaires
+            </Typography>
+          </Box>
+          <Button
+            variant="contained"
+            startIcon={<AddIcon />}
+            onClick={() => setShowForm(!showForm)}
+            sx={{
+              backgroundColor: '#1565c0',
+              textTransform: 'none',
+              fontWeight: 600,
+              '&:hover': { backgroundColor: '#0d47a1' },
+            }}
+          >
+            Nouveau Budget
+          </Button>
+        </Box>
 
-      {showForm && (
-        <div className="form-section corporate">
-          <h3>Créer un Nouveau Budget</h3>
-          <div className="form-grid">
-            <input type="text" placeholder="Nom du budget" value={newBudget.name} onChange={(e) => setNewBudget({...newBudget, name: e.target.value})} className="input-corporate" />
-            <input type="number" placeholder="Montant total (TND)" value={newBudget.total} onChange={(e) => setNewBudget({...newBudget, total: e.target.value})} className="input-corporate" />
-            <select value={newBudget.category} onChange={(e) => setNewBudget({...newBudget, category: e.target.value})} className="select-corporate">
-              <option value="">Sélectionner une catégorie</option>
-              <option value="Fournitures">Fournitures</option>
-              <option value="Services">Services</option>
-              <option value="Construction">Construction</option>
-              <option value="Conseil">Conseil</option>
-            </select>
-          </div>
-          <div className="form-actions">
-            <button onClick={handleAddBudget} className="btn btn-primary-corporate">Ajouter</button>
-            <button onClick={() => setShowForm(false)} className="btn btn-secondary-corporate">Annuler</button>
-          </div>
-        </div>
-      )}
+        {showForm && (
+          <Card sx={{ marginBottom: '32px', border: '1px solid #e0e0e0' }}>
+            <CardContent sx={{ padding: '24px' }}>
+              <Typography variant="h4" sx={{ fontSize: '18px', fontWeight: 600, color: '#212121', marginBottom: '16px' }}>
+                Créer un Nouveau Budget
+              </Typography>
+              <Stack spacing={2}>
+                <TextField
+                  fullWidth
+                  label="Nom du Budget"
+                  value={newBudget.name}
+                  onChange={(e) => setNewBudget({...newBudget, name: e.target.value})}
+                />
+                <TextField
+                  fullWidth
+                  label="Montant Total (TND)"
+                  type="number"
+                  value={newBudget.total}
+                  onChange={(e) => setNewBudget({...newBudget, total: e.target.value})}
+                />
+                <FormControl fullWidth>
+                  <InputLabel>Catégorie</InputLabel>
+                  <Select
+                    value={newBudget.category}
+                    onChange={(e) => setNewBudget({...newBudget, category: e.target.value})}
+                    label="Catégorie"
+                  >
+                    <MenuItem value="Fournitures">Fournitures</MenuItem>
+                    <MenuItem value="Services">Services</MenuItem>
+                    <MenuItem value="Construction">Construction</MenuItem>
+                    <MenuItem value="Conseil">Conseil</MenuItem>
+                  </Select>
+                </FormControl>
+                <Box sx={{ display: 'flex', gap: '8px' }}>
+                  <Button
+                    variant="contained"
+                    onClick={handleAddBudget}
+                    sx={{ backgroundColor: '#2e7d32', '&:hover': { backgroundColor: '#1b5e20' } }}
+                  >
+                    Ajouter
+                  </Button>
+                  <Button
+                    variant="outlined"
+                    onClick={() => setShowForm(false)}
+                    startIcon={<CancelIcon />}
+                    sx={{ color: '#1565c0', borderColor: '#1565c0' }}
+                  >
+                    Annuler
+                  </Button>
+                </Box>
+              </Stack>
+            </CardContent>
+          </Card>
+        )}
 
-      <div className="summary-cards">
-        <div className="card corporate">
-          <label>Budget Total</label>
-          <span className="value">{totalBudget.toLocaleString()} TND</span>
-        </div>
-        <div className="card corporate">
-          <label>Total Dépensé</label>
-          <span className="value">{totalSpent.toLocaleString()} TND</span>
-        </div>
-        <div className="card corporate">
-          <label>Restant</label>
-          <span className="value success">{totalRemaining.toLocaleString()} TND</span>
-        </div>
-      </div>
+        <Grid container spacing={3} sx={{ marginBottom: '32px' }}>
+          <Grid item xs={12} md={4}>
+            <StatCard label="Budget Total" value={totalBudget} color="#1565c0" />
+          </Grid>
+          <Grid item xs={12} md={4}>
+            <StatCard label="Total Dépensé" value={totalSpent} color="#f57c00" />
+          </Grid>
+          <Grid item xs={12} md={4}>
+            <StatCard label="Restant" value={totalRemaining} color="#2e7d32" />
+          </Grid>
+        </Grid>
 
-      <div className="budgets-table-section">
-        <table className="table-corporate">
-          <thead>
-            <tr>
-              <th>Nom du Budget</th>
-              <th>Catégorie</th>
-              <th>Total</th>
-              <th>Dépensé</th>
-              <th>Restant</th>
-              <th>Utilisation %</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {budgets.map(budget => (
-              <tr key={budget.id}>
-                <td>{budget.name}</td>
-                <td>{budget.category}</td>
-                <td>{budget.total.toLocaleString()} TND</td>
-                <td>{budget.spent.toLocaleString()} TND</td>
-                <td>{budget.remaining.toLocaleString()} TND</td>
-                <td>
-                  <div className="progress-bar">
-                    <div className="progress" style={{width: `${(budget.spent / budget.total * 100)}%`}}></div>
-                    <span>{((budget.spent / budget.total) * 100).toFixed(1)}%</span>
-                  </div>
-                </td>
-                <td>
-                  <button className="btn btn-small btn-secondary-corporate">Éditer</button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    </div>
+        <Card sx={{ border: '1px solid #e0e0e0', overflow: 'hidden' }}>
+          <Paper sx={{ border: 'none', borderRadius: 0 }}>
+            <Table>
+              <TableHead sx={{ backgroundColor: '#f5f5f5' }}>
+                <TableRow sx={{ height: '56px' }}>
+                  <TableCell sx={{ fontWeight: 600, color: '#1565c0' }}>Nom du Budget</TableCell>
+                  <TableCell sx={{ fontWeight: 600, color: '#1565c0' }}>Catégorie</TableCell>
+                  <TableCell sx={{ fontWeight: 600, color: '#1565c0' }} align="right">Total</TableCell>
+                  <TableCell sx={{ fontWeight: 600, color: '#1565c0' }} align="right">Dépensé</TableCell>
+                  <TableCell sx={{ fontWeight: 600, color: '#1565c0' }} align="right">Restant</TableCell>
+                  <TableCell sx={{ fontWeight: 600, color: '#1565c0' }} align="center">Utilisation</TableCell>
+                  <TableCell sx={{ fontWeight: 600, color: '#1565c0' }} align="center">Actions</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {budgets.map(budget => {
+                  const usage = (budget.spent / budget.total) * 100;
+                  return (
+                    <TableRow key={budget.id} sx={{ borderBottom: '1px solid #e0e0e0', '&:hover': { backgroundColor: '#fafafa' } }}>
+                      <TableCell sx={{ color: '#212121' }}>{budget.name}</TableCell>
+                      <TableCell sx={{ color: '#616161' }}>{budget.category}</TableCell>
+                      <TableCell align="right" sx={{ color: '#1565c0', fontWeight: 600 }}>
+                        {budget.total.toLocaleString()} TND
+                      </TableCell>
+                      <TableCell align="right" sx={{ color: '#212121' }}>
+                        {budget.spent.toLocaleString()} TND
+                      </TableCell>
+                      <TableCell align="right" sx={{ color: '#2e7d32', fontWeight: 600 }}>
+                        {budget.remaining.toLocaleString()} TND
+                      </TableCell>
+                      <TableCell align="center">
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                          <LinearProgress variant="determinate" value={usage} sx={{ flex: 1 }} />
+                          <Typography sx={{ fontSize: '12px', fontWeight: 600, color: '#212121', minWidth: '40px' }}>
+                            {usage.toFixed(0)}%
+                          </Typography>
+                        </Box>
+                      </TableCell>
+                      <TableCell align="center">
+                        <Button size="small" startIcon={<EditIcon />} sx={{ color: '#1565c0', textTransform: 'none' }}>
+                          Éditer
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
+              </TableBody>
+            </Table>
+          </Paper>
+        </Card>
+      </Container>
+    </Box>
   );
 }

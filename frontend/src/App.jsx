@@ -97,26 +97,45 @@ function App() {
 
   useEffect(() => {
     const checkAuth = () => {
-      const token = TokenManager.getAccessToken();
-      if (token) {
-        try {
+      try {
+        const token = TokenManager.getAccessToken();
+        console.log('Checking auth, token exists:', !!token);
+        
+        if (token) {
           const userData = TokenManager.getUserFromToken();
-          setUser(userData);
-        } catch (error) {
-          TokenManager.clearTokens();
+          console.log('User data from token:', userData);
+          
+          if (userData && userData.userId) {
+            setUser(userData);
+          } else {
+            console.warn('Invalid user data from token');
+            TokenManager.clearTokens();
+            setUser(null);
+          }
+        } else {
           setUser(null);
         }
-      } else {
+      } catch (error) {
+        console.error('Auth check error:', error);
+        TokenManager.clearTokens();
         setUser(null);
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     };
     
     checkAuth();
     
     // Écouter l'événement authChanged depuis Login/Register
-    const handleAuthChange = () => {
-      checkAuth();
+    const handleAuthChange = (event) => {
+      console.log('Auth changed event fired', event.detail);
+      if (event.detail) {
+        // If user data is passed directly, use it
+        setUser(event.detail);
+      } else {
+        // Otherwise check token
+        checkAuth();
+      }
     };
     
     window.addEventListener('authChanged', handleAuthChange);
@@ -169,7 +188,7 @@ function App() {
               <Route path="/register" element={<Register />} />
 
               {/* Appels d'offres */}
-              <Route path="/tenders" element={<TenderList />} />
+              <Route path="/tenders" element={user ? <TenderList /> : <Navigate to="/login" />} />
               <Route path="/tender/security" element={<TenderSecuritySettings />} />
               <Route path="/tender/preferences" element={<TenderPreferencesSettings />} />
               <Route path="/tender/:id" element={<TenderDetail />} />

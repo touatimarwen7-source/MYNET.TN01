@@ -13,9 +13,21 @@ const TOKEN_KEY = 'access_token';
 const REFRESH_TOKEN_KEY = 'refresh_token_id';
 const TOKEN_EXPIRY_KEY = 'token_expiry';
 
-// Memory storage for access token (cleared on page refresh)
+// Memory storage for access token (persists during session)
 let memoryAccessToken = null;
 let tokenExpiryTime = null;
+
+// Try both sessionStorage and localStorage
+const getStorage = () => {
+  try {
+    sessionStorage.setItem('test', 'test');
+    sessionStorage.removeItem('test');
+    return sessionStorage;
+  } catch (e) {
+    console.warn('sessionStorage unavailable, using fallback');
+    return localStorage;
+  }
+};
 
 class TokenManager {
   /**
@@ -30,8 +42,15 @@ class TokenManager {
 
     memoryAccessToken = token;
     tokenExpiryTime = Date.now() + expiresIn * 1000;
-    sessionStorage.setItem(TOKEN_KEY, token);
-    sessionStorage.setItem(TOKEN_EXPIRY_KEY, tokenExpiryTime);
+    
+    try {
+      const storage = getStorage();
+      storage.setItem(TOKEN_KEY, token);
+      storage.setItem(TOKEN_EXPIRY_KEY, tokenExpiryTime);
+      console.log('Token saved successfully');
+    } catch (e) {
+      console.error('Error saving token:', e);
+    }
   }
 
   /**
@@ -40,15 +59,28 @@ class TokenManager {
    */
   static getAccessToken() {
     // Check memory first (fastest)
-    if (memoryAccessToken && this.isTokenValid()) {
-      return memoryAccessToken;
+    if (memoryAccessToken) {
+      if (this.isTokenValid()) {
+        return memoryAccessToken;
+      }
     }
 
-    // Fall back to session storage
-    const token = sessionStorage.getItem(TOKEN_KEY);
-    if (token && this.isTokenValid()) {
-      memoryAccessToken = token;
-      return token;
+    // Fall back to storage
+    try {
+      const storage = getStorage();
+      const token = storage.getItem(TOKEN_KEY);
+      const expiryStr = storage.getItem(TOKEN_EXPIRY_KEY);
+      
+      if (token && expiryStr) {
+        const expiryTime = parseInt(expiryStr);
+        if (Date.now() < expiryTime) {
+          memoryAccessToken = token;
+          tokenExpiryTime = expiryTime;
+          return token;
+        }
+      }
+    } catch (e) {
+      console.error('Error retrieving token:', e);
     }
 
     // Token expired or missing
@@ -61,8 +93,16 @@ class TokenManager {
    * @returns {boolean}
    */
   static isTokenValid() {
-    if (!tokenExpiryTime && sessionStorage.getItem(TOKEN_EXPIRY_KEY)) {
-      tokenExpiryTime = parseInt(sessionStorage.getItem(TOKEN_EXPIRY_KEY));
+    if (!tokenExpiryTime) {
+      try {
+        const storage = getStorage();
+        const storedExpiry = storage.getItem(TOKEN_EXPIRY_KEY);
+        if (storedExpiry) {
+          tokenExpiryTime = parseInt(storedExpiry);
+        }
+      } catch (e) {
+        console.error('Error getting token expiry:', e);
+      }
     }
     return tokenExpiryTime && Date.now() < tokenExpiryTime;
   }
@@ -74,7 +114,12 @@ class TokenManager {
    */
   static setRefreshTokenId(refreshTokenId) {
     if (refreshTokenId) {
-      sessionStorage.setItem(REFRESH_TOKEN_KEY, refreshTokenId);
+      try {
+        const storage = getStorage();
+        storage.setItem(REFRESH_TOKEN_KEY, refreshTokenId);
+      } catch (e) {
+        console.error('Error saving refresh token:', e);
+      }
     }
   }
 
@@ -83,7 +128,13 @@ class TokenManager {
    * @returns {string|null}
    */
   static getRefreshTokenId() {
-    return sessionStorage.getItem(REFRESH_TOKEN_KEY);
+    try {
+      const storage = getStorage();
+      return storage.getItem(REFRESH_TOKEN_KEY);
+    } catch (e) {
+      console.error('Error getting refresh token:', e);
+      return null;
+    }
   }
 
   /**
@@ -92,9 +143,15 @@ class TokenManager {
   static clearTokens() {
     memoryAccessToken = null;
     tokenExpiryTime = null;
-    sessionStorage.removeItem(TOKEN_KEY);
-    sessionStorage.removeItem(TOKEN_EXPIRY_KEY);
-    sessionStorage.removeItem(REFRESH_TOKEN_KEY);
+    
+    try {
+      const storage = getStorage();
+      storage.removeItem(TOKEN_KEY);
+      storage.removeItem(TOKEN_EXPIRY_KEY);
+      storage.removeItem(REFRESH_TOKEN_KEY);
+    } catch (e) {
+      console.error('Error clearing tokens:', e);
+    }
     
     // Also clear CSRF token
     try {

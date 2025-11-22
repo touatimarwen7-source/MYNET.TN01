@@ -37,6 +37,10 @@ export default function Login() {
     try {
       const response = await authAPI.login({ email, password });
       
+      if (!response.data.accessToken) {
+        throw new Error('Pas de token reçu du serveur');
+      }
+      
       // Store tokens securely (expiresIn in seconds, default 900 = 15 minutes)
       const expiresIn = response.data.expiresIn || 900;
       TokenManager.setAccessToken(response.data.accessToken, expiresIn);
@@ -47,16 +51,20 @@ export default function Login() {
         TokenManager.setRefreshTokenId(refreshToken);
       }
       
-      // Trigger auth state update
-      window.dispatchEvent(new Event('authChanged'));
+      // Extract user data directly from response
+      const userData = response.data.user;
+      console.log('Login successful, user data:', userData);
       
       addToast('Connexion réussie', 'success', 2000);
       
-      // Navigate after token is saved
-      setTimeout(() => {
-        navigate('/tenders');
-      }, 50);
+      // Dispatch event with user data for immediate update
+      window.dispatchEvent(new CustomEvent('authChanged', { detail: userData }));
+      
+      // Navigate immediately - state will be updated by event listener
+      navigate('/tenders', { replace: true });
+      
     } catch (err) {
+      console.error('Login error:', err);
       setError('Erreur de connexion. Vérifiez vos identifiants.');
       addToast('Erreur de connexion', 'error', 3000);
     } finally {

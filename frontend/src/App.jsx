@@ -1,4 +1,4 @@
-import { useState, useEffect, Suspense, lazy } from 'react';
+import { Suspense, lazy } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -7,13 +7,12 @@ import institutionalTheme from './theme/theme';
 import AlertStrip from './components/AlertStrip';
 import UnifiedHeader from './components/UnifiedHeader';
 import ErrorBoundary from './components/ErrorBoundary';
-import { setupInactivityTimer } from './utils/security';
 import ToastContainer from './components/ToastContainer';
 import Sidebar from './components/Sidebar';
 import { ToastContext } from './contexts/ToastContext';
 import { DarkModeProvider } from './contexts/DarkModeContext';
 import { SuperAdminProvider } from './contexts/SuperAdminContext';
-import TokenManager from './services/tokenManager';
+import { AppProvider, useApp } from './contexts/AppContext';
 
 // Core pages (eager load)
 import HomePage from './pages/HomePage';
@@ -107,79 +106,11 @@ const LoadingFallback = () => (
   </Container>
 );
 
-function App() {
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [toasts, setToasts] = useState([]);
-  
-  const addToast = (message, type = 'success') => {
-    const id = Date.now();
-    setToasts(prev => [...prev, { id, message, type }]);
-    setTimeout(() => removeToast(id), 3000);
-  };
-  
-  const removeToast = (id) => {
-    setToasts(prev => prev.filter(t => t.id !== id));
-  };
+// Inner App Component - uses AppContext
+function AppContent() {
+  const { user, authLoading, logout, addToast } = useApp();
 
-  useEffect(() => {
-    const checkAuth = () => {
-      try {
-        // First, try to restore tokens from storage
-        TokenManager.restoreFromStorage();
-        
-        const token = TokenManager.getAccessToken();
-        
-        if (token) {
-          const userData = TokenManager.getUserFromToken();
-          
-          if (userData && userData.userId) {
-            setUser(userData);
-          } else {
-            TokenManager.clearTokens();
-            setUser(null);
-          }
-        } else {
-          setUser(null);
-        }
-      } catch (error) {
-        setUser(null);
-      } finally {
-        setLoading(false);
-      }
-    };
-    
-    checkAuth();
-    
-    // Écouter l'événement authChanged depuis Login/Register
-    const handleAuthChange = (event) => {
-      if (event.detail) {
-        // If user data is passed directly, use it
-        TokenManager.setUserData(event.detail);
-        setUser(event.detail);
-      } else {
-        // Otherwise check token
-        checkAuth();
-      }
-    };
-    
-    window.addEventListener('authChanged', handleAuthChange);
-    return () => window.removeEventListener('authChanged', handleAuthChange);
-  }, []);
-
-  // Configurer la surveillance de l'inactivité - alerte après 15 minutes d'inactivité
-  useEffect(() => {
-    if (!user) return;
-    const cleanup = setupInactivityTimer(15 * 60 * 1000);
-    return cleanup;
-  }, [user]);
-
-  const handleLogout = () => {
-    TokenManager.clearTokens();
-    setUser(null);
-  };
-
-  if (loading) {
+  if (authLoading) {
     return <Box sx={{ padding: '20px', textAlign: 'center' }}>Chargement en cours...</Box>;
   }
 
@@ -189,16 +120,15 @@ function App() {
         <CssBaseline />
         <DarkModeProvider>
           <SuperAdminProvider>
-            <ToastContext.Provider value={{ addToast }}>
-              <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+            <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
             <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
             <AlertStrip />
             <UnifiedHeader />
-            <ToastContainer toasts={toasts} removeToast={removeToast} />
+            <AppToastContainer />
           
           <Box sx={{ display: 'flex', flex: 1, overflow: 'hidden' }}>
             {/* Sidebar Navigation - Only for authenticated users */}
-            {user && <Sidebar user={user} onLogout={handleLogout} />}
+            {user && <Sidebar user={user} onLogout={logout} />}
 
             <Box component="main" sx={{ flex: 1, overflowY: 'auto', paddingY: '20px', paddingX: { xs: '12px', sm: '20px' }, transition: 'all 0.3s ease-in-out' }}>
             <Suspense fallback={<LoadingFallback />}>
@@ -211,7 +141,7 @@ function App() {
               <Route path="/contact" element={<ContactPage />} />
 
               {/* Authentification */}
-              <Route path="/login" element={<Login setUser={setUser} />} />
+              <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
 
               {/* Appels d'offres */}
@@ -570,7 +500,6 @@ function App() {
         </Box>
             </Box>
           </Router>
-            </ToastContext.Provider>
             </SuperAdminProvider>
           </DarkModeProvider>
         </ThemeProvider>
@@ -578,7 +507,21 @@ function App() {
     );
   }
 
-export default App;
+// Toast Container Component using AppContext
+function AppToastContainer() {
+  const { toasts, removeToast } = useApp();
+  
+  return <ToastContainer toasts={toasts} removeToast={removeToast} />;
+}
+
+// Main App with AppProvider wrapper
+export default function App() {
+  return (
+    <AppProvider>
+      <AppContent />
+    </AppProvider>
+  );
+}
 
 // Dark Mode Toggle Button for navbar - add to navbar section:
 // <button onClick={toggleDarkMode} className="btn-dark-mode">

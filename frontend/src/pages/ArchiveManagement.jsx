@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   Container,
   Box,
@@ -19,89 +19,59 @@ import {
   DialogActions,
   Alert,
   LinearProgress,
+  CircularProgress,
 } from '@mui/material';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import DownloadIcon from '@mui/icons-material/Download';
 import RestoreIcon from '@mui/icons-material/Restore';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { useSuperAdmin } from '../contexts/SuperAdminContext';
 
 export default function ArchiveManagement() {
-  const [backups, setBackups] = useState([
-    {
-      id: 1,
-      name: 'Sauvegarde complète 20/01/2025',
-      type: 'Complète',
-      size: '2.4 GB',
-      date: '2025-01-20 22:30',
-      status: 'succès',
-      dataCount: '45,230 enregistrements',
-    },
-    {
-      id: 2,
-      name: 'Sauvegarde incrémentale 19/01/2025',
-      type: 'Incrémentale',
-      size: '450 MB',
-      date: '2025-01-19 22:30',
-      status: 'succès',
-      dataCount: '8,120 enregistrements',
-    },
-    {
-      id: 3,
-      name: 'Sauvegarde complète 15/01/2025',
-      type: 'Complète',
-      size: '2.1 GB',
-      date: '2025-01-15 22:30',
-      status: 'succès',
-      dataCount: '32,100 enregistrements',
-    },
-    {
-      id: 4,
-      name: 'Sauvegarde test 10/01/2025',
-      type: 'Test',
-      size: '1.8 GB',
-      date: '2025-01-10 14:00',
-      status: 'échouée',
-      dataCount: 'N/A',
-    },
-  ]);
-
+  const { backups, loading, error, fetchBackups, createBackup, restoreBackup } = useSuperAdmin();
+  
   const [openDialog, setOpenDialog] = useState(false);
-  const [dialogType, setDialogType] = useState('');
   const [selectedBackup, setSelectedBackup] = useState(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [message, setMessage] = useState('');
 
-  const handleCreateBackup = () => {
+  useEffect(() => {
+    fetchBackups();
+  }, []);
+
+  const handleCreateBackup = async () => {
     setIsProcessing(true);
-    setTimeout(() => {
-      const newBackup = {
-        id: Math.max(...backups.map(b => b.id), 0) + 1,
-        name: `Sauvegarde manuelle ${new Date().toLocaleDateString('fr-FR')}`,
-        type: 'Complète',
-        size: '2.5 GB',
-        date: new Date().toLocaleString('fr-FR'),
-        status: 'succès',
-        dataCount: '46,500 enregistrements',
-      };
-      setBackups([newBackup, ...backups]);
-      setIsProcessing(false);
+    try {
+      await createBackup();
       setMessage('Sauvegarde créée avec succès');
-    }, 3000);
+      setTimeout(() => setMessage(''), 3000);
+    } catch (err) {
+      setMessage(`Erreur: ${err.message}`);
+    } finally {
+      setIsProcessing(false);
+    }
   };
 
   const handleRestoreBackup = (backup) => {
     setSelectedBackup(backup);
-    setDialogType('restore');
     setOpenDialog(true);
   };
 
-  const confirmRestore = () => {
+  const confirmRestore = async () => {
+    if (!selectedBackup) return;
+    
     setIsProcessing(true);
-    setTimeout(() => {
+    try {
+      await restoreBackup(selectedBackup.id);
       setOpenDialog(false);
-      setIsProcessing(false);
       setMessage(`Restauration de ${selectedBackup.name} terminée avec succès`);
-    }, 3000);
+      setTimeout(() => setMessage(''), 3000);
+      await fetchBackups();
+    } catch (err) {
+      setMessage(`Erreur de restauration: ${err.message}`);
+    } finally {
+      setIsProcessing(false);
+    }
   };
 
   const handleDownloadBackup = (backup) => {
@@ -110,12 +80,20 @@ export default function ArchiveManagement() {
     element.download = `backup-${backup.id}.tar.gz`;
     element.click();
     setMessage(`Téléchargement de ${backup.name} en cours...`);
+    setTimeout(() => setMessage(''), 3000);
   };
 
-  const handleDeleteBackup = (backup) => {
-    setBackups(backups.filter(b => b.id !== backup.id));
-    setMessage(`Sauvegarde ${backup.name} supprimée`);
+  const formatFileSize = (bytes) => {
+    if (!bytes) return '0 B';
+    const k = 1024;
+    const sizes = ['B', 'KB', 'MB', 'GB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return Math.round((bytes / Math.pow(k, i)) * 100) / 100 + ' ' + sizes[i];
   };
+
+  const backupsList = Array.isArray(backups) ? backups : [];
+  const totalSize = backupsList.reduce((sum, b) => sum + (b.size_bytes || 0), 0);
+  const successCount = backupsList.filter(b => b.status === 'completed').length;
 
   return (
     <Box sx={{ backgroundColor: '#fafafa', paddingY: '40px', minHeight: '100vh' }}>
@@ -129,6 +107,12 @@ export default function ArchiveManagement() {
             Gestion des sauvegardes et restauration des données
           </Typography>
 
+          {error && (
+            <Alert severity="error" sx={{ marginBottom: '16px' }}>
+              {error}
+            </Alert>
+          )}
+
           {message && (
             <Alert severity="success" sx={{ marginBottom: '16px' }}>
               {message}
@@ -141,8 +125,8 @@ export default function ArchiveManagement() {
               variant="contained"
               startIcon={<CloudUploadIcon />}
               onClick={handleCreateBackup}
-              disabled={isProcessing}
-              sx={{ backgroundColor: '#4caf50' }}
+              disabled={isProcessing || loading}
+              sx={{ backgroundColor: '#0056B3', color: 'white', '&:hover': { backgroundColor: '#004399' } }}
             >
               {isProcessing ? 'Création en cours...' : 'Créer Sauvegarde'}
             </Button>
@@ -166,7 +150,7 @@ export default function ArchiveManagement() {
                 Total des sauvegardes
               </Typography>
               <Typography sx={{ fontSize: '24px', fontWeight: 700, color: '#0056B3' }}>
-                {backups.length}
+                {backupsList.length}
               </Typography>
             </CardContent>
           </Card>
@@ -176,10 +160,7 @@ export default function ArchiveManagement() {
                 Espace utilisé
               </Typography>
               <Typography sx={{ fontSize: '24px', fontWeight: 700, color: '#ff9800' }}>
-                {backups.reduce((total, b) => {
-                  const size = parseInt(b.size);
-                  return total + size;
-                }, 0)} GB
+                {formatFileSize(totalSize)}
               </Typography>
             </CardContent>
           </Card>
@@ -189,103 +170,111 @@ export default function ArchiveManagement() {
                 Succès
               </Typography>
               <Typography sx={{ fontSize: '24px', fontWeight: 700, color: '#4caf50' }}>
-                {backups.filter(b => b.status === 'succès').length}
+                {successCount}
               </Typography>
             </CardContent>
           </Card>
         </Stack>
 
         {/* Backups Table */}
-        <Paper sx={{ border: '1px solid #e0e0e0', overflow: 'auto' }}>
-          <Table>
-            <TableHead>
-              <TableRow sx={{ backgroundColor: '#f5f5f5' }}>
-                <TableCell sx={{ fontWeight: 700, color: '#212121' }}>Nom</TableCell>
-                <TableCell sx={{ fontWeight: 700, color: '#212121' }}>Type</TableCell>
-                <TableCell sx={{ fontWeight: 700, color: '#212121' }}>Taille</TableCell>
-                <TableCell sx={{ fontWeight: 700, color: '#212121' }}>Date</TableCell>
-                <TableCell sx={{ fontWeight: 700, color: '#212121' }}>Données</TableCell>
-                <TableCell sx={{ fontWeight: 700, color: '#212121' }}>Statut</TableCell>
-                <TableCell sx={{ fontWeight: 700, color: '#212121' }} align="right">
-                  Actions
-                </TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {backups.map((backup) => (
-                <TableRow key={backup.id} sx={{ '&:hover': { backgroundColor: '#f9f9f9' } }}>
-                  <TableCell sx={{ fontSize: '13px', fontWeight: 600 }}>{backup.name}</TableCell>
-                  <TableCell sx={{ fontSize: '13px' }}>{backup.type}</TableCell>
-                  <TableCell sx={{ fontSize: '13px' }}>{backup.size}</TableCell>
-                  <TableCell sx={{ fontSize: '13px' }}>{backup.date}</TableCell>
-                  <TableCell sx={{ fontSize: '13px', color: '#666' }}>{backup.dataCount}</TableCell>
-                  <TableCell>
-                    <Box
-                      sx={{
-                        display: 'inline-block',
-                        padding: '4px 12px',
-                        borderRadius: '4px',
-                        backgroundColor:
-                          backup.status === 'succès'
-                            ? '#4caf5020'
-                            : backup.status === 'échouée'
-                            ? '#d32f2f20'
-                            : '#ff980020',
-                        color:
-                          backup.status === 'succès'
-                            ? '#4caf50'
-                            : backup.status === 'échouée'
-                            ? '#d32f2f'
-                            : '#ff9800',
-                        fontSize: '12px',
-                        fontWeight: 600,
-                      }}
-                    >
-                      {backup.status}
-                    </Box>
-                  </TableCell>
-                  <TableCell align="right">
-                    <Stack direction="row" spacing={1} sx={{ justifyContent: 'flex-end' }}>
-                      <Button
-                        size="small"
-                        variant="outlined"
-                        startIcon={<DownloadIcon />}
-                        onClick={() => handleDownloadBackup(backup)}
-                      >
-                        Télécharger
-                      </Button>
-                      <Button
-                        size="small"
-                        variant="outlined"
-                        startIcon={<RestoreIcon />}
-                        onClick={() => handleRestoreBackup(backup)}
-                        color="success"
-                      >
-                        Restaurer
-                      </Button>
-                      <Button
-                        size="small"
-                        variant="outlined"
-                        startIcon={<DeleteIcon />}
-                        onClick={() => handleDeleteBackup(backup)}
-                        color="error"
-                      >
-                        Supprimer
-                      </Button>
-                    </Stack>
+        {loading ? (
+          <Box sx={{ display: 'flex', justifyContent: 'center', padding: '40px' }}>
+            <CircularProgress sx={{ color: '#0056B3' }} />
+          </Box>
+        ) : (
+          <Paper sx={{ border: '1px solid #e0e0e0', overflow: 'auto' }}>
+            <Table>
+              <TableHead>
+                <TableRow sx={{ backgroundColor: '#f5f5f5' }}>
+                  <TableCell sx={{ fontWeight: 700, color: '#212121' }}>Nom</TableCell>
+                  <TableCell sx={{ fontWeight: 700, color: '#212121' }}>Taille</TableCell>
+                  <TableCell sx={{ fontWeight: 700, color: '#212121' }}>Date</TableCell>
+                  <TableCell sx={{ fontWeight: 700, color: '#212121' }}>Statut</TableCell>
+                  <TableCell sx={{ fontWeight: 700, color: '#212121' }} align="right">
+                    Actions
                   </TableCell>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </Paper>
+              </TableHead>
+              <TableBody>
+                {backupsList.length > 0 ? (
+                  backupsList.map((backup) => (
+                    <TableRow key={backup.id} sx={{ '&:hover': { backgroundColor: '#f9f9f9' } }}>
+                      <TableCell sx={{ fontSize: '13px', fontWeight: 600 }}>{backup.name}</TableCell>
+                      <TableCell sx={{ fontSize: '13px' }}>{formatFileSize(backup.size_bytes)}</TableCell>
+                      <TableCell sx={{ fontSize: '13px' }}>
+                        {backup.created_at ? new Date(backup.created_at).toLocaleDateString('ar-TN') : '-'}
+                      </TableCell>
+                      <TableCell>
+                        <Box
+                          sx={{
+                            display: 'inline-block',
+                            padding: '4px 12px',
+                            borderRadius: '4px',
+                            backgroundColor:
+                              backup.status === 'completed'
+                                ? '#4caf5020'
+                                : backup.status === 'failed'
+                                ? '#d32f2f20'
+                                : '#ff980020',
+                            color:
+                              backup.status === 'completed'
+                                ? '#4caf50'
+                                : backup.status === 'failed'
+                                ? '#d32f2f'
+                                : '#ff9800',
+                            fontSize: '12px',
+                            fontWeight: 600,
+                          }}
+                        >
+                          {backup.status === 'completed' ? 'نجح' : backup.status === 'failed' ? 'فشل' : 'قيد المعالجة'}
+                        </Box>
+                      </TableCell>
+                      <TableCell align="right">
+                        <Stack direction="row" spacing={1} sx={{ justifyContent: 'flex-end' }}>
+                          <Button
+                            size="small"
+                            variant="outlined"
+                            startIcon={<DownloadIcon />}
+                            onClick={() => handleDownloadBackup(backup)}
+                            sx={{ borderColor: '#0056B3', color: '#0056B3' }}
+                          >
+                            تحميل
+                          </Button>
+                          {backup.status === 'completed' && (
+                            <Button
+                              size="small"
+                              variant="outlined"
+                              startIcon={<RestoreIcon />}
+                              onClick={() => handleRestoreBackup(backup)}
+                              color="success"
+                            >
+                              استرجاع
+                            </Button>
+                          )}
+                        </Stack>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                ) : (
+                  <TableRow>
+                    <TableCell colSpan={5} align="center" sx={{ padding: '40px', color: '#616161' }}>
+                      لا توجد نسخ احتياطية
+                    </TableCell>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </Paper>
+        )}
 
         {/* Restore Dialog */}
-        <Dialog open={openDialog && dialogType === 'restore'} onClose={() => setOpenDialog(false)} maxWidth="sm" fullWidth>
-          <DialogTitle>Confirmer la restauration</DialogTitle>
-          <DialogContent>
-            <Alert severity="warning" sx={{ marginBottom: '16px' }}>
-              ⚠️ Cette action restaurera toutes les données à l'état de la sauvegarde sélectionnée. Les données actuelles seront remplacées.
+        <Dialog open={openDialog} onClose={() => !isProcessing && setOpenDialog(false)} maxWidth="sm" fullWidth>
+          <DialogTitle sx={{ backgroundColor: '#0056B3', color: 'white', fontWeight: 'bold' }}>
+            تأكيد الاسترجاع
+          </DialogTitle>
+          <DialogContent sx={{ padding: '20px' }}>
+            <Alert severity="warning" sx={{ marginBottom: '16px', marginTop: '16px' }}>
+              ⚠️ هذا الإجراء سيستعيد جميع البيانات إلى حالة النسخة الاحتياطية المحددة. سيتم استبدال البيانات الحالية.
             </Alert>
             {selectedBackup && (
               <Box>
@@ -293,23 +282,25 @@ export default function ArchiveManagement() {
                   {selectedBackup.name}
                 </Typography>
                 <Typography sx={{ fontSize: '13px', color: '#666' }}>
-                  Date: {selectedBackup.date}
+                  التاريخ: {selectedBackup.created_at ? new Date(selectedBackup.created_at).toLocaleDateString('ar-TN') : '-'}
                 </Typography>
                 <Typography sx={{ fontSize: '13px', color: '#666' }}>
-                  Données: {selectedBackup.dataCount}
+                  الحجم: {formatFileSize(selectedBackup.size_bytes)}
                 </Typography>
               </Box>
             )}
           </DialogContent>
-          <DialogActions>
-            <Button onClick={() => setOpenDialog(false)}>Annuler</Button>
+          <DialogActions sx={{ padding: '20px', gap: '10px' }}>
+            <Button onClick={() => setOpenDialog(false)} disabled={isProcessing} sx={{ color: '#616161' }}>
+              إلغاء
+            </Button>
             <Button
               onClick={confirmRestore}
               variant="contained"
               color="error"
               disabled={isProcessing}
             >
-              {isProcessing ? 'Restauration...' : 'Confirmer Restauration'}
+              {isProcessing ? <CircularProgress size={24} /> : 'تأكيد الاسترجاع'}
             </Button>
           </DialogActions>
         </Dialog>

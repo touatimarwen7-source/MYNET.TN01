@@ -60,7 +60,6 @@ export function AppProvider({ children }) {
         setIsAuthenticated(false);
       }
     } catch (error) {
-      console.error('Auth check error:', error);
       setAuthError(error.message);
       setUser(null);
       setIsAuthenticated(false);

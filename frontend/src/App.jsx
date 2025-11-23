@@ -20,6 +20,8 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import PasswordReset from './pages/PasswordReset';
 import EmailVerification from './pages/EmailVerification';
+import PrivacyPolicy from './pages/PrivacyPolicy';
+import TermsOfService from './pages/TermsOfService';
 
 // Lazy load heavy pages
 const AboutPage = lazy(() => import('./pages/AboutPage'));
@@ -141,6 +143,8 @@ function AppContent() {
               <Route path="/features" element={<FeaturesPage />} />
               <Route path="/pricing" element={<PricingPage />} />
               <Route path="/contact" element={<ContactPage />} />
+              <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+              <Route path="/terms-of-service" element={<TermsOfService />} />
 
               {/* Authentification */}
               <Route path="/login" element={<Login />} />

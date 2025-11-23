@@ -58,7 +58,6 @@ const FileManagement = () => {
       setFileName('');
       await fetchFiles();
     } catch (error) {
-      console.error('Upload error:', error);
     } finally {
       setUploading(false);
     }
@@ -70,7 +69,6 @@ const FileManagement = () => {
         await deleteFile(fileId);
         await fetchFiles();
       } catch (error) {
-        console.error('Delete error:', error);
       }
     }
   };

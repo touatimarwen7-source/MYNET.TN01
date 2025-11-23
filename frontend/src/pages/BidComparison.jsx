@@ -306,6 +306,9 @@ export default function BidComparison() {
         {/* Tender Summary */}
         {tender && (
           <Paper sx={{ marginTop: '32px', padding: '16px', backgroundColor: '#f5f5f5' }}>
+            <Typography sx={{ fontWeight: 700, marginBottom: '12px', color: theme.palette.primary.main, fontSize: '14px' }}>
+              🔐 ID Plateforme: <strong>{tender.id || 'N/A'}</strong>
+            </Typography>
             <Typography sx={{ fontWeight: 600, marginBottom: '12px', color: theme.palette.primary.main }}>
               📋 ملخص المناقصة
             </Typography>

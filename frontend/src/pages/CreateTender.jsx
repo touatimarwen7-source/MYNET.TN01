@@ -73,6 +73,7 @@ const REQUIREMENT_PRIORITIES = [
 
 // ============ Initial State ============
 const getInitialFormData = () => ({
+  platform_id: '',
   consultation_number: '',
   reference_id: '',
   title: '',
@@ -1419,6 +1420,8 @@ export default function CreateTender() {
       });
 
       clearDraft('tender_draft');
+      // Store platform_id for tracking
+      const tenderData = { ...formData, platform_id: response.data.tender.id };
       navigate(`/tender/${response.data.tender.id}`);
     } catch (err) {
       setError(handleAPIError(err));

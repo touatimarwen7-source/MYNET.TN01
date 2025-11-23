@@ -123,40 +123,154 @@ const StepContent = ({ type, formData, handleChange, loading, newRequirement, se
   switch (type) {
     case 'step1':
       return (
-        <Box sx={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-          <TextField
-            fullWidth
-            label="Titre de l'Appel d'Offres *"
-            name="title"
-            value={formData.title}
-            onChange={handleChange}
-            placeholder="Ex: Fourniture d'équipements informatiques"
-            disabled={loading}
-            helperText={`${formData.title.length}/100 caractères`}
-            inputProps={{ maxLength: 100 }}
-          />
-          <TextField
-            fullWidth
-            label="Description *"
-            name="description"
-            value={formData.description}
-            onChange={handleChange}
-            placeholder="Décrivez en détail l'objet de votre appel d'offres..."
-            multiline
-            rows={4}
-            disabled={loading}
-          />
-          <FormControlLabel
-            control={
-              <Checkbox
-                name="is_public"
-                checked={formData.is_public}
-                onChange={handleChange}
-                disabled={loading}
-              />
-            }
-            label="Appel d'offres public (visible pour tous les fournisseurs)"
-          />
+        <Box sx={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+          {/* Header Section */}
+          <Box sx={{ pb: '20px', borderBottom: '2px solid #E3F2FD' }}>
+            <Typography 
+              variant="h5" 
+              sx={{ fontWeight: 700, color: '#0056B3', mb: 1, display: 'flex', alignItems: 'center', gap: '8px' }}
+            >
+              📋 Informations Générales
+            </Typography>
+            <Typography sx={{ fontSize: '14px', color: '#666666', lineHeight: 1.5 }}>
+              Définissez le titre et la description de votre appel d'offres. Ces informations seront visibles par les fournisseurs intéressés.
+            </Typography>
+          </Box>
+
+          {/* Title Field */}
+          <Box>
+            <Typography sx={{ fontSize: '13px', fontWeight: 600, color: '#212121', mb: '8px' }}>
+              Titre de l'Appel d'Offres *
+            </Typography>
+            <TextField
+              fullWidth
+              placeholder="Ex: Fourniture d'équipements informatiques pour le nouveau bureau"
+              name="title"
+              value={formData.title}
+              onChange={handleChange}
+              disabled={loading}
+              inputProps={{ maxLength: 100 }}
+              sx={{
+                '& .MuiOutlinedInput-root': {
+                  borderRadius: '4px',
+                  backgroundColor: '#FAFAFA',
+                  '&:hover': {
+                    backgroundColor: '#F5F5F5'
+                  },
+                  '&.Mui-focused': {
+                    backgroundColor: '#FFFFFF'
+                  }
+                }
+              }}
+            />
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: '6px' }}>
+              <Typography sx={{ fontSize: '12px', color: '#999999' }}>
+                ✓ Soyez précis et descriptif
+              </Typography>
+              <Typography sx={{ fontSize: '12px', color: formData.title.length > 80 ? '#FF6F00' : '#999999' }}>
+                {formData.title.length}/100 caractères
+              </Typography>
+            </Box>
+          </Box>
+
+          {/* Description Field */}
+          <Box>
+            <Typography sx={{ fontSize: '13px', fontWeight: 600, color: '#212121', mb: '8px' }}>
+              Description Détaillée *
+            </Typography>
+            <TextField
+              fullWidth
+              placeholder="Décrivez en détail l'objet de votre appel d'offres, les objectifs, les exigences principales..."
+              name="description"
+              value={formData.description}
+              onChange={handleChange}
+              disabled={loading}
+              multiline
+              rows={5}
+              sx={{
+                '& .MuiOutlinedInput-root': {
+                  borderRadius: '4px',
+                  backgroundColor: '#FAFAFA',
+                  '&:hover': {
+                    backgroundColor: '#F5F5F5'
+                  },
+                  '&.Mui-focused': {
+                    backgroundColor: '#FFFFFF'
+                  }
+                }
+              }}
+            />
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: '4px', mt: '6px' }}>
+              <Typography sx={{ fontSize: '12px', color: '#999999' }}>
+                💡 Minimum 20 caractères | Actuel: {formData.description.length}
+              </Typography>
+              {formData.description.length >= 20 && (
+                <Typography sx={{ fontSize: '12px', color: '#4CAF50', fontWeight: 600 }}>
+                  ✓ Valide
+                </Typography>
+              )}
+            </Box>
+          </Box>
+
+          {/* Visibility Section */}
+          <Box sx={{ 
+            p: '16px', 
+            backgroundColor: formData.is_public ? '#E3F2FD' : '#FFF3E0', 
+            borderRadius: '4px',
+            border: '1px solid',
+            borderColor: formData.is_public ? '#BBDEFB' : '#FFE0B2',
+            transition: 'all 0.3s ease'
+          }}>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  name="is_public"
+                  checked={formData.is_public}
+                  onChange={handleChange}
+                  disabled={loading}
+                  sx={{ color: '#0056B3' }}
+                />
+              }
+              label={
+                <Box>
+                  <Typography sx={{ fontSize: '14px', fontWeight: 600, color: '#212121' }}>
+                    🌐 Appel d'offres public
+                  </Typography>
+                  <Typography sx={{ fontSize: '12px', color: '#666666', mt: '2px' }}>
+                    {formData.is_public 
+                      ? 'Cet appel d\'offres sera visible par tous les fournisseurs enregistrés' 
+                      : 'Cet appel d\'offres sera visible uniquement par les fournisseurs sélectionnés'
+                    }
+                  </Typography>
+                </Box>
+              }
+              sx={{ width: '100%', margin: 0 }}
+            />
+          </Box>
+
+          {/* Info Box */}
+          <Paper 
+            sx={{ 
+              p: '16px', 
+              backgroundColor: '#E8F5E9', 
+              border: '1px solid #C8E6C9',
+              borderRadius: '4px'
+            }}
+          >
+            <Box sx={{ display: 'flex', gap: '12px' }}>
+              <Typography sx={{ fontSize: '24px' }}>ℹ️</Typography>
+              <Box>
+                <Typography sx={{ fontSize: '13px', fontWeight: 600, color: '#2E7D32', mb: '4px' }}>
+                  Conseils pour une meilleure visibilité
+                </Typography>
+                <Typography sx={{ fontSize: '12px', color: '#558B2F', lineHeight: 1.6 }}>
+                  • Utilisez des mots-clés pertinents pour améliorer la recherche<br/>
+                  • Soyez clair sur les délais et les exigences<br/>
+                  • Mentionnez les certifications requises si applicable
+                </Typography>
+              </Box>
+            </Box>
+          </Paper>
         </Box>
       );
     case 'step2':

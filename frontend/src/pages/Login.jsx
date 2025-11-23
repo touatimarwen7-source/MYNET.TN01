@@ -12,14 +12,14 @@ import {
   CircularProgress,
   Alert,
 } from '@mui/material';
-import { useToastContext } from '../contexts/ToastContext';
+import { useToast } from '../contexts/AppContext';
 import { authAPI } from '../api';
 import TokenManager from '../services/tokenManager';
 import { setPageTitle } from '../utils/pageTitle';
 
 export default function Login() {
   const navigate = useNavigate();
-  const { addToast } = useToastContext();
+  const { addToast } = useToast();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);

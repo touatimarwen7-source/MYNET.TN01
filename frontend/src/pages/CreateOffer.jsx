@@ -36,13 +36,13 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { procurementAPI } from '../api';
-import { useToastContext } from '../contexts/ToastContext';
+import { useToast } from '../contexts/AppContext';
 import { setPageTitle } from '../utils/pageTitle';
 
 export default function CreateOffer() {
   const { tenderId } = useParams();
   const navigate = useNavigate();
-  const { addToast } = useToastContext();
+  const { addToast } = useToast();
 
   useEffect(() => {
     setPageTitle('Soumission d\'Offre Sécurisée');

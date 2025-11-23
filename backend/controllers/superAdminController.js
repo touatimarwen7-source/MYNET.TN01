@@ -98,7 +98,7 @@ exports.createPage = async (req, res) => {
     );
 
     // Log audit
-    await logAuditAction(req.user.id, 'CREATE_PAGE', `Created page: ${title}`, 'success');
+    await logAuditAction(req.user.id, 'CREATE_PAGE', `Created page: ${title}`, 'success', req.clientIP);
 
     return res.status(201).json({ success: true, data: result.rows[0] });
   } catch (error) {
@@ -128,7 +128,7 @@ exports.updatePage = async (req, res) => {
     }
 
     // Log audit
-    await logAuditAction(req.user.id, 'UPDATE_PAGE', `Updated page: ${title}`, 'success');
+    await logAuditAction(req.user.id, 'UPDATE_PAGE', `Updated page: ${title}`, 'success', req.clientIP);
 
     return res.json({ success: true, data: result.rows[0] });
   } catch (error) {
@@ -157,7 +157,7 @@ exports.deletePage = async (req, res) => {
     }
 
     // Log audit
-    await logAuditAction(req.user.id, 'DELETE_PAGE', `Deleted page ID: ${id}`, 'success');
+    await logAuditAction(req.user.id, 'DELETE_PAGE', `Deleted page ID: ${id}`, 'success', req.clientIP);
 
     return res.json({ success: true, message: 'Page deleted successfully' });
   } catch (error) {
@@ -234,7 +234,7 @@ exports.uploadFile = async (req, res) => {
     );
 
     // Log audit
-    await logAuditAction(req.user.id, 'UPLOAD_FILE', `Uploaded: ${fileName}`, 'success');
+    await logAuditAction(req.user.id, 'UPLOAD_FILE', `Uploaded: ${fileName}`, 'success', req.clientIP);
 
     return res.status(201).json({ success: true, data: result.rows[0] });
   } catch (error) {
@@ -262,7 +262,7 @@ exports.deleteFile = async (req, res) => {
     }
 
     // Log audit
-    await logAuditAction(req.user.id, 'DELETE_FILE', `Deleted file ID: ${id}`, 'success');
+    await logAuditAction(req.user.id, 'DELETE_FILE', `Deleted file ID: ${id}`, 'success', req.clientIP);
 
     return res.json({ success: true, message: 'File deleted successfully' });
   } catch (error) {
@@ -327,7 +327,7 @@ exports.createDocument = async (req, res) => {
     );
 
     // Log audit
-    await logAuditAction(req.user.id, 'CREATE_DOCUMENT', `Created document: ${name}`, 'success');
+    await logAuditAction(req.user.id, 'CREATE_DOCUMENT', `Created document: ${name}`, 'success', req.clientIP);
 
     return res.status(201).json({ success: true, data: result.rows[0] });
   } catch (error) {
@@ -350,7 +350,7 @@ exports.deleteDocument = async (req, res) => {
     );
 
     // Log audit
-    await logAuditAction(req.user.id, 'DELETE_DOCUMENT', `Deleted document ID: ${id}`, 'success');
+    await logAuditAction(req.user.id, 'DELETE_DOCUMENT', `Deleted document ID: ${id}`, 'success', req.clientIP);
 
     return res.json({ success: true, message: 'Document deleted successfully' });
   } catch (error) {
@@ -420,7 +420,7 @@ exports.sendEmail = async (req, res) => {
     );
 
     // Log audit
-    await logAuditAction(req.user.id, 'SEND_EMAIL', `Sent email to: ${recipient}`, 'success');
+    await logAuditAction(req.user.id, 'SEND_EMAIL', `Sent email to: ${recipient}`, 'success', req.clientIP);
 
     return res.status(201).json({ success: true, data: result.rows[0], message: 'Email sent successfully' });
   } catch (error) {
@@ -499,7 +499,7 @@ exports.updateUserRole = async (req, res) => {
     }
 
     // Log audit
-    await logAuditAction(req.user.id, 'UPDATE_USER_ROLE', `Changed user ${id} role to ${role}`, 'success');
+    await logAuditAction(req.user.id, 'UPDATE_USER_ROLE', `Changed user ${id} role to ${role}`, 'success', req.clientIP);
 
     return res.json({ success: true, data: result.rows[0] });
   } catch (error) {
@@ -518,7 +518,7 @@ exports.blockUser = async (req, res) => {
     await db.query(`UPDATE users SET is_active = false WHERE id = $1`, [id]);
 
     // Log audit
-    await logAuditAction(req.user.id, 'BLOCK_USER', `Blocked user ID: ${id}`, 'success');
+    await logAuditAction(req.user.id, 'BLOCK_USER', `Blocked user ID: ${id}`, 'success', req.clientIP);
 
     return res.json({ success: true, message: 'User blocked successfully' });
   } catch (error) {
@@ -537,7 +537,7 @@ exports.unblockUser = async (req, res) => {
     await db.query(`UPDATE users SET is_active = true WHERE id = $1`, [id]);
 
     // Log audit
-    await logAuditAction(req.user.id, 'UNBLOCK_USER', `Unblocked user ID: ${id}`, 'success');
+    await logAuditAction(req.user.id, 'UNBLOCK_USER', `Unblocked user ID: ${id}`, 'success', req.clientIP);
 
     return res.json({ success: true, message: 'User unblocked successfully' });
   } catch (error) {
@@ -660,7 +660,7 @@ exports.createBackup = async (req, res) => {
     );
 
     // Log audit
-    await logAuditAction(req.user.id, 'CREATE_BACKUP', `Created backup: ${backupName}`, 'success');
+    await logAuditAction(req.user.id, 'CREATE_BACKUP', `Created backup: ${backupName}`, 'success', req.clientIP);
 
     return res.status(201).json({ success: true, data: result.rows[0] });
   } catch (error) {
@@ -677,7 +677,7 @@ exports.restoreBackup = async (req, res) => {
     const { id } = req.params;
 
     // Log audit
-    await logAuditAction(req.user.id, 'RESTORE_BACKUP', `Restored from backup ID: ${id}`, 'success');
+    await logAuditAction(req.user.id, 'RESTORE_BACKUP', `Restored from backup ID: ${id}`, 'success', req.clientIP);
 
     return res.json({ success: true, message: 'Backup restored successfully' });
   } catch (error) {
@@ -727,7 +727,7 @@ exports.createSubscriptionPlan = async (req, res) => {
     );
 
     // Log audit
-    await logAuditAction(req.user.id, 'CREATE_PLAN', `Created plan: ${name}`, 'success');
+    await logAuditAction(req.user.id, 'CREATE_PLAN', `Created plan: ${name}`, 'success', req.clientIP);
 
     return res.status(201).json({ success: true, data: result.rows[0] });
   } catch (error) {
@@ -756,7 +756,7 @@ exports.updateSubscriptionPlan = async (req, res) => {
     }
 
     // Log audit
-    await logAuditAction(req.user.id, 'UPDATE_PLAN', `Updated plan: ${name}`, 'success');
+    await logAuditAction(req.user.id, 'UPDATE_PLAN', `Updated plan: ${name}`, 'success', req.clientIP);
 
     return res.json({ success: true, data: result.rows[0] });
   } catch (error) {
@@ -775,7 +775,7 @@ exports.deleteSubscriptionPlan = async (req, res) => {
     await db.query(`DELETE FROM subscription_plans WHERE id = $1`, [id]);
 
     // Log audit
-    await logAuditAction(req.user.id, 'DELETE_PLAN', `Deleted plan ID: ${id}`, 'success');
+    await logAuditAction(req.user.id, 'DELETE_PLAN', `Deleted plan ID: ${id}`, 'success', req.clientIP);
 
     return res.json({ success: true, message: 'Plan deleted successfully' });
   } catch (error) {
@@ -825,7 +825,7 @@ exports.toggleFeature = async (req, res) => {
 
     // Log audit
     const action = enabled ? 'ENABLE_FEATURE' : 'DISABLE_FEATURE';
-    await logAuditAction(req.user.id, action, `${action}: ${result.rows[0].name}`, 'success');
+    await logAuditAction(req.user.id, action, `${action}: ${result.rows[0].name}`, 'success', req.clientIP);
 
     return res.json({ success: true, data: result.rows[0] });
   } catch (error) {
@@ -836,14 +836,14 @@ exports.toggleFeature = async (req, res) => {
 // ===== HELPER FUNCTIONS =====
 
 /**
- * Log audit action
+ * Log audit action with IP address tracking
  */
-async function logAuditAction(userId, action, description, status) {
+async function logAuditAction(userId, action, description, status, ipAddress = null) {
   try {
     await db.query(
-      `INSERT INTO audit_logs (user_id, action, description, status, created_at)
-       VALUES ($1, $2, $3, $4, NOW())`,
-      [userId, action, description, status]
+      `INSERT INTO audit_logs (user_id, action, description, status, ip_address, created_at)
+       VALUES ($1, $2, $3, $4, $5, NOW())`,
+      [userId, action, description, status, ipAddress]
     );
   } catch (error) {
     console.error('Error logging audit:', error);

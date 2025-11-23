@@ -474,7 +474,7 @@ const StepContent = ({ type, formData, handleChange, loading, newRequirement, se
             variant="outlined"
             startIcon={<AddIcon />}
             onClick={addLot}
-            disabled={loading || !newLot.objet.trim()}
+            disabled={loading || !(newLot?.objet?.trim())}
             sx={{ color: theme.palette.primary.main, borderColor: '#0056B3', mb: 2 }}
           >
             Ajouter un Lot/Article

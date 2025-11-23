@@ -91,6 +91,7 @@ const POManagement = lazy(() => import('./pages/POManagement'));
 const PODetail = lazy(() => import('./pages/PODetail'));
 const ReviewsList = lazy(() => import('./pages/ReviewsList'));
 const SuperAdminCRUD = lazy(() => import('./pages/SuperAdminCRUD'));
+const EmailNotifications = lazy(() => import('./pages/EmailNotifications'));
 
 const LoadingFallback = () => (
   <Container maxWidth="lg" sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '60vh' }}>
@@ -379,6 +380,36 @@ function App() {
               <Route 
               path="/reviews" 
               element={user ? <ReviewsList /> : <Navigate to="/login" />} 
+            />
+
+              {/* Messaging System - Communication */}
+              <Route 
+              path="/inbox" 
+              element={user ? <Inbox /> : <Navigate to="/login" />} 
+            />
+              <Route 
+              path="/compose" 
+              element={user ? <Compose /> : <Navigate to="/login" />} 
+            />
+              <Route 
+              path="/message/:messageId" 
+              element={user ? <MessageDetail /> : <Navigate to="/login" />} 
+            />
+
+              {/* Email Notifications */}
+              <Route 
+              path="/email-notifications" 
+              element={user?.role === 'super_admin' ? <EmailNotifications /> : <Navigate to="/tenders" />} 
+            />
+
+              {/* Supply Requests & Invoices */}
+              <Route 
+              path="/my-supply-requests" 
+              element={user?.role === 'buyer' ? <MySupplyRequests /> : <Navigate to="/tenders" />} 
+            />
+              <Route 
+              path="/supplier-requests" 
+              element={user?.role === 'supplier' ? <SupplierRequests /> : <Navigate to="/tenders" />} 
             />
 
               {/* Administration */}

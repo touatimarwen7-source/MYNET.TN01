@@ -62,10 +62,10 @@ export default function Compose() {
         subject: formData.subject,
         content: formData.content,
       });
-      setSuccess('تم إرسال الرسالة بنجاح');
+      setSuccess("تم إرسال الرسالة بنجاح");
       setTimeout(() => navigate('/inbox'), 2000);
     } catch (err) {
-      setError('Erreur lors de l'envoi du message');
+      setError("Erreur lors de l'envoi du message");
     } finally {
       setSending(false);
     }

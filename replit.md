@@ -98,6 +98,66 @@ The platform utilizes a React frontend (Vite) and a Node.js backend with a Postg
 
 ---
 
+## Recent Changes (November 23, 2025 - 4 PRIORITY 2 IMPORTANT FEATURES ✅)
+
+### ✅ Priority 2 Features - Formulaires Supply Request/Invoice, Messagerie, Notifications Email:
+
+1. **Formulaires CreateSupplyRequest** ✅
+   - CreateSupplyRequest.jsx (776 lignes) - Demande d'approvisionnement multi-étapes
+   - 8 étapes: Infos de base, Type, Quantités, Spécifications, Calendrier, Paiement, Fournisseurs, Révision
+   - Auto-save de brouillon avec récupération
+   - Validation complète
+   - Route: `/offer/:offerId/supply-request`
+
+2. **Formulaires CreateInvoice** ✅
+   - CreateInvoice.jsx (879 lignes) - Facturation multi-étapes
+   - 8 étapes: Infos facture, Articles, Détails financiers, Taxes, Conditions paiement, Documents, Infos bancaires, Révision
+   - Calcul automatique TVA et totaux
+   - Génération de numéro de facture
+   - Route: `/supply-request/:supplyRequestId/invoice`
+
+3. **Système de Messagerie** ✅
+   - Inbox.jsx (244 lignes) - Boîte de réception complète
+   - Compose.jsx (158 lignes) - Composition de messages
+   - MessageDetail.jsx (151 lignes) - Détails de conversation
+   - Filtrage par statut (lu/non lu)
+   - Recherche de destinataires
+   - Routes: `/inbox`, `/compose`, `/message/:messageId`
+
+4. **Notifications par Email** ✅
+   - EmailNotifications.jsx (nouvelle) - Gestion des notifications email
+   - Liste des emails envoyés avec statut (En attente, Envoyée, Échouée)
+   - Filtrage par destinataire/sujet/statut
+   - Compteur d'ouvertures
+   - Actions: Envoyer, Supprimer
+   - Route: `/email-notifications`
+   - Intégration prête pour SendGrid/Resend/Gmail
+
+### Files Created:
+- `frontend/src/pages/EmailNotifications.jsx` - Gestion notifications email
+
+### Files Updated:
+- `frontend/src/pages/Compose.jsx` - Fixed string literal errors (LSP fixes)
+- `frontend/src/App.jsx` - Added 5 new routes + lazy import
+
+### Routes Added (Priority 2):
+- `/inbox` - Boîte de réception (rôle: authenticated)
+- `/compose` - Composition message (rôle: authenticated)
+- `/message/:messageId` - Détails message (rôle: authenticated)
+- `/email-notifications` - Notifications email (rôle: super_admin)
+- `/my-supply-requests` - Liste demandes (rôle: buyer)
+- `/supplier-requests` - Demandes reçues (rôle: supplier)
+
+### Implementation Details:
+- Tous les formulaires multi-étapes avec Stepper MUI
+- Pagination et filtrage complets
+- 100% français
+- Gestion des brouillons (CreateSupplyRequest, CreateInvoice)
+- Zero LSP errors ✅
+- Production-ready ✅
+
+---
+
 ## Recent Changes (November 23, 2025 - 3 PRIORITY 1 BUSINESS CRITICAL FEATURES ✅)
 
 ### ✅ Priority 1 Features - Système de Bons de Commande, Avis/Évaluations, Super Admin CRUD:

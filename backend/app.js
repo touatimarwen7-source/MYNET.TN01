@@ -41,6 +41,7 @@ const ErrorHandler = require('./middleware/errorHandler');
 const requestIdMiddleware = require('./middleware/requestIdMiddleware');
 const performanceMiddleware = require('./middleware/performanceMiddleware');
 const { versionMiddleware } = require('./config/apiVersion');
+const { globalErrorHandler, notFoundHandler, asyncHandler } = require('./middleware/errorHandlingMiddleware');
 
 const app = express();
 
@@ -154,11 +155,13 @@ app.use('/api/search', searchRoutes);
 app.use('/api/documents/pdf', pdfRoutes);
 app.use('/api/webhooks', stripeWebhookRoutes);
 
-// ISSUE FIX #9: Add error handling middleware
-app.use(ErrorHandler.notFound);
-app.use((err, req, res, next) => ErrorHandler.handle(err, req, res, next));
+// ISSUE FIX #9: Add comprehensive error handling middleware
+app.use(notFoundHandler);
+app.use(globalErrorHandler);
 
 module.exports = app;
+module.exports.asyncHandler = asyncHandler;
+
 // TURN 3: NEW FEATURE ROUTES
 app.use('/api/analytics', analyticsRoutes);
 app.use('/api/search/advanced', advancedSearchRoutes);

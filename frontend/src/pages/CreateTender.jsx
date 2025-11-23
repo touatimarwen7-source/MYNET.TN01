@@ -429,6 +429,8 @@ const StepContent = ({ type, formData, handleChange, loading, newRequirement, se
         </Box>
       );
     case 'step4':
+      // Ensure newLot has default values
+      const safeNewLot = newLot || { numero: '', objet: '', typeAdjudication: 'lot' };
       return (
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
           <Box sx={{ pb: 2, borderBottom: '1px solid #e0e0e0' }}>
@@ -442,17 +444,19 @@ const StepContent = ({ type, formData, handleChange, loading, newRequirement, se
 
           <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: '2fr 1fr 1fr' }, gap: '16px', mb: 2 }}>
             <TextField
+              fullWidth
               label="Objet du Lot/Article *"
               placeholder="Ex: Fourniture d'ordinateurs portables"
-              value={newLot.objet}
+              value={safeNewLot.objet || ''}
               onChange={(e) => setNewLot(prev => ({ ...prev, objet: e.target.value }))}
               disabled={loading}
               size="small"
             />
             <TextField
+              fullWidth
               label="N° Lot/Article *"
               placeholder="Ex: 001"
-              value={newLot.numero}
+              value={safeNewLot.numero || ''}
               onChange={(e) => setNewLot(prev => ({ ...prev, numero: e.target.value }))}
               disabled={loading}
               size="small"
@@ -460,7 +464,7 @@ const StepContent = ({ type, formData, handleChange, loading, newRequirement, se
             <FormControl fullWidth disabled={loading} size="small">
               <InputLabel>Type d'Adjudication *</InputLabel>
               <Select
-                value={newLot.typeAdjudication}
+                value={safeNewLot.typeAdjudication || 'lot'}
                 onChange={(e) => setNewLot(prev => ({ ...prev, typeAdjudication: e.target.value }))}
                 label="Type d'Adjudication *"
               >
@@ -474,13 +478,13 @@ const StepContent = ({ type, formData, handleChange, loading, newRequirement, se
             variant="outlined"
             startIcon={<AddIcon />}
             onClick={addLot}
-            disabled={loading || !(newLot?.objet?.trim())}
+            disabled={loading || !(safeNewLot?.objet?.trim())}
             sx={{ color: theme.palette.primary.main, borderColor: '#0056B3', mb: 2 }}
           >
             Ajouter un Lot/Article
           </Button>
 
-          {formData.lots && formData.lots.length > 0 && (
+          {formData?.lots && formData.lots.length > 0 && (
             <TableContainer component={Paper} sx={{ border: '1px solid #E0E0E0' }}>
               <Table size="small">
                 <TableHead sx={{ backgroundColor: '#F5F5F5' }}>
@@ -1256,18 +1260,18 @@ export default function CreateTender() {
   };
 
   const addLot = () => {
-    if (newLot.objet.trim()) {
+    if (newLot && newLot.objet && newLot.objet.trim()) {
       const lotObj = {
         id: Date.now(),
         numero: newLot.numero || `${(formData.lots?.length || 0) + 1}`,
         objet: newLot.objet.trim(),
-        typeAdjudication: newLot.typeAdjudication
+        typeAdjudication: newLot.typeAdjudication || 'lot'
       };
 
       if (editingLotIndex !== null) {
         setFormData(prev => ({
           ...prev,
-          lots: prev.lots.map((lot, i) =>
+          lots: (prev.lots || []).map((lot, i) =>
             i === editingLotIndex ? lotObj : lot
           )
         }));
@@ -1286,18 +1290,20 @@ export default function CreateTender() {
   const removeLot = (index) => {
     setFormData(prev => ({
       ...prev,
-      lots: prev.lots.filter((_, i) => i !== index)
+      lots: (prev.lots || []).filter((_, i) => i !== index)
     }));
   };
 
   const editLot = (index) => {
-    const lot = formData.lots[index];
-    setNewLot({
-      numero: lot.numero,
-      objet: lot.objet,
-      typeAdjudication: lot.typeAdjudication
-    });
-    setEditingLotIndex(index);
+    const lot = formData?.lots?.[index];
+    if (lot) {
+      setNewLot({
+        numero: lot.numero || '',
+        objet: lot.objet || '',
+        typeAdjudication: lot.typeAdjudication || 'lot'
+      });
+      setEditingLotIndex(index);
+    }
   };
 
   const handleFileUpload = (e) => {

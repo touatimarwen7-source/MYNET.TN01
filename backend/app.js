@@ -50,6 +50,8 @@ const { globalErrorHandler, notFoundHandler, asyncHandler } = require('./middlew
 const { safeQueryMiddleware } = require('./middleware/safeQueryMiddleware');
 const { validationMiddleware } = require('./middleware/validationMiddleware');
 const { attachValidators } = require('./middleware/endpointValidators');
+const { cacheMiddleware, cacheControlHeaders } = require('./middleware/cacheMiddleware');
+const { errorTracker } = require('./services/ErrorTrackingService');
 
 const app = express();
 
@@ -104,6 +106,10 @@ app.use(requestIdMiddleware);
 // ENHANCEMENT: Add performance monitoring
 app.use(performanceMiddleware);
 
+// 🚀 CACHING: Add cache middleware and headers
+app.use(cacheMiddleware(300)); // 5 minute default TTL
+app.use(cacheControlHeaders(300));
+
 // ENHANCEMENT: Add API version headers
 app.use(versionMiddleware);
 
@@ -137,6 +143,22 @@ app.get('/health', (req, res) => {
         service: 'MyNet.tn API',
         version: '1.2.0'
     });
+});
+
+// 📊 ERROR TRACKING STATS ENDPOINT
+app.get('/api/admin/error-stats', (req, res) => {
+    try {
+        const stats = errorTracker.getStats();
+        const recentErrors = errorTracker.getRecentErrors(20);
+        
+        res.status(200).json({
+            stats,
+            recentErrors,
+            timestamp: new Date().toISOString()
+        });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
 });
 
 app.get('/', (req, res) => {

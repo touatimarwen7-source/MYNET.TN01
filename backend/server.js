@@ -6,6 +6,7 @@ const { initializeSchema } = require('./config/schema');
 const { getPool } = require('./config/db');
 const BackupScheduler = require('./services/backup/BackupScheduler');
 const { initializeWebSocket } = require('./config/websocket');
+const { errorTracker } = require('./services/ErrorTrackingService');
 
 const PORT = process.env.PORT || 3000;
 
@@ -54,8 +55,29 @@ async function startServer() {
 
     } catch (error) {
         console.error('❌ Failed to start server:', error.message);
+        errorTracker.trackError(error, {
+            severity: 'critical',
+            context: 'server_startup'
+        });
         process.exit(1);
     }
 }
+
+// 🔍 Global error handlers for uncaught exceptions
+process.on('uncaughtException', (error) => {
+    console.error('💥 Uncaught Exception:', error);
+    errorTracker.trackError(error, {
+        severity: 'critical',
+        context: 'uncaught_exception'
+    });
+});
+
+process.on('unhandledRejection', (reason, promise) => {
+    console.error('💥 Unhandled Rejection:', reason);
+    errorTracker.trackError(new Error(String(reason)), {
+        severity: 'critical',
+        context: 'unhandled_rejection'
+    });
+});
 
 startServer();

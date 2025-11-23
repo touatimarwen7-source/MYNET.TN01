@@ -567,17 +567,31 @@ const StepContent = ({ type, formData, handleChange, loading, newRequirement, se
                 }
               }}
             />
-          <TextField
-            fullWidth
-            label="Date d'Ouverture (Decryption Date)"
-            name="opening_date"
-            type="datetime-local"
-            value={formData.opening_date}
-            onChange={handleChange}
-            InputLabelProps={{ shrink: true }}
-            disabled={loading}
-            helperText="Date où les offres cryptées seront déchiffrées"
-          />
+          </Box>
+
+          <Box>
+            <Typography sx={{ fontSize: '13px', fontWeight: 600, color: '#212121', mb: '8px' }}>
+              Date d'Ouverture (Decryption Date)
+            </Typography>
+            <TextField
+              fullWidth
+              name="opening_date"
+              type="datetime-local"
+              value={formData.opening_date}
+              onChange={handleChange}
+              InputLabelProps={{ shrink: true }}
+              disabled={loading}
+              sx={{
+                '& .MuiOutlinedInput-root': {
+                  borderRadius: '4px',
+                  backgroundColor: '#FAFAFA',
+                  '&:hover': { backgroundColor: '#F5F5F5' },
+                  '&.Mui-focused': { backgroundColor: '#FFFFFF' }
+                }
+              }}
+            />
+          </Box>
+
           <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr' }, gap: '16px' }}>
             <TextField
               fullWidth
@@ -661,6 +675,7 @@ const StepContent = ({ type, formData, handleChange, loading, newRequirement, se
                 }
               }}
             />
+          </Box>
 
           <Box>
             <Typography sx={{ fontSize: '14px', fontWeight: 600, mb: 1, color: theme.palette.text.primary }}>

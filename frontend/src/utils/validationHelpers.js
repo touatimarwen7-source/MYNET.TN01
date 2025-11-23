@@ -138,31 +138,41 @@ export const validatePhone = (phone) => {
 
 // Budget validation
 export const validateBudget = (min, max) => {
+  // Allow empty budgets - they can be filled later
+  if (!min && !max) {
+    return { valid: true };
+  }
+  
   const minNum = parseFloat(min);
   const maxNum = parseFloat(max);
   
-  if (!min || !max || isNaN(minNum) || isNaN(maxNum)) {
-    return { valid: false, error: 'Budgets invalides' };
+  if ((min && isNaN(minNum)) || (max && isNaN(maxNum))) {
+    return { valid: false, error: 'Les budgets doivent être des nombres valides' };
   }
   
-  if (minNum < 0 || maxNum < 0) {
+  if ((minNum && minNum < 0) || (maxNum && maxNum < 0)) {
     return { valid: false, error: 'Le budget ne peut pas être négatif' };
   }
   
-  if (minNum > maxNum) {
-    return { valid: false, error: 'Le budget minimum doit être inférieur au maximum' };
+  if (minNum > maxNum && minNum && maxNum) {
+    return { valid: false, error: 'Budget min doit être ≤ budget max' };
   }
   
   return { valid: true };
 };
 
-// Deadline validation
+// Deadline validation - Allow moving to next step without deadline
 export const validateDeadline = (deadline) => {
+  // Deadline is optional for navigating steps
+  if (!deadline) {
+    return { valid: true };
+  }
+  
   const date = new Date(deadline);
   const now = new Date();
   
-  if (!deadline || isNaN(date.getTime())) {
-    return { valid: false, error: 'Date invalide' };
+  if (isNaN(date.getTime())) {
+    return { valid: false, error: 'Format de date invalide' };
   }
   
   if (date <= now) {

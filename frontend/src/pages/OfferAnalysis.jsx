@@ -100,7 +100,6 @@ export default function OfferAnalysis() {
         }
       }
     } catch (err) {
-      console.error('خطأ في جلب العروض:', err);
       setError('فشل تحميل تحليل العروض: ' + err.message);
     } finally {
       setLoading(false);

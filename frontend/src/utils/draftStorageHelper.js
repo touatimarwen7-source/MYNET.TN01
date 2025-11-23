@@ -18,7 +18,7 @@ export const autosaveDraft = (draftKey, data) => {
     localStorage.setItem(storageKey, JSON.stringify(data));
     localStorage.setItem(timestampKey, new Date().toISOString());
   } catch (err) {
-    console.error('❌ Auto-save failed:', err.message);
+    // Silently fail - don't break user experience
   }
 };
 
@@ -50,7 +50,7 @@ export const recoverDraft = (draftKey) => {
     
     return JSON.parse(savedData);
   } catch (err) {
-    console.error('❌ Draft recovery failed:', err.message);
+    // Silently fail - return null for expired/corrupted drafts
     return null;
   }
 };
@@ -68,7 +68,7 @@ export const clearDraft = (draftKey) => {
     localStorage.removeItem(storageKey);
     localStorage.removeItem(timestampKey);
   } catch (err) {
-    console.error('❌ Draft clearing failed:', err.message);
+    // Silently fail
   }
 };
 
@@ -112,7 +112,6 @@ export const getAllDrafts = () => {
     }
     return drafts;
   } catch (err) {
-    console.error('❌ Getting drafts failed:', err.message);
     return [];
   }
 };

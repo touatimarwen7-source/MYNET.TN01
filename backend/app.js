@@ -43,6 +43,8 @@ const performanceMiddleware = require('./middleware/performanceMiddleware');
 const { versionMiddleware } = require('./config/apiVersion');
 const { globalErrorHandler, notFoundHandler, asyncHandler } = require('./middleware/errorHandlingMiddleware');
 const { safeQueryMiddleware } = require('./middleware/safeQueryMiddleware');
+const { validationMiddleware } = require('./middleware/validationMiddleware');
+const { attachValidators } = require('./middleware/endpointValidators');
 
 const app = express();
 
@@ -99,6 +101,10 @@ app.use(loggingMiddleware);
 
 // 🛡️ CRITICAL FIX #1: Safe database connection handling
 app.use(safeQueryMiddleware);
+
+// 🛡️ CRITICAL FIX #2: Comprehensive input validation (prevents SQL injection & XSS)
+app.use(validationMiddleware);
+app.use(attachValidators);
 
 app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');

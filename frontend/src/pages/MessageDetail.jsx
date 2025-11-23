@@ -36,7 +36,6 @@ export default function MessageDetail() {
       setMessage(response.data);
       setError('');
     } catch (err) {
-      console.error('Error fetching message:', err);
       setError('Erreur lors du chargement du message');
     } finally {
       setLoading(false);
@@ -49,7 +48,6 @@ export default function MessageDetail() {
       await axiosInstance.delete(`/messaging/${messageId}`);
       navigate('/inbox');
     } catch (err) {
-      console.error('Error:', err);
       setError('خطأ في حذف الرسالة');
     }
   };

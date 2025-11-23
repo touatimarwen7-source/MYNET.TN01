@@ -51,7 +51,6 @@ export default function SupplierRequests() {
       setRequests(data.data || []);
       setError('');
     } catch (err) {
-      console.error('Error fetching requests:', err);
       setError('Erreur lors du chargement des demandes');
     } finally {
       setLoading(false);
@@ -105,7 +104,6 @@ export default function SupplierRequests() {
       // Show success message
       alert('تم تحديث حالة الطلب بنجاح');
     } catch (err) {
-      console.error('Error updating status:', err);
       setError('Erreur lors de la mise à jour du statut');
     }
   };

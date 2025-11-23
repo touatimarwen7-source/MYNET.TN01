@@ -59,7 +59,6 @@ export default function DirectSupplyRequest() {
       const response = await procurementAPI.getSuppliers();
       setSuppliers(response.data || []);
     } catch (err) {
-      console.error('Error fetching suppliers:', err);
       setError('Erreur lors du chargement des fournisseurs');
     } finally {
       setLoading(false);
@@ -122,7 +121,6 @@ export default function DirectSupplyRequest() {
         navigate('/my-supply-requests');
       }, 2000);
     } catch (err) {
-      console.error('Error submitting request:', err);
       setError(err.response?.data?.error || 'Erreur lors de l\'envoi de la demande');
     } finally {
       setSubmitting(false);

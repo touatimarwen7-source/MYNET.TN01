@@ -136,9 +136,7 @@ export const errorHandler = {
       url: error?.response?.config?.url
     };
 
-    // Development: console.error
     if (import.meta.env.MODE === 'development') {
-      console.error(
         `[${context}] [${errorInfo.code}] ${errorInfo.message}`,
         error
       );

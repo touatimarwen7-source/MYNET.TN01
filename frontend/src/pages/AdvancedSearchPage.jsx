@@ -23,7 +23,6 @@ const AdvancedSearchPage = () => {
       });
       setResults(res.data);
     } catch (error) {
-      console.error('Search error:', error);
     }
   };
 

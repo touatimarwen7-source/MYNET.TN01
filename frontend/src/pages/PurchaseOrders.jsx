@@ -48,7 +48,6 @@ export default function PurchaseOrders() {
       setOrders(response.data);
       setError('');
     } catch (err) {
-      console.error('Error:', err);
       setError('Erreur lors du chargement des bons de commande');
     } finally {
       setLoading(false);

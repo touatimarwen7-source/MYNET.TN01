@@ -97,7 +97,6 @@ export default function CompanyProfile() {
       setCompanyData(transformed);
       setError('');
     } catch (err) {
-      console.error('Error fetching company profile:', err);
       setError('Erreur lors du chargement du profil');
     } finally {
       setLoading(false);
@@ -138,7 +137,6 @@ export default function CompanyProfile() {
       setSearchResults(results);
       setShowSearch(true);
     } catch (err) {
-      console.error('Search error:', err);
       setError('Erreur lors de la recherche');
     } finally {
       setLoading(false);

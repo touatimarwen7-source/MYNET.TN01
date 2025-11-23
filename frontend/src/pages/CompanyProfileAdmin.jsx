@@ -82,7 +82,6 @@ export default function CompanyProfileAdmin() {
       });
       setError('');
     } catch (err) {
-      console.error('Error fetching profile:', err);
       setError('Erreur lors du chargement du profil');
     } finally {
       setLoading(false);
@@ -147,7 +146,6 @@ export default function CompanyProfileAdmin() {
       setTimeout(() => setSuccess(''), 3000);
       setError('');
     } catch (err) {
-      console.error('Error saving profile:', err);
       setError('Erreur lors de la sauvegarde du profil');
     } finally {
       setSaving(false);

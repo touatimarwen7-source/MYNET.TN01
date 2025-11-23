@@ -110,7 +110,7 @@ const StepContent = ({ type, formData, handleChange, loading, newRequirement, se
               name="category"
               value={formData.category}
               onChange={handleChange}
-              label="Catégorie"
+              label="Catégorie *"
             >
               <MenuItem value="technology">Technologie & Informatique</MenuItem>
               <MenuItem value="supplies">Fournitures & Matériaux</MenuItem>
@@ -188,7 +188,7 @@ const StepContent = ({ type, formData, handleChange, loading, newRequirement, se
               size="small"
             />
             <TextField
-              label="N° Lot/Article"
+              label="N° Lot/Article *"
               placeholder="Ex: 001"
               value={newLot.numero}
               onChange={(e) => setNewLot(prev => ({ ...prev, numero: e.target.value }))}
@@ -196,11 +196,11 @@ const StepContent = ({ type, formData, handleChange, loading, newRequirement, se
               size="small"
             />
             <FormControl fullWidth disabled={loading} size="small">
-              <InputLabel>Type d'Adjudication</InputLabel>
+              <InputLabel>Type d'Adjudication *</InputLabel>
               <Select
                 value={newLot.typeAdjudication}
                 onChange={(e) => setNewLot(prev => ({ ...prev, typeAdjudication: e.target.value }))}
-                label="Type d'Adjudication"
+                label="Type d'Adjudication *"
               >
                 <MenuItem value="lot">Par Lot</MenuItem>
                 <MenuItem value="global">Globale (Appel Entier)</MenuItem>
@@ -300,7 +300,7 @@ const StepContent = ({ type, formData, handleChange, loading, newRequirement, se
           <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr' }, gap: '16px' }}>
             <TextField
               fullWidth
-              label="Début des Enquêtes"
+              label="Début des Enquêtes *"
               name="queries_start_date"
               type="datetime-local"
               value={formData.queries_start_date}
@@ -310,7 +310,7 @@ const StepContent = ({ type, formData, handleChange, loading, newRequirement, se
             />
             <TextField
               fullWidth
-              label="Fin des Enquêtes"
+              label="Fin des Enquêtes *"
               name="queries_end_date"
               type="datetime-local"
               value={formData.queries_end_date}
@@ -322,7 +322,7 @@ const StepContent = ({ type, formData, handleChange, loading, newRequirement, se
           <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr' }, gap: '16px' }}>
             <TextField
               fullWidth
-              label="Validité des Offres (jours)"
+              label="Validité des Offres (jours) *"
               name="offer_validity_days"
               type="number"
               inputProps={{ min: '1' }}
@@ -331,12 +331,12 @@ const StepContent = ({ type, formData, handleChange, loading, newRequirement, se
               disabled={loading}
             />
             <FormControl fullWidth disabled={loading}>
-              <InputLabel>Système d'Alerte</InputLabel>
+              <InputLabel>Système d'Alerte *</InputLabel>
               <Select
                 name="alert_type"
                 value={formData.alert_type}
                 onChange={handleChange}
-                label="Système d'Alerte"
+                label="Système d'Alerte *"
               >
                 <MenuItem value="before_48h">48 heures avant fermeture</MenuItem>
                 <MenuItem value="before_24h">24 heures avant fermeture</MenuItem>
@@ -400,7 +400,7 @@ const StepContent = ({ type, formData, handleChange, loading, newRequirement, se
 
           <TextField
             fullWidth
-            label="Critères de Désqualification"
+            label="Critères de Désqualification *"
             name="disqualification_criteria"
             value={formData.disqualification_criteria || ''}
             onChange={(e) => setFormData(prev => ({ ...prev, disqualification_criteria: e.target.value }))}
@@ -430,7 +430,7 @@ const StepContent = ({ type, formData, handleChange, loading, newRequirement, se
               name="submission_method"
               value={formData.submission_method}
               onChange={handleChange}
-              label="Méthode de Soumission"
+              label="Méthode de Soumission *"
             >
               <MenuItem value="electronic">Soumission Électronique</MenuItem>
               <MenuItem value="sealed_envelope">Enveloppe Scellée (Papier)</MenuItem>
@@ -442,7 +442,7 @@ const StepContent = ({ type, formData, handleChange, loading, newRequirement, se
           {formData.submission_method === 'sealed_envelope' && (
             <TextField
               fullWidth
-              label="Instructions pour Enveloppe Scellée"
+              label="Instructions pour Enveloppe Scellée *"
               name="sealed_envelope_requirements"
               value={formData.sealed_envelope_requirements}
               onChange={handleChange}

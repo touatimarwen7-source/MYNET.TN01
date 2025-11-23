@@ -33,7 +33,6 @@ const AnalyticsDashboard = () => {
       setTrends(trendsRes.data);
       setDistribution(distRes.data);
     } catch (error) {
-      console.error('Error fetching analytics:', error);
     } finally {
       setLoading(false);
     }

@@ -41,7 +41,6 @@ export default function Compose() {
       setReceivers(response.data);
       setError('');
     } catch (err) {
-      console.error('Error fetching receivers:', err);
       setError('Erreur lors du chargement de la liste des destinataires');
     } finally {
       setLoading(false);
@@ -66,7 +65,6 @@ export default function Compose() {
       setSuccess('تم إرسال الرسالة بنجاح');
       setTimeout(() => navigate('/inbox'), 2000);
     } catch (err) {
-      console.error('Error:', err);
       setError('Erreur lors de l'envoi du message');
     } finally {
       setSending(false);

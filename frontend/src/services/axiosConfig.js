@@ -194,7 +194,6 @@ axiosInstance.interceptors.response.use(
     // Don't clear on resource-specific 403 errors (e.g., user doesn't have permission to that specific resource)
     if (error.response?.status === 403) {
       // Only log 403, don't immediately logout
-      console.warn('403 Forbidden error - access denied to resource', error.config?.url);
       // Let components handle the 403 appropriately without clearing auth
     }
 

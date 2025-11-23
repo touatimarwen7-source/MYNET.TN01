@@ -100,7 +100,6 @@ export default function CreateSupplyRequest() {
         setFormData(savedData);
         setItems(savedData.items || []);
       } catch (e) {
-        console.error('Erreur chargement brouillon:', e);
       }
     }
   }, [offerId]);

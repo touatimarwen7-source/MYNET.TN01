@@ -23,7 +23,6 @@ class TokenManager {
    */
   static setAccessToken(token, expiresIn = 900) {
     if (!token || typeof token !== 'string') {
-      console.warn('Invalid token provided to setAccessToken');
       return;
     }
 
@@ -32,24 +31,19 @@ class TokenManager {
     // Set in memory FIRST (fastest, no iframe issues)
     memoryAccessToken = token;
     tokenExpiryTime = tokenExpiryMs;
-    console.log('✅ Token stored in memory, expires in:', expiresIn, 'seconds');
     
     // Try to persist to sessionStorage (most iframe-compatible)
     try {
       sessionStorage.setItem(TOKEN_KEY, token);
       sessionStorage.setItem(TOKEN_EXPIRY_KEY, String(tokenExpiryMs));
-      console.log('✅ Token persisted to sessionStorage');
     } catch (e) {
-      console.warn('⚠️ sessionStorage unavailable:', e.message);
     }
     
     // Try to persist to localStorage as backup
     try {
       localStorage.setItem(TOKEN_KEY, token);
       localStorage.setItem(TOKEN_EXPIRY_KEY, String(tokenExpiryMs));
-      console.log('✅ Token persisted to localStorage');
     } catch (e) {
-      console.warn('⚠️ localStorage unavailable:', e.message);
     }
 
     // Notify listeners
@@ -77,7 +71,6 @@ class TokenManager {
           // Restore to memory for next call
           memoryAccessToken = token;
           tokenExpiryTime = expiryTime;
-          console.log('✅ Token restored from sessionStorage to memory');
           return token;
         }
       }
@@ -96,7 +89,6 @@ class TokenManager {
           // Restore to memory
           memoryAccessToken = token;
           tokenExpiryTime = expiryTime;
-          console.log('✅ Token restored from localStorage to memory');
           return token;
         }
       }
@@ -151,7 +143,6 @@ class TokenManager {
       // Ignore errors
     }
 
-    console.log('✅ All tokens cleared');
     this._notifyListeners();
   }
 
@@ -266,7 +257,6 @@ class TokenManager {
           isAuthenticated: !!memoryAccessToken && this.isTokenValid()
         });
       } catch (e) {
-        console.error('Error in auth change listener:', e);
       }
     });
   }
@@ -292,7 +282,6 @@ class TokenManager {
             memoryUserData = JSON.parse(userDataStr);
           }
           restored = true;
-          console.log('✅ Tokens restored from sessionStorage');
         }
       }
     } catch (e) {
@@ -315,7 +304,6 @@ class TokenManager {
               memoryUserData = JSON.parse(userDataStr);
             }
             restored = true;
-            console.log('✅ Tokens restored from localStorage');
           }
         }
       } catch (e) {

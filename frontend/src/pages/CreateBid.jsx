@@ -86,7 +86,8 @@ export default function CreateBid() {
     supplier_email: '',
     supplier_phone: '',
     supplier_address: '',
-    supplier_registration_number: ''
+    supplier_registration_number: '',
+    supplier_industry: ''
   });
 
   const [newTechnicalDetail, setNewTechnicalDetail] = useState('');
@@ -431,6 +432,16 @@ export default function CreateBid() {
           rows={1}
         />
       </Box>
+
+      <TextField
+        fullWidth
+        label="Secteur d'Activité (optionnel)"
+        name="supplier_industry"
+        value={formData.supplier_industry || ''}
+        onChange={handleChange}
+        disabled={loading}
+        placeholder="Ex: Technologie, Services, Fournitures..."
+      />
     </Box>
   );
 

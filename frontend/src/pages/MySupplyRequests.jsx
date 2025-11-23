@@ -45,7 +45,6 @@ export default function MySupplyRequests() {
       setRequests(data.data || []);
       setError('');
     } catch (err) {
-      console.error('Error fetching requests:', err);
       setError('Erreur lors du chargement des demandes');
     } finally {
       setLoading(false);

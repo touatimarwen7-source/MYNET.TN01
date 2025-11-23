@@ -61,7 +61,6 @@ export default function Inbox() {
       setTotal(response.data.total);
       setError('');
     } catch (err) {
-      console.error('Error fetching messages:', err);
       setError('Erreur lors du chargement des messages');
     } finally {
       setLoading(false);
@@ -73,7 +72,6 @@ export default function Inbox() {
       const response = await axiosInstance.get('/messaging/count/unread');
       setStats(prev => ({ ...prev, unread: response.data.unread_count }));
     } catch (err) {
-      console.error('Error fetching stats:', err);
     }
   };
 
@@ -84,7 +82,6 @@ export default function Inbox() {
       fetchMessages();
       setError('');
     } catch (err) {
-      console.error('Error:', err);
       setError('Erreur lors de la suppression du message');
     }
   };

@@ -115,16 +115,13 @@ function App() {
         TokenManager.restoreFromStorage();
         
         const token = TokenManager.getAccessToken();
-        console.log('Checking auth, token exists:', !!token);
         
         if (token) {
           const userData = TokenManager.getUserFromToken();
-          console.log('User data from token:', userData);
           
           if (userData && userData.userId) {
             setUser(userData);
           } else {
-            console.warn('Invalid user data from token');
             TokenManager.clearTokens();
             setUser(null);
           }
@@ -132,7 +129,6 @@ function App() {
           setUser(null);
         }
       } catch (error) {
-        console.error('Auth check error:', error);
         setUser(null);
       } finally {
         setLoading(false);
@@ -143,7 +139,6 @@ function App() {
     
     // Écouter l'événement authChanged depuis Login/Register
     const handleAuthChange = (event) => {
-      console.log('Auth changed event fired', event.detail);
       if (event.detail) {
         // If user data is passed directly, use it
         TokenManager.setUserData(event.detail);

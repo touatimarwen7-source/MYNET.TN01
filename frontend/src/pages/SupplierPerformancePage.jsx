@@ -19,7 +19,6 @@ const SupplierPerformancePage = () => {
       });
       setTopSuppliers(res.data);
     } catch (error) {
-      console.error('Error fetching suppliers:', error);
     } finally {
       setLoading(false);
     }

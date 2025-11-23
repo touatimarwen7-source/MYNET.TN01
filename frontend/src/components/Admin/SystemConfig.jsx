@@ -44,12 +44,10 @@ export default function SystemConfig() {
         setConfig(response.data || response);
       } catch {
         // Utiliser les paramètres par défaut
-        console.warn('Utilisation des paramètres par défaut');
       }
       setErrorMsg('');
     } catch (error) {
       const formatted = errorHandler.getUserMessage(error);
-      console.warn('Erreur lors du chargement:', formatted.message);
       setErrorMsg('');
     } finally {
       setLoading(false);

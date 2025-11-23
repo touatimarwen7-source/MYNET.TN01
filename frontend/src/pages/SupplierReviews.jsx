@@ -64,7 +64,6 @@ export default function SupplierReviews() {
       }
       setError('');
     } catch (err) {
-      console.error('Error fetching reviews:', err);
       setError('Erreur lors du chargement des avis');
     } finally {
       setLoading(false);
@@ -106,7 +105,6 @@ export default function SupplierReviews() {
       handleCloseDialog();
       setError('');
     } catch (err) {
-      console.error('Error:', err);
       setError('Erreur lors de la sauvegarde de l\'avis');
     }
   };
@@ -117,7 +115,6 @@ export default function SupplierReviews() {
       await axiosInstance.delete(`/procurement/reviews/${reviewId}`);
       fetchReviews();
     } catch (err) {
-      console.error('Error:', err);
       setError('Erreur lors de la suppression de l\'avis');
     }
   };

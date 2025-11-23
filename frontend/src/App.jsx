@@ -18,6 +18,8 @@ import { AppProvider, useApp } from './contexts/AppContext';
 import HomePage from './pages/HomePage';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import PasswordReset from './pages/PasswordReset';
+import EmailVerification from './pages/EmailVerification';
 
 // Lazy load heavy pages
 const AboutPage = lazy(() => import('./pages/AboutPage'));
@@ -143,6 +145,8 @@ function AppContent() {
               {/* Authentification */}
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
+              <Route path="/password-reset" element={<PasswordReset />} />
+              <Route path="/verify-email" element={<EmailVerification />} />
 
               {/* Appels d'offres */}
               <Route path="/tenders" element={user ? <TenderList /> : <Navigate to="/login" />} />

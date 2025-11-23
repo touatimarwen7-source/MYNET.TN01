@@ -101,6 +101,21 @@ export default function Login() {
               Connexion Sécurisée
             </Typography>
             
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', gap: '8px', marginBottom: '16px' }}>
+              <Link 
+                href="/password-reset"
+                sx={{ fontSize: '13px', color: '#0056B3', textDecoration: 'none', '&:hover': { textDecoration: 'underline' } }}
+              >
+                Mot de passe oublié?
+              </Link>
+              <Link 
+                href="/register"
+                sx={{ fontSize: '13px', color: '#0056B3', textDecoration: 'none', '&:hover': { textDecoration: 'underline' } }}
+              >
+                Créer un compte
+              </Link>
+            </Box>
+
             <Typography
               variant="body1"
               sx={{

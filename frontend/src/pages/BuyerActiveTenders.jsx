@@ -187,13 +187,20 @@ export default function BuyerActiveTenders() {
                 value={filter}
                 onChange={(e) => setFilter(e.target.value)}
                 variant="outlined"
+                inputProps={{ 'aria-label': 'Rechercher dans les appels d\'offres' }}
+                aria-describedby="search-help"
               />
+              <Typography id="search-help" sx={{ fontSize: '12px', color: '#999' }}>
+                Tapez au moins 2 caractères pour rechercher
+              </Typography>
               <FormControl fullWidth>
-                <InputLabel>Trier par</InputLabel>
+                <InputLabel id="sort-label">Trier par</InputLabel>
                 <Select
+                  labelId="sort-label"
                   value={sortBy}
                   onChange={(e) => setSortBy(e.target.value)}
                   label="Trier par"
+                  inputProps={{ 'aria-label': 'Trier les appels d\'offres par' }}
                 >
                   <MenuItem value="created_at">Date de création (récent)</MenuItem>
                   <MenuItem value="deadline">Date limite (urgent)</MenuItem>

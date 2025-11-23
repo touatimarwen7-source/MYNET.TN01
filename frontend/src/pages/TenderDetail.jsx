@@ -17,6 +17,7 @@ import {
   Chip,
   CircularProgress,
   Alert,
+  Skeleton,
 } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { procurementAPI } from '../api';
@@ -67,8 +68,24 @@ export default function TenderDetail() {
 
   if (loading) {
     return (
-      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '60vh' }}>
-        <CircularProgress sx={{ color: '#0056B3' }} />
+      <Box sx={{ backgroundColor: '#fafafa', paddingY: '40px' }}>
+        <Container maxWidth="lg">
+          <Box sx={{ marginBottom: '24px' }}>
+            <Button startIcon={<ArrowBackIcon />} onClick={() => navigate(-1)} sx={{ color: '#0056B3', marginBottom: '16px' }} />
+          </Box>
+          <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '32px' }}>
+            <Box>
+              <Skeleton variant="rectangular" height={300} sx={{ marginBottom: '16px' }} />
+              <Skeleton variant="text" height={24} width="60%" sx={{ marginBottom: '8px' }} />
+              <Skeleton variant="text" height={16} width="40%" />
+            </Box>
+            <Box>
+              <Skeleton variant="text" height={28} sx={{ marginBottom: '16px' }} />
+              <Skeleton variant="text" height={16} sx={{ marginBottom: '24px' }} />
+              <Skeleton variant="rectangular" height={200} />
+            </Box>
+          </Box>
+        </Container>
       </Box>
     );
   }

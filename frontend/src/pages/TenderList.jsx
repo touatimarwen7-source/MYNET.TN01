@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   Container,
@@ -21,6 +21,8 @@ import { formatDate } from '../utils/dateFormatter';
 import { setPageTitle } from '../utils/pageTitle';
 import LoadingSpinner from '../components/LoadingSpinner';
 import Pagination from '../components/Pagination';
+import { TableSkeleton } from '../components/SkeletonLoader';
+import { debounce, optimizedSearch } from '../utils/searchOptimization';
 
 const ITEMS_PER_PAGE = 10;
 
@@ -28,6 +30,7 @@ export default function TenderList() {
   const navigate = useNavigate();
   const [tenders, setTenders] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [searching, setSearching] = useState(false);
   const [filter, setFilter] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -54,8 +57,30 @@ export default function TenderList() {
     navigate(`/create-offer/${tenderId}`);
   };
 
+  const performSearch = useCallback(
+    debounce((term) => {
+      setSearching(true);
+      if (term.length >= 1) {
+        const filtered = optimizedSearch(tenders, term, ['title', 'description']);
+        setCurrentPage(1);
+        setSearching(false);
+      } else {
+        setCurrentPage(1);
+        setSearching(false);
+      }
+    }, 300),
+    [tenders]
+  );
+
+  const handleFilterChange = (e) => {
+    const term = e.target.value;
+    setFilter(term);
+    performSearch(term);
+  };
+
   const filteredTenders = tenders.filter(t =>
-    t.title?.toLowerCase().includes(filter.toLowerCase())
+    t.title?.toLowerCase().includes(filter.toLowerCase()) ||
+    (t.description && t.description.toLowerCase().includes(filter.toLowerCase()))
   );
 
   // Pagination logic
@@ -70,7 +95,16 @@ export default function TenderList() {
   }, [filter]);
 
   if (loading) {
-    return <LoadingSpinner message="Chargement des appels d'offres..." />;
+    return (
+      <Box sx={{ backgroundColor: '#fafafa', paddingY: '40px' }}>
+        <Container maxWidth="lg">
+          <Typography sx={{ marginBottom: '24px', fontWeight: 600, color: '#0056B3' }}>
+            Appels d'Offres
+          </Typography>
+          <TableSkeleton rows={5} columns={5} />
+        </Container>
+      </Box>
+    );
   }
 
   return (
@@ -92,10 +126,11 @@ export default function TenderList() {
           <CardContent>
             <TextField
               fullWidth
-              placeholder="Filtrer par titre..."
+              placeholder="Filtrer par titre ou description..."
               value={filter}
-              onChange={(e) => setFilter(e.target.value)}
+              onChange={handleFilterChange}
               variant="outlined"
+              inputProps={{ 'aria-label': 'Filtrer les appels d\'offres' }}
               sx={{
                 '& .MuiOutlinedInput-root': {
                   backgroundColor: '#ffffff',

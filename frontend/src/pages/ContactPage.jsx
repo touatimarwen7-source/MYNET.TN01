@@ -157,7 +157,7 @@ export default function ContactPage() {
                       <Link href="mailto:support@mynet.tn" sx={{ color: theme.palette.primary.main, textDecoration: 'none', fontSize: '14px', fontWeight: 500 }}>
                         support@mynet.tn
                       </Link>
-                      <Typography sx={{ fontSize: '11px', color: '#616161', marginTop: '4px' }}>Réponse en < 4 heures</Typography>
+                      <Typography sx={{ fontSize: '11px', color: '#616161', marginTop: '4px' }}>Réponse en {'<'} 4 heures</Typography>
                     </Box>
                     <Box>
                       <Typography sx={{ fontSize: '12px', color: '#616161', fontWeight: 600 }}>🔧 Signaler un Bug Technique</Typography>
@@ -187,7 +187,7 @@ export default function ContactPage() {
                     <Typography><strong>📅 Jours de Bureau:</strong> Samedi - Jeudi</Typography>
                     <Typography><strong>🕐 Horaires Standards:</strong> 7h00 - 19h00</Typography>
                     <Typography><strong>☎️ Support d'Urgence:</strong> Disponible 24/7 pour clients Premium</Typography>
-                    <Typography><strong>🌐 Chat En Ligne:</strong> 7h-19h (réponse < 5 minutes)</Typography>
+                    <Typography><strong>🌐 Chat En Ligne:</strong> 7h-19h (réponse {'<'} 5 minutes)</Typography>
                     <Box sx={{ marginTop: '12px', padding: '8px', backgroundColor: 'rgba(13, 71, 161, 0.1)', borderRadius: '4px' }}>
                       <Typography sx={{ fontSize: '13px', fontWeight: 500 }}>💬 Temps de réponse garanti</Typography>
                     </Box>

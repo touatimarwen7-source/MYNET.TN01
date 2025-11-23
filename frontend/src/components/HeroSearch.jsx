@@ -28,10 +28,10 @@ export default function HeroSearch() {
   });
 
   const searchTabs = [
-    { id: 'markets', label: 'Nouveaux Marchés' },
-    { id: 'tenders', label: 'Appels d\'Offres' },
-    { id: 'awards', label: 'Attributions' },
-    { id: 'data', label: 'Données Essentielles' }
+    { id: 'markets', label: '🏪 Nouveaux Marchés' },
+    { id: 'tenders', label: '🏷️ Appels d\'Offres' },
+    { id: 'awards', label: '✅ Attributions Gagnées' },
+    { id: 'data', label: '📊 Données & Statistiques' }
   ];
 
   const categories = [

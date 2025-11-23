@@ -4,9 +4,9 @@ import institutionalTheme from '../theme/theme';
 export default function HomePageTestimonials() {
   const theme = institutionalTheme;
   const testimonials = [
-    { text: 'MyNet.tn a révolutionné notre processus d\'achat. Plus de transparence, moins de papiers, et une meilleure gestion des fournisseurs.', author: '— Directeur des Achats, Entreprise Manufacturière' },
-    { text: 'Accès à plus d\'opportunités commerciales. La plateforme est facile à utiliser et les outils d\'offres sont complets.', author: '— Responsable Commercial, PME de Fournitures' },
-    { text: 'La sécurité et la conformité des données sont au cœur de MyNet.tn. Nous recommandons vivement cette plateforme.', author: '— Directeur Financier, Grande Entreprise' },
+    { text: 'MyNet.tn a révolutionné notre processus d\'achat. Nous avons réduit nos délais de 60% et amélioré la transparence avec nos fournisseurs. Les économies réalisées sur les coûts d\'approvisionnement dépassent déjà 20% en 6 mois.', author: '— Directeur des Achats, Groupe manufacturier tunisien' },
+    { text: 'Grâce à MyNet.tn, nous accédons à 10x plus d\'opportunités commerciales. La plateforme est intuitive, sécurisée et les retours clients sont exceptionnels. Nous avons augmenté notre chiffre d\'affaires de 35% cette année.', author: '— PDG, PME technologique' },
+    { text: 'La conformité légale et la sécurité des données sont garanties. Audit complet, traçabilité totale, et respect des normes ISO. MyNet.tn est devenue notre partenaire stratégique de confiance.', author: '— Directeur Financier et Risques, Banque tunisienne' },
   ];
 
   return (

@@ -4,22 +4,22 @@ import institutionalTheme from '../theme/theme';
 export default function HowItWorks() {
   const theme = institutionalTheme;
   const buyerSteps = [
-    { number: 1, title: 'Créer un Appel d\'Offres', description: 'Définissez vos besoins, fixez les critères et publiez en quelques clics', icon: '📝' },
-    { number: 2, title: 'Recevoir les Offres', description: 'Collectez les propositions de fournisseurs qualifiés en temps réel', icon: '📨' },
-    { number: 3, title: 'Évaluer et Attribuer', description: 'Comparez, analysez avec l\'IA et attribuez les meilleurs fournisseurs', icon: '✓' }
+    { number: 1, title: 'Créer un Appel d\'Offres en 5 minutes', description: 'Définissez vos besoins précis, fixez les critères d\'évaluation, établissez votre budget et publiez auprès de milliers de fournisseurs vérifiés', icon: '📝' },
+    { number: 2, title: 'Recevoir les Offres en 24h', description: 'Collectez automatiquement les propositions qualifiées avec pièces jointes, documents techniques et calendriers détaillés en temps réel', icon: '📨' },
+    { number: 3, title: 'Évaluer, Comparer & Attribuer', description: 'Comparez côte à côte avec tableaux analytiques, analysez avec l\'IA, notez les fournisseurs et attribuez en toute transparence avec traçabilité complète', icon: '✓' }
   ];
 
   const supplierSteps = [
-    { number: 1, title: 'Parcourir les Opportunités', description: 'Découvrez les appels d\'offres correspondant à votre expertise', icon: '🔍' },
-    { number: 2, title: 'Soumettre une Offre', description: 'Répondez avec votre proposition chiffrée sécurisée en quelques minutes', icon: '💼' },
-    { number: 3, title: 'Remporter le Marché', description: 'Recevez le bon de commande et commencez à servir le client', icon: '🎯' }
+    { number: 1, title: 'Parcourir 100+ Opportunités Quotidiennes', description: 'Découvrez les appels d\'offres et demandes directs filtrés selon votre domaine d\'activité, localisation et capacités', icon: '🔍' },
+    { number: 2, title: 'Soumettre une Offre Compétitive', description: 'Répondez en quelques minutes avec votre tarification sécurisée, dévis détaillé, conditions de paiement et documents techniques cryptés', icon: '💼' },
+    { number: 3, title: 'Gagner le Contrat et Invoicer', description: 'Recevez le bon de commande, commencez la production, et générez vos factures directement via la plateforme avec paiement sécurisé', icon: '🎯' }
   ];
 
   const benefits = [
-    { icon: '⚡', title: 'Rapide', desc: 'Processus complet en quelques jours au lieu de semaines' },
-    { icon: '🔐', title: 'Sécurisé', desc: 'Chiffrement AES-256 et audit complet de toutes les transactions' },
-    { icon: '🤖', title: 'Intelligent', desc: 'Analyse IA pour sélectionner les meilleures offres automatiquement' },
-    { icon: '💰', title: 'Économique', desc: 'Réduisez les coûts d\'approvisionnement de 15-25%' }
+    { icon: '⚡', title: 'Économie de Temps', desc: 'Processus complet en 3-5 jours au lieu de 4-6 semaines avec des gains d\'efficacité de 70%' },
+    { icon: '🔐', title: 'Sécurité Totale', desc: 'Chiffrement AES-256, authentification 2FA, audit blockchain, conformité RGPD et normes ISO 27001 certifiées' },
+    { icon: '🤖', title: 'Intelligence Artificielle', desc: 'Algorithmes IA pour sélection automatique, prédictions de performance et détection d\'anomalies' },
+    { icon: '💰', title: 'ROI Garanti', desc: 'Réduisez coûts d\'approvisionnement de 15-30% et augmentez revenus fournisseur de 25-40%' }
   ];
 
   return (

@@ -67,10 +67,10 @@ export default function ContactPage() {
       >
         <Container maxWidth="lg">
           <Typography variant="h1" sx={{ fontSize: '44px', fontWeight: 600, marginBottom: '16px' }}>
-            📞 Contact et Support
+            📞 Contactez-Nous - Support 24/7
           </Typography>
           <Typography sx={{ fontSize: '18px', color: '#e3f2fd' }}>
-            Nous sommes ici pour vous aider
+            Notre équipe d'experts est disponible pour répondre à toutes vos questions, suggestions et demandes de support
           </Typography>
         </Container>
       </Box>
@@ -92,10 +92,13 @@ export default function ContactPage() {
                     </Box>
                   </Box>
                   <Typography sx={{ color: '#616161', fontSize: '14px', lineHeight: 1.8 }}>
-                    MyNet.tn<br />
-                    Immeuble Tunisiana Business Center<br />
-                    Rue des Entrepreneurs, La Marsa<br />
-                    2070 Tunis, Tunisie
+                    MyNet.tn SARL<br />
+                    Immeuble Business Innovation Park<br />
+                    Boulevard 9 avril, Ariana<br />
+                    2080 Ariana, Tunisie<br />
+                    <Box sx={{ marginTop: '8px', fontSize: '13px' }}>
+                      📍 Localisation GPS disponible sur Google Maps
+                    </Box>
                   </Typography>
                 </CardContent>
               </Card>
@@ -113,22 +116,25 @@ export default function ContactPage() {
                   </Box>
                   <Stack spacing={1}>
                     <Box>
-                      <Typography sx={{ fontSize: '12px', color: '#616161', fontWeight: 600 }}>Support Technique</Typography>
-                      <Link href="tel:+21671123456" sx={{ color: theme.palette.primary.main, textDecoration: 'none', fontSize: '14px' }}>
-                        +216 71 123 456
+                      <Typography sx={{ fontSize: '12px', color: '#616161', fontWeight: 600 }}>🛠️ Support Technique (Bugs, Accès)</Typography>
+                      <Link href="tel:+21671255000" sx={{ color: theme.palette.primary.main, textDecoration: 'none', fontSize: '14px', fontWeight: 500 }}>
+                        +216 71 255 000
                       </Link>
+                      <Typography sx={{ fontSize: '11px', color: '#616161', marginTop: '4px' }}>7h-19h (Sam-Jeu), 24/7 Pour clients Premium</Typography>
                     </Box>
                     <Box>
-                      <Typography sx={{ fontSize: '12px', color: '#616161', fontWeight: 600 }}>Support Commercial</Typography>
-                      <Link href="tel:+21671123457" sx={{ color: theme.palette.primary.main, textDecoration: 'none', fontSize: '14px' }}>
-                        +216 71 123 457
+                      <Typography sx={{ fontSize: '12px', color: '#616161', fontWeight: 600 }}>💼 Support Commercial (Ventes, Partenaires)</Typography>
+                      <Link href="tel:+21671255001" sx={{ color: theme.palette.primary.main, textDecoration: 'none', fontSize: '14px', fontWeight: 500 }}>
+                        +216 71 255 001
                       </Link>
+                      <Typography sx={{ fontSize: '11px', color: '#616161', marginTop: '4px' }}>8h-18h (Lun-Ven)</Typography>
                     </Box>
                     <Box>
-                      <Typography sx={{ fontSize: '12px', color: '#616161', fontWeight: 600 }}>Support Légal</Typography>
-                      <Link href="tel:+21671123458" sx={{ color: theme.palette.primary.main, textDecoration: 'none', fontSize: '14px' }}>
-                        +216 71 123 458
+                      <Typography sx={{ fontSize: '12px', color: '#616161', fontWeight: 600 }}>⚖️ Support Légal & Conformité</Typography>
+                      <Link href="tel:+21671255002" sx={{ color: theme.palette.primary.main, textDecoration: 'none', fontSize: '14px', fontWeight: 500 }}>
+                        +216 71 255 002
                       </Link>
+                      <Typography sx={{ fontSize: '11px', color: '#616161', marginTop: '4px' }}>9h-17h (Lun-Ven)</Typography>
                     </Box>
                   </Stack>
                 </CardContent>
@@ -147,16 +153,25 @@ export default function ContactPage() {
                   </Box>
                   <Stack spacing={1}>
                     <Box>
-                      <Typography sx={{ fontSize: '12px', color: '#616161', fontWeight: 600 }}>Support Général</Typography>
-                      <Link href="mailto:support@mynet.tn" sx={{ color: theme.palette.primary.main, textDecoration: 'none', fontSize: '14px' }}>
+                      <Typography sx={{ fontSize: '12px', color: '#616161', fontWeight: 600 }}>📧 Support Général & Questions</Typography>
+                      <Link href="mailto:support@mynet.tn" sx={{ color: theme.palette.primary.main, textDecoration: 'none', fontSize: '14px', fontWeight: 500 }}>
                         support@mynet.tn
                       </Link>
+                      <Typography sx={{ fontSize: '11px', color: '#616161', marginTop: '4px' }}>Réponse en < 4 heures</Typography>
                     </Box>
                     <Box>
-                      <Typography sx={{ fontSize: '12px', color: '#616161', fontWeight: 600 }}>Technique</Typography>
-                      <Link href="mailto:tech@mynet.tn" sx={{ color: theme.palette.primary.main, textDecoration: 'none', fontSize: '14px' }}>
-                        tech@mynet.tn
+                      <Typography sx={{ fontSize: '12px', color: '#616161', fontWeight: 600 }}>🔧 Signaler un Bug Technique</Typography>
+                      <Link href="mailto:bugs@mynet.tn" sx={{ color: theme.palette.primary.main, textDecoration: 'none', fontSize: '14px', fontWeight: 500 }}>
+                        bugs@mynet.tn
                       </Link>
+                      <Typography sx={{ fontSize: '11px', color: '#616161', marginTop: '4px' }}>Avec détails et captures d'écran</Typography>
+                    </Box>
+                    <Box>
+                      <Typography sx={{ fontSize: '12px', color: '#616161', fontWeight: 600 }}>💡 Suggestions & Partenariats</Typography>
+                      <Link href="mailto:business@mynet.tn" sx={{ color: theme.palette.primary.main, textDecoration: 'none', fontSize: '14px', fontWeight: 500 }}>
+                        business@mynet.tn
+                      </Link>
+                      <Typography sx={{ fontSize: '11px', color: '#616161', marginTop: '4px' }}>Partenaires B2B & projets spéciaux</Typography>
                     </Box>
                   </Stack>
                 </CardContent>
@@ -169,9 +184,13 @@ export default function ContactPage() {
                     ⏰ Horaires
                   </Typography>
                   <Stack spacing={1} sx={{ fontSize: '14px', color: '#0d47a1' }}>
-                    <Typography><strong>Lundi - Vendredi:</strong> 8:00 - 18:00</Typography>
-                    <Typography><strong>Samedi:</strong> 9:00 - 13:00</Typography>
-                    <Typography><strong>Support 24/7:</strong> Disponible pour clients Premium</Typography>
+                    <Typography><strong>📅 Jours de Bureau:</strong> Samedi - Jeudi</Typography>
+                    <Typography><strong>🕐 Horaires Standards:</strong> 7h00 - 19h00</Typography>
+                    <Typography><strong>☎️ Support d'Urgence:</strong> Disponible 24/7 pour clients Premium</Typography>
+                    <Typography><strong>🌐 Chat En Ligne:</strong> 7h-19h (réponse < 5 minutes)</Typography>
+                    <Box sx={{ marginTop: '12px', padding: '8px', backgroundColor: 'rgba(13, 71, 161, 0.1)', borderRadius: '4px' }}>
+                      <Typography sx={{ fontSize: '13px', fontWeight: 500 }}>💬 Temps de réponse garanti</Typography>
+                    </Box>
                   </Stack>
                 </CardContent>
               </Card>
@@ -183,15 +202,15 @@ export default function ContactPage() {
             <Card sx={{ border: '1px solid #e0e0e0' }}>
               <CardContent sx={{ padding: '32px' }}>
                 <Typography variant="h3" sx={{ fontSize: '24px', fontWeight: 600, color: theme.palette.text.primary, marginBottom: '8px' }}>
-                  Envoyez-nous un Message
+                  ✉️ Envoyez-Nous un Message
                 </Typography>
                 <Typography sx={{ color: '#616161', marginBottom: '24px' }}>
-                  Remplissez le formulaire ci-dessous et nous vous répondrons dès que possible
+                  Remplissez le formulaire ci-dessous avec vos détails et votre demande. Nous vous répondrons dans les meilleurs délais (maximum 4 heures)
                 </Typography>
 
                 {submitted && (
                   <Alert severity="success" sx={{ marginBottom: '24px' }}>
-                    ✅ Merci! Votre message a été envoyé avec succès. Nous vous répondrons bientôt.
+                    ✅ Excellent! Votre message a été reçu. Notre équipe l'examinera et vous répondra sous peu. Vérifiez votre email pour les mises à jour.
                   </Alert>
                 )}
 

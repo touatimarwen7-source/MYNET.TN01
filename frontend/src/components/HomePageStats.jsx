@@ -4,10 +4,10 @@ import institutionalTheme from '../theme/theme';
 export default function HomePageStats() {
   const theme = institutionalTheme;
   const stats = [
-    { number: '50M+', label: 'Dinars', description: 'Montants d\'appels d\'offres traités' },
-    { number: '1,200+', label: 'Organisations', description: 'Acheteurs et fournisseurs' },
-    { number: '15,000+', label: 'Appels d\'Offres', description: 'Publiés avec succès' },
-    { number: '99.9%', label: 'Disponibilité', description: 'Infrastructure sécurisée' },
+    { number: '250M+', label: 'Dinars', description: 'Volumes de transactions annuels traités en toute sécurité' },
+    { number: '2,500+', label: 'Organisations', description: 'Acheteurs, fournisseurs et entreprises partenaires actifs' },
+    { number: '45,000+', label: 'Appels d\'Offres', description: 'Gérés avec transparence et conformité réglementaire' },
+    { number: '99.9%', label: 'Disponibilité', description: 'Infrastructure cloud sécurisée et certifiée ISO' },
   ];
 
   return (

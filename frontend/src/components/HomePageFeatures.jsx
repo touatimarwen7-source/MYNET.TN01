@@ -10,12 +10,12 @@ import institutionalTheme from '../theme/theme';
 export default function HomePageFeatures() {
   const theme = institutionalTheme;
   const features = [
-    { icon: <SecurityIcon sx={{ fontSize: '40px', color: theme.palette.primary.main }} />, title: 'Sécurité Entreprise', description: 'Chiffrement AES-256, authentification 2FA, et audit complet' },
-    { icon: <TrendingUpIcon sx={{ fontSize: '40px', color: theme.palette.primary.main }} />, title: 'Performant', description: 'Infrastructure cloud scalable avec 99.9% d\'uptime' },
-    { icon: <GroupIcon sx={{ fontSize: '40px', color: theme.palette.primary.main }} />, title: 'Support Premium', description: 'Équipe d\'experts disponible 24/7' },
-    { icon: <InventoryIcon sx={{ fontSize: '40px', color: theme.palette.primary.main }} />, title: 'Analytics Avancées', description: 'Tableaux de bord détaillés et rapports en temps réel' },
-    { icon: <LanguageIcon sx={{ fontSize: '40px', color: theme.palette.primary.main }} />, title: 'Multi-Devises', description: 'Support dinars, euros et autres devises' },
-    { icon: <PhoneAndroidIcon sx={{ fontSize: '40px', color: theme.palette.primary.main }} />, title: 'Mobile Ready', description: 'Interface responsive pour tous les appareils' },
+    { icon: <SecurityIcon sx={{ fontSize: '40px', color: theme.palette.primary.main }} />, title: 'Sécurité Classe Entreprise', description: 'Chiffrement AES-256, authentification 2FA/MFA, audit complet et conformité ISO 27001 certifiée' },
+    { icon: <TrendingUpIcon sx={{ fontSize: '40px', color: theme.palette.primary.main }} />, title: 'Performance & Scalabilité', description: 'Infrastructure cloud distribuée avec temps de réponse < 200ms et 99.9% de disponibilité garantie' },
+    { icon: <GroupIcon sx={{ fontSize: '40px', color: theme.palette.primary.main }} />, title: 'Support Dédié 24/7', description: 'Équipe d\'experts tunisiens parlant arabe et français pour assistance immédiate' },
+    { icon: <InventoryIcon sx={{ fontSize: '40px', color: theme.palette.primary.main }} />, title: 'Intelligence Analytique', description: 'Tableaux de bord détaillés, rapports en temps réel et prédictions basées sur l\'IA' },
+    { icon: <LanguageIcon sx={{ fontSize: '40px', color: theme.palette.primary.main }} />, title: 'Multi-Devises & Localisé', description: 'Support dinars tunisiens, euros, dollars + interface 100% en français tunisien' },
+    { icon: <PhoneAndroidIcon sx={{ fontSize: '40px', color: theme.palette.primary.main }} />, title: 'Accessible Partout', description: 'Application web responsive, compatible iOS/Android, sans installation requise' },
   ];
 
   return (

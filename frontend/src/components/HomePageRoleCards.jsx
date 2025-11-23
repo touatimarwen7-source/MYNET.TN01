@@ -8,8 +8,8 @@ export default function HomePageRoleCards({ onRoleClick }) {
   const [selectedRole, setSelectedRole] = useState(null);
 
   const roles = [
-    { id: 'buyer', title: 'Je suis Acheteur', description: 'Publiez vos appels d\'offres, recevez les meilleures propositions, évaluez les fournisseurs et finalisez vos contrats en toute confiance.', features: ['Créer des appels d\'offres', 'Gérer les soumissions', 'Analyser les offres', 'Émettre des bons de commande', 'Gérer l\'équipe d\'achat'] },
-    { id: 'supplier', title: 'Je suis Fournisseur', description: 'Découvrez les opportunités de marché, soumettez vos offres compétitives, et développez votre activité avec des clients de confiance.', features: ['Parcourir les appels d\'offres', 'Soumettre des offres', 'Gérer votre catalogue', 'Suivre les évaluations', 'Recevoir les commandes'] },
+    { id: 'buyer', title: 'Je suis Acheteur / Organisations', description: 'Optimisez vos processus d\'approvisionnement. Publiez des appels d\'offres auprès de milliers de fournisseurs vérifiés, recevez les meilleures propositions, évaluez avec intelligence artificielle, et finalisez vos contrats sécurisés en quelques jours.', features: ['✓ Créer des appels d\'offres avec évaluation IA', '✓ Recevoir 100+ propositions qualifiées', '✓ Analyser comparativement avec tableaux de bord', '✓ Émettre bons de commande et factures', '✓ Gérer équipe d\'achat et historique complet'] },
+    { id: 'supplier', title: 'Je suis Fournisseur / Producteur', description: 'Multipliez vos opportunités commerciales. Découvrez 100+ appels d\'offres quotidiens filtrés, soumettez rapidement vos offres compétitives sécurisées, et développez votre activité B2B avec des clients de confiance et des paiements garantis.', features: ['✓ Accéder à 100+ opportunités quotidiennes', '✓ Soumettre des offres en quelques minutes', '✓ Gérer catalogue produits et prix', '✓ Suivre évaluations et retours clients', '✓ Générer factures et recevoir paiements'] },
   ];
 
   const handleStartTrial = (role) => {

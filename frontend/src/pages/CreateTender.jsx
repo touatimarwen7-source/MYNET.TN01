@@ -187,56 +187,6 @@ const StepOne = ({ formData, handleChange, loading }) => {
         </Select>
       </FormControl>
 
-      {/* Quantity */}
-      <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-        <Box sx={{ flex: 1 }}>
-          <Typography sx={{ fontSize: '13px', fontWeight: 600, color: '#212121', mb: '8px' }}>
-            Quantité Requise
-          </Typography>
-          <TextField
-            fullWidth
-            type="number"
-            name="quantity_required"
-            value={formData.quantity_required}
-            onChange={handleChange}
-            disabled={loading}
-            placeholder="Ex: 100"
-            inputProps={{ min: 0, step: 0.01 }}
-            sx={{
-              '& .MuiOutlinedInput-root': {
-                borderRadius: '4px',
-                backgroundColor: '#FAFAFA',
-              },
-            }}
-          />
-        </Box>
-
-        <Box sx={{ flex: 1 }}>
-          <Typography sx={{ fontSize: '13px', fontWeight: 600, color: '#212121', mb: '8px' }}>
-            Unité
-          </Typography>
-          <Select
-            fullWidth
-            name="unit"
-            value={formData.unit}
-            onChange={handleChange}
-            disabled={loading}
-            sx={{ borderRadius: '4px' }}
-          >
-            {UNIT_OPTIONS.map((group) => [
-              <MenuItem key={`header-${group.group}`} disabled sx={{ fontWeight: 600, color: '#0056B3', fontSize: '12px' }}>
-                ─ {group.group}
-              </MenuItem>,
-              ...group.options.map((opt) => (
-                <MenuItem key={opt.value} value={opt.value} sx={{ pl: '24px' }}>
-                  {opt.label}
-                </MenuItem>
-              )),
-            ])}
-          </Select>
-        </Box>
-      </Stack>
-
       {/* Visibility */}
       <FormControlLabel
         control={

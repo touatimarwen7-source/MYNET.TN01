@@ -30,51 +30,68 @@ class UserService {
 
     async authenticateUser(email, password) {
         const pool = getPool();
+        const startTime = Date.now();
         
         try {
-            const result = await pool.query(
-                'SELECT * FROM users WHERE email = $1 AND is_active = TRUE AND is_deleted = FALSE',
-                [email]
-            );
+            // ✅ OPTIMIZATION: Use connection with timeout and select only needed fields
+            const client = await Promise.race([
+                pool.connect(),
+                new Promise((_, reject) => 
+                    setTimeout(() => reject(new Error('Connection timeout')), 5000)
+                )
+            ]);
             
-            if (result.rows.length === 0) {
-                throw new Error('Invalid credentials');
+            try {
+                const result = await client.query(
+                    'SELECT id, username, email, password_hash, password_salt, role, is_active, is_deleted FROM users WHERE email = $1 AND is_active = TRUE AND is_deleted = FALSE LIMIT 1',
+                    [email]
+                );
+                
+                if (result.rows.length === 0) {
+                    throw new Error('Invalid credentials');
+                }
+                
+                const user = result.rows[0];
+                const isValid = KeyManagementService.verifyPassword(
+                    password,
+                    user.password_hash,
+                    user.password_salt
+                );
+                
+                if (!isValid) {
+                    throw new Error('Invalid credentials');
+                }
+                
+                // ✅ UPDATE AND FETCH IN BACKGROUND (non-blocking)
+                // Don't wait for this - it's not critical for login response
+                client.query('UPDATE users SET last_login = CURRENT_TIMESTAMP WHERE id = $1', [user.id]).catch(() => {});
+                
+                const accessToken = KeyManagementService.generateAccessToken({
+                    userId: user.id,
+                    username: user.username,
+                    email: user.email,
+                    role: user.role
+                });
+                
+                const refreshToken = KeyManagementService.generateRefreshToken({
+                    userId: user.id
+                });
+                
+                const { password_hash, password_salt, is_deleted, ...userWithoutPassword } = user;
+                
+                const duration = Date.now() - startTime;
+                if (duration > 500) {
+                    console.warn(`⚠️  SLOW LOGIN: ${email} took ${duration}ms (target: <500ms)`);
+                }
+                
+                return {
+                    user: userWithoutPassword,
+                    accessToken,
+                    refreshToken
+                };
+            } finally {
+                client.release();
             }
-            
-            const user = result.rows[0];
-            const isValid = KeyManagementService.verifyPassword(
-                password,
-                user.password_hash,
-                user.password_salt
-            );
-            
-            if (!isValid) {
-                throw new Error('Invalid credentials');
-            }
-            
-            await pool.query(
-                'UPDATE users SET last_login = CURRENT_TIMESTAMP WHERE id = $1',
-                [user.id]
-            );
-            
-            const accessToken = KeyManagementService.generateAccessToken({
-                userId: user.id,
-                username: user.username,
-                email: user.email,
-                role: user.role
-            });
-            
-            const refreshToken = KeyManagementService.generateRefreshToken({
-                userId: user.id
-            });
-            
-            const { password_hash, password_salt, ...userWithoutPassword } = user;
-            
-            return {
-                user: userWithoutPassword,
-                accessToken,
-                refreshToken
-            };
         } catch (error) {
             throw new Error(`Authentication failed: ${error.message}`);
         }
@@ -147,12 +164,27 @@ class UserService {
             paramCount++;
         }
 
-        query += ' ORDER BY created_at DESC';
+        query += ' ORDER BY created_at DESC LIMIT 1000';
 
         try {
-            const result = await pool.query(query, params);
-            return result.rows;
+            // ✅ FIX: Use connection with timeout to prevent hanging
+            const client = await Promise.race([
+                pool.connect(),
+                new Promise((_, reject) => 
+                    setTimeout(() => reject(new Error('Connection timeout')), 10000)
+                )
+            ]);
+            
+            try {
+                const result = await client.query(query, params);
+                return result.rows;
+            } finally {
+                client.release();
+            }
         } catch (error) {
+            if (error.message.includes('timeout') || error.message.includes('ECONNREFUSED')) {
+                throw new Error(`Database connection failed: ${error.message}`);
+            }
             throw new Error(`Failed to get users: ${error.message}`);
         }
     }

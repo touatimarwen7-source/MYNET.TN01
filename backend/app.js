@@ -106,6 +106,16 @@ app.use((req, res, next) => {
     next();
 });
 
+// ✅ HEALTH CHECK ENDPOINT (Public - No auth required)
+app.get('/health', (req, res) => {
+    res.status(200).json({
+        status: 'ok',
+        timestamp: new Date().toISOString(),
+        service: 'MyNet.tn API',
+        version: '1.2.0'
+    });
+});
+
 app.get('/', (req, res) => {
     res.status(200).json({
         status: 'Running',

@@ -22,9 +22,17 @@ async function initializeDb() {
                 idle_in_transaction_session_timeout: 30000
             });
 
-            // Add error handlers to prevent unhandled errors
-            pool.on('error', (err) => {
+            // ✅ Add error handlers to prevent unhandled errors and pool crashes
+            pool.on('error', (err, client) => {
                 console.error('❌ POOL ERROR:', err.message);
+                // Try to release the client if possible
+                try {
+                    if (client) {
+                        client.release();
+                    }
+                } catch (releaseErr) {
+                    console.error('❌ Failed to release client:', releaseErr.message);
+                }
                 // Don't crash the app on pool errors
             });
 

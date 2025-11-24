@@ -1,6 +1,3 @@
-/**
- * Award Notification Service
- */
 const { getPool } = require('../config/db');
 const { sendEmail } = require('../config/emailService');
 const AuditLogService = require('./AuditLogService');
@@ -20,7 +17,7 @@ class AwardNotificationService {
 
       const tender = tenderResult.rows[0];
 
-      // Validate partial award constraint
+      // Validate partial award constraints
       if (!tender.allow_partial_award && winnersIds.length > 1) {
         throw new Error(`This tender allows only 1 winner (partial award disabled). You selected ${winnersIds.length} winners.`);
       }
@@ -29,6 +26,7 @@ class AwardNotificationService {
         throw new Error(`Maximum ${tender.max_winners} winner(s) allowed. You selected ${winnersIds.length}.`);
       }
 
+      // Mark winners with exact timestamp
       for (const winnerId of winnersIds) {
         await pool.query(
           'UPDATE offers SET award_status = $1, awarded_at = NOW() WHERE id = $2',
@@ -36,29 +34,40 @@ class AwardNotificationService {
         );
       }
 
+      // Get all participants for notification
       const participantsResult = await pool.query(
-        `SELECT DISTINCT u.id, u.email, u.company_name, o.offer_number
+        `SELECT DISTINCT u.id, u.email, u.company_name, o.offer_number, o.id as offer_id
          FROM offers o LEFT JOIN users u ON o.supplier_id = u.id
          WHERE o.tender_id = $1 AND o.status = 'submitted'`,
         [tenderId]
       );
 
-      for (const participant of participantsResult.rows) {
+      const participants = participantsResult.rows;
+
+      // Send notifications
+      for (const participant of participants) {
         if (participant.email) {
-          if (winnersIds.includes(participant.id)) {
+          if (winnersIds.includes(participant.offer_id)) {
             sendEmail(participant.email, `إخطار بالترسية - ${tender.tender_number}`, 
-              `تم اختيارك كفائز في المناقصة`).catch(e => console.error('Email error:', e.message));
+              `تم اختيارك كفائز في المناقصة برقم عرض ${participant.offer_number}`)
+              .catch(e => console.error('Email error:', e.message));
           } else {
             sendEmail(participant.email, `نتيجة المناقصة - ${tender.tender_number}`, 
-              `للأسف لم يتم قبول عرضك`).catch(e => console.error('Email error:', e.message));
+              `للأسف لم يتم قبول عرضك في هذه المناقصة`)
+              .catch(e => console.error('Email error:', e.message));
           }
         }
       }
 
       await AuditLogService.log(buyerId, 'award_selection', tenderId, 'create', 
-        `${winnersIds.length} winner(s) selected and notifications sent`);
+        `${winnersIds.length} winner(s) selected. Notifications sent to ${participants.length} participants`);
 
-      return { success: true, winnersCount: winnersIds.length, notificationsCount: participantsResult.rows.length };
+      return { 
+        success: true, 
+        winnersCount: winnersIds.length, 
+        notificationsCount: participants.length,
+        message: `${winnersIds.length} fائز(ين) اختيار وإشعارات أرسلت`
+      };
     } catch (error) {
       console.error('Error in winner selection:', error);
       throw error;

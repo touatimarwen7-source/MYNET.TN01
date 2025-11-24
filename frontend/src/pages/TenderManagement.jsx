@@ -1,25 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {
-  Box,
-  Card,
-  CardContent,
-  Button,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  TextField,
-  Checkbox,
-  FormControlLabel,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
-  Typography,
-  Alert,
-  CircularProgress,
-} from '@mui/material';
+import { Box, Card, CardContent, Button, Dialog, DialogTitle, DialogContent, DialogActions, TextField, Checkbox, FormControlLabel, Table, TableBody, TableCell, TableHead, TableRow, Typography, Alert, CircularProgress } from '@mui/material';
 import axios from 'axios';
 import { theme } from '../theme/theme';
 
@@ -60,13 +40,9 @@ export default function TenderManagement({ tenderId }) {
       setError('يرجى اختيار فائز واحد على الأقل');
       return;
     }
-
     try {
       setLoading(true);
-      await axios.post(`/api/tender-management/award-winners/${tenderId}`, {
-        winnersIds: selectedWinners,
-      });
-
+      await axios.post(`/api/tender-management/award-winners/${tenderId}`, { winnersIds: selectedWinners });
       setError(null);
       setSelectedWinners([]);
       setAwardDialogOpen(false);
@@ -83,13 +59,9 @@ export default function TenderManagement({ tenderId }) {
       setError('يرجى إدخال سبب الإلغاء');
       return;
     }
-
     try {
       setLoading(true);
-      await axios.post(`/api/tender-management/cancel/${tenderId}`, {
-        cancellationReason,
-      });
-
+      await axios.post(`/api/tender-management/cancel/${tenderId}`, { cancellationReason });
       setError(null);
       setCancellationReason('');
       setCancelDialogOpen(false);
@@ -105,77 +77,58 @@ export default function TenderManagement({ tenderId }) {
       <Typography variant="h5" sx={{ mb: 3, color: theme.palette.primary.main, fontWeight: 'bold' }}>
         📋 إدارة المناقصة
       </Typography>
-
       {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
-
       {loading ? (
         <Box sx={{ display: 'flex', justifyContent: 'center', py: 4 }}>
           <CircularProgress />
         </Box>
       ) : (
-        <>
-          <Card sx={{ mb: 3 }}>
-            <CardContent>
-              <Typography variant="subtitle1" sx={{ fontWeight: 'bold', mb: 2 }}>
-                🏆 اختيار الفائزين
-              </Typography>
-
-              <Table>
-                <TableHead>
-                  <TableRow sx={{ backgroundColor: '#f5f5f5' }}>
-                    <TableCell sx={{ fontWeight: 'bold' }}>اختيار</TableCell>
-                    <TableCell sx={{ fontWeight: 'bold' }}>رقم العرض</TableCell>
-                    <TableCell sx={{ fontWeight: 'bold' }}>الشركة</TableCell>
-                    <TableCell sx={{ fontWeight: 'bold' }}>النتيجة النهائية</TableCell>
-                    <TableCell sx={{ fontWeight: 'bold' }}>الحالة</TableCell>
+        <Card sx={{ mb: 3 }}>
+          <CardContent>
+            <Typography variant="subtitle1" sx={{ fontWeight: 'bold', mb: 2 }}>
+              🏆 اختيار الفائزين
+            </Typography>
+            <Table>
+              <TableHead>
+                <TableRow sx={{ backgroundColor: '#f5f5f5' }}>
+                  <TableCell sx={{ fontWeight: 'bold' }}>اختيار</TableCell>
+                  <TableCell sx={{ fontWeight: 'bold' }}>رقم العرض</TableCell>
+                  <TableCell sx={{ fontWeight: 'bold' }}>الشركة</TableCell>
+                  <TableCell sx={{ fontWeight: 'bold' }}>النتيجة النهائية</TableCell>
+                  <TableCell sx={{ fontWeight: 'bold' }}>الحالة</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {offers.map(offer => (
+                  <TableRow key={offer.id}>
+                    <TableCell>
+                      <Checkbox checked={selectedWinners.includes(offer.id)} onChange={() => handleSelectWinner(offer.id)} />
+                    </TableCell>
+                    <TableCell>{offer.offer_number}</TableCell>
+                    <TableCell>{offer.company_name}</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold' }}>{offer.final_score}</TableCell>
+                    <TableCell>
+                      {offer.award_status === 'awarded' ? (
+                        <span style={{ color: '#4caf50', fontWeight: 'bold' }}>✓ فائز</span>
+                      ) : (
+                        'قيد الانتظار'
+                      )}
+                    </TableCell>
                   </TableRow>
-                </TableHead>
-                <TableBody>
-                  {offers.map(offer => (
-                    <TableRow key={offer.id}>
-                      <TableCell>
-                        <Checkbox
-                          checked={selectedWinners.includes(offer.id)}
-                          onChange={() => handleSelectWinner(offer.id)}
-                        />
-                      </TableCell>
-                      <TableCell>{offer.offer_number}</TableCell>
-                      <TableCell>{offer.company_name}</TableCell>
-                      <TableCell sx={{ fontWeight: 'bold' }}>{offer.final_score}</TableCell>
-                      <TableCell>
-                        {offer.award_status === 'awarded' ? (
-                          <span style={{ color: '#4caf50', fontWeight: 'bold' }}>✓ فائز</span>
-                        ) : (
-                          'قيد الانتظار'
-                        )}
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-
-              <Box sx={{ mt: 2, display: 'flex', gap: 2 }}>
-                <Button
-                  variant="contained"
-                  onClick={() => setAwardDialogOpen(true)}
-                  sx={{ backgroundColor: theme.palette.primary.main }}
-                >
-                  تأكيد اختيار الفائزين
-                </Button>
-                <Button
-                  variant="outlined"
-                  onClick={() => setCancelDialogOpen(true)}
-                  sx={{ color: '#f44336', borderColor: '#f44336' }}
-                >
-                  ⚠️ إلغاء المناقصة
-                </Button>
-              </Box>
-            </CardContent>
-          </Card>
-        </>
+                ))}
+              </TableBody>
+            </Table>
+            <Box sx={{ mt: 2, display: 'flex', gap: 2 }}>
+              <Button variant="contained" onClick={() => setAwardDialogOpen(true)} sx={{ backgroundColor: theme.palette.primary.main }}>
+                تأكيد اختيار الفائزين
+              </Button>
+              <Button variant="outlined" onClick={() => setCancelDialogOpen(true)} sx={{ color: '#f44336', borderColor: '#f44336' }}>
+                ⚠️ إلغاء المناقصة
+              </Button>
+            </Box>
+          </CardContent>
+        </Card>
       )}
-
-      {/* Award Dialog */}
       <Dialog open={awardDialogOpen} onClose={() => setAwardDialogOpen(false)}>
         <DialogTitle>تأكيد اختيار الفائزين</DialogTitle>
         <DialogContent sx={{ pt: 2 }}>
@@ -188,40 +141,22 @@ export default function TenderManagement({ tenderId }) {
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setAwardDialogOpen(false)}>إلغاء</Button>
-          <Button
-            onClick={handleAwardWinners}
-            variant="contained"
-            sx={{ backgroundColor: theme.palette.primary.main }}
-          >
+          <Button onClick={handleAwardWinners} variant="contained" sx={{ backgroundColor: theme.palette.primary.main }}>
             تأكيد
           </Button>
         </DialogActions>
       </Dialog>
-
-      {/* Cancellation Dialog */}
       <Dialog open={cancelDialogOpen} onClose={() => setCancelDialogOpen(false)} maxWidth="sm" fullWidth>
         <DialogTitle>إلغاء المناقصة</DialogTitle>
         <DialogContent sx={{ pt: 2 }}>
           <Alert severity="warning" sx={{ mb: 2 }}>
             ⚠️ هذا الإجراء سيلغي المناقصة وسيتم إرسال إخطارات الإلغاء لجميع المزودين
           </Alert>
-          <TextField
-            fullWidth
-            label="سبب الإلغاء"
-            value={cancellationReason}
-            onChange={(e) => setCancellationReason(e.target.value)}
-            multiline
-            rows={4}
-            placeholder="أدخل سبب الإلغاء (إلزامي)"
-          />
+          <TextField fullWidth label="سبب الإلغاء" value={cancellationReason} onChange={(e) => setCancellationReason(e.target.value)} multiline rows={4} placeholder="أدخل سبب الإلغاء (إلزامي)" />
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setCancelDialogOpen(false)}>إغلاق</Button>
-          <Button
-            onClick={handleCancelTender}
-            variant="contained"
-            sx={{ backgroundColor: '#f44336' }}
-          >
+          <Button onClick={handleCancelTender} variant="contained" sx={{ backgroundColor: '#f44336' }}>
             إلغاء المناقصة
           </Button>
         </DialogActions>

@@ -1,0 +1,46 @@
+-- Backup check: Verify all required columns exist
+ALTER TABLE offers ADD COLUMN IF NOT EXISTS award_status VARCHAR(20);
+ALTER TABLE offers ADD COLUMN IF NOT EXISTS awarded_at TIMESTAMP WITH TIME ZONE;
+ALTER TABLE offers ADD COLUMN IF NOT EXISTS technical_score DECIMAL(5, 2);
+ALTER TABLE offers ADD COLUMN IF NOT EXISTS technical_comments TEXT;
+ALTER TABLE offers ADD COLUMN IF NOT EXISTS technical_evaluated_at TIMESTAMP WITH TIME ZONE;
+ALTER TABLE offers ADD COLUMN IF NOT EXISTS technical_evaluated_by INTEGER;
+ALTER TABLE offers ADD COLUMN IF NOT EXISTS financial_score DECIMAL(5, 2);
+ALTER TABLE offers ADD COLUMN IF NOT EXISTS financial_comments TEXT;
+ALTER TABLE offers ADD COLUMN IF NOT EXISTS financial_evaluated_at TIMESTAMP WITH TIME ZONE;
+ALTER TABLE offers ADD COLUMN IF NOT EXISTS financial_evaluated_by INTEGER;
+ALTER TABLE offers ADD COLUMN IF NOT EXISTS final_score DECIMAL(5, 2);
+ALTER TABLE offers ADD COLUMN IF NOT EXISTS ranking INTEGER;
+ALTER TABLE offers ADD COLUMN IF NOT EXISTS evaluation_completed_at TIMESTAMP WITH TIME ZONE;
+ALTER TABLE offers ADD COLUMN IF NOT EXISTS is_locked BOOLEAN DEFAULT FALSE;
+ALTER TABLE offers ADD COLUMN IF NOT EXISTS receipt_number VARCHAR(20);
+ALTER TABLE offers ADD COLUMN IF NOT EXISTS receipt_issued_at TIMESTAMP WITH TIME ZONE;
+
+ALTER TABLE tenders ADD COLUMN IF NOT EXISTS allow_partial_award BOOLEAN DEFAULT FALSE;
+ALTER TABLE tenders ADD COLUMN IF NOT EXISTS max_winners INTEGER DEFAULT 1;
+ALTER TABLE tenders ADD COLUMN IF NOT EXISTS cancellation_reason TEXT;
+ALTER TABLE tenders ADD COLUMN IF NOT EXISTS cancelled_at TIMESTAMP WITH TIME ZONE;
+
+CREATE TABLE IF NOT EXISTS opening_reports (
+  id SERIAL PRIMARY KEY,
+  tender_id INTEGER REFERENCES tenders(id),
+  opened_by INTEGER,
+  total_offers_received INTEGER,
+  total_valid_offers INTEGER,
+  total_invalid_offers INTEGER,
+  offers_data JSONB,
+  status VARCHAR(20),
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS document_archives (
+  id SERIAL PRIMARY KEY,
+  archive_id VARCHAR(255) UNIQUE NOT NULL,
+  document_type VARCHAR(50),
+  document_ref_id INTEGER,
+  encrypted_data TEXT,
+  retention_years INTEGER DEFAULT 7,
+  expiration_date TIMESTAMP WITH TIME ZONE,
+  archived_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+  status VARCHAR(20) DEFAULT 'active'
+);

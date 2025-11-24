@@ -4,44 +4,25 @@ const AwardNotificationService = require('../services/AwardNotificationService')
 const ArchiveService = require('../services/ArchiveService');
 const TenderCancellationService = require('../services/TenderCancellationService');
 
-/**
- * POST /api/tender-management/award-winners/:tenderId
- * Select winner(s) and send notifications
- */
 router.post('/award-winners/:tenderId', async (req, res) => {
   try {
     const { tenderId } = req.params;
     const { winnersIds } = req.body;
     const buyerId = req.user?.userId;
-
-    if (!buyerId) {
-      return res.status(401).json({ success: false, error: 'Authentication required' });
-    }
-
+    if (!buyerId) return res.status(401).json({ success: false, error: 'Authentication required' });
     if (!winnersIds || !Array.isArray(winnersIds) || winnersIds.length === 0) {
       return res.status(400).json({ success: false, error: 'Winners IDs required' });
     }
-
-    const result = await AwardNotificationService.selectWinnersAndNotify(
-      parseInt(tenderId),
-      winnersIds,
-      buyerId
-    );
-
+    const result = await AwardNotificationService.selectWinnersAndNotify(parseInt(tenderId), winnersIds, buyerId);
     res.status(200).json({ success: true, result });
   } catch (error) {
     res.status(400).json({ success: false, error: error.message });
   }
 });
 
-/**
- * GET /api/tender-management/award-status/:tenderId
- * Get award status for tender
- */
 router.get('/award-status/:tenderId', async (req, res) => {
   try {
     const { tenderId } = req.params;
-
     const status = await AwardNotificationService.getAwardStatus(parseInt(tenderId));
     res.status(200).json({ success: true, status });
   } catch (error) {
@@ -49,40 +30,21 @@ router.get('/award-status/:tenderId', async (req, res) => {
   }
 });
 
-/**
- * POST /api/tender-management/archive/:tenderId
- * Archive tender documents
- */
 router.post('/archive/:tenderId', async (req, res) => {
   try {
     const { tenderId } = req.params;
     const { docType, docData, retention_years } = req.body;
-
-    if (!docType || !docData) {
-      return res.status(400).json({ success: false, error: 'Document type and data required' });
-    }
-
-    const archive = await ArchiveService.archiveDocument(
-      docType,
-      parseInt(tenderId),
-      docData,
-      retention_years || 7
-    );
-
+    if (!docType || !docData) return res.status(400).json({ success: false, error: 'Document type and data required' });
+    const archive = await ArchiveService.archiveDocument(docType, parseInt(tenderId), docData, retention_years || 7);
     res.status(201).json({ success: true, archive });
   } catch (error) {
     res.status(400).json({ success: false, error: error.message });
   }
 });
 
-/**
- * GET /api/tender-management/archive/:archiveId
- * Retrieve archived document
- */
 router.get('/archive/:archiveId', async (req, res) => {
   try {
     const { archiveId } = req.params;
-
     const archive = await ArchiveService.retrieveArchiveDocument(archiveId);
     res.status(200).json({ success: true, archive });
   } catch (error) {
@@ -90,14 +52,9 @@ router.get('/archive/:archiveId', async (req, res) => {
   }
 });
 
-/**
- * GET /api/tender-management/archives/:tenderId
- * List all archives for tender
- */
 router.get('/archives/:tenderId', async (req, res) => {
   try {
     const { tenderId } = req.params;
-
     const archives = await ArchiveService.getArchivesByTender(parseInt(tenderId));
     res.status(200).json({ success: true, archives });
   } catch (error) {
@@ -105,44 +62,23 @@ router.get('/archives/:tenderId', async (req, res) => {
   }
 });
 
-/**
- * POST /api/tender-management/cancel/:tenderId
- * Cancel a tender
- */
 router.post('/cancel/:tenderId', async (req, res) => {
   try {
     const { tenderId } = req.params;
     const { cancellationReason } = req.body;
     const buyerId = req.user?.userId;
-
-    if (!buyerId) {
-      return res.status(401).json({ success: false, error: 'Authentication required' });
-    }
-
-    if (!cancellationReason) {
-      return res.status(400).json({ success: false, error: 'Cancellation reason required' });
-    }
-
-    const result = await TenderCancellationService.cancelTender(
-      parseInt(tenderId),
-      buyerId,
-      cancellationReason
-    );
-
+    if (!buyerId) return res.status(401).json({ success: false, error: 'Authentication required' });
+    if (!cancellationReason) return res.status(400).json({ success: false, error: 'Cancellation reason required' });
+    const result = await TenderCancellationService.cancelTender(parseInt(tenderId), buyerId, cancellationReason);
     res.status(200).json({ success: true, result });
   } catch (error) {
     res.status(400).json({ success: false, error: error.message });
   }
 });
 
-/**
- * GET /api/tender-management/cancellation-status/:tenderId
- * Get cancellation status
- */
 router.get('/cancellation-status/:tenderId', async (req, res) => {
   try {
     const { tenderId } = req.params;
-
     const status = await TenderCancellationService.getCancellationStatus(parseInt(tenderId));
     res.status(200).json({ success: true, status });
   } catch (error) {

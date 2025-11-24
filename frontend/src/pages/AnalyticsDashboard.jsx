@@ -42,7 +42,7 @@ const AnalyticsDashboard = () => {
 
   if (loading) return <CircularProgress />;
 
-  const COLORS = [theme.palette.primary.main, '#00D4FF', '#FF6B6B', '#4ECDC4'];
+  const COLORS = [institutionalTheme.palette.primary.main, '#00D4FF', '#FF6B6B', '#4ECDC4'];
 
   return (
     <Box sx={{ p: 3 }}>
@@ -56,7 +56,7 @@ const AnalyticsDashboard = () => {
               <Typography variant="body2" sx={{ color: '#666', mb: 1 }}>
                 {key.replace(/_/g, ' ').toUpperCase()}
               </Typography>
-              <Typography variant="h5" sx={{ color: theme.palette.primary.main, fontWeight: 'bold' }}>
+              <Typography variant="h5" sx={{ color: institutionalTheme.palette.primary.main, fontWeight: 'bold' }}>
                 {typeof value === 'number' ? value.toFixed(2) : value}
               </Typography>
             </Card>
@@ -73,7 +73,7 @@ const AnalyticsDashboard = () => {
             <XAxis dataKey="date" />
             <YAxis />
             <Tooltip />
-            <Line type="monotone" dataKey="count" stroke=theme.palette.primary.main strokeWidth={2} />
+            <Line type="monotone" dataKey="count" stroke=institutionalTheme.palette.primary.main strokeWidth={2} />
           </LineChart>
         </ResponsiveContainer>
       </Card>
@@ -105,7 +105,7 @@ const AnalyticsDashboard = () => {
                 <XAxis dataKey="status" />
                 <YAxis />
                 <Tooltip />
-                <Bar dataKey="count" fill=theme.palette.primary.main />
+                <Bar dataKey="count" fill=institutionalTheme.palette.primary.main />
               </BarChart>
             </ResponsiveContainer>
           </Card>

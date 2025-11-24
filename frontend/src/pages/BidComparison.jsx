@@ -158,18 +158,18 @@ export default function BidComparison() {
           <Link 
             component="button"
             onClick={() => navigate('/tenders')}
-            sx={{ cursor: 'pointer', color: theme.palette.primary.main, textDecoration: 'none', '&:hover': { textDecoration: 'underline' } }}
+            sx={{ cursor: 'pointer', color: institutionalTheme.palette.primary.main, textDecoration: 'none', '&:hover': { textDecoration: 'underline' } }}
           >
             المناقصات
           </Link>
           <Link
             component="button"
             onClick={() => navigate(`/tender/${tenderId}`)}
-            sx={{ cursor: 'pointer', color: theme.palette.primary.main, textDecoration: 'none', '&:hover': { textDecoration: 'underline' } }}
+            sx={{ cursor: 'pointer', color: institutionalTheme.palette.primary.main, textDecoration: 'none', '&:hover': { textDecoration: 'underline' } }}
           >
             المناقصة
           </Link>
-          <Typography sx={{ color: theme.palette.primary.main, fontWeight: 600 }}>
+          <Typography sx={{ color: institutionalTheme.palette.primary.main, fontWeight: 600 }}>
             مقارنة العروض
           </Typography>
         </Breadcrumbs>
@@ -180,12 +180,12 @@ export default function BidComparison() {
             <Button
               startIcon={<ArrowBackIcon />}
               onClick={() => navigate(`/tender/${tenderId}`)}
-              sx={{ color: theme.palette.primary.main, textTransform: 'none' }}
+              sx={{ color: institutionalTheme.palette.primary.main, textTransform: 'none' }}
             >
               العودة
             </Button>
           </Box>
-          <Typography variant="h2" sx={{ fontSize: '32px', fontWeight: 500, color: theme.palette.text.primary, marginBottom: '8px' }}>
+          <Typography variant="h2" sx={{ fontSize: '32px', fontWeight: 500, color: institutionalTheme.palette.text.primary, marginBottom: '8px' }}>
             📊 مقارنة العروض
           </Typography>
           {tender && (
@@ -223,7 +223,7 @@ export default function BidComparison() {
                   startIcon={<SortIcon />}
                   onClick={() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')}
                   size="small"
-                  sx={{ color: theme.palette.primary.main }}
+                  sx={{ color: institutionalTheme.palette.primary.main }}
                 >
                   {sortOrder === 'asc' ? '↑ تصاعدي' : '↓ تنازلي'}
                 </Button>
@@ -235,7 +235,7 @@ export default function BidComparison() {
                   onClick={exportToCSV}
                   variant="outlined"
                   size="small"
-                  sx={{ color: theme.palette.primary.main, borderColor: theme.palette.primary.main }}
+                  sx={{ color: institutionalTheme.palette.primary.main, borderColor: institutionalTheme.palette.primary.main }}
                 >
                   تصدير CSV
                 </Button>
@@ -249,12 +249,12 @@ export default function BidComparison() {
                   <Table>
                     <TableHead sx={{ backgroundColor: '#f5f5f5' }}>
                       <TableRow>
-                        <TableCell sx={{ fontWeight: 600, color: theme.palette.primary.main }}>المورد</TableCell>
-                        <TableCell sx={{ fontWeight: 600, color: theme.palette.primary.main }} align="center">المبلغ</TableCell>
-                        <TableCell sx={{ fontWeight: 600, color: theme.palette.primary.main }} align="center">التسليم</TableCell>
-                        <TableCell sx={{ fontWeight: 600, color: theme.palette.primary.main }} align="center">الدفع</TableCell>
-                        <TableCell sx={{ fontWeight: 600, color: theme.palette.primary.main }} align="center">الحالة</TableCell>
-                        <TableCell sx={{ fontWeight: 600, color: theme.palette.primary.main }} align="center">التقييم</TableCell>
+                        <TableCell sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main }}>المورد</TableCell>
+                        <TableCell sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main }} align="center">المبلغ</TableCell>
+                        <TableCell sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main }} align="center">التسليم</TableCell>
+                        <TableCell sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main }} align="center">الدفع</TableCell>
+                        <TableCell sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main }} align="center">الحالة</TableCell>
+                        <TableCell sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main }} align="center">التقييم</TableCell>
                       </TableRow>
                     </TableHead>
                     <TableBody>
@@ -263,7 +263,7 @@ export default function BidComparison() {
                           <TableCell sx={{ fontSize: '13px', fontWeight: 600 }}>
                             {offer.supplier_name || 'N/A'}
                           </TableCell>
-                          <TableCell sx={{ fontSize: '13px', fontWeight: 600, color: theme.palette.primary.main, textAlign: 'center' }}>
+                          <TableCell sx={{ fontSize: '13px', fontWeight: 600, color: institutionalTheme.palette.primary.main, textAlign: 'center' }}>
                             {parseFloat(offer.total_amount).toFixed(2)} TND
                           </TableCell>
                           <TableCell sx={{ fontSize: '13px', textAlign: 'center' }}>
@@ -306,10 +306,10 @@ export default function BidComparison() {
         {/* Tender Summary */}
         {tender && (
           <Paper sx={{ marginTop: '32px', padding: '16px', backgroundColor: '#f5f5f5' }}>
-            <Typography sx={{ fontWeight: 700, marginBottom: '12px', color: theme.palette.primary.main, fontSize: '14px' }}>
+            <Typography sx={{ fontWeight: 700, marginBottom: '12px', color: institutionalTheme.palette.primary.main, fontSize: '14px' }}>
               🔐 ID Référence (Plateforme): <strong>{tender.id || 'N/A'}</strong>
             </Typography>
-            <Typography sx={{ fontWeight: 600, marginBottom: '12px', color: theme.palette.primary.main }}>
+            <Typography sx={{ fontWeight: 600, marginBottom: '12px', color: institutionalTheme.palette.primary.main }}>
               📋 ملخص المناقصة
             </Typography>
             <Stack spacing={1}>

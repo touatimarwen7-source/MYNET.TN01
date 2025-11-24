@@ -103,7 +103,7 @@ export default function POManagement() {
     return (
       <Box sx={{ backgroundColor: '#fafafa', paddingY: '40px' }}>
         <Container maxWidth="lg">
-          <Typography sx={{ marginBottom: '24px', fontWeight: 600, color: theme.palette.primary.main }}>
+          <Typography sx={{ marginBottom: '24px', fontWeight: 600, color: institutionalTheme.palette.primary.main }}>
             Gestion des Bons de Commande
           </Typography>
           <TableSkeleton rows={5} columns={6} />
@@ -116,14 +116,14 @@ export default function POManagement() {
     <Box sx={{ backgroundColor: '#fafafa', paddingY: '40px' }}>
       <Container maxWidth="lg">
         <Stack direction={{ xs: 'column', md: 'row' }} spacing={2} sx={{ marginBottom: '32px', justifyContent: 'space-between', alignItems: 'center' }}>
-          <Typography variant="h4" sx={{ fontWeight: 600, color: theme.palette.text.primary }}>
+          <Typography variant="h4" sx={{ fontWeight: 600, color: institutionalTheme.palette.text.primary }}>
             Gestion des Bons de Commande
           </Typography>
           <Button
             variant="contained"
             startIcon={<AddIcon />}
             onClick={() => navigate('/po-create')}
-            sx={{ backgroundColor: theme.palette.primary.main }}
+            sx={{ backgroundColor: institutionalTheme.palette.primary.main }}
           >
             Nouveau Bon de Commande
           </Button>
@@ -164,18 +164,18 @@ export default function POManagement() {
           <Table>
             <TableHead sx={{ backgroundColor: '#f5f5f5' }}>
               <TableRow>
-                <TableCell sx={{ fontWeight: 600, color: theme.palette.text.primary }}>N° Bon</TableCell>
-                <TableCell sx={{ fontWeight: 600, color: theme.palette.text.primary }}>Fournisseur</TableCell>
-                <TableCell sx={{ fontWeight: 600, color: theme.palette.text.primary }}>Montant</TableCell>
-                <TableCell sx={{ fontWeight: 600, color: theme.palette.text.primary }}>Statut</TableCell>
-                <TableCell sx={{ fontWeight: 600, color: theme.palette.text.primary }}>Livraison</TableCell>
-                <TableCell sx={{ fontWeight: 600, color: theme.palette.text.primary }}>Actions</TableCell>
+                <TableCell sx={{ fontWeight: 600, color: institutionalTheme.palette.text.primary }}>N° Bon</TableCell>
+                <TableCell sx={{ fontWeight: 600, color: institutionalTheme.palette.text.primary }}>Fournisseur</TableCell>
+                <TableCell sx={{ fontWeight: 600, color: institutionalTheme.palette.text.primary }}>Montant</TableCell>
+                <TableCell sx={{ fontWeight: 600, color: institutionalTheme.palette.text.primary }}>Statut</TableCell>
+                <TableCell sx={{ fontWeight: 600, color: institutionalTheme.palette.text.primary }}>Livraison</TableCell>
+                <TableCell sx={{ fontWeight: 600, color: institutionalTheme.palette.text.primary }}>Actions</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {paginatedPOs.map((po) => (
                 <TableRow key={po.id} hover>
-                  <TableCell sx={{ color: theme.palette.primary.main, fontWeight: 500 }}>{po.number}</TableCell>
+                  <TableCell sx={{ color: institutionalTheme.palette.primary.main, fontWeight: 500 }}>{po.number}</TableCell>
                   <TableCell>{po.supplier}</TableCell>
                   <TableCell>{po.amount.toLocaleString()} {po.currency}</TableCell>
                   <TableCell>
@@ -188,7 +188,7 @@ export default function POManagement() {
                         size="small"
                         startIcon={<VisibilityIcon />}
                         onClick={() => navigate(`/po-detail/${po.id}`)}
-                        sx={{ color: theme.palette.primary.main }}
+                        sx={{ color: institutionalTheme.palette.primary.main }}
                       >
                         Détails
                       </Button>
@@ -196,7 +196,7 @@ export default function POManagement() {
                         size="small"
                         startIcon={<EditIcon />}
                         onClick={() => navigate(`/po-edit/${po.id}`)}
-                        sx={{ color: theme.palette.primary.main }}
+                        sx={{ color: institutionalTheme.palette.primary.main }}
                       >
                         Modifier
                       </Button>

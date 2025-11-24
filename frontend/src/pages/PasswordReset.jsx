@@ -105,7 +105,7 @@ export default function PasswordReset() {
   };
 
   return (
-    <Box sx={{ backgroundColor: theme.palette.background.default, minHeight: '100vh', paddingY: '60px' }}>
+    <Box sx={{ backgroundColor: institutionalTheme.palette.background.default, minHeight: '100vh', paddingY: '60px' }}>
       <Container maxWidth="sm">
         <Card sx={{ borderRadius: '8px' }}>
           <CardContent sx={{ padding: '48px 40px' }}>
@@ -114,7 +114,7 @@ export default function PasswordReset() {
               sx={{
                 fontSize: '28px',
                 fontWeight: 500,
-                color: theme.palette.primary.main,
+                color: institutionalTheme.palette.primary.main,
                 marginBottom: '24px',
                 textAlign: 'center',
               }}
@@ -156,7 +156,7 @@ export default function PasswordReset() {
                   fullWidth
                   variant="contained"
                   sx={{
-                    backgroundColor: theme.palette.primary.main,
+                    backgroundColor: institutionalTheme.palette.primary.main,
                     marginTop: '24px',
                     padding: '12px',
                   }}
@@ -184,7 +184,7 @@ export default function PasswordReset() {
                   fullWidth
                   variant="contained"
                   sx={{
-                    backgroundColor: theme.palette.primary.main,
+                    backgroundColor: institutionalTheme.palette.primary.main,
                     marginTop: '24px',
                     padding: '12px',
                   }}
@@ -222,7 +222,7 @@ export default function PasswordReset() {
                   fullWidth
                   variant="contained"
                   sx={{
-                    backgroundColor: theme.palette.primary.main,
+                    backgroundColor: institutionalTheme.palette.primary.main,
                     marginTop: '24px',
                     padding: '12px',
                   }}

@@ -144,7 +144,7 @@ export default function InvoiceGeneration() {
             sx={{
               fontSize: '32px',
               fontWeight: 600,
-              color: theme.palette.primary.main,
+              color: institutionalTheme.palette.primary.main,
               marginBottom: '8px'
             }}
           >
@@ -169,7 +169,7 @@ export default function InvoiceGeneration() {
                 <Typography sx={{ color: '#999', fontSize: '12px', fontWeight: 600 }}>
                   COMMANDES TOTALES
                 </Typography>
-                <Typography sx={{ fontSize: '24px', fontWeight: 700, color: theme.palette.primary.main }}>
+                <Typography sx={{ fontSize: '24px', fontWeight: 700, color: institutionalTheme.palette.primary.main }}>
                   {purchaseOrders.length}
                 </Typography>
               </CardContent>
@@ -181,7 +181,7 @@ export default function InvoiceGeneration() {
                 <Typography sx={{ color: '#999', fontSize: '12px', fontWeight: 600 }}>
                   FACTURES TOTALES
                 </Typography>
-                <Typography sx={{ fontSize: '24px', fontWeight: 700, color: theme.palette.primary.main }}>
+                <Typography sx={{ fontSize: '24px', fontWeight: 700, color: institutionalTheme.palette.primary.main }}>
                   {invoices.length}
                 </Typography>
               </CardContent>
@@ -216,7 +216,7 @@ export default function InvoiceGeneration() {
         {/* Section: Purchase Orders */}
         <Card sx={{ border: '1px solid #e0e0e0', marginBottom: '40px' }}>
           <CardContent sx={{ padding: '24px' }}>
-            <Typography variant="h5" sx={{ fontSize: '20px', fontWeight: 600, color: theme.palette.text.primary, marginBottom: '20px' }}>
+            <Typography variant="h5" sx={{ fontSize: '20px', fontWeight: 600, color: institutionalTheme.palette.text.primary, marginBottom: '20px' }}>
               📦 Vos Commandes (Demandes de Fourniture)
             </Typography>
 
@@ -227,11 +227,11 @@ export default function InvoiceGeneration() {
                 <Table size="small">
                   <TableHead sx={{ backgroundColor: '#F5F5F5' }}>
                     <TableRow>
-                      <TableCell sx={{ fontWeight: 600, color: theme.palette.primary.main }}>N° Commande</TableCell>
-                      <TableCell sx={{ fontWeight: 600, color: theme.palette.primary.main }}>Fournisseur</TableCell>
-                      <TableCell sx={{ fontWeight: 600, color: theme.palette.primary.main }}>Montant</TableCell>
-                      <TableCell sx={{ fontWeight: 600, color: theme.palette.primary.main }}>Statut</TableCell>
-                      <TableCell sx={{ fontWeight: 600, color: theme.palette.primary.main }}>Facture(s)</TableCell>
+                      <TableCell sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main }}>N° Commande</TableCell>
+                      <TableCell sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main }}>Fournisseur</TableCell>
+                      <TableCell sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main }}>Montant</TableCell>
+                      <TableCell sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main }}>Statut</TableCell>
+                      <TableCell sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main }}>Facture(s)</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
@@ -275,7 +275,7 @@ export default function InvoiceGeneration() {
         <Card sx={{ border: '1px solid #e0e0e0' }}>
           <CardContent sx={{ padding: '24px' }}>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-              <Typography variant="h5" sx={{ fontSize: '20px', fontWeight: 600, color: theme.palette.text.primary }}>
+              <Typography variant="h5" sx={{ fontSize: '20px', fontWeight: 600, color: institutionalTheme.palette.text.primary }}>
                 📄 Factures des Fournisseurs
               </Typography>
               <Typography sx={{ fontSize: '12px', color: '#999' }}>
@@ -290,12 +290,12 @@ export default function InvoiceGeneration() {
                 <Table size="small">
                   <TableHead sx={{ backgroundColor: '#F5F5F5' }}>
                     <TableRow>
-                      <TableCell sx={{ fontWeight: 600, color: theme.palette.primary.main }}>N° Facture</TableCell>
-                      <TableCell sx={{ fontWeight: 600, color: theme.palette.primary.main }}>Fournisseur</TableCell>
-                      <TableCell sx={{ fontWeight: 600, color: theme.palette.primary.main }}>Montant</TableCell>
-                      <TableCell sx={{ fontWeight: 600, color: theme.palette.primary.main }}>Échéance</TableCell>
-                      <TableCell sx={{ fontWeight: 600, color: theme.palette.primary.main }}>Statut</TableCell>
-                      <TableCell sx={{ fontWeight: 600, color: theme.palette.primary.main }} align="center">Actions</TableCell>
+                      <TableCell sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main }}>N° Facture</TableCell>
+                      <TableCell sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main }}>Fournisseur</TableCell>
+                      <TableCell sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main }}>Montant</TableCell>
+                      <TableCell sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main }}>Échéance</TableCell>
+                      <TableCell sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main }}>Statut</TableCell>
+                      <TableCell sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main }} align="center">Actions</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
@@ -368,7 +368,7 @@ export default function InvoiceGeneration() {
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setOpenApprovalDialog(false)}>Annuler</Button>
-          <Button onClick={approveInvoice} variant="contained" sx={{ backgroundColor: theme.palette.primary.main }}>
+          <Button onClick={approveInvoice} variant="contained" sx={{ backgroundColor: institutionalTheme.palette.primary.main }}>
             Approuver
           </Button>
         </DialogActions>

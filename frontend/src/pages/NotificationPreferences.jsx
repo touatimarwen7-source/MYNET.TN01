@@ -19,9 +19,9 @@ export default function NotificationPreferences() {
   }, []);
 
   return (
-    <Box sx={{ backgroundColor: theme.palette.background.default, paddingY: '40px', minHeight: '80vh' }}>
+    <Box sx={{ backgroundColor: institutionalTheme.palette.background.default, paddingY: '40px', minHeight: '80vh' }}>
       <Container maxWidth="md">
-        <Typography variant="h2" sx={{ fontSize: '32px', fontWeight: 600, color: theme.palette.primary.main, mb: 3 }}>
+        <Typography variant="h2" sx={{ fontSize: '32px', fontWeight: 600, color: institutionalTheme.palette.primary.main, mb: 3 }}>
           Préférences de notification
         </Typography>
         <Card sx={{ border: '1px solid #E0E0E0' }}>

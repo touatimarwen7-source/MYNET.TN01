@@ -20,7 +20,7 @@ import {
   Paper,
 } from '@mui/material';
 import axios from 'axios';
-import { theme } from '../theme/theme';
+import institutionalTheme from '../theme/theme';
 
 export default function OfferSubmission({ tenderId }) {
   const [step, setStep] = useState(0);
@@ -98,7 +98,7 @@ export default function OfferSubmission({ tenderId }) {
 
   const ReceiptCertificate = () => (
     <Paper sx={{ p: 3, backgroundColor: '#f0f7ff', borderRadius: '4px', direction: 'rtl' }}>
-      <Typography variant="h6" sx={{ fontWeight: 'bold', mb: 2, color: theme.palette.primary.main }}>
+      <Typography variant="h6" sx={{ fontWeight: 'bold', mb: 2, color: institutionalTheme.palette.primary.main }}>
         📄 شهادة استقبال العرض - Certificat d'Dépôt
       </Typography>
 
@@ -127,7 +127,7 @@ export default function OfferSubmission({ tenderId }) {
       <Box sx={{ display: 'flex', gap: 1 }}>
         <Button
           variant="contained"
-          sx={{ backgroundColor: theme.palette.primary.main }}
+          sx={{ backgroundColor: institutionalTheme.palette.primary.main }}
           onClick={() => {
             const element = document.createElement('a');
             element.href = `data:text/plain;charset=utf-8,${encodeURIComponent(JSON.stringify(receipt))}`;
@@ -144,7 +144,7 @@ export default function OfferSubmission({ tenderId }) {
 
   return (
     <Box sx={{ p: 3, direction: 'rtl' }}>
-      <Typography variant="h5" sx={{ mb: 3, color: theme.palette.primary.main, fontWeight: 'bold' }}>
+      <Typography variant="h5" sx={{ mb: 3, color: institutionalTheme.palette.primary.main, fontWeight: 'bold' }}>
         📝 إرسال عرض جديد
       </Typography>
 
@@ -193,7 +193,7 @@ export default function OfferSubmission({ tenderId }) {
               <Button
                 variant="contained"
                 onClick={() => setStep(1)}
-                sx={{ backgroundColor: theme.palette.primary.main }}
+                sx={{ backgroundColor: institutionalTheme.palette.primary.main }}
               >
                 التالي
               </Button>
@@ -227,7 +227,7 @@ export default function OfferSubmission({ tenderId }) {
                 />
               </Button>
               {offerData.technical_file && (
-                <Typography variant="caption" sx={{ color: theme.palette.primary.main }}>
+                <Typography variant="caption" sx={{ color: institutionalTheme.palette.primary.main }}>
                   ✓ {offerData.technical_file.name}
                 </Typography>
               )}
@@ -251,7 +251,7 @@ export default function OfferSubmission({ tenderId }) {
                 />
               </Button>
               {offerData.financial_file && (
-                <Typography variant="caption" sx={{ color: theme.palette.primary.main }}>
+                <Typography variant="caption" sx={{ color: institutionalTheme.palette.primary.main }}>
                   ✓ {offerData.financial_file.name}
                 </Typography>
               )}
@@ -272,7 +272,7 @@ export default function OfferSubmission({ tenderId }) {
               <Button
                 variant="contained"
                 onClick={() => setStep(2)}
-                sx={{ backgroundColor: theme.palette.primary.main }}
+                sx={{ backgroundColor: institutionalTheme.palette.primary.main }}
               >
                 التالي
               </Button>
@@ -309,7 +309,7 @@ export default function OfferSubmission({ tenderId }) {
                 variant="contained"
                 onClick={handleSubmit}
                 disabled={loading}
-                sx={{ backgroundColor: theme.palette.primary.main }}
+                sx={{ backgroundColor: institutionalTheme.palette.primary.main }}
               >
                 {loading ? <CircularProgress size={24} /> : 'إرسال العرض بشكل نهائي'}
               </Button>

@@ -85,14 +85,14 @@ export default function PODetail() {
         <Button
           startIcon={<ArrowBackIcon />}
           onClick={() => navigate('/po-management')}
-          sx={{ color: theme.palette.primary.main, marginBottom: '24px' }}
+          sx={{ color: institutionalTheme.palette.primary.main, marginBottom: '24px' }}
         >
           Retour
         </Button>
 
         <Stack direction={{ xs: 'column', md: 'row' }} spacing={2} sx={{ marginBottom: '32px', justifyContent: 'space-between' }}>
           <Box>
-            <Typography variant="h4" sx={{ fontWeight: 600, color: theme.palette.text.primary }}>
+            <Typography variant="h4" sx={{ fontWeight: 600, color: institutionalTheme.palette.text.primary }}>
               {po.number}
             </Typography>
             <StatusBadge status={po.status} />
@@ -102,14 +102,14 @@ export default function PODetail() {
               variant="contained"
               startIcon={<EditIcon />}
               onClick={() => navigate(`/po-edit/${po.id}`)}
-              sx={{ backgroundColor: theme.palette.primary.main }}
+              sx={{ backgroundColor: institutionalTheme.palette.primary.main }}
             >
               Modifier
             </Button>
             <Button
               variant="outlined"
               startIcon={<PrintIcon />}
-              sx={{ color: theme.palette.primary.main, borderColor: theme.palette.primary.main }}
+              sx={{ color: institutionalTheme.palette.primary.main, borderColor: institutionalTheme.palette.primary.main }}
             >
               Imprimer
             </Button>
@@ -120,7 +120,7 @@ export default function PODetail() {
           <Grid item xs={12} md={6}>
             <Card sx={{ border: '1px solid #e0e0e0' }}>
               <CardContent>
-                <Typography sx={{ fontWeight: 600, color: theme.palette.primary.main, marginBottom: '16px' }}>
+                <Typography sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main, marginBottom: '16px' }}>
                   Informations Fournisseur
                 </Typography>
                 <Stack spacing={1}>
@@ -144,7 +144,7 @@ export default function PODetail() {
           <Grid item xs={12} md={6}>
             <Card sx={{ border: '1px solid #e0e0e0' }}>
               <CardContent>
-                <Typography sx={{ fontWeight: 600, color: theme.palette.primary.main, marginBottom: '16px' }}>
+                <Typography sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main, marginBottom: '16px' }}>
                   Détails du Bon
                 </Typography>
                 <Stack spacing={1}>
@@ -168,7 +168,7 @@ export default function PODetail() {
 
         <Card sx={{ marginBottom: '32px', border: '1px solid #e0e0e0' }}>
           <CardContent>
-            <Typography sx={{ fontWeight: 600, color: theme.palette.primary.main, marginBottom: '16px' }}>
+            <Typography sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main, marginBottom: '16px' }}>
               Articles du Bon
             </Typography>
             <Table>
@@ -208,7 +208,7 @@ export default function PODetail() {
                 </Box>
                 <Box sx={{ borderLeft: '1px solid #e0e0e0', paddingLeft: '32px' }}>
                   <Typography sx={{ fontSize: '12px', color: '#666' }}>Total</Typography>
-                  <Typography sx={{ fontWeight: 700, fontSize: '18px', color: theme.palette.primary.main }}>
+                  <Typography sx={{ fontWeight: 700, fontSize: '18px', color: institutionalTheme.palette.primary.main }}>
                     {po.total.toLocaleString()} {po.currency}
                   </Typography>
                 </Box>

@@ -17,9 +17,9 @@ export default function PricingPage() {
   }, []);
 
   return (
-    <Box sx={{ backgroundColor: theme.palette.background.default, paddingY: '40px', minHeight: '80vh' }}>
+    <Box sx={{ backgroundColor: institutionalTheme.palette.background.default, paddingY: '40px', minHeight: '80vh' }}>
       <Container maxWidth="lg">
-        <Typography variant="h2" sx={{ fontSize: '32px', fontWeight: 600, color: theme.palette.primary.main, mb: 3, textAlign: 'center' }}>
+        <Typography variant="h2" sx={{ fontSize: '32px', fontWeight: 600, color: institutionalTheme.palette.primary.main, mb: 3, textAlign: 'center' }}>
           Plans tarifaires
         </Typography>
         <Grid container spacing={3}>
@@ -28,7 +28,7 @@ export default function PricingPage() {
               <Card sx={{ border: '1px solid #E0E0E0', height: '100%' }}>
                 <CardContent>
                   <Typography sx={{ fontSize: '20px', fontWeight: 600, mb: 1 }}>{plan.name}</Typography>
-                  <Typography sx={{ fontSize: '24px', fontWeight: 600, color: theme.palette.primary.main, mb: 2 }}>{plan.price}</Typography>
+                  <Typography sx={{ fontSize: '24px', fontWeight: 600, color: institutionalTheme.palette.primary.main, mb: 2 }}>{plan.price}</Typography>
                   <List dense>
                     {plan.features.map((f, fidx) => (
                       <ListItem key={fidx} disableGutters>
@@ -37,7 +37,7 @@ export default function PricingPage() {
                       </ListItem>
                     ))}
                   </List>
-                  <Button variant="contained" fullWidth sx={{ backgroundColor: theme.palette.primary.main, mt: 2 }}>
+                  <Button variant="contained" fullWidth sx={{ backgroundColor: institutionalTheme.palette.primary.main, mt: 2 }}>
                     Choisir
                   </Button>
                 </CardContent>

@@ -95,7 +95,7 @@ const FileManagement = () => {
   return (
     <Box sx={{ padding: '20px' }}>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-        <Typography variant="h5" sx={{ fontWeight: 'bold', color: theme.palette.text.primary }}>
+        <Typography variant="h5" sx={{ fontWeight: 'bold', color: institutionalTheme.palette.text.primary }}>
           إدارة الملفات
         </Typography>
         <Button
@@ -103,7 +103,7 @@ const FileManagement = () => {
           startIcon={<CloudUploadIcon />}
           onClick={() => setOpenDialog(true)}
           sx={{
-            backgroundColor: theme.palette.primary.main,
+            backgroundColor: institutionalTheme.palette.primary.main,
             color: 'white',
             '&:hover': { backgroundColor: '#004399' },
             borderRadius: '4px',
@@ -127,20 +127,20 @@ const FileManagement = () => {
       ) : (
         <TableContainer component={Paper} sx={{ backgroundColor: 'white', borderRadius: '4px' }}>
           <Table>
-            <TableHead sx={{ backgroundColor: theme.palette.background.default }}>
+            <TableHead sx={{ backgroundColor: institutionalTheme.palette.background.default }}>
               <TableRow>
-                <TableCell sx={{ fontWeight: 'bold', color: theme.palette.primary.main }}>اسم الملف</TableCell>
-                <TableCell sx={{ fontWeight: 'bold', color: theme.palette.primary.main }}>نوع الملف</TableCell>
-                <TableCell sx={{ fontWeight: 'bold', color: theme.palette.primary.main }}>الحجم</TableCell>
-                <TableCell sx={{ fontWeight: 'bold', color: theme.palette.primary.main }}>تاريخ الإنشاء</TableCell>
-                <TableCell sx={{ fontWeight: 'bold', color: theme.palette.primary.main }}>الإجراءات</TableCell>
+                <TableCell sx={{ fontWeight: 'bold', color: institutionalTheme.palette.primary.main }}>اسم الملف</TableCell>
+                <TableCell sx={{ fontWeight: 'bold', color: institutionalTheme.palette.primary.main }}>نوع الملف</TableCell>
+                <TableCell sx={{ fontWeight: 'bold', color: institutionalTheme.palette.primary.main }}>الحجم</TableCell>
+                <TableCell sx={{ fontWeight: 'bold', color: institutionalTheme.palette.primary.main }}>تاريخ الإنشاء</TableCell>
+                <TableCell sx={{ fontWeight: 'bold', color: institutionalTheme.palette.primary.main }}>الإجراءات</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {files && files.length > 0 ? (
                 files.map((file) => (
-                  <TableRow key={file.id} sx={{ '&:hover': { backgroundColor: theme.palette.background.default } }}>
-                    <TableCell sx={{ color: theme.palette.text.primary }}>{file.name || file.file_name}</TableCell>
+                  <TableRow key={file.id} sx={{ '&:hover': { backgroundColor: institutionalTheme.palette.background.default } }}>
+                    <TableCell sx={{ color: institutionalTheme.palette.text.primary }}>{file.name || file.file_name}</TableCell>
                     <TableCell>
                       <Chip
                         label={file.file_type || 'ملف'}
@@ -162,7 +162,7 @@ const FileManagement = () => {
                               href={file.url}
                               target="_blank"
                               rel="noopener noreferrer"
-                              sx={{ color: theme.palette.primary.main }}
+                              sx={{ color: institutionalTheme.palette.primary.main }}
                             >
                               <DownloadIcon fontSize="small" />
                             </IconButton>
@@ -195,7 +195,7 @@ const FileManagement = () => {
 
       {/* Upload Dialog */}
       <Dialog open={openDialog} onClose={() => !uploading && setOpenDialog(false)}>
-        <DialogTitle sx={{ backgroundColor: theme.palette.primary.main, color: 'white', fontWeight: 'bold' }}>
+        <DialogTitle sx={{ backgroundColor: institutionalTheme.palette.primary.main, color: 'white', fontWeight: 'bold' }}>
           رفع ملف جديد
         </DialogTitle>
         <DialogContent sx={{ padding: '20px', minWidth: '400px' }}>
@@ -213,11 +213,11 @@ const FileManagement = () => {
                 fullWidth
                 startIcon={<CloudUploadIcon />}
                 sx={{
-                  borderColor: theme.palette.primary.main,
-                  color: theme.palette.primary.main,
+                  borderColor: institutionalTheme.palette.primary.main,
+                  color: institutionalTheme.palette.primary.main,
                   '&:hover': {
                     backgroundColor: '#F0F5FF',
-                    borderColor: theme.palette.primary.main,
+                    borderColor: institutionalTheme.palette.primary.main,
                   },
                 }}
               >
@@ -245,7 +245,7 @@ const FileManagement = () => {
             onClick={handleUpload}
             disabled={!selectedFile || uploading}
             variant="contained"
-            sx={{ backgroundColor: theme.palette.primary.main, color: 'white' }}
+            sx={{ backgroundColor: institutionalTheme.palette.primary.main, color: 'white' }}
           >
             {uploading ? <CircularProgress size={24} /> : 'رفع'}
           </Button>

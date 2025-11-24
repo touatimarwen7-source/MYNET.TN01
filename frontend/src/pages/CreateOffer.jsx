@@ -275,7 +275,7 @@ export default function CreateOffer() {
   if (loading) {
     return (
       <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '60vh' }}>
-        <CircularProgress sx={{ color: theme.palette.primary.main }} />
+        <CircularProgress sx={{ color: institutionalTheme.palette.primary.main }} />
       </Box>
     );
   }
@@ -291,7 +291,7 @@ export default function CreateOffer() {
   return (
     <Box sx={{ backgroundColor: '#fafafa', paddingY: '40px' }}>
       <Container maxWidth="lg">
-        <Button startIcon={<ArrowBackIcon />} onClick={() => window.history.back()} sx={{ marginBottom: '24px', color: theme.palette.primary.main }}>
+        <Button startIcon={<ArrowBackIcon />} onClick={() => window.history.back()} sx={{ marginBottom: '24px', color: institutionalTheme.palette.primary.main }}>
           Retour
         </Button>
 
@@ -337,7 +337,7 @@ export default function CreateOffer() {
 
         <Card sx={{ border: '1px solid #e0e0e0' }}>
           <CardContent sx={{ padding: '32px' }}>
-            <Typography variant="h2" sx={{ fontSize: '28px', fontWeight: 500, color: theme.palette.text.primary, marginBottom: '8px' }}>
+            <Typography variant="h2" sx={{ fontSize: '28px', fontWeight: 500, color: institutionalTheme.palette.text.primary, marginBottom: '8px' }}>
               Soumission d'Offre Sécurisée
             </Typography>
             <Box sx={{ marginBottom: '24px' }}>
@@ -445,18 +445,18 @@ export default function CreateOffer() {
                     <Table>
                       <TableHead sx={{ backgroundColor: '#f5f5f5' }}>
                         <TableRow>
-                          <TableCell sx={{ fontWeight: 600, color: theme.palette.primary.main }}>Description</TableCell>
-                          <TableCell sx={{ fontWeight: 600, color: theme.palette.primary.main }} align="right">Qty</TableCell>
-                          <TableCell sx={{ fontWeight: 600, color: theme.palette.primary.main }} align="right">Prix Unitaire</TableCell>
-                          <TableCell sx={{ fontWeight: 600, color: theme.palette.primary.main }} align="right">Total</TableCell>
-                          <TableCell sx={{ fontWeight: 600, color: theme.palette.primary.main }} align="center">Actions</TableCell>
+                          <TableCell sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main }}>Description</TableCell>
+                          <TableCell sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main }} align="right">Qty</TableCell>
+                          <TableCell sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main }} align="right">Prix Unitaire</TableCell>
+                          <TableCell sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main }} align="right">Total</TableCell>
+                          <TableCell sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main }} align="center">Actions</TableCell>
                         </TableRow>
                       </TableHead>
                       <TableBody>
                         {offerData.line_items.map((item, idx) => (
                           <TableRow key={idx} sx={{ borderBottom: '1px solid #e0e0e0' }}>
-                            <TableCell sx={{ color: theme.palette.text.primary }}>{item.description}</TableCell>
-                            <TableCell align="right" sx={{ color: theme.palette.text.primary }}>{item.quantity}</TableCell>
+                            <TableCell sx={{ color: institutionalTheme.palette.text.primary }}>{item.description}</TableCell>
+                            <TableCell align="right" sx={{ color: institutionalTheme.palette.text.primary }}>{item.quantity}</TableCell>
                             <TableCell align="right">
                               <TextField
                                 size="small"
@@ -467,7 +467,7 @@ export default function CreateOffer() {
                                 sx={{ width: '100px' }}
                               />
                             </TableCell>
-                            <TableCell align="right" sx={{ color: theme.palette.primary.main, fontWeight: 600 }}>
+                            <TableCell align="right" sx={{ color: institutionalTheme.palette.primary.main, fontWeight: 600 }}>
                               {item.total_price.toFixed(2)} TND
                             </TableCell>
                             <TableCell align="center">
@@ -475,7 +475,7 @@ export default function CreateOffer() {
                                 size="small"
                                 onClick={() => handleOpenCatalog(idx)}
                                 disabled={submitting || isDeadlinePassed}
-                                sx={{ color: theme.palette.primary.main, textTransform: 'none' }}
+                                sx={{ color: institutionalTheme.palette.primary.main, textTransform: 'none' }}
                               >
                                 Catalogue
                               </Button>
@@ -486,7 +486,7 @@ export default function CreateOffer() {
                     </Table>
                   </Paper>
                   <Box sx={{ padding: '16px', backgroundColor: '#f5f5f5', marginTop: '16px', borderRadius: '4px' }}>
-                    <Typography sx={{ fontSize: '16px', fontWeight: 600, color: theme.palette.primary.main }}>
+                    <Typography sx={{ fontSize: '16px', fontWeight: 600, color: institutionalTheme.palette.primary.main }}>
                       Total: {getTotalBidAmount()} TND
                     </Typography>
                   </Box>
@@ -527,7 +527,7 @@ export default function CreateOffer() {
                   variant="outlined"
                   onClick={() => setStep(Math.max(0, step - 1))}
                   disabled={step === 0 || submitting || isDeadlinePassed}
-                  sx={{ color: theme.palette.primary.main, borderColor: theme.palette.primary.main }}
+                  sx={{ color: institutionalTheme.palette.primary.main, borderColor: institutionalTheme.palette.primary.main }}
                 >
                   Précédent
                 </Button>
@@ -536,7 +536,7 @@ export default function CreateOffer() {
                     variant="contained"
                     onClick={() => setStep(step + 1)}
                     disabled={submitting || isDeadlinePassed}
-                    sx={{ backgroundColor: theme.palette.primary.main, '&:hover': { backgroundColor: '#0d47a1' } }}
+                    sx={{ backgroundColor: institutionalTheme.palette.primary.main, '&:hover': { backgroundColor: '#0d47a1' } }}
                   >
                     Suivant
                   </Button>
@@ -568,7 +568,7 @@ export default function CreateOffer() {
                   key={product.id}
                   variant="outlined"
                   onClick={() => handleSelectFromCatalog(product)}
-                  sx={{ textAlign: 'left', justifyContent: 'flex-start', color: theme.palette.text.primary }}
+                  sx={{ textAlign: 'left', justifyContent: 'flex-start', color: institutionalTheme.palette.text.primary }}
                 >
                   {product.description} - {product.total_amount} TND
                 </Button>

@@ -334,7 +334,7 @@ export default function CreateSupplyRequest() {
           startIcon={<AddIcon />}
           sx={{
             marginTop: '12px',
-            backgroundColor: theme.palette.primary.main,
+            backgroundColor: institutionalTheme.palette.primary.main,
             color: '#ffffff',
             textTransform: 'none',
           }}
@@ -462,7 +462,7 @@ export default function CreateSupplyRequest() {
         component="label"
         startIcon={<UploadIcon />}
         disabled={loading}
-        sx={{ color: 'primary.main', borderColor: theme.palette.primary.main }}
+        sx={{ color: 'primary.main', borderColor: institutionalTheme.palette.primary.main }}
       >
         Télécharger des documents
         <input type="file" multiple hidden onChange={handleFileUpload} />
@@ -672,7 +672,7 @@ export default function CreateSupplyRequest() {
                 disabled={activeStep === 0 || loading}
                 sx={{
                   color: 'primary.main',
-                  borderColor: theme.palette.primary.main,
+                  borderColor: institutionalTheme.palette.primary.main,
                   textTransform: 'none',
                   fontWeight: 600,
                   minHeight: '44px',
@@ -689,7 +689,7 @@ export default function CreateSupplyRequest() {
                   startIcon={loading ? <CircularProgress size={20} /> : <CheckCircleIcon />}
                   sx={{
                     flex: 1,
-                    backgroundColor: theme.palette.primary.main,
+                    backgroundColor: institutionalTheme.palette.primary.main,
                     color: '#ffffff',
                     textTransform: 'none',
                     fontWeight: 600,
@@ -705,7 +705,7 @@ export default function CreateSupplyRequest() {
                   disabled={loading}
                   sx={{
                     flex: 1,
-                    backgroundColor: theme.palette.primary.main,
+                    backgroundColor: institutionalTheme.palette.primary.main,
                     color: '#ffffff',
                     textTransform: 'none',
                     fontWeight: 600,

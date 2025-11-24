@@ -107,7 +107,7 @@ export default function Inbox() {
   if (loading && messages.length === 0) {
     return (
       <Container sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '60vh' }}>
-        <CircularProgress sx={{ color: theme.palette.primary.main }} />
+        <CircularProgress sx={{ color: institutionalTheme.palette.primary.main }} />
       </Container>
     );
   }
@@ -117,7 +117,7 @@ export default function Inbox() {
       <Container maxWidth="lg">
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '30px' }}>
           <Box>
-            <Typography variant="h4" sx={{ fontWeight: 600, color: theme.palette.primary.main, marginBottom: '8px' }}>
+            <Typography variant="h4" sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main, marginBottom: '8px' }}>
               Boîte de Réception
             </Typography>
             <Typography variant="body2" sx={{ color: '#666' }}>
@@ -127,7 +127,7 @@ export default function Inbox() {
           <Button
             variant="contained"
             onClick={() => navigate('/compose')}
-            sx={{ backgroundColor: theme.palette.primary.main }}
+            sx={{ backgroundColor: institutionalTheme.palette.primary.main }}
           >
             كتابة رسالة جديدة
           </Button>
@@ -146,7 +146,7 @@ export default function Inbox() {
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
-                      <SearchIcon sx={{ color: theme.palette.primary.main }} />
+                      <SearchIcon sx={{ color: institutionalTheme.palette.primary.main }} />
                     </InputAdornment>
                   ),
                 }}
@@ -155,7 +155,7 @@ export default function Inbox() {
               <Button
                 variant={unreadOnly ? 'contained' : 'outlined'}
                 onClick={() => { setUnreadOnly(!unreadOnly); setPage(1); }}
-                sx={{ backgroundColor: unreadOnly ? theme.palette.primary.main : 'transparent', color: unreadOnly ? 'white' : theme.palette.primary.main }}
+                sx={{ backgroundColor: unreadOnly ? institutionalTheme.palette.primary.main : 'transparent', color: unreadOnly ? 'white' : institutionalTheme.palette.primary.main }}
               >
                 غير مقروء
               </Button>
@@ -194,7 +194,7 @@ export default function Inbox() {
                           {message.is_read ? (
                             <MailOutlineIcon sx={{ color: '#999', fontSize: '20px' }} />
                           ) : (
-                            <MailIcon sx={{ color: theme.palette.primary.main, fontSize: '20px' }} />
+                            <MailIcon sx={{ color: institutionalTheme.palette.primary.main, fontSize: '20px' }} />
                           )}
                           {message.sender_company}
                         </Box>
@@ -233,7 +233,7 @@ export default function Inbox() {
                   count={Math.ceil(total / limit)}
                   page={page}
                   onChange={(e, value) => setPage(value)}
-                  sx={{ color: theme.palette.primary.main }}
+                  sx={{ color: institutionalTheme.palette.primary.main }}
                 />
               </Box>
             )}

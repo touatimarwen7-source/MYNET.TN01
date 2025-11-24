@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Card, CardContent, TextField, Button, Table, TableBody, TableCell, TableHead, TableRow, Typography, CircularProgress, Alert, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
 import axios from 'axios';
-import { theme } from '../theme/theme';
+import institutionalTheme from '../theme/theme';
 
 export default function OfferEvaluation({ tenderId }) {
   const [offers, setOffers] = useState([]);
@@ -68,7 +68,7 @@ export default function OfferEvaluation({ tenderId }) {
 
   return (
     <Box sx={{ p: 3, direction: 'rtl' }}>
-      <Typography variant="h5" sx={{ mb: 3, color: theme.palette.primary.main, fontWeight: 'bold' }}>
+      <Typography variant="h5" sx={{ mb: 3, color: institutionalTheme.palette.primary.main, fontWeight: 'bold' }}>
         📊 تقييم العروض
       </Typography>
       {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
@@ -104,10 +104,10 @@ export default function OfferEvaluation({ tenderId }) {
                       <TableCell>{offer.financial_score ? `${offer.financial_score}/100` : 'قيد الانتظار'}</TableCell>
                       <TableCell>
                         <Box sx={{ display: 'flex', gap: 1 }}>
-                          <Button size="small" onClick={() => handleOpenDialog(offer, 'technical')} sx={{ color: theme.palette.primary.main }}>
+                          <Button size="small" onClick={() => handleOpenDialog(offer, 'technical')} sx={{ color: institutionalTheme.palette.primary.main }}>
                             فني
                           </Button>
-                          <Button size="small" onClick={() => handleOpenDialog(offer, 'financial')} sx={{ color: theme.palette.primary.main }}>
+                          <Button size="small" onClick={() => handleOpenDialog(offer, 'financial')} sx={{ color: institutionalTheme.palette.primary.main }}>
                             مالي
                           </Button>
                         </Box>
@@ -116,7 +116,7 @@ export default function OfferEvaluation({ tenderId }) {
                   ))}
                 </TableBody>
               </Table>
-              <Button variant="contained" onClick={calculateFinalScores} sx={{ mt: 2, backgroundColor: theme.palette.primary.main }}>
+              <Button variant="contained" onClick={calculateFinalScores} sx={{ mt: 2, backgroundColor: institutionalTheme.palette.primary.main }}>
                 حساب النتائج النهائية
               </Button>
             </CardContent>
@@ -144,7 +144,7 @@ export default function OfferEvaluation({ tenderId }) {
                         <TableCell>{item.offer_number}</TableCell>
                         <TableCell>{item.technical_score}</TableCell>
                         <TableCell>{item.financial_score}</TableCell>
-                        <TableCell sx={{ fontWeight: 'bold', color: theme.palette.primary.main }}>
+                        <TableCell sx={{ fontWeight: 'bold', color: institutionalTheme.palette.primary.main }}>
                           {item.final_score}
                         </TableCell>
                       </TableRow>
@@ -169,7 +169,7 @@ export default function OfferEvaluation({ tenderId }) {
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setDialogOpen(false)}>إغلاق</Button>
-          <Button onClick={handleSubmitEvaluation} variant="contained" sx={{ backgroundColor: theme.palette.primary.main }}>
+          <Button onClick={handleSubmitEvaluation} variant="contained" sx={{ backgroundColor: institutionalTheme.palette.primary.main }}>
             حفظ التقييم
           </Button>
         </DialogActions>

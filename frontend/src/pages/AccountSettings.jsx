@@ -68,7 +68,7 @@ export default function AccountSettings() {
   if (loading) {
     return (
       <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '60vh' }}>
-        <CircularProgress sx={{ color: theme.palette.primary.main }} />
+        <CircularProgress sx={{ color: institutionalTheme.palette.primary.main }} />
       </Box>
     );
   }
@@ -76,7 +76,7 @@ export default function AccountSettings() {
   return (
     <Box sx={{ backgroundColor: '#fafafa', paddingY: '40px' }}>
       <Container maxWidth="md">
-        <Typography variant="h2" sx={{ fontSize: '32px', fontWeight: 500, color: theme.palette.text.primary, marginBottom: '8px' }}>
+        <Typography variant="h2" sx={{ fontSize: '32px', fontWeight: 500, color: institutionalTheme.palette.text.primary, marginBottom: '8px' }}>
           Paramètres du Compte
         </Typography>
         <Typography sx={{ color: '#616161', marginBottom: '32px' }}>
@@ -92,14 +92,14 @@ export default function AccountSettings() {
         {/* Notifications Section */}
         <Card sx={{ marginBottom: '24px', border: '1px solid #e0e0e0' }}>
           <CardContent sx={{ padding: '24px' }}>
-            <Typography variant="h4" sx={{ fontSize: '18px', fontWeight: 600, color: theme.palette.text.primary, marginBottom: '24px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <Typography variant="h4" sx={{ fontSize: '18px', fontWeight: 600, color: institutionalTheme.palette.text.primary, marginBottom: '24px', display: 'flex', alignItems: 'center', gap: '8px' }}>
               📬 Notifications
             </Typography>
 
             <Stack spacing={2}>
               <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <Box>
-                  <Typography sx={{ fontWeight: 600, color: theme.palette.text.primary }}>Notifications par Email</Typography>
+                  <Typography sx={{ fontWeight: 600, color: institutionalTheme.palette.text.primary }}>Notifications par Email</Typography>
                   <Typography sx={{ fontSize: '12px', color: '#616161', marginTop: '4px' }}>
                     Recevoir les mises à jour importantes par email
                   </Typography>
@@ -114,7 +114,7 @@ export default function AccountSettings() {
 
               <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <Box>
-                  <Typography sx={{ fontWeight: 600, color: theme.palette.text.primary }}>Notifications par SMS</Typography>
+                  <Typography sx={{ fontWeight: 600, color: institutionalTheme.palette.text.primary }}>Notifications par SMS</Typography>
                   <Typography sx={{ fontSize: '12px', color: '#616161', marginTop: '4px' }}>
                     Recevoir les alertes critiques par SMS
                   </Typography>
@@ -129,7 +129,7 @@ export default function AccountSettings() {
 
               <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <Box>
-                  <Typography sx={{ fontWeight: 600, color: theme.palette.text.primary }}>Emails Marketing</Typography>
+                  <Typography sx={{ fontWeight: 600, color: institutionalTheme.palette.text.primary }}>Emails Marketing</Typography>
                   <Typography sx={{ fontSize: '12px', color: '#616161', marginTop: '4px' }}>
                     Recevoir les offres spéciales et promotions
                   </Typography>
@@ -146,7 +146,7 @@ export default function AccountSettings() {
         {/* Appearance Section */}
         <Card sx={{ marginBottom: '24px', border: '1px solid #e0e0e0' }}>
           <CardContent sx={{ padding: '24px' }}>
-            <Typography variant="h4" sx={{ fontSize: '18px', fontWeight: 600, color: theme.palette.text.primary, marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <Typography variant="h4" sx={{ fontSize: '18px', fontWeight: 600, color: institutionalTheme.palette.text.primary, marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
               🎨 Apparence
             </Typography>
 

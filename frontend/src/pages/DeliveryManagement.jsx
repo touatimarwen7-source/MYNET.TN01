@@ -23,26 +23,26 @@ export default function DeliveryManagement() {
   };
 
   return (
-    <Box sx={{ backgroundColor: theme.palette.background.default, paddingY: '40px', minHeight: '80vh' }}>
+    <Box sx={{ backgroundColor: institutionalTheme.palette.background.default, paddingY: '40px', minHeight: '80vh' }}>
       <Container maxWidth="lg">
-        <Typography variant="h2" sx={{ fontSize: '32px', fontWeight: 600, color: theme.palette.primary.main, mb: 3 }}>
+        <Typography variant="h2" sx={{ fontSize: '32px', fontWeight: 600, color: institutionalTheme.palette.primary.main, mb: 3 }}>
           Gestion des livraisons
         </Typography>
         <Paper sx={{ border: '1px solid #E0E0E0', borderRadius: '8px', overflow: 'hidden' }}>
           <Table>
             <TableHead sx={{ backgroundColor: '#F5F5F5' }}>
               <TableRow>
-                <TableCell sx={{ fontWeight: 600, color: theme.palette.primary.main }}>Commande</TableCell>
-                <TableCell sx={{ fontWeight: 600, color: theme.palette.primary.main }}>Statut</TableCell>
-                <TableCell sx={{ fontWeight: 600, color: theme.palette.primary.main }}>Localisation</TableCell>
-                <TableCell sx={{ fontWeight: 600, color: theme.palette.primary.main }}>Date</TableCell>
-                <TableCell sx={{ fontWeight: 600, color: theme.palette.primary.main }}>Date d'arrivée prévue</TableCell>
-                <TableCell sx={{ fontWeight: 600, color: theme.palette.primary.main }} align="center">Actions</TableCell>
+                <TableCell sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main }}>Commande</TableCell>
+                <TableCell sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main }}>Statut</TableCell>
+                <TableCell sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main }}>Localisation</TableCell>
+                <TableCell sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main }}>Date</TableCell>
+                <TableCell sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main }}>Date d'arrivée prévue</TableCell>
+                <TableCell sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main }} align="center">Actions</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {deliveries.map((del) => (
-                <TableRow key={del.id} sx={{ '&:hover': { backgroundColor: theme.palette.background.default } }}>
+                <TableRow key={del.id} sx={{ '&:hover': { backgroundColor: institutionalTheme.palette.background.default } }}>
                   <TableCell>{del.order}</TableCell>
                   <TableCell>
                     <Chip label={del.status} size="small" sx={{ backgroundColor: getStatusColor(del.status) + '30', color: getStatusColor(del.status) }} />
@@ -51,7 +51,7 @@ export default function DeliveryManagement() {
                   <TableCell>{del.date}</TableCell>
                   <TableCell>{del.eta}</TableCell>
                   <TableCell align="center">
-                    <Button size="small" startIcon={<TrackChangesIcon />} sx={{ color: theme.palette.primary.main }}>Suivre</Button>
+                    <Button size="small" startIcon={<TrackChangesIcon />} sx={{ color: institutionalTheme.palette.primary.main }}>Suivre</Button>
                   </TableCell>
                 </TableRow>
               ))}

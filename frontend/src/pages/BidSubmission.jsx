@@ -202,7 +202,7 @@ export default function BidSubmission() {
   if (loading) {
     return (
       <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '60vh' }}>
-        <CircularProgress sx={{ color: theme.palette.primary.main }} />
+        <CircularProgress sx={{ color: institutionalTheme.palette.primary.main }} />
       </Box>
     );
   }
@@ -215,7 +215,7 @@ export default function BidSubmission() {
           <Button
             startIcon={<ArrowBackIcon />}
             onClick={() => navigate(`/tender/${tenderId}`)}
-            sx={{ color: theme.palette.primary.main, textTransform: 'none', mb: '16px' }}
+            sx={{ color: institutionalTheme.palette.primary.main, textTransform: 'none', mb: '16px' }}
           >
             العودة
           </Button>
@@ -224,7 +224,7 @@ export default function BidSubmission() {
             sx={{ 
               fontSize: '32px', 
               fontWeight: 600, 
-              color: theme.palette.primary.main,
+              color: institutionalTheme.palette.primary.main,
               mb: '8px'
             }}
           >
@@ -306,22 +306,22 @@ export default function BidSubmission() {
                   <Table>
                     <TableHead sx={{ backgroundColor: '#F5F5F5' }}>
                       <TableRow>
-                        <TableCell sx={{ fontWeight: 600, color: theme.palette.primary.main, fontSize: '12px' }}>
+                        <TableCell sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main, fontSize: '12px' }}>
                           Lot
                         </TableCell>
-                        <TableCell sx={{ fontWeight: 600, color: theme.palette.primary.main, fontSize: '12px' }}>
+                        <TableCell sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main, fontSize: '12px' }}>
                           المقالة
                         </TableCell>
-                        <TableCell sx={{ fontWeight: 600, color: theme.palette.primary.main, fontSize: '12px', textAlign: 'center' }}>
+                        <TableCell sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main, fontSize: '12px', textAlign: 'center' }}>
                           الكمية
                         </TableCell>
-                        <TableCell sx={{ fontWeight: 600, color: theme.palette.primary.main, fontSize: '12px', textAlign: 'center' }}>
+                        <TableCell sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main, fontSize: '12px', textAlign: 'center' }}>
                           الوحدة
                         </TableCell>
-                        <TableCell sx={{ fontWeight: 600, color: theme.palette.primary.main, fontSize: '12px', textAlign: 'center' }}>
+                        <TableCell sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main, fontSize: '12px', textAlign: 'center' }}>
                           سعر الوحدة (TND)
                         </TableCell>
-                        <TableCell sx={{ fontWeight: 600, color: theme.palette.primary.main, fontSize: '12px', textAlign: 'center' }}>
+                        <TableCell sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main, fontSize: '12px', textAlign: 'center' }}>
                           المجموع (TND)
                         </TableCell>
                       </TableRow>
@@ -509,8 +509,8 @@ export default function BidSubmission() {
               onClick={() => navigate(`/tender/${tenderId}`)}
               disabled={submitting}
               sx={{
-                color: theme.palette.primary.main,
-                borderColor: theme.palette.primary.main,
+                color: institutionalTheme.palette.primary.main,
+                borderColor: institutionalTheme.palette.primary.main,
                 textTransform: 'none',
                 fontWeight: 600,
                 flex: 1,

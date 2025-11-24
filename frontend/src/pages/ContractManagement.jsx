@@ -38,7 +38,7 @@ export default function ContractManagement() {
   return (
     <Box sx={{ backgroundColor: '#fafafa', paddingY: '40px' }}>
       <Container maxWidth="lg">
-        <Typography variant="h2" sx={{ fontSize: '32px', fontWeight: 500, color: theme.palette.text.primary, marginBottom: '8px' }}>
+        <Typography variant="h2" sx={{ fontSize: '32px', fontWeight: 500, color: institutionalTheme.palette.text.primary, marginBottom: '8px' }}>
           📜 Gestion des Contrats
         </Typography>
         <Typography sx={{ color: '#616161', marginBottom: '32px' }}>
@@ -50,21 +50,21 @@ export default function ContractManagement() {
             <Table>
               <TableHead sx={{ backgroundColor: '#f5f5f5' }}>
                 <TableRow sx={{ height: '56px' }}>
-                  <TableCell sx={{ fontWeight: 600, color: theme.palette.primary.main }}>Numéro</TableCell>
-                  <TableCell sx={{ fontWeight: 600, color: theme.palette.primary.main }}>Fournisseur</TableCell>
-                  <TableCell sx={{ fontWeight: 600, color: theme.palette.primary.main }} align="right">Montant</TableCell>
-                  <TableCell sx={{ fontWeight: 600, color: theme.palette.primary.main }}>Statut</TableCell>
-                  <TableCell sx={{ fontWeight: 600, color: theme.palette.primary.main }}>Date Début</TableCell>
-                  <TableCell sx={{ fontWeight: 600, color: theme.palette.primary.main }}>Date Fin</TableCell>
-                  <TableCell sx={{ fontWeight: 600, color: theme.palette.primary.main }} align="center">Actions</TableCell>
+                  <TableCell sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main }}>Numéro</TableCell>
+                  <TableCell sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main }}>Fournisseur</TableCell>
+                  <TableCell sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main }} align="right">Montant</TableCell>
+                  <TableCell sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main }}>Statut</TableCell>
+                  <TableCell sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main }}>Date Début</TableCell>
+                  <TableCell sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main }}>Date Fin</TableCell>
+                  <TableCell sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main }} align="center">Actions</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
                 {contracts.map(contract => (
                   <TableRow key={contract.id} sx={{ borderBottom: '1px solid #e0e0e0', '&:hover': { backgroundColor: '#fafafa' } }}>
-                    <TableCell sx={{ color: theme.palette.text.primary, fontWeight: 600 }}>{contract.number}</TableCell>
-                    <TableCell sx={{ color: theme.palette.text.primary }}>{contract.supplier}</TableCell>
-                    <TableCell align="right" sx={{ color: theme.palette.primary.main, fontWeight: 600 }}>
+                    <TableCell sx={{ color: institutionalTheme.palette.text.primary, fontWeight: 600 }}>{contract.number}</TableCell>
+                    <TableCell sx={{ color: institutionalTheme.palette.text.primary }}>{contract.supplier}</TableCell>
+                    <TableCell align="right" sx={{ color: institutionalTheme.palette.primary.main, fontWeight: 600 }}>
                       {contract.amount.toLocaleString()} TND
                     </TableCell>
                     <TableCell>
@@ -84,7 +84,7 @@ export default function ContractManagement() {
                           size="small"
                           variant="outlined"
                           startIcon={<VisibilityIcon />}
-                          sx={{ color: theme.palette.primary.main, borderColor: theme.palette.primary.main, textTransform: 'none' }}
+                          sx={{ color: institutionalTheme.palette.primary.main, borderColor: institutionalTheme.palette.primary.main, textTransform: 'none' }}
                         >
                           Voir
                         </Button>

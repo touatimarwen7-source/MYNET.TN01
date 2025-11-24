@@ -94,7 +94,7 @@ export default function EmailNotifications() {
     return (
       <Box sx={{ backgroundColor: '#fafafa', paddingY: '40px' }}>
         <Container maxWidth="lg">
-          <Typography sx={{ marginBottom: '24px', fontWeight: 600, color: theme.palette.primary.main }}>
+          <Typography sx={{ marginBottom: '24px', fontWeight: 600, color: institutionalTheme.palette.primary.main }}>
             Notifications par Email
           </Typography>
           <TableSkeleton rows={5} columns={6} />
@@ -106,7 +106,7 @@ export default function EmailNotifications() {
   return (
     <Box sx={{ backgroundColor: '#fafafa', paddingY: '40px' }}>
       <Container maxWidth="lg">
-        <Typography variant="h4" sx={{ fontWeight: 600, color: theme.palette.text.primary, marginBottom: '32px' }}>
+        <Typography variant="h4" sx={{ fontWeight: 600, color: institutionalTheme.palette.text.primary, marginBottom: '32px' }}>
           Gestion des Notifications par Email
         </Typography>
 
@@ -143,18 +143,18 @@ export default function EmailNotifications() {
           <Table>
             <TableHead sx={{ backgroundColor: '#f5f5f5' }}>
               <TableRow>
-                <TableCell sx={{ fontWeight: 600, color: theme.palette.text.primary }}>Destinataire</TableCell>
-                <TableCell sx={{ fontWeight: 600, color: theme.palette.text.primary }}>Sujet</TableCell>
-                <TableCell sx={{ fontWeight: 600, color: theme.palette.text.primary }}>Statut</TableCell>
-                <TableCell sx={{ fontWeight: 600, color: theme.palette.text.primary }}>Date d'envoi</TableCell>
-                <TableCell sx={{ fontWeight: 600, color: theme.palette.text.primary }}>Ouvertures</TableCell>
-                <TableCell sx={{ fontWeight: 600, color: theme.palette.text.primary }}>Actions</TableCell>
+                <TableCell sx={{ fontWeight: 600, color: institutionalTheme.palette.text.primary }}>Destinataire</TableCell>
+                <TableCell sx={{ fontWeight: 600, color: institutionalTheme.palette.text.primary }}>Sujet</TableCell>
+                <TableCell sx={{ fontWeight: 600, color: institutionalTheme.palette.text.primary }}>Statut</TableCell>
+                <TableCell sx={{ fontWeight: 600, color: institutionalTheme.palette.text.primary }}>Date d'envoi</TableCell>
+                <TableCell sx={{ fontWeight: 600, color: institutionalTheme.palette.text.primary }}>Ouvertures</TableCell>
+                <TableCell sx={{ fontWeight: 600, color: institutionalTheme.palette.text.primary }}>Actions</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {paginatedEmails.map((email) => (
                 <TableRow key={email.id} hover>
-                  <TableCell sx={{ color: theme.palette.primary.main, fontWeight: 500 }}>{email.recipient}</TableCell>
+                  <TableCell sx={{ color: institutionalTheme.palette.primary.main, fontWeight: 500 }}>{email.recipient}</TableCell>
                   <TableCell>{email.subject}</TableCell>
                   <TableCell>
                     <StatusBadge status={email.status} />
@@ -167,7 +167,7 @@ export default function EmailNotifications() {
                         <Button
                           size="small"
                           startIcon={<SendIcon />}
-                          sx={{ color: theme.palette.primary.main }}
+                          sx={{ color: institutionalTheme.palette.primary.main }}
                         >
                           Envoyer
                         </Button>

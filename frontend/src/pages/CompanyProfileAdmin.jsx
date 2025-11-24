@@ -164,7 +164,7 @@ export default function CompanyProfileAdmin() {
   if (loading) {
     return (
       <Container maxWidth="lg" sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '60vh' }}>
-        <CircularProgress sx={{ color: theme.palette.primary.main }} />
+        <CircularProgress sx={{ color: institutionalTheme.palette.primary.main }} />
       </Container>
     );
   }
@@ -172,7 +172,7 @@ export default function CompanyProfileAdmin() {
   return (
     <Box sx={{ backgroundColor: '#f9f9f9', paddingY: '40px' }}>
       <Container maxWidth="lg">
-        <Typography variant="h4" sx={{ fontWeight: 600, marginBottom: '30px', color: theme.palette.primary.main }}>
+        <Typography variant="h4" sx={{ fontWeight: 600, marginBottom: '30px', color: institutionalTheme.palette.primary.main }}>
           Gestion du Profil d'Entreprise
         </Typography>
 
@@ -182,7 +182,7 @@ export default function CompanyProfileAdmin() {
         {/* Information Générale */}
         <Card sx={{ border: '1px solid #e0e0e0', marginBottom: '20px' }}>
           <CardContent>
-            <Typography variant="h6" sx={{ fontWeight: 600, marginBottom: '20px', color: theme.palette.primary.main }}>
+            <Typography variant="h6" sx={{ fontWeight: 600, marginBottom: '20px', color: institutionalTheme.palette.primary.main }}>
               INFORMATIONS GÉNÉRALES
             </Typography>
             <Grid container spacing={2}>
@@ -227,7 +227,7 @@ export default function CompanyProfileAdmin() {
         {/* Adresse et Localisation */}
         <Card sx={{ border: '1px solid #e0e0e0', marginBottom: '20px' }}>
           <CardContent>
-            <Typography variant="h6" sx={{ fontWeight: 600, marginBottom: '20px', color: theme.palette.primary.main }}>
+            <Typography variant="h6" sx={{ fontWeight: 600, marginBottom: '20px', color: institutionalTheme.palette.primary.main }}>
               ADRESSE ET LOCALISATION
             </Typography>
             <Grid container spacing={2}>
@@ -264,7 +264,7 @@ export default function CompanyProfileAdmin() {
         {/* Biographie */}
         <Card sx={{ border: '1px solid #e0e0e0', marginBottom: '20px' }}>
           <CardContent>
-            <Typography variant="h6" sx={{ fontWeight: 600, marginBottom: '20px', color: theme.palette.primary.main }}>
+            <Typography variant="h6" sx={{ fontWeight: 600, marginBottom: '20px', color: institutionalTheme.palette.primary.main }}>
               BIOGRAPHIE
             </Typography>
             <TextField
@@ -282,7 +282,7 @@ export default function CompanyProfileAdmin() {
         {/* Catégories de Services */}
         <Card sx={{ border: '1px solid #e0e0e0', marginBottom: '20px' }}>
           <CardContent>
-            <Typography variant="h6" sx={{ fontWeight: 600, marginBottom: '20px', color: theme.palette.primary.main }}>
+            <Typography variant="h6" sx={{ fontWeight: 600, marginBottom: '20px', color: institutionalTheme.palette.primary.main }}>
               CATÉGORIES DE SERVICES
             </Typography>
             <Box sx={{ marginBottom: '16px' }}>
@@ -302,7 +302,7 @@ export default function CompanyProfileAdmin() {
                 <Button
                   variant="contained"
                   onClick={handleAddCategory}
-                  sx={{ backgroundColor: theme.palette.primary.main }}
+                  sx={{ backgroundColor: institutionalTheme.palette.primary.main }}
                 >
                   Ajouter
                 </Button>
@@ -313,7 +313,7 @@ export default function CompanyProfileAdmin() {
                     key={cat}
                     label={cat}
                     onDelete={() => handleRemoveCategory(cat)}
-                    sx={{ backgroundColor: theme.palette.primary.main, color: '#ffffff' }}
+                    sx={{ backgroundColor: institutionalTheme.palette.primary.main, color: '#ffffff' }}
                   />
                 ))}
               </Stack>
@@ -324,7 +324,7 @@ export default function CompanyProfileAdmin() {
         {/* Zones de Couverture */}
         <Card sx={{ border: '1px solid #e0e0e0', marginBottom: '20px' }}>
           <CardContent>
-            <Typography variant="h6" sx={{ fontWeight: 600, marginBottom: '20px', color: theme.palette.primary.main }}>
+            <Typography variant="h6" sx={{ fontWeight: 600, marginBottom: '20px', color: institutionalTheme.palette.primary.main }}>
               ZONES DE COUVERTURE
             </Typography>
             <Box sx={{ marginBottom: '16px' }}>
@@ -344,7 +344,7 @@ export default function CompanyProfileAdmin() {
                 <Button
                   variant="contained"
                   onClick={handleAddLocation}
-                  sx={{ backgroundColor: theme.palette.primary.main }}
+                  sx={{ backgroundColor: institutionalTheme.palette.primary.main }}
                 >
                   Ajouter
                 </Button>
@@ -355,7 +355,7 @@ export default function CompanyProfileAdmin() {
                     key={loc}
                     label={loc}
                     onDelete={() => handleRemoveLocation(loc)}
-                    sx={{ backgroundColor: theme.palette.primary.main, color: '#ffffff' }}
+                    sx={{ backgroundColor: institutionalTheme.palette.primary.main, color: '#ffffff' }}
                   />
                 ))}
               </Stack>
@@ -378,7 +378,7 @@ export default function CompanyProfileAdmin() {
             variant="contained"
             startIcon={<SaveIcon />}
             onClick={handleSave}
-            sx={{ backgroundColor: theme.palette.primary.main }}
+            sx={{ backgroundColor: institutionalTheme.palette.primary.main }}
             disabled={saving}
           >
             {saving ? <CircularProgress size={24} /> : 'Enregistrer'}

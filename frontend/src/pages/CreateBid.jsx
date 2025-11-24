@@ -842,7 +842,7 @@ export default function CreateBid() {
   if (!tender) {
     return (
       <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '60vh' }}>
-        <CircularProgress sx={{ color: theme.palette.primary.main }} />
+        <CircularProgress sx={{ color: institutionalTheme.palette.primary.main }} />
       </Box>
     );
   }
@@ -890,7 +890,7 @@ export default function CreateBid() {
                 <Button
                   startIcon={<ArrowBackIcon />}
                   onClick={() => navigate(`/tender/${tenderId}`)}
-                  sx={{ color: theme.palette.primary.main, textTransform: 'none' }}
+                  sx={{ color: institutionalTheme.palette.primary.main, textTransform: 'none' }}
                 >
                   Retour
                 </Button>
@@ -898,7 +898,7 @@ export default function CreateBid() {
               <Typography sx={{ fontSize: '12px', fontWeight: 600, color: '#999999', textTransform: 'uppercase', mb: '8px' }}>
                 Étape {currentStep + 1} sur {STAGES.length}
               </Typography>
-              <Typography variant="h2" sx={{ fontSize: '28px', fontWeight: 500, color: theme.palette.primary.main, mb: '8px' }}>
+              <Typography variant="h2" sx={{ fontSize: '28px', fontWeight: 500, color: institutionalTheme.palette.primary.main, mb: '8px' }}>
                 {STAGES[currentStep].name}
               </Typography>
               <Typography sx={{ fontSize: '14px', color: '#666666' }}>
@@ -916,7 +916,7 @@ export default function CreateBid() {
                       flex: 1,
                       height: '4px',
                       borderRadius: '2px',
-                      backgroundColor: index <= currentStep ? theme.palette.primary.main : '#E0E0E0',
+                      backgroundColor: index <= currentStep ? institutionalTheme.palette.primary.main : '#E0E0E0',
                       transition: 'all 0.3s ease',
                     }}
                   />
@@ -975,7 +975,7 @@ export default function CreateBid() {
 
       {/* Success Dialog */}
       <Dialog open={successDialog} onClose={() => setSuccessDialog(false)}>
-        <DialogTitle sx={{ color: theme.palette.primary.main, fontWeight: 600 }}>
+        <DialogTitle sx={{ color: institutionalTheme.palette.primary.main, fontWeight: 600 }}>
           ✅ Offre Soumise avec Succès
         </DialogTitle>
         <DialogContent>

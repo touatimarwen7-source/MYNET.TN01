@@ -76,7 +76,7 @@ export default function Compose() {
   if (loading) {
     return (
       <Container sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '60vh' }}>
-        <CircularProgress sx={{ color: theme.palette.primary.main }} />
+        <CircularProgress sx={{ color: institutionalTheme.palette.primary.main }} />
       </Container>
     );
   }
@@ -86,7 +86,7 @@ export default function Compose() {
       <Container maxWidth="md">
         <Card>
           <CardContent sx={{ padding: '40px' }}>
-            <Typography variant="h4" sx={{ fontWeight: 600, color: theme.palette.primary.main, marginBottom: '30px' }}>
+            <Typography variant="h4" sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main, marginBottom: '30px' }}>
               كتابة رسالة جديدة
             </Typography>
 
@@ -144,7 +144,7 @@ export default function Compose() {
                     type="submit"
                     disabled={sending}
                     startIcon={sending ? <CircularProgress size={20} /> : <SendIcon />}
-                    sx={{ backgroundColor: theme.palette.primary.main }}
+                    sx={{ backgroundColor: institutionalTheme.palette.primary.main }}
                   >
                     {sending ? 'جاري الإرسال...' : 'إرسال'}
                   </Button>

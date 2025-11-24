@@ -12,12 +12,12 @@ export default function PrivacyPolicy() {
   return (
     <Container maxWidth="lg" sx={{ py: 6 }}>
       <Box sx={{ maxWidth: '900px', mx: 'auto' }}>
-        <Typography variant="h2" sx={{ mb: 4, color: theme.palette.primary.main, fontWeight: 600 }}>
+        <Typography variant="h2" sx={{ mb: 4, color: institutionalTheme.palette.primary.main, fontWeight: 600 }}>
           Politique de Confidentialité
         </Typography>
 
-        <Paper sx={{ p: 4, backgroundColor: theme.palette.background.default }}>
-          <Typography variant="h4" sx={{ mb: 3, color: theme.palette.primary.main, mt: 3 }}>
+        <Paper sx={{ p: 4, backgroundColor: institutionalTheme.palette.background.default }}>
+          <Typography variant="h4" sx={{ mb: 3, color: institutionalTheme.palette.primary.main, mt: 3 }}>
             1. Introduction
           </Typography>
           <Typography sx={{ mb: 2, lineHeight: 1.8 }}>
@@ -25,7 +25,7 @@ export default function PrivacyPolicy() {
             Cette politique explique comment nous collectons, utilisons, et protégeons vos données personnelles.
           </Typography>
 
-          <Typography variant="h4" sx={{ mb: 3, color: theme.palette.primary.main, mt: 4 }}>
+          <Typography variant="h4" sx={{ mb: 3, color: institutionalTheme.palette.primary.main, mt: 4 }}>
             2. Collecte de Données
           </Typography>
           <Typography sx={{ mb: 2, lineHeight: 1.8 }}>
@@ -39,7 +39,7 @@ export default function PrivacyPolicy() {
             <Typography>• Informations de localisation (optionnelles)</Typography>
           </Box>
 
-          <Typography variant="h4" sx={{ mb: 3, color: theme.palette.primary.main, mt: 4 }}>
+          <Typography variant="h4" sx={{ mb: 3, color: institutionalTheme.palette.primary.main, mt: 4 }}>
             3. Utilisation des Données
           </Typography>
           <Typography sx={{ mb: 2, lineHeight: 1.8 }}>
@@ -53,7 +53,7 @@ export default function PrivacyPolicy() {
             <Typography>• Prévenir la fraude et les abus</Typography>
           </Box>
 
-          <Typography variant="h4" sx={{ mb: 3, color: theme.palette.primary.main, mt: 4 }}>
+          <Typography variant="h4" sx={{ mb: 3, color: institutionalTheme.palette.primary.main, mt: 4 }}>
             4. Sécurité des Données
           </Typography>
           <Typography sx={{ mb: 2, lineHeight: 1.8 }}>
@@ -61,7 +61,7 @@ export default function PrivacyPolicy() {
             Les données sont stockées sur des serveurs sécurisés avec contrôle d'accès strict.
           </Typography>
 
-          <Typography variant="h4" sx={{ mb: 3, color: theme.palette.primary.main, mt: 4 }}>
+          <Typography variant="h4" sx={{ mb: 3, color: institutionalTheme.palette.primary.main, mt: 4 }}>
             5. Partage de Données
           </Typography>
           <Typography sx={{ mb: 2, lineHeight: 1.8 }}>
@@ -73,7 +73,7 @@ export default function PrivacyPolicy() {
             <Typography>• Avec les prestataires de services (sous contrat de confidentialité)</Typography>
           </Box>
 
-          <Typography variant="h4" sx={{ mb: 3, color: theme.palette.primary.main, mt: 4 }}>
+          <Typography variant="h4" sx={{ mb: 3, color: institutionalTheme.palette.primary.main, mt: 4 }}>
             6. Droits de l'Utilisateur
           </Typography>
           <Typography sx={{ mb: 2, lineHeight: 1.8 }}>
@@ -86,7 +86,7 @@ export default function PrivacyPolicy() {
             <Typography>• Retirer votre consentement</Typography>
           </Box>
 
-          <Typography variant="h4" sx={{ mb: 3, color: theme.palette.primary.main, mt: 4 }}>
+          <Typography variant="h4" sx={{ mb: 3, color: institutionalTheme.palette.primary.main, mt: 4 }}>
             7. Contact
           </Typography>
           <Typography sx={{ mb: 2, lineHeight: 1.8 }}>

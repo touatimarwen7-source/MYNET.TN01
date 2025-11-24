@@ -14,7 +14,7 @@ import {
   Alert,
 } from '@mui/material';
 import axios from 'axios';
-import { theme } from '../theme/theme';
+import institutionalTheme from '../theme/theme';
 
 export default function NotificationCenter() {
   const [notifications, setNotifications] = useState([]);
@@ -52,7 +52,7 @@ export default function NotificationCenter() {
     <Box sx={{ p: 3, direction: 'rtl' }}>
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 3 }}>
         <Badge badgeContent={unreadCount} color="error">
-          <Typography variant="h5" sx={{ color: theme.palette.primary.main, fontWeight: 'bold' }}>
+          <Typography variant="h5" sx={{ color: institutionalTheme.palette.primary.main, fontWeight: 'bold' }}>
             🔔 مركز الإشعارات
           </Typography>
         </Badge>
@@ -81,7 +81,7 @@ export default function NotificationCenter() {
                 sx={{
                   mb: 2,
                   backgroundColor: notification.read_at ? '#fff' : '#f0f7ff',
-                  borderLeft: `4px solid ${theme.palette.primary.main}`,
+                  borderLeft: `4px solid ${institutionalTheme.palette.primary.main}`,
                 }}
               >
                 <CardContent>
@@ -116,7 +116,7 @@ export default function NotificationCenter() {
                     <Button
                       size="small"
                       onClick={() => markAsRead(notification.id)}
-                      sx={{ mt: 1, color: theme.palette.primary.main }}
+                      sx={{ mt: 1, color: institutionalTheme.palette.primary.main }}
                     >
                       تحديد كمقروء
                     </Button>

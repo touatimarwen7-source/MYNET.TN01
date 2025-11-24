@@ -22,20 +22,20 @@ export default function MonitoringSubmissions() {
   };
 
   return (
-    <Box sx={{ backgroundColor: theme.palette.background.default, paddingY: '40px', minHeight: '80vh' }}>
+    <Box sx={{ backgroundColor: institutionalTheme.palette.background.default, paddingY: '40px', minHeight: '80vh' }}>
       <Container maxWidth="lg">
-        <Typography variant="h2" sx={{ fontSize: '32px', fontWeight: 600, color: theme.palette.primary.main, mb: 3 }}>
+        <Typography variant="h2" sx={{ fontSize: '32px', fontWeight: 600, color: institutionalTheme.palette.primary.main, mb: 3 }}>
           Surveillance des soumissions
         </Typography>
         <Paper sx={{ border: '1px solid #E0E0E0', overflow: 'hidden' }}>
           <Table>
             <TableHead sx={{ backgroundColor: '#F5F5F5' }}>
               <TableRow>
-                <TableCell sx={{ fontWeight: 600, color: theme.palette.primary.main }}>Utilisateur</TableCell>
-                <TableCell sx={{ fontWeight: 600, color: theme.palette.primary.main }}>Offre</TableCell>
-                <TableCell sx={{ fontWeight: 600, color: theme.palette.primary.main }}>Statut</TableCell>
-                <TableCell sx={{ fontWeight: 600, color: theme.palette.primary.main }}>Date</TableCell>
-                <TableCell align="center" sx={{ fontWeight: 600, color: theme.palette.primary.main }}>Action</TableCell>
+                <TableCell sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main }}>Utilisateur</TableCell>
+                <TableCell sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main }}>Offre</TableCell>
+                <TableCell sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main }}>Statut</TableCell>
+                <TableCell sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main }}>Date</TableCell>
+                <TableCell align="center" sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main }}>Action</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -48,7 +48,7 @@ export default function MonitoringSubmissions() {
                   </TableCell>
                   <TableCell>{sub.date}</TableCell>
                   <TableCell align="center">
-                    <Button size="small" startIcon={<VisibilityIcon />} sx={{ color: theme.palette.primary.main }}>Afficher</Button>
+                    <Button size="small" startIcon={<VisibilityIcon />} sx={{ color: institutionalTheme.palette.primary.main }}>Afficher</Button>
                   </TableCell>
                 </TableRow>
               ))}

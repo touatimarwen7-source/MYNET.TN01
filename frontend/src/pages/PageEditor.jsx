@@ -164,12 +164,12 @@ export default function PageEditor() {
             <Button
               startIcon={<ArrowBackIcon />}
               onClick={handleBack}
-              sx={{ color: theme.palette.primary.main }}
+              sx={{ color: institutionalTheme.palette.primary.main }}
               disabled={saving}
             >
               Retour
             </Button>
-            <Typography variant="h4" sx={{ fontWeight: 600, color: theme.palette.text.primary, flex: 1 }}>
+            <Typography variant="h4" sx={{ fontWeight: 600, color: institutionalTheme.palette.text.primary, flex: 1 }}>
               Modifier la Page: {formData.title}
             </Typography>
             <Box sx={{
@@ -206,7 +206,7 @@ export default function PageEditor() {
               {/* Basic Info */}
               <Card sx={{ border: '1px solid #e0e0e0' }}>
                 <CardContent>
-                  <Typography sx={{ fontWeight: 600, color: theme.palette.primary.main, marginBottom: '16px' }}>
+                  <Typography sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main, marginBottom: '16px' }}>
                     Informations Générales
                   </Typography>
                   <Stack spacing={2}>
@@ -249,7 +249,7 @@ export default function PageEditor() {
               {/* Content Editor */}
               <Card sx={{ border: '1px solid #e0e0e0' }}>
                 <CardContent>
-                  <Typography sx={{ fontWeight: 600, color: theme.palette.primary.main, marginBottom: '16px' }}>
+                  <Typography sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main, marginBottom: '16px' }}>
                     Contenu de la Page
                   </Typography>
                   <TextField
@@ -271,7 +271,7 @@ export default function PageEditor() {
               {/* SEO Settings */}
               <Card sx={{ border: '1px solid #e0e0e0' }}>
                 <CardContent>
-                  <Typography sx={{ fontWeight: 600, color: theme.palette.primary.main, marginBottom: '16px' }}>
+                  <Typography sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main, marginBottom: '16px' }}>
                     Paramètres SEO
                   </Typography>
                   <Stack spacing={2}>
@@ -319,7 +319,7 @@ export default function PageEditor() {
               {/* Actions */}
               <Card sx={{ border: '1px solid #e0e0e0', backgroundColor: '#f9f9f9' }}>
                 <CardContent>
-                  <Typography sx={{ fontWeight: 600, color: theme.palette.text.primary, marginBottom: '16px' }}>
+                  <Typography sx={{ fontWeight: 600, color: institutionalTheme.palette.text.primary, marginBottom: '16px' }}>
                     Actions
                   </Typography>
                   <Stack spacing={2}>
@@ -329,7 +329,7 @@ export default function PageEditor() {
                       startIcon={<SaveIcon />}
                       onClick={handleSave}
                       disabled={saving || !hasChanges}
-                      sx={{ backgroundColor: theme.palette.primary.main }}
+                      sx={{ backgroundColor: institutionalTheme.palette.primary.main }}
                     >
                       {saving ? 'Sauvegarde...' : 'Sauvegarder'}
                     </Button>
@@ -348,7 +348,7 @@ export default function PageEditor() {
                       variant="outlined"
                       startIcon={<PreviewIcon />}
                       onClick={() => setOpenPreview(true)}
-                      sx={{ color: theme.palette.primary.main, borderColor: theme.palette.primary.main }}
+                      sx={{ color: institutionalTheme.palette.primary.main, borderColor: institutionalTheme.palette.primary.main }}
                     >
                       Aperçu
                     </Button>
@@ -359,13 +359,13 @@ export default function PageEditor() {
               {/* Info Panel */}
               <Card sx={{ border: '1px solid #e0e0e0' }}>
                 <CardContent>
-                  <Typography sx={{ fontWeight: 600, color: theme.palette.primary.main, marginBottom: '16px' }}>
+                  <Typography sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main, marginBottom: '16px' }}>
                     Informations
                   </Typography>
                   <Stack spacing={2} sx={{ fontSize: '13px' }}>
                     <Box>
                       <Typography sx={{ color: '#666', fontSize: '11px' }}>URL de la Page</Typography>
-                      <Typography sx={{ fontFamily: 'monospace', color: theme.palette.primary.main, fontWeight: 500 }}>
+                      <Typography sx={{ fontFamily: 'monospace', color: institutionalTheme.palette.primary.main, fontWeight: 500 }}>
                         /{formData.slug}
                       </Typography>
                     </Box>
@@ -388,7 +388,7 @@ export default function PageEditor() {
               {/* Aide */}
               <Card sx={{ border: '1px solid #e0e0e0', backgroundColor: '#f0f8ff' }}>
                 <CardContent>
-                  <Typography sx={{ fontWeight: 600, color: theme.palette.primary.main, marginBottom: '12px', fontSize: '14px' }}>
+                  <Typography sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main, marginBottom: '12px', fontSize: '14px' }}>
                     Aide
                   </Typography>
                   <Typography sx={{ fontSize: '12px', color: '#666', lineHeight: '1.6' }}>
@@ -406,13 +406,13 @@ export default function PageEditor() {
 
       {/* Preview Dialog */}
       <Dialog open={openPreview} onClose={() => setOpenPreview(false)} maxWidth="md" fullWidth>
-        <DialogTitle sx={{ fontWeight: 600, color: theme.palette.primary.main }}>
+        <DialogTitle sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main }}>
           Aperçu: {formData.title}
         </DialogTitle>
         <DialogContent sx={{ paddingTop: '20px' }}>
           <Paper sx={{ padding: '24px', backgroundColor: '#fff', border: '1px solid #e0e0e0' }}>
             <Box
-              sx={{ '& h1, & h2, & h3': { color: theme.palette.primary.main, marginTop: '16px' } }}
+              sx={{ '& h1, & h2, & h3': { color: institutionalTheme.palette.primary.main, marginTop: '16px' } }}
               dangerouslySetInnerHTML={{ __html: formData.content }}
             />
           </Paper>

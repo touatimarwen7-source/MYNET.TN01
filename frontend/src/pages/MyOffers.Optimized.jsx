@@ -115,12 +115,12 @@ export default function MyOffersOptimized() {
   }, []);
 
   return (
-    <Box sx={{ backgroundColor: theme.palette.background.default, paddingY: '40px', minHeight: '80vh' }}>
+    <Box sx={{ backgroundColor: institutionalTheme.palette.background.default, paddingY: '40px', minHeight: '80vh' }}>
       <Container maxWidth="lg">
         <Typography variant="h2" sx={{
           fontSize: '32px',
           fontWeight: 600,
-          color: theme.palette.primary.main,
+          color: institutionalTheme.palette.primary.main,
           mb: 3,
           direction: 'rtl'
         }}>
@@ -145,11 +145,11 @@ export default function MyOffersOptimized() {
               <Table>
                 <TableHead sx={{ backgroundColor: '#F5F5F5' }}>
                   <TableRow>
-                    <TableCell sx={{ fontWeight: 600, color: theme.palette.primary.main }}>N° d'offre</TableCell>
-                    <TableCell sx={{ fontWeight: 600, color: theme.palette.primary.main }}>Montant</TableCell>
-                    <TableCell sx={{ fontWeight: 600, color: theme.palette.primary.main }}>Statut</TableCell>
-                    <TableCell sx={{ fontWeight: 600, color: theme.palette.primary.main }}>Date</TableCell>
-                    <TableCell sx={{ fontWeight: 600, color: theme.palette.primary.main }} align="center">Actions</TableCell>
+                    <TableCell sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main }}>N° d'offre</TableCell>
+                    <TableCell sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main }}>Montant</TableCell>
+                    <TableCell sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main }}>Statut</TableCell>
+                    <TableCell sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main }}>Date</TableCell>
+                    <TableCell sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main }} align="center">Actions</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>

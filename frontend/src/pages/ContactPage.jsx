@@ -59,7 +59,7 @@ export default function ContactPage() {
       {/* Hero Section */}
       <Box
         sx={{
-          backgroundColor: theme.palette.primary.main,
+          backgroundColor: institutionalTheme.palette.primary.main,
           color: 'white',
           padding: '60px 20px',
           textAlign: 'center',
@@ -84,9 +84,9 @@ export default function ContactPage() {
               <Card sx={{ border: '1px solid #e0e0e0' }}>
                 <CardContent sx={{ padding: '24px' }}>
                   <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: '12px', marginBottom: '16px' }}>
-                    <LocationOnIcon sx={{ color: theme.palette.primary.main, fontSize: '20px', marginTop: '2px' }} />
+                    <LocationOnIcon sx={{ color: institutionalTheme.palette.primary.main, fontSize: '20px', marginTop: '2px' }} />
                     <Box>
-                      <Typography variant="h4" sx={{ fontSize: '16px', fontWeight: 600, color: theme.palette.text.primary }}>
+                      <Typography variant="h4" sx={{ fontSize: '16px', fontWeight: 600, color: institutionalTheme.palette.text.primary }}>
                         Siège Social
                       </Typography>
                     </Box>
@@ -107,9 +107,9 @@ export default function ContactPage() {
               <Card sx={{ border: '1px solid #e0e0e0' }}>
                 <CardContent sx={{ padding: '24px' }}>
                   <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: '12px', marginBottom: '16px' }}>
-                    <PhoneIcon sx={{ color: theme.palette.primary.main, fontSize: '20px', marginTop: '2px' }} />
+                    <PhoneIcon sx={{ color: institutionalTheme.palette.primary.main, fontSize: '20px', marginTop: '2px' }} />
                     <Box>
-                      <Typography variant="h4" sx={{ fontSize: '16px', fontWeight: 600, color: theme.palette.text.primary }}>
+                      <Typography variant="h4" sx={{ fontSize: '16px', fontWeight: 600, color: institutionalTheme.palette.text.primary }}>
                         Téléphone
                       </Typography>
                     </Box>
@@ -117,21 +117,21 @@ export default function ContactPage() {
                   <Stack spacing={1}>
                     <Box>
                       <Typography sx={{ fontSize: '12px', color: '#616161', fontWeight: 600 }}>🛠️ Support Technique (Bugs, Accès)</Typography>
-                      <Link href="tel:+21671255000" sx={{ color: theme.palette.primary.main, textDecoration: 'none', fontSize: '14px', fontWeight: 500 }}>
+                      <Link href="tel:+21671255000" sx={{ color: institutionalTheme.palette.primary.main, textDecoration: 'none', fontSize: '14px', fontWeight: 500 }}>
                         +216 71 255 000
                       </Link>
                       <Typography sx={{ fontSize: '11px', color: '#616161', marginTop: '4px' }}>7h-19h (Sam-Jeu), 24/7 Pour clients Premium</Typography>
                     </Box>
                     <Box>
                       <Typography sx={{ fontSize: '12px', color: '#616161', fontWeight: 600 }}>💼 Support Commercial (Ventes, Partenaires)</Typography>
-                      <Link href="tel:+21671255001" sx={{ color: theme.palette.primary.main, textDecoration: 'none', fontSize: '14px', fontWeight: 500 }}>
+                      <Link href="tel:+21671255001" sx={{ color: institutionalTheme.palette.primary.main, textDecoration: 'none', fontSize: '14px', fontWeight: 500 }}>
                         +216 71 255 001
                       </Link>
                       <Typography sx={{ fontSize: '11px', color: '#616161', marginTop: '4px' }}>8h-18h (Lun-Ven)</Typography>
                     </Box>
                     <Box>
                       <Typography sx={{ fontSize: '12px', color: '#616161', fontWeight: 600 }}>⚖️ Support Légal & Conformité</Typography>
-                      <Link href="tel:+21671255002" sx={{ color: theme.palette.primary.main, textDecoration: 'none', fontSize: '14px', fontWeight: 500 }}>
+                      <Link href="tel:+21671255002" sx={{ color: institutionalTheme.palette.primary.main, textDecoration: 'none', fontSize: '14px', fontWeight: 500 }}>
                         +216 71 255 002
                       </Link>
                       <Typography sx={{ fontSize: '11px', color: '#616161', marginTop: '4px' }}>9h-17h (Lun-Ven)</Typography>
@@ -144,9 +144,9 @@ export default function ContactPage() {
               <Card sx={{ border: '1px solid #e0e0e0' }}>
                 <CardContent sx={{ padding: '24px' }}>
                   <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: '12px', marginBottom: '16px' }}>
-                    <EmailIcon sx={{ color: theme.palette.primary.main, fontSize: '20px', marginTop: '2px' }} />
+                    <EmailIcon sx={{ color: institutionalTheme.palette.primary.main, fontSize: '20px', marginTop: '2px' }} />
                     <Box>
-                      <Typography variant="h4" sx={{ fontSize: '16px', fontWeight: 600, color: theme.palette.text.primary }}>
+                      <Typography variant="h4" sx={{ fontSize: '16px', fontWeight: 600, color: institutionalTheme.palette.text.primary }}>
                         Email
                       </Typography>
                     </Box>
@@ -154,21 +154,21 @@ export default function ContactPage() {
                   <Stack spacing={1}>
                     <Box>
                       <Typography sx={{ fontSize: '12px', color: '#616161', fontWeight: 600 }}>📧 Support Général & Questions</Typography>
-                      <Link href="mailto:support@mynet.tn" sx={{ color: theme.palette.primary.main, textDecoration: 'none', fontSize: '14px', fontWeight: 500 }}>
+                      <Link href="mailto:support@mynet.tn" sx={{ color: institutionalTheme.palette.primary.main, textDecoration: 'none', fontSize: '14px', fontWeight: 500 }}>
                         support@mynet.tn
                       </Link>
                       <Typography sx={{ fontSize: '11px', color: '#616161', marginTop: '4px' }}>Réponse en {'<'} 4 heures</Typography>
                     </Box>
                     <Box>
                       <Typography sx={{ fontSize: '12px', color: '#616161', fontWeight: 600 }}>🔧 Signaler un Bug Technique</Typography>
-                      <Link href="mailto:bugs@mynet.tn" sx={{ color: theme.palette.primary.main, textDecoration: 'none', fontSize: '14px', fontWeight: 500 }}>
+                      <Link href="mailto:bugs@mynet.tn" sx={{ color: institutionalTheme.palette.primary.main, textDecoration: 'none', fontSize: '14px', fontWeight: 500 }}>
                         bugs@mynet.tn
                       </Link>
                       <Typography sx={{ fontSize: '11px', color: '#616161', marginTop: '4px' }}>Avec détails et captures d'écran</Typography>
                     </Box>
                     <Box>
                       <Typography sx={{ fontSize: '12px', color: '#616161', fontWeight: 600 }}>💡 Suggestions & Partenariats</Typography>
-                      <Link href="mailto:business@mynet.tn" sx={{ color: theme.palette.primary.main, textDecoration: 'none', fontSize: '14px', fontWeight: 500 }}>
+                      <Link href="mailto:business@mynet.tn" sx={{ color: institutionalTheme.palette.primary.main, textDecoration: 'none', fontSize: '14px', fontWeight: 500 }}>
                         business@mynet.tn
                       </Link>
                       <Typography sx={{ fontSize: '11px', color: '#616161', marginTop: '4px' }}>Partenaires B2B & projets spéciaux</Typography>
@@ -201,7 +201,7 @@ export default function ContactPage() {
           <Grid size={{ xs: 12, md: 8 }}>
             <Card sx={{ border: '1px solid #e0e0e0' }}>
               <CardContent sx={{ padding: '32px' }}>
-                <Typography variant="h3" sx={{ fontSize: '24px', fontWeight: 600, color: theme.palette.text.primary, marginBottom: '8px' }}>
+                <Typography variant="h3" sx={{ fontSize: '24px', fontWeight: 600, color: institutionalTheme.palette.text.primary, marginBottom: '8px' }}>
                   ✉️ Envoyez-Nous un Message
                 </Typography>
                 <Typography sx={{ color: '#616161', marginBottom: '24px' }}>
@@ -291,7 +291,7 @@ export default function ContactPage() {
                     disabled={submitting}
                     startIcon={submitting ? <CircularProgress size={20} /> : <SendIcon />}
                     sx={{
-                      backgroundColor: theme.palette.primary.main,
+                      backgroundColor: institutionalTheme.palette.primary.main,
                       textTransform: 'none',
                       fontWeight: 600,
                       minHeight: '44px',

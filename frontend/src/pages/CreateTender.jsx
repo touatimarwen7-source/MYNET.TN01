@@ -214,7 +214,7 @@ const StepOne = ({ formData, handleChange, loading }) => {
             checked={formData.is_public}
             onChange={handleChange}
             disabled={loading}
-            sx={{ color: theme.palette.primary.main }}
+            sx={{ color: institutionalTheme.palette.primary.main }}
           />
         }
         label="🌐 Appel d'offres public (visible à tous les fournisseurs)"
@@ -1460,7 +1460,7 @@ export default function CreateTender() {
                 sx={{
                   fontSize: '28px',
                   fontWeight: 500,
-                  color: theme.palette.primary.main,
+                  color: institutionalTheme.palette.primary.main,
                   mb: '8px',
                 }}
               >
@@ -1476,7 +1476,7 @@ export default function CreateTender() {
               <Box
                 sx={{
                   height: '100%',
-                  backgroundColor: theme.palette.primary.main,
+                  backgroundColor: institutionalTheme.palette.primary.main,
                   width: `${progress}%`,
                   transition: 'width 0.3s ease',
                   borderRadius: '2px',
@@ -1503,7 +1503,7 @@ export default function CreateTender() {
                 onClick={handlePrevious}
                 disabled={currentStep === 0 || loading}
                 sx={{
-                  color: theme.palette.primary.main,
+                  color: institutionalTheme.palette.primary.main,
                   borderColor: '#0056B3',
                   textTransform: 'none',
                   fontWeight: 600,
@@ -1521,8 +1521,8 @@ export default function CreateTender() {
                     disabled={loading || totalCriteria !== 100}
                     sx={{
                       flex: 1,
-                      color: theme.palette.primary.main,
-                      borderColor: theme.palette.primary.main,
+                      color: institutionalTheme.palette.primary.main,
+                      borderColor: institutionalTheme.palette.primary.main,
                       textTransform: 'none',
                       fontWeight: 600,
                       minHeight: '44px',
@@ -1537,7 +1537,7 @@ export default function CreateTender() {
                     startIcon={loading ? <CircularProgress size={20} /> : <CheckCircleIcon />}
                     sx={{
                       flex: 1,
-                      backgroundColor: theme.palette.primary.main,
+                      backgroundColor: institutionalTheme.palette.primary.main,
                       color: '#ffffff',
                       textTransform: 'none',
                       fontWeight: 600,
@@ -1556,7 +1556,7 @@ export default function CreateTender() {
                   disabled={loading}
                   sx={{
                     flex: 1,
-                    backgroundColor: theme.palette.primary.main,
+                    backgroundColor: institutionalTheme.palette.primary.main,
                     color: '#ffffff',
                     textTransform: 'none',
                     fontWeight: 600,
@@ -1603,7 +1603,7 @@ export default function CreateTender() {
 
       {/* Preview Dialog */}
       <Dialog open={showPreview} onClose={() => setShowPreview(false)} maxWidth="md" fullWidth>
-        <DialogTitle sx={{ backgroundColor: theme.palette.primary.main, color: '#fff' }}>
+        <DialogTitle sx={{ backgroundColor: institutionalTheme.palette.primary.main, color: '#fff' }}>
           📋 Aperçu de votre Appel d'Offres
         </DialogTitle>
         <DialogContent sx={{ paddingY: '24px', maxHeight: '60vh', overflowY: 'auto' }}>
@@ -1618,7 +1618,7 @@ export default function CreateTender() {
             variant="contained"
             disabled={loading || totalCriteria !== 100}
             startIcon={loading ? <CircularProgress size={18} /> : <CheckCircleIcon />}
-            sx={{ backgroundColor: theme.palette.primary.main, color: '#fff' }}
+            sx={{ backgroundColor: institutionalTheme.palette.primary.main, color: '#fff' }}
           >
             {loading ? 'Création...' : 'Créer'}
           </Button>
@@ -1634,7 +1634,7 @@ export default function CreateTender() {
           </Typography>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setShowExit(false)} sx={{ color: theme.palette.primary.main }}>
+          <Button onClick={() => setShowExit(false)} sx={{ color: institutionalTheme.palette.primary.main }}>
             Continuer
           </Button>
           <Button

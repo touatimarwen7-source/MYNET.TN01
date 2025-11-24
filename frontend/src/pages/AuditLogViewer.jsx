@@ -76,7 +76,7 @@ export default function AuditLogViewer() {
 
   const getActionColor = (action) => {
     const colors = {
-      'CREATE_PAGE': theme.palette.primary.main,
+      'CREATE_PAGE': institutionalTheme.palette.primary.main,
       'UPDATE_PAGE': '#ff9800',
       'DELETE_PAGE': '#d32f2f',
       'UPLOAD_FILE': '#2196f3',
@@ -121,7 +121,7 @@ export default function AuditLogViewer() {
       <Container maxWidth="lg">
         {/* Header */}
         <Box sx={{ marginBottom: '32px' }}>
-          <Typography variant="h3" sx={{ fontWeight: 700, color: theme.palette.text.primary, marginBottom: '12px' }}>
+          <Typography variant="h3" sx={{ fontWeight: 700, color: institutionalTheme.palette.text.primary, marginBottom: '12px' }}>
             سجل التدقيق الإداري - Audit Logs
           </Typography>
           <Typography sx={{ fontSize: '14px', color: '#666', marginBottom: '24px' }}>
@@ -176,7 +176,7 @@ export default function AuditLogViewer() {
             <Button variant="outlined" startIcon={<ClearIcon />} onClick={handleClearFilters}>
               إعادة تعيين
             </Button>
-            <Button variant="contained" startIcon={<DownloadIcon />} onClick={handleExport} sx={{ backgroundColor: theme.palette.primary.main }}>
+            <Button variant="contained" startIcon={<DownloadIcon />} onClick={handleExport} sx={{ backgroundColor: institutionalTheme.palette.primary.main }}>
               تصدير
             </Button>
           </Stack>
@@ -189,7 +189,7 @@ export default function AuditLogViewer() {
               <Typography sx={{ fontSize: '12px', color: '#666', marginBottom: '8px' }}>
                 إجمالي السجلات
               </Typography>
-              <Typography sx={{ fontSize: '24px', fontWeight: 700, color: theme.palette.primary.main }}>
+              <Typography sx={{ fontSize: '24px', fontWeight: 700, color: institutionalTheme.palette.primary.main }}>
                 {filteredLogs.length}
               </Typography>
             </CardContent>
@@ -219,18 +219,18 @@ export default function AuditLogViewer() {
         {/* Table */}
         {loading ? (
           <Box sx={{ display: 'flex', justifyContent: 'center', padding: '40px' }}>
-            <CircularProgress sx={{ color: theme.palette.primary.main }} />
+            <CircularProgress sx={{ color: institutionalTheme.palette.primary.main }} />
           </Box>
         ) : (
           <Paper sx={{ border: '1px solid #e0e0e0', overflow: 'auto' }}>
             <Table>
               <TableHead>
                 <TableRow sx={{ backgroundColor: '#f5f5f5' }}>
-                  <TableCell sx={{ fontWeight: 700, color: theme.palette.text.primary }}>التاريخ والوقت</TableCell>
-                  <TableCell sx={{ fontWeight: 700, color: theme.palette.text.primary }}>الإجراء</TableCell>
-                  <TableCell sx={{ fontWeight: 700, color: theme.palette.text.primary }}>الوصف</TableCell>
-                  <TableCell sx={{ fontWeight: 700, color: theme.palette.text.primary }}>الحالة</TableCell>
-                  <TableCell sx={{ fontWeight: 700, color: theme.palette.text.primary }}>عنوان IP</TableCell>
+                  <TableCell sx={{ fontWeight: 700, color: institutionalTheme.palette.text.primary }}>التاريخ والوقت</TableCell>
+                  <TableCell sx={{ fontWeight: 700, color: institutionalTheme.palette.text.primary }}>الإجراء</TableCell>
+                  <TableCell sx={{ fontWeight: 700, color: institutionalTheme.palette.text.primary }}>الوصف</TableCell>
+                  <TableCell sx={{ fontWeight: 700, color: institutionalTheme.palette.text.primary }}>الحالة</TableCell>
+                  <TableCell sx={{ fontWeight: 700, color: institutionalTheme.palette.text.primary }}>عنوان IP</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>

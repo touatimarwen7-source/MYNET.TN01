@@ -66,7 +66,7 @@ export default function MessageDetail() {
   if (loading) {
     return (
       <Container sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '60vh' }}>
-        <CircularProgress sx={{ color: theme.palette.primary.main }} />
+        <CircularProgress sx={{ color: institutionalTheme.palette.primary.main }} />
       </Container>
     );
   }
@@ -85,7 +85,7 @@ export default function MessageDetail() {
         <Button
           startIcon={<BackIcon />}
           onClick={() => navigate('/inbox')}
-          sx={{ color: theme.palette.primary.main, marginBottom: '20px' }}
+          sx={{ color: institutionalTheme.palette.primary.main, marginBottom: '20px' }}
         >
           العودة إلى الصندوق
         </Button>
@@ -96,7 +96,7 @@ export default function MessageDetail() {
           <CardContent sx={{ padding: '40px' }}>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '20px' }}>
               <Box>
-                <Typography variant="h5" sx={{ fontWeight: 600, color: theme.palette.primary.main, marginBottom: '8px' }}>
+                <Typography variant="h5" sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main, marginBottom: '8px' }}>
                   {message.subject || '(بدون موضوع)'}
                 </Typography>
                 <Typography variant="body2" sx={{ color: '#666' }}>
@@ -116,7 +116,7 @@ export default function MessageDetail() {
                 <Button
                   startIcon={<ReplyIcon />}
                   onClick={handleReply}
-                  sx={{ color: theme.palette.primary.main }}
+                  sx={{ color: institutionalTheme.palette.primary.main }}
                 >
                   Réponse
                 </Button>

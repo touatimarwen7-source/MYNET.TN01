@@ -156,11 +156,11 @@ export default function CompanyProfile() {
   // ===== RENDER SECTIONS =====
   const renderPresentation = () => (
     <Box>
-      <Typography variant="h5" sx={{ fontWeight: 600, marginBottom: '16px', color: theme.palette.primary.main }}>
+      <Typography variant="h5" sx={{ fontWeight: 600, marginBottom: '16px', color: institutionalTheme.palette.primary.main }}>
         À PROPOS DE L'ENTREPRISE
       </Typography>
       <Paper sx={{ padding: '20px', backgroundColor: '#f5f5f5', borderRadius: '4px', marginBottom: '20px' }}>
-        <Typography variant="body2" sx={{ whiteSpace: 'pre-wrap', lineHeight: 1.8, color: theme.palette.text.primary }}>
+        <Typography variant="body2" sx={{ whiteSpace: 'pre-wrap', lineHeight: 1.8, color: institutionalTheme.palette.text.primary }}>
           {companyData?.presentation.description}
         </Typography>
       </Paper>
@@ -169,10 +169,10 @@ export default function CompanyProfile() {
         <Grid item xs={12} sm={6}>
           <Card sx={{ border: '1px solid #e0e0e0' }}>
             <CardContent>
-              <Typography variant="subtitle2" sx={{ fontWeight: 600, color: theme.palette.primary.main, marginBottom: '8px' }}>
+              <Typography variant="subtitle2" sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main, marginBottom: '8px' }}>
                 SPÉCIALISATION
               </Typography>
-              <Typography variant="body2" sx={{ color: theme.palette.text.primary }}>
+              <Typography variant="body2" sx={{ color: institutionalTheme.palette.text.primary }}>
                 {companyData?.presentation.specialization}
               </Typography>
             </CardContent>
@@ -181,10 +181,10 @@ export default function CompanyProfile() {
         <Grid item xs={12} sm={6}>
           <Card sx={{ border: '1px solid #e0e0e0' }}>
             <CardContent>
-              <Typography variant="subtitle2" sx={{ fontWeight: 600, color: theme.palette.primary.main, marginBottom: '8px' }}>
+              <Typography variant="subtitle2" sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main, marginBottom: '8px' }}>
                 ZONE DE COUVERTURE
               </Typography>
-              <Typography variant="body2" sx={{ color: theme.palette.text.primary }}>
+              <Typography variant="body2" sx={{ color: institutionalTheme.palette.text.primary }}>
                 {companyData?.presentation.coverage}
               </Typography>
             </CardContent>
@@ -194,12 +194,12 @@ export default function CompanyProfile() {
 
       <Card sx={{ border: '1px solid #e0e0e0' }}>
         <CardContent>
-          <Typography variant="subtitle2" sx={{ fontWeight: 600, color: theme.palette.primary.main, marginBottom: '12px' }}>
+          <Typography variant="subtitle2" sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main, marginBottom: '12px' }}>
             CERTIFICATIONS
           </Typography>
           <Stack direction="row" spacing={1} sx={{ flexWrap: 'wrap', gap: '8px' }}>
             {companyData?.presentation.certifications.map((cert, idx) => (
-              <Chip key={idx} label={cert} sx={{ backgroundColor: theme.palette.primary.main, color: '#ffffff' }} />
+              <Chip key={idx} label={cert} sx={{ backgroundColor: institutionalTheme.palette.primary.main, color: '#ffffff' }} />
             ))}
           </Stack>
         </CardContent>
@@ -209,7 +209,7 @@ export default function CompanyProfile() {
 
   const renderServices = () => (
     <Box>
-      <Typography variant="h5" sx={{ fontWeight: 600, marginBottom: '20px', color: theme.palette.primary.main }}>
+      <Typography variant="h5" sx={{ fontWeight: 600, marginBottom: '20px', color: institutionalTheme.palette.primary.main }}>
         PRODUITS ET SERVICES
       </Typography>
       <Grid container spacing={2}>
@@ -217,20 +217,20 @@ export default function CompanyProfile() {
           <Grid item xs={12} sm={6} md={4} key={service.id}>
             <Card sx={{ border: '1px solid #e0e0e0', height: '100%', display: 'flex', flexDirection: 'column' }}>
               <CardContent sx={{ flex: 1 }}>
-                <Typography variant="subtitle1" sx={{ fontWeight: 600, color: theme.palette.primary.main, marginBottom: '8px' }}>
+                <Typography variant="subtitle1" sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main, marginBottom: '8px' }}>
                   {service.name}
                 </Typography>
-                <Chip label={service.category} size="small" sx={{ marginBottom: '8px', backgroundColor: '#e3f2fd', color: theme.palette.primary.main }} />
+                <Chip label={service.category} size="small" sx={{ marginBottom: '8px', backgroundColor: '#e3f2fd', color: institutionalTheme.palette.primary.main }} />
                 <Typography variant="body2" sx={{ color: '#666666', marginBottom: '16px' }}>
                   {service.description}
                 </Typography>
               </CardContent>
               <Divider />
               <Box sx={{ padding: '12px', display: 'flex', gap: '8px' }}>
-                <Button variant="outlined" size="small" sx={{ flex: 1, borderColor: '#0056B3', color: theme.palette.primary.main }}>
+                <Button variant="outlined" size="small" sx={{ flex: 1, borderColor: '#0056B3', color: institutionalTheme.palette.primary.main }}>
                   Consulter
                 </Button>
-                <Button variant="contained" size="small" sx={{ flex: 1, backgroundColor: theme.palette.primary.main }}>
+                <Button variant="contained" size="small" sx={{ flex: 1, backgroundColor: institutionalTheme.palette.primary.main }}>
                   Devis
                 </Button>
               </Box>
@@ -243,7 +243,7 @@ export default function CompanyProfile() {
 
   const renderStatistics = () => (
     <Box>
-      <Typography variant="h5" sx={{ fontWeight: 600, marginBottom: '20px', color: theme.palette.primary.main }}>
+      <Typography variant="h5" sx={{ fontWeight: 600, marginBottom: '20px', color: institutionalTheme.palette.primary.main }}>
         CHIFFRES CLÉS
       </Typography>
       <Grid container spacing={2}>
@@ -251,7 +251,7 @@ export default function CompanyProfile() {
           <Grid item xs={12} sm={6} md={3} key={idx}>
             <Card sx={{ border: '1px solid #e0e0e0', textAlign: 'center' }}>
               <CardContent>
-                <Typography variant="h4" sx={{ fontWeight: 600, color: theme.palette.primary.main, marginBottom: '8px' }}>
+                <Typography variant="h4" sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main, marginBottom: '8px' }}>
                   {value}
                 </Typography>
                 <Typography variant="body2" sx={{ color: '#666666' }}>
@@ -265,7 +265,7 @@ export default function CompanyProfile() {
       {companyData?.rating && (
         <Card sx={{ border: '1px solid #e0e0e0', marginTop: '20px', textAlign: 'center' }}>
           <CardContent>
-            <Typography variant="h4" sx={{ fontWeight: 600, color: theme.palette.primary.main, marginBottom: '8px' }}>
+            <Typography variant="h4" sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main, marginBottom: '8px' }}>
               ⭐ {companyData.rating}/5
             </Typography>
             <Typography variant="body2" sx={{ color: '#666666' }}>
@@ -279,7 +279,7 @@ export default function CompanyProfile() {
 
   const renderSearch = () => (
     <Box>
-      <Typography variant="h5" sx={{ fontWeight: 600, marginBottom: '20px', color: theme.palette.primary.main }}>
+      <Typography variant="h5" sx={{ fontWeight: 600, marginBottom: '20px', color: institutionalTheme.palette.primary.main }}>
         RECHERCHE AVANCÉE
       </Typography>
       
@@ -334,7 +334,7 @@ export default function CompanyProfile() {
               variant="contained"
               startIcon={<SearchIcon />}
               onClick={handleSearch}
-              sx={{ backgroundColor: theme.palette.primary.main, padding: '12px' }}
+              sx={{ backgroundColor: institutionalTheme.palette.primary.main, padding: '12px' }}
             >
               Rechercher
             </Button>
@@ -344,7 +344,7 @@ export default function CompanyProfile() {
 
       {showSearch && (
         <Box>
-          <Typography variant="subtitle1" sx={{ fontWeight: 600, marginBottom: '16px', color: theme.palette.text.primary }}>
+          <Typography variant="subtitle1" sx={{ fontWeight: 600, marginBottom: '16px', color: institutionalTheme.palette.text.primary }}>
             Résultats ({searchResults.length})
           </Typography>
           {searchResults.length === 0 ? (
@@ -357,7 +357,7 @@ export default function CompanyProfile() {
                     <CardContent>
                       <Grid container alignItems="center" justifyContent="space-between">
                         <Grid item xs={12} sm="auto">
-                          <Typography variant="h6" sx={{ fontWeight: 600, color: theme.palette.primary.main }}>
+                          <Typography variant="h6" sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main }}>
                             {result.company_name}
                           </Typography>
                           <Typography variant="body2" sx={{ color: '#666666', marginTop: '4px' }}>
@@ -368,7 +368,7 @@ export default function CompanyProfile() {
                           </Typography>
                         </Grid>
                         <Grid item xs={12} sm="auto">
-                          <Button variant="contained" sx={{ backgroundColor: theme.palette.primary.main }}>
+                          <Button variant="contained" sx={{ backgroundColor: institutionalTheme.palette.primary.main }}>
                             Voir Profil
                           </Button>
                         </Grid>
@@ -386,7 +386,7 @@ export default function CompanyProfile() {
 
   const renderContact = () => (
     <Box>
-      <Typography variant="h5" sx={{ fontWeight: 600, marginBottom: '20px', color: theme.palette.primary.main }}>
+      <Typography variant="h5" sx={{ fontWeight: 600, marginBottom: '20px', color: institutionalTheme.palette.primary.main }}>
         CONTACTER L'ENTREPRISE
       </Typography>
       <Grid container spacing={2}>
@@ -395,28 +395,28 @@ export default function CompanyProfile() {
             <CardContent>
               <Stack spacing={2}>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                  <CallIcon sx={{ color: theme.palette.primary.main }} />
+                  <CallIcon sx={{ color: institutionalTheme.palette.primary.main }} />
                   <Box>
                     <Typography variant="caption" sx={{ color: '#666666' }}>Téléphone</Typography>
-                    <Typography variant="body2" sx={{ fontWeight: 500, color: theme.palette.text.primary }}>
+                    <Typography variant="body2" sx={{ fontWeight: 500, color: institutionalTheme.palette.text.primary }}>
                       {companyData?.contact.phone}
                     </Typography>
                   </Box>
                 </Box>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                  <EmailIcon sx={{ color: theme.palette.primary.main }} />
+                  <EmailIcon sx={{ color: institutionalTheme.palette.primary.main }} />
                   <Box>
                     <Typography variant="caption" sx={{ color: '#666666' }}>Email</Typography>
-                    <Typography variant="body2" sx={{ fontWeight: 500, color: theme.palette.text.primary }}>
+                    <Typography variant="body2" sx={{ fontWeight: 500, color: institutionalTheme.palette.text.primary }}>
                       {companyData?.contact.email}
                     </Typography>
                   </Box>
                 </Box>
                 <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
-                  <LocationOnIcon sx={{ color: theme.palette.primary.main, marginTop: '2px' }} />
+                  <LocationOnIcon sx={{ color: institutionalTheme.palette.primary.main, marginTop: '2px' }} />
                   <Box>
                     <Typography variant="caption" sx={{ color: '#666666' }}>Adresse</Typography>
-                    <Typography variant="body2" sx={{ fontWeight: 500, color: theme.palette.text.primary }}>
+                    <Typography variant="body2" sx={{ fontWeight: 500, color: institutionalTheme.palette.text.primary }}>
                       {companyData?.contact.address}
                     </Typography>
                   </Box>
@@ -428,17 +428,17 @@ export default function CompanyProfile() {
         <Grid item xs={12} sm={6}>
           <Card sx={{ border: '1px solid #e0e0e0' }}>
             <CardContent>
-              <Typography variant="subtitle2" sx={{ fontWeight: 600, color: theme.palette.primary.main, marginBottom: '12px' }}>
+              <Typography variant="subtitle2" sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main, marginBottom: '12px' }}>
                 SUIVEZ-NOUS
               </Typography>
               <Stack spacing={2}>
-                <Button variant="outlined" fullWidth startIcon={<LinkedInIcon />} sx={{ borderColor: '#0056B3', color: theme.palette.primary.main }}>
+                <Button variant="outlined" fullWidth startIcon={<LinkedInIcon />} sx={{ borderColor: '#0056B3', color: institutionalTheme.palette.primary.main }}>
                   LinkedIn
                 </Button>
-                <Button variant="outlined" fullWidth startIcon={<FacebookIcon />} sx={{ borderColor: '#0056B3', color: theme.palette.primary.main }}>
+                <Button variant="outlined" fullWidth startIcon={<FacebookIcon />} sx={{ borderColor: '#0056B3', color: institutionalTheme.palette.primary.main }}>
                   Facebook
                 </Button>
-                <Button fullWidth variant="contained" sx={{ backgroundColor: theme.palette.primary.main, marginTop: '12px' }}>
+                <Button fullWidth variant="contained" sx={{ backgroundColor: institutionalTheme.palette.primary.main, marginTop: '12px' }}>
                   Demander un Devis
                 </Button>
               </Stack>
@@ -452,7 +452,7 @@ export default function CompanyProfile() {
   if (loading && !companyData) {
     return (
       <Container maxWidth="lg" sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '60vh' }}>
-        <CircularProgress sx={{ color: theme.palette.primary.main }} />
+        <CircularProgress sx={{ color: institutionalTheme.palette.primary.main }} />
       </Container>
     );
   }
@@ -479,7 +479,7 @@ export default function CompanyProfile() {
               </Box>
             </Grid>
             <Grid item xs={12} sm>
-              <Typography variant="h3" sx={{ fontSize: '28px', fontWeight: 600, color: theme.palette.primary.main, marginBottom: '8px' }}>
+              <Typography variant="h3" sx={{ fontSize: '28px', fontWeight: 600, color: institutionalTheme.palette.primary.main, marginBottom: '8px' }}>
                 {companyData.header.name}
               </Typography>
               <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
@@ -490,14 +490,14 @@ export default function CompanyProfile() {
               </Box>
               <Stack direction="row" spacing={1} sx={{ flexWrap: 'wrap', gap: '8px' }}>
                 {companyData.header.sectors.map((sector, idx) => (
-                  <Chip key={idx} label={sector} sx={{ backgroundColor: theme.palette.primary.main, color: '#ffffff' }} />
+                  <Chip key={idx} label={sector} sx={{ backgroundColor: institutionalTheme.palette.primary.main, color: '#ffffff' }} />
                 ))}
               </Stack>
               <Box sx={{ display: 'flex', gap: '8px', marginTop: '16px' }}>
-                <Button variant="outlined" startIcon={<LinkedInIcon />} sx={{ borderColor: '#0056B3', color: theme.palette.primary.main }}>
+                <Button variant="outlined" startIcon={<LinkedInIcon />} sx={{ borderColor: '#0056B3', color: institutionalTheme.palette.primary.main }}>
                   LinkedIn
                 </Button>
-                <Button variant="outlined" startIcon={<FacebookIcon />} sx={{ borderColor: '#0056B3', color: theme.palette.primary.main }}>
+                <Button variant="outlined" startIcon={<FacebookIcon />} sx={{ borderColor: '#0056B3', color: institutionalTheme.palette.primary.main }}>
                   Facebook
                 </Button>
               </Box>

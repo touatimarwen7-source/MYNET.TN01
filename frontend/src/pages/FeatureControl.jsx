@@ -35,7 +35,7 @@ export default function FeatureControl() {
       <Container maxWidth="lg">
         {/* Header */}
         <Box sx={{ marginBottom: '32px' }}>
-          <Typography variant="h3" sx={{ fontWeight: 700, color: theme.palette.text.primary, marginBottom: '12px' }}>
+          <Typography variant="h3" sx={{ fontWeight: 700, color: institutionalTheme.palette.text.primary, marginBottom: '12px' }}>
             Contrôle des Fonctionnalités - Feature Control
           </Typography>
           <Typography sx={{ fontSize: '14px', color: '#666', marginBottom: '24px' }}>
@@ -56,7 +56,7 @@ export default function FeatureControl() {
               <Typography sx={{ fontSize: '12px', color: '#666', marginBottom: '8px' }}>
                 Total des fonctionnalités
               </Typography>
-              <Typography sx={{ fontSize: '24px', fontWeight: 700, color: theme.palette.primary.main }}>
+              <Typography sx={{ fontSize: '24px', fontWeight: 700, color: institutionalTheme.palette.primary.main }}>
                 {features.length}
               </Typography>
             </CardContent>
@@ -94,7 +94,7 @@ export default function FeatureControl() {
               marginBottom: '16px',
               borderRadius: '4px',
             }}>
-              <Typography sx={{ fontWeight: 700, color: theme.palette.primary.main, fontSize: '14px' }}>
+              <Typography sx={{ fontWeight: 700, color: institutionalTheme.palette.primary.main, fontSize: '14px' }}>
                 {category}
               </Typography>
             </Box>
@@ -123,7 +123,7 @@ export default function FeatureControl() {
                       <ListItemText
                         primary={
                           <Box sx={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                            <Typography sx={{ fontWeight: 600, color: theme.palette.text.primary }}>
+                            <Typography sx={{ fontWeight: 600, color: institutionalTheme.palette.text.primary }}>
                               {f.name}
                             </Typography>
                             {f.category === 'Beta' && (

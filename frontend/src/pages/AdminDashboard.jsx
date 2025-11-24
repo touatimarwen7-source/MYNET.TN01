@@ -40,7 +40,7 @@ export default function AdminDashboard() {
   ];
 
   return (
-    <Box sx={{ backgroundColor: theme.palette.background.default, paddingY: '40px', minHeight: '100vh' }}>
+    <Box sx={{ backgroundColor: institutionalTheme.palette.background.default, paddingY: '40px', minHeight: '100vh' }}>
       <Container maxWidth="lg">
         {/* Header */}
         <Box sx={{ marginBottom: '32px' }}>
@@ -49,7 +49,7 @@ export default function AdminDashboard() {
             sx={{
               fontSize: '32px',
               fontWeight: 600,
-              color: theme.palette.primary.main,
+              color: institutionalTheme.palette.primary.main,
               marginBottom: '8px',
             }}
           >
@@ -92,7 +92,7 @@ export default function AdminDashboard() {
                 color: '#616161',
                 padding: '12px 16px',
                 '&.Mui-selected': {
-                  color: theme.palette.primary.main,
+                  color: institutionalTheme.palette.primary.main,
                   backgroundColor: '#F0F4FF'
                 }
               }
@@ -112,7 +112,7 @@ export default function AdminDashboard() {
 
           {/* Tab Description */}
           <Box sx={{ padding: '16px 24px', borderBottom: '1px solid #F0F0F0', backgroundColor: '#FAFAFA' }}>
-            <Typography sx={{ fontSize: '12px', color: theme.palette.text.secondary }}>
+            <Typography sx={{ fontSize: '12px', color: institutionalTheme.palette.text.secondary }}>
               📌 {tabs[currentTab].description}
             </Typography>
           </Box>

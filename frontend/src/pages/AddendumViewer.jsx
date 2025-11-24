@@ -18,7 +18,7 @@ import {
   Alert,
 } from '@mui/material';
 import axios from 'axios';
-import { theme } from '../theme/theme';
+import institutionalTheme from '../theme/theme';
 
 export default function AddendumViewer({ tenderId }) {
   const [addenda, setAddenda] = useState([]);
@@ -77,13 +77,13 @@ export default function AddendumViewer({ tenderId }) {
   return (
     <Box sx={{ p: 3, direction: 'rtl' }}>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
-        <Typography variant="h5" sx={{ color: theme.palette.primary.main, fontWeight: 'bold' }}>
+        <Typography variant="h5" sx={{ color: institutionalTheme.palette.primary.main, fontWeight: 'bold' }}>
           📄 الملاحق (Addenda) والتوضيحات
         </Typography>
         <Button
           variant="contained"
           onClick={() => setOpenDialog(true)}
-          sx={{ backgroundColor: theme.palette.primary.main }}
+          sx={{ backgroundColor: institutionalTheme.palette.primary.main }}
         >
           نشر ملحق جديد
         </Button>
@@ -124,14 +124,14 @@ export default function AddendumViewer({ tenderId }) {
                         setSelectedAddendum(addendum);
                         setOpenDialog(true);
                       }}
-                      sx={{ color: theme.palette.primary.main }}
+                      sx={{ color: institutionalTheme.palette.primary.main }}
                     >
                       عرض التفاصيل
                     </Button>
                     <Button
                       size="small"
                       onClick={() => downloadAddendum(addendum)}
-                      sx={{ color: theme.palette.primary.main }}
+                      sx={{ color: institutionalTheme.palette.primary.main }}
                     >
                       تحميل
                     </Button>
@@ -195,7 +195,7 @@ export default function AddendumViewer({ tenderId }) {
             إغلاق
           </Button>
           {!selectedAddendum && (
-            <Button onClick={publishAddendum} variant="contained" sx={{ backgroundColor: theme.palette.primary.main }}>
+            <Button onClick={publishAddendum} variant="contained" sx={{ backgroundColor: institutionalTheme.palette.primary.main }}>
               نشر الملحق
             </Button>
           )}

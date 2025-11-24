@@ -191,18 +191,18 @@ export default function OfferAnalysis() {
           <Link 
             component="button"
             onClick={() => navigate('/tenders')}
-            sx={{ cursor: 'pointer', color: theme.palette.primary.main, textDecoration: 'none', '&:hover': { textDecoration: 'underline' } }}
+            sx={{ cursor: 'pointer', color: institutionalTheme.palette.primary.main, textDecoration: 'none', '&:hover': { textDecoration: 'underline' } }}
           >
             المناقصات
           </Link>
           <Link
             component="button"
             onClick={() => navigate(`/tender/${tenderId}`)}
-            sx={{ cursor: 'pointer', color: theme.palette.primary.main, textDecoration: 'none', '&:hover': { textDecoration: 'underline' } }}
+            sx={{ cursor: 'pointer', color: institutionalTheme.palette.primary.main, textDecoration: 'none', '&:hover': { textDecoration: 'underline' } }}
           >
             المناقصة
           </Link>
-          <Typography sx={{ color: theme.palette.primary.main, fontWeight: 600 }}>
+          <Typography sx={{ color: institutionalTheme.palette.primary.main, fontWeight: 600 }}>
             تحليل العروض
           </Typography>
         </Breadcrumbs>
@@ -215,7 +215,7 @@ export default function OfferAnalysis() {
               sx={{
                 fontSize: '32px',
                 fontWeight: 600,
-                color: theme.palette.primary.main,
+                color: institutionalTheme.palette.primary.main,
                 mb: '8px',
               }}
             >
@@ -231,7 +231,7 @@ export default function OfferAnalysis() {
               onClick={exportToCSV}
               variant="outlined"
               size="small"
-              sx={{ color: theme.palette.primary.main, borderColor: theme.palette.primary.main }}
+              sx={{ color: institutionalTheme.palette.primary.main, borderColor: institutionalTheme.palette.primary.main }}
             >
               تصدير CSV
             </Button>
@@ -240,7 +240,7 @@ export default function OfferAnalysis() {
               onClick={exportToJSON}
               variant="outlined"
               size="small"
-              sx={{ color: theme.palette.primary.main, borderColor: theme.palette.primary.main }}
+              sx={{ color: institutionalTheme.palette.primary.main, borderColor: institutionalTheme.palette.primary.main }}
             >
               تصدير JSON
             </Button>
@@ -273,7 +273,7 @@ export default function OfferAnalysis() {
                       sx={{
                         fontWeight: 600,
                         fontSize: '18px',
-                        color: theme.palette.primary.main,
+                        color: institutionalTheme.palette.primary.main,
                       }}
                     >
                       {item.value}
@@ -322,7 +322,7 @@ export default function OfferAnalysis() {
                       startIcon={<DownloadIcon />}
                       onClick={exportToJSON}
                       sx={{
-                        color: theme.palette.primary.main,
+                        color: institutionalTheme.palette.primary.main,
                         textTransform: 'none',
                         fontSize: '12px',
                       }}
@@ -334,7 +334,7 @@ export default function OfferAnalysis() {
                       startIcon={<DownloadIcon />}
                       onClick={exportToCSV}
                       sx={{
-                        color: theme.palette.primary.main,
+                        color: institutionalTheme.palette.primary.main,
                         textTransform: 'none',
                         fontSize: '12px',
                       }}
@@ -349,25 +349,25 @@ export default function OfferAnalysis() {
                   <Table>
                     <TableHead sx={{ backgroundColor: '#F5F5F5' }}>
                       <TableRow>
-                        <TableCell sx={{ fontWeight: 600, color: theme.palette.primary.main, fontSize: '12px' }}>
+                        <TableCell sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main, fontSize: '12px' }}>
                           المورد
                         </TableCell>
-                        <TableCell sx={{ fontWeight: 600, color: theme.palette.primary.main, fontSize: '12px', textAlign: 'center' }}>
+                        <TableCell sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main, fontSize: '12px', textAlign: 'center' }}>
                           المبلغ (TND)
                         </TableCell>
-                        <TableCell sx={{ fontWeight: 600, color: theme.palette.primary.main, fontSize: '12px', textAlign: 'center' }}>
+                        <TableCell sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main, fontSize: '12px', textAlign: 'center' }}>
                           مقارنة
                         </TableCell>
-                        <TableCell sx={{ fontWeight: 600, color: theme.palette.primary.main, fontSize: '12px', textAlign: 'center' }}>
+                        <TableCell sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main, fontSize: '12px', textAlign: 'center' }}>
                           التسليم
                         </TableCell>
-                        <TableCell sx={{ fontWeight: 600, color: theme.palette.primary.main, fontSize: '12px', textAlign: 'center' }}>
+                        <TableCell sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main, fontSize: '12px', textAlign: 'center' }}>
                           الدفع
                         </TableCell>
-                        <TableCell sx={{ fontWeight: 600, color: theme.palette.primary.main, fontSize: '12px', textAlign: 'center' }}>
+                        <TableCell sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main, fontSize: '12px', textAlign: 'center' }}>
                           الحالة
                         </TableCell>
-                        <TableCell sx={{ fontWeight: 600, color: theme.palette.primary.main, fontSize: '12px', textAlign: 'center' }}>
+                        <TableCell sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main, fontSize: '12px', textAlign: 'center' }}>
                           الإجراء
                         </TableCell>
                       </TableRow>
@@ -459,7 +459,7 @@ export default function OfferAnalysis() {
                                   setDetailsOpen(true);
                                 }}
                                 sx={{
-                                  color: theme.palette.primary.main,
+                                  color: institutionalTheme.palette.primary.main,
                                   textTransform: 'none',
                                   fontSize: '11px',
                                 }}
@@ -535,7 +535,7 @@ export default function OfferAnalysis() {
 
       {/* Offer Details Dialog */}
       <Dialog open={detailsOpen} onClose={() => setDetailsOpen(false)} maxWidth="sm" fullWidth>
-        <DialogTitle sx={{ fontSize: '16px', fontWeight: 600, color: theme.palette.primary.main }}>
+        <DialogTitle sx={{ fontSize: '16px', fontWeight: 600, color: institutionalTheme.palette.primary.main }}>
           تفاصيل العرض
         </DialogTitle>
         <DialogContent>

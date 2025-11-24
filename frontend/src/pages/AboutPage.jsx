@@ -22,11 +22,11 @@ export default function AboutPage() {
   }, []);
 
   return (
-    <Box sx={{ backgroundColor: theme.palette.background.default, paddingY: '0px' }}>
+    <Box sx={{ backgroundColor: institutionalTheme.palette.background.default, paddingY: '0px' }}>
       {/* Hero Section */}
       <Box
         sx={{
-          backgroundColor: theme.palette.primary.main,
+          backgroundColor: institutionalTheme.palette.primary.main,
           color: '#FFFFFF',
           paddingY: '80px',
           textAlign: 'center',
@@ -68,7 +68,7 @@ export default function AboutPage() {
             sx={{
               fontSize: '36px',
               fontWeight: 700,
-              color: theme.palette.text.primary,
+              color: institutionalTheme.palette.text.primary,
               marginBottom: '48px',
               textAlign: 'center',
             }}
@@ -94,7 +94,7 @@ export default function AboutPage() {
                   sx={{
                     fontSize: '20px',
                     fontWeight: 600,
-                    color: theme.palette.text.primary,
+                    color: institutionalTheme.palette.text.primary,
                     marginBottom: '12px',
                   }}
                 >
@@ -133,7 +133,7 @@ export default function AboutPage() {
                   sx={{
                     fontSize: '20px',
                     fontWeight: 600,
-                    color: theme.palette.text.primary,
+                    color: institutionalTheme.palette.text.primary,
                     marginBottom: '12px',
                   }}
                 >
@@ -172,7 +172,7 @@ export default function AboutPage() {
                   sx={{
                     fontSize: '20px',
                     fontWeight: 600,
-                    color: theme.palette.text.primary,
+                    color: institutionalTheme.palette.text.primary,
                     marginBottom: '12px',
                   }}
                 >
@@ -202,7 +202,7 @@ export default function AboutPage() {
             sx={{
               fontSize: '36px',
               fontWeight: 700,
-              color: theme.palette.text.primary,
+              color: institutionalTheme.palette.text.primary,
               marginBottom: '48px',
               textAlign: 'center',
             }}
@@ -217,22 +217,22 @@ export default function AboutPage() {
           >
             {[
               {
-                icon: <SecurityIcon sx={{ fontSize: 40, color: theme.palette.primary.main }} />,
+                icon: <SecurityIcon sx={{ fontSize: 40, color: institutionalTheme.palette.primary.main }} />,
                 title: 'Sécurité',
                 desc: 'La confiance est notre priorité absolue avec chiffrement AES-256 et authentification 2FA',
               },
               {
-                icon: <VisibilityIcon sx={{ fontSize: 40, color: theme.palette.primary.main }} />,
+                icon: <VisibilityIcon sx={{ fontSize: 40, color: institutionalTheme.palette.primary.main }} />,
                 title: 'Transparence',
                 desc: 'Zéro compromis sur la clarté des processus avec audit complet et historique complet',
               },
               {
-                icon: <BalanceIcon sx={{ fontSize: 40, color: theme.palette.primary.main }} />,
+                icon: <BalanceIcon sx={{ fontSize: 40, color: institutionalTheme.palette.primary.main }} />,
                 title: 'Équité',
                 desc: 'Égalité des chances pour tous les participants dans un environnement juste',
               },
               {
-                icon: <LightbulbIcon sx={{ fontSize: 40, color: theme.palette.primary.main }} />,
+                icon: <LightbulbIcon sx={{ fontSize: 40, color: institutionalTheme.palette.primary.main }} />,
                 title: 'Innovation',
                 desc: 'Technologie de pointe pour un avenir meilleur et des processus plus efficaces',
               },
@@ -259,7 +259,7 @@ export default function AboutPage() {
                       sx={{
                         fontSize: '16px',
                         fontWeight: 600,
-                        color: theme.palette.text.primary,
+                        color: institutionalTheme.palette.text.primary,
                         marginBottom: '8px',
                       }}
                     >
@@ -289,7 +289,7 @@ export default function AboutPage() {
             sx={{
               fontSize: '36px',
               fontWeight: 700,
-              color: theme.palette.text.primary,
+              color: institutionalTheme.palette.text.primary,
               marginBottom: '48px',
               textAlign: 'center',
             }}
@@ -344,7 +344,7 @@ export default function AboutPage() {
                       sx={{
                         fontSize: '16px',
                         fontWeight: 600,
-                        color: theme.palette.text.primary,
+                        color: institutionalTheme.palette.text.primary,
                         marginBottom: '4px',
                         textAlign: 'center',
                       }}
@@ -355,7 +355,7 @@ export default function AboutPage() {
                       variant="body2"
                       sx={{
                         fontSize: '13px',
-                        color: theme.palette.primary.main,
+                        color: institutionalTheme.palette.primary.main,
                         fontWeight: 600,
                         marginBottom: '12px',
                         textAlign: 'center',
@@ -384,7 +384,7 @@ export default function AboutPage() {
         {/* CTA Section */}
         <Box
           sx={{
-            backgroundColor: theme.palette.primary.main,
+            backgroundColor: institutionalTheme.palette.primary.main,
             borderRadius: '4px',
             padding: '48px',
             textAlign: 'center',
@@ -421,7 +421,7 @@ export default function AboutPage() {
               variant="contained"
               sx={{
                 backgroundColor: '#FFFFFF',
-                color: theme.palette.primary.main,
+                color: institutionalTheme.palette.primary.main,
                 fontWeight: 600,
                 padding: '12px 32px',
                 fontSize: '16px',

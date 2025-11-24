@@ -67,12 +67,12 @@ export default function MyOffers() {
   const maxPages = Math.ceil(pagination.total / pagination.limit);
 
   return (
-    <Box sx={{ backgroundColor: theme.palette.background.default, paddingY: '40px', minHeight: '80vh' }}>
+    <Box sx={{ backgroundColor: institutionalTheme.palette.background.default, paddingY: '40px', minHeight: '80vh' }}>
       <Container maxWidth="lg">
         <Typography variant="h2" sx={{
           fontSize: '32px',
           fontWeight: 600,
-          color: theme.palette.primary.main,
+          color: institutionalTheme.palette.primary.main,
           mb: 3,
           direction: 'rtl'
         }}>
@@ -97,18 +97,18 @@ export default function MyOffers() {
               <Table>
                 <TableHead sx={{ backgroundColor: '#F5F5F5' }}>
                   <TableRow>
-                    <TableCell sx={{ fontWeight: 600, color: theme.palette.primary.main }}>N° d'offre</TableCell>
-                    <TableCell sx={{ fontWeight: 600, color: theme.palette.primary.main }}>Montant</TableCell>
-                    <TableCell sx={{ fontWeight: 600, color: theme.palette.primary.main }}>Statut</TableCell>
-                    <TableCell sx={{ fontWeight: 600, color: theme.palette.primary.main }}>Date</TableCell>
-                    <TableCell sx={{ fontWeight: 600, color: theme.palette.primary.main }} align="center">Actions</TableCell>
+                    <TableCell sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main }}>N° d'offre</TableCell>
+                    <TableCell sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main }}>Montant</TableCell>
+                    <TableCell sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main }}>Statut</TableCell>
+                    <TableCell sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main }}>Date</TableCell>
+                    <TableCell sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main }} align="center">Actions</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
                   {offers.map((offer) => (
                     <TableRow
                       key={offer.id}
-                      sx={{ '&:hover': { backgroundColor: theme.palette.background.default } }}
+                      sx={{ '&:hover': { backgroundColor: institutionalTheme.palette.background.default } }}
                     >
                       <TableCell>{offer.offer_number}</TableCell>
                       <TableCell>{formatCurrency(offer.total_amount, offer.currency)}</TableCell>
@@ -128,7 +128,7 @@ export default function MyOffers() {
                         <Button
                           size="small"
                           startIcon={<EditIcon />}
-                          sx={{ color: theme.palette.primary.main, mr: 1 }}
+                          sx={{ color: institutionalTheme.palette.primary.main, mr: 1 }}
                         >
                           Modifier
                         </Button>

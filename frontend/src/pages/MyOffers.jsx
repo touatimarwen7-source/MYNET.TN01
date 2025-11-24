@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import institutionalTheme from '../theme/theme';
 import {
   Container,
@@ -14,15 +14,21 @@ import {
   Typography,
   Alert,
   CircularProgress,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem
+  Pagination
 } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { setPageTitle } from '../utils/pageTitle';
 import { useOptimizedFetch } from '../hooks/useOptimizedFetch';
+
+const STATUS_COLORS = {
+  'submitted': '#4caf50',
+  'rejected': '#f44336',
+  'pending': '#ff9800',
+  'opened': '#2196f3',
+  'accepted': '#388e3c',
+  'closed': '#616161'
+};
 
 export default function MyOffers() {
   const theme = institutionalTheme;
@@ -30,28 +36,64 @@ export default function MyOffers() {
 
   useEffect(() => {
     setPageTitle('Mes offres');
+  }, []);
+
+  useEffect(() => {
     fetchData('/api/procurement/my-offers', { page: pagination.page, limit: 20 });
-  }, [pagination.page]);
+  }, [pagination.page, fetchData]);
+
+  const offers = useMemo(() => data?.offers || [], [data]);
 
   const getStatusColor = (status) => {
-    const colors = { 'submitted': '#4caf50', 'rejected': '#f44336', 'pending': '#ff9800', 'opened': '#2196f3' };
-    return colors[status] || '#757575';
+    return STATUS_COLORS[status] || '#757575';
   };
 
-  const offers = data?.offers || [];
+  const formatCurrency = (amount, currency = 'TND') => {
+    return new Intl.NumberFormat('fr-TN', {
+      style: 'currency',
+      currency: currency,
+      minimumFractionDigits: 2
+    }).format(amount);
+  };
+
+  const formatDate = (dateString) => {
+    return new Date(dateString).toLocaleDateString('fr-TN', {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit'
+    });
+  };
+
+  const maxPages = Math.ceil(pagination.total / pagination.limit);
 
   return (
     <Box sx={{ backgroundColor: theme.palette.background.default, paddingY: '40px', minHeight: '80vh' }}>
       <Container maxWidth="lg">
-        <Typography variant="h2" sx={{ fontSize: '32px', fontWeight: 600, color: theme.palette.primary.main, mb: 3 }}>
+        <Typography variant="h2" sx={{
+          fontSize: '32px',
+          fontWeight: 600,
+          color: theme.palette.primary.main,
+          mb: 3,
+          direction: 'rtl'
+        }}>
           Mes offres
         </Typography>
-        
-        {error && <Alert severity="error">{error}</Alert>}
-        
-        {loading ? <CircularProgress /> : (
+
+        {error && (
+          <Alert severity="error" sx={{ mb: 2 }}>
+            {error}
+          </Alert>
+        )}
+
+        {loading ? (
+          <Box sx={{ display: 'flex', justifyContent: 'center', p: 3 }}>
+            <CircularProgress />
+          </Box>
+        ) : offers.length === 0 ? (
+          <Alert severity="info">Aucune offre trouvée</Alert>
+        ) : (
           <>
-            <Paper sx={{ border: '1px solid #E0E0E0', borderRadius: '8px', overflow: 'hidden' }}>
+            <Paper sx={{ border: '1px solid #E0E0E0', borderRadius: '8px', overflow: 'auto' }}>
               <Table>
                 <TableHead sx={{ backgroundColor: '#F5F5F5' }}>
                   <TableRow>
@@ -64,28 +106,54 @@ export default function MyOffers() {
                 </TableHead>
                 <TableBody>
                   {offers.map((offer) => (
-                    <TableRow key={offer.id} sx={{ '&:hover': { backgroundColor: theme.palette.background.default } }}>
+                    <TableRow
+                      key={offer.id}
+                      sx={{ '&:hover': { backgroundColor: theme.palette.background.default } }}
+                    >
                       <TableCell>{offer.offer_number}</TableCell>
-                      <TableCell>{offer.total_amount?.toLocaleString()} {offer.currency || 'TND'}</TableCell>
+                      <TableCell>{formatCurrency(offer.total_amount, offer.currency)}</TableCell>
                       <TableCell>
-                        <Chip label={offer.status} size="small" sx={{ backgroundColor: getStatusColor(offer.status) + '30', color: getStatusColor(offer.status) }} />
+                        <Chip
+                          label={offer.status}
+                          size="small"
+                          sx={{
+                            backgroundColor: getStatusColor(offer.status) + '30',
+                            color: getStatusColor(offer.status),
+                            fontWeight: 500
+                          }}
+                        />
                       </TableCell>
-                      <TableCell>{new Date(offer.submitted_at).toLocaleDateString('fr-TN')}</TableCell>
+                      <TableCell>{formatDate(offer.submitted_at)}</TableCell>
                       <TableCell align="center">
-                        <Button size="small" startIcon={<EditIcon />} sx={{ color: theme.palette.primary.main, mr: 1 }}>Modifier</Button>
-                        <Button size="small" startIcon={<DeleteIcon />} sx={{ color: '#C62828' }}>Supprimer</Button>
+                        <Button
+                          size="small"
+                          startIcon={<EditIcon />}
+                          sx={{ color: theme.palette.primary.main, mr: 1 }}
+                        >
+                          Modifier
+                        </Button>
+                        <Button
+                          size="small"
+                          startIcon={<DeleteIcon />}
+                          sx={{ color: '#C62828' }}
+                        >
+                          Supprimer
+                        </Button>
                       </TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
               </Table>
             </Paper>
-            
-            {pagination && pagination.total > pagination.limit && (
-              <Box sx={{ mt: 2, display: 'flex', justifyContent: 'center', gap: 1 }}>
-                <Button disabled={pagination.page === 1} onClick={() => goToPage(pagination.page - 1)}>السابق</Button>
-                <Typography sx={{ alignSelf: 'center' }}>{pagination.page} / {Math.ceil(pagination.total / pagination.limit)}</Typography>
-                <Button disabled={pagination.page >= Math.ceil(pagination.total / pagination.limit)} onClick={() => goToPage(pagination.page + 1)}>التالي</Button>
+
+            {maxPages > 1 && (
+              <Box sx={{ mt: 3, display: 'flex', justifyContent: 'center' }}>
+                <Pagination
+                  count={maxPages}
+                  page={pagination.page}
+                  onChange={(e, page) => goToPage(page)}
+                  color="primary"
+                />
               </Box>
             )}
           </>

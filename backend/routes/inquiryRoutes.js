@@ -28,7 +28,6 @@ router.post('/tenders/:tenderId/inquiries', async (req, res) => {
 
     res.status(201).json({ success: true, inquiry });
   } catch (error) {
-    console.error('Error submitting inquiry:', error.message);
     res.status(500).json({ success: false, error: error.message });
   }
 });
@@ -48,7 +47,6 @@ router.get('/tenders/:tenderId/inquiries', async (req, res) => {
 
     res.status(200).json({ success: true, count: inquiries.length, inquiries });
   } catch (error) {
-    console.error('Error fetching inquiries:', error.message);
     res.status(500).json({ success: false, error: error.message });
   }
 });
@@ -69,7 +67,6 @@ router.get('/my-inquiries', async (req, res) => {
 
     res.status(200).json({ success: true, count: inquiries.length, inquiries });
   } catch (error) {
-    console.error('Error fetching my inquiries:', error.message);
     res.status(500).json({ success: false, error: error.message });
   }
 });
@@ -98,7 +95,6 @@ router.post('/inquiries/:inquiryId/respond', async (req, res) => {
 
     res.status(201).json({ success: true, response });
   } catch (error) {
-    console.error('Error responding to inquiry:', error.message);
     res.status(500).json({ success: false, error: error.message });
   }
 });
@@ -112,7 +108,6 @@ router.get('/inquiries/:inquiryId/responses', async (req, res) => {
 
     res.status(200).json({ success: true, count: responses.length, responses });
   } catch (error) {
-    console.error('Error fetching responses:', error.message);
     res.status(500).json({ success: false, error: error.message });
   }
 });
@@ -147,7 +142,6 @@ router.post('/tenders/:tenderId/addenda', async (req, res) => {
 
     res.status(201).json({ success: true, addendum });
   } catch (error) {
-    console.error('Error creating addendum:', error.message);
     res.status(500).json({ success: false, error: error.message });
   }
 });
@@ -167,7 +161,6 @@ router.get('/tenders/:tenderId/addenda', async (req, res) => {
 
     res.status(200).json({ success: true, count: addenda.length, addenda });
   } catch (error) {
-    console.error('Error fetching addenda:', error.message);
     res.status(500).json({ success: false, error: error.message });
   }
 });
@@ -188,7 +181,6 @@ router.get('/my-notifications', async (req, res) => {
 
     res.status(200).json({ success: true, count: notifications.length, notifications });
   } catch (error) {
-    console.error('Error fetching notifications:', error.message);
     res.status(500).json({ success: false, error: error.message });
   }
 });
@@ -202,7 +194,6 @@ router.post('/notifications/:notificationId/read', async (req, res) => {
 
     res.status(200).json({ success: true, message: 'Notification marked as read' });
   } catch (error) {
-    console.error('Error marking notification as read:', error.message);
     res.status(500).json({ success: false, error: error.message });
   }
 });

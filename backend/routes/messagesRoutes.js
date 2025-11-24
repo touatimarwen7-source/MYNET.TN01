@@ -44,7 +44,6 @@ router.post('/', authMiddleware, async (req, res) => {
       data: result.rows[0]
     });
   } catch (error) {
-    console.error('Error sending message:', error);
     res.status(500).json({ error: error.message });
   }
 });

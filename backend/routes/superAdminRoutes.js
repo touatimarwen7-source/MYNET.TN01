@@ -13,7 +13,6 @@ try {
     limits: { fileSize: 50 * 1024 * 1024 } // 50MB max
   }).single('file');
 } catch (e) {
-  console.warn('Multer not installed, file upload disabled');
   upload = (req, res, next) => next();
 }
 

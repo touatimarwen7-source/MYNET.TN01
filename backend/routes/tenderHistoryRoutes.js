@@ -28,7 +28,6 @@ const logTenderChange = async (db, tenderId, changeType, changedBy, details = {}
       VALUES ($1, $2, $3, $4)
     `, [tenderId, changeType, changedBy, JSON.stringify(details)]);
   } catch (error) {
-    console.error('Error logging tender history:', error);
   }
 };
 

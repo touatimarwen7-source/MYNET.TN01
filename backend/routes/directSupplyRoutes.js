@@ -101,7 +101,6 @@ router.post('/create-request', authMiddleware, async (req, res) => {
       data: result.rows[0]
     });
   } catch (error) {
-    console.error('Error creating supply request:', error);
     res.status(500).json({ error: error.message });
   }
 });

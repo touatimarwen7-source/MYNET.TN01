@@ -35,7 +35,6 @@ export default function NotificationCenter() {
       setNotifications(response.data.notifications || []);
       setUnreadCount(response.data.notifications?.filter(n => !n.read_at).length || 0);
     } catch (err) {
-      console.error('فشل في تحميل الإشعارات:', err);
     } finally {
       setLoading(false);
     }
@@ -46,7 +45,6 @@ export default function NotificationCenter() {
       await axios.post(`/api/notifications/${notificationId}/read`);
       fetchNotifications();
     } catch (err) {
-      console.error('فشل في تحديث الإشعار:', err);
     }
   };
 

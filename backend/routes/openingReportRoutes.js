@@ -8,7 +8,6 @@ try {
   const authMiddleware = require('../middleware/authMiddleware');
   authenticate = authMiddleware.authenticate || authMiddleware;
 } catch (e) {
-  console.log('⚠️  Authentication middleware not found, routes will be public');
 }
 
 /**
@@ -37,7 +36,6 @@ router.get('/tenders/:tenderId/opening-report', async (req, res) => {
 
     res.status(200).json({ success: true, report });
   } catch (error) {
-    console.error('[OpeningReportRoutes] Error:', error.message);
     res.status(500).json({ 
       success: false, 
       error: error.message || 'Failed to fetch opening report' 
@@ -82,7 +80,6 @@ router.get('/my-opening-reports', authenticate, async (req, res) => {
       reports 
     });
   } catch (error) {
-    console.error('[OpeningReportRoutes] Error:', error.message);
     res.status(500).json({ 
       success: false, 
       error: error.message || 'Failed to fetch opening reports' 
@@ -127,7 +124,6 @@ router.get('/:reportId/export', authenticate, async (req, res) => {
 
     res.status(200).json(result);
   } catch (error) {
-    console.error('[OpeningReportRoutes] Error:', error.message);
     res.status(500).json({ 
       success: false, 
       error: error.message || 'Failed to export opening report' 

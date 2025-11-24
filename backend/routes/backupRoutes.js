@@ -54,7 +54,6 @@ router.get('/scheduler/status', verifyToken, verifySuperAdmin, asyncHandler(asyn
  * Create manual backup
  */
 router.post('/create', verifyToken, verifySuperAdmin, asyncHandler(async (req, res) => {
-  console.log('📦 Manual backup requested by:', req.user.id);
   const result = await BackupService.createBackup();
   res.status(result.success ? 200 : 400).json(result);
 }));
@@ -103,7 +102,6 @@ router.post('/restore/:filename', verifyToken, verifySuperAdmin, asyncHandler(as
     });
   }
 
-  console.log('⚠️  Database restore requested by:', req.user.id, 'File:', filename);
   
   const result = await BackupService.restoreBackup(filename);
   res.status(result.success ? 200 : 400).json(result);
@@ -132,7 +130,6 @@ router.delete('/:filename', verifyToken, verifySuperAdmin, asyncHandler(async (r
     }
 
     fs.unlinkSync(filepath);
-    console.log('🗑️  Backup deleted:', filename);
 
     res.json({
       success: true,

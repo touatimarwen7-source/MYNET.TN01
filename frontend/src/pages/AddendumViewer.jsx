@@ -42,7 +42,6 @@ export default function AddendumViewer({ tenderId }) {
       setAddenda(response.data.addenda || []);
     } catch (err) {
       setError('فشل في تحميل الملاحق');
-      console.error(err);
     } finally {
       setLoading(false);
     }
@@ -62,7 +61,6 @@ export default function AddendumViewer({ tenderId }) {
       setError(null);
     } catch (err) {
       setError('فشل في نشر الملحق');
-      console.error(err);
     }
   };
 

@@ -13,7 +13,6 @@ const checkDuplicateReview = async (db, reviewerId, reviewedUserId) => {
     );
     return result.rows.length > 0;
   } catch (error) {
-    console.error('Error checking duplicate review:', error);
     return false;
   }
 };
@@ -70,7 +69,6 @@ router.post('/', authMiddleware, async (req, res) => {
       data: result.rows[0]
     });
   } catch (error) {
-    console.error('Error creating review:', error);
     res.status(500).json({ error: error.message });
   }
 });

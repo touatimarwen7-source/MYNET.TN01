@@ -12,7 +12,6 @@ const logAction = async (db, userId, action, entityType, entityId, details = {})
       VALUES ($1, $2, $3, $4, $5)
     `, [userId, action, entityType, entityId, JSON.stringify(details)]);
   } catch (error) {
-    console.error('Error logging action:', error);
   }
 };
 

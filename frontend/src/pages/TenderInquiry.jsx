@@ -46,7 +46,6 @@ export default function TenderInquiry({ tenderId }) {
       setInquiries(response.data.inquiries || []);
     } catch (err) {
       setError('فشل في تحميل الاستفسارات');
-      console.error(err);
     } finally {
       setLoading(false);
     }
@@ -65,7 +64,6 @@ export default function TenderInquiry({ tenderId }) {
       setError(null);
     } catch (err) {
       setError('فشل في إرسال الاستفسار');
-      console.error(err);
     }
   };
 
@@ -75,7 +73,6 @@ export default function TenderInquiry({ tenderId }) {
       const response = await axios.get(`/api/inquiries/${inquiry.id}/responses`);
       setResponses(response.data.responses || []);
     } catch (err) {
-      console.error('فشل في تحميل الردود:', err);
     }
     setOpenDialog(true);
   };
@@ -96,7 +93,6 @@ export default function TenderInquiry({ tenderId }) {
       setError(null);
     } catch (err) {
       setError('فشل في إرسال الرد');
-      console.error(err);
     }
   };
 

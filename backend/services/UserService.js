@@ -87,7 +87,6 @@ class UserService {
                 
                 const duration = Date.now() - startTime;
                 if (duration > 500) {
-                    console.warn(`⚠️  SLOW LOGIN: ${email} took ${duration}ms (target: <500ms)`);
                 }
                 
                 return {

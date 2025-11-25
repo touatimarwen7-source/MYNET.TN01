@@ -171,14 +171,11 @@ function getPoolMetrics() {
 // Graceful shutdown
 async function closeDb() {
     if (pool) {
-        console.log('🛑 Closing database connections...');
         
         // Drain pool before closing
         try {
             await pool.end();
-            console.log('✅ Database connections closed gracefully');
         } catch (error) {
-            console.error('⚠️ Error closing pool:', error.message);
         }
         
         pool = null;
@@ -187,7 +184,6 @@ async function closeDb() {
 
 // ✅ GRACEFUL SHUTDOWN HANDLERS
 async function gracefulShutdown() {
-    console.log('\n🛑 Received shutdown signal. Closing connections...');
     await closeDb();
     process.exit(0);
 }
@@ -197,12 +193,10 @@ process.on('SIGINT', gracefulShutdown);
 
 // Handle uncaught exceptions
 process.on('uncaughtException', (error) => {
-    console.error('❌ Uncaught Exception:', error);
     closeDb().then(() => process.exit(1));
 });
 
 process.on('unhandledRejection', (reason, promise) => {
-    console.error('❌ Unhandled Rejection at:', promise, 'reason:', reason);
     closeDb().then(() => process.exit(1));
 });
 

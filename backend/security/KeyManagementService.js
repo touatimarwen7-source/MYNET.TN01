@@ -120,7 +120,6 @@ class KeyManagementService {
                 [keyId, encryptedKey, keyType, expiresAt]
             );
         } catch (error) {
-            console.error("Erreur lors du stockage de la clé de chiffrement:", error.message);
         }
     }
 
@@ -143,7 +142,6 @@ class KeyManagementService {
             const encryptedKey = result.rows[0].encrypted_key;
             return this.decryptWithMasterKey(encryptedKey);
         } catch (error) {
-            console.error("Erreur lors de la récupération de la clé de chiffrement:", error.message);
             return null;
         }
     }
@@ -174,12 +172,10 @@ class KeyManagementService {
 
                 await this.storeEncryptionKey(newKeyId, newKey, keyRecord.key_type);
 
-                console.log(`Rotated key ${keyRecord.key_id} -> ${newKeyId}`);
             }
 
             return { success: true, rotatedCount: result.rows.length };
         } catch (error) {
-            console.error("Erreur de rotation de clé:", error.message);
             return { success: false, error: error.message };
         }
     }

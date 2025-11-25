@@ -69,7 +69,6 @@ class AwardNotificationService {
         message: `${winnersIds.length} fائز(ين) اختيار وإشعارات أرسلت`
       };
     } catch (error) {
-      console.error('Error in winner selection:', error);
       throw error;
     }
   }

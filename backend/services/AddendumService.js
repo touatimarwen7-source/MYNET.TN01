@@ -34,7 +34,6 @@ class AddendumService {
       await AuditLogService.log(userId, 'addendum', result.rows[0].id, 'create', `Addendum ${addendumNumber} published`);
       return result.rows[0];
     } catch (error) {
-      console.error('Error creating addendum:', error);
       throw new Error(`Failed to create addendum: ${error.message}`);
     }
   }
@@ -59,7 +58,6 @@ class AddendumService {
 
       return result.rows;
     } catch (error) {
-      console.error('Error fetching addenda:', error);
       throw new Error(`Failed to fetch addenda: ${error.message}`);
     }
   }
@@ -95,7 +93,6 @@ class AddendumService {
       await AuditLogService.log(userId, 'addendum_notification', addendumId, 'create', `Notifications sent to ${supplierEmails.length} suppliers`);
       return notifications;
     } catch (error) {
-      console.error('Error notifying suppliers:', error);
       throw new Error(`Failed to notify suppliers: ${error.message}`);
     }
   }
@@ -121,7 +118,6 @@ class AddendumService {
 
       return result.rows;
     } catch (error) {
-      console.error('Error fetching notifications:', error);
       throw new Error(`Failed to fetch notifications: ${error.message}`);
     }
   }
@@ -140,7 +136,6 @@ class AddendumService {
 
       return true;
     } catch (error) {
-      console.error('Error marking notification as read:', error);
       throw new Error(`Failed to mark notification as read: ${error.message}`);
     }
   }

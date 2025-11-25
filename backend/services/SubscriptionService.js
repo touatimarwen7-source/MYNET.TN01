@@ -173,7 +173,6 @@ class SubscriptionService {
             
             return feature.is_enabled;
         } catch (error) {
-            console.error('Error checking feature:', error.message);
             return false;
         }
     }
@@ -266,11 +265,9 @@ class SubscriptionService {
     }
 
     async handlePaymentSuccess(invoiceData) {
-        console.log('Payment succeeded for invoice:', invoiceData.id);
     }
 
     async handlePaymentFailure(invoiceData) {
-        console.log('Payment failed for invoice:', invoiceData.id);
     }
 }
 

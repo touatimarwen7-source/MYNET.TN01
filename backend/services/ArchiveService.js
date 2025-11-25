@@ -24,7 +24,6 @@ class ArchiveService {
 
       return result.rows[0];
     } catch (error) {
-      console.error('Error archiving document:', error);
       throw error;
     }
   }
@@ -49,7 +48,6 @@ class ArchiveService {
         data: JSON.parse(decryptedData),
       };
     } catch (error) {
-      console.error('Error retrieving archive:', error);
       throw error;
     }
   }
@@ -66,7 +64,6 @@ class ArchiveService {
       );
       return result.rows;
     } catch (error) {
-      console.error('Error fetching archives:', error);
       throw error;
     }
   }

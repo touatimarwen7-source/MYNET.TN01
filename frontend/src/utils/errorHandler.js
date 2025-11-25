@@ -138,7 +138,6 @@ export const errorHandler = {
     };
 
     if (import.meta.env.MODE === 'development') {
-      console.error(
         `[${context}] [${errorInfo.code}] ${errorInfo.message}`,
         error
       );

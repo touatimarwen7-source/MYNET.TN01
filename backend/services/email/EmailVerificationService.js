@@ -18,10 +18,8 @@ class EmailVerificationService {
   async sendVerificationEmail(email, token, userName) {
     try {
       const verificationLink = `${process.env.FRONTEND_URL || 'http://localhost:5000'}/verify-email?token=${token}`;
-      console.log(`📧 Verification email to ${email}`);
       return { success: true, message: 'Verification email sent' };
     } catch (error) {
-      console.error('❌ Failed to send verification email:', error.message);
       return { success: false, error: error.message };
     }
   }

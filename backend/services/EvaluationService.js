@@ -41,7 +41,6 @@ class EvaluationService {
 
       return result.rows[0];
     } catch (error) {
-      console.error('Error recording technical evaluation:', error);
       throw error;
     }
   }
@@ -75,7 +74,6 @@ class EvaluationService {
 
       return result.rows[0];
     } catch (error) {
-      console.error('Error recording financial evaluation:', error);
       throw error;
     }
   }
@@ -138,7 +136,6 @@ class EvaluationService {
 
       return rankedOffers;
     } catch (error) {
-      console.error('Error calculating final scores:', error);
       throw error;
     }
   }
@@ -170,7 +167,6 @@ class EvaluationService {
 
       return result.rows;
     } catch (error) {
-      console.error('Error fetching evaluation summary:', error);
       throw error;
     }
   }

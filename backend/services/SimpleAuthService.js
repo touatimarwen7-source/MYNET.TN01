@@ -19,7 +19,6 @@ class SimpleAuthService {
         return JSON.parse(data);
       }
     } catch (error) {
-      console.error('Erreur lecture utilisateurs:', error);
     }
     return [];
   }

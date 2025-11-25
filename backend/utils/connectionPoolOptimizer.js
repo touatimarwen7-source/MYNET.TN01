@@ -62,11 +62,9 @@ class PoolOptimizer {
     if (!stats) return;
 
     if (stats.utilization > 90) {
-      console.warn('⚠️ Connection pool near capacity:', stats.utilization);
     }
 
     if (stats.waitingQueue > 5) {
-      console.warn('⚠️ Clients waiting for connections:', stats.waitingQueue);
     }
   }
 }

@@ -95,21 +95,17 @@ class DistributedCacheManager {
       
       this.client.on('connect', () => {
         this.connected = true;
-        console.log('✅ Redis connected');
       });
 
       this.client.on('error', (err) => {
-        console.warn('⚠️  Redis error:', err.message);
         this.stats.errors++;
       });
 
       this.client.on('reconnecting', () => {
-        console.log('🔄 Redis reconnecting...');
       });
 
       await this.client.connect();
     } catch (error) {
-      console.warn('⚠️  Redis unavailable, using in-memory cache:', error.message);
       this.stats.connectionFailures++;
       this.connected = false;
     }
@@ -125,7 +121,6 @@ class DistributedCacheManager {
         }
       }
     } catch (error) {
-      console.warn('Redis get error:', error.message);
       this.stats.errors++;
     }
 
@@ -145,7 +140,6 @@ class DistributedCacheManager {
         await this.client.setEx(key, ttl, JSON.stringify(value));
       }
     } catch (error) {
-      console.warn('Redis set error:', error.message);
       this.stats.errors++;
     }
 
@@ -158,7 +152,6 @@ class DistributedCacheManager {
         await this.client.del(key);
       }
     } catch (error) {
-      console.warn('Redis delete error:', error.message);
       this.stats.errors++;
     }
 
@@ -174,7 +167,6 @@ class DistributedCacheManager {
         }
       }
     } catch (error) {
-      console.warn('Redis pattern invalidation error:', error.message);
       this.stats.errors++;
     }
 
@@ -187,7 +179,6 @@ class DistributedCacheManager {
         await this.client.flushDb();
       }
     } catch (error) {
-      console.warn('Redis clear error:', error.message);
       this.stats.errors++;
     }
 

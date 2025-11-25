@@ -62,7 +62,6 @@ class TenderCancellationService {
         cancellationReason,
       };
     } catch (error) {
-      console.error('Error cancelling tender:', error);
       throw error;
     }
   }

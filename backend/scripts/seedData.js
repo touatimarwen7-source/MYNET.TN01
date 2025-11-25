@@ -22,13 +22,11 @@ const testTenders = [
 
 async function seedData() {
   try {
-    console.log('🌱 Starting database seeding...');
     
     await initializeDb();
     const pool = getPool();
     
     // Add test users
-    console.log('👥 Adding test users...');
     for (const user of testUsers) {
       const { hash, salt } = KeyManagementService.hashPassword(user.password);
       
@@ -38,7 +36,6 @@ async function seedData() {
          ON CONFLICT (email) DO NOTHING`,
         [user.username, user.email, hash, salt, user.name, user.role, user.company]
       );
-      console.log(`  ✅ Added ${user.email} (${user.role})`);
     }
     
     // Get buyer user for tender creation
@@ -46,7 +43,6 @@ async function seedData() {
     const buyerId = buyerResult.rows[0]?.id;
     
     if (buyerId) {
-      console.log('📋 Adding test tenders...');
       for (let i = 0; i < testTenders.length; i++) {
         const tender = testTenders[i];
         const tenderNumber = `TEND-${Date.now()}-${i}`;
@@ -57,14 +53,12 @@ async function seedData() {
            ON CONFLICT (tender_number) DO NOTHING`,
           [tenderNumber, tender.title, tender.description, tender.category, tender.budget_min, tender.budget_max, 'TND', 'open', buyerId]
         );
-        console.log(`  ✅ Added tender: ${tender.title}`);
       }
       
       // Add offers for each tender
       const tendersResult = await pool.query('SELECT id FROM tenders LIMIT 5');
       const suppliers = await pool.query('SELECT id FROM users WHERE role = $1 LIMIT 3', ['supplier']);
       
-      console.log('💼 Adding test offers...');
       for (const tender of tendersResult.rows) {
         for (let i = 0; i < 2; i++) {
           const supplier = suppliers.rows[i];
@@ -78,16 +72,13 @@ async function seedData() {
                ON CONFLICT (offer_number) DO NOTHING`,
               [tender.id, supplier.id, offerNumber, totalAmount, 'TND', '30 days', 'Net 30', 'submitted']
             );
-            console.log(`  ✅ Added offer from supplier ${supplier.id}`);
           }
         }
       }
     }
     
-    console.log('✅ Database seeding completed successfully!');
     process.exit(0);
   } catch (error) {
-    console.error('❌ Error seeding database:', error.message);
     process.exit(1);
   }
 }

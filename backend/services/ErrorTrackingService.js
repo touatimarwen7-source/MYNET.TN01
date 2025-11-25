@@ -136,7 +136,6 @@ class ErrorTracker {
       data.push(errorRecord);
       fs.writeFileSync(logFile, JSON.stringify(data, null, 2));
     } catch (e) {
-      console.error('Failed to persist error:', e.message);
     }
   }
 

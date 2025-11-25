@@ -59,7 +59,6 @@ class OpeningReportService {
 
       return report.rows[0];
     } catch (error) {
-      console.error('Error creating opening report:', error);
       throw new Error(`Failed to create opening report: ${error.message}`);
     }
   }
@@ -101,7 +100,6 @@ class OpeningReportService {
 
       return report;
     } catch (error) {
-      console.error('Error fetching opening report:', error);
       throw new Error(`Failed to fetch opening report: ${error.message}`);
     }
   }
@@ -143,7 +141,6 @@ class OpeningReportService {
           : (report.offers_data || [])
       }));
     } catch (error) {
-      console.error('Error fetching opening reports:', error);
       throw new Error(`Failed to fetch opening reports: ${error.message}`);
     }
   }
@@ -197,7 +194,6 @@ class OpeningReportService {
         exportedAt: new Date().toISOString()
       };
     } catch (error) {
-      console.error('Error exporting opening report:', error);
       throw new Error(`Failed to export opening report: ${error.message}`);
     }
   }

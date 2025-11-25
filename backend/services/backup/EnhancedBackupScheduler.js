@@ -44,12 +44,10 @@ class EnhancedBackupScheduler {
    */
   start() {
     if (!this.isEnabled) {
-      console.log('⏸️  Backup scheduler is disabled (BACKUP_ENABLED=false)');
       return;
     }
 
     if (this.isRunning) {
-      console.warn('⚠️  Backup scheduler is already running');
       return;
     }
 
@@ -57,20 +55,13 @@ class EnhancedBackupScheduler {
       this.ensureBackupDir();
       
       const job = schedule.scheduleJob(this.schedulePattern, async () => {
-        console.log('🔄 Scheduled backup started...');
         await this.runBackup();
       });
 
       this.jobs.push(job);
       this.isRunning = true;
 
-      console.log('✅ Backup scheduler started');
-      console.log(`   Schedule: ${this.schedulePattern}`);
-      console.log(`   Retention: ${this.retentionDays} days`);
-      console.log(`   Max backups: ${this.maxBackups}`);
-      console.log(`   Next backup:`, job.nextInvocation());
     } catch (error) {
-      console.error('❌ Failed to start backup scheduler:', error.message);
     }
   }
 
@@ -83,7 +74,6 @@ class EnhancedBackupScheduler {
       const backupName = `backup-${timestamp}.json`;
       const backupPath = path.join(this.backupDir, backupName);
 
-      console.log(`📦 Creating backup: ${backupName}`);
 
       // Run backup
       const result = await BackupService.createBackup(backupPath);
@@ -99,14 +89,10 @@ class EnhancedBackupScheduler {
         };
 
         this.backupHistory.push(backupRecord);
-        console.log(`✅ Backup completed: ${backupName}`);
-        console.log(`   Size: ${(backupRecord.size / 1024).toFixed(2)} KB`);
-        console.log(`   Verified: ${backupRecord.verified ? '✓' : '✗'}`);
 
         // Cleanup old backups
         await this.cleanupOldBackups();
       } else {
-        console.error(`❌ Backup failed: ${result.error}`);
         this.backupHistory.push({
           timestamp: new Date().toISOString(),
           name: backupName,
@@ -115,7 +101,6 @@ class EnhancedBackupScheduler {
         });
       }
     } catch (error) {
-      console.error('❌ Backup error:', error.message);
       this.backupHistory.push({
         timestamp: new Date().toISOString(),
         status: 'error',
@@ -137,7 +122,6 @@ class EnhancedBackupScheduler {
 
       return hasAllFields && Object.keys(data.tables || {}).length > 0;
     } catch (error) {
-      console.error(`Verification failed for ${backupPath}:`, error.message);
       return false;
     }
   }
@@ -163,11 +147,9 @@ class EnhancedBackupScheduler {
         // Remove if exceeds max count or retention days
         if (i >= this.maxBackups || age > retentionMs) {
           fs.unlinkSync(filePath);
-          console.log(`🗑️  Deleted old backup: ${files[i]}`);
         }
       }
     } catch (error) {
-      console.error('Cleanup error:', error.message);
     }
   }
 
@@ -187,7 +169,6 @@ class EnhancedBackupScheduler {
     this.jobs.forEach(job => job.cancel());
     this.jobs = [];
     this.isRunning = false;
-    console.log('⏹️  Backup scheduler stopped');
   }
 
   /**

@@ -400,7 +400,6 @@ const adminErrorHandler = (err, req, res, next) => {
 
   // Log admin errors
   if (req.user?.role === 'super_admin') {
-    console.error('[ADMIN ERROR]', {
       ...errorResponse,
       path: req.path,
       method: req.method,

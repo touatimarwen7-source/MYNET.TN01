@@ -29,9 +29,7 @@ class FeatureFlagService {
                     [flag.name, flag.key, flag.category]
                 );
             }
-            console.log('✅ Feature flags initialized');
         } catch (error) {
-            console.error('Error initializing feature flags:', error.message);
         }
     }
 
@@ -61,7 +59,6 @@ class FeatureFlagService {
 
             return isEnabled;
         } catch (error) {
-            console.error(`Error checking feature flag ${featureKey}:`, error.message);
             return false;
         }
     }
@@ -165,7 +162,6 @@ class FeatureFlagService {
                 [featureId, adminId, action, previousStatus, newStatus, reason]
             );
         } catch (error) {
-            console.error('Error logging feature flag audit:', error.message);
         }
     }
 

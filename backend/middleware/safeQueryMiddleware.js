@@ -33,7 +33,6 @@ async function safeQuery(query, params = []) {
         }
       } catch (releaseErr) {
         // Silently ignore release errors
-        console.debug('Release error (ignored):', releaseErr.message);
       }
     }
   }

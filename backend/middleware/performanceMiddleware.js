@@ -7,7 +7,6 @@ const performanceMiddleware = (req, res, next) => {
     
     // Log slow requests (optional)
     if (duration > 1000) {
-      console.warn(`⏱️  SLOW REQUEST: ${req.method} ${req.path} took ${duration}ms`);
     }
     
     // Track response time

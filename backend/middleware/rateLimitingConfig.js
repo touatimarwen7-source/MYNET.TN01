@@ -21,11 +21,9 @@ try {
     port: process.env.REDIS_PORT || 6379
   });
   redisClient.connect().catch(() => {
-    console.warn('⚠️  Redis unavailable for rate limiting, using memory store');
     redisClient = null;
   });
 } catch (e) {
-  console.warn('⚠️  Redis unavailable for rate limiting, using memory store');
 }
 
 /**

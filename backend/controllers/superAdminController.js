@@ -51,7 +51,6 @@ exports.listPages = async (req, res) => {
       }
     });
   } catch (error) {
-    console.error('Error listing pages:', error);
     return res.status(500).json({ success: false, error: error.message });
   }
 };
@@ -238,7 +237,6 @@ exports.uploadFile = async (req, res) => {
 
     return res.status(201).json({ success: true, data: result.rows[0] });
   } catch (error) {
-    console.error('Upload error:', error);
     return res.status(500).json({ success: false, error: error.message });
   }
 };
@@ -846,7 +844,6 @@ async function logAuditAction(userId, action, description, status, ipAddress = n
       [userId, action, description, status, ipAddress]
     );
   } catch (error) {
-    console.error('Error logging audit:', error);
   }
 }
 

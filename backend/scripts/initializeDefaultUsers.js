@@ -50,7 +50,5 @@ if (!fs.existsSync(usersFile)) {
   }));
   
   fs.writeFileSync(usersFile, JSON.stringify(usersWithHashedPasswords, null, 2));
-  console.log('✅ Utilisateurs par défaut initialisés');
 }
 
-console.log('✅ Système d\'authentification prêt');

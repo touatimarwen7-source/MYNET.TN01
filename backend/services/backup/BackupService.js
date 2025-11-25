@@ -26,7 +26,6 @@ class BackupService {
   ensureBackupDirectory() {
     if (!fs.existsSync(BACKUP_DIR)) {
       fs.mkdirSync(BACKUP_DIR, { recursive: true });
-      console.log('✅ Backup directory created:', BACKUP_DIR);
     }
   }
 
@@ -47,7 +46,6 @@ class BackupService {
       const filename = this.generateBackupFilename();
       const filepath = path.join(BACKUP_DIR, filename);
 
-      console.log('🔄 Starting database backup...');
 
       // Use pg_dump to create backup
       const dumpCommand = `pg_dump "${process.env.DATABASE_URL}" > "${filepath}"`;
@@ -61,7 +59,6 @@ class BackupService {
       const stats = fs.statSync(filepath);
       const backupSize = (stats.size / 1024 / 1024).toFixed(2); // Size in MB
 
-      console.log(`✅ Backup created: ${filename} (${backupSize}MB)`);
 
       // Clean old backups
       await this.cleanOldBackups();
@@ -75,7 +72,6 @@ class BackupService {
         sizeBytes: stats.size
       };
     } catch (error) {
-      console.error('❌ Backup failed:', error.message);
       return {
         success: false,
         error: error.message,
@@ -117,7 +113,6 @@ class BackupService {
         backupDir: BACKUP_DIR
       };
     } catch (error) {
-      console.error('❌ Failed to list backups:', error.message);
       return {
         success: false,
         error: error.message,
@@ -159,7 +154,6 @@ class BackupService {
         size: Buffer.byteLength(content, 'utf8')
       };
     } catch (error) {
-      console.error('❌ Failed to get backup:', error.message);
       return {
         success: false,
         error: error.message
@@ -175,7 +169,6 @@ class BackupService {
     try {
       const filepath = this.getBackupPath(filename);
 
-      console.log('🔄 Starting database restore from:', filename);
 
       // Safety: Ask for confirmation by requiring a flag
       const restoreCommand = `psql "${process.env.DATABASE_URL}" < "${filepath}"`;
@@ -185,7 +178,6 @@ class BackupService {
         maxBuffer: 10 * 1024 * 1024
       });
 
-      console.log(`✅ Database restored from: ${filename}`);
 
       return {
         success: true,
@@ -194,7 +186,6 @@ class BackupService {
         message: 'Database restored successfully'
       };
     } catch (error) {
-      console.error('❌ Restore failed:', error.message);
       return {
         success: false,
         error: error.message,
@@ -219,11 +210,9 @@ class BackupService {
         for (const file of filesToDelete) {
           const filepath = path.join(BACKUP_DIR, file);
           fs.unlinkSync(filepath);
-          console.log(`🗑️  Deleted old backup: ${file}`);
         }
       }
     } catch (error) {
-      console.error('⚠️  Error cleaning old backups:', error.message);
     }
   }
 
@@ -255,7 +244,6 @@ class BackupService {
         }
       };
     } catch (error) {
-      console.error('❌ Failed to get backup stats:', error.message);
       return {
         success: false,
         error: error.message
@@ -306,7 +294,6 @@ class BackupService {
         message: 'Backup file is valid'
       };
     } catch (error) {
-      console.error('❌ Verification failed:', error.message);
       return {
         success: false,
         integrity: 'unknown',

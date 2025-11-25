@@ -22,7 +22,6 @@ class AuditLogService {
                  details.ip_address || null, details.user_agent || null]
             );
         } catch (error) {
-            console.error('Failed to log audit action:', error.message);
         }
     }
 

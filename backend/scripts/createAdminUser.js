@@ -7,7 +7,6 @@ async function createAdminUser() {
   const pool = getPool();
   
   try {
-    console.log('🔐 Création de l\'utilisateur administrateur...');
     
     const adminData = {
       username: 'admin',
@@ -29,7 +28,6 @@ async function createAdminUser() {
     );
     
     if (checkResult.rows.length > 0) {
-      console.log('✅ L\'utilisateur admin existe déjà');
       return;
     }
     
@@ -43,14 +41,9 @@ async function createAdminUser() {
        adminData.phone, adminData.role, adminData.company_name]
     );
     
-    console.log('✅ Utilisateur administrateur créé avec succès!');
-    console.log('📧 Email:', result.rows[0].email);
-    console.log('🔑 Mot de passe:', adminData.password);
-    console.log('👤 Rôle:', result.rows[0].role);
     
     process.exit(0);
   } catch (error) {
-    console.error('❌ Erreur:', error.message);
     process.exit(1);
   }
 }

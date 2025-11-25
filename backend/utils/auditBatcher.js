@@ -69,7 +69,6 @@ class AuditBatcher {
 
       await db.query(query, values);
     } catch (error) {
-      console.error('Audit batch flush error:', error.message);
       this.queue.unshift(...batch); // Re-queue on error
     }
 

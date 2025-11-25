@@ -13,7 +13,6 @@ const config = {
   socket: {
     reconnectStrategy: (retries) => {
       if (retries > 10) {
-        console.error('Max Redis reconnection attempts reached');
         return new Error('Max retries reached');
       }
       return Math.min(retries * 50, 500);

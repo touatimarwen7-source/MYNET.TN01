@@ -148,7 +148,6 @@ function logSensitiveFieldAccess(req, res, next) {
   const accessedSensitive = bodyKeys.filter(key => sensitiveFields.includes(key));
 
   if (accessedSensitive.length > 0) {
-    console.warn('[SENSITIVE FIELD ACCESS]', {
       userId: req.user?.id,
       method: req.method,
       path: req.path,

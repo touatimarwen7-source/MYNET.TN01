@@ -5,7 +5,6 @@ const KeyManagementService = require('../security/KeyManagementService');
 
 async function createSuperAdminUser() {
   try {
-    console.log('🔐 Creating Super Admin user...');
     
     await initializeDb();
     const pool = getPool();
@@ -31,7 +30,6 @@ async function createSuperAdminUser() {
     );
     
     if (checkResult.rows.length > 0) {
-      console.log('✅ Super Admin user already exists');
       process.exit(0);
     }
     
@@ -45,15 +43,9 @@ async function createSuperAdminUser() {
        adminData.phone, adminData.role, adminData.company_name, adminData.company_registration]
     );
     
-    console.log('✅ Super Admin user created successfully!');
-    console.log('📧 Email:', result.rows[0].email);
-    console.log('🔑 Password:', adminData.password);
-    console.log('👤 Role:', result.rows[0].role);
-    console.log('⏰ Created at:', result.rows[0].created_at);
     
     process.exit(0);
   } catch (error) {
-    console.error('❌ Error creating super admin:', error.message);
     process.exit(1);
   }
 }

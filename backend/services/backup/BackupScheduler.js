@@ -29,7 +29,6 @@ class BackupScheduler {
       if (parts.length === 5) {
         return process.env.BACKUP_SCHEDULE;
       }
-      console.warn('⚠️  Invalid BACKUP_SCHEDULE. Using default: 2 AM UTC daily');
     }
     
     return defaultSchedule;
@@ -57,27 +56,18 @@ class BackupScheduler {
   start() {
     try {
       if (!this.isEnabled) {
-        console.log('⏸️  Backups disabled (BACKUP_ENABLED=false)');
         return;
       }
 
       // Schedule backup
       const backupJob = schedule.scheduleJob(this.schedulePattern, async () => {
-        console.log('🔄 Scheduled backup job started');
         await this.performBackup();
       });
 
       this.jobs.push(backupJob);
       this.isRunning = true;
 
-      console.log('✅ Backup scheduler started');
-      console.log(`   Schedule: ${this.getScheduleDescription()}`);
-      console.log(`   Pattern: ${this.schedulePattern}`);
-      console.log('   Next backup:', backupJob.nextInvocation());
-      console.log('   Tip: Set BACKUP_SCHEDULE env var to customize schedule');
-      console.log('   Tip: Set BACKUP_ENABLED=false to disable backups');
     } catch (error) {
-      console.error('❌ Failed to start backup scheduler:', error.message);
     }
   }
 
@@ -86,18 +76,14 @@ class BackupScheduler {
    */
   async performBackup() {
     try {
-      console.log('📦 Performing scheduled backup...');
       const result = await BackupService.createBackup();
 
       if (result.success) {
-        console.log(`✅ Scheduled backup completed: ${result.filename} (${result.size}MB)`);
       } else {
-        console.error(`❌ Scheduled backup failed: ${result.error}`);
       }
 
       return result;
     } catch (error) {
-      console.error('❌ Backup error:', error.message);
       return { success: false, error: error.message };
     }
   }
@@ -109,7 +95,6 @@ class BackupScheduler {
     this.jobs.forEach(job => job.cancel());
     this.jobs = [];
     this.isRunning = false;
-    console.log('🛑 Backup scheduler stopped');
   }
 
   /**

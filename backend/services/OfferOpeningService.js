@@ -74,7 +74,6 @@ class OfferOpeningService {
               was_encrypted: true,
             };
           } catch (err) {
-            console.error(`Decryption failed for offer ${offer.id}:`, err);
             return { ...offer, decryption_failed: true };
           }
         }
@@ -92,7 +91,6 @@ class OfferOpeningService {
 
       return decryptedOffers;
     } catch (error) {
-      console.error('Error getting offers for opening:', error);
       throw error;
     }
   }
@@ -136,7 +134,6 @@ class OfferOpeningService {
 
       return reportResult.rows[0];
     } catch (error) {
-      console.error('Error generating opening report:', error);
       throw error;
     }
   }
@@ -155,7 +152,6 @@ class OfferOpeningService {
 
       return result.rows[0] || null;
     } catch (error) {
-      console.error('Error fetching opening report:', error);
       throw error;
     }
   }

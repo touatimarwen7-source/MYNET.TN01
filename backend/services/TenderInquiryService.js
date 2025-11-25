@@ -25,7 +25,6 @@ class TenderInquiryService {
       await AuditLogService.log(supplierId, 'inquiry', result.rows[0].id, 'submit', `Inquiry submitted for tender ${tenderId}`);
       return result.rows[0];
     } catch (error) {
-      console.error('Error submitting inquiry:', error);
       throw new Error(`Failed to submit inquiry: ${error.message}`);
     }
   }
@@ -50,7 +49,6 @@ class TenderInquiryService {
 
       return result.rows;
     } catch (error) {
-      console.error('Error fetching inquiries:', error);
       throw new Error(`Failed to fetch inquiries: ${error.message}`);
     }
   }
@@ -91,7 +89,6 @@ class TenderInquiryService {
       await AuditLogService.log(userId, 'inquiry_response', result.rows[0].id, 'create', `Response provided for inquiry`);
       return result.rows[0];
     } catch (error) {
-      console.error('Error responding to inquiry:', error);
       throw new Error(`Failed to respond to inquiry: ${error.message}`);
     }
   }
@@ -114,7 +111,6 @@ class TenderInquiryService {
 
       return result.rows;
     } catch (error) {
-      console.error('Error fetching inquiry responses:', error);
       throw new Error(`Failed to fetch responses: ${error.message}`);
     }
   }
@@ -139,7 +135,6 @@ class TenderInquiryService {
 
       return result.rows;
     } catch (error) {
-      console.error('Error fetching my inquiries:', error);
       throw new Error(`Failed to fetch inquiries: ${error.message}`);
     }
   }

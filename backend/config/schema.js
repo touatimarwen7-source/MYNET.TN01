@@ -525,16 +525,12 @@ const schemaQueries = [
 ];
 
 async function initializeSchema(pool) {
-    console.log('--- Initializing Database Schema ---');
     try {
         for (const query of schemaQueries) {
             await pool.query(query);
         }
-        console.log('✅ SCHEMA: All tables created or verified successfully.');
         return true;
     } catch (error) {
-        console.error('❌ SCHEMA ERROR: Failed to create one or more tables.');
-        console.error('Error Details:', error.message);
         return false;
     }
 }

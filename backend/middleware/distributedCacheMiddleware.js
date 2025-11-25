@@ -112,7 +112,6 @@ const distributedCacheMiddleware = (req, res, next) => {
 
       next();
     } catch (error) {
-      console.warn('Cache middleware error:', error.message);
       next();
     }
   })();

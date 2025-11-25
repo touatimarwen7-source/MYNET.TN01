@@ -97,7 +97,6 @@ class NotificationService {
             
             return { success: true, notified: notifiedCount, total_suppliers: suppliers.rows.length };
         } catch (error) {
-            console.error('Failed to notify suppliers:', error.message);
             return { success: false, error: error.message };
         }
     }
@@ -139,7 +138,6 @@ class NotificationService {
             
             return { success: true };
         } catch (error) {
-            console.error('Failed to notify buyer:', error.message);
         }
     }
 
@@ -156,7 +154,6 @@ class NotificationService {
             
             return { success: true };
         } catch (error) {
-            console.error('Failed to notify supplier:', error.message);
         }
     }
 }

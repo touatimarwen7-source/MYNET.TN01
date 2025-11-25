@@ -40,7 +40,6 @@ async function withTransaction(callback) {
     try {
       await client.query('ROLLBACK');
     } catch (rollbackErr) {
-      console.error('⚠️ Rollback error:', rollbackErr.message);
     }
     throw error;
   } finally {
@@ -50,7 +49,6 @@ async function withTransaction(callback) {
         isReleased = true;
         client.release();
       } catch (releaseErr) {
-        console.error('⚠️ Failed to release connection in transaction:', releaseErr.message);
         // Continue anyway - connection will be garbage collected
       }
     }

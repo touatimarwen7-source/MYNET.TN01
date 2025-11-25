@@ -9,7 +9,6 @@ async function getOpeningReport(req, res) {
     }
     res.status(200).json({ success: true, report });
   } catch (error) {
-    console.error('Error fetching opening report:', error);
     res.status(500).json({ success: false, error: error.message });
   }
 }
@@ -19,7 +18,6 @@ async function getBuyerOpeningReports(req, res) {
     const reports = await OpeningReportService.getOpeningReportsByBuyer(req.user.userId);
     res.status(200).json({ success: true, count: reports.length, reports });
   } catch (error) {
-    console.error('Error fetching buyer opening reports:', error);
     res.status(500).json({ success: false, error: error.message });
   }
 }
@@ -38,7 +36,6 @@ async function exportOpeningReport(req, res) {
     }
     res.status(200).json(result);
   } catch (error) {
-    console.error('Error exporting opening report:', error);
     res.status(500).json({ success: false, error: error.message });
   }
 }

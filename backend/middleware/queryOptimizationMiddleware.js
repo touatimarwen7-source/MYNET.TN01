@@ -17,12 +17,10 @@ class QueryOptimizationMiddleware {
 
         // Log slow queries
         if (duration > SLOW_QUERY_THRESHOLD) {
-          console.warn(`⚠️ SLOW QUERY: ${req.method} ${req.path} took ${duration}ms`);
           res.set('X-Query-Time', `${duration}ms`);
           
           // Add optimization hint
           if (duration > 1000) {
-            console.warn(`💡 Consider:
               - Adding pagination (page, limit params)
               - Using specific columns (not *)
               - Adding database indexes

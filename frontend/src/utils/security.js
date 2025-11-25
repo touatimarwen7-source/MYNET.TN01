@@ -40,7 +40,6 @@ export function setupInactivityTimer(timeout = 3 * 60 * 60 * 1000) {
   const resetTimer = () => {
     clearTimeout(inactivityTimer);
     inactivityTimer = setTimeout(() => {
-      console.warn('[Security] Session timeout - logging out user due to inactivity');
       TokenManager.clearTokens();
       window.location.replace('/login');
     }, timeout);

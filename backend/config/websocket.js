@@ -85,7 +85,6 @@ const initializeWebSocket = (server) => {
           status: data.status,
           timestamp: new Date()
         });
-        console.log(`[WebSocket] 📦 Offer ${data.offerId} status changed to ${data.status}`);
       }
     });
 
@@ -97,7 +96,6 @@ const initializeWebSocket = (server) => {
     socket.on('tender-status-changed', (data) => {
       if (data.tenderId) {
         eventsManager.emitTenderStatusChanged(data.tenderId, data.status, data.changedBy);
-        console.log(`[WebSocket] 🎯 Tender ${data.tenderId} status changed to ${data.status}`);
       }
     });
 
@@ -107,7 +105,6 @@ const initializeWebSocket = (server) => {
     socket.on('tender-updated', (data) => {
       if (data.tenderId) {
         eventsManager.emitTenderUpdated(data.tenderId, data);
-        console.log(`[WebSocket] 🎯 Tender ${data.tenderId} updated: ${data.field}`);
       }
     });
 
@@ -119,7 +116,6 @@ const initializeWebSocket = (server) => {
     socket.on('new-message', (data) => {
       if (data.recipientId) {
         eventsManager.emitNewMessage(data.recipientId, data);
-        console.log(`[WebSocket] 💬 Message from ${data.senderId} to ${data.recipientId}`);
       }
     });
 
@@ -157,7 +153,6 @@ const initializeWebSocket = (server) => {
     socket.on('new-rating', (data) => {
       if (data.supplierId) {
         eventsManager.emitRatingReceived(data.supplierId, data);
-        console.log(`[WebSocket] ⭐ New rating for supplier ${data.supplierId}`);
       }
     });
 
@@ -173,7 +168,6 @@ const initializeWebSocket = (server) => {
           content: data.content,
           timestamp: new Date()
         });
-        console.log(`[WebSocket] ✍️  New review for supplier ${data.supplierId}`);
       }
     });
 

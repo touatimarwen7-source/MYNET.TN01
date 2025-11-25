@@ -48,7 +48,6 @@ class PDFService {
             const qrCode = await QRCode.toDataURL(url, { width: size });
             pdf.image(qrCode, x, y, { width: size, height: size });
         } catch (error) {
-            console.error('Error generating QR code:', error.message);
         }
     }
 

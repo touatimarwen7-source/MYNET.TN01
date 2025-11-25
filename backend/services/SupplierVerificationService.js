@@ -4,7 +4,16 @@ const AuditLogService = require('./AuditLogService');
 
 class SupplierVerificationService {
     /**
-     * Submit verification request
+     * Submit supplier verification request with documents
+     * Creates new or updates existing verification request
+     * @async
+     * @param {string} userId - ID of supplier submitting verification
+     * @param {Object} verificationData - Verification documents and details
+     * @param {string} verificationData.company_registration - Company registration number
+     * @param {string} [verificationData.tax_id] - Tax ID number
+     * @param {Array} [verificationData.documents] - Array of verification documents
+     * @returns {Promise<Object>} Created/updated verification record
+     * @throws {Error} When submission fails
      */
     async submitVerificationRequest(userId, verificationData) {
         const pool = getPool();
@@ -45,7 +54,14 @@ class SupplierVerificationService {
     }
 
     /**
-     * Verify supplier (Admin only)
+     * Verify supplier (Admin only) - Approve or reject verification
+     * @async
+     * @param {string} verificationId - ID of verification request
+     * @param {string} adminId - ID of admin performing verification
+     * @param {boolean} approved - Whether to approve (true) or reject (false)
+     * @param {string} [notes=''] - Admin notes about decision
+     * @returns {Promise<Object>} Updated verification record
+     * @throws {Error} When verification not found or update fails
      */
     async verifySupplier(verificationId, adminId, approved, notes = '') {
         const pool = getPool();
@@ -69,7 +85,7 @@ class SupplierVerificationService {
                 throw new Error('Verification request not found');
             }
 
-            // Update user verification status
+            // Update user verification status if approved
             if (approved) {
                 await pool.query(
                     'UPDATE users SET is_verified = TRUE WHERE id = $1',
@@ -92,7 +108,11 @@ class SupplierVerificationService {
     }
 
     /**
-     * Get verification status
+     * Get verification status for a supplier
+     * @async
+     * @param {string} userId - ID of supplier
+     * @returns {Promise<Object|null>} Verification record with user and admin details or null
+     * @throws {Error} When database query fails
      */
     async getVerificationStatus(userId) {
         const pool = getPool();
@@ -115,7 +135,10 @@ class SupplierVerificationService {
     }
 
     /**
-     * Get pending verifications (Admin only)
+     * Get all pending verification requests (Admin only)
+     * @async
+     * @returns {Promise<Array>} Array of pending verification records with user contact info
+     * @throws {Error} When database query fails
      */
     async getPendingVerifications() {
         const pool = getPool();

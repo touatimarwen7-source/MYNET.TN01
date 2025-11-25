@@ -2,10 +2,34 @@
 const { getPool } = require('../config/db');
 
 class AuditLogService {
+    /**
+     * Log an action to audit trail (wrapper for logAction)
+     * @async
+     * @param {string} userId - ID of user performing action
+     * @param {string} entityType - Type of entity (tender, offer, user, etc)
+     * @param {string} entityId - ID of entity affected
+     * @param {string} action - Action performed (create, update, delete, etc)
+     * @param {string} message - Human-readable description of action
+     * @param {Object} [details={}] - Additional context details
+     * @returns {Promise<void>}
+     */
     async log(userId, entityType, entityId, action, message, details = {}) {
         return this.logAction(userId, action, entityType, entityId, { ...details, message });
     }
 
+    /**
+     * Log action to audit table with full context
+     * @async
+     * @param {string} userId - ID of user performing action (can be null for system actions)
+     * @param {string} action - Action type (create, update, delete, approve, etc)
+     * @param {string} entityType - Type of entity affected
+     * @param {string} entityId - ID of entity affected (can be null for bulk actions)
+     * @param {Object} [details={}] - Additional context including IP and user agent
+     * @param {string} [details.message] - Action message
+     * @param {string} [details.ip_address] - Client IP address
+     * @param {string} [details.user_agent] - Client user agent
+     * @returns {Promise<void>}
+     */
     async logAction(userId, action, entityType, entityId, details = {}) {
         const pool = getPool();
         
@@ -22,9 +46,22 @@ class AuditLogService {
                  details.ip_address || null, details.user_agent || null]
             );
         } catch (error) {
+            // Audit logging error - continue without failing main operation
         }
     }
 
+    /**
+     * Retrieve audit logs with flexible filtering
+     * Returns up to 100 most recent records
+     * @async
+     * @param {Object} [filters={}] - Filter options
+     * @param {string} [filters.user_id] - Filter by user ID
+     * @param {string} [filters.entity_type] - Filter by entity type (tender, offer, user, etc)
+     * @param {string} [filters.entity_id] - Filter by specific entity ID
+     * @param {string} [filters.action] - Filter by action type
+     * @returns {Promise<Array>} Array of audit log records with user details
+     * @throws {Error} When database query fails
+     */
     async getAuditLogs(filters = {}) {
         const pool = getPool();
         let query = `SELECT al.*, u.username, u.full_name 

@@ -4,6 +4,16 @@ const AuditLogService = require('./AuditLogService');
 const { logger } = require('../utils/logger');
 
 class AwardNotificationService {
+  /**
+   * Select winners for tender and send notifications to all participants
+   * Validates partial award constraints before updating
+   * @async
+   * @param {string} tenderId - ID of tender to award
+   * @param {Array} winnersIds - Array of winning offer IDs
+   * @param {string} buyerId - ID of buyer (for authorization)
+   * @returns {Promise<Object>} Result with counts of winners and notifications
+   * @throws {Error} When tender not found, constraints violated, or operation fails
+   */
   static async selectWinnersAndNotify(tenderId, winnersIds, buyerId) {
     const pool = getPool();
     try {
@@ -67,13 +77,20 @@ class AwardNotificationService {
         success: true, 
         winnersCount: winnersIds.length, 
         notificationsCount: participants.length,
-        message: `${winnersIds.length} fائز(ين) اختيار وإشعارات أرسلت`
+        message: `${winnersIds.length} فائز(ين) اختيار وإشعارات أرسلت`
       };
     } catch (error) {
       throw error;
     }
   }
 
+  /**
+   * Get award status and ranking for all offers in a tender
+   * @async
+   * @param {string} tenderId - ID of tender to get award status for
+   * @returns {Promise<Array>} Array of offers with status, ranking, and company names
+   * @throws {Error} When database query fails
+   */
   static async getAwardStatus(tenderId) {
     const pool = getPool();
     const result = await pool.query(

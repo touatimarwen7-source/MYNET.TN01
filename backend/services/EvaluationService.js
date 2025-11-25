@@ -8,7 +8,14 @@ const AuditLogService = require('./AuditLogService');
 
 class EvaluationService {
   /**
-   * Record technical evaluation for an offer
+   * Record technical evaluation score for an offer
+   * @async
+   * @param {string} offerId - ID of offer to evaluate
+   * @param {number} technicalScore - Technical score (0-100)
+   * @param {string} comments - Evaluation comments
+   * @param {string} evaluatorId - ID of evaluator
+   * @returns {Promise<Object>} Updated offer record with technical score
+   * @throws {Error} When score invalid or offer not found
    */
   static async recordTechnicalEvaluation(offerId, technicalScore, comments, evaluatorId) {
     const pool = getPool();
@@ -46,7 +53,14 @@ class EvaluationService {
   }
 
   /**
-   * Record financial evaluation
+   * Record financial evaluation score for an offer
+   * @async
+   * @param {string} offerId - ID of offer to evaluate
+   * @param {number} financialScore - Financial score (0-100)
+   * @param {string} comments - Evaluation comments
+   * @param {string} evaluatorId - ID of evaluator
+   * @returns {Promise<Object>} Updated offer record with financial score
+   * @throws {Error} When score invalid or update fails
    */
   static async recordFinancialEvaluation(offerId, financialScore, comments, evaluatorId) {
     const pool = getPool();
@@ -79,8 +93,14 @@ class EvaluationService {
   }
 
   /**
-   * Calculate final score using formula: (technical + financial) / 2
-   * Note: This is advisory only, buyer decision is final
+   * Calculate final evaluation scores for all tender offers
+   * Final score = (technical + financial) / 2
+   * NOTE: This is advisory only, buyer decision is final
+   * @async
+   * @param {string} tenderId - ID of tender
+   * @param {string} buyerId - ID of buyer (for audit)
+   * @returns {Promise<Array>} Array of offers with calculated final scores and rankings
+   * @throws {Error} When database query fails
    */
   static async calculateFinalScores(tenderId, buyerId) {
     const pool = getPool();
@@ -141,7 +161,11 @@ class EvaluationService {
   }
 
   /**
-   * Get evaluation summary for tender
+   * Get evaluation summary for a tender with all scores and rankings
+   * @async
+   * @param {string} tenderId - ID of tender
+   * @returns {Promise<Array>} Array of evaluated offers with complete scoring details
+   * @throws {Error} When database query fails
    */
   static async getEvaluationSummary(tenderId) {
     const pool = getPool();

@@ -7,7 +7,19 @@ const DataMapper = require('../helpers/DataMapper');
 
 class ChatService {
     /**
-     * Send message between buyer and supplier
+     * Send message between buyer and supplier with access verification
+     * @async
+     * @param {Object} messageData - Message content and metadata
+     * @param {string} messageData.related_entity_type - Entity type (tender, purchase_order, invoice)
+     * @param {string} messageData.related_entity_id - ID of related entity
+     * @param {string} messageData.receiver_id - ID of message recipient
+     * @param {string} messageData.subject - Message subject
+     * @param {string} messageData.content - Message body content
+     * @param {Array} [messageData.attachments] - Optional attachments array
+     * @param {string} [messageData.parent_message_id] - Optional parent message ID for threads
+     * @param {string} userId - ID of message sender
+     * @returns {Promise<Object>} Created message record
+     * @throws {Error} When unauthorized or message creation fails
      */
     async sendMessage(messageData, userId) {
         const pool = getPool();
@@ -48,14 +60,14 @@ class ChatService {
             );
             
             // Send notification to receiver
-            await NotificationService.createNotification({
-                user_id: message.receiver_id,
-                type: 'new_message',
-                title: `New message: ${message.subject}`,
-                message: message.content.substring(0, 100),
-                related_entity_type: 'message',
-                related_entity_id: result.rows[0].id
-            });
+            await NotificationService.createNotification(
+                message.receiver_id,
+                'new_message',
+                `New message: ${message.subject}`,
+                message.content.substring(0, 100),
+                'message',
+                result.rows[0].id
+            );
             
             await AuditLogService.log(userId, 'message', result.rows[0].id, 'create', 
                 `Sent message regarding ${messageData.related_entity_type}`);
@@ -71,7 +83,15 @@ class ChatService {
     }
 
     /**
-     * Verify user has access to entity
+     * Verify user has access to entity for messaging
+     * Checks permissions for tender (buyer only), purchase_order, and invoice (buyer/supplier)
+     * @private
+     * @async
+     * @param {Object} client - Database client connection
+     * @param {string} entityType - Type of entity (tender, purchase_order, invoice)
+     * @param {string} entityId - ID of entity
+     * @param {string} userId - ID of user to verify access for
+     * @returns {Promise<boolean>} True if user has access to entity
      */
     async verifyEntityAccess(client, entityType, entityId, userId) {
         let query;
@@ -95,7 +115,14 @@ class ChatService {
     }
 
     /**
-     * Get conversation for an entity
+     * Get all messages in conversation for an entity
+     * Returns full thread with sender/receiver details
+     * @async
+     * @param {string} entityType - Type of related entity
+     * @param {string} entityId - ID of related entity
+     * @param {string} userId - ID of user (to filter visible messages)
+     * @returns {Promise<Array>} Array of message records in chronological order
+     * @throws {Error} When database query fails
      */
     async getConversation(entityType, entityId, userId) {
         const pool = getPool();
@@ -121,7 +148,12 @@ class ChatService {
     }
 
     /**
-     * Mark messages as read
+     * Mark messages as read for a user
+     * @async
+     * @param {Array} messageIds - Array of message IDs to mark as read
+     * @param {string} userId - ID of user (must be receiver)
+     * @returns {Promise<Object>} Success status
+     * @throws {Error} When update fails
      */
     async markAsRead(messageIds, userId) {
         const pool = getPool();

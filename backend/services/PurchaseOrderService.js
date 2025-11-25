@@ -5,17 +5,30 @@ const crypto = require('crypto');
 const DataMapper = require('../helpers/DataMapper');
 
 class PurchaseOrderService {
+    /**
+     * Generate unique purchase order number using timestamp and random hex
+     * @private
+     * @returns {string} Generated PO number (format: PO-YYYYMMDD-RANDOMHEX)
+     */
     generatePONumber() {
         const timestamp = new Date().toISOString().split('T')[0].replace(/-/g, '');
         const randomPart = crypto.randomBytes(4).toString('hex').toUpperCase();
         return `PO-${timestamp}-${randomPart}`;
     }
 
+    /**
+     * Create purchase order from a winning offer
+     * @async
+     * @param {string} offerId - ID of winning offer
+     * @param {string} userId - ID of user creating PO (buyer)
+     * @returns {Promise<Object>} Created purchase order record
+     * @throws {Error} When offer not found or not winner
+     */
     async createPurchaseOrder(offerId, userId) {
         const pool = getPool();
         
         try {
-            // الحصول على بيانات العرض والمناقصة
+            // Get offer and tender data
             const offerResult = await pool.query(
                 `SELECT o.*, t.buyer_id, t.title as tender_title 
                  FROM offers o 
@@ -47,6 +60,13 @@ class PurchaseOrderService {
         }
     }
 
+    /**
+     * Get purchase order by ID with related details
+     * @async
+     * @param {string} poId - ID of purchase order
+     * @returns {Promise<Object|null>} Purchase order record with tender and supplier info or null
+     * @throws {Error} When database query fails
+     */
     async getPurchaseOrderById(poId) {
         const pool = getPool();
         
@@ -67,6 +87,15 @@ class PurchaseOrderService {
         }
     }
 
+    /**
+     * Update purchase order status to one of valid states
+     * @async
+     * @param {string} poId - ID of purchase order to update
+     * @param {string} status - New status (pending, approved, in_progress, completed, cancelled)
+     * @param {string} userId - ID of user performing update
+     * @returns {Promise<Object>} Updated purchase order record
+     * @throws {Error} When invalid status or update fails
+     */
     async updatePOStatus(poId, status, userId) {
         const pool = getPool();
         
@@ -89,6 +118,13 @@ class PurchaseOrderService {
         }
     }
 
+    /**
+     * Get all purchase orders for a buyer
+     * @async
+     * @param {string} buyerId - ID of buyer
+     * @returns {Promise<Array>} Array of purchase orders with tender and supplier details
+     * @throws {Error} When database query fails
+     */
     async getPurchaseOrdersByBuyer(buyerId) {
         const pool = getPool();
         
@@ -110,6 +146,13 @@ class PurchaseOrderService {
         }
     }
 
+    /**
+     * Get all purchase orders for a supplier
+     * @async
+     * @param {string} supplierId - ID of supplier
+     * @returns {Promise<Array>} Array of purchase orders with tender details
+     * @throws {Error} When database query fails
+     */
     async getPurchaseOrdersBySupplier(supplierId) {
         const pool = getPool();
         

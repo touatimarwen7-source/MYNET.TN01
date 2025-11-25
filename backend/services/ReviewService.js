@@ -3,6 +3,20 @@ const AuditLogService = require('./AuditLogService');
 const DataMapper = require('../helpers/DataMapper');
 
 class ReviewService {
+    /**
+     * Create supplier review after purchase order completion
+     * @async
+     * @param {Object} reviewData - Review content and metadata
+     * @param {string} reviewData.offer_id - ID of related offer
+     * @param {string} reviewData.supplier_id - ID of supplier being reviewed
+     * @param {number} reviewData.rating - Rating score (1-5)
+     * @param {string} reviewData.comment - Review comment
+     * @param {string} reviewData.po_id - ID of completed purchase order
+     * @param {string} buyerId - ID of reviewer (buyer)
+     * @param {string} ipAddress - IP address of reviewer
+     * @returns {Promise<Object>} Created review record
+     * @throws {Error} When invalid rating, PO not found, or review fails
+     */
     async createReview(reviewData, buyerId, ipAddress) {
         const pool = getPool();
         
@@ -15,7 +29,7 @@ class ReviewService {
         }
 
         try {
-            // تحقق من أن PO قد انتهى
+            // Verify PO has completed
             const poResult = await pool.query(
                 'SELECT status FROM purchase_orders WHERE id = $1 AND supplier_id = $2',
                 [po_id, supplier_id]
@@ -46,6 +60,13 @@ class ReviewService {
         }
     }
 
+    /**
+     * Get all verified reviews for a supplier with average rating
+     * @async
+     * @param {string} supplierId - ID of supplier
+     * @returns {Promise<Object>} Object with average_rating, total_reviews, and reviews array
+     * @throws {Error} When database query fails
+     */
     async getSupplierReviews(supplierId) {
         const pool = getPool();
 
@@ -75,6 +96,14 @@ class ReviewService {
         }
     }
 
+    /**
+     * Update average rating for supplier in users table
+     * Recalculates from all verified reviews
+     * @async
+     * @param {string} supplierId - ID of supplier to update
+     * @returns {Promise<number>} New average rating
+     * @throws {Error} When database query fails
+     */
     async updateSupplierAverageRating(supplierId) {
         const pool = getPool();
 

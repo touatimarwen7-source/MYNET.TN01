@@ -9,7 +9,14 @@ class HealthMonitoringService {
     };
   }
 
-  // تسجيل طلب API
+  /**
+   * Record API request metrics including latency and response code
+   * @param {string} method - HTTP method (GET, POST, etc)
+   * @param {string} path - API endpoint path
+   * @param {number} statusCode - HTTP response status code
+   * @param {number} latency - Request latency in milliseconds
+   * @returns {void}
+   */
   recordRequest(method, path, statusCode, latency) {
     const record = {
       timestamp: new Date(),
@@ -23,13 +30,23 @@ class HealthMonitoringService {
     if (statusCode >= 400) this.metrics.errors.push(record);
     this.metrics.latencies.push(latency);
     
-    // الاحتفاظ بـ 1000 سجل فقط
+    // Keep only 1000 most recent records
     if (this.metrics.requests.length > 1000) {
       this.metrics.requests.shift();
     }
   }
 
-  // الحصول على إحصائيات الصحة
+  /**
+   * Get health statistics for last hour
+   * Calculates success rate, average latency, and overall status
+   * @returns {Object} Health metrics object
+   * @returns {string} result.status - Health status (healthy, degraded, critical)
+   * @returns {number} result.successRate - Success rate percentage (0-100)
+   * @returns {number} result.avgLatency - Average latency in milliseconds
+   * @returns {number} result.totalRequests - Total requests in last hour
+   * @returns {number} result.totalErrors - Total errors in last hour
+   * @returns {Date} result.timestamp - Timestamp of health check
+   */
   getHealthStats() {
     const now = new Date();
     const oneHourAgo = new Date(now - 60 * 60 * 1000);
@@ -55,7 +72,10 @@ class HealthMonitoringService {
     };
   }
 
-  // إحصائيات حسب المسار
+  /**
+   * Get performance metrics broken down by API path
+   * @returns {Array} Array of path metrics with call counts and success rates
+   */
   getPathStats() {
     const pathMetrics = {};
     
@@ -82,7 +102,11 @@ class HealthMonitoringService {
     }));
   }
 
-  // التحقق من المسارات الحرجة
+  /**
+   * Check critical API paths for performance issues
+   * Alerts if latency > 1000ms or success rate < 95%
+   * @returns {Array} Array of alerts for critical issues
+   */
   checkCriticalPaths() {
     const criticalPaths = [
       '/api/auth/login',

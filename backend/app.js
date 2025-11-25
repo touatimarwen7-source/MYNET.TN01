@@ -48,6 +48,8 @@ try {
 const loggingMiddleware = require('./middleware/loggingMiddleware');
 const { requestLoggingMiddleware, errorLoggingMiddleware } = require('./middleware/requestLoggingMiddleware');
 const { securityHeadersMiddleware, corsMiddleware } = require('./middleware/corsSecurityMiddleware');
+const { inputSanitizationMiddleware } = require('./middleware/inputSanitizationMiddleware');
+const { ddosProtectionMiddleware, authLimiter, uploadLimiter } = require('./middleware/ddosProtectionMiddleware');
 const ErrorHandler = require('./middleware/errorHandler');
 const requestIdMiddleware = require('./middleware/requestIdMiddleware');
 const performanceMiddleware = require('./middleware/performanceMiddleware');
@@ -74,6 +76,12 @@ app.use(corsMiddleware);
 app.use(express.json({ limit: '1mb' }));
 app.use(express.urlencoded({ extended: true, limit: '1mb' }));
 
+// Input sanitization middleware (XSS prevention)
+app.use(inputSanitizationMiddleware);
+
+// DDoS protection middleware (early in chain)
+app.use(ddosProtectionMiddleware);
+
 // Enhanced security headers middleware
 app.use(securityHeadersMiddleware);
 
@@ -85,9 +93,9 @@ const enhancedRateLimiting = require('./middleware/enhancedRateLimiting');
 
 // Apply enhanced rate limiting
 app.use('/api/', enhancedRateLimiting.general);
-app.post('/api/auth/login', enhancedRateLimiting.login);
-app.post('/api/auth/register', enhancedRateLimiting.register);
-app.post('/api/auth/password-reset', enhancedRateLimiting.passwordReset);
+app.post('/api/auth/login', authLimiter, enhancedRateLimiting.login);
+app.post('/api/auth/register', authLimiter, enhancedRateLimiting.register);
+app.post('/api/auth/password-reset', authLimiter, enhancedRateLimiting.passwordReset);
 app.post('/api/procurement/tenders', enhancedRateLimiting.tenderCreation);
 app.post('/api/procurement/offers', enhancedRateLimiting.offerSubmission);
 app.post('/api/messaging', enhancedRateLimiting.messageSending);

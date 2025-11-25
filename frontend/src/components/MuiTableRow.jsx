@@ -3,6 +3,7 @@
    Unified Table Row Usage - No Custom Styling
    ================================================ */
 
+import { THEME_COLORS } from './themeHelpers';
 import { TableRow, TableCell } from '@mui/material';
 
 export default function MuiTableRow({ data, cells, onClick }) {

@@ -1,4 +1,5 @@
 import { Box, Paper, Table, TableHead, TableBody, TableRow, TableCell, TextField, Button } from '@mui/material';
+import { THEME_COLORS } from './themeHelpers';
 import institutionalTheme from '../theme/theme';
 
 export default function CreateOfferLineItems({ items, onLineItemChange, onOpenCatalog, isDeadlinePassed, getTotalBidAmount }) {
@@ -7,7 +8,7 @@ export default function CreateOfferLineItems({ items, onLineItemChange, onOpenCa
     <Box>
       <Paper sx={{ overflow: 'hidden' }}>
         <Table>
-          <TableHead sx={{ backgroundColor: '#f5f5f5' }}>
+          <TableHead sx={{ backgroundColor: 'THEME_COLORS.bgDefault' }}>
             <TableRow>
               <TableCell sx={{ fontWeight: 600, color: theme.palette.primary.main }}>Description</TableCell>
               <TableCell sx={{ fontWeight: 600, color: theme.palette.primary.main }} align="right">Qty</TableCell>
@@ -37,7 +38,7 @@ export default function CreateOfferLineItems({ items, onLineItemChange, onOpenCa
           </TableBody>
         </Table>
       </Paper>
-      <Box sx={{ padding: '16px', backgroundColor: '#f5f5f5', marginTop: '16px', borderRadius: '4px' }}>
+      <Box sx={{ padding: '16px', backgroundColor: 'THEME_COLORS.bgDefault', marginTop: '16px', borderRadius: '4px' }}>
         <span style={{ fontSize: '16px', fontWeight: 600, color: theme.palette.primary.main }}>
           Total: {getTotalBidAmount()} TND
         </span>

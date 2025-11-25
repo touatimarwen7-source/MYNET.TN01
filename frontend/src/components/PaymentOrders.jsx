@@ -1,3 +1,4 @@
+import { THEME_COLORS } from './themeHelpers';
 import { useState, useEffect } from 'react';
 import institutionalTheme from '../theme/theme';
 import { Box, Container, Typography, Stack, Card, CardContent, Button, Chip } from '@mui/material';
@@ -72,24 +73,24 @@ export default function PaymentOrders() {
       </Stack>
 
       {filteredOrders.length === 0 ? (
-        <Card sx={{ backgroundColor: '#FFFFFF', border: '1px solid #E0E0E0', borderRadius: '4px' }}>
+        <Card sx={{ backgroundColor: THEME_COLORS.bgPaper, border: '1px solid #E0E0E0', borderRadius: '4px' }}>
           <CardContent sx={{ textAlign: 'center', padding: '48px' }}>
             <Typography sx={{ fontSize: '24px', marginBottom: '12px' }}>📋</Typography>
-            <Typography sx={{ color: '#616161' }}>Aucun ordre de paiement</Typography>
+            <Typography sx={{ color: THEME_COLORS.textSecondary }}>Aucun ordre de paiement</Typography>
             <Typography sx={{ fontSize: '13px', color: '#9e9e9e' }}>Les ordres apparaîtront ici lors de leur création</Typography>
           </CardContent>
         </Card>
       ) : (
         <Stack spacing={2}>
           {filteredOrders.map(order => (
-            <Card key={order.id} sx={{ backgroundColor: '#FFFFFF', border: '1px solid #E0E0E0', borderRadius: '4px' }}>
+            <Card key={order.id} sx={{ backgroundColor: THEME_COLORS.bgPaper, border: '1px solid #E0E0E0', borderRadius: '4px' }}>
               <CardContent sx={{ padding: '24px' }}>
                 <Stack direction={{ xs: 'column', md: 'row' }} justifyContent="space-between" sx={{ marginBottom: '16px' }}>
                   <Box>
                     <Typography sx={{ fontWeight: 600, fontSize: '16px', color: theme.palette.text.primary }}>
                       {order.po_number || 'Numéro non défini'}
                     </Typography>
-                    <Typography sx={{ fontSize: '13px', color: '#616161' }}>
+                    <Typography sx={{ fontSize: '13px', color: THEME_COLORS.textSecondary }}>
                       {order.tender_title || 'Appel d\'offres'}
                     </Typography>
                   </Box>
@@ -107,25 +108,25 @@ export default function PaymentOrders() {
 
                 <Stack spacing={1} sx={{ marginBottom: '16px' }}>
                   <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <Typography sx={{ fontSize: '13px', color: '#616161' }}>Fournisseur:</Typography>
+                    <Typography sx={{ fontSize: '13px', color: THEME_COLORS.textSecondary }}>Fournisseur:</Typography>
                     <Typography sx={{ fontSize: '13px', fontWeight: 500, color: theme.palette.text.primary }}>
                       {order.supplier_name || 'Non défini'}
                     </Typography>
                   </Box>
                   <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <Typography sx={{ fontSize: '13px', color: '#616161' }}>Montant Total:</Typography>
+                    <Typography sx={{ fontSize: '13px', color: THEME_COLORS.textSecondary }}>Montant Total:</Typography>
                     <Typography sx={{ fontSize: '14px', fontWeight: 600, color: theme.palette.primary.main }}>
                       {formatCurrency(order.total_amount, order.currency)}
                     </Typography>
                   </Box>
                   <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <Typography sx={{ fontSize: '13px', color: '#616161' }}>Conditions de Paiement:</Typography>
+                    <Typography sx={{ fontSize: '13px', color: THEME_COLORS.textSecondary }}>Conditions de Paiement:</Typography>
                     <Typography sx={{ fontSize: '13px', color: theme.palette.text.primary }}>
                       {order.payment_terms || 'Standard'}
                     </Typography>
                   </Box>
                   <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <Typography sx={{ fontSize: '13px', color: '#616161' }}>Date de Création:</Typography>
+                    <Typography sx={{ fontSize: '13px', color: THEME_COLORS.textSecondary }}>Date de Création:</Typography>
                     <Typography sx={{ fontSize: '13px', color: theme.palette.text.primary }}>
                       {new Date(order.created_at).toLocaleDateString('fr-TN')}
                     </Typography>

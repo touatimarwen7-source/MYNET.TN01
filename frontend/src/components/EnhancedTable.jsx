@@ -1,3 +1,4 @@
+import { THEME_COLORS } from './themeHelpers';
 import { useState, useMemo } from 'react';
 import institutionalTheme from '../theme/theme';
 import {
@@ -67,7 +68,7 @@ export default function EnhancedTable({
 
   return (
     <TableContainer component={Paper} sx={{ boxShadow: 'none', border: '1px solid #E0E0E0', borderRadius: '4px' }}>
-      <Table sx={{ backgroundColor: '#FFFFFF' }}>
+      <Table sx={{ backgroundColor: THEME_COLORS.bgPaper }}>
         <TableHead>
           <TableRow sx={{ backgroundColor: theme.palette.background.default }}>
             {groupBy && (
@@ -85,7 +86,7 @@ export default function EnhancedTable({
                   fontSize: '14px',
                   cursor: sortable ? 'pointer' : 'default',
                   userSelect: 'none',
-                  '&:hover': sortable ? { backgroundColor: '#f5f5f5' } : {},
+                  '&:hover': sortable ? { backgroundColor: 'THEME_COLORS.bgDefault' } : {},
                 }}
               >
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -97,7 +98,7 @@ export default function EnhancedTable({
                   )}
                   {col.tooltip && (
                     <Tooltip title={col.tooltip} arrow>
-                      <HelpOutlineIcon sx={{ fontSize: '16px', color: '#616161' }} />
+                      <HelpOutlineIcon sx={{ fontSize: '16px', color: THEME_COLORS.textSecondary }} />
                     </Tooltip>
                   )}
                 </Box>
@@ -112,7 +113,7 @@ export default function EnhancedTable({
                 <TableRow
                   onClick={() => toggleGroup(groupName)}
                   sx={{
-                    backgroundColor: '#f5f5f5',
+                    backgroundColor: 'THEME_COLORS.bgDefault',
                     cursor: 'pointer',
                     '&:hover': { backgroundColor: '#eeeeee' },
                   }}
@@ -127,7 +128,7 @@ export default function EnhancedTable({
                       <Typography sx={{ fontWeight: 600, color: theme.palette.text.primary }}>
                         {groupName}
                       </Typography>
-                      <Typography sx={{ color: '#616161', fontSize: '14px' }}>
+                      <Typography sx={{ color: THEME_COLORS.textSecondary, fontSize: '14px' }}>
                         ({groupRows.length})
                       </Typography>
                     </Box>
@@ -139,9 +140,9 @@ export default function EnhancedTable({
                       key={idx}
                       onClick={() => onRowClick?.(row)}
                       sx={{
-                        backgroundColor: striped && idx % 2 === 0 ? '#FFFFFF' : '#fafafa',
+                        backgroundColor: striped && idx % 2 === 0 ? '#FFFFFF' : 'THEME_COLORS.bgDefault',
                         cursor: onRowClick ? 'pointer' : 'default',
-                        '&:hover': { backgroundColor: '#f5f5f5' },
+                        '&:hover': { backgroundColor: 'THEME_COLORS.bgDefault' },
                       }}
                     >
                       <TableCell sx={{ padding: '12px', width: '40px' }} />
@@ -167,9 +168,9 @@ export default function EnhancedTable({
                 key={idx}
                 onClick={() => onRowClick?.(row)}
                 sx={{
-                  backgroundColor: striped && idx % 2 === 0 ? '#FFFFFF' : '#fafafa',
+                  backgroundColor: striped && idx % 2 === 0 ? '#FFFFFF' : 'THEME_COLORS.bgDefault',
                   cursor: onRowClick ? 'pointer' : 'default',
-                  '&:hover': { backgroundColor: '#f5f5f5' },
+                  '&:hover': { backgroundColor: 'THEME_COLORS.bgDefault' },
                 }}
               >
                 {columns.map((col) => (

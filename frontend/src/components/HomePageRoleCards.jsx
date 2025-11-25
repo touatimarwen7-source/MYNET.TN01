@@ -1,3 +1,4 @@
+import { THEME_COLORS } from './themeHelpers';
 import { useState } from 'react';
 import { Box, Container, Card, CardContent, Button, List, ListItem, ListItemIcon, ListItemText, Typography, Grid } from '@mui/material';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
@@ -23,7 +24,7 @@ export default function HomePageRoleCards({ onRoleClick }) {
         <Typography variant="h2" sx={{ fontSize: '32px', fontWeight: 500, color: theme.palette.text.primary, marginBottom: '12px' }}>
           Choisissez Votre Rôle
         </Typography>
-        <Typography variant="body1" sx={{ fontSize: '16px', color: '#616161' }}>
+        <Typography variant="body1" sx={{ fontSize: '16px', color: THEME_COLORS.textSecondary }}>
           Deux expériences optimisées, une plateforme unifiée
         </Typography>
       </Box>
@@ -36,20 +37,20 @@ export default function HomePageRoleCards({ onRoleClick }) {
                 <Typography variant="h3" sx={{ fontSize: '24px', fontWeight: 500, color: theme.palette.primary.main, marginBottom: '16px' }}>
                   {role.title}
                 </Typography>
-                <Typography variant="body1" sx={{ color: '#616161', marginBottom: '24px', lineHeight: 1.6 }}>
+                <Typography variant="body1" sx={{ color: THEME_COLORS.textSecondary, marginBottom: '24px', lineHeight: 1.6 }}>
                   {role.description}
                 </Typography>
                 <List sx={{ marginBottom: '24px' }}>
                   {role.features.map((feature, idx) => (
                     <ListItem key={idx} sx={{ paddingLeft: 0, paddingTop: '6px', paddingBottom: '6px' }}>
-                      <ListItemIcon sx={{ minWidth: 32, color: '#2e7d32' }}>
+                      <ListItemIcon sx={{ minWidth: 32, color: THEME_COLORS.success }}>
                         <CheckCircleIcon sx={{ fontSize: 18 }} />
                       </ListItemIcon>
                       <ListItemText primary={feature} sx={{ '& .MuiTypography-root': { fontSize: '14px', color: theme.palette.text.primary, fontWeight: 400 } }} />
                     </ListItem>
                   ))}
                 </List>
-                <Button fullWidth variant="contained" onClick={() => handleStartTrial(role.id)} sx={{ backgroundColor: theme.palette.primary.main, textTransform: 'none', fontWeight: 500, padding: '12px 24px', minHeight: '44px', '&:hover': { backgroundColor: '#0d47a1' } }}>
+                <Button fullWidth variant="contained" onClick={() => handleStartTrial(role.id)} sx={{ backgroundColor: theme.palette.primary.main, textTransform: 'none', fontWeight: 500, padding: '12px 24px', minHeight: '44px', '&:hover': { backgroundColor: 'THEME_COLORS.primaryDark' } }}>
                   Commencer Essai Gratuit
                 </Button>
               </CardContent>

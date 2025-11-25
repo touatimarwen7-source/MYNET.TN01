@@ -1,5 +1,6 @@
 import { Box, CircularProgress, Typography } from '@mui/material';
 import institutionalTheme from '../theme/theme';
+import { THEME_COLORS } from './themeHelpers';
 
 /**
  * Loading Spinner Component
@@ -20,7 +21,7 @@ export default function LoadingSpinner({ message = 'Chargement en cours...' }) {
     >
       <CircularProgress sx={{ color: theme.palette.primary.main }} size={50} />
       {message && (
-        <Typography sx={{ color: '#616161', fontSize: '14px' }}>
+        <Typography sx={{ color: THEME_COLORS.textSecondary, fontSize: '14px' }}>
           {message}
         </Typography>
       )}

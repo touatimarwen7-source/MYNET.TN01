@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Alert, Box, IconButton, Stack } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
+import { THEME_COLORS } from './themeHelpers';
 
 export default function AlertStrip() {
   const [alerts, setAlerts] = useState([]);
@@ -25,6 +26,16 @@ export default function AlertStrip() {
   // Don't render if no visible alerts
   if (visibleAlerts.size === 0) return null;
 
+  const getAlertBorderColor = (type) => {
+    const colorMap = {
+      success: THEME_COLORS.success,
+      warning: THEME_COLORS.warning,
+      error: THEME_COLORS.error,
+      info: THEME_COLORS.primary,
+    };
+    return colorMap[type] || THEME_COLORS.primary;
+  };
+
   return (
     <Box
       sx={{
@@ -33,8 +44,8 @@ export default function AlertStrip() {
         left: 0,
         right: 0,
         zIndex: 1000,
-        backgroundColor: '#ffffff',
-        borderBottom: '1px solid #e0e0e0',
+        backgroundColor: THEME_COLORS.bgPaper,
+        borderBottom: `1px solid ${THEME_COLORS.divider}`,
         padding: '8px 16px',
       }}
     >
@@ -48,14 +59,7 @@ export default function AlertStrip() {
                 onClose={() => closeAlert(alert.id)}
                 sx={{
                   border: '1px solid',
-                  borderColor:
-                    alert.type === 'success'
-                      ? '#2e7d32'
-                      : alert.type === 'warning'
-                      ? '#f57c00'
-                      : alert.type === 'error'
-                      ? '#c62828'
-                      : '#1976d2',
+                  borderColor: getAlertBorderColor(alert.type),
                   borderRadius: '4px',
                 }}
               >
@@ -69,9 +73,9 @@ export default function AlertStrip() {
               size="small"
               onClick={closeAllAlerts}
               sx={{
-                color: '#616161',
+                color: THEME_COLORS.textSecondary,
                 fontSize: '12px',
-                '&:hover': { backgroundColor: '#f5f5f5' },
+                '&:hover': { backgroundColor: THEME_COLORS.bgDefault },
               }}
             >
               Fermer tout

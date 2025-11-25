@@ -1,3 +1,4 @@
+import { THEME_COLORS } from './themeHelpers';
 import { useState } from 'react';
 import { Box, Card, CardContent, Typography, Button, Stack, IconButton } from '@mui/material';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
@@ -21,12 +22,12 @@ export default function DynamicAdvertisement() {
 
   return (
     <Box sx={{ padding: '24px' }}>
-      <Card sx={{ backgroundColor: '#FFFFFF', border: '1px solid #E0E0E0', borderRadius: '4px', boxShadow: 'none' }}>
+      <Card sx={{ backgroundColor: THEME_COLORS.bgPaper, border: '1px solid #E0E0E0', borderRadius: '4px', boxShadow: 'none' }}>
         <CardContent sx={{ padding: '32px' }}>
           <Typography variant="h5" sx={{ fontSize: '18px', fontWeight: 600, color: theme.palette.text.primary, marginBottom: '12px' }}>
             {ad.title}
           </Typography>
-          <Typography variant="body2" sx={{ fontSize: '14px', color: '#616161', marginBottom: '16px' }}>
+          <Typography variant="body2" sx={{ fontSize: '14px', color: THEME_COLORS.textSecondary, marginBottom: '16px' }}>
             {ad.message}
           </Typography>
           <Button 

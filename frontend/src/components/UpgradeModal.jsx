@@ -1,3 +1,4 @@
+import { THEME_COLORS } from './themeHelpers';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Box, Typography, Stack, Chip } from '@mui/material';
@@ -29,19 +30,19 @@ export default function UpgradeModal({ isOpen, onClose, currentTier, featureKey 
             <Typography variant="h6" sx={{ fontSize: '18px', fontWeight: 600, color: theme.palette.text.primary, marginBottom: '8px' }}>
               {featureInfo.label}
             </Typography>
-            <Typography variant="body2" sx={{ fontSize: '14px', color: '#616161' }}>
+            <Typography variant="body2" sx={{ fontSize: '14px', color: THEME_COLORS.textSecondary }}>
               {featureInfo.description}
             </Typography>
           </Box>
 
           <Stack spacing={2}>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <Typography sx={{ fontSize: '14px', color: '#616161' }}>Plan actuel:</Typography>
+              <Typography sx={{ fontSize: '14px', color: THEME_COLORS.textSecondary }}>Plan actuel:</Typography>
               <Chip label={currentTier?.name} variant="outlined" />
             </Box>
             {nextTierInfo && (
               <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <Typography sx={{ fontSize: '14px', color: '#616161' }}>Plan requis:</Typography>
+                <Typography sx={{ fontSize: '14px', color: THEME_COLORS.textSecondary }}>Plan requis:</Typography>
                 <Chip label={nextTierInfo.name} color="primary" />
               </Box>
             )}
@@ -53,13 +54,13 @@ export default function UpgradeModal({ isOpen, onClose, currentTier, featureKey 
                 Avantages supplémentaires:
               </Typography>
               <Stack spacing={1}>
-                <Typography variant="body2" sx={{ fontSize: '13px', color: '#616161' }}>
+                <Typography variant="body2" sx={{ fontSize: '13px', color: THEME_COLORS.textSecondary }}>
                   ✓ {upgradeValue.benefit1}
                 </Typography>
-                <Typography variant="body2" sx={{ fontSize: '13px', color: '#616161' }}>
+                <Typography variant="body2" sx={{ fontSize: '13px', color: THEME_COLORS.textSecondary }}>
                   ✓ {upgradeValue.benefit2}
                 </Typography>
-                <Typography variant="body2" sx={{ fontSize: '13px', color: '#616161' }}>
+                <Typography variant="body2" sx={{ fontSize: '13px', color: THEME_COLORS.textSecondary }}>
                   ✓ {upgradeValue.benefit3}
                 </Typography>
               </Stack>
@@ -68,20 +69,20 @@ export default function UpgradeModal({ isOpen, onClose, currentTier, featureKey 
 
           {nextTierInfo && (
             <Box sx={{ backgroundColor: theme.palette.background.default, padding: '16px', borderRadius: '4px', textAlign: 'center' }}>
-              <Typography sx={{ fontSize: '12px', color: '#616161' }}>À partir de</Typography>
+              <Typography sx={{ fontSize: '12px', color: THEME_COLORS.textSecondary }}>À partir de</Typography>
               <Typography sx={{ fontSize: '24px', fontWeight: 600, color: theme.palette.primary.main }}>
                 {nextTierInfo.price} TND
               </Typography>
-              <Typography sx={{ fontSize: '12px', color: '#616161' }}>/mois</Typography>
+              <Typography sx={{ fontSize: '12px', color: THEME_COLORS.textSecondary }}>/mois</Typography>
             </Box>
           )}
 
           {!nextTierInfo && (
             <Box sx={{ backgroundColor: '#e8f5e9', padding: '16px', borderRadius: '4px', textAlign: 'center' }}>
-              <Typography sx={{ fontSize: '14px', color: '#2e7d32', fontWeight: 600 }}>
+              <Typography sx={{ fontSize: '14px', color: THEME_COLORS.success, fontWeight: 600 }}>
                 ✓ Vous avez accès à toutes les fonctionnalités
               </Typography>
-              <Typography sx={{ fontSize: '13px', color: '#616161' }}>Merci de votre confiance!</Typography>
+              <Typography sx={{ fontSize: '13px', color: THEME_COLORS.textSecondary }}>Merci de votre confiance!</Typography>
             </Box>
           )}
         </Stack>

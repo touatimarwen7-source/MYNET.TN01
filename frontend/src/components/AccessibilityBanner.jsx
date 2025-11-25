@@ -1,4 +1,5 @@
 import { Box, Alert, CloseIcon, IconButton } from '@mui/material';
+import { THEME_COLORS } from './themeHelpers';
 import { useState } from 'react';
 import institutionalTheme from '../theme/theme';
 
@@ -12,7 +13,7 @@ export default function AccessibilityBanner() {
     <Alert
       severity="info"
       sx={{
-        backgroundColor: '#e3f2fd',
+        backgroundColor: 'THEME_COLORS.bgDefault',
         color: theme.palette.primary.main,
         border: '1px solid #0056B3',
         marginBottom: '16px',

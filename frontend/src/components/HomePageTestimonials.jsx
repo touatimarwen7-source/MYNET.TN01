@@ -1,3 +1,4 @@
+import { THEME_COLORS } from './themeHelpers';
 import { Grid, Paper, Typography, Box } from '@mui/material';
 import institutionalTheme from '../theme/theme';
 
@@ -17,11 +18,11 @@ export default function HomePageTestimonials() {
       <Grid container spacing={2}>
         {testimonials.map((testimonial, idx) => (
           <Grid size={{ xs: 12, md: 4 }} key={idx}>
-            <Paper sx={{ padding: '24px', backgroundColor: '#f5f5f5', border: '1px solid #e0e0e0', borderRadius: '8px', height: '100%', display: 'flex', flexDirection: 'column' }}>
+            <Paper sx={{ padding: '24px', backgroundColor: 'THEME_COLORS.bgDefault', border: '1px solid #e0e0e0', borderRadius: '8px', height: '100%', display: 'flex', flexDirection: 'column' }}>
               <Typography sx={{ fontSize: '14px', color: theme.palette.text.primary, marginBottom: '12px', flex: 1, lineHeight: 1.6 }}>
                 "{testimonial.text}"
               </Typography>
-              <Typography sx={{ fontSize: '12px', color: '#616161', fontStyle: 'italic' }}>
+              <Typography sx={{ fontSize: '12px', color: THEME_COLORS.textSecondary, fontStyle: 'italic' }}>
                 {testimonial.author}
               </Typography>
             </Paper>

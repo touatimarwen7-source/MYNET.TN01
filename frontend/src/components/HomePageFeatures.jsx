@@ -1,3 +1,4 @@
+import { THEME_COLORS } from './themeHelpers';
 import { Container, Box, Grid, Card, Typography } from '@mui/material';
 import SecurityIcon from '@mui/icons-material/Security';
 import TrendingUpIcon from '@mui/icons-material/TrendingUp';
@@ -26,14 +27,14 @@ export default function HomePageFeatures() {
       <Grid container spacing={2}>
         {features.map((feature, idx) => (
           <Grid size={{ xs: 12, md: 4 }} key={idx}>
-            <Card sx={{ backgroundColor: '#ffffff', border: '1px solid #e0e0e0', borderRadius: '8px', padding: '32px 24px', textAlign: 'center', transition: 'all 200ms ease-in-out', '&:hover': { borderColor: theme.palette.primary.main, boxShadow: 'none', transform: 'translateY(-4px)' } }}>
+            <Card sx={{ backgroundColor: THEME_COLORS.bgPaper, border: '1px solid #e0e0e0', borderRadius: '8px', padding: '32px 24px', textAlign: 'center', transition: 'all 200ms ease-in-out', '&:hover': { borderColor: theme.palette.primary.main, boxShadow: 'none', transform: 'translateY(-4px)' } }}>
               <Box sx={{ marginBottom: '16px' }}>
                 {feature.icon}
               </Box>
               <Typography variant="h4" sx={{ fontSize: '18px', fontWeight: 600, color: theme.palette.text.primary, marginBottom: '12px' }}>
                 {feature.title}
               </Typography>
-              <Typography sx={{ fontSize: '14px', color: '#616161', lineHeight: 1.6 }}>
+              <Typography sx={{ fontSize: '14px', color: THEME_COLORS.textSecondary, lineHeight: 1.6 }}>
                 {feature.description}
               </Typography>
             </Card>

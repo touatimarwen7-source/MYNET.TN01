@@ -1,3 +1,4 @@
+import { THEME_COLORS } from './themeHelpers';
 import { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import {
@@ -120,7 +121,7 @@ export default function UnifiedHeader() {
     <AppBar
       position="static"
       sx={{
-        backgroundColor: '#ffffff',
+        backgroundColor: THEME_COLORS.bgPaper,
         color: theme.palette.text.primary,
         borderBottom: '1px solid #e0e0e0',
         boxShadow: 'none',
@@ -216,7 +217,7 @@ export default function UnifiedHeader() {
                   <Typography variant="body2" sx={{ fontWeight: 500, color: theme.palette.text.primary }}>
                     {userName}
                   </Typography>
-                  <Typography variant="caption" sx={{ color: '#616161' }}>
+                  <Typography variant="caption" sx={{ color: THEME_COLORS.textSecondary }}>
                     {userRole === 'buyer' ? 'Acheteur' : 'Fournisseur'}
                   </Typography>
                 </Box>
@@ -239,7 +240,7 @@ export default function UnifiedHeader() {
                 <MenuItem onClick={() => { navigate('/security'); handleProfileMenuClose(); }}>
                   Sécurité
                 </MenuItem>
-                <MenuItem onClick={handleLogout} sx={{ color: '#c62828' }}>
+                <MenuItem onClick={handleLogout} sx={{ color: THEME_COLORS.errorLight }}>
                   <LogoutIcon sx={{ mr: 1, fontSize: 18 }} />
                   Se Déconnecter
                 </MenuItem>
@@ -298,7 +299,7 @@ export default function UnifiedHeader() {
         onClose={() => setMobileMenuOpen(false)}
         PaperProps={{ sx: { marginTop: '64px' } }}
       >
-        <Box sx={{ width: '100%', padding: '16px', backgroundColor: '#ffffff' }}>
+        <Box sx={{ width: '100%', padding: '16px', backgroundColor: THEME_COLORS.bgPaper }}>
           <List>
             {shouldShowAuthLinks && authenticatedLinks.map((link) => (
               <ListItem

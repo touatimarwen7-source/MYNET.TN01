@@ -2,6 +2,7 @@ import React from 'react';
 import { Box, Container, Typography, Button } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
+import { THEME_COLORS } from './themeHelpers';
 
 /**
  * Error Boundary Component
@@ -60,7 +61,7 @@ class ErrorBoundary extends React.Component {
             <ErrorOutlineIcon
               sx={{
                 fontSize: 80,
-                color: '#c62828',
+                color: THEME_COLORS.error,
                 marginBottom: '20px'
               }}
             />
@@ -68,7 +69,7 @@ class ErrorBoundary extends React.Component {
             <Typography
               variant="h3"
               sx={{
-                color: '#212121',
+                color: THEME_COLORS.textPrimary,
                 fontWeight: 600,
                 marginBottom: '16px'
               }}
@@ -79,7 +80,7 @@ class ErrorBoundary extends React.Component {
             <Typography
               variant="body1"
               sx={{
-                color: '#616161',
+                color: THEME_COLORS.textSecondary,
                 marginBottom: '24px',
                 maxWidth: '500px'
               }}
@@ -92,14 +93,14 @@ class ErrorBoundary extends React.Component {
                 variant="contained"
                 onClick={this.handleReset}
                 sx={{
-                  backgroundColor: '#0056B3',
-                  color: '#FFFFFF',
+                  backgroundColor: THEME_COLORS.primary,
+                  color: THEME_COLORS.bgPaper,
                   textTransform: 'none',
                   fontSize: '14px',
                   fontWeight: 500,
                   minHeight: '40px',
                   '&:hover': {
-                    backgroundColor: '#003d7a'
+                    backgroundColor: THEME_COLORS.primaryDark
                   }
                 }}
               >
@@ -110,15 +111,15 @@ class ErrorBoundary extends React.Component {
                 variant="outlined"
                 onClick={this.handleReload}
                 sx={{
-                  color: '#0056B3',
-                  borderColor: '#0056B3',
+                  color: THEME_COLORS.primary,
+                  borderColor: THEME_COLORS.primary,
                   textTransform: 'none',
                   fontSize: '14px',
                   fontWeight: 500,
                   minHeight: '40px',
                   '&:hover': {
-                    borderColor: '#003d7a',
-                    backgroundColor: '#f0f7ff'
+                    borderColor: THEME_COLORS.primaryDark,
+                    backgroundColor: `${THEME_COLORS.primary}10`
                   }
                 }}
               >

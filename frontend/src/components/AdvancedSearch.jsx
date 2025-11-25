@@ -1,3 +1,4 @@
+import { THEME_COLORS } from './themeHelpers';
 import { useState } from 'react';
 import institutionalTheme from '../theme/theme';
 import { useNavigate } from 'react-router-dom';
@@ -40,7 +41,7 @@ export default function AdvancedSearch() {
       onSubmit={handleSearch}
       sx={{
         padding: '24px',
-        backgroundColor: '#FFFFFF',
+        backgroundColor: THEME_COLORS.bgPaper,
         border: '1px solid #E0E0E0',
         borderRadius: '4px',
         boxShadow: 'none',

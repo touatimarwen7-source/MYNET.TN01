@@ -6,6 +6,7 @@ import {
   Button,
   Typography
 } from '@mui/material';
+import { THEME_COLORS } from './themeHelpers';
 import institutionalTheme from '../theme/theme';
 
 export default function ConfirmDialog({ 
@@ -21,7 +22,7 @@ export default function ConfirmDialog({
 }) {
   const theme = institutionalTheme;
   const severityColors = {
-    warning: { title: '#d32f2f', button: '#d32f2f' },
+    warning: { title: 'THEME_COLORS.error', button: 'THEME_COLORS.error' },
     info: { title: theme.palette.primary.main, button: theme.palette.primary.main },
     success: { title: '#2e7d32', button: '#2e7d32' }
   };
@@ -32,7 +33,7 @@ export default function ConfirmDialog({
         {title}
       </DialogTitle>
       <DialogContent>
-        <Typography sx={{ color: '#666', marginTop: '12px' }}>
+        <Typography sx={{ color: THEME_COLORS.textSecondary, marginTop: '12px' }}>
           {message}
         </Typography>
       </DialogContent>

@@ -1,3 +1,4 @@
+import { THEME_COLORS } from './themeHelpers';
 import { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import {
@@ -309,7 +310,7 @@ export default function Sidebar({ user, onLogout }) {
             <Typography variant="body2" sx={{ fontWeight: 600, color: theme.palette.text.primary, overflow: 'hidden', textOverflow: 'ellipsis' }}>
               {user?.email || 'Utilisateur'}
             </Typography>
-            <Typography variant="caption" sx={{ color: '#616161' }}>
+            <Typography variant="caption" sx={{ color: THEME_COLORS.textSecondary }}>
               {user?.role === 'buyer' ? 'Acheteur' : user?.role === 'supplier' ? 'Fournisseur' : user?.role === 'super_admin' ? 'Super Admin' : 'Admin'}
             </Typography>
           </Box>
@@ -457,7 +458,7 @@ export default function Sidebar({ user, onLogout }) {
           '& .MuiDrawer-paper': {
             width: DRAWER_WIDTH,
             boxSizing: 'border-box',
-            backgroundColor: '#ffffff',
+            backgroundColor: THEME_COLORS.bgPaper,
             borderRight: '1px solid #e0e0e0',
             marginTop: '64px',
             transition: 'all 0.3s ease-in-out',
@@ -477,7 +478,7 @@ export default function Sidebar({ user, onLogout }) {
           '& .MuiDrawer-paper': {
             width: DRAWER_WIDTH,
             boxSizing: 'border-box',
-            backgroundColor: '#ffffff',
+            backgroundColor: THEME_COLORS.bgPaper,
             marginTop: '64px',
             transition: 'transform 0.3s ease-in-out',
           },

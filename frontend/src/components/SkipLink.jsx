@@ -1,3 +1,4 @@
+import { THEME_COLORS } from './themeHelpers';
 import { Box, Link } from '@mui/material';
 import institutionalTheme from '../theme/theme';
 

@@ -1,3 +1,4 @@
+import { THEME_COLORS } from './themeHelpers';
 import { Box, Container, Typography, Grid, Card, CardContent, Stack } from '@mui/material';
 import institutionalTheme from '../theme/theme';
 
@@ -29,7 +30,7 @@ export default function HowItWorks() {
           <Typography variant="h2" sx={{ fontSize: '36px', fontWeight: 700, color: theme.palette.text.primary, marginBottom: '16px' }}>
             Comment Fonctionne MyNet.tn?
           </Typography>
-          <Typography variant="body1" sx={{ fontSize: '16px', color: '#616161' }}>
+          <Typography variant="body1" sx={{ fontSize: '16px', color: THEME_COLORS.textSecondary }}>
             Trois étapes simples pour transformer vos achats
           </Typography>
         </Box>
@@ -41,14 +42,14 @@ export default function HowItWorks() {
           <Grid container spacing={3}>
             {buyerSteps.map((step, idx) => (
               <Grid size={{ xs: 12, md: 4 }} key={idx}>
-                <Card sx={{ backgroundColor: '#FFFFFF', border: '1px solid #E0E0E0', borderRadius: '4px', boxShadow: 'none', height: '100%' }}>
+                <Card sx={{ backgroundColor: THEME_COLORS.bgPaper, border: '1px solid #E0E0E0', borderRadius: '4px', boxShadow: 'none', height: '100%' }}>
                   <CardContent sx={{ padding: '32px', textAlign: 'center' }}>
                     <Box sx={{ fontSize: '48px', marginBottom: '16px' }}>{step.icon}</Box>
                     <Box sx={{ fontSize: '32px', fontWeight: 700, color: theme.palette.primary.main, marginBottom: '12px' }}>{step.number}</Box>
                     <Typography variant="h5" sx={{ fontSize: '18px', fontWeight: 600, color: theme.palette.text.primary, marginBottom: '12px' }}>
                       {step.title}
                     </Typography>
-                    <Typography variant="body2" sx={{ fontSize: '14px', color: '#616161', lineHeight: 1.6 }}>
+                    <Typography variant="body2" sx={{ fontSize: '14px', color: THEME_COLORS.textSecondary, lineHeight: 1.6 }}>
                       {step.description}
                     </Typography>
                   </CardContent>
@@ -65,14 +66,14 @@ export default function HowItWorks() {
           <Grid container spacing={3}>
             {supplierSteps.map((step, idx) => (
               <Grid size={{ xs: 12, md: 4 }} key={idx}>
-                <Card sx={{ backgroundColor: '#FFFFFF', border: '1px solid #E0E0E0', borderRadius: '4px', boxShadow: 'none', height: '100%' }}>
+                <Card sx={{ backgroundColor: THEME_COLORS.bgPaper, border: '1px solid #E0E0E0', borderRadius: '4px', boxShadow: 'none', height: '100%' }}>
                   <CardContent sx={{ padding: '32px', textAlign: 'center' }}>
                     <Box sx={{ fontSize: '48px', marginBottom: '16px' }}>{step.icon}</Box>
                     <Box sx={{ fontSize: '32px', fontWeight: 700, color: theme.palette.primary.main, marginBottom: '12px' }}>{step.number}</Box>
                     <Typography variant="h5" sx={{ fontSize: '18px', fontWeight: 600, color: theme.palette.text.primary, marginBottom: '12px' }}>
                       {step.title}
                     </Typography>
-                    <Typography variant="body2" sx={{ fontSize: '14px', color: '#616161', lineHeight: 1.6 }}>
+                    <Typography variant="body2" sx={{ fontSize: '14px', color: THEME_COLORS.textSecondary, lineHeight: 1.6 }}>
                       {step.description}
                     </Typography>
                   </CardContent>
@@ -89,13 +90,13 @@ export default function HowItWorks() {
           <Grid container spacing={3}>
             {benefits.map((benefit, idx) => (
               <Grid size={{ xs: 12, sm: 6, md: 3 }} key={idx}>
-                <Card sx={{ backgroundColor: '#FFFFFF', border: '1px solid #E0E0E0', borderRadius: '4px', boxShadow: 'none', textAlign: 'center' }}>
+                <Card sx={{ backgroundColor: THEME_COLORS.bgPaper, border: '1px solid #E0E0E0', borderRadius: '4px', boxShadow: 'none', textAlign: 'center' }}>
                   <CardContent sx={{ padding: '24px' }}>
                     <Box sx={{ fontSize: '40px', marginBottom: '12px' }}>{benefit.icon}</Box>
                     <Typography variant="h6" sx={{ fontSize: '16px', fontWeight: 600, color: theme.palette.text.primary, marginBottom: '8px' }}>
                       {benefit.title}
                     </Typography>
-                    <Typography variant="body2" sx={{ fontSize: '13px', color: '#616161', lineHeight: 1.6 }}>
+                    <Typography variant="body2" sx={{ fontSize: '13px', color: THEME_COLORS.textSecondary, lineHeight: 1.6 }}>
                       {benefit.desc}
                     </Typography>
                   </CardContent>

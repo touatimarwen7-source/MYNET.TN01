@@ -1,4 +1,5 @@
 import { Box, Tooltip, Typography } from '@mui/material';
+import { THEME_COLORS } from './themeHelpers';
 
 export default function VerifiedBadge({ size = 'md', showText = true }) {
   const sizeMap = {
@@ -21,7 +22,7 @@ export default function VerifiedBadge({ size = 'md', showText = true }) {
           ✓
         </Box>
         {showText && (
-          <Typography variant="caption" sx={{ fontWeight: 600, color: '#2e7d32' }}>
+          <Typography variant="caption" sx={{ fontWeight: 600, color: THEME_COLORS.success }}>
             Vérifiée
           </Typography>
         )}

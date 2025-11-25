@@ -1,3 +1,4 @@
+import { THEME_COLORS } from './themeHelpers';
 import { Box, Card, CardContent, Typography, Stack, Chip, Link } from '@mui/material';
 import institutionalTheme from '../theme/theme';
 
@@ -9,7 +10,7 @@ export default function ImportantDocuments({ documents, title = 'Documents Impor
         <Typography sx={{ fontSize: '16px', fontWeight: 600, color: theme.palette.text.primary, marginBottom: '16px' }}>
           {title}
         </Typography>
-        <Typography sx={{ color: '#616161', fontSize: '14px' }}>
+        <Typography sx={{ color: THEME_COLORS.textSecondary, fontSize: '14px' }}>
           ✓ Aucun document en attente
         </Typography>
       </Box>
@@ -18,7 +19,7 @@ export default function ImportantDocuments({ documents, title = 'Documents Impor
 
   const getPriorityColor = (priority) => {
     const colorMap = {
-      high: '#c62828',
+      high: 'THEME_COLORS.errorLight',
       medium: '#f57c00',
       normal: '#2e7d32'
     };
@@ -42,7 +43,7 @@ export default function ImportantDocuments({ documents, title = 'Documents Impor
 
       <Stack spacing={2}>
         {documents.map((doc, idx) => (
-          <Card key={idx} sx={{ backgroundColor: '#FFFFFF', border: '1px solid #E0E0E0', borderRadius: '4px' }}>
+          <Card key={idx} sx={{ backgroundColor: THEME_COLORS.bgPaper, border: '1px solid #E0E0E0', borderRadius: '4px' }}>
             <CardContent sx={{ padding: '20px' }}>
               <Stack direction={{ xs: 'column', md: 'row' }} justifyContent="space-between" sx={{ marginBottom: '12px' }}>
                 <Box sx={{ display: 'flex', gap: '12px', flex: 1 }}>
@@ -51,7 +52,7 @@ export default function ImportantDocuments({ documents, title = 'Documents Impor
                     <Typography sx={{ fontWeight: 600, color: theme.palette.text.primary, fontSize: '14px' }}>
                       {doc.title}
                     </Typography>
-                    <Typography sx={{ fontSize: '12px', color: '#616161' }}>
+                    <Typography sx={{ fontSize: '12px', color: THEME_COLORS.textSecondary }}>
                       {doc.meta}
                     </Typography>
                   </Box>
@@ -68,7 +69,7 @@ export default function ImportantDocuments({ documents, title = 'Documents Impor
               </Stack>
 
               {doc.details && (
-                <Typography sx={{ fontSize: '13px', color: '#616161', marginBottom: '12px', lineHeight: 1.6 }}>
+                <Typography sx={{ fontSize: '13px', color: THEME_COLORS.textSecondary, marginBottom: '12px', lineHeight: 1.6 }}>
                   {doc.details}
                 </Typography>
               )}

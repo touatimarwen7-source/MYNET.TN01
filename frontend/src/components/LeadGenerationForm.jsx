@@ -1,3 +1,4 @@
+import { THEME_COLORS } from './themeHelpers';
 import { useState } from 'react';
 import { Box, Container, Typography, TextField, Button, Stack, FormControlLabel, Radio, RadioGroup, Alert } from '@mui/material';
 import institutionalTheme from '../theme/theme';
@@ -35,13 +36,13 @@ export default function LeadGenerationForm() {
   };
 
   return (
-    <Box sx={{ backgroundColor: '#FFFFFF', paddingY: '60px', borderTop: '1px solid #E0E0E0', borderBottom: '1px solid #E0E0E0' }}>
+    <Box sx={{ backgroundColor: THEME_COLORS.bgPaper, paddingY: '60px', borderTop: '1px solid #E0E0E0', borderBottom: '1px solid #E0E0E0' }}>
       <Container maxWidth="sm">
         <Box sx={{ textAlign: 'center', marginBottom: '32px' }}>
           <Typography variant="h4" sx={{ fontWeight: 600, color: theme.palette.text.primary, marginBottom: '12px' }}>
             Restez Connecté avec MyNet.tn
           </Typography>
-          <Typography sx={{ fontSize: '14px', color: '#616161' }}>
+          <Typography sx={{ fontSize: '14px', color: THEME_COLORS.textSecondary }}>
             Recevez les dernières mises à jour, conseils exclusifs et offres spéciales directement dans votre boîte mail
           </Typography>
         </Box>
@@ -117,7 +118,7 @@ export default function LeadGenerationForm() {
             {loading ? 'Envoi en cours...' : 'Envoyer ma Demande'}
           </Button>
 
-          <Typography sx={{ fontSize: '12px', color: '#616161', textAlign: 'center', marginTop: '16px', lineHeight: 1.6 }}>
+          <Typography sx={{ fontSize: '12px', color: THEME_COLORS.textSecondary, textAlign: 'center', marginTop: '16px', lineHeight: 1.6 }}>
             Nous respectons votre confidentialité. Aucun spam. Vous pouvez vous désabonner à tout moment.
           </Typography>
         </Box>

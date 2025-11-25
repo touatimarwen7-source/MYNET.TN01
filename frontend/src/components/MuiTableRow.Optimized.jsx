@@ -1,3 +1,4 @@
+import { THEME_COLORS } from './themeHelpers';
 import React from 'react';
 import { TableRow, TableCell } from '@mui/material';
 

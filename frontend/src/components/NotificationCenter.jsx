@@ -2,6 +2,7 @@
  * Enhanced Real-time Notification Center Component
  * Displays WebSocket notifications with proper styling
  */
+import { THEME_COLORS } from './themeHelpers';
 import React, { useState } from 'react';
 import { Box, Badge, IconButton, Popover, List, ListItem, ListItemText, Typography, Button, Chip, Snackbar, Alert } from '@mui/material';
 import NotificationsIcon from '@mui/icons-material/Notifications';
@@ -66,7 +67,7 @@ const NotificationCenter = ({ userId }) => {
           </Box>
 
           {notifications.length === 0 ? (
-            <Typography sx={{ p: 3, textAlign: 'center', color: '#999', fontSize: '13px' }}>
+            <Typography sx={{ p: 3, textAlign: 'center', color: THEME_COLORS.textDisabled, fontSize: '13px' }}>
               ✨ Aucune notification
             </Typography>
           ) : (
@@ -85,10 +86,10 @@ const NotificationCenter = ({ userId }) => {
                       <Box sx={{ display: 'flex', gap: 1, alignItems: 'flex-start' }}>
                         <span style={{ fontSize: '18px', minWidth: '24px' }}>{notif.icon}</span>
                         <Box sx={{ flex: 1 }}>
-                          <div style={{ fontWeight: 600, fontSize: '13px', color: '#212121', marginBottom: '4px' }}>
+                          <div style={{ fontWeight: 600, fontSize: '13px', color: THEME_COLORS.textPrimary, marginBottom: '4px' }}>
                             {notif.title}
                           </div>
-                          <div style={{ fontSize: '12px', color: '#666' }}>
+                          <div style={{ fontSize: '12px', color: THEME_COLORS.textSecondary }}>
                             {notif.message}
                           </div>
                         </Box>

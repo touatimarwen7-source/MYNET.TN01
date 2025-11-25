@@ -1,3 +1,4 @@
+import { THEME_COLORS } from './themeHelpers';
 import React from 'react';
 import { Box, Typography, Button, Alert } from '@mui/material';
 import RefreshIcon from '@mui/icons-material/Refresh';
@@ -22,7 +23,7 @@ const ErrorFallback = ({ error, resetError }) => {
       }}
     >
       <Box sx={{ display: 'flex', justifyContent: 'center', marginBottom: '16px' }}>
-        <WarningIcon sx={{ fontSize: 48, color: '#f57c00' }} />
+        <WarningIcon sx={{ fontSize: 48, color: THEME_COLORS.warning }} />
       </Box>
 
       <Typography
@@ -39,7 +40,7 @@ const ErrorFallback = ({ error, resetError }) => {
       <Typography
         variant="body2"
         sx={{
-          color: '#616161',
+          color: THEME_COLORS.textSecondary,
           marginBottom: '16px'
         }}
       >
@@ -67,7 +68,7 @@ const ErrorFallback = ({ error, resetError }) => {
           fontWeight: 500,
           borderRadius: '4px',
           '&:hover': {
-            backgroundColor: '#003d7a'
+            backgroundColor: 'THEME_COLORS.primaryDark'
           }
         }}
       >

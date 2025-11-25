@@ -1,3 +1,4 @@
+import { THEME_COLORS } from './themeHelpers';
 import { Box, Button, Typography, Stack } from '@mui/material';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
@@ -47,7 +48,7 @@ export default function Pagination({
         marginTop: '24px'
       }}
     >
-      <Typography sx={{ fontSize: '13px', color: '#616161' }}>
+      <Typography sx={{ fontSize: '13px', color: THEME_COLORS.textSecondary }}>
         {totalItems > 0 
           ? `Affichage ${startItem}-${endItem} sur ${totalItems} éléments`
           : `Page ${currentPage} sur ${totalPages}`

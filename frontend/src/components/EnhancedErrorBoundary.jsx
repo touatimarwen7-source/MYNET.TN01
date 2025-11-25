@@ -4,6 +4,7 @@
  * Also sends errors to backend for monitoring
  */
 
+import { THEME_COLORS } from './themeHelpers';
 import React from 'react';
 import { Box, Card, CardContent, Button, Typography, Alert } from '@mui/material';
 import { institutionalTheme } from '../theme/theme';
@@ -70,7 +71,7 @@ class EnhancedErrorBoundary extends React.Component {
               </Typography>
 
               <Box sx={{
-                backgroundColor: '#f5f5f5',
+                backgroundColor: 'THEME_COLORS.bgDefault',
                 p: 2,
                 borderRadius: 1,
                 mb: 2,
@@ -78,7 +79,7 @@ class EnhancedErrorBoundary extends React.Component {
                 overflow: 'auto',
                 fontFamily: 'monospace',
                 fontSize: '12px',
-                color: '#d32f2f'
+                color: THEME_COLORS.error
               }}>
                 <div>{this.state.error && this.state.error.toString()}</div>
                 {this.state.errorInfo && (
@@ -91,7 +92,7 @@ class EnhancedErrorBoundary extends React.Component {
                 )}
               </Box>
 
-              <Typography sx={{ mb: 3, color: '#666', fontSize: '14px' }}>
+              <Typography sx={{ mb: 3, color: THEME_COLORS.textSecondary, fontSize: '14px' }}>
                 Erreur #{this.state.errorCount} | Cette erreur a été enregistrée automatiquement pour diagnostic.
               </Typography>
 

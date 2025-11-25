@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { THEME_COLORS } from './themeHelpers';
 import { useNavigate } from 'react-router-dom';
 import {
   Box,
@@ -121,7 +122,7 @@ export default function HeroSearch() {
   };
 
   return (
-    <Paper elevation={0} sx={{ padding: '24px', backgroundColor: '#FFFFFF', border: '1px solid #E0E0E0', borderRadius: '4px' }}>
+    <Paper elevation={0} sx={{ padding: '24px', backgroundColor: THEME_COLORS.bgPaper, border: '1px solid #E0E0E0', borderRadius: '4px' }}>
       <Stack spacing={2}>
         <Stack direction="row" spacing={1}>
           {searchTabs.map(tab => (

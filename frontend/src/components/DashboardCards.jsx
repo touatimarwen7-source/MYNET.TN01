@@ -1,5 +1,6 @@
 import { Box, Card, CardContent, Typography, LinearProgress, Stack, Chip } from '@mui/material';
 import institutionalTheme from '../theme/theme';
+import { THEME_COLORS } from './themeHelpers';
 
 export default function DashboardCards({ cards }) {
   const theme = institutionalTheme;
@@ -35,7 +36,7 @@ export default function DashboardCards({ cards }) {
         <Card key={idx} sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
           <CardContent>
             <Stack spacing={2} sx={{ height: '100%' }}>
-              <Typography variant="subtitle2" sx={{ fontWeight: 500, color: '#616161' }}>
+              <Typography variant="subtitle2" sx={{ fontWeight: 500, color: THEME_COLORS.textSecondary }}>
                 {card.label}
               </Typography>
               
@@ -44,7 +45,7 @@ export default function DashboardCards({ cards }) {
               </Typography>
               
               {card.subtitle && (
-                <Typography variant="caption" sx={{ color: '#9e9e9e' }}>
+                <Typography variant="caption" sx={{ color: THEME_COLORS.textDisabled }}>
                   {card.subtitle}
                 </Typography>
               )}

@@ -3,6 +3,7 @@
  * Shows how to use real-time features in any component
  */
 
+import { THEME_COLORS } from './themeHelpers';
 import React, { useEffect } from 'react';
 import { Box, Typography, Button, Card, CardContent } from '@mui/material';
 import useWebSocket from '../hooks/useWebSocket';
@@ -43,7 +44,7 @@ export const WebSocketExample = ({ userId, tenderId }) => {
               <Typography variant="h6">
                 {connected ? 'Connecté' : 'Déconnecté'}
               </Typography>
-              <Typography sx={{ fontSize: '12px', color: '#666' }}>
+              <Typography sx={{ fontSize: '12px', color: THEME_COLORS.textSecondary }}>
                 {connected ? 'Prêt à recevoir les mises à jour en temps réel' : 'En reconnexion...'}
               </Typography>
             </Box>
@@ -74,7 +75,7 @@ export const WebSocketExample = ({ userId, tenderId }) => {
                       <div style={{ fontWeight: 600, fontSize: '13px' }}>
                         {notif.icon} {notif.title}
                       </div>
-                      <div style={{ fontSize: '12px', color: '#666' }}>
+                      <div style={{ fontSize: '12px', color: THEME_COLORS.textSecondary }}>
                         {notif.message}
                       </div>
                     </Box>
@@ -99,7 +100,7 @@ export const WebSocketExample = ({ userId, tenderId }) => {
             <Typography variant="h6" sx={{ mb: 1 }}>
               👥 المستخدمون الآن على الإنترنت ({onlineUsers.size})
             </Typography>
-            <Typography sx={{ fontSize: '12px', color: '#666' }}>
+            <Typography sx={{ fontSize: '12px', color: THEME_COLORS.textSecondary }}>
               {Array.from(onlineUsers).join(', ')}
             </Typography>
           </CardContent>

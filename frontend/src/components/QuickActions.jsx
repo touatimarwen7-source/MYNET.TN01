@@ -1,3 +1,4 @@
+import { THEME_COLORS } from './themeHelpers';
 import { useNavigate } from 'react-router-dom';
 import institutionalTheme from '../theme/theme';
 import { Grid, Card, CardActionArea, CardContent, Typography, Chip, Box } from '@mui/material';
@@ -31,7 +32,7 @@ export default function QuickActions({ actions }) {
       <Grid container spacing={2}>
         {actions.map((action, idx) => (
           <Grid size={{ xs: 12, sm: 6, md: 4 }} key={idx}>
-            <Card sx={{ backgroundColor: '#FFFFFF', border: '1px solid #E0E0E0', borderRadius: '4px', height: '100%' }}>
+            <Card sx={{ backgroundColor: THEME_COLORS.bgPaper, border: '1px solid #E0E0E0', borderRadius: '4px', height: '100%' }}>
               <CardActionArea onClick={() => handleActionClick(action)} sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
                 <CardContent sx={{ flex: 1, width: '100%' }}>
                   <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', marginBottom: '8px' }}>
@@ -42,7 +43,7 @@ export default function QuickActions({ actions }) {
                       <Chip label={action.badge} size="small" color="primary" sx={{ marginLeft: '8px' }} />
                     )}
                   </Box>
-                  <Typography sx={{ fontSize: '12px', color: '#616161' }}>
+                  <Typography sx={{ fontSize: '12px', color: THEME_COLORS.textSecondary }}>
                     {action.description}
                   </Typography>
                 </CardContent>

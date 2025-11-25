@@ -1,3 +1,4 @@
+import { THEME_COLORS } from './themeHelpers';
 import { useState } from 'react';
 import institutionalTheme from '../theme/theme';
 import { Box, Card, CardContent, Typography, Chip, TextField, Button, Stack } from '@mui/material';
@@ -29,7 +30,7 @@ export default function ProfileInterestsTab({ interests: initialInterests, onUpd
         </Typography>
         <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '24px' }}>
           {interests.length === 0 ? (
-            <Typography sx={{ color: '#999', fontStyle: 'italic' }}>Aucun secteur défini</Typography>
+            <Typography sx={{ color: THEME_COLORS.textDisabled, fontStyle: 'italic' }}>Aucun secteur défini</Typography>
           ) : (
             interests.map((interest, idx) => (
               <Chip key={idx} label={interest} onDelete={() => removeInterest(idx)} sx={{ backgroundColor: '#e3f2fd', color: theme.palette.primary.main }} />

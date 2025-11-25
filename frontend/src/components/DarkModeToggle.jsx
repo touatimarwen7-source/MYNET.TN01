@@ -1,5 +1,6 @@
 import { useContext } from 'react';
 import { IconButton } from '@mui/material';
+import { THEME_COLORS } from './themeHelpers';
 import { DarkModeContext } from '../contexts/DarkModeContext';
 import institutionalTheme from '../theme/theme';
 
@@ -14,7 +15,7 @@ export default function DarkModeToggle() {
       sx={{
         color: theme.palette.primary.main,
         '&:hover': {
-          backgroundColor: '#f5f5f5'
+          backgroundColor: 'THEME_COLORS.bgDefault'
         }
       }}
     >

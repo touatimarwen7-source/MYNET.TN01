@@ -1,0 +1,14 @@
+# Browserslist config for MyNet.tn
+
+# Production browsers
+> 0.5%
+last 2 versions
+firefox esr
+not dead
+not IE 11
+
+# Development browsers
+[development]
+last 1 chrome version
+last 1 firefox version
+last 1 safari version

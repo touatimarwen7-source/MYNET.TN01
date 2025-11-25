@@ -78,6 +78,7 @@ class Logger {
 
     // Console output
     const style = this.getConsoleStyle(level);
+    console.log(
       `%c[${level}] ${this.name}: ${message}`,
       style,
       data

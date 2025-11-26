@@ -270,11 +270,11 @@ export default function CreateTender() {
         console.log('✅ Found tender ID in response.tender.id');
       }
 
-      // Validate tender ID
-      if (!tenderId || typeof tenderId !== 'string' && typeof tenderId !== 'number') {
+      // Validate tender ID - FIXED: proper parentheses for logic
+      if (!tenderId || (typeof tenderId !== 'string' && typeof tenderId !== 'number')) {
         console.error('❌ Invalid tender ID:', tenderId);
         console.error('Full response structure:', JSON.stringify(response?.data || response, null, 2));
-        setError(`Erreur de créación: ID du tender invalide. Veuillez réessayer ou contacter le support.`);
+        setError(`Erreur de création: ID du tender invalide. Veuillez réessayer ou contacter le support.`);
         return;
       }
 
@@ -304,7 +304,7 @@ export default function CreateTender() {
       } else if (err.response?.status === 409) {
         errorMessage = 'Un appel d\'offres avec ce titre existe déjà.';
       } else if (err.response?.status === 422) {
-        errorMessage = `Validation échouée: ${err.response.data?.message || 'Les données fournie ne sont pas valides'}`;
+        errorMessage = `Validation échouée: ${err.response.data?.message || 'Les données fournies ne sont pas valides'}`;
       } else if (err.response?.status === 500) {
         errorMessage = 'Erreur serveur. Veuillez réessayer plus tard ou contacter le support.';
       } else if (err.message === 'Network Error') {

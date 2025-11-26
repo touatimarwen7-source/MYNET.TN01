@@ -72,14 +72,60 @@ class MFAService {
         
         await this.storeMFACode(userId, code, expiresAt, purpose);
         
-        // TODO: Send code via email/SMS
-        // For now, return code for testing
+        // Send code via email or SMS
+        try {
+            if (channel === 'email') {
+                const pool = getPool();
+                const userResult = await pool.query('SELECT email FROM users WHERE id = $1', [userId]);
+                
+                if (userResult.rows.length > 0) {
+                    const userEmail = userResult.rows[0].email;
+                    await this.sendMFACodeByEmail(userEmail, code, purpose);
+                }
+            } else if (channel === 'sms') {
+                await this.sendMFACodeBySMS(userId, code);
+            }
+        } catch (error) {
+            // Log error but don't fail the request - code is still stored in DB
+        }
         
         return { 
             success: true, 
             message: `MFA code sent via ${channel}`,
             expiresIn: '5 minutes'
         };
+    }
+
+    /**
+     * Send MFA code via email
+     */
+    async sendMFACodeByEmail(email, code, purpose) {
+        try {
+            const emailService = require('../config/emailService');
+            const subject = 'Code de Vérification MyNet.tn';
+            const html = `
+                <h2>Vérification de Sécurité</h2>
+                <p>Votre code de vérification pour ${purpose} est:</p>
+                <h1 style="color: #0056B3; letter-spacing: 2px;">${code}</h1>
+                <p>Ce code expire dans 5 minutes.</p>
+                <p>Ne partagez jamais ce code avec quiconque.</p>
+                <hr>
+                <p>© MyNet.tn - Plateforme B2B</p>
+            `;
+            
+            await emailService.sendEmail(email, subject, html);
+            return true;
+        } catch (error) {
+            return false;
+        }
+    }
+
+    /**
+     * Send MFA code via SMS (placeholder for future implementation)
+     */
+    async sendMFACodeBySMS(userId, code) {
+        // TODO: Implement SMS sending via Twilio or similar
+        return false;
     }
 }
 

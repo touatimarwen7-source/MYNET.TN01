@@ -53,8 +53,8 @@ const validateIdMiddleware = (paramName = 'id') => {
 const normalizeUserMiddleware = (req, res, next) => {
   if (req.user) {
     // Standardize to use req.user.id
-    if (!req.user.id && req.user.userId) {
-      req.user.id = req.user.userId;
+    if (!req.user.id && req.user.id) {
+      req.user.id = req.user.id;
     }
     
     // Validate user has an ID

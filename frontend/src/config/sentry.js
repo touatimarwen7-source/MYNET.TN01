@@ -11,8 +11,8 @@ import { BrowserTracing } from '@sentry/tracing';
  * @returns {void}
  */
 export function initializeSentry() {
-  const sentryDSN = process.env.REACT_APP_SENTRY_DSN || '';
-  const environment = process.env.NODE_ENV || 'development';
+  const sentryDSN = import.meta.env.VITE_SENTRY_DSN || '';
+  const environment = import.meta.env.MODE || 'development';
 
   // Only initialize if DSN is provided
   if (!sentryDSN) {

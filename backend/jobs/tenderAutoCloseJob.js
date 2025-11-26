@@ -9,7 +9,6 @@ const OpeningReportService = require('../services/OpeningReportService');
 class TenderAutoCloseJob {
   static async runAutoCloseJob() {
     const startTime = Date.now();
-    console.log('🕐 [TenderAutoCloseJob] Running tender auto-close check...');
     
     let closedCount = 0;
     let errorCount = 0;
@@ -27,15 +26,12 @@ class TenderAutoCloseJob {
       );
 
       if (!result || !result.rows || result.rows.length === 0) {
-        console.log('✅ [TenderAutoCloseJob] No tenders to close');
         return;
       }
 
-      console.log(`📋 [TenderAutoCloseJob] Found ${result.rows.length} tender(s) to close`);
 
       for (const tender of result.rows) {
         if (!tender || !tender.id) {
-          console.warn('⚠️  [TenderAutoCloseJob] Skipping invalid tender object');
           continue;
         }
 
@@ -50,7 +46,6 @@ class TenderAutoCloseJob {
           );
 
           const offers = (offersResult && offersResult.rows) || [];
-          console.log(`   - Tender #${tender.tender_number}: ${offers.length} offer(s) found`);
 
           await OpeningReportService.createOpeningReport(
             tender.id,
@@ -65,18 +60,14 @@ class TenderAutoCloseJob {
             [tender.id]
           );
 
-          console.log(`   ✅ Tender #${tender.tender_number} closed successfully`);
           closedCount++;
         } catch (error) {
           errorCount++;
-          console.error(`   ❌ Error closing tender #${tender.tender_number}:`, error.message);
         }
       }
 
       const duration = ((Date.now() - startTime) / 1000).toFixed(2);
-      console.log(`✅ [TenderAutoCloseJob] Completed: ${closedCount} closed, ${errorCount} errors in ${duration}s`);
     } catch (error) {
-      console.error('❌ [TenderAutoCloseJob] Fatal error:', error.message);
     }
   }
 
@@ -85,17 +76,14 @@ class TenderAutoCloseJob {
    * @returns {Object} Scheduled job object
    */
   static scheduleJob() {
-    console.log('🔄 [TenderAutoCloseJob] Scheduling job to run every 60 seconds...');
     
     try {
       const job = schedule.scheduleJob('*/1 * * * *', async () => {
         await this.runAutoCloseJob();
       });
       
-      console.log('✅ [TenderAutoCloseJob] Job scheduled successfully');
       return job;
     } catch (error) {
-      console.error('❌ [TenderAutoCloseJob] Failed to schedule job:', error.message);
       throw error;
     }
   }

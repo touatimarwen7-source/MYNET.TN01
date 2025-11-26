@@ -4,6 +4,8 @@
  */
 
 const rateLimit = require('express-rate-limit');
+const { REQUEST_SIZE_LIMIT } = require('../config/appConstants');
+const { logger } = require('../utils/logger');
 
 /**
  * Strict rate limiter for sensitive endpoints
@@ -139,11 +141,11 @@ function exponentialBackoffLimiter(options = {}) {
 /**
  * Request size validation to prevent buffer attacks
  */
-function requestSizeValidation(maxSize = '1mb') {
+function requestSizeValidation(maxSize = REQUEST_SIZE_LIMIT.FORMAT) {
   return (req, res, next) => {
     const contentLength = req.get('content-length');
     
-    if (contentLength && contentLength > 1048576) { // 1MB in bytes
+    if (contentLength && contentLength > REQUEST_SIZE_LIMIT.MAX_BYTES) {
       logger.warn('OVERSIZED_REQUEST', { ip: req.ip, size: contentLength });
       return res.status(413).json({
         success: false,

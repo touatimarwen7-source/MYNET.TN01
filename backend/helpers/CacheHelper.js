@@ -50,7 +50,6 @@ class CacheHelper {
         this.isConnected = false;
       });
     } catch (error) {
-      console.warn('Redis initialization skipped:', error.message);
     }
   }
 

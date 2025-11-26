@@ -83,12 +83,10 @@ async function initializeDb() {
             pool.on('connect', () => {
                 poolMetrics.totalConnections++;
                 poolMetrics.activeConnections++;
-                // Removed console.log - connection tracking handled by metrics
             });
 
             pool.on('remove', () => {
                 poolMetrics.activeConnections--;
-                // Removed console.log - connection tracking handled by metrics
             });
 
             // ✅ QUERY ERROR HANDLER - Catch idle transaction errors
@@ -105,7 +103,6 @@ async function initializeDb() {
             try {
                 const result = await client.query('SELECT NOW()');
                 // Connection successful - logged via server startup sequence only
-                // Removed verbose console.log statements
             } finally {
                 client.release();
             }

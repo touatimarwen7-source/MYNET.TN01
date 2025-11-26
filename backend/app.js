@@ -43,7 +43,7 @@ let initializeEmailService;
 try {
   initializeEmailService = require('./config/emailService').initializeEmailService;
 } catch (e) {
-  initializeEmailService = () => console.warn('Email service optional');
+  initializeEmailService = () => logger.warn('Email service optional');
 }
 const loggingMiddleware = require('./middleware/loggingMiddleware');
 const { requestLoggingMiddleware, errorLoggingMiddleware } = require('./middleware/requestLoggingMiddleware');

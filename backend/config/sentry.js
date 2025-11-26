@@ -17,7 +17,6 @@ function initializeSentry(app) {
 
   // Only initialize if DSN is provided
   if (!sentryDSN) {
-    console.warn('⚠️ Sentry DSN not configured - error tracking disabled');
     return;
   }
 
@@ -52,7 +51,6 @@ function initializeSentry(app) {
   // Attach Sentry error handler (must be last middleware)
   app.use(Sentry.Handlers.errorHandler());
 
-  console.log('✅ Sentry error tracking initialized');
 }
 
 /**

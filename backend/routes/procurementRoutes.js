@@ -80,22 +80,29 @@ router.get('/tenders', async (req, res) => {
     const { page, limit } = getPaginationParams(req);
     const pool = getPool();
     
-    // Optimized query with selective columns and pagination
-    let query = DataFetchingOptimizer.buildSelectQuery('tenders', 'tender_list');
-    query += ` WHERE is_deleted = FALSE AND is_public = TRUE`;
+    const offset = (page - 1) * limit;
     
-    const totalResult = await pool.query(`SELECT COUNT(*) FROM tenders WHERE is_deleted = FALSE AND is_public = TRUE`);
+    // Get total count
+    const totalResult = await pool.query(`SELECT COUNT(*) as count FROM tenders WHERE is_deleted = FALSE AND is_public = TRUE`);
     const total = parseInt(totalResult.rows[0].count);
     
-    query = DataFetchingOptimizer.addPagination(query, page, limit);
-    const result = await pool.query(query + ` ORDER BY created_at DESC`);
+    // Get paginated results
+    const result = await pool.query(
+      `SELECT id, tender_number, title, category, budget_min, budget_max, deadline, status, is_public, buyer_id, created_at 
+       FROM tenders 
+       WHERE is_deleted = FALSE AND is_public = TRUE
+       ORDER BY created_at DESC
+       LIMIT $1 OFFSET $2`,
+      [limit, offset]
+    );
     
     res.json({
+      success: true,
       tenders: result.rows,
       pagination: { page, limit, total, pages: Math.ceil(total / limit) }
     });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    return handleError(res, error, 500);
   }
 });
 

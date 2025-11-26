@@ -213,9 +213,6 @@ app.get('/api-spec.json', (req, res) => {
   res.send(swaggerSpec);
 });
 
-// 🔐 AUTH ROUTES with rate limiting
-app.use('/api/auth/login', authLimiter, enhancedRateLimiting.login);
-app.use('/api/auth/register', authLimiter, enhancedRateLimiting.register);
 app.use('/api/auth', authRoutes);
 app.use('/api/procurement', procurementRoutes);
 app.use('/api/opening-reports', openingReportRoutes);

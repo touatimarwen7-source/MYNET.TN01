@@ -10,30 +10,31 @@ const { errorTracker } = require('./services/ErrorTrackingService');
 const { initializeSentry, captureException } = require('./config/sentry');
 const performanceMonitoring = require('./utils/performanceMonitoring');
 const analyticsTracking = require('./utils/analyticsTracking');
+const { logger } = require('./utils/logger');
 
 const PORT = process.env.PORT || 3000;
 
 async function startServer() {
     try {
-        console.log('========================================');
-        console.log('MyNet.tn Backend Server Starting...');
-        console.log('========================================');
+        logger.info('========================================');
+        logger.info('MyNet.tn Backend Server Starting...');
+        logger.info('========================================');
 
         // Initialize monitoring and error tracking
         initializeSentry(app);
-        console.log('✅ Error tracking initialized');
+        logger.info('✅ Error tracking initialized');
 
         const dbConnected = await initializeDb();
         
         if (dbConnected) {
             const pool = getPool();
             await initializeSchema(pool);
-            console.log('✅ Database initialized successfully');
+            logger.info('✅ Database initialized successfully');
 
             // 🔄 Initialize backup scheduler
             BackupScheduler.start();
         } else {
-            console.warn('⚠️  Server starting without database connection');
+            logger.warn('⚠️  Server starting without database connection');
         }
 
         // ✨ Create HTTP server for WebSocket support
@@ -41,27 +42,27 @@ async function startServer() {
         
         // 🔌 Initialize WebSocket
         const io = initializeWebSocket(server);
-        console.log('✅ WebSocket initialized');
+        logger.info('✅ WebSocket initialized');
 
         server.listen(PORT, '0.0.0.0', () => {
-            console.log('========================================');
-            console.log(`🚀 Server running on port ${PORT}`);
-            console.log(`📍 Access API at: http://localhost:${PORT}`);
-            console.log(`🔌 WebSocket available at: ws://localhost:${PORT}`);
-            console.log('========================================');
-            console.log('Available endpoints:');
-            console.log('  - POST /api/auth/register');
-            console.log('  - POST /api/auth/login');
-            console.log('  - GET  /api/procurement/tenders');
-            console.log('  - POST /api/procurement/tenders');
-            console.log('  - POST /api/procurement/offers');
-            console.log('  - GET  /api/admin/statistics');
-            console.log('  - GET  /api/search/tenders');
-            console.log('========================================');
+            logger.info('========================================');
+            logger.info(`🚀 Server running on port ${PORT}`);
+            logger.info(`📍 Access API at: http://localhost:${PORT}`);
+            logger.info(`🔌 WebSocket available at: ws://localhost:${PORT}`);
+            logger.info('========================================');
+            logger.info('Available endpoints:');
+            logger.info('  - POST /api/auth/register');
+            logger.info('  - POST /api/auth/login');
+            logger.info('  - GET  /api/procurement/tenders');
+            logger.info('  - POST /api/procurement/tenders');
+            logger.info('  - POST /api/procurement/offers');
+            logger.info('  - GET  /api/admin/statistics');
+            logger.info('  - GET  /api/search/tenders');
+            logger.info('========================================');
         });
 
     } catch (error) {
-        console.error('❌ Failed to start server:', error.message);
+        logger.error('❌ Failed to start server:', { message: error.message });
         errorTracker.trackError(error, {
             severity: 'critical',
             context: 'server_startup'
@@ -72,7 +73,7 @@ async function startServer() {
 
 // 🔍 Global error handlers for uncaught exceptions
 process.on('uncaughtException', (error) => {
-    console.error('💥 Uncaught Exception:', error);
+    logger.error('💥 Uncaught Exception:', { error: error.message });
     errorTracker.trackError(error, {
         severity: 'critical',
         context: 'uncaught_exception'
@@ -80,7 +81,7 @@ process.on('uncaughtException', (error) => {
 });
 
 process.on('unhandledRejection', (reason, promise) => {
-    console.error('💥 Unhandled Rejection:', reason);
+    logger.error('💥 Unhandled Rejection:', { reason: String(reason) });
     errorTracker.trackError(new Error(String(reason)), {
         severity: 'critical',
         context: 'unhandled_rejection'

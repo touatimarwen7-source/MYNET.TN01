@@ -39,6 +39,8 @@ const { ipMiddleware } = require('./middleware/ipMiddleware');
 const { requestTimeout } = require('./middleware/timeoutMiddleware');
 const { perUserLimiter, apiLimiters } = require('./middleware/perUserRateLimiting');
 const { sqlInjectionDetector } = require('./middleware/sqlInjectionAudit');
+const { logger } = require('./utils/logger');
+
 let initializeEmailService;
 try {
   initializeEmailService = require('./config/emailService').initializeEmailService;

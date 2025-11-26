@@ -4,10 +4,9 @@
  * Also sends errors to backend for monitoring
  */
 
-import { THEME_COLORS } from './themeHelpers';
 import React from 'react';
 import { Box, Card, CardContent, Button, Typography, Alert } from '@mui/material';
-import { institutionalTheme } from '../theme/theme';
+import institutionalTheme from '../theme/theme';
 
 class EnhancedErrorBoundary extends React.Component {
   constructor(props) {

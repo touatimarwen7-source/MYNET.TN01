@@ -36,6 +36,16 @@ export default function SuperAdminMenu() {
 
   const adminFunctions = [
     {
+      id: 'dashboard',
+      title: 'Centre de Contrôle',
+      description: 'Tableau de bord principal avec statistiques et actions rapides',
+      icon: DashboardIcon,
+      color: theme.palette.primary.main,
+      route: '/super-admin/dashboard',
+      category: 'Système',
+      features: ['Statistiques', 'Santé système', 'Actions rapides', 'Activités'],
+    },
+    {
       id: 'pages',
       title: 'Gestion des Pages Statiques',
       description: 'Créer, modifier et supprimer les pages statiques du site',

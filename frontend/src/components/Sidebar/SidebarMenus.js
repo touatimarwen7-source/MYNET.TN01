@@ -160,8 +160,14 @@ export const adminMenu = [
 export const superAdminMenu = [
   {
     id: 'dashboard',
-    label: 'Centre de Contrôle Total',
-    path: '/super-admin',
+    label: '📊 Centre de Contrôle',
+    path: '/super-admin/dashboard',
+    subItems: []
+  },
+  {
+    id: 'admin-functions',
+    label: 'Fonctions Admin',
+    path: '/super-admin-menu',
     subItems: []
   },
   {

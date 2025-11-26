@@ -70,7 +70,7 @@ class EnhancedErrorBoundary extends React.Component {
               </Typography>
 
               <Box sx={{
-                backgroundColor: 'THEME_COLORS.bgDefault',
+                backgroundColor: institutionalTheme.palette.background.default,
                 p: 2,
                 borderRadius: 1,
                 mb: 2,
@@ -78,7 +78,8 @@ class EnhancedErrorBoundary extends React.Component {
                 overflow: 'auto',
                 fontFamily: 'monospace',
                 fontSize: '12px',
-                color: THEME_COLORS.error
+                color: institutionalTheme.palette.error.main,
+                border: `1px solid ${institutionalTheme.palette.divider}`
               }}>
                 <div>{this.state.error && this.state.error.toString()}</div>
                 {this.state.errorInfo && (
@@ -91,7 +92,7 @@ class EnhancedErrorBoundary extends React.Component {
                 )}
               </Box>
 
-              <Typography sx={{ mb: 3, color: THEME_COLORS.textSecondary, fontSize: '14px' }}>
+              <Typography sx={{ mb: 3, color: institutionalTheme.palette.text.secondary, fontSize: '14px' }}>
                 Erreur #{this.state.errorCount} | Cette erreur a été enregistrée automatiquement pour diagnostic.
               </Typography>
 

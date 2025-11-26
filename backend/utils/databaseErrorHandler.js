@@ -3,7 +3,7 @@
  * Handles all database errors consistently
  */
 
-const logger = require('./logger');
+const { logger } = require('./logger');
 const ErrorResponseFormatter = require('./errorResponseFormatter');
 
 class DatabaseErrorHandler {

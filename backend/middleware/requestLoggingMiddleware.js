@@ -3,7 +3,7 @@
  * Comprehensive logging for debugging and monitoring
  */
 
-const logger = require('../utils/logger');
+const { logger } = require('../utils/logger');
 
 /**
  * Logging middleware for all requests and responses

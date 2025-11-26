@@ -3,7 +3,7 @@
  * Standardizes error responses across all endpoints
  */
 
-const logger = require('./logger');
+const { logger } = require('./logger');
 
 /**
  * Standard error response format

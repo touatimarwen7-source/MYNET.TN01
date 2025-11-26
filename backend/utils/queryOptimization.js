@@ -3,7 +3,7 @@
  * Prevents N+1 problem and optimizes database queries
  */
 
-const logger = require('./logger');
+const { logger } = require('./logger');
 
 /**
  * Batch loader for preventing N+1 problem

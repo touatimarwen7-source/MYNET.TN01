@@ -67,6 +67,29 @@ class Logger {
     );
   }
 
+  /**
+   * Convenience methods for logging levels
+   */
+  debug(message, data = {}) {
+    return this.log('DEBUG', message, data);
+  }
+
+  info(message, data = {}) {
+    return this.log('INFO', message, data);
+  }
+
+  warn(message, data = {}) {
+    return this.log('WARN', message, data);
+  }
+
+  error(message, data = {}) {
+    return this.log('ERROR', message, data);
+  }
+
+  fatal(message, data = {}) {
+    return this.log('FATAL', message, data);
+  }
+
   getColorCode(level) {
     const colors = {
       DEBUG: '\x1b[36m', // Cyan

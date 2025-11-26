@@ -15,7 +15,7 @@ import {
 } from '@mui/material';
 import {
   Dashboard, People, Settings, Assessment, Security, Storage, Edit, Delete, Block, Check,
-  Download, Upload, Refresh, Add, Close, TrendingUp, Activity, Visibility, Lock,
+  Download, Upload, Refresh, Add, Close, TrendingUp, Visibility, Lock,
   BarChart, Warning, CheckCircle, Info, Email, Phone, MapPin, Calendar, Percent
 } from '@mui/icons-material';
 import EnhancedErrorBoundary from '../../components/EnhancedErrorBoundary';
@@ -84,7 +84,7 @@ function AdvancedDashboard() {
   const stats = [
     { label: 'إجمالي المستخدمين النشطين', value: '3,847', change: 18, icon: People, color: '#0056B3' },
     { label: 'الأجل المُنشرة', value: '245', change: 24, icon: Assessment, color: '#2e7d32' },
-    { label: 'العروض المُقيّمة', value: '892', change: -3, icon: Activity, color: '#f57c00' },
+    { label: 'العروض المُقيّمة', value: '892', change: -3, icon: TrendingUp, color: '#f57c00' },
     { label: 'الإيرادات الإجمالية', value: 'د.ت 12.5M', change: 35, icon: TrendingUp, color: '#7b1fa2' },
   ];
 
@@ -308,7 +308,7 @@ function AdvancedUserManagement() {
                       </TableCell>
                       <TableCell>
                         <Stack direction="row" alignItems="center" spacing={0.5}>
-                          <Activity sx={{ fontSize: 16, color: THEME.palette.primary.main }} />
+                          <TrendingUp sx={{ fontSize: 16, color: THEME.palette.primary.main }} />
                           <Typography variant="body2" sx={{ fontWeight: 600 }}>{user.activities}</Typography>
                         </Stack>
                       </TableCell>

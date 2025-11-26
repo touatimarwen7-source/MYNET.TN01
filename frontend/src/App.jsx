@@ -110,6 +110,7 @@ const SubscriptionPlans = lazy(() => import('./pages/SubscriptionPlans'));
 const PageEditor = lazy(() => import('./pages/PageEditor'));
 const SuperAdminMenu = lazy(() => import('./pages/SuperAdminMenu'));
 const OpeningReport = lazy(() => import('./pages/OpeningReport'));
+const DraftsPage = lazy(() => import('./pages/DraftsPage'));
 
 const LoadingFallback = () => (
   <Container maxWidth="lg" sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '60vh' }}>

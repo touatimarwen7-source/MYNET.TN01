@@ -55,10 +55,10 @@ export default function AdminAnalytics() {
     } catch (err) {
       setError('Erreur lors du chargement des données');
       setStats([
-        { label: 'Utilisateurs Actifs', value: '1,254', change: '+12%', icon: <PeopleIcon />, color: theme.palette.primary.main },
-        { label: 'Appels d\'Offres Ouverts', value: '342', change: '+8%', icon: <TrendingUpIcon />, color: '#2E7D32' },
-        { label: 'Offres Envoyées', value: '1,847', change: '+25%', icon: <StorageIcon />, color: '#F57C00' },
-        { label: 'Erreurs', value: '3', change: '-2%', icon: <ErrorIcon />, color: '#C62828' }
+        { label: 'Utilisateurs Actifs', value: '1,254', change: '+12%', iconType: 'people', color: theme.palette.primary.main },
+        { label: 'Appels d\'Offres Ouverts', value: '342', change: '+8%', iconType: 'trending', color: '#2E7D32' },
+        { label: 'Offres Envoyées', value: '1,847', change: '+25%', iconType: 'storage', color: '#F57C00' },
+        { label: 'Erreurs', value: '3', change: '-2%', iconType: 'error', color: '#C62828' }
       ]);
       setActivities([
         { event: 'Nouvel utilisateur enregistré', timestamp: 'Il y a 2 heures', user: 'Entreprise XYZ' },
@@ -71,16 +71,28 @@ export default function AdminAnalytics() {
     }
   };
 
+  const renderIcon = (iconType) => {
+    switch(iconType) {
+      case 'people': return <PeopleIcon />;
+      case 'trending': return <TrendingUpIcon />;
+      case 'storage': return <StorageIcon />;
+      case 'error': return <ErrorIcon />;
+      default: return null;
+    }
+  };
+
   if (loading) {
     return <Box sx={{ display: 'flex', justifyContent: 'center', py: 4 }}><CircularProgress /></Box>;
   }
 
-  const displayStats = stats.length > 0 ? stats : [
-    { label: 'Utilisateurs Actifs', value: '1,254', change: '+12%', icon: <PeopleIcon />, color: theme.palette.primary.main },
-    { label: 'Appels d\'Offres Ouverts', value: '342', change: '+8%', icon: <TrendingUpIcon />, color: '#2E7D32' },
-    { label: 'Offres Envoyées', value: '1,847', change: '+25%', icon: <StorageIcon />, color: '#F57C00' },
-    { label: 'Erreurs', value: '3', change: '-2%', icon: <ErrorIcon />, color: '#C62828' }
+  const defaultStats = [
+    { label: 'Utilisateurs Actifs', value: '1,254', change: '+12%', iconType: 'people', color: theme.palette.primary.main },
+    { label: 'Appels d\'Offres Ouverts', value: '342', change: '+8%', iconType: 'trending', color: '#2E7D32' },
+    { label: 'Offres Envoyées', value: '1,847', change: '+25%', iconType: 'storage', color: '#F57C00' },
+    { label: 'Erreurs', value: '3', change: '-2%', iconType: 'error', color: '#C62828' }
   ];
+
+  const displayStats = stats.length > 0 ? stats : defaultStats;
 
   const displayActivities = activities.length > 0 ? activities : [
     { event: 'Nouvel utilisateur enregistré', timestamp: 'Il y a 2 heures', user: 'Entreprise XYZ' },
@@ -108,7 +120,7 @@ export default function AdminAnalytics() {
             <Card sx={{ border: '1px solid #E0E0E0', boxShadow: 'none' }}>
               <CardContent>
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 1 }}>
-                  <Box sx={{ fontSize: '28px', color: stat.color }}>{stat.icon}</Box>
+                  <Box sx={{ fontSize: '28px', color: stat.color }}>{renderIcon(stat.iconType || stat.icon)}</Box>
                   <Typography sx={{ fontSize: '12px', fontWeight: 600, color: stat.change?.startsWith('+') ? '#2E7D32' : '#C62828' }}>
                     {stat.change}
                   </Typography>

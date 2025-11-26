@@ -50,16 +50,16 @@ const statusLabels = {
   'pending': 'En attente'
 };
 
-// Role colors
-const roleColors = {
-  'buyer': theme.palette.primary.main,
-  'supplier': '#2E7D32',
-  'admin': '#F57C00',
-  'super_admin': '#7B1FA2'
-};
-
 export default function UserRoleManagement() {
   const theme = institutionalTheme;
+
+  // Role colors - must be inside component after theme is defined
+  const roleColors = {
+    'buyer': theme.palette.primary.main,
+    'supplier': '#2E7D32',
+    'admin': '#F57C00',
+    'super_admin': '#7B1FA2'
+  };
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');

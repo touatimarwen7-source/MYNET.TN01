@@ -116,7 +116,7 @@ export default function AdminAnalytics() {
 
       <Grid container spacing={2} sx={{ mb: 4 }}>
         {displayStats.map((stat, idx) => (
-          <Grid item xs={12} sm={6} md={3} key={idx}>
+          <Grid xs={12} sm={6} md={3} key={idx}>
             <Card sx={{ border: '1px solid #E0E0E0', boxShadow: 'none' }}>
               <CardContent>
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 1 }}>
@@ -143,7 +143,7 @@ export default function AdminAnalytics() {
 
       <Grid container spacing={2} sx={{ mb: 4 }}>
         {resourceUsage.map((resource, idx) => (
-          <Grid item xs={12} sm={6} md={3} key={idx}>
+          <Grid xs={12} sm={6} md={3} key={idx}>
             <Card sx={{ border: '1px solid #E0E0E0', boxShadow: 'none' }}>
               <CardContent>
                 <Typography variant="caption" sx={{ color: '#616161', display: 'block', mb: 1 }}>

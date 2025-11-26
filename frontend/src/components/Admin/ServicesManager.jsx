@@ -221,7 +221,7 @@ export default function ServicesManager() {
 
       <Grid container spacing={2}>
         {plans.map(plan => (
-          <Grid item xs={12} sm={6} md={4} key={plan.id}>
+          <Grid xs={12} sm={6} md={4} key={plan.id}>
             <Card sx={{ border: '1px solid #E0E0E0', boxShadow: 'none', height: '100%' }}>
               <CardContent>
                 <Typography variant="h6" sx={{ fontWeight: 600, mb: 1, color: theme.palette.primary.main }}>

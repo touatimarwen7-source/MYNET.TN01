@@ -146,7 +146,7 @@ export default function SystemConfig() {
       )}
 
       <Grid container spacing={2}>
-        <Grid item xs={12} md={6}>
+        <Grid xs={12} md={6}>
           <Card sx={{ border: '1px solid #E0E0E0', boxShadow: 'none' }}>
             <CardContent>
               <Typography variant="h6" sx={{ fontWeight: 600, mb: 2 }}>
@@ -214,7 +214,7 @@ export default function SystemConfig() {
           </Card>
         </Grid>
 
-        <Grid item xs={12} md={6}>
+        <Grid xs={12} md={6}>
           <Card sx={{ border: '1px solid #E0E0E0', boxShadow: 'none' }}>
             <CardContent>
               <Typography variant="h6" sx={{ fontWeight: 600, mb: 2 }}>
@@ -263,7 +263,7 @@ export default function SystemConfig() {
           </Card>
         </Grid>
 
-        <Grid item xs={12}>
+        <Grid xs={12}>
           <Card sx={{ border: '1px solid #E0E0E0', boxShadow: 'none' }}>
             <CardContent>
               <Typography variant="h6" sx={{ fontWeight: 600, mb: 2 }}>
@@ -272,25 +272,25 @@ export default function SystemConfig() {
               <Divider sx={{ mb: 2 }} />
 
               <Grid container spacing={2}>
-                <Grid item xs={6} sm={3}>
+                <Grid xs={6} sm={3}>
                   <Box>
                     <Typography variant="caption" sx={{ color: '#616161' }}>Version</Typography>
                     <Typography sx={{ fontWeight: 600 }}>1.2.0</Typography>
                   </Box>
                 </Grid>
-                <Grid item xs={6} sm={3}>
+                <Grid xs={6} sm={3}>
                   <Box>
                     <Typography variant="caption" sx={{ color: '#616161' }}>Santé du Système</Typography>
                     <Typography sx={{ fontWeight: 600, color: '#2E7D32' }}>99.9%</Typography>
                   </Box>
                 </Grid>
-                <Grid item xs={6} sm={3}>
+                <Grid xs={6} sm={3}>
                   <Box>
                     <Typography variant="caption" sx={{ color: '#616161' }}>Utilisateurs Actifs</Typography>
                     <Typography sx={{ fontWeight: 600 }}>1,254</Typography>
                   </Box>
                 </Grid>
-                <Grid item xs={6} sm={3}>
+                <Grid xs={6} sm={3}>
                   <Box>
                     <Typography variant="caption" sx={{ color: '#616161' }}>Dernière Sauvegarde</Typography>
                     <Typography sx={{ fontWeight: 600 }}>Aujourd'hui 02:30</Typography>

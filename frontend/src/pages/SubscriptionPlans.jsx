@@ -89,7 +89,7 @@ export default function SubscriptionPlans() {
 
         <Grid container spacing={3}>
           {plans.map((plan) => (
-            <Grid item xs={12} md={4} key={plan.id}>
+            <Grid xs={12} md={4} key={plan.id}>
               <Card
                 sx={{
                   border: plan.popular ? '2px solid #0056B3' : '1px solid #e0e0e0',
@@ -188,7 +188,7 @@ export default function SubscriptionPlans() {
           </Typography>
 
           <Grid container spacing={3}>
-            <Grid item xs={12} md={6}>
+            <Grid xs={12} md={6}>
               <Card sx={{ border: '1px solid #e0e0e0' }}>
                 <CardContent>
                   <Typography sx={{ fontWeight: 600, color: theme.palette.primary.main, marginBottom: '12px' }}>
@@ -201,7 +201,7 @@ export default function SubscriptionPlans() {
               </Card>
             </Grid>
 
-            <Grid item xs={12} md={6}>
+            <Grid xs={12} md={6}>
               <Card sx={{ border: '1px solid #e0e0e0' }}>
                 <CardContent>
                   <Typography sx={{ fontWeight: 600, color: theme.palette.primary.main, marginBottom: '12px' }}>
@@ -214,7 +214,7 @@ export default function SubscriptionPlans() {
               </Card>
             </Grid>
 
-            <Grid item xs={12} md={6}>
+            <Grid xs={12} md={6}>
               <Card sx={{ border: '1px solid #e0e0e0' }}>
                 <CardContent>
                   <Typography sx={{ fontWeight: 600, color: theme.palette.primary.main, marginBottom: '12px' }}>
@@ -227,7 +227,7 @@ export default function SubscriptionPlans() {
               </Card>
             </Grid>
 
-            <Grid item xs={12} md={6}>
+            <Grid xs={12} md={6}>
               <Card sx={{ border: '1px solid #e0e0e0' }}>
                 <CardContent>
                   <Typography sx={{ fontWeight: 600, color: theme.palette.primary.main, marginBottom: '12px' }}>

@@ -165,7 +165,8 @@ export const superAdminMenu = [
       { label: 'لوحة المعلومات', path: '/admin-portal' },
       { label: 'إدارة الخطط', path: '/admin-portal/subscriptions' },
       { label: 'الإخطارات البريدية', path: '/admin-portal/notifications' },
-      { label: 'النسخ الاحتياطية', path: '/admin-portal/backup-restore' }
+      { label: 'النسخ الاحتياطية', path: '/admin-portal/backup-restore' },
+      { label: '👥 المساعدون الإداريون', path: '/admin-portal/assistants' }
     ]
   },
   {

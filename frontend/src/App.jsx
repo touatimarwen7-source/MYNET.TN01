@@ -79,6 +79,7 @@ const AdminPortal = lazy(() => import('./pages/AdminPortal/index'));
 const SubscriptionManagement = lazy(() => import('./pages/AdminPortal/SubscriptionManagement'));
 const EmailNotificationCenter = lazy(() => import('./pages/AdminPortal/EmailNotificationCenter'));
 const BackupRestore = lazy(() => import('./pages/AdminPortal/BackupRestore'));
+const AdminAssistantManagement = lazy(() => import('./pages/AdminPortal/AdminAssistantManagement'));
 const MFASetup = lazy(() => import('./pages/MFASetup'));
 const AuditLogViewer = lazy(() => import('./pages/AuditLogViewer'));
 const HealthMonitoring = lazy(() => import('./pages/HealthMonitoring'));
@@ -399,6 +400,10 @@ function AppContent() {
               <Route 
               path="/admin-portal/backup-restore" 
               element={user?.role === 'super_admin' ? <BackupRestore /> : <Navigate to="/tenders" />} 
+            />
+              <Route 
+              path="/admin-portal/assistants" 
+              element={user?.role === 'super_admin' ? <AdminAssistantManagement /> : <Navigate to="/tenders" />} 
             />
               {/* Super Admin - Main Dashboard */}
               <Route 

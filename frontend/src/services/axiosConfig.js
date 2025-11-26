@@ -117,6 +117,15 @@ axiosInstance.interceptors.request.use(
     config.headers['X-Requested-With'] = 'XMLHttpRequest';
     config.headers['X-Content-Type-Options'] = 'nosniff';
 
+    // DEBUG: Log login requests
+    if (config.url?.includes('auth/login')) {
+      console.log('🔐 Login Request:', {
+        url: config.url,
+        method: config.method,
+        hasData: !!config.data
+      });
+    }
+
     // Check if token should be refreshed proactively (only if we have a token)
     if (token && TokenManager.shouldRefreshToken() && !isRefreshing) {
       // Silently refresh in background

@@ -161,8 +161,12 @@ export const superAdminMenu = [
   {
     id: 'admin-portal',
     label: '🏛️ واجهة الإدارة الرسمية',
-    path: '/admin-portal',
-    subItems: []
+    subItems: [
+      { label: 'لوحة المعلومات', path: '/admin-portal' },
+      { label: 'إدارة الخطط', path: '/admin-portal/subscriptions' },
+      { label: 'الإخطارات البريدية', path: '/admin-portal/notifications' },
+      { label: 'النسخ الاحتياطية', path: '/admin-portal/backup-restore' }
+    ]
   },
   {
     id: 'dashboard',

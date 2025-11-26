@@ -76,6 +76,9 @@ const AdminDashboard = lazy(() => import('./pages/AdminDashboard'));
 const SuperAdminMenuDashboard = lazy(() => import('./pages/SuperAdminDashboard'));
 const SuperAdminDashboard = lazy(() => import('./pages/SuperAdminDashboard/index'));
 const AdminPortal = lazy(() => import('./pages/AdminPortal/index'));
+const SubscriptionManagement = lazy(() => import('./pages/AdminPortal/SubscriptionManagement'));
+const EmailNotificationCenter = lazy(() => import('./pages/AdminPortal/EmailNotificationCenter'));
+const BackupRestore = lazy(() => import('./pages/AdminPortal/BackupRestore'));
 const MFASetup = lazy(() => import('./pages/MFASetup'));
 const AuditLogViewer = lazy(() => import('./pages/AuditLogViewer'));
 const HealthMonitoring = lazy(() => import('./pages/HealthMonitoring'));
@@ -380,9 +383,22 @@ function AppContent() {
 
               {/* Administration */}
               {/* Admin Portal - Main Interface */}
+              {/* Admin Portal Routes */}
               <Route 
               path="/admin-portal" 
               element={user?.role === 'super_admin' ? <AdminPortal /> : <Navigate to="/tenders" />} 
+            />
+              <Route 
+              path="/admin-portal/subscriptions" 
+              element={user?.role === 'super_admin' ? <SubscriptionManagement /> : <Navigate to="/tenders" />} 
+            />
+              <Route 
+              path="/admin-portal/notifications" 
+              element={user?.role === 'super_admin' ? <EmailNotificationCenter /> : <Navigate to="/tenders" />} 
+            />
+              <Route 
+              path="/admin-portal/backup-restore" 
+              element={user?.role === 'super_admin' ? <BackupRestore /> : <Navigate to="/tenders" />} 
             />
               {/* Super Admin - Main Dashboard */}
               <Route 

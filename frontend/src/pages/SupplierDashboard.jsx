@@ -1,37 +1,36 @@
 /**
  * لوحة تحكم المزود - Supplier Dashboard
- * واجهة احترافية عالمية للموردين
+ * واجهة شاملة للموردين مع جميع الميزات والوظائف
  * @component
  */
 
 import { useState, useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
-import institutionalTheme from '../theme/theme';
 import { useNavigate } from 'react-router-dom';
 import {
   Container, Box, Card, CardContent, Grid, Button, Typography, Table, TableHead, TableBody,
-  TableRow, TableCell, Chip, Tabs, Tab, Alert, Avatar, Stack, Badge, Tooltip, Rating,
-  IconButton, Paper, LinearProgress, Divider, CircularProgress
+  TableRow, TableCell, CircularProgress, Chip, Tabs, Tab, Alert, Stack, Paper, List,
+  ListItemButton, ListItemIcon, ListItemText, Divider, Drawer
 } from '@mui/material';
 import {
-  Add, Visibility, Edit, Delete, TrendingUp, CheckCircle, Clock, Warning,
-  Send, Download, Refresh, Share, MoreVert
+  Dashboard, Assignment, Inventory2, Money, Send, TrendingUp, Notifications,
+  Person, Settings, Security, FileDownload, Visibility, Edit, Delete, Star
 } from '@mui/icons-material';
 import { procurementAPI } from '../api';
-import { setPageTitle } from '../utils/pageTitle';
 import { logger } from '../utils/logger';
 import EnhancedErrorBoundary from '../components/EnhancedErrorBoundary';
 import { InfoCard } from '../components/ProfessionalComponents';
+import institutionalTheme from '../theme/theme';
 
 const THEME = institutionalTheme;
+const DRAWER_WIDTH = 280;
 
 function SupplierDashboardContent() {
   const navigate = useNavigate();
-  const { t } = useTranslation();
-  const [tabValue, setTabValue] = useState(0);
+  const [activeSection, setActiveSection] = useState('dashboard');
+  const [loading, setLoading] = useState(true);
   const [tenders, setTenders] = useState([]);
   const [myOffers, setMyOffers] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   useEffect(() => {
     fetchSupplierData();
@@ -53,88 +52,61 @@ function SupplierDashboardContent() {
     }
   };
 
-  const stats = [
-    { label: 'الأجل المتاحة', value: String(tenders.length), change: 24, icon: Edit, color: '#0056B3' },
-    { label: 'العروض المرسلة', value: String(myOffers.length), change: 18, icon: Send, color: '#2e7d32' },
-    { label: 'معدل الفوز', value: String(myOffers.filter(o => o.status === 'accepted').length || 0), change: 12, icon: TrendingUp, color: '#f57c00' },
-    { label: 'الإيرادات الشهرية', value: 'د.ت 450K', change: 31, icon: CheckCircle, color: '#0288d1' },
+  const menuItems = [
+    { id: 'dashboard', label: 'لوحة التحكم', icon: Dashboard },
+    { id: 'browse-tenders', label: 'استعراض الأجل', icon: Assignment },
+    { id: 'my-offers', label: 'عروضي', icon: Send },
+    { id: 'catalog', label: 'إدارة المنتجات والخدمات', icon: Inventory2 },
+    { id: 'finances', label: 'الفواتير والمدفوعات', icon: Money },
+    { id: 'reviews', label: 'التقييمات والآراء', icon: Star },
+    { id: 'notifications', label: 'الإخطارات', icon: Notifications },
+    { id: 'profile', label: 'الملف الشخصي', icon: Person },
+    { id: 'security', label: 'الأمان والخصوصية', icon: Security },
   ];
 
-  const activeTenders = tenders.slice(0, 3).map(t => ({
-    id: t.id,
-    title: t.title || 'مناقصة',
-    buyer: 'مشتري',
-    budget: `د.ت ${t.budget_max || 0}`,
-    deadline: new Date(t.created_at).toLocaleDateString('ar-TN'),
-    status: t.status === 'open' ? 'متاحة' : 'مغلقة'
-  }));
+  const stats = [
+    { label: 'الأجل المتاحة', value: String(tenders.length), change: 24, icon: Assignment, color: '#2e7d32' },
+    { label: 'العروض المرسلة', value: String(myOffers.length), change: 18, icon: Send, color: '#0056B3' },
+    { label: 'معدل الفوز', value: String(myOffers.filter(o => o.status === 'accepted').length || 0), change: 12, icon: TrendingUp, color: '#f57c00' },
+    { label: 'التقييم', value: '4.8 / 5', change: 5, icon: Star, color: '#0288d1' },
+  ];
 
-  return (
-    <Box sx={{ minHeight: '100vh', backgroundColor: '#F9F9F9', paddingY: 4 }}>
-      <Container maxWidth="xl">
-        {/* الرأس */}
-        <Paper elevation={0} sx={{
-          background: 'linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%)',
-          borderRadius: '12px',
-          padding: '32px',
-          marginBottom: '24px',
-          color: 'white',
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-        }}>
-          <Stack>
-            <Typography variant="h5" sx={{ fontWeight: 700 }}>
-              منصة التوريد الاحترافية
-            </Typography>
-            <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.9)', mt: 0.5 }}>
-              ابحث عن الفرص المربحة وقدم عروضك الفائزة
-            </Typography>
-          </Stack>
-          <Button variant="contained" startIcon={<Send />} sx={{ backgroundColor: 'rgba(255,255,255,0.2)' }}>
-            عرض جديد
-          </Button>
-        </Paper>
+  const renderContent = () => {
+    switch (activeSection) {
+      case 'dashboard':
+        return (
+          <Box>
+            <Paper elevation={0} sx={{
+              background: 'linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%)',
+              borderRadius: '12px', padding: '32px', marginBottom: '24px',
+              color: 'white'
+            }}>
+              <Typography variant="h5" sx={{ fontWeight: 700, mb: 1 }}>
+                منصة التوريد الاحترافية
+              </Typography>
+              <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.9)' }}>
+                ابحث عن الفرص المربحة وقدم عروضك الفائزة
+              </Typography>
+            </Paper>
 
-        {/* الإحصائيات الرئيسية */}
-        <Grid container spacing={3} sx={{ mb: 3 }}>
-          {stats.map((stat, idx) => (
-            <Grid item xs={12} md={6} lg={3} key={idx}>
-              <InfoCard {...stat} />
+            <Grid container spacing={3} sx={{ mb: 3 }}>
+              {stats.map((stat, idx) => (
+                <Grid item xs={12} md={6} lg={3} key={idx}>
+                  <InfoCard {...stat} loading={loading} />
+                </Grid>
+              ))}
             </Grid>
-          ))}
-        </Grid>
 
-        {/* التبويبات */}
-        <Paper elevation={0} sx={{
-          backgroundColor: '#FFFFFF',
-          border: '1px solid #e0e0e0',
-          borderRadius: '12px',
-          overflow: 'hidden'
-        }}>
-          <Tabs
-            value={tabValue}
-            onChange={(e, v) => setTabValue(v)}
-            sx={{
-              borderBottom: '1px solid #e0e0e0',
-              '& .MuiTab-root': { textTransform: 'none', fontWeight: 500 },
-              '& .Mui-selected': { color: '#2e7d32', fontWeight: 700 }
-            }}
-          >
-            <Tab label="🎯 الأجل المتاحة" />
-            <Tab label="📤 عروضي" />
-            <Tab label="📊 الأداء" />
-            <Tab label="⭐ التقييمات" />
-          </Tabs>
-
-          <Box sx={{ padding: '24px' }}>
-            {tabValue === 0 && (
+            {/* Recent Tenders */}
+            <Paper elevation={0} sx={{ backgroundColor: '#FFFFFF', border: '1px solid #e0e0e0', borderRadius: '8px', overflow: 'hidden' }}>
+              <Box sx={{ p: 2, backgroundColor: '#f5f5f5', borderBottom: '1px solid #e0e0e0' }}>
+                <Typography variant="h6" sx={{ fontWeight: 600 }}>الأجل المتاحة الحديثة</Typography>
+              </Box>
               <Box sx={{ overflowX: 'auto' }}>
                 <Table>
                   <TableHead sx={{ backgroundColor: '#f5f5f5' }}>
                     <TableRow>
-                      <TableCell sx={{ fontWeight: 600 }}>اسم المشروع</TableCell>
-                      <TableCell sx={{ fontWeight: 600 }}>المشتري</TableCell>
+                      <TableCell sx={{ fontWeight: 600 }}>المشروع</TableCell>
                       <TableCell sx={{ fontWeight: 600 }}>الميزانية</TableCell>
                       <TableCell sx={{ fontWeight: 600 }}>الموعد</TableCell>
                       <TableCell sx={{ fontWeight: 600 }}>الحالة</TableCell>
@@ -142,24 +114,84 @@ function SupplierDashboardContent() {
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {activeTenders.map((tender) => (
-                      <TableRow key={tender.id} sx={{ '&:hover': { backgroundColor: '#f9f9f9' } }}>
-                        <TableCell sx={{ fontWeight: 500 }}>{tender.title}</TableCell>
-                        <TableCell>{tender.buyer}</TableCell>
-                        <TableCell><Chip label={tender.budget} size="small" variant="outlined" /></TableCell>
-                        <TableCell>{tender.deadline}</TableCell>
+                    {loading ? (
+                      <TableRow><TableCell colSpan={5} sx={{ textAlign: 'center', py: 3 }}><CircularProgress size={30} /></TableCell></TableRow>
+                    ) : tenders.length === 0 ? (
+                      <TableRow><TableCell colSpan={5} sx={{ textAlign: 'center', py: 3 }}>لا توجد أجل متاحة</TableCell></TableRow>
+                    ) : (
+                      tenders.slice(0, 5).map((tender) => (
+                        <TableRow key={tender.id} sx={{ '&:hover': { backgroundColor: '#f9f9f9' } }}>
+                          <TableCell sx={{ fontWeight: 500 }}>{tender.title || 'مناقصة'}</TableCell>
+                          <TableCell>د.ت {tender.budget_max || 0}</TableCell>
+                          <TableCell>{new Date(tender.created_at).toLocaleDateString('ar-TN')}</TableCell>
+                          <TableCell>
+                            <Chip
+                              label={tender.status === 'open' ? 'متاحة' : 'مغلقة'}
+                              size="small"
+                              color={tender.status === 'open' ? 'success' : 'default'}
+                            />
+                          </TableCell>
+                          <TableCell>
+                            <Button size="small" startIcon={<Visibility />} onClick={() => navigate(`/tender/${tender.id}`)}>
+                              عرض
+                            </Button>
+                          </TableCell>
+                        </TableRow>
+                      ))
+                    )}
+                  </TableBody>
+                </Table>
+              </Box>
+            </Paper>
+          </Box>
+        );
+
+      case 'browse-tenders':
+        return (
+          <Paper elevation={0} sx={{ backgroundColor: '#FFFFFF', border: '1px solid #e0e0e0', borderRadius: '8px', p: 3 }}>
+            <Typography variant="h6" sx={{ fontWeight: 600, mb: 2 }}>استعراض الأجل</Typography>
+            <Divider sx={{ mb: 2 }} />
+            <Button variant="contained" fullWidth onClick={() => navigate('/tenders')}>
+              عرض جميع الأجل
+            </Button>
+          </Paper>
+        );
+
+      case 'my-offers':
+        return (
+          <Paper elevation={0} sx={{ backgroundColor: '#FFFFFF', border: '1px solid #e0e0e0', borderRadius: '8px', p: 3 }}>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+              <Typography variant="h6" sx={{ fontWeight: 600 }}>عروضي</Typography>
+              <Button variant="contained" startIcon={<Send />} onClick={() => navigate('/my-offers')}>
+                عرض الكل
+              </Button>
+            </Box>
+            <Divider sx={{ mb: 2 }} />
+            {myOffers.length === 0 ? (
+              <Alert severity="info">لم تقدم أي عروض حتى الآن</Alert>
+            ) : (
+              <Box sx={{ overflowX: 'auto' }}>
+                <Table size="small">
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>السعر</TableCell>
+                      <TableCell>الحالة</TableCell>
+                      <TableCell>الإجراء</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {myOffers.map(offer => (
+                      <TableRow key={offer.id}>
+                        <TableCell>د.ت {offer.price || 0}</TableCell>
                         <TableCell>
                           <Chip
-                            label={tender.status}
+                            label={offer.status || 'تحت الدراسة'}
                             size="small"
-                            color={tender.status === 'متاحة' ? 'success' : 'warning'}
-                            variant="filled"
+                            color={offer.status === 'accepted' ? 'success' : 'default'}
                           />
                         </TableCell>
                         <TableCell>
-                          <Button size="small" variant="contained" startIcon={<Send />}>
-                            قدم عرض
-                          </Button>
+                          <Button size="small" onClick={() => navigate(`/my-offers`)}>عرض</Button>
                         </TableCell>
                       </TableRow>
                     ))}
@@ -167,120 +199,168 @@ function SupplierDashboardContent() {
                 </Table>
               </Box>
             )}
+          </Paper>
+        );
 
-            {tabValue === 1 && (
-              <Stack spacing={2}>
-                {myOffers.map((offer) => (
-                  <Paper key={offer.id} sx={{
-                    p: 2,
-                    backgroundColor: '#f9f9f9',
-                    border: '1px solid #e0e0e0',
-                    borderRadius: '8px',
-                    transition: 'all 0.3s ease',
-                    '&:hover': { boxShadow: '0 4px 12px rgba(46,125,50,0.15)' }
-                  }}>
-                    <Stack direction="row" justifyContent="space-between" alignItems="center">
-                      <Stack flex={1}>
-                        <Typography variant="body2" sx={{ fontWeight: 600 }}>{offer.tender}</Typography>
-                        <Stack direction="row" spacing={1} sx={{ mt: 1 }} alignItems="center">
-                          <Chip label={offer.amount} size="small" color="primary" variant="filled" />
-                          <Chip label={offer.date} size="small" variant="outlined" />
-                        </Stack>
-                      </Stack>
-                      <Stack alignItems="flex-end" spacing={1}>
-                        <Chip
-                          label={offer.status}
-                          size="small"
-                          color={offer.status === 'مقبول' ? 'success' : offer.status === 'مرفوض' ? 'error' : 'warning'}
-                          variant="filled"
-                        />
-                        <Rating value={offer.rating / 5} readOnly size="small" />
-                      </Stack>
-                    </Stack>
-                  </Paper>
-                ))}
-              </Stack>
-            )}
+      case 'catalog':
+        return (
+          <Paper elevation={0} sx={{ backgroundColor: '#FFFFFF', border: '1px solid #e0e0e0', borderRadius: '8px', p: 3 }}>
+            <Typography variant="h6" sx={{ fontWeight: 600, mb: 2 }}>إدارة المنتجات والخدمات</Typography>
+            <Divider sx={{ mb: 2 }} />
+            <Stack spacing={2}>
+              <Button variant="outlined" fullWidth onClick={() => navigate('/supplier-products')}>
+                <Inventory2 sx={{ mr: 1 }} /> إدارة المنتجات
+              </Button>
+              <Button variant="outlined" fullWidth onClick={() => navigate('/supplier-services')}>
+                إدارة الخدمات
+              </Button>
+              <Button variant="outlined" fullWidth onClick={() => navigate('/supplier-catalog')}>
+                عرض الكتالوج
+              </Button>
+            </Stack>
+          </Paper>
+        );
 
-            {tabValue === 2 && (
-              <Grid container spacing={3}>
-                <Grid item xs={12} lg={6}>
-                  <Card sx={{ backgroundColor: '#FFFFFF', border: '1px solid #e0e0e0', borderRadius: '8px' }}>
-                    <CardContent>
-                      <Typography variant="body2" sx={{ fontWeight: 600, mb: 2 }}>معدل النجاح</Typography>
-                      <Box sx={{ textAlign: 'center', py: 2 }}>
-                        <CircularProgress
-                          variant="determinate"
-                          value={64}
-                          size={80}
-                          sx={{ color: '#2e7d32' }}
-                        />
-                        <Typography variant="h5" sx={{ fontWeight: 700, mt: 1, color: '#2e7d32' }}>64%</Typography>
-                      </Box>
-                      <Typography variant="caption" color="textSecondary" sx={{ display: 'block', textAlign: 'center' }}>
-                        من 89 عرض مرسل
-                      </Typography>
-                    </CardContent>
-                  </Card>
-                </Grid>
-                <Grid item xs={12} lg={6}>
-                  <Card sx={{ backgroundColor: '#FFFFFF', border: '1px solid #e0e0e0', borderRadius: '8px' }}>
-                    <CardContent>
-                      <Typography variant="body2" sx={{ fontWeight: 600, mb: 2 }}>مؤشرات الأداء</Typography>
-                      <Stack spacing={2}>
-                        <Box>
-                          <Stack direction="row" justifyContent="space-between" sx={{ mb: 1 }}>
-                            <Typography variant="caption">سرعة الاستجابة</Typography>
-                            <Typography variant="caption" sx={{ fontWeight: 600 }}>92%</Typography>
-                          </Stack>
-                          <LinearProgress variant="determinate" value={92} sx={{ height: 6, borderRadius: '3px' }} />
-                        </Box>
-                        <Box>
-                          <Stack direction="row" justifyContent="space-between" sx={{ mb: 1 }}>
-                            <Typography variant="caption">جودة العروض</Typography>
-                            <Typography variant="caption" sx={{ fontWeight: 600 }}>88%</Typography>
-                          </Stack>
-                          <LinearProgress variant="determinate" value={88} sx={{ height: 6, borderRadius: '3px' }} />
-                        </Box>
-                      </Stack>
-                    </CardContent>
-                  </Card>
-                </Grid>
-              </Grid>
-            )}
+      case 'finances':
+        return (
+          <Paper elevation={0} sx={{ backgroundColor: '#FFFFFF', border: '1px solid #e0e0e0', borderRadius: '8px', p: 3 }}>
+            <Typography variant="h6" sx={{ fontWeight: 600, mb: 2 }}>الفواتير والمدفوعات</Typography>
+            <Divider sx={{ mb: 2 }} />
+            <Stack spacing={2}>
+              <Button variant="outlined" fullWidth onClick={() => navigate('/supplier-invoices')}>
+                <FileDownload sx={{ mr: 1 }} /> الفواتير
+              </Button>
+              <Button variant="outlined" fullWidth onClick={() => navigate('/supplier-payments')}>
+                <Money sx={{ mr: 1 }} /> المدفوعات
+              </Button>
+            </Stack>
+          </Paper>
+        );
 
-            {tabValue === 3 && (
-              <Stack spacing={2}>
-                <Alert severity="success" sx={{ borderRadius: '8px' }}>
-                  ⭐ متوسط التقييم: 4.8 من 5 • استنادا إلى 23 تقييم من المشترين
-                </Alert>
-                <Paper sx={{ p: 2, backgroundColor: '#f9f9f9', borderRadius: '8px' }}>
-                  <Stack spacing={2}>
-                    {[
-                      { label: 'الاحترافية', value: 4.9 },
-                      { label: 'التزام المواعيد', value: 4.8 },
-                      { label: 'جودة الخدمة', value: 4.7 },
-                      { label: 'التواصل', value: 4.9 }
-                    ].map((rating, idx) => (
-                      <Box key={idx}>
-                        <Stack direction="row" justifyContent="space-between" sx={{ mb: 1 }}>
-                          <Typography variant="body2" sx={{ fontWeight: 500 }}>{rating.label}</Typography>
-                          <Typography variant="caption" sx={{ fontWeight: 600 }}>{rating.value}</Typography>
-                        </Stack>
-                        <LinearProgress
-                          variant="determinate"
-                          value={(rating.value / 5) * 100}
-                          sx={{ height: 8, borderRadius: '4px' }}
-                        />
-                      </Box>
-                    ))}
-                  </Stack>
-                </Paper>
-              </Stack>
-            )}
-          </Box>
-        </Paper>
-      </Container>
+      case 'reviews':
+        return (
+          <Paper elevation={0} sx={{ backgroundColor: '#FFFFFF', border: '1px solid #e0e0e0', borderRadius: '8px', p: 3 }}>
+            <Typography variant="h6" sx={{ fontWeight: 600, mb: 2 }}>التقييمات والآراء</Typography>
+            <Divider sx={{ mb: 2 }} />
+            <Button variant="contained" fullWidth onClick={() => navigate('/reviews')}>
+              <Star sx={{ mr: 1 }} /> عرض التقييمات
+            </Button>
+          </Paper>
+        );
+
+      case 'notifications':
+        return (
+          <Paper elevation={0} sx={{ backgroundColor: '#FFFFFF', border: '1px solid #e0e0e0', borderRadius: '8px', p: 3 }}>
+            <Typography variant="h6" sx={{ fontWeight: 600, mb: 2 }}>الإخطارات</Typography>
+            <Divider sx={{ mb: 2 }} />
+            <Button variant="contained" fullWidth onClick={() => navigate('/notifications')}>
+              <Notifications sx={{ mr: 1 }} /> عرض الإخطارات
+            </Button>
+          </Paper>
+        );
+
+      case 'profile':
+        return (
+          <Paper elevation={0} sx={{ backgroundColor: '#FFFFFF', border: '1px solid #e0e0e0', borderRadius: '8px', p: 3 }}>
+            <Typography variant="h6" sx={{ fontWeight: 600, mb: 2 }}>الملف الشخصي</Typography>
+            <Divider sx={{ mb: 2 }} />
+            <Stack spacing={2}>
+              <Button variant="outlined" fullWidth onClick={() => navigate('/profile')}>
+                <Person sx={{ mr: 1 }} /> تعديل الملف الشخصي
+              </Button>
+            </Stack>
+          </Paper>
+        );
+
+      case 'security':
+        return (
+          <Paper elevation={0} sx={{ backgroundColor: '#FFFFFF', border: '1px solid #e0e0e0', borderRadius: '8px', p: 3 }}>
+            <Typography variant="h6" sx={{ fontWeight: 600, mb: 2 }}>الأمان والخصوصية</Typography>
+            <Divider sx={{ mb: 2 }} />
+            <Stack spacing={2}>
+              <Button variant="outlined" fullWidth onClick={() => navigate('/security')}>
+                <Security sx={{ mr: 1 }} /> إعدادات الأمان
+              </Button>
+              <Button variant="outlined" fullWidth onClick={() => navigate('/preferences')}>
+                <Settings sx={{ mr: 1 }} /> التفضيلات
+              </Button>
+            </Stack>
+          </Paper>
+        );
+
+      default:
+        return null;
+    }
+  };
+
+  const drawerContent = (
+    <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+      <Box sx={{ p: 2, borderBottom: '1px solid #e0e0e0' }}>
+        <Typography variant="h6" sx={{ fontWeight: 700, color: '#2e7d32' }}>لوحة التحكم</Typography>
+      </Box>
+      <List sx={{ flex: 1, pt: 0 }}>
+        {menuItems.map((item) => (
+          <ListItemButton
+            key={item.id}
+            selected={activeSection === item.id}
+            onClick={() => {
+              setActiveSection(item.id);
+              setMobileOpen(false);
+            }}
+            sx={{
+              borderRight: activeSection === item.id ? '3px solid #2e7d32' : 'none',
+              backgroundColor: activeSection === item.id ? '#f0fff0' : 'transparent',
+              '&:hover': { backgroundColor: '#f0fff0' }
+            }}
+          >
+            <ListItemIcon sx={{ minWidth: 40, color: activeSection === item.id ? '#2e7d32' : 'inherit' }}>
+              <item.icon />
+            </ListItemIcon>
+            <ListItemText primary={item.label} />
+          </ListItemButton>
+        ))}
+      </List>
+    </Box>
+  );
+
+  return (
+    <Box sx={{ display: 'flex', minHeight: '100vh', backgroundColor: '#F9F9F9' }}>
+      {/* Desktop Drawer */}
+      <Drawer
+        variant="permanent"
+        sx={{
+          width: DRAWER_WIDTH,
+          display: { xs: 'none', md: 'block' },
+          flexShrink: 0,
+          '& .MuiDrawer-paper': {
+            width: DRAWER_WIDTH,
+            boxSizing: 'border-box',
+            mt: { xs: '60px', md: '64px' },
+            height: 'calc(100vh - 64px)',
+            backgroundColor: '#FFFFFF',
+            borderRight: '1px solid #e0e0e0'
+          }
+        }}
+      >
+        {drawerContent}
+      </Drawer>
+
+      {/* Mobile Drawer */}
+      <Drawer
+        anchor="left"
+        open={mobileOpen}
+        onClose={() => setMobileOpen(false)}
+        sx={{ display: { xs: 'block', md: 'none' } }}
+      >
+        {drawerContent}
+      </Drawer>
+
+      {/* Main Content */}
+      <Box sx={{ flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column' }}>
+        <Container maxWidth="xl" sx={{ py: 3, flex: 1 }}>
+          {renderContent()}
+        </Container>
+      </Box>
     </Box>
   );
 }

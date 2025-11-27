@@ -106,7 +106,7 @@ function BuyerDashboardContent() {
         {/* الإحصائيات الرئيسية */}
         <Grid container spacing={3} sx={{ mb: 3 }}>
           {stats.map((stat, idx) => (
-            <Grid item xs={12} lg={6} lg={3} key={idx}>
+            <Grid item xs={12} md={6} lg={3} key={idx}>
               <InfoCard {...stat} loading={loading} />
             </Grid>
           ))}

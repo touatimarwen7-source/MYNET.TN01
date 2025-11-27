@@ -189,22 +189,29 @@ router.get('/my-offers',
     AuthorizationGuard.authenticateToken.bind(AuthorizationGuard),
     async (req, res) => {
       try {
-        const { page, limit } = getPaginationParams(req);
+        const { page = 1, limit = 10 } = req.query;
         const supplierId = req.user?.id;
         const pool = getPool();
         
-        let query = DataFetchingOptimizer.buildSelectQuery('offers', 'offer_list');
-        query += ` WHERE supplier_id = $1 AND is_deleted = FALSE`;
+        if (!supplierId) {
+          return res.status(401).json({ error: 'User not authenticated' });
+        }
+        
+        // Simple direct query for offers
+        const offset = (parseInt(page) - 1) * parseInt(limit);
+        const result = await pool.query(
+          `SELECT id, tender_id, supplier_id, price, currency, quantity, description, status, ranking, submitted_at, updated_at 
+           FROM offers WHERE supplier_id = $1 AND is_deleted = FALSE 
+           ORDER BY submitted_at DESC LIMIT $2 OFFSET $3`,
+          [supplierId, parseInt(limit), offset]
+        );
         
         const totalResult = await pool.query(`SELECT COUNT(*) FROM offers WHERE supplier_id = $1 AND is_deleted = FALSE`, [supplierId]);
         const total = parseInt(totalResult.rows[0].count);
         
-        query = DataFetchingOptimizer.addPagination(query, page, limit);
-        const result = await pool.query(query + ` ORDER BY submitted_at DESC`, [supplierId]);
-        
         res.json({
           offers: result.rows,
-          pagination: { page, limit, total, pages: Math.ceil(total / limit) }
+          pagination: { page: parseInt(page), limit: parseInt(limit), total, pages: Math.ceil(total / parseInt(limit)) }
         });
       } catch (error) {
         res.status(500).json({ error: error.message });

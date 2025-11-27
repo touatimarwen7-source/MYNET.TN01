@@ -4,7 +4,7 @@
  * @component
  */
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import institutionalTheme from '../theme/theme';
 import { useNavigate } from 'react-router-dom';
@@ -29,25 +29,45 @@ function SupplierDashboardContent() {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const [tabValue, setTabValue] = useState(0);
+  const [tenders, setTenders] = useState([]);
+  const [myOffers, setMyOffers] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchSupplierData();
+  }, []);
+
+  const fetchSupplierData = async () => {
+    try {
+      setLoading(true);
+      const [tendersRes, offersRes] = await Promise.all([
+        procurementAPI.getTenders({ limit: 50 }),
+        procurementAPI.getMyOffers()
+      ]);
+      setTenders(tendersRes?.data?.tenders || []);
+      setMyOffers(offersRes?.data?.offers || []);
+    } catch (err) {
+      logger.error('Failed to load supplier data:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const stats = [
-    { label: 'الأجل المتاحة', value: '156', change: 24, icon: Edit, color: '#0056B3' },
-    { label: 'العروض المرسلة', value: '89', change: 18, icon: Send, color: '#2e7d32' },
-    { label: 'معدل الفوز', value: '64%', change: 12, icon: TrendingUp, color: '#f57c00' },
+    { label: 'الأجل المتاحة', value: String(tenders.length), change: 24, icon: Edit, color: '#0056B3' },
+    { label: 'العروض المرسلة', value: String(myOffers.length), change: 18, icon: Send, color: '#2e7d32' },
+    { label: 'معدل الفوز', value: String(myOffers.filter(o => o.status === 'accepted').length || 0), change: 12, icon: TrendingUp, color: '#f57c00' },
     { label: 'الإيرادات الشهرية', value: 'د.ت 450K', change: 31, icon: CheckCircle, color: '#0288d1' },
   ];
 
-  const activeTenders = [
-    { id: 1, title: 'شراء أجهزة حاسوب', buyer: 'شركة النجاح', budget: 'د.ت 50,000', deadline: '2025-02-15', status: 'متاحة' },
-    { id: 2, title: 'توريد مواد بناء', buyer: 'وزارة الأشغال', budget: 'د.ت 120,000', deadline: '2025-02-20', status: 'متاحة' },
-    { id: 3, title: 'خدمات الصيانة', buyer: 'البلدية', budget: 'د.ت 30,000', deadline: '2025-02-10', status: 'قريبة من الإغلاق' },
-  ];
-
-  const myOffers = [
-    { id: 1, tender: 'شراء أجهزة حاسوب', amount: 'د.ت 48,500', date: '2025-01-20', status: 'قيد المراجعة', rating: 4.8 },
-    { id: 2, tender: 'توريد مواد بناء', amount: 'د.ت 118,000', date: '2025-01-18', status: 'مقبول', rating: 5.0 },
-    { id: 3, tender: 'خدمات الصيانة', amount: 'د.ت 29,000', date: '2025-01-15', status: 'مرفوض', rating: 4.5 },
-  ];
+  const activeTenders = tenders.slice(0, 3).map(t => ({
+    id: t.id,
+    title: t.title || 'مناقصة',
+    buyer: 'مشتري',
+    budget: `د.ت ${t.budget_max || 0}`,
+    deadline: new Date(t.created_at).toLocaleDateString('ar-TN'),
+    status: t.status === 'open' ? 'متاحة' : 'مغلقة'
+  }));
 
   return (
     <Box sx={{ minHeight: '100vh', backgroundColor: '#F9F9F9', paddingY: 4 }}>

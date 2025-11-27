@@ -73,11 +73,8 @@ function BuyerDashboardContent() {
     status: tender.status === 'open' ? 'نشطة' : 'مغلقة'
   }));
 
-  const topSuppliers = [
-    { rank: 1, name: 'شركة العتيبي للتوريد', rating: 4.8, deals: 45, responseTime: '< 2 ساعة' },
-    { rank: 2, name: 'فاطمة المرزوقي', rating: 4.7, deals: 38, responseTime: '< 4 ساعات' },
-    { rank: 3, name: 'أحمد الخليفة', rating: 4.5, deals: 32, responseTime: '< 6 ساعات' },
-  ];
+  // Top suppliers - جاهز للتوسع عند توفر بيانات حقيقية
+  const topSuppliers = [];
 
   return (
     <Box sx={{ minHeight: '100vh', backgroundColor: '#F9F9F9', paddingY: 4 }}>

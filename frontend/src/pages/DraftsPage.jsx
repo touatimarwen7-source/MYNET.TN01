@@ -14,7 +14,7 @@ import {
   Stack, Paper, IconButton, Tooltip, Avatar, LinearProgress, Divider
 } from '@mui/material';
 import {
-  Edit, Delete, Restore, FileDownload, Clock, CheckCircle, AlertTriangle,
+  Edit, Delete, Restore, FileDownload, Clock, CheckCircle, Warning,
   ChevronRight, ArrowForward, Trash2
 } from '@mui/icons-material';
 import { setPageTitle } from '../utils/pageTitle';

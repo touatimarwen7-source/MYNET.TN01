@@ -16,7 +16,7 @@ import {
 } from '@mui/material';
 import {
   Add, Visibility, FileDownload, Assignment, TrendingUp, TrendingDown, Refresh,
-  CheckCircle, Schedule, AlertTriangle, Edit, Delete, Share, Download, MoreVert
+  CheckCircle, Schedule, Warning, Edit, Delete, Share, Download, MoreVert
 } from '@mui/icons-material';
 import { procurementAPI } from '../api';
 import { setPageTitle } from '../utils/pageTitle';

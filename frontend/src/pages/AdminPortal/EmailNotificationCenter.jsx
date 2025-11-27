@@ -9,7 +9,7 @@ import {
   Chip, Table, TableHead, TableBody, TableRow, TableCell, TextField, Switch,
   FormControlLabel, Alert, Dialog, DialogTitle, DialogContent, DialogActions
 } from '@mui/material';
-import { Send, Check, AlertTriangle, Settings } from '@mui/icons-material';
+import { Send, Check, Warning, Settings } from '@mui/icons-material';
 import institutionalTheme from '../../theme/theme';
 
 const THEME = institutionalTheme;

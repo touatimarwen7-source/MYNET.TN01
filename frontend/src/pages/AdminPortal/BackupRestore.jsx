@@ -9,7 +9,7 @@ import {
   Chip, Table, TableHead, TableBody, TableRow, TableCell, Alert, LinearProgress,
   Dialog, DialogTitle, DialogContent, DialogActions, TextField
 } from '@mui/material';
-import { CloudDownload, Restore, Schedule, CheckCircle, AlertTriangle, Info } from '@mui/icons-material';
+import { CloudDownload, Restore, Schedule, CheckCircle, Warning, Info } from '@mui/icons-material';
 import institutionalTheme from '../../theme/theme';
 
 const THEME = institutionalTheme;

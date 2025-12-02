@@ -19,11 +19,12 @@ export default function AccessibilityBanner() {
         marginBottom: '16px',
         display: 'flex',
         justifyContent: 'space-between',
-        alignItems: 'center'
+        alignItems: 'center',
       }}
     >
       <Box>
-        ♿ <strong>Accessibilité:</strong> Cette plateforme respecte les normes WCAG 2.1. Utilisez la touche Tab pour naviguer et Esc pour fermer les dialogues.
+        ♿ <strong>Accessibilité:</strong> Cette plateforme respecte les normes WCAG 2.1. Utilisez
+        la touche Tab pour naviguer et Esc pour fermer les dialogues.
       </Box>
       <IconButton
         size="small"

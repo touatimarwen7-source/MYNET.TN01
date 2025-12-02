@@ -39,17 +39,18 @@ src/
 
 ### Current Tests: 65 Passing ✅
 
-| Module | Tests | Status |
-|--------|-------|--------|
-| Validation | 21 | ✅ PASS |
-| Error Codes | 18 | ✅ PASS |
-| Token Manager | 15 | ✅ PASS |
-| Error Handler | 11 | ✅ PASS |
-| **TOTAL** | **65** | **✅ ALL PASS** |
+| Module        | Tests  | Status          |
+| ------------- | ------ | --------------- |
+| Validation    | 21     | ✅ PASS         |
+| Error Codes   | 18     | ✅ PASS         |
+| Token Manager | 15     | ✅ PASS         |
+| Error Handler | 11     | ✅ PASS         |
+| **TOTAL**     | **65** | **✅ ALL PASS** |
 
 ### Test Categories
 
 #### 1. Validation Tests (21 tests)
+
 - ✅ Email validation
 - ✅ Phone validation
 - ✅ Number range validation
@@ -62,6 +63,7 @@ src/
 - ✅ Zod schema validation (Register)
 
 #### 2. Error Codes Tests (18 tests)
+
 - ✅ Authentication errors (A001-A006)
 - ✅ Validation errors (V001-V006)
 - ✅ Network errors (N001-N006)
@@ -74,6 +76,7 @@ src/
 - ✅ French language verification
 
 #### 3. Token Manager Tests (15 tests)
+
 - ✅ Token storage/retrieval
 - ✅ Token expiry validation
 - ✅ Token refresh logic
@@ -83,6 +86,7 @@ src/
 - ✅ Time to expiry calculation
 
 #### 4. Error Handler Tests (11 tests)
+
 - ✅ User-friendly error messages
 - ✅ Validation error formatting
 - ✅ Auth error detection
@@ -178,10 +182,10 @@ describe('Feature Name', () => {
     it('should do something specific', () => {
       // Arrange
       const input = 'test';
-      
+
       // Act
       const result = functionUnderTest(input);
-      
+
       // Assert
       expect(result).toBeDefined();
       expect(result).toBe('expected');
@@ -214,7 +218,7 @@ const mockFn = vi.fn(() => 'return value');
 const mockFn = vi.fn().mockResolvedValue('async value');
 
 mockFn.mockClear(); // Clear call history
-vi.clearAllMocks();  // Clear all mocks
+vi.clearAllMocks(); // Clear all mocks
 ```
 
 ---
@@ -265,11 +269,13 @@ npm run test:coverage
 ### vitest.setup.js
 
 Mocks:
+
 - `window.matchMedia`
 - `localStorage`
 - `window.location`
 
 Globals:
+
 - `describe`, `it`, `expect`, `beforeEach`, `vi`
 
 ---

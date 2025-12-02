@@ -34,7 +34,7 @@ class QueryOptimizer {
       )
       SELECT * FROM buyer_stats, supplier_ratings;
     `;
-    
+
     return pool.query(query, [userId]);
   }
 
@@ -54,7 +54,7 @@ class QueryOptimizer {
       LEFT JOIN purchase_orders po ON o.id = po.offer_id
       WHERE o.supplier_id = $1;
     `;
-    
+
     return pool.query(query, [userId]);
   }
 
@@ -74,7 +74,7 @@ class QueryOptimizer {
       FROM offers
       WHERE supplier_id = $1;
     `;
-    
+
     return pool.query(query, [supplierId]);
   }
 
@@ -94,7 +94,7 @@ class QueryOptimizer {
       LEFT JOIN users u ON o.supplier_id = u.id
       WHERE o.tender_id = $1 AND o.is_deleted = false;
     `;
-    
+
     return pool.query(query, [tenderId]);
   }
 }

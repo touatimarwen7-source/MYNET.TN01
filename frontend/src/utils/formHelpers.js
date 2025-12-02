@@ -56,7 +56,15 @@ export const formatFileSize = (bytes) => {
 /**
  * Validate file constraints
  */
-export const validateFile = (file, maxSizeMB = 10, allowedTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document']) => {
+export const validateFile = (
+  file,
+  maxSizeMB = 10,
+  allowedTypes = [
+    'application/pdf',
+    'application/msword',
+    'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+  ]
+) => {
   const errors = [];
   const maxSizeBytes = maxSizeMB * 1024 * 1024;
 
@@ -135,7 +143,10 @@ export const validateDate = (date, { minDate = null, maxDate = null, required = 
 /**
  * Validate text field constraints
  */
-export const validateTextField = (text, { minLength = 0, maxLength = Infinity, required = true, pattern = null } = {}) => {
+export const validateTextField = (
+  text,
+  { minLength = 0, maxLength = Infinity, required = true, pattern = null } = {}
+) => {
   const errors = [];
 
   if (required && (!text || text.trim() === '')) {

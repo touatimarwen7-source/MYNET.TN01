@@ -21,29 +21,26 @@ import AddIcon from '@mui/icons-material/Add';
 import institutionalTheme from '../../../theme/theme';
 
 /**
- * الخطوة الثالثة: إضافة بنود المناقصة
+ * Étape 3 : Ajout des Lignes d'Article
  * @param {object} props
- * @param {object} props.formData - بيانات النموذج الحالية
- * @param {function} props.setFormData - دالة لتحديث بيانات النموذج
- * @param {boolean} props.loading - حالة التحميل
+ * @param {object} props.formData - Données actuelles du formulaire
+ * @param {function} props.setFormData - Fonction pour mettre à jour les données du formulaire
+ * @param {boolean} props.loading - État de chargement
  */
 const StepThree = ({ formData, setFormData, loading }) => {
   const lineItems = formData.lineItems || [];
 
-  // دالة لمعالجة التغييرات في حقول البنود
   const handleItemChange = (index, field, value) => {
     const updatedItems = [...lineItems];
     updatedItems[index] = { ...updatedItems[index], [field]: value };
     setFormData(prev => ({ ...prev, lineItems: updatedItems }));
   };
 
-  // دالة لإضافة بند جديد
   const addNewItem = () => {
     const newItem = { id: Date.now(), description: '', quantity: 1, unit: 'Unit' };
     setFormData(prev => ({ ...prev, lineItems: [...(prev.lineItems || []), newItem] }));
   };
 
-  // دالة لحذف بند
   const deleteItem = (index) => {
     const updatedItems = lineItems.filter((_, i) => i !== index);
     setFormData(prev => ({ ...prev, lineItems: updatedItems }));
@@ -52,17 +49,17 @@ const StepThree = ({ formData, setFormData, loading }) => {
   return (
     <Box>
       <Alert severity="info" sx={{ mb: 3 }}>
-        أضف البنود المطلوبة في المناقصة. سيقوم الموردون بتقديم عروضهم بناءً على هذه القائمة.
+        Ajoutez les articles requis pour l'appel d'offres. Les fournisseurs soumettront leurs offres sur la base de cette liste.
       </Alert>
       
       <TableContainer component={Paper}>
         <Table>
           <TableHead sx={{ backgroundColor: '#f5f5f5' }}>
             <TableRow>
-              <TableCell sx={{ fontWeight: 'bold' }}>الوصف</TableCell>
-              <TableCell sx={{ fontWeight: 'bold', width: '120px' }}>الكمية</TableCell>
-              <TableCell sx={{ fontWeight: 'bold', width: '150px' }}>الوحدة</TableCell>
-              <TableCell sx={{ fontWeight: 'bold', width: '100px' }}>إجراء</TableCell>
+              <TableCell sx={{ fontWeight: 'bold' }}>Description</TableCell>
+              <TableCell sx={{ fontWeight: 'bold', width: '120px' }}>Quantité</TableCell>
+              <TableCell sx={{ fontWeight: 'bold', width: '150px' }}>Unité</TableCell>
+              <TableCell sx={{ fontWeight: 'bold', width: '100px' }}>Action</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -75,7 +72,7 @@ const StepThree = ({ formData, setFormData, loading }) => {
                     variant="outlined"
                     size="small"
                     fullWidth
-                    placeholder="وصف البند"
+                    placeholder="Description de l'article"
                     disabled={loading}
                   />
                 </TableCell>
@@ -123,7 +120,7 @@ const StepThree = ({ formData, setFormData, loading }) => {
         sx={{ mt: 2, backgroundColor: institutionalTheme.palette.primary.main }}
         disabled={loading}
       >
-        إضافة بند جديد
+        Ajouter un nouvel article
       </Button>
     </Box>
   );

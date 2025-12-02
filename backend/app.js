@@ -48,15 +48,29 @@ try {
   initializeEmailService = () => logger.warn('Email service optional');
 }
 const loggingMiddleware = require('./middleware/loggingMiddleware');
-const { requestLoggingMiddleware, errorLoggingMiddleware } = require('./middleware/requestLoggingMiddleware');
-const { securityHeadersMiddleware, corsMiddleware } = require('./middleware/corsSecurityMiddleware');
+const {
+  requestLoggingMiddleware,
+  errorLoggingMiddleware,
+} = require('./middleware/requestLoggingMiddleware');
+const {
+  securityHeadersMiddleware,
+  corsMiddleware,
+} = require('./middleware/corsSecurityMiddleware');
 const { inputSanitizationMiddleware } = require('./middleware/inputSanitizationMiddleware');
-const { ddosProtectionMiddleware, authLimiter, uploadLimiter } = require('./middleware/ddosProtectionMiddleware');
+const {
+  ddosProtectionMiddleware,
+  authLimiter,
+  uploadLimiter,
+} = require('./middleware/ddosProtectionMiddleware');
 const ErrorHandler = require('./middleware/errorHandler');
 const requestIdMiddleware = require('./middleware/requestIdMiddleware');
 const performanceMiddleware = require('./middleware/performanceMiddleware');
 const { versionMiddleware } = require('./config/apiVersion');
-const { globalErrorHandler, notFoundHandler, asyncHandler } = require('./middleware/errorHandlingMiddleware');
+const {
+  globalErrorHandler,
+  notFoundHandler,
+  asyncHandler,
+} = require('./middleware/errorHandlingMiddleware');
 const { safeQueryMiddleware } = require('./middleware/safeQueryMiddleware');
 const { validationMiddleware } = require('./middleware/validationMiddleware');
 const { attachValidators } = require('./middleware/endpointValidators');
@@ -138,74 +152,80 @@ app.use(validationMiddleware);
 app.use(attachValidators);
 
 app.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
-    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header(
+    'Access-Control-Allow-Headers',
+    'Origin, X-Requested-With, Content-Type, Accept, Authorization'
+  );
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
 
-    if (req.method === 'OPTIONS') {
-        return res.sendStatus(200);
-    }
+  if (req.method === 'OPTIONS') {
+    return res.sendStatus(200);
+  }
 
-    next();
+  next();
 });
 
 // ✅ HEALTH CHECK ENDPOINT (Public - No auth required)
 app.get('/health', (req, res) => {
-    res.status(200).json({
-        status: 'ok',
-        timestamp: new Date().toISOString(),
-        service: 'MyNet.tn API',
-        version: '1.2.0'
-    });
+  res.status(200).json({
+    status: 'ok',
+    timestamp: new Date().toISOString(),
+    service: 'MyNet.tn API',
+    version: '1.2.0',
+  });
 });
 
 // 📊 ERROR TRACKING STATS ENDPOINT
 app.get('/api/admin/error-stats', (req, res) => {
-    try {
-        const stats = errorTracker.getStats();
-        const recentErrors = errorTracker.getRecentErrors(20);
-        
-        res.status(200).json({
-            stats,
-            recentErrors,
-            timestamp: new Date().toISOString()
-        });
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
+  try {
+    const stats = errorTracker.getStats();
+    const recentErrors = errorTracker.getRecentErrors(20);
+
+    res.status(200).json({
+      stats,
+      recentErrors,
+      timestamp: new Date().toISOString(),
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 });
 
 app.get('/', (req, res) => {
-    res.status(200).json({
-        status: 'Running',
-        message: 'MyNet.tn Procurement & Tender Management System API',
-        version: '1.2.0',
-        endpoints: {
-            auth: '/api/auth',
-            procurement: '/api/procurement',
-            admin: '/api/admin',
-            'super-admin': '/api/super-admin',
-            search: '/api/search',
-            messaging: '/api/messaging',
-            documents: '/api/documents/pdf',
-            features: '/api/admin/features'
-        }
-    });
+  res.status(200).json({
+    status: 'Running',
+    message: 'MyNet.tn Procurement & Tender Management System API',
+    version: '1.2.0',
+    endpoints: {
+      auth: '/api/auth',
+      procurement: '/api/procurement',
+      admin: '/api/admin',
+      'super-admin': '/api/super-admin',
+      search: '/api/search',
+      messaging: '/api/messaging',
+      documents: '/api/documents/pdf',
+      features: '/api/admin/features',
+    },
+  });
 });
 
 // 📚 SWAGGER/OPENAPI DOCUMENTATION
 app.use('/api-docs', swaggerUi.serve);
-app.get('/api-docs', swaggerUi.setup(swaggerSpec, {
-  swaggerOptions: {
-    persistAuthorization: true,
-    displayOperationId: true,
-    filter: true,
-    showExtensions: true,
-    tryItOutEnabled: true
-  },
-  customCss: '.swagger-ui .topbar { display: none }',
-  customSiteTitle: 'MyNet.tn API Documentation'
-}));
+app.get(
+  '/api-docs',
+  swaggerUi.setup(swaggerSpec, {
+    swaggerOptions: {
+      persistAuthorization: true,
+      displayOperationId: true,
+      filter: true,
+      showExtensions: true,
+      tryItOutEnabled: true,
+    },
+    customCss: '.swagger-ui .topbar { display: none }',
+    customSiteTitle: 'MyNet.tn API Documentation',
+  })
+);
 
 // API specification endpoint
 app.get('/api-spec.json', (req, res) => {
@@ -288,11 +308,11 @@ app.get('/api/cache/stats', (req, res) => {
   try {
     const cacheManager = getCacheManager();
     const stats = cacheManager.getStats();
-    
+
     res.status(200).json({
       cache: stats,
       timestamp: new Date().toISOString(),
-      uptime: process.uptime()
+      uptime: process.uptime(),
     });
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -304,10 +324,10 @@ app.delete('/api/cache/clear', (req, res) => {
   try {
     const cacheManager = getCacheManager();
     cacheManager.clear();
-    
+
     res.status(200).json({
       message: 'Cache cleared successfully',
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -320,7 +340,7 @@ app.get('/api/admin/rate-limit-stats', (req, res) => {
     const stats = enhancedRateLimiting.getRateLimitStats();
     res.status(200).json({
       stats,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -333,14 +353,14 @@ app.post('/api/admin/rate-limit-reset', (req, res) => {
     if (!userId) {
       return res.status(400).json({ error: 'userId is required' });
     }
-    
+
     const key = `user:${userId}`;
     const reset = enhancedRateLimiting.resetLimits(key);
-    
+
     res.status(200).json({
       message: reset ? 'Limits reset successfully' : 'User not found',
       userId,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -352,7 +372,7 @@ app.delete('/api/admin/rate-limit-clear', (req, res) => {
     enhancedRateLimiting.clearAllLimits();
     res.status(200).json({
       message: 'All rate limits cleared successfully',
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
   } catch (error) {
     res.status(500).json({ error: error.message });

@@ -14,7 +14,7 @@ class DatabaseErrorHandler {
     logger.error('DATABASE_ERROR', {
       message: error.message,
       code: error.code,
-      context
+      context,
     });
 
     // Unique constraint violation
@@ -23,7 +23,7 @@ class DatabaseErrorHandler {
         statusCode: 409,
         message: 'Record already exists',
         code: 'DUPLICATE_RECORD',
-        field: context.field || 'unknown'
+        field: context.field || 'unknown',
       };
     }
 
@@ -32,7 +32,7 @@ class DatabaseErrorHandler {
       return {
         statusCode: 404,
         message: context.resource ? `${context.resource} not found` : 'Record not found',
-        code: 'NOT_FOUND'
+        code: 'NOT_FOUND',
       };
     }
 
@@ -42,7 +42,7 @@ class DatabaseErrorHandler {
         statusCode: 400,
         message: 'Invalid reference',
         code: 'INVALID_REFERENCE',
-        field: context.field || 'unknown'
+        field: context.field || 'unknown',
       };
     }
 
@@ -51,7 +51,7 @@ class DatabaseErrorHandler {
       return {
         statusCode: 400,
         message: 'Invalid data provided',
-        code: 'INVALID_DATA'
+        code: 'INVALID_DATA',
       };
     }
 
@@ -60,7 +60,7 @@ class DatabaseErrorHandler {
       return {
         statusCode: 503,
         message: 'Database connection failed',
-        code: 'DATABASE_UNAVAILABLE'
+        code: 'DATABASE_UNAVAILABLE',
       };
     }
 
@@ -69,7 +69,7 @@ class DatabaseErrorHandler {
       statusCode: 500,
       message: 'Database operation failed',
       code: 'DATABASE_ERROR',
-      ...(process.env.NODE_ENV !== 'production' && { details: error.message })
+      ...(process.env.NODE_ENV !== 'production' && { details: error.message }),
     };
   }
 
@@ -113,7 +113,7 @@ class DatabaseErrorHandler {
     } catch (error) {
       logger.error('TRANSACTION_FAILED', {
         message: error.message,
-        context
+        context,
       });
 
       const handled = this.handle(error, context);

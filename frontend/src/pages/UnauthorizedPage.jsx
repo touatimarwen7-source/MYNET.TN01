@@ -7,9 +7,9 @@ import institutionalTheme from '../theme/theme';
 const UnauthorizedPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  
+
   // استخلاص الرسالة من الحالة التي تم تمريرها بواسطة ProtectedRoute
-  const message = location.state?.message || "ليس لديك الصلاحية للوصول إلى هذه الصفحة.";
+  const message = location.state?.message || 'ليس لديك الصلاحية للوصول إلى هذه الصفحة.';
 
   const goBack = () => navigate(-1); // العودة إلى الصفحة السابقة
 
@@ -25,14 +25,14 @@ const UnauthorizedPage = () => {
           padding: 4,
           border: `1px solid ${institutionalTheme.palette.error.main}`,
           borderRadius: '8px',
-          backgroundColor: '#fff8f8'
+          backgroundColor: '#fff8f8',
         }}
       >
         <BlockIcon sx={{ fontSize: 60, color: institutionalTheme.palette.error.main, mb: 2 }} />
         <Typography component="h1" variant="h4" sx={{ mb: 2, fontWeight: 'bold' }}>
           وصول غير مصرح به
         </Typography>
-        
+
         <Alert severity="error" sx={{ width: '100%', justifyContent: 'center' }}>
           {message}
         </Alert>
@@ -40,9 +40,9 @@ const UnauthorizedPage = () => {
         <Button
           variant="contained"
           onClick={goBack}
-          sx={{ 
-            mt: 3, 
-            backgroundColor: institutionalTheme.palette.primary.main 
+          sx={{
+            mt: 3,
+            backgroundColor: institutionalTheme.palette.primary.main,
           }}
         >
           العودة إلى الصفحة السابقة

@@ -23,7 +23,7 @@ import {
   TableRow,
   Paper,
   IconButton,
-  Chip
+  Chip,
 } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -33,39 +33,39 @@ import adminAPI from '../../services/adminAPI';
 import { errorHandler } from '../../utils/errorHandler';
 
 const FALLBACK_PAGES = [
-  { 
-    id: 1, 
-    slug: 'home', 
-    title: 'Accueil', 
-    content: 'Contenu de la page d\'accueil', 
-    description: 'Page d\'accueil de la plateforme',
-    meta_keywords: 'accueil, appels d\'offres',
+  {
+    id: 1,
+    slug: 'home',
+    title: 'Accueil',
+    content: "Contenu de la page d'accueil",
+    description: "Page d'accueil de la plateforme",
+    meta_keywords: "accueil, appels d'offres",
     status: 'published',
     created_at: '2024-11-20',
-    updated_at: '2024-11-20'
+    updated_at: '2024-11-20',
   },
-  { 
-    id: 2, 
-    slug: 'about', 
-    title: 'À Propos', 
-    content: 'Informations sur l\'entreprise', 
+  {
+    id: 2,
+    slug: 'about',
+    title: 'À Propos',
+    content: "Informations sur l'entreprise",
     description: 'Informations sur la plateforme',
     meta_keywords: 'à propos, entreprise',
     status: 'published',
     created_at: '2024-11-15',
-    updated_at: '2024-11-15'
+    updated_at: '2024-11-15',
   },
-  { 
-    id: 3, 
-    slug: 'terms', 
-    title: 'Conditions d\'Utilisation', 
-    content: 'Termes et conditions de service', 
+  {
+    id: 3,
+    slug: 'terms',
+    title: "Conditions d'Utilisation",
+    content: 'Termes et conditions de service',
     description: 'Termes et conditions de service',
     meta_keywords: 'conditions, termes',
     status: 'published',
     created_at: '2024-11-10',
-    updated_at: '2024-11-10'
-  }
+    updated_at: '2024-11-10',
+  },
 ];
 
 export default function StaticPagesManager() {
@@ -81,7 +81,7 @@ export default function StaticPagesManager() {
     description: '',
     content: '',
     meta_keywords: '',
-    status: 'published'
+    status: 'published',
   });
   const [successMsg, setSuccessMsg] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
@@ -115,7 +115,7 @@ export default function StaticPagesManager() {
       description: '',
       content: '',
       meta_keywords: '',
-      status: 'published'
+      status: 'published',
     });
     setOpenPageDialog(true);
   };
@@ -129,15 +129,15 @@ export default function StaticPagesManager() {
       description: page.description || '',
       content: page.content || '',
       meta_keywords: page.meta_keywords || '',
-      status: page.status || 'published'
+      status: page.status || 'published',
     });
     setOpenPageDialog(true);
   };
 
   const handleFormChange = (field, value) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [field]: value
+      [field]: value,
     }));
   };
 
@@ -157,10 +157,10 @@ export default function StaticPagesManager() {
           savedPage = res.data || res;
         } catch {
           savedPage = {
-            id: Math.max(...pages.map(p => p.id || 0), 0) + 1,
+            id: Math.max(...pages.map((p) => p.id || 0), 0) + 1,
             ...formData,
             created_at: new Date().toISOString().split('T')[0],
-            updated_at: new Date().toISOString().split('T')[0]
+            updated_at: new Date().toISOString().split('T')[0],
           };
         }
         setPages([...pages, savedPage]);
@@ -173,12 +173,10 @@ export default function StaticPagesManager() {
           savedPage = {
             ...editingPage,
             ...formData,
-            updated_at: new Date().toISOString().split('T')[0]
+            updated_at: new Date().toISOString().split('T')[0],
           };
         }
-        setPages(pages.map(p =>
-          p.id === editingPage.id ? savedPage : p
-        ));
+        setPages(pages.map((p) => (p.id === editingPage.id ? savedPage : p)));
         setSuccessMsg(`Page mise à jour "${formData.title}"`);
       }
 
@@ -199,10 +197,9 @@ export default function StaticPagesManager() {
       setSaving(true);
       try {
         await adminAPI.content.deletePage(pageId);
-      } catch {
-      }
-      
-      setPages(pages.filter(p => p.id !== pageId));
+      } catch {}
+
+      setPages(pages.filter((p) => p.id !== pageId));
       setSuccessMsg('Page supprimée');
       setTimeout(() => setSuccessMsg(''), 3000);
     } catch (error) {
@@ -214,13 +211,25 @@ export default function StaticPagesManager() {
   };
 
   if (loading) {
-    return <Box sx={{ display: 'flex', justifyContent: 'center', py: 4 }}><CircularProgress /></Box>;
+    return (
+      <Box sx={{ display: 'flex', justifyContent: 'center', py: 4 }}>
+        <CircularProgress />
+      </Box>
+    );
   }
 
   return (
     <Box>
-      {successMsg && <Alert severity="success" sx={{ mb: 2 }}>{successMsg}</Alert>}
-      {errorMsg && <Alert severity="error" sx={{ mb: 2 }}>{errorMsg}</Alert>}
+      {successMsg && (
+        <Alert severity="success" sx={{ mb: 2 }}>
+          {successMsg}
+        </Alert>
+      )}
+      {errorMsg && (
+        <Alert severity="error" sx={{ mb: 2 }}>
+          {errorMsg}
+        </Alert>
+      )}
 
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
         <Box>
@@ -247,11 +256,21 @@ export default function StaticPagesManager() {
         <Table>
           <TableHead sx={{ backgroundColor: '#F5F5F5' }}>
             <TableRow>
-              <TableCell sx={{ fontWeight: 600, color: theme.palette.text.primary }}>Titre</TableCell>
-              <TableCell sx={{ fontWeight: 600, color: theme.palette.text.primary }}>Slug</TableCell>
-              <TableCell sx={{ fontWeight: 600, color: theme.palette.text.primary }}>État</TableCell>
-              <TableCell sx={{ fontWeight: 600, color: theme.palette.text.primary }}>Dernière Modification</TableCell>
-              <TableCell align="right" sx={{ fontWeight: 600, color: theme.palette.text.primary }}>Actions</TableCell>
+              <TableCell sx={{ fontWeight: 600, color: theme.palette.text.primary }}>
+                Titre
+              </TableCell>
+              <TableCell sx={{ fontWeight: 600, color: theme.palette.text.primary }}>
+                Slug
+              </TableCell>
+              <TableCell sx={{ fontWeight: 600, color: theme.palette.text.primary }}>
+                État
+              </TableCell>
+              <TableCell sx={{ fontWeight: 600, color: theme.palette.text.primary }}>
+                Dernière Modification
+              </TableCell>
+              <TableCell align="right" sx={{ fontWeight: 600, color: theme.palette.text.primary }}>
+                Actions
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -262,18 +281,25 @@ export default function StaticPagesManager() {
                 </TableCell>
               </TableRow>
             ) : (
-              pages.map(page => (
-                <TableRow key={page.id} sx={{ '&:hover': { backgroundColor: theme.palette.background.default } }}>
+              pages.map((page) => (
+                <TableRow
+                  key={page.id}
+                  sx={{ '&:hover': { backgroundColor: theme.palette.background.default } }}
+                >
                   <TableCell>
                     <Box>
-                      <Typography sx={{ fontWeight: 500, fontSize: '14px' }}>{page.title}</Typography>
+                      <Typography sx={{ fontWeight: 500, fontSize: '14px' }}>
+                        {page.title}
+                      </Typography>
                       <Typography variant="caption" sx={{ color: '#616161' }}>
                         {page.description || 'Sans description'}
                       </Typography>
                     </Box>
                   </TableCell>
                   <TableCell>
-                    <Typography sx={{ fontSize: '13px', color: '#616161', fontFamily: 'monospace' }}>
+                    <Typography
+                      sx={{ fontSize: '13px', color: '#616161', fontFamily: 'monospace' }}
+                    >
                       /{page.slug}
                     </Typography>
                   </TableCell>
@@ -283,7 +309,7 @@ export default function StaticPagesManager() {
                       size="small"
                       sx={{
                         backgroundColor: page.status === 'published' ? '#E8F5E9' : '#FFF9C4',
-                        color: page.status === 'published' ? '#2E7D32' : '#F57F17'
+                        color: page.status === 'published' ? '#2E7D32' : '#F57F17',
                       }}
                     />
                   </TableCell>
@@ -317,7 +343,12 @@ export default function StaticPagesManager() {
         </Table>
       </TableContainer>
 
-      <Dialog open={openPageDialog} onClose={() => !saving && setOpenPageDialog(false)} maxWidth="md" fullWidth>
+      <Dialog
+        open={openPageDialog}
+        onClose={() => !saving && setOpenPageDialog(false)}
+        maxWidth="md"
+        fullWidth
+      >
         <DialogTitle>
           {isCreating ? 'Nouvelle Page' : `Modifier: ${editingPage?.title}`}
         </DialogTitle>
@@ -337,7 +368,9 @@ export default function StaticPagesManager() {
               fullWidth
               label="Slug (URL)"
               value={formData.slug}
-              onChange={(e) => handleFormChange('slug', e.target.value.toLowerCase().replace(/\s+/g, '-'))}
+              onChange={(e) =>
+                handleFormChange('slug', e.target.value.toLowerCase().replace(/\s+/g, '-'))
+              }
               placeholder="Exemple: about-us"
               disabled={saving}
               size="small"
@@ -370,7 +403,7 @@ export default function StaticPagesManager() {
             <Box sx={{ display: 'flex', gap: 2 }}>
               <Typography sx={{ fontWeight: 500, fontSize: '14px', pt: 1 }}>État:</Typography>
               <Box sx={{ display: 'flex', gap: 1 }}>
-                {['published', 'draft'].map(status => (
+                {['published', 'draft'].map((status) => (
                   <Button
                     key={status}
                     variant={formData.status === status ? 'contained' : 'outlined'}
@@ -378,9 +411,10 @@ export default function StaticPagesManager() {
                     onClick={() => handleFormChange('status', status)}
                     disabled={saving}
                     sx={{
-                      backgroundColor: formData.status === status ? theme.palette.primary.main : 'transparent',
+                      backgroundColor:
+                        formData.status === status ? theme.palette.primary.main : 'transparent',
                       color: formData.status === status ? '#FFF' : theme.palette.primary.main,
-                      borderColor: theme.palette.primary.main
+                      borderColor: theme.palette.primary.main,
                     }}
                   >
                     {status === 'published' ? 'Publiée' : 'Brouillon'}
@@ -412,7 +446,13 @@ export default function StaticPagesManager() {
             sx={{ backgroundColor: theme.palette.primary.main }}
             disabled={saving}
           >
-            {saving ? <CircularProgress size={20} sx={{ color: '#FFF' }} /> : (isCreating ? 'Créer' : 'Enregistrer')}
+            {saving ? (
+              <CircularProgress size={20} sx={{ color: '#FFF' }} />
+            ) : isCreating ? (
+              'Créer'
+            ) : (
+              'Enregistrer'
+            )}
           </Button>
         </DialogActions>
       </Dialog>

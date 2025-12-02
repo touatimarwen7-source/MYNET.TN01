@@ -6,7 +6,7 @@ export default function StepSeven({ formData, handleChange, loading }) {
   const awardLevelLabel = {
     lot: 'Par Lot',
     article: 'Par Article',
-    tender: 'Global (Toute l\'appel d\'offres)',
+    tender: "Global (Toute l'appel d'offres)",
   };
 
   return (
@@ -16,7 +16,9 @@ export default function StepSeven({ formData, handleChange, loading }) {
       </Alert>
 
       <Paper sx={{ p: '20px', backgroundColor: THEME_COLORS.bgDefault, borderRadius: '4px' }}>
-        <Typography sx={{ fontSize: '14px', fontWeight: 600, color: THEME_COLORS.primary, mb: '16px' }}>
+        <Typography
+          sx={{ fontSize: '14px', fontWeight: 600, color: THEME_COLORS.primary, mb: '16px' }}
+        >
           📋 Résumé de l'Appel d'Offres
         </Typography>
 
@@ -43,7 +45,9 @@ export default function StepSeven({ formData, handleChange, loading }) {
           </Box>
 
           <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-            <Typography sx={{ color: THEME_COLORS.textSecondary }}>🎯 Niveau d'Attribution:</Typography>
+            <Typography sx={{ color: THEME_COLORS.textSecondary }}>
+              🎯 Niveau d'Attribution:
+            </Typography>
             <Typography sx={{ fontWeight: 600, color: THEME_COLORS.primary }}>
               {awardLevelLabel[formData.awardLevel] || 'Non défini'}
             </Typography>
@@ -75,7 +79,9 @@ export default function StepSeven({ formData, handleChange, loading }) {
       {/* Detailed Lots Section */}
       {(formData.lots || []).length > 0 && (
         <Paper sx={{ p: '20px', backgroundColor: THEME_COLORS.bgDefault, borderRadius: '4px' }}>
-          <Typography sx={{ fontSize: '14px', fontWeight: 600, color: THEME_COLORS.primary, mb: '16px' }}>
+          <Typography
+            sx={{ fontSize: '14px', fontWeight: 600, color: THEME_COLORS.primary, mb: '16px' }}
+          >
             📦 Détail des Lots et Articles
           </Typography>
 
@@ -91,7 +97,14 @@ export default function StepSeven({ formData, handleChange, loading }) {
                   borderLeft: `4px solid ${THEME_COLORS.primary}`,
                 }}
               >
-                <Typography sx={{ fontSize: '12px', fontWeight: 600, color: THEME_COLORS.textPrimary, mb: '8px' }}>
+                <Typography
+                  sx={{
+                    fontSize: '12px',
+                    fontWeight: 600,
+                    color: THEME_COLORS.textPrimary,
+                    mb: '8px',
+                  }}
+                >
                   Lot {lot.numero}: {lot.objet}
                 </Typography>
 
@@ -121,7 +134,9 @@ export default function StepSeven({ formData, handleChange, loading }) {
 
       {/* Contact Info */}
       <Box>
-        <Typography sx={{ fontSize: '13px', fontWeight: 600, color: THEME_COLORS.textPrimary, mb: '12px' }}>
+        <Typography
+          sx={{ fontSize: '13px', fontWeight: 600, color: THEME_COLORS.textPrimary, mb: '12px' }}
+        >
           Informations de Contact
         </Typography>
 

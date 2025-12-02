@@ -56,8 +56,8 @@ export default function Inbox() {
         params: {
           page,
           limit,
-          unread_only: unreadOnly
-        }
+          unread_only: unreadOnly,
+        },
       });
       setMessages(response.data.data);
       setTotal(response.data.total);
@@ -72,9 +72,8 @@ export default function Inbox() {
   const fetchStats = async () => {
     try {
       const response = await axiosInstance.get('/messaging/count/unread');
-      setStats(prev => ({ ...prev, unread: response.data.unread_count }));
-    } catch (err) {
-    }
+      setStats((prev) => ({ ...prev, unread: response.data.unread_count }));
+    } catch (err) {}
   };
 
   const handleDelete = async (messageId) => {
@@ -98,15 +97,18 @@ export default function Inbox() {
     navigate(`/message/${messageId}`);
   };
 
-  const filteredMessages = messages.filter(msg =>
-    msg.subject?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    msg.sender_company?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    msg.content?.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredMessages = messages.filter(
+    (msg) =>
+      msg.subject?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      msg.sender_company?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      msg.content?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   if (loading && messages.length === 0) {
     return (
-      <Container sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '60vh' }}>
+      <Container
+        sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '60vh' }}
+      >
         <CircularProgress sx={{ color: institutionalTheme.palette.primary.main }} />
       </Container>
     );
@@ -115,9 +117,23 @@ export default function Inbox() {
   return (
     <Box sx={{ backgroundColor: '#f9f9f9', paddingY: '40px', minHeight: '100vh' }}>
       <Container maxWidth="lg">
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '30px' }}>
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            marginBottom: '30px',
+          }}
+        >
           <Box>
-            <Typography variant="h4" sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main, marginBottom: '8px' }}>
+            <Typography
+              variant="h4"
+              sx={{
+                fontWeight: 600,
+                color: institutionalTheme.palette.primary.main,
+                marginBottom: '8px',
+              }}
+            >
               Boîte de Réception
             </Typography>
             <Typography variant="body2" sx={{ color: '#666' }}>
@@ -133,7 +149,11 @@ export default function Inbox() {
           </Button>
         </Box>
 
-        {error && <Alert severity="error" sx={{ marginBottom: '20px' }}>{error}</Alert>}
+        {error && (
+          <Alert severity="error" sx={{ marginBottom: '20px' }}>
+            {error}
+          </Alert>
+        )}
 
         <Card sx={{ marginBottom: '20px' }}>
           <CardContent>
@@ -154,8 +174,16 @@ export default function Inbox() {
               />
               <Button
                 variant={unreadOnly ? 'contained' : 'outlined'}
-                onClick={() => { setUnreadOnly(!unreadOnly); setPage(1); }}
-                sx={{ backgroundColor: unreadOnly ? institutionalTheme.palette.primary.main : 'transparent', color: unreadOnly ? 'white' : institutionalTheme.palette.primary.main }}
+                onClick={() => {
+                  setUnreadOnly(!unreadOnly);
+                  setPage(1);
+                }}
+                sx={{
+                  backgroundColor: unreadOnly
+                    ? institutionalTheme.palette.primary.main
+                    : 'transparent',
+                  color: unreadOnly ? 'white' : institutionalTheme.palette.primary.main,
+                }}
               >
                 غير مقروء
               </Button>
@@ -194,7 +222,12 @@ export default function Inbox() {
                           {message.is_read ? (
                             <MailOutlineIcon sx={{ color: '#999', fontSize: '20px' }} />
                           ) : (
-                            <MailIcon sx={{ color: institutionalTheme.palette.primary.main, fontSize: '20px' }} />
+                            <MailIcon
+                              sx={{
+                                color: institutionalTheme.palette.primary.main,
+                                fontSize: '20px',
+                              }}
+                            />
                           )}
                           {message.sender_company}
                         </Box>
@@ -202,7 +235,14 @@ export default function Inbox() {
                       <TableCell sx={{ fontWeight: message.is_read ? 400 : 600 }}>
                         {message.subject || '(بدون موضوع)'}
                       </TableCell>
-                      <TableCell sx={{ maxWidth: '300px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                      <TableCell
+                        sx={{
+                          maxWidth: '300px',
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                          whiteSpace: 'nowrap',
+                        }}
+                      >
                         {message.content}
                       </TableCell>
                       <TableCell sx={{ fontSize: '12px', color: '#666' }}>

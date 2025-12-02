@@ -51,9 +51,9 @@ import EnhancedErrorBoundary from '../components/EnhancedErrorBoundary';
  * Snackbar component لعرض الإشعارات
  */
 const SnackbarComponent = ({ open, message, severity, onClose }) => (
-  <Snackbar 
-    open={open} 
-    autoHideDuration={6000} 
+  <Snackbar
+    open={open}
+    autoHideDuration={6000}
     onClose={onClose}
     anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
   >
@@ -69,7 +69,7 @@ const SnackbarComponent = ({ open, message, severity, onClose }) => (
 function SuperAdminDashboardContent() {
   const theme = institutionalTheme;
   const { t } = useTranslation();
-  
+
   const [currentTab, setCurrentTab] = useState(0);
   const [stats, setStats] = useState({
     totalUsers: 0,
@@ -94,7 +94,7 @@ function SuperAdminDashboardContent() {
     try {
       const statsRes = await adminAPI.getStatistics();
       const data = statsRes.data?.data || {};
-      
+
       setStats({
         totalUsers: data.total_users || 0,
         activeTenders: data.active_tenders || 0,
@@ -103,7 +103,9 @@ function SuperAdminDashboardContent() {
         responseTime: data.avg_response_time || 145,
       });
 
-      setSystemStatus(data.system_health > 90 ? 'operational' : data.system_health > 70 ? 'degraded' : 'critical');
+      setSystemStatus(
+        data.system_health > 90 ? 'operational' : data.system_health > 70 ? 'degraded' : 'critical'
+      );
       logger.info('Statistiques du système chargées');
     } catch (error) {
       logger.error('Erreur lors du chargement des statistiques', error);
@@ -114,41 +116,43 @@ function SuperAdminDashboardContent() {
   };
 
   const tabs = [
-    { 
+    {
       label: t('dashboard.admin.usersMgmt'),
-      icon: <SecurityIcon />, 
+      icon: <SecurityIcon />,
       component: <UserRoleManagement />,
-      description: t('dashboard.admin.usersMgmtDesc')
+      description: t('dashboard.admin.usersMgmtDesc'),
     },
-    { 
+    {
       label: t('dashboard.admin.contentMgmt'),
-      icon: <ArticleIcon />, 
+      icon: <ArticleIcon />,
       component: <ContentManager />,
-      description: t('dashboard.admin.contentMgmtDesc')
+      description: t('dashboard.admin.contentMgmtDesc'),
     },
-    { 
+    {
       label: t('dashboard.admin.servicesMgmt'),
-      icon: <BuildIcon />, 
+      icon: <BuildIcon />,
       component: <ServicesManager />,
-      description: t('dashboard.admin.servicesMgmtDesc')
+      description: t('dashboard.admin.servicesMgmtDesc'),
     },
-    { 
+    {
       label: t('dashboard.admin.systemConfig'),
-      icon: <SettingsIcon />, 
+      icon: <SettingsIcon />,
       component: <SystemConfig />,
-      description: t('dashboard.admin.systemConfigDesc')
+      description: t('dashboard.admin.systemConfigDesc'),
     },
-    { 
+    {
       label: t('dashboard.admin.monitoring'),
-      icon: <AnalyticsIcon />, 
+      icon: <AnalyticsIcon />,
       component: <AdminAnalytics />,
-      description: t('dashboard.admin.monitoringDesc')
-    }
+      description: t('dashboard.admin.monitoringDesc'),
+    },
   ];
 
   if (loading) {
     return (
-      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '60vh' }}>
+      <Box
+        sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '60vh' }}
+      >
         <CircularProgress sx={{ color: theme.palette.primary.main }} />
       </Box>
     );
@@ -157,12 +161,17 @@ function SuperAdminDashboardContent() {
   const StatCard = ({ label, value, subtitle, icon, color, trend }) => (
     <Card sx={{ border: '1px solid #e0e0e0', height: '100%' }}>
       <CardContent sx={{ padding: '20px' }}>
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '12px' }}>
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'flex-start',
+            marginBottom: '12px',
+          }}
+        >
           <Box sx={{ fontSize: '28px', color }}>{icon}</Box>
           <Box sx={{ textAlign: 'right' }}>
-            <Typography sx={{ fontSize: '24px', fontWeight: 600, color }}>
-              {value}
-            </Typography>
+            <Typography sx={{ fontSize: '24px', fontWeight: 600, color }}>{value}</Typography>
             {trend && (
               <Typography sx={{ fontSize: '11px', color: trend > 0 ? '#4caf50' : '#f44336' }}>
                 {trend > 0 ? '↑' : '↓'} {Math.abs(trend)}%
@@ -181,10 +190,23 @@ function SuperAdminDashboardContent() {
   );
 
   return (
-    <Box sx={{ backgroundColor: theme.palette.background.default, paddingY: '40px', minHeight: '100vh' }}>
+    <Box
+      sx={{
+        backgroundColor: theme.palette.background.default,
+        paddingY: '40px',
+        minHeight: '100vh',
+      }}
+    >
       <Container maxWidth="lg">
         {/* Header */}
-        <Box sx={{ marginBottom: '32px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+        <Box
+          sx={{
+            marginBottom: '32px',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'flex-start',
+          }}
+        >
           <Box>
             <Typography
               variant="h2"
@@ -216,26 +238,55 @@ function SuperAdminDashboardContent() {
             {t('common.refresh')}
           </Button>
         </Box>
-          
-        <Alert 
-          severity={systemStatus === 'operational' ? 'success' : systemStatus === 'degraded' ? 'warning' : 'error'}
-          sx={{ 
+
+        <Alert
+          severity={
+            systemStatus === 'operational'
+              ? 'success'
+              : systemStatus === 'degraded'
+                ? 'warning'
+                : 'error'
+          }
+          sx={{
             marginBottom: '24px',
-            backgroundColor: systemStatus === 'operational' ? '#e8f5e9' : systemStatus === 'degraded' ? '#FFF3E0' : '#ffebee',
-            borderColor: systemStatus === 'operational' ? '#4caf50' : systemStatus === 'degraded' ? '#FFB74D' : '#f44336',
-            color: systemStatus === 'operational' ? '#1b5e20' : systemStatus === 'degraded' ? '#E65100' : '#c62828'
+            backgroundColor:
+              systemStatus === 'operational'
+                ? '#e8f5e9'
+                : systemStatus === 'degraded'
+                  ? '#FFF3E0'
+                  : '#ffebee',
+            borderColor:
+              systemStatus === 'operational'
+                ? '#4caf50'
+                : systemStatus === 'degraded'
+                  ? '#FFB74D'
+                  : '#f44336',
+            color:
+              systemStatus === 'operational'
+                ? '#1b5e20'
+                : systemStatus === 'degraded'
+                  ? '#E65100'
+                  : '#c62828',
           }}
         >
           <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <Box>
-              <strong>{t('dashboard.admin.systemStatus')}: {t(`dashboard.admin.status.${systemStatus}`)}</strong>
+              <strong>
+                {t('dashboard.admin.systemStatus')}: {t(`dashboard.admin.status.${systemStatus}`)}
+              </strong>
               <Typography sx={{ fontSize: '12px', mt: 0.5 }}>
                 {t('dashboard.admin.affectsAll')}
               </Typography>
             </Box>
-            <Chip 
-              label={systemStatus} 
-              color={systemStatus === 'operational' ? 'success' : systemStatus === 'degraded' ? 'warning' : 'error'}
+            <Chip
+              label={systemStatus}
+              color={
+                systemStatus === 'operational'
+                  ? 'success'
+                  : systemStatus === 'degraded'
+                    ? 'warning'
+                    : 'error'
+              }
               variant="filled"
             />
           </Box>
@@ -244,7 +295,7 @@ function SuperAdminDashboardContent() {
         {/* System Stats Grid */}
         <Grid container spacing={2} sx={{ marginBottom: '32px' }}>
           <Grid xs={12} lg={6} md={2.4}>
-            <StatCard 
+            <StatCard
               label={t('dashboard.admin.totalUsers')}
               value={stats.totalUsers}
               subtitle={t('dashboard.admin.activeUsers')}
@@ -254,7 +305,7 @@ function SuperAdminDashboardContent() {
             />
           </Grid>
           <Grid xs={12} lg={6} md={2.4}>
-            <StatCard 
+            <StatCard
               label={t('dashboard.admin.activeCalls')}
               value={stats.activeTenders}
               subtitle={t('dashboard.admin.inProgress')}
@@ -264,17 +315,23 @@ function SuperAdminDashboardContent() {
             />
           </Grid>
           <Grid xs={12} lg={6} md={2.4}>
-            <StatCard 
+            <StatCard
               label={t('dashboard.admin.systemHealth')}
               value={`${stats.systemHealth}%`}
               subtitle={t('dashboard.admin.generalState')}
               icon={<TrendingUpIcon />}
-              color={stats.systemHealth > 90 ? '#388e3c' : stats.systemHealth > 70 ? '#f57c00' : '#d32f2f'}
+              color={
+                stats.systemHealth > 90
+                  ? '#388e3c'
+                  : stats.systemHealth > 70
+                    ? '#f57c00'
+                    : '#d32f2f'
+              }
               trend={-0.8}
             />
           </Grid>
           <Grid xs={12} lg={6} md={2.4}>
-            <StatCard 
+            <StatCard
               label={t('dashboard.admin.errorRate')}
               value={`${stats.errorRate}%`}
               subtitle={t('dashboard.admin.lastHour')}
@@ -284,7 +341,7 @@ function SuperAdminDashboardContent() {
             />
           </Grid>
           <Grid xs={12} lg={6} md={2.4}>
-            <StatCard 
+            <StatCard
               label={t('dashboard.admin.responseTime')}
               value={`${stats.responseTime}ms`}
               subtitle={t('dashboard.admin.average')}
@@ -314,18 +371,13 @@ function SuperAdminDashboardContent() {
                 minWidth: 'auto',
                 '&.Mui-selected': {
                   color: theme.palette.primary.main,
-                  backgroundColor: '#F0F4FF'
-                }
-              }
+                  backgroundColor: '#F0F4FF',
+                },
+              },
             }}
           >
             {tabs.map((tab, index) => (
-              <Tab 
-                key={index}
-                icon={tab.icon}
-                iconPosition="start"
-                label={tab.label}
-              />
+              <Tab key={index} icon={tab.icon} iconPosition="start" label={tab.label} />
             ))}
           </Tabs>
 
@@ -351,7 +403,7 @@ function SuperAdminDashboardContent() {
                 <ListItemIcon>
                   <PeopleIcon />
                 </ListItemIcon>
-                <ListItemText 
+                <ListItemText
                   primary={t('dashboard.admin.userManagement')}
                   secondary={t('dashboard.admin.manageAllUsers')}
                 />
@@ -360,7 +412,7 @@ function SuperAdminDashboardContent() {
                 <ListItemIcon>
                   <SecurityIcon />
                 </ListItemIcon>
-                <ListItemText 
+                <ListItemText
                   primary={t('dashboard.admin.securityLogs')}
                   secondary={t('dashboard.admin.viewAuditLogs')}
                 />
@@ -369,7 +421,7 @@ function SuperAdminDashboardContent() {
                 <ListItemIcon>
                   <AnalyticsIcon />
                 </ListItemIcon>
-                <ListItemText 
+                <ListItemText
                   primary={t('dashboard.admin.analyticsReports')}
                   secondary={t('dashboard.admin.analyzePerformance')}
                 />
@@ -378,7 +430,7 @@ function SuperAdminDashboardContent() {
                 <ListItemIcon>
                   <SettingsIcon />
                 </ListItemIcon>
-                <ListItemText 
+                <ListItemText
                   primary={t('dashboard.admin.systemSettings')}
                   secondary={t('dashboard.admin.advancedMaintenance')}
                 />
@@ -397,25 +449,22 @@ function SuperAdminDashboardContent() {
                 </Typography>
                 <List dense>
                   <ListItem>
-                    <ListItemText 
-                      primary={t('dashboard.admin.cpuUsage')}
-                      secondary="45.2%"
-                    />
+                    <ListItemText primary={t('dashboard.admin.cpuUsage')} secondary="45.2%" />
                   </ListItem>
                   <ListItem>
-                    <ListItemText 
+                    <ListItemText
                       primary={t('dashboard.admin.memory')}
                       secondary="62.8% (5.2GB / 8GB)"
                     />
                   </ListItem>
                   <ListItem>
-                    <ListItemText 
+                    <ListItemText
                       primary={t('dashboard.admin.storage')}
                       secondary="78.4% {t('dashboard.admin.used')}"
                     />
                   </ListItem>
                   <ListItem>
-                    <ListItemText 
+                    <ListItemText
                       primary={t('dashboard.admin.dbConnections')}
                       secondary="8/20 actives"
                     />
@@ -432,29 +481,65 @@ function SuperAdminDashboardContent() {
                 </Typography>
                 <List dense>
                   <ListItem>
-                    <ListItemIcon><Box sx={{ width: 10, height: 10, borderRadius: '50%', backgroundColor: '#4caf50' }} /></ListItemIcon>
-                    <ListItemText 
+                    <ListItemIcon>
+                      <Box
+                        sx={{
+                          width: 10,
+                          height: 10,
+                          borderRadius: '50%',
+                          backgroundColor: '#4caf50',
+                        }}
+                      />
+                    </ListItemIcon>
+                    <ListItemText
                       primary={t('dashboard.admin.apiServer')}
                       secondary={t('dashboard.admin.operational')}
                     />
                   </ListItem>
                   <ListItem>
-                    <ListItemIcon><Box sx={{ width: 10, height: 10, borderRadius: '50%', backgroundColor: '#4caf50' }} /></ListItemIcon>
-                    <ListItemText 
+                    <ListItemIcon>
+                      <Box
+                        sx={{
+                          width: 10,
+                          height: 10,
+                          borderRadius: '50%',
+                          backgroundColor: '#4caf50',
+                        }}
+                      />
+                    </ListItemIcon>
+                    <ListItemText
                       primary={t('dashboard.admin.database')}
                       secondary={t('dashboard.admin.operational')}
                     />
                   </ListItem>
                   <ListItem>
-                    <ListItemIcon><Box sx={{ width: 10, height: 10, borderRadius: '50%', backgroundColor: '#4caf50' }} /></ListItemIcon>
-                    <ListItemText 
+                    <ListItemIcon>
+                      <Box
+                        sx={{
+                          width: 10,
+                          height: 10,
+                          borderRadius: '50%',
+                          backgroundColor: '#4caf50',
+                        }}
+                      />
+                    </ListItemIcon>
+                    <ListItemText
                       primary={t('dashboard.admin.cacheRedis')}
                       secondary={t('dashboard.admin.operational')}
                     />
                   </ListItem>
                   <ListItem>
-                    <ListItemIcon><Box sx={{ width: 10, height: 10, borderRadius: '50%', backgroundColor: '#4caf50' }} /></ListItemIcon>
-                    <ListItemText 
+                    <ListItemIcon>
+                      <Box
+                        sx={{
+                          width: 10,
+                          height: 10,
+                          borderRadius: '50%',
+                          backgroundColor: '#4caf50',
+                        }}
+                      />
+                    </ListItemIcon>
+                    <ListItemText
                       primary={t('dashboard.admin.emailService')}
                       secondary={t('dashboard.admin.operational')}
                     />

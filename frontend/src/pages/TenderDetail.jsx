@@ -54,14 +54,24 @@ export default function TenderDetail() {
   useEffect(() => {
     const userData = TokenManager.getUserFromToken();
     setUser(userData);
-    setPageTitle('Détails de l\'Appel d\'Offres');
+    setPageTitle("Détails de l'Appel d'Offres");
   }, []);
 
   // ✅ 2. استخدام الخطاف لجلب بيانات المناقصة والعروض
-  const { data: tenderData, loading: tenderLoading, error: tenderError } = useFetchData(`/procurement/tenders/${id}`);
-  const { data: offersData, loading: offersLoading, error: offersError } = useFetchData(
+  const {
+    data: tenderData,
+    loading: tenderLoading,
+    error: tenderError,
+  } = useFetchData(`/procurement/tenders/${id}`);
+  const {
+    data: offersData,
+    loading: offersLoading,
+    error: offersError,
+  } = useFetchData(
     // جلب العروض فقط إذا كان المستخدم هو المشتري صاحب المناقصة
-    user?.role === 'buyer' && tenderData?.tender?.user_id === user.id ? `/procurement/tenders/${id}/offers` : null
+    user?.role === 'buyer' && tenderData?.tender?.user_id === user.id
+      ? `/procurement/tenders/${id}/offers`
+      : null
   );
 
   // ✅ 3. دمج حالات التحميل والأخطاء والبيانات
@@ -78,17 +88,29 @@ export default function TenderDetail() {
     if (isOwner) {
       return (
         <Stack direction="row" spacing={2}>
-          <Button variant="contained" startIcon={<CompareArrowsIcon />} onClick={() => navigate(`/bid-comparison/${id}`)}>
+          <Button
+            variant="contained"
+            startIcon={<CompareArrowsIcon />}
+            onClick={() => navigate(`/bid-comparison/${id}`)}
+          >
             Comparer les Offres
           </Button>
-          <Button variant="outlined" startIcon={<GavelIcon />} onClick={() => navigate(`/tender-awarding/${id}`)}>
+          <Button
+            variant="outlined"
+            startIcon={<GavelIcon />}
+            onClick={() => navigate(`/tender-awarding/${id}`)}
+          >
             Attribuer le Marché
           </Button>
         </Stack>
       );
     } else if (user.role === 'supplier') {
       return (
-        <Button variant="contained" startIcon={<NoteAddIcon />} onClick={() => navigate(`/tender/${id}/create-offer`)}>
+        <Button
+          variant="contained"
+          startIcon={<NoteAddIcon />}
+          onClick={() => navigate(`/tender/${id}/create-offer`)}
+        >
           Soumettre une Offre
         </Button>
       );
@@ -128,7 +150,11 @@ export default function TenderDetail() {
   return (
     <Box sx={{ backgroundColor: '#FAFAFA', py: 4, minHeight: '100vh' }}>
       <Container maxWidth="lg">
-        <Button startIcon={<ArrowBackIcon />} onClick={() => navigate('/dashboard')} sx={{ mb: 3, color: theme.palette.primary.main }}>
+        <Button
+          startIcon={<ArrowBackIcon />}
+          onClick={() => navigate('/dashboard')}
+          sx={{ mb: 3, color: theme.palette.primary.main }}
+        >
           Retour
         </Button>
 
@@ -146,15 +172,31 @@ export default function TenderDetail() {
             <Grid item xs={12} md={4}>
               <Stack spacing={2} divider={<Divider />}>
                 <Box>
-                  <Typography variant="caption" color="text.secondary">Date Limite de Soumission</Typography>
-                  <Typography fontWeight="bold">{format(new Date(tender.submission_deadline), 'd MMMM yyyy, HH:mm', { locale: fr })}</Typography>
+                  <Typography variant="caption" color="text.secondary">
+                    Date Limite de Soumission
+                  </Typography>
+                  <Typography fontWeight="bold">
+                    {format(new Date(tender.submission_deadline), 'd MMMM yyyy, HH:mm', {
+                      locale: fr,
+                    })}
+                  </Typography>
                 </Box>
                 <Box>
-                  <Typography variant="caption" color="text.secondary">Niveau d'Attribution</Typography>
-                  <Typography fontWeight="bold">{tender.award_level === 'lot' ? 'Par Lot' : tender.award_level === 'article' ? 'Par Article' : 'Global'}</Typography>
+                  <Typography variant="caption" color="text.secondary">
+                    Niveau d'Attribution
+                  </Typography>
+                  <Typography fontWeight="bold">
+                    {tender.award_level === 'lot'
+                      ? 'Par Lot'
+                      : tender.award_level === 'article'
+                        ? 'Par Article'
+                        : 'Global'}
+                  </Typography>
                 </Box>
                 <Box>
-                  <Typography variant="caption" color="text.secondary">Catégorie</Typography>
+                  <Typography variant="caption" color="text.secondary">
+                    Catégorie
+                  </Typography>
                   <Typography fontWeight="bold">{tender.category || 'Non spécifiée'}</Typography>
                 </Box>
               </Stack>
@@ -173,7 +215,9 @@ export default function TenderDetail() {
             <Stack spacing={2}>
               {tender.lots.map((lot) => (
                 <Paper key={lot.id} variant="outlined" sx={{ p: 2 }}>
-                  <Typography variant="subtitle1" fontWeight="bold">Lot {lot.numero}: {lot.objet}</Typography>
+                  <Typography variant="subtitle1" fontWeight="bold">
+                    Lot {lot.numero}: {lot.objet}
+                  </Typography>
                   {lot.articles && lot.articles.length > 0 && (
                     <Table size="small" sx={{ mt: 1 }}>
                       <TableHead>
@@ -219,9 +263,18 @@ export default function TenderDetail() {
                   {offers.map((offer) => (
                     <TableRow key={offer.id} hover>
                       <TableCell sx={{ fontWeight: 'bold' }}>{offer.supplier_name}</TableCell>
-                      <TableCell align="right">{new Intl.NumberFormat('fr-TN', { style: 'currency', currency: 'TND' }).format(offer.total_amount)}</TableCell>
-                      <TableCell><Chip label={offer.status} size="small" /></TableCell>
-                      <TableCell>{format(new Date(offer.created_at), 'd MMM yyyy', { locale: fr })}</TableCell>
+                      <TableCell align="right">
+                        {new Intl.NumberFormat('fr-TN', {
+                          style: 'currency',
+                          currency: 'TND',
+                        }).format(offer.total_amount)}
+                      </TableCell>
+                      <TableCell>
+                        <Chip label={offer.status} size="small" />
+                      </TableCell>
+                      <TableCell>
+                        {format(new Date(offer.created_at), 'd MMM yyyy', { locale: fr })}
+                      </TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
@@ -234,7 +287,6 @@ export default function TenderDetail() {
         <Paper sx={{ p: 4, mt: 3, border: `1px solid ${theme.palette.divider}` }}>
           <TenderInquiry tenderId={id} />
         </Paper>
-
       </Container>
     </Box>
   );

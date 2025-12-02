@@ -1,4 +1,5 @@
 # MyNet.tn - تقرير التحقق الفني والأمان الشامل
+
 # Rapport de Validation Technique et Sécurité
 
 **تاريخ التقرير:** 21 نوفمبر 2025  
@@ -9,22 +10,23 @@
 
 ## 📋 ملخص التقييم
 
-| العنصر | الحالة | التفاصيل |
-|--------|--------|----------|
-| **المصادقة والتفويض** | ✅ | JWT + AuthorizationGuard على جميع المسارات |
-| **حماية كلمات المرور** | ✅ | PBKDF2 + ملح عشوائي |
-| **حماية من SQL Injection** | ✅ | Prepared Statements عبر ORM |
-| **حماية من XSS** | ✅ | React الافتراضية + DOM محمي |
-| **التحكم في الوصول** | ✅ | Role-based + Route Protection |
-| **معالجة الأخطاء** | ✅ | Global Error Handler + Validation |
-| **دعم اللغات** | ✅ | الفرنسية كاملة + i18next جاهز |
-| **التصميم المؤسسي** | ✅ | 58 صفحة موحدة + Corporate CSS |
+| العنصر                     | الحالة | التفاصيل                                   |
+| -------------------------- | ------ | ------------------------------------------ |
+| **المصادقة والتفويض**      | ✅     | JWT + AuthorizationGuard على جميع المسارات |
+| **حماية كلمات المرور**     | ✅     | PBKDF2 + ملح عشوائي                        |
+| **حماية من SQL Injection** | ✅     | Prepared Statements عبر ORM                |
+| **حماية من XSS**           | ✅     | React الافتراضية + DOM محمي                |
+| **التحكم في الوصول**       | ✅     | Role-based + Route Protection              |
+| **معالجة الأخطاء**         | ✅     | Global Error Handler + Validation          |
+| **دعم اللغات**             | ✅     | الفرنسية كاملة + i18next جاهز              |
+| **التصميم المؤسسي**        | ✅     | 58 صفحة موحدة + Corporate CSS              |
 
 ---
 
 ## 🔐 التحقق الأمني (SECURITY VALIDATION)
 
 ### 1️⃣ المصادقة (Authentication)
+
 **الحالة:** ✅ آمنة وموثقة
 
 ```
@@ -32,12 +34,12 @@
   - Access Token: 24 ساعة (KeyManagementService)
   - Refresh Token: 30 يوم
   - Automatic Retry على انتهاء الصلاحية
-  
+
 ✓ AuthorizationGuard يحمي جميع المسارات:
   - router.post('/tenders', authenticateToken, ...)
   - router.get('/my-tenders', authenticateToken, ...)
   - router.post('/offers', authenticateToken, ...)
-  
+
 ✓ Frontend Token Management:
   - localStorage للتخزين الآمن
   - Automatic refresh mechanism
@@ -45,6 +47,7 @@
 ```
 
 ### 2️⃣ التفويض والتحكم في الوصول (Authorization)
+
 **الحالة:** ✅ تم التطبيق بالكامل
 
 ```
@@ -54,8 +57,8 @@
   - admin_dashboard: فقط للمسؤولين
 
 ✓ حماية المسارات في App.jsx (30+ مسار محمي):
-  <Route 
-    path="/buyer-dashboard" 
+  <Route
+    path="/buyer-dashboard"
     element={user?.role === 'buyer' ? <BuyerDashboard /> : <Navigate to="/login" />}
   />
 
@@ -66,6 +69,7 @@
 ```
 
 ### 3️⃣ حماية كلمات المرور (Password Security)
+
 **الحالة:** ✅ معايير عالية
 
 ```
@@ -73,56 +77,59 @@
   - location: KeyManagementService.hashPassword()
   - salt: عشوائي لكل مستخدم (password_salt في DB)
   - iterations: معايير NIST
-  
+
 ✓ Database Schema:
   - password_hash VARCHAR(255) NOT NULL
   - password_salt VARCHAR(255) NOT NULL
-  
+
 ✓ Scripts الأمان:
   - createAdminUser.js: ينشئ مستخدم بكلمة مرور محمية
   - initializeDefaultUsers.js: تهيئة آمنة
 ```
 
 ### 4️⃣ حماية من SQL Injection
+
 **الحالة:** ✅ Prepared Statements
 
 ```
 ✓ ORM Usage (TypeORM/Sequelize):
   - جميع الاستعلامات معاملة (Parameterized)
   - No raw SQL queries من المدخلات المباشرة
-  
+
 ✓ مثال:
   // ✓ آمن:
   const tender = await Tender.findById(tenderId);
-  
+
   // ✗ غير آمن (غير موجود في الكود):
   const tender = await db.query(`SELECT * FROM tenders WHERE id = ${tenderId}`);
 ```
 
 ### 5️⃣ حماية من XSS (Cross-Site Scripting)
+
 **الحالة:** ✅ محمي بشكل افتراضي
 
 ```
 ✓ React Escaping:
   - {tender.title} - محمي من XSS تلقائياً
   - No dangerouslySetInnerHTML في الكود الإنتاجي
-  
+
 ✓ Frontend Security:
   - Content Security Policy جاهزة
   - React DevTools security
-  
+
 ✓ في AboutPage.jsx:
   - "🛡️ Protection XSS/CSRF" موثقة
 ```
 
 ### 6️⃣ حماية من CSRF
+
 **الحالة:** ✅ موجودة
 
 ```
 ✓ CORS Configuration في Backend:
   - Allow requests من frontend فقط
   - Credentials معايير آمنة
-  
+
 ✓ Vite Proxy:
   - /api/* routes موجهة إلى backend آمن
   - Same-origin requests
@@ -135,6 +142,7 @@
 ### 🔄 دورة المناقصة الكاملة
 
 #### 1. إنشاء المناقصة (CREATE TENDER)
+
 ```
 ✓ الصفحة: CreateTenderImproved.jsx
 ✓ المسار: POST /api/procurement/tenders
@@ -158,6 +166,7 @@
 ```
 
 #### 2. إدارة الأعلانات النشطة (ACTIVE TENDERS)
+
 ```
 ✓ الصفحة: BuyerActiveTenders.jsx
 ✓ المسار: GET /api/procurement/my-tenders
@@ -177,6 +186,7 @@
 ```
 
 #### 3. مراقبة الطلبات (MONITORING SUBMISSIONS)
+
 ```
 ✓ الصفحة: MonitoringSubmissions.jsx
 ✓ البيانات:
@@ -191,6 +201,7 @@
 ```
 
 #### 4. تقييم العروض (EVALUATION)
+
 ```
 ✓ الصفحة: TenderEvaluation.jsx
 ✓ المسار: POST /api/procurement/offers/:id/evaluate
@@ -206,6 +217,7 @@
 ```
 
 #### 5. إسناد المناقصة (AWARDING)
+
 ```
 ✓ الصفحة: TenderAwarding.jsx
 ✓ المسار: POST /api/procurement/offers/:id/select-winner
@@ -223,6 +235,7 @@
 ```
 
 #### 6. الإخطارات (AWARD NOTIFICATIONS)
+
 ```
 ✓ الصفحة: AwardNotifications.jsx
 ✓ الميزات:
@@ -233,6 +246,7 @@
 ```
 
 #### 7. إدارة العقود (CONTRACT MANAGEMENT)
+
 ```
 ✓ الصفحة: ContractManagement.jsx
 ✓ المسار: GET /api/procurement/contracts
@@ -244,6 +258,7 @@
 ```
 
 #### 8. التسليمات (DELIVERIES)
+
 ```
 ✓ الصفحة: DeliveryManagement.jsx
 ✓ المسار: GET /api/procurement/deliveries
@@ -260,6 +275,7 @@
 ```
 
 #### 9. الفواتير (INVOICING)
+
 ```
 ✓ الصفحة: InvoiceGeneration.jsx
 ✓ المسار: POST /api/procurement/invoices
@@ -275,6 +291,7 @@
 ```
 
 #### 10. أداء الموردين (PERFORMANCE)
+
 ```
 ✓ الصفحة: PerformanceMonitoring.jsx
 ✓ المقاييس:
@@ -290,6 +307,7 @@
 ```
 
 #### 11. النزاعات (DISPUTES)
+
 ```
 ✓ الصفحة: DisputeManagement.jsx
 ✓ المسار: POST /api/procurement/disputes
@@ -298,7 +316,7 @@
   - تسجيل الحيثيات
   - تعيين مسؤول التسوية
   - تتبع الحل
-  
+
 ✓ الحالات:
   - مفتوح (open)
   - قيد الحل (in_progress)
@@ -308,6 +326,7 @@
 ### 📊 عروض الموردين (SUPPLIER BIDS)
 
 #### 1. تقديم عرض (BID SUBMISSION)
+
 ```
 ✓ الصفحة: BidSubmission.jsx
 ✓ المسار: POST /api/procurement/offers
@@ -324,6 +343,7 @@
 ```
 
 #### 2. إدارة المنتجات (PRODUCTS)
+
 ```
 ✓ الصفحة: SupplierProductsManagement.jsx
 ✓ الأعمال:
@@ -341,6 +361,7 @@
 ```
 
 #### 3. إدارة الخدمات (SERVICES)
+
 ```
 ✓ الصفحة: SupplierServicesManagement.jsx
 ✓ الأعمال:
@@ -360,6 +381,7 @@
 ## 🛠️ معالجة الأخطاء والتحقق من البيانات
 
 ### Input Validation (التحقق من المدخلات)
+
 ```
 ✓ على Frontend:
   - CreateTenderImproved: التحقق من حقول العنوان والميزانية
@@ -373,6 +395,7 @@
 ```
 
 ### Error Handling (معالجة الأخطاء)
+
 ```
 ✓ Frontend:
   - Try-catch في جميع استدعاءات API
@@ -398,6 +421,7 @@
 ## 🌍 دعم اللغات (MULTILINGUAL SUPPORT)
 
 ### الفرنسية (French) - اللغة الرسمية
+
 ```
 ✓ جميع الواجهات:
   - القوائم: "Appels d'Offres", "Finances", "Équipe"
@@ -440,6 +464,7 @@
 ## 🔍 فحص الكود (CODE REVIEW)
 
 ### معايير الجودة
+
 ```
 ✓ React Best Practices:
   - استخدام Hooks بشكل صحيح (useState, useEffect)
@@ -484,6 +509,7 @@
 ## 🚀 الخلاصة والتوصيات
 
 ### ✅ ما هو مكتمل:
+
 1. **الأمان:** JWT + PBKDF2 + Role-Based Access Control
 2. **المصادقة:** Token-based with 24-hour expiry
 3. **التفويض:** Frontend + Backend protection
@@ -494,6 +520,7 @@
 8. **الأداء:** Build clean + no critical errors
 
 ### 🔮 التوصيات للإنتاج:
+
 1. تفعيل HTTPS على الـ Domain
 2. تكوين CORS في Production
 3. إضافة Rate Limiting على API
@@ -503,6 +530,7 @@
 7. Monitoring والـ Logging
 
 ### 📈 الحالة النهائية:
+
 **🟢 جاهزة للاستخدام (PRODUCTION-READY)**
 
 ---
@@ -515,4 +543,3 @@
 **الحالة:** ✅ معتمد
 
 ---
-

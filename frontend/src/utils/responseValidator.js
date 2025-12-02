@@ -100,7 +100,7 @@ export const ResponseValidator = {
     return {
       statusCode: error.response.status || 500,
       message: error.response.data?.error?.message || error.message,
-      details: error.response.data?.error?.details
+      details: error.response.data?.error?.details,
     };
   },
 
@@ -132,7 +132,7 @@ export const ResponseValidator = {
     }
 
     return data;
-  }
+  },
 };
 
 export default ResponseValidator;

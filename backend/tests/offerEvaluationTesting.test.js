@@ -31,30 +31,29 @@ async function testOpenOffers() {
 
     const tender = tenderResponse.data.tenders[0];
     const tenderId = tender.id;
-    
+
     info(`Using Tender: ${tender.tender_number}`);
     info(`Opening Date: ${new Date(tender.opening_date).toLocaleString('ar-TN')}`);
 
     // Check if opening time has arrived
     const now = new Date();
     const openingDate = new Date(tender.opening_date);
-    
+
     if (now < openingDate) {
       info(`Opening time not yet reached. Skipping this test.`);
       return true;
     }
 
     // Get offers for opening
-    const offersResponse = await axios.get(
-      `${BASE_URL}/evaluation/opening/${tenderId}`,
-      { headers: { Authorization: `Bearer test-buyer-token` } }
-    );
+    const offersResponse = await axios.get(`${BASE_URL}/evaluation/opening/${tenderId}`, {
+      headers: { Authorization: `Bearer test-buyer-token` },
+    });
 
     if (offersResponse.data.success && offersResponse.data.offers) {
       success(`Retrieved ${offersResponse.data.count} offers`);
 
       // Check for decryption
-      const encryptedOffers = offersResponse.data.offers.filter(o => o.was_encrypted);
+      const encryptedOffers = offersResponse.data.offers.filter((o) => o.was_encrypted);
       if (encryptedOffers.length > 0) {
         success(`${encryptedOffers.length} encrypted offers successfully decrypted`);
       } else {
@@ -135,7 +134,9 @@ async function testTechnicalEvaluation() {
     const tender = tenderResponse.data.tenders[0];
 
     // Try to get offers
-    const offersResponse = await axios.get(`${BASE_URL}/procurement/offers?tender_id=${tender.id}&limit=1`);
+    const offersResponse = await axios.get(
+      `${BASE_URL}/procurement/offers?tender_id=${tender.id}&limit=1`
+    );
     if (!offersResponse.data.offers?.length) {
       info('No offers available for evaluation');
       return true;
@@ -149,7 +150,7 @@ async function testTechnicalEvaluation() {
       `${BASE_URL}/evaluation/technical/${offer.id}`,
       {
         technical_score: 85,
-        comments: 'Excellent technical proposal with strong team experience'
+        comments: 'Excellent technical proposal with strong team experience',
       },
       { headers: { Authorization: `Bearer test-evaluator-token` } }
     );
@@ -200,7 +201,7 @@ async function testCalculateFinalScores() {
       results.slice(0, 3).forEach((result, idx) => {
         const expected = (result.technical_score + result.financial_score) / 2;
         const matches = Math.abs(expected - result.final_score) < 0.01;
-        
+
         console.log(`  - Rank ${result.rank}: ${result.final_score}/100 ${matches ? '✓' : '✗'}`);
       });
 
@@ -254,10 +255,10 @@ Scenario 2 - Generate Report:           ${results.generatingReport ? '✅ PASS' 
 Scenario 3 - Technical Evaluation:      ${results.technicalEvaluation ? '✅ PASS' : '❌ FAIL'}
 Scenario 4 - Calculate Final Scores:    ${results.calculateScores ? '✅ PASS' : '❌ FAIL'}
 
-Overall Status: ${Object.values(results).filter(r => r).length}/4 tests passed
+Overall Status: ${Object.values(results).filter((r) => r).length}/4 tests passed
   `);
 
-  process.exit(Object.values(results).every(r => r) ? 0 : 1);
+  process.exit(Object.values(results).every((r) => r) ? 0 : 1);
 }
 
 runAllTests();

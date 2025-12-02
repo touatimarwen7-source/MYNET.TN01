@@ -24,7 +24,7 @@ app.get('/api/tenders', async (req, res) => {
 app.post('/api/tenders', async (req, res) => {
   const pool = getPool();
   const { title, description, budget_max } = req.body;
-  
+
   if (!title || !description || !budget_max) {
     return res.status(400).json({ error: 'Missing required fields' });
   }
@@ -38,31 +38,30 @@ app.post('/api/tenders', async (req, res) => {
 
 app.get('/api/tenders/:id', async (req, res) => {
   const pool = getPool();
-  const result = await pool.query(
-    'SELECT * FROM tenders WHERE id = $1 AND is_deleted = FALSE',
-    [req.params.id]
-  );
-  
+  const result = await pool.query('SELECT * FROM tenders WHERE id = $1 AND is_deleted = FALSE', [
+    req.params.id,
+  ]);
+
   if (result.rows.length === 0) {
     return res.status(404).json({ error: 'Tender not found' });
   }
-  
+
   res.json(result.rows[0]);
 });
 
 app.put('/api/tenders/:id', async (req, res) => {
   const pool = getPool();
   const { title, description } = req.body;
-  
+
   const result = await pool.query(
     'UPDATE tenders SET title = $1, description = $2 WHERE id = $3 RETURNING *',
     [title, description, req.params.id]
   );
-  
+
   if (result.rows.length === 0) {
     return res.status(404).json({ error: 'Tender not found' });
   }
-  
+
   res.json(result.rows[0]);
 });
 
@@ -75,7 +74,7 @@ app.get('/api/offers', async (req, res) => {
 app.post('/api/offers', async (req, res) => {
   const pool = getPool();
   const { tender_id, supplier_id, total_amount } = req.body;
-  
+
   if (!tender_id || !supplier_id || !total_amount) {
     return res.status(400).json({ error: 'Missing required fields' });
   }
@@ -93,20 +92,18 @@ app.post('/api/offers', async (req, res) => {
 
 app.get('/api/offers/:id', async (req, res) => {
   const pool = getPool();
-  const result = await pool.query(
-    'SELECT * FROM offers WHERE id = $1 AND is_deleted = FALSE',
-    [req.params.id]
-  );
-  
+  const result = await pool.query('SELECT * FROM offers WHERE id = $1 AND is_deleted = FALSE', [
+    req.params.id,
+  ]);
+
   if (result.rows.length === 0) {
     return res.status(404).json({ error: 'Offer not found' });
   }
-  
+
   res.json(result.rows[0]);
 });
 
 describe('🧪 API Integration Tests', () => {
-
   beforeEach(() => {
     jest.clearAllMocks();
   });
@@ -118,13 +115,11 @@ describe('🧪 API Integration Tests', () => {
       pool.query.mockResolvedValueOnce({
         rows: [
           { id: 1, title: 'Tender 1', status: 'open' },
-          { id: 2, title: 'Tender 2', status: 'closed' }
-        ]
+          { id: 2, title: 'Tender 2', status: 'closed' },
+        ],
       });
 
-      const response = await request(app)
-        .get('/api/tenders')
-        .expect(200);
+      const response = await request(app).get('/api/tenders').expect(200);
 
       expect(Array.isArray(response.body)).toBe(true);
       expect(response.body.length).toBe(2);
@@ -133,7 +128,7 @@ describe('🧪 API Integration Tests', () => {
     test('POST /api/tenders should create new tender', async () => {
       const pool = getPool();
       pool.query.mockResolvedValueOnce({
-        rows: [{ id: 1, title: 'New Tender', budget_max: 50000 }]
+        rows: [{ id: 1, title: 'New Tender', budget_max: 50000 }],
       });
 
       const response = await request(app)
@@ -141,7 +136,7 @@ describe('🧪 API Integration Tests', () => {
         .send({
           title: 'New Tender',
           description: 'Test description',
-          budget_max: 50000
+          budget_max: 50000,
         })
         .expect(201);
 
@@ -161,12 +156,10 @@ describe('🧪 API Integration Tests', () => {
     test('GET /api/tenders/:id should return single tender', async () => {
       const pool = getPool();
       pool.query.mockResolvedValueOnce({
-        rows: [{ id: 1, title: 'Tender 1', status: 'open' }]
+        rows: [{ id: 1, title: 'Tender 1', status: 'open' }],
       });
 
-      const response = await request(app)
-        .get('/api/tenders/1')
-        .expect(200);
+      const response = await request(app).get('/api/tenders/1').expect(200);
 
       expect(response.body.id).toBe(1);
       expect(response.body.title).toBe('Tender 1');
@@ -176,9 +169,7 @@ describe('🧪 API Integration Tests', () => {
       const pool = getPool();
       pool.query.mockResolvedValueOnce({ rows: [] });
 
-      const response = await request(app)
-        .get('/api/tenders/999')
-        .expect(404);
+      const response = await request(app).get('/api/tenders/999').expect(404);
 
       expect(response.body.error).toContain('not found');
     });
@@ -186,14 +177,14 @@ describe('🧪 API Integration Tests', () => {
     test('PUT /api/tenders/:id should update tender', async () => {
       const pool = getPool();
       pool.query.mockResolvedValueOnce({
-        rows: [{ id: 1, title: 'Updated Title' }]
+        rows: [{ id: 1, title: 'Updated Title' }],
       });
 
       const response = await request(app)
         .put('/api/tenders/1')
         .send({
           title: 'Updated Title',
-          description: 'Updated description'
+          description: 'Updated description',
         })
         .expect(200);
 
@@ -208,13 +199,11 @@ describe('🧪 API Integration Tests', () => {
       pool.query.mockResolvedValueOnce({
         rows: [
           { id: 1, tender_id: 1, total_amount: 5000 },
-          { id: 2, tender_id: 1, total_amount: 6000 }
-        ]
+          { id: 2, tender_id: 1, total_amount: 6000 },
+        ],
       });
 
-      const response = await request(app)
-        .get('/api/offers')
-        .expect(200);
+      const response = await request(app).get('/api/offers').expect(200);
 
       expect(Array.isArray(response.body)).toBe(true);
       expect(response.body.length).toBe(2);
@@ -223,7 +212,7 @@ describe('🧪 API Integration Tests', () => {
     test('POST /api/offers should create new offer', async () => {
       const pool = getPool();
       pool.query.mockResolvedValueOnce({
-        rows: [{ id: 1, tender_id: 1, supplier_id: 5, total_amount: 5000 }]
+        rows: [{ id: 1, tender_id: 1, supplier_id: 5, total_amount: 5000 }],
       });
 
       const response = await request(app)
@@ -231,7 +220,7 @@ describe('🧪 API Integration Tests', () => {
         .send({
           tender_id: 1,
           supplier_id: 5,
-          total_amount: 5000
+          total_amount: 5000,
         })
         .expect(201);
 
@@ -245,7 +234,7 @@ describe('🧪 API Integration Tests', () => {
         .send({
           tender_id: 1,
           supplier_id: 5,
-          total_amount: -1000
+          total_amount: -1000,
         })
         .expect(400);
 
@@ -253,10 +242,7 @@ describe('🧪 API Integration Tests', () => {
     });
 
     test('POST /api/offers should reject missing fields', async () => {
-      const response = await request(app)
-        .post('/api/offers')
-        .send({ tender_id: 1 })
-        .expect(400);
+      const response = await request(app).post('/api/offers').send({ tender_id: 1 }).expect(400);
 
       expect(response.body.error).toContain('Missing required fields');
     });
@@ -264,12 +250,10 @@ describe('🧪 API Integration Tests', () => {
     test('GET /api/offers/:id should return single offer', async () => {
       const pool = getPool();
       pool.query.mockResolvedValueOnce({
-        rows: [{ id: 1, tender_id: 1, total_amount: 5000 }]
+        rows: [{ id: 1, tender_id: 1, total_amount: 5000 }],
       });
 
-      const response = await request(app)
-        .get('/api/offers/1')
-        .expect(200);
+      const response = await request(app).get('/api/offers/1').expect(200);
 
       expect(response.body.id).toBe(1);
     });
@@ -278,9 +262,7 @@ describe('🧪 API Integration Tests', () => {
       const pool = getPool();
       pool.query.mockResolvedValueOnce({ rows: [] });
 
-      const response = await request(app)
-        .get('/api/offers/999')
-        .expect(404);
+      const response = await request(app).get('/api/offers/999').expect(404);
 
       expect(response.body.error).toContain('not found');
     });
@@ -305,10 +287,10 @@ describe('🧪 API Integration Tests', () => {
         { code: 201, meaning: 'Created' },
         { code: 400, meaning: 'Bad Request' },
         { code: 404, meaning: 'Not Found' },
-        { code: 500, meaning: 'Internal Server Error' }
+        { code: 500, meaning: 'Internal Server Error' },
       ];
 
-      responses.forEach(r => {
+      responses.forEach((r) => {
         expect(r.code).toBeGreaterThanOrEqual(200);
       });
     });
@@ -316,7 +298,7 @@ describe('🧪 API Integration Tests', () => {
     test('should validate request body', async () => {
       const invalidData = {
         title: 123, // Should be string
-        budget_max: 'invalid' // Should be number
+        budget_max: 'invalid', // Should be number
       };
 
       expect(typeof invalidData.title).not.toBe('string');
@@ -360,5 +342,4 @@ describe('🧪 API Integration Tests', () => {
       expect(sanitized).not.toContain('<');
     });
   });
-
 });

@@ -2,16 +2,16 @@
 
 ## Quick Status
 
-| Issue | Status | Details |
-|-------|--------|---------|
-| #11 Real Email | ✅ Ready | SendGrid integration available |
-| #12 Transactions | ✅ Implemented | withTransaction() utility |
-| #13 CSRF Protection | ✅ Ready | csrfProtection middleware |
-| #14 Field-Level Access | ✅ Implemented | fieldLevelAccessFilter middleware |
-| #15 Error Boundaries | ✅ Implemented | ErrorBoundary component active |
-| #16 Real-time Updates | ✅ Documented | WebSocket pattern provided |
-| #17 Conflict Resolution | ✅ Implemented | optimisticLocking utility |
-| #18 Rate Limiting | ✅ Active | 100 req/15min general, 5 login attempts |
+| Issue                   | Status         | Details                                 |
+| ----------------------- | -------------- | --------------------------------------- |
+| #11 Real Email          | ✅ Ready       | SendGrid integration available          |
+| #12 Transactions        | ✅ Implemented | withTransaction() utility               |
+| #13 CSRF Protection     | ✅ Ready       | csrfProtection middleware               |
+| #14 Field-Level Access  | ✅ Implemented | fieldLevelAccessFilter middleware       |
+| #15 Error Boundaries    | ✅ Implemented | ErrorBoundary component active          |
+| #16 Real-time Updates   | ✅ Documented  | WebSocket pattern provided              |
+| #17 Conflict Resolution | ✅ Implemented | optimisticLocking utility               |
+| #18 Rate Limiting       | ✅ Active      | 100 req/15min general, 5 login attempts |
 
 ---
 
@@ -31,19 +31,20 @@ To enable email:
 **Usage in Backend**:
 
 ```javascript
-const sgMail = require('@sendgrid/mail');
+const sgMail = require("@sendgrid/mail");
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 // Send email
 await sgMail.send({
-  to: 'user@example.com',
-  from: 'noreply@mynet.tn',
-  subject: 'Tender Notification',
-  html: '<strong>New tender available</strong>'
+  to: "user@example.com",
+  from: "noreply@mynet.tn",
+  subject: "Tender Notification",
+  html: "<strong>New tender available</strong>",
 });
 ```
 
 **Email Types to Implement**:
+
 - ✅ Tender notifications
 - ✅ Bid confirmations
 - ✅ Invoice updates
@@ -56,6 +57,7 @@ await sgMail.send({
 ## 12. DATABASE TRANSACTIONS
 
 ### Location
+
 `backend/utils/databaseTransactions.js`
 
 ### Pattern: Atomic Operations
@@ -63,18 +65,18 @@ await sgMail.send({
 All related database changes must succeed together or fail together:
 
 ```javascript
-import { withTransaction } from '../utils/databaseTransactions';
+import { withTransaction } from "../utils/databaseTransactions";
 
 // Create tender with requirements - atomic
 const result = await withTransaction(async (client) => {
   // Insert tender
   const tender = await client.query(
-    'INSERT INTO tenders (...) VALUES (...) RETURNING id'
+    "INSERT INTO tenders (...) VALUES (...) RETURNING id",
   );
 
   // Insert requirements (must succeed with tender or both rollback)
   for (const req of requirements) {
-    await client.query('INSERT INTO requirements ...');
+    await client.query("INSERT INTO requirements ...");
   }
 
   return tender;
@@ -84,6 +86,7 @@ const result = await withTransaction(async (client) => {
 ### Why It Matters
 
 **WITHOUT Transactions:**
+
 ```
 1. Create tender         ✅
 2. Network error
@@ -92,6 +95,7 @@ Result: Tender with no requirements! 🔴
 ```
 
 **WITH Transactions:**
+
 ```
 1. Start transaction
 2. Create tender        ✅
@@ -110,17 +114,17 @@ Result: Nothing created (consistent) ✅
 ```javascript
 // 1. Transfer bid to awarded state (atomically)
 const result = await withTransaction(async (client) => {
-  await client.query('INSERT INTO awarded_bids ...');
-  await client.query('UPDATE bids SET status=awarded ...');
-  await client.query('UPDATE tenders SET status=awarded ...');
+  await client.query("INSERT INTO awarded_bids ...");
+  await client.query("UPDATE bids SET status=awarded ...");
+  await client.query("UPDATE tenders SET status=awarded ...");
   return { success: true };
 });
 
 // 2. Create invoice with audit log
 await withTransaction(async (client) => {
-  const invoice = await client.query('INSERT INTO invoices ...');
-  await client.query('INSERT INTO audit_logs ...');
-  await client.query('UPDATE tenders SET invoice_count = invoice_count + 1');
+  const invoice = await client.query("INSERT INTO invoices ...");
+  await client.query("INSERT INTO audit_logs ...");
+  await client.query("UPDATE tenders SET invoice_count = invoice_count + 1");
 });
 ```
 
@@ -129,13 +133,14 @@ await withTransaction(async (client) => {
 ## 13. CSRF PROTECTION
 
 ### Location
+
 `backend/utils/csrfProtection.js`
 
 ### Already Integrated in App
 
 ```javascript
 // In app.js
-const { csrfProtection, csrfTokenProvider } = require('./utils/csrfProtection');
+const { csrfProtection, csrfTokenProvider } = require("./utils/csrfProtection");
 
 // Provide token to frontend
 app.use(csrfTokenProvider);
@@ -147,6 +152,7 @@ app.use(csrfProtection);
 ### How It Works
 
 **Flow:**
+
 ```
 1. Frontend loads page
    ↓ Backend sends CSRF token in header
@@ -162,16 +168,16 @@ app.use(csrfProtection);
 
 ```javascript
 // Get token from response header
-const token = response.headers['X-CSRF-Token'];
+const token = response.headers["X-CSRF-Token"];
 
 // Include in all POST/PUT/DELETE requests
-const response = await fetch('/api/tenders', {
-  method: 'POST',
+const response = await fetch("/api/tenders", {
+  method: "POST",
   headers: {
-    'X-CSRF-Token': token,
-    'Content-Type': 'application/json'
+    "X-CSRF-Token": token,
+    "Content-Type": "application/json",
   },
-  body: JSON.stringify(data)
+  body: JSON.stringify(data),
 });
 ```
 
@@ -187,35 +193,36 @@ Result: Token is invalid/missing → Request rejected ✅
 ## 14. FIELD-LEVEL ACCESS CONTROL
 
 ### Location
+
 `backend/middleware/fieldLevelAccessMiddleware.js`
 
 ### Sensitive Fields by Role
 
 ```javascript
 // Super admin sees everything
-user.role = 'super_admin'
-user.password // ✅ Visible
+user.role = "super_admin";
+user.password; // ✅ Visible
 
 // Regular buyer can't see sensitive supplier data
-user.role = 'buyer'
-supplier.taxId // ❌ Hidden
-supplier.bankDetails // ❌ Hidden
+user.role = "buyer";
+supplier.taxId; // ❌ Hidden
+supplier.bankDetails; // ❌ Hidden
 
 // Supplier can't see evaluation criteria
-user.role = 'supplier'
-tender.evaluationCriteria // ❌ Hidden
+user.role = "supplier";
+tender.evaluationCriteria; // ❌ Hidden
 ```
 
 ### Usage
 
 ```javascript
 // 1. Auto-filter GET responses
-app.get('/api/users/:id', fieldLevelAccessFilter('user'), (req, res) => {
+app.get("/api/users/:id", fieldLevelAccessFilter("user"), (req, res) => {
   // Response automatically removes sensitive fields
 });
 
 // 2. Block writes to sensitive fields
-app.put('/api/users/:id', restrictSensitiveFieldWrites, (req, res) => {
+app.put("/api/users/:id", restrictSensitiveFieldWrites, (req, res) => {
   // Blocks attempts to modify password, apiKey, role, etc.
 });
 
@@ -226,15 +233,18 @@ app.use(logSensitiveFieldAccess);
 ### Configured Restrictions
 
 **User data**:
+
 - Admin: Can see all
 - Others: Password, API keys hidden
 
 **Tender data**:
+
 - Admin: Can see all
 - Supplier: Budget, internal notes, eval criteria hidden
 - Buyer: Can see own tenders
 
 **Invoice data**:
+
 - Admin: Can see all
 - Others: Payment terms hidden
 
@@ -265,9 +275,7 @@ App doesn't crash ✅
 ```jsx
 // App.jsx - All routes wrapped
 <ErrorBoundary>
-  <Routes>
-    {/* All routes protected */}
-  </Routes>
+  <Routes>{/* All routes protected */}</Routes>
 </ErrorBoundary>
 ```
 
@@ -281,22 +289,24 @@ For real-time data (bids updating, tender status changes):
 
 ```javascript
 // Backend: server.js
-const http = require('http');
-const WebSocket = require('ws');
+const http = require("http");
+const WebSocket = require("ws");
 
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
 
-wss.on('connection', (ws) => {
+wss.on("connection", (ws) => {
   // New connection
-  ws.on('message', (data) => {
+  ws.on("message", (data) => {
     // Broadcast to all connected clients
-    wss.clients.forEach(client => {
+    wss.clients.forEach((client) => {
       if (client.readyState === WebSocket.OPEN) {
-        client.send(JSON.stringify({ 
-          type: 'tender_updated',
-          data: newData 
-        }));
+        client.send(
+          JSON.stringify({
+            type: "tender_updated",
+            data: newData,
+          }),
+        );
       }
     });
   });
@@ -304,11 +314,11 @@ wss.on('connection', (ws) => {
 
 // Frontend: React
 useEffect(() => {
-  const ws = new WebSocket('ws://localhost:3000');
-  
+  const ws = new WebSocket("ws://localhost:3000");
+
   ws.onmessage = (event) => {
     const { type, data } = JSON.parse(event.data);
-    if (type === 'tender_updated') {
+    if (type === "tender_updated") {
       // Update UI with fresh data
       setTenderData(data);
     }
@@ -321,6 +331,7 @@ useEffect(() => {
 ## 17. CONFLICT RESOLUTION (Optimistic Locking)
 
 ### Location
+
 `backend/utils/optimisticLocking.js`
 
 ### Problem It Solves
@@ -332,7 +343,7 @@ Admin B: Changes status to 'closed'
 
 WITHOUT optimistic locking:
   Admin A's change: OVERWRITTEN by Admin B ❌
-  
+
 WITH optimistic locking:
   Admin B sees: "Record changed. Refresh and try again" ✅
   Admin B refreshes, sees Admin A's changes, can merge
@@ -357,26 +368,26 @@ Tender: { id: 1, budget: 500, version: 5 }
 ### Usage
 
 ```javascript
-import { optimisticUpdate, updateWithRetry } from '../utils/optimisticLocking';
+import { optimisticUpdate, updateWithRetry } from "../utils/optimisticLocking";
 
 // Safe update with conflict detection
 const result = await optimisticUpdate(
-  'tenders',           // table
-  tenderId,            // id
-  currentVersion,      // version from client (5)
-  { budget: 1500 }     // updates
+  "tenders", // table
+  tenderId, // id
+  currentVersion, // version from client (5)
+  { budget: 1500 }, // updates
 );
 
-if (!result.success && result.reason === 'VERSION_CONFLICT') {
+if (!result.success && result.reason === "VERSION_CONFLICT") {
   // Show user: "Someone else changed this. Refresh and try again"
 }
 
 // Auto-retry with exponential backoff
 const updated = await updateWithRetry(
-  'tenders',
+  "tenders",
   tenderId,
-  (current) => ({ status: 'awarded' }),
-  3 // max retries
+  (current) => ({ status: "awarded" }),
+  3, // max retries
 );
 ```
 
@@ -414,17 +425,20 @@ HTTP 429 Too Many Requests
 ## Implementation Checklist
 
 ### Phase 1 - Basic Security (Done)
+
 - ✅ CSRF Protection
 - ✅ Error Boundaries
 - ✅ Rate Limiting
 - ✅ Field-Level Access Control
 
 ### Phase 2 - Data Integrity (Ready)
+
 - ✅ Database Transactions
 - ✅ Optimistic Locking
 - ✅ Audit Logging
 
 ### Phase 3 - Communication (Requires User Setup)
+
 - ⏳ Email Integration (SendGrid - user configures)
 - ⏳ Real-time Updates (WebSocket - optional, documented)
 
@@ -432,13 +446,13 @@ HTTP 429 Too Many Requests
 
 ## Files Added
 
-| File | Purpose | Lines |
-|------|---------|-------|
-| `backend/utils/databaseTransactions.js` | Transaction wrapper | 150+ |
-| `backend/middleware/fieldLevelAccessMiddleware.js` | Field filtering | 200+ |
-| `backend/utils/optimisticLocking.js` | Conflict resolution | 180+ |
-| `backend/utils/csrfProtection.js` | CSRF token handling | 150+ |
-| `CRITICAL_SECURITY_GUIDE.md` | This documentation | - |
+| File                                               | Purpose             | Lines |
+| -------------------------------------------------- | ------------------- | ----- |
+| `backend/utils/databaseTransactions.js`            | Transaction wrapper | 150+  |
+| `backend/middleware/fieldLevelAccessMiddleware.js` | Field filtering     | 200+  |
+| `backend/utils/optimisticLocking.js`               | Conflict resolution | 180+  |
+| `backend/utils/csrfProtection.js`                  | CSRF token handling | 150+  |
+| `CRITICAL_SECURITY_GUIDE.md`                       | This documentation  | -     |
 
 **Total Security Code: 700+ lines**
 

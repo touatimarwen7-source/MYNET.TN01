@@ -23,7 +23,13 @@ export default function HomePage() {
 
   return (
     <Box sx={{ backgroundColor: '#fafafa' }}>
-      <Box sx={{ backgroundColor: '#ffffff', borderBottom: '1px solid #e0e0e0', paddingBottom: '40px' }}>
+      <Box
+        sx={{
+          backgroundColor: '#ffffff',
+          borderBottom: '1px solid #e0e0e0',
+          paddingBottom: '40px',
+        }}
+      >
         <HeroSearch />
       </Box>
 
@@ -33,7 +39,14 @@ export default function HomePage() {
 
       <HomePageRoleCards onRoleClick={handleRoleClick} />
 
-      <Box sx={{ backgroundColor: '#ffffff', borderTop: '1px solid #e0e0e0', borderBottom: '1px solid #e0e0e0', paddingY: '60px' }}>
+      <Box
+        sx={{
+          backgroundColor: '#ffffff',
+          borderTop: '1px solid #e0e0e0',
+          borderBottom: '1px solid #e0e0e0',
+          paddingY: '60px',
+        }}
+      >
         <Container maxWidth="lg">
           <Box sx={{ marginBottom: '48px' }}>
             <HomePageStats />
@@ -46,7 +59,14 @@ export default function HomePage() {
         <HomePageFeatures />
       </Container>
 
-      <Box sx={{ backgroundColor: '#f5f5f5', borderTop: '1px solid #e0e0e0', borderBottom: '1px solid #e0e0e0', paddingY: '60px' }}>
+      <Box
+        sx={{
+          backgroundColor: '#f5f5f5',
+          borderTop: '1px solid #e0e0e0',
+          borderBottom: '1px solid #e0e0e0',
+          paddingY: '60px',
+        }}
+      >
         <HowItWorks />
       </Box>
 

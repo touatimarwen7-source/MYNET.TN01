@@ -16,8 +16,8 @@ const config = {
         return new Error('Max retries reached');
       }
       return Math.min(retries * 50, 500);
-    }
-  }
+    },
+  },
 };
 
 // Remove undefined password
@@ -29,5 +29,5 @@ module.exports = {
   config,
   createClient() {
     return redis.createClient(config);
-  }
+  },
 };

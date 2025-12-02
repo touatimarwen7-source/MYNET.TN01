@@ -16,26 +16,52 @@ import { EMPTY_STATES, FEATURE_FLAGS, isFeatureEnabled } from '../../utils/admin
  */
 
 function TabPanel({ children, value, index }) {
-  return <div hidden={value !== index}>{value === index && <Box sx={{ py: 3 }}>{children}</Box>}</div>;
+  return (
+    <div hidden={value !== index}>{value === index && <Box sx={{ py: 3 }}>{children}</Box>}</div>
+  );
 }
 
 export default function SuperAdminCRUD() {
   const navigate = useNavigate();
   const context = useContext(SuperAdminContext);
-  
+
   if (!context) return <Alert severity="error">Context not available</Alert>;
 
-  const { pages, files, documents, users, loading, error, success, 
-    fetchPages, fetchFiles, fetchDocuments, fetchUsers,
-    createPage, updatePage, deletePage, uploadFile, deleteFile,
-    createDocument, deleteDocument, updateUserRole, blockUser, unblockUser } = context;
+  const {
+    pages,
+    files,
+    documents,
+    users,
+    loading,
+    error,
+    success,
+    fetchPages,
+    fetchFiles,
+    fetchDocuments,
+    fetchUsers,
+    createPage,
+    updatePage,
+    deletePage,
+    uploadFile,
+    deleteFile,
+    createDocument,
+    deleteDocument,
+    updateUserRole,
+    blockUser,
+    unblockUser,
+  } = context;
 
   const [tabValue, setTabValue] = useState(0);
   const [openDialog, setOpenDialog] = useState(false);
   const [dialogType, setDialogType] = useState('');
   const [selectedItem, setSelectedItem] = useState(null);
   const [message, setMessage] = useState('');
-  const [formData, setFormData] = useState({ title: '', slug: '', description: '', status: 'brouillon' });
+  const [formData, setFormData] = useState({
+    title: '',
+    slug: '',
+    description: '',
+    status: 'brouillon',
+  });
 
   // Auto-hide messages
   useEffect(() => {
@@ -66,13 +92,11 @@ export default function SuperAdminCRUD() {
     }
 
     if (dialogType === 'page') {
-      selectedItem 
-        ? await updatePage(selectedItem.id, formData)
-        : await createPage(formData);
+      selectedItem ? await updatePage(selectedItem.id, formData) : await createPage(formData);
     } else if (dialogType === 'document') {
       await createDocument(formData);
     }
-    
+
     setOpenDialog(false);
   };
 
@@ -89,19 +113,23 @@ export default function SuperAdminCRUD() {
     { field: 'title', label: 'Titre' },
     { field: 'slug', label: 'Slug' },
     { field: 'status', label: 'Statut' },
-    { field: 'updated_at', label: 'Modifiée' }
+    { field: 'updated_at', label: 'Modifiée' },
   ];
 
   const fileColumns = [
     { field: 'name', label: 'Nom' },
     { field: 'file_type', label: 'Type' },
     { field: 'size_bytes', label: 'Taille' },
-    { field: 'created_at', label: 'Uploadée' }
+    { field: 'created_at', label: 'Uploadée' },
   ];
 
   return (
     <Container maxWidth="xl" sx={{ py: 5 }}>
-      {message && <Alert severity="success" sx={{ mb: 2 }}>{message}</Alert>}
+      {message && (
+        <Alert severity="success" sx={{ mb: 2 }}>
+          {message}
+        </Alert>
+      )}
 
       <Paper>
         <Tabs value={tabValue} onChange={(_, val) => setTabValue(val)}>
@@ -121,8 +149,8 @@ export default function SuperAdminCRUD() {
           {/* PAGES TAB */}
           <TabPanel value={tabValue} index={0}>
             <Stack spacing={2}>
-              <Button 
-                variant="contained" 
+              <Button
+                variant="contained"
                 startIcon={<AddIcon />}
                 onClick={() => openCreateDialog('page')}
               >
@@ -149,8 +177,8 @@ export default function SuperAdminCRUD() {
           {/* FILES TAB */}
           <TabPanel value={tabValue} index={1}>
             <Stack spacing={2}>
-              <Button 
-                variant="contained" 
+              <Button
+                variant="contained"
                 startIcon={<AddIcon />}
                 onClick={() => openCreateDialog('file')}
               >
@@ -171,15 +199,18 @@ export default function SuperAdminCRUD() {
           {/* DOCUMENTS TAB */}
           <TabPanel value={tabValue} index={2}>
             <Stack spacing={2}>
-              <Button 
-                variant="contained" 
+              <Button
+                variant="contained"
                 startIcon={<AddIcon />}
                 onClick={() => openCreateDialog('document')}
               >
                 Ajouter Document
               </Button>
               <AdminTable
-                columns={[{ field: 'name', label: 'Nom' }, { field: 'created_at', label: 'Créé' }]}
+                columns={[
+                  { field: 'name', label: 'Nom' },
+                  { field: 'created_at', label: 'Créé' },
+                ]}
                 rows={documents || []}
                 onDelete={(row) => {
                   setDialogType('document');
@@ -196,7 +227,7 @@ export default function SuperAdminCRUD() {
               columns={[
                 { field: 'email', label: 'Email' },
                 { field: 'role', label: 'Rôle' },
-                { field: 'created_at', label: 'Créé' }
+                { field: 'created_at', label: 'Créé' },
               ]}
               rows={users || []}
               emptyMessage={EMPTY_STATES.users}
@@ -218,15 +249,15 @@ export default function SuperAdminCRUD() {
             { name: 'title', label: 'Titre', required: true },
             { name: 'slug', label: 'Slug' },
             { name: 'description', label: 'Description', multiline: true, rows: 3 },
-            { 
-              name: 'status', 
-              label: 'Statut', 
+            {
+              name: 'status',
+              label: 'Statut',
               type: 'select',
               options: [
                 { value: 'brouillon', label: 'Brouillon' },
-                { value: 'publié', label: 'Publié' }
-              ]
-            }
+                { value: 'publié', label: 'Publié' },
+              ],
+            },
           ]}
           values={formData}
           onChange={setFormData}

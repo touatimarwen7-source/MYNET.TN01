@@ -20,7 +20,9 @@ export const useFetchData = (initialUrl) => {
       const response = await api.get(url);
       setData(response.data);
     } catch (err) {
-      setError(err.response?.data?.message || "Une erreur s'est produite lors du chargement des données.");
+      setError(
+        err.response?.data?.message || "Une erreur s'est produite lors du chargement des données."
+      );
     } finally {
       setLoading(false);
     }

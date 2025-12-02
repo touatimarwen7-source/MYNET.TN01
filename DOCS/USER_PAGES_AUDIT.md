@@ -1,4 +1,5 @@
 # مراجعة شاملة لجميع صفحات المستخدمين
+
 ## Audit Complet des Pages Utilisateurs
 
 ### 📊 ملخص المراجعة
@@ -12,20 +13,24 @@
 ### ✅ **الإصلاحات المكتملة اليوم:**
 
 #### 1. PDFExport.jsx ✓
+
 - ✅ تم إصلاح مفتاح الرمز: `token` → `accessToken` (سطرين)
 - ✅ اختبار تحميل/طباعة PDF
 
 #### 2. InvoiceManagement.jsx ✓
+
 - ✅ استبدال 5 روابط مشفرة بـ `API_BASE`
 - ✅ استبدال 4 alert() بـ console.log
 - ✅ تحسين معالجة الأخطاء
 
 #### 3. SupplierCatalog.jsx ✓
+
 - ✅ استبدال 3 روابط مشفرة بـ `API_BASE`
 - ✅ استبدال 3 alert() بـ console.log
 - ✅ استبدال confirm() بـ window.confirm()
 
 #### 4. UserManagement.jsx ✓
+
 - ✅ استبدال 5 روابط مشفرة بـ `API_BASE`
 - ✅ استبدال 4 alert() بـ console.log
 - ✅ استبدال confirm() بـ window.confirm()
@@ -35,6 +40,7 @@
 ### ⚠️ **الصفحات المتبقية التي تحتاج إصلاح:**
 
 #### صفحات بها alert() (15 صفحة):
+
 ```
 - AccountSettings.jsx
 - ArchiveManagement.jsx
@@ -54,6 +60,7 @@
 ```
 
 #### صفحات بها روابط مشفرة:
+
 ```
 - AuditLogViewer.jsx
 - CreateTenderImproved.jsx
@@ -86,13 +93,13 @@
 
 ```javascript
 // ❌ قديم
-await axios.post('http://localhost:5000/api/...', data);
-alert('تم بنجاح');
+await axios.post("http://localhost:5000/api/...", data);
+alert("تم بنجاح");
 
 // ✅ جديد
-const API_BASE = '/api';
+const API_BASE = "/api";
 await axios.post(`${API_BASE}/...`, data);
-console.log('تم بنجاح');
+console.log("تم بنجاح");
 // أو toast.success('تم بنجاح') لاحقاً
 ```
 

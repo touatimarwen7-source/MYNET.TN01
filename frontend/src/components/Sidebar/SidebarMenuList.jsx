@@ -1,12 +1,6 @@
 import { useState, useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import {
-  List,
-  ListItemButton,
-  ListItemText,
-  Collapse,
-  Box,
-} from '@mui/material';
+import { List, ListItemButton, ListItemText, Collapse, Box } from '@mui/material';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import DashboardIcon from '@mui/icons-material/Dashboard';
@@ -48,9 +42,9 @@ export default function SidebarMenuList({ menu }) {
   const [expandedMenus, setExpandedMenus] = useState({});
 
   const toggleMenu = (menuId) => {
-    setExpandedMenus(prev => ({
+    setExpandedMenus((prev) => ({
       ...prev,
-      [menuId]: !prev[menuId]
+      [menuId]: !prev[menuId],
     }));
   };
 
@@ -65,7 +59,7 @@ export default function SidebarMenuList({ menu }) {
 
   return (
     <List sx={{ flex: 1, padding: '8px 0', overflowY: 'auto' }}>
-      {menu.map(item => {
+      {menu.map((item) => {
         const IconComponent = iconMap[item.id];
         return (
           <Box key={item.id}>
@@ -83,11 +77,20 @@ export default function SidebarMenuList({ menu }) {
                   }}
                 >
                   {IconComponent && (
-                    <IconComponent sx={{ marginRight: '12px', fontSize: '20px', color: theme.palette.primary.main }} />
+                    <IconComponent
+                      sx={{
+                        marginRight: '12px',
+                        fontSize: '20px',
+                        color: theme.palette.primary.main,
+                      }}
+                    />
                   )}
                   <ListItemText
                     primary={item.label}
-                    sx={{ margin: 0, '& .MuiTypography-root': { fontSize: '14px', fontWeight: 500 } }}
+                    sx={{
+                      margin: 0,
+                      '& .MuiTypography-root': { fontSize: '14px', fontWeight: 500 },
+                    }}
                   />
                   {expandedMenus[item.id] ? <ExpandLessIcon /> : <ExpandMoreIcon />}
                 </ListItemButton>
@@ -108,10 +111,14 @@ export default function SidebarMenuList({ menu }) {
                           marginTop: '2px',
                           marginBottom: '2px',
                           borderRadius: '4px',
-                          backgroundColor: isMenuItemActive(subItem.path) ? '#e3f2fd' : 'transparent',
+                          backgroundColor: isMenuItemActive(subItem.path)
+                            ? '#e3f2fd'
+                            : 'transparent',
                           borderLeft: isMenuItemActive(subItem.path) ? '4px solid #0056B3' : 'none',
                           paddingLeft: isMenuItemActive(subItem.path) ? '44px' : '48px',
-                          color: isMenuItemActive(subItem.path) ? theme.palette.primary.main : '#616161',
+                          color: isMenuItemActive(subItem.path)
+                            ? theme.palette.primary.main
+                            : '#616161',
                           '&:hover': {
                             backgroundColor: '#f5f5f5',
                             color: theme.palette.primary.main,
@@ -120,7 +127,10 @@ export default function SidebarMenuList({ menu }) {
                       >
                         <ListItemText
                           primary={subItem.label}
-                          sx={{ margin: 0, '& .MuiTypography-root': { fontSize: '13px', fontWeight: 400 } }}
+                          sx={{
+                            margin: 0,
+                            '& .MuiTypography-root': { fontSize: '13px', fontWeight: 400 },
+                          }}
                         />
                       </ListItemButton>
                     ))}
@@ -138,7 +148,9 @@ export default function SidebarMenuList({ menu }) {
                   backgroundColor: isMenuItemActive(item.path) ? '#e3f2fd' : 'transparent',
                   borderLeft: isMenuItemActive(item.path) ? '4px solid #0056B3' : 'none',
                   paddingLeft: isMenuItemActive(item.path) ? '12px' : '16px',
-                  color: isMenuItemActive(item.path) ? theme.palette.primary.main : theme.palette.text.primary,
+                  color: isMenuItemActive(item.path)
+                    ? theme.palette.primary.main
+                    : theme.palette.text.primary,
                   '&:hover': {
                     backgroundColor: '#f5f5f5',
                     color: theme.palette.primary.main,
@@ -146,7 +158,13 @@ export default function SidebarMenuList({ menu }) {
                 }}
               >
                 {IconComponent && (
-                  <IconComponent sx={{ marginRight: '12px', fontSize: '20px', color: theme.palette.primary.main }} />
+                  <IconComponent
+                    sx={{
+                      marginRight: '12px',
+                      fontSize: '20px',
+                      color: theme.palette.primary.main,
+                    }}
+                  />
                 )}
                 <ListItemText
                   primary={item.label}

@@ -38,7 +38,7 @@ export default function CompanyProfile() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [companyData, setCompanyData] = useState(null);
-  
+
   // Search & Filtering
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
@@ -46,12 +46,19 @@ export default function CompanyProfile() {
   const [selectedLocation, setSelectedLocation] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [showSearch, setShowSearch] = useState(false);
-  
+
   // Service categories
-  const categories = ['Sécurité', 'Gardiennage', 'Surveillance', 'Transport', 'Événementiel', 'Audit'];
+  const categories = [
+    'Sécurité',
+    'Gardiennage',
+    'Surveillance',
+    'Transport',
+    'Événementiel',
+    'Audit',
+  ];
 
   useEffect(() => {
-    setPageTitle('Profil d\'Entreprise');
+    setPageTitle("Profil d'Entreprise");
     fetchCompanyProfile();
   }, [setPageTitle]);
 
@@ -59,10 +66,13 @@ export default function CompanyProfile() {
     try {
       setLoading(true);
       // Get supplier ID from URL or context
-      const supplierId = new URLSearchParams(window.location.search).get('id') || localStorage.getItem('currentSupplierId') || 1;
-      
+      const supplierId =
+        new URLSearchParams(window.location.search).get('id') ||
+        localStorage.getItem('currentSupplierId') ||
+        1;
+
       const data = await companyProfileAPI.getSupplierProfile(supplierId);
-      
+
       // Transform API response to match component structure
       const transformed = {
         header: {
@@ -79,10 +89,13 @@ export default function CompanyProfile() {
           certifications: ['ISO 9001', 'ISO 45001'],
         },
         presentation: {
-          description: data.bio || 'Description de l\'entreprise...',
+          description: data.bio || "Description de l'entreprise...",
           specialization: data.preferred_categories?.join(', ') || 'Services généraux',
           coverage: data.city || 'Grand Tunis',
-          certifications: ['ISO 9001:2015 (Management Qualité)', 'ISO 45001:2018 (Santé & Sécurité)'],
+          certifications: [
+            'ISO 9001:2015 (Management Qualité)',
+            'ISO 45001:2018 (Santé & Sécurité)',
+          ],
           experience: '15+ ans',
         },
         services: generateServices(data.preferred_categories),
@@ -95,7 +108,7 @@ export default function CompanyProfile() {
         },
         rating: data.average_rating || 0,
       };
-      
+
       setCompanyData(transformed);
       setError('');
     } catch (err) {
@@ -107,18 +120,58 @@ export default function CompanyProfile() {
 
   const generateServices = (categories = []) => {
     const services = [
-      { id: 1, name: 'SÉCURITÉ INCENDIE', category: 'Sécurité', description: 'Systèmes de détection et lutte contre les incendies' },
-      { id: 2, name: 'GARDIENNAGE STATIQUE', category: 'Gardiennage', description: 'Surveillance et protection des locaux' },
-      { id: 3, name: 'SURVEILLANCE VIDÉO', category: 'Surveillance', description: 'Monitoring et enregistrement vidéo 24/7' },
-      { id: 4, name: 'ESCORTE ET TRANSPORT', category: 'Transport', description: 'Services d\'escorte et transport de fonds' },
-      { id: 5, name: 'SÉCURITÉ ÉVÉNEMENTIELLE', category: 'Événementiel', description: 'Protection lors de manifestations' },
-      { id: 6, name: 'AUDIT DE SÉCURITÉ', category: 'Audit', description: 'Évaluation et recommandations' },
-      { id: 7, name: 'GARDIENNAGE DYNAMIQUE', category: 'Gardiennage', description: 'Patrouilles et interventions d\'urgence' },
-      { id: 8, name: 'FORMATION SÉCURITÉ', category: 'Sécurité', description: 'Formation aux protocoles de sécurité' },
+      {
+        id: 1,
+        name: 'SÉCURITÉ INCENDIE',
+        category: 'Sécurité',
+        description: 'Systèmes de détection et lutte contre les incendies',
+      },
+      {
+        id: 2,
+        name: 'GARDIENNAGE STATIQUE',
+        category: 'Gardiennage',
+        description: 'Surveillance et protection des locaux',
+      },
+      {
+        id: 3,
+        name: 'SURVEILLANCE VIDÉO',
+        category: 'Surveillance',
+        description: 'Monitoring et enregistrement vidéo 24/7',
+      },
+      {
+        id: 4,
+        name: 'ESCORTE ET TRANSPORT',
+        category: 'Transport',
+        description: "Services d'escorte et transport de fonds",
+      },
+      {
+        id: 5,
+        name: 'SÉCURITÉ ÉVÉNEMENTIELLE',
+        category: 'Événementiel',
+        description: 'Protection lors de manifestations',
+      },
+      {
+        id: 6,
+        name: 'AUDIT DE SÉCURITÉ',
+        category: 'Audit',
+        description: 'Évaluation et recommandations',
+      },
+      {
+        id: 7,
+        name: 'GARDIENNAGE DYNAMIQUE',
+        category: 'Gardiennage',
+        description: "Patrouilles et interventions d'urgence",
+      },
+      {
+        id: 8,
+        name: 'FORMATION SÉCURITÉ',
+        category: 'Sécurité',
+        description: 'Formation aux protocoles de sécurité',
+      },
     ];
-    
+
     if (categories.length === 0) return services;
-    return services.filter(s => categories.includes(s.category));
+    return services.filter((s) => categories.includes(s.category));
   };
 
   const handleSearch = async () => {
@@ -127,14 +180,14 @@ export default function CompanyProfile() {
         setSearchResults([]);
         return;
       }
-      
+
       setLoading(true);
       const filters = {};
       if (searchQuery) filters.query = searchQuery;
       if (selectedCategory) filters.category = selectedCategory;
       if (minRating) filters.minRating = minRating;
       if (selectedLocation) filters.location = selectedLocation;
-      
+
       const results = await companyProfileAPI.searchSuppliers(filters);
       setSearchResults(results);
       setShowSearch(true);
@@ -150,17 +203,38 @@ export default function CompanyProfile() {
     { id: 'services', label: 'PRODUITS ET SERVICES', icon: '🛒' },
     { id: 'statistics', label: 'CHIFFRES CLÉS', icon: '📊' },
     { id: 'search', label: 'RECHERCHE AVANCÉE', icon: '🔍' },
-    { id: 'contact', label: 'CONTACTER L\'ENTREPRISE', icon: '📞' },
+    { id: 'contact', label: "CONTACTER L'ENTREPRISE", icon: '📞' },
   ];
 
   // ===== RENDER SECTIONS =====
   const renderPresentation = () => (
     <Box>
-      <Typography variant="h5" sx={{ fontWeight: 600, marginBottom: '16px', color: institutionalTheme.palette.primary.main }}>
+      <Typography
+        variant="h5"
+        sx={{
+          fontWeight: 600,
+          marginBottom: '16px',
+          color: institutionalTheme.palette.primary.main,
+        }}
+      >
         À PROPOS DE L'ENTREPRISE
       </Typography>
-      <Paper sx={{ padding: '20px', backgroundColor: '#f5f5f5', borderRadius: '4px', marginBottom: '20px' }}>
-        <Typography variant="body2" sx={{ whiteSpace: 'pre-wrap', lineHeight: 1.8, color: institutionalTheme.palette.text.primary }}>
+      <Paper
+        sx={{
+          padding: '20px',
+          backgroundColor: '#f5f5f5',
+          borderRadius: '4px',
+          marginBottom: '20px',
+        }}
+      >
+        <Typography
+          variant="body2"
+          sx={{
+            whiteSpace: 'pre-wrap',
+            lineHeight: 1.8,
+            color: institutionalTheme.palette.text.primary,
+          }}
+        >
           {companyData?.presentation.description}
         </Typography>
       </Paper>
@@ -169,7 +243,14 @@ export default function CompanyProfile() {
         <Grid xs={12} lg={6}>
           <Card sx={{ border: '1px solid #e0e0e0' }}>
             <CardContent>
-              <Typography variant="subtitle2" sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main, marginBottom: '8px' }}>
+              <Typography
+                variant="subtitle2"
+                sx={{
+                  fontWeight: 600,
+                  color: institutionalTheme.palette.primary.main,
+                  marginBottom: '8px',
+                }}
+              >
                 SPÉCIALISATION
               </Typography>
               <Typography variant="body2" sx={{ color: institutionalTheme.palette.text.primary }}>
@@ -181,7 +262,14 @@ export default function CompanyProfile() {
         <Grid xs={12} lg={6}>
           <Card sx={{ border: '1px solid #e0e0e0' }}>
             <CardContent>
-              <Typography variant="subtitle2" sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main, marginBottom: '8px' }}>
+              <Typography
+                variant="subtitle2"
+                sx={{
+                  fontWeight: 600,
+                  color: institutionalTheme.palette.primary.main,
+                  marginBottom: '8px',
+                }}
+              >
                 ZONE DE COUVERTURE
               </Typography>
               <Typography variant="body2" sx={{ color: institutionalTheme.palette.text.primary }}>
@@ -194,12 +282,23 @@ export default function CompanyProfile() {
 
       <Card sx={{ border: '1px solid #e0e0e0' }}>
         <CardContent>
-          <Typography variant="subtitle2" sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main, marginBottom: '12px' }}>
+          <Typography
+            variant="subtitle2"
+            sx={{
+              fontWeight: 600,
+              color: institutionalTheme.palette.primary.main,
+              marginBottom: '12px',
+            }}
+          >
             CERTIFICATIONS
           </Typography>
           <Stack direction="row" spacing={1} sx={{ flexWrap: 'wrap', gap: '8px' }}>
             {companyData?.presentation.certifications.map((cert, idx) => (
-              <Chip key={idx} label={cert} sx={{ backgroundColor: institutionalTheme.palette.primary.main, color: '#ffffff' }} />
+              <Chip
+                key={idx}
+                label={cert}
+                sx={{ backgroundColor: institutionalTheme.palette.primary.main, color: '#ffffff' }}
+              />
             ))}
           </Stack>
         </CardContent>
@@ -209,28 +308,69 @@ export default function CompanyProfile() {
 
   const renderServices = () => (
     <Box>
-      <Typography variant="h5" sx={{ fontWeight: 600, marginBottom: '20px', color: institutionalTheme.palette.primary.main }}>
+      <Typography
+        variant="h5"
+        sx={{
+          fontWeight: 600,
+          marginBottom: '20px',
+          color: institutionalTheme.palette.primary.main,
+        }}
+      >
         PRODUITS ET SERVICES
       </Typography>
       <Grid container spacing={2}>
         {companyData?.services.map((service) => (
           <Grid xs={12} lg={6} md={4} key={service.id}>
-            <Card sx={{ border: '1px solid #e0e0e0', height: '100%', display: 'flex', flexDirection: 'column' }}>
+            <Card
+              sx={{
+                border: '1px solid #e0e0e0',
+                height: '100%',
+                display: 'flex',
+                flexDirection: 'column',
+              }}
+            >
               <CardContent sx={{ flex: 1 }}>
-                <Typography variant="subtitle1" sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main, marginBottom: '8px' }}>
+                <Typography
+                  variant="subtitle1"
+                  sx={{
+                    fontWeight: 600,
+                    color: institutionalTheme.palette.primary.main,
+                    marginBottom: '8px',
+                  }}
+                >
                   {service.name}
                 </Typography>
-                <Chip label={service.category} size="small" sx={{ marginBottom: '8px', backgroundColor: '#e3f2fd', color: institutionalTheme.palette.primary.main }} />
+                <Chip
+                  label={service.category}
+                  size="small"
+                  sx={{
+                    marginBottom: '8px',
+                    backgroundColor: '#e3f2fd',
+                    color: institutionalTheme.palette.primary.main,
+                  }}
+                />
                 <Typography variant="body2" sx={{ color: '#666666', marginBottom: '16px' }}>
                   {service.description}
                 </Typography>
               </CardContent>
               <Divider />
               <Box sx={{ padding: '12px', display: 'flex', gap: '8px' }}>
-                <Button variant="outlined" size="small" sx={{ flex: 1, borderColor: '#0056B3', color: institutionalTheme.palette.primary.main }}>
+                <Button
+                  variant="outlined"
+                  size="small"
+                  sx={{
+                    flex: 1,
+                    borderColor: '#0056B3',
+                    color: institutionalTheme.palette.primary.main,
+                  }}
+                >
                   Consulter
                 </Button>
-                <Button variant="contained" size="small" sx={{ flex: 1, backgroundColor: institutionalTheme.palette.primary.main }}>
+                <Button
+                  variant="contained"
+                  size="small"
+                  sx={{ flex: 1, backgroundColor: institutionalTheme.palette.primary.main }}
+                >
                   Devis
                 </Button>
               </Box>
@@ -243,29 +383,53 @@ export default function CompanyProfile() {
 
   const renderStatistics = () => (
     <Box>
-      <Typography variant="h5" sx={{ fontWeight: 600, marginBottom: '20px', color: institutionalTheme.palette.primary.main }}>
+      <Typography
+        variant="h5"
+        sx={{
+          fontWeight: 600,
+          marginBottom: '20px',
+          color: institutionalTheme.palette.primary.main,
+        }}
+      >
         CHIFFRES CLÉS
       </Typography>
       <Grid container spacing={2}>
-        {companyData?.stats && Object.entries(companyData.stats).slice(0, 4).map(([key, value], idx) => (
-          <Grid xs={12} lg={6} lg={3} key={idx}>
-            <Card sx={{ border: '1px solid #e0e0e0', textAlign: 'center' }}>
-              <CardContent>
-                <Typography variant="h4" sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main, marginBottom: '8px' }}>
-                  {value}
-                </Typography>
-                <Typography variant="body2" sx={{ color: '#666666' }}>
-                  {key.replace(/_/g, ' ').toUpperCase()}
-                </Typography>
-              </CardContent>
-            </Card>
-          </Grid>
-        ))}
+        {companyData?.stats &&
+          Object.entries(companyData.stats)
+            .slice(0, 4)
+            .map(([key, value], idx) => (
+              <Grid xs={12} lg={6} lg={3} key={idx}>
+                <Card sx={{ border: '1px solid #e0e0e0', textAlign: 'center' }}>
+                  <CardContent>
+                    <Typography
+                      variant="h4"
+                      sx={{
+                        fontWeight: 600,
+                        color: institutionalTheme.palette.primary.main,
+                        marginBottom: '8px',
+                      }}
+                    >
+                      {value}
+                    </Typography>
+                    <Typography variant="body2" sx={{ color: '#666666' }}>
+                      {key.replace(/_/g, ' ').toUpperCase()}
+                    </Typography>
+                  </CardContent>
+                </Card>
+              </Grid>
+            ))}
       </Grid>
       {companyData?.rating && (
         <Card sx={{ border: '1px solid #e0e0e0', marginTop: '20px', textAlign: 'center' }}>
           <CardContent>
-            <Typography variant="h4" sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main, marginBottom: '8px' }}>
+            <Typography
+              variant="h4"
+              sx={{
+                fontWeight: 600,
+                color: institutionalTheme.palette.primary.main,
+                marginBottom: '8px',
+              }}
+            >
               ⭐ {companyData.rating}/5
             </Typography>
             <Typography variant="body2" sx={{ color: '#666666' }}>
@@ -279,10 +443,17 @@ export default function CompanyProfile() {
 
   const renderSearch = () => (
     <Box>
-      <Typography variant="h5" sx={{ fontWeight: 600, marginBottom: '20px', color: institutionalTheme.palette.primary.main }}>
+      <Typography
+        variant="h5"
+        sx={{
+          fontWeight: 600,
+          marginBottom: '20px',
+          color: institutionalTheme.palette.primary.main,
+        }}
+      >
         RECHERCHE AVANCÉE
       </Typography>
-      
+
       <Paper sx={{ padding: '20px', marginBottom: '20px', backgroundColor: '#f9f9f9' }}>
         <Grid container spacing={2} alignItems="flex-end">
           <Grid xs={12} lg={6}>
@@ -304,7 +475,9 @@ export default function CompanyProfile() {
               >
                 <MenuItem value="">Toutes les catégories</MenuItem>
                 {categories.map((cat) => (
-                  <MenuItem key={cat} value={cat}>{cat}</MenuItem>
+                  <MenuItem key={cat} value={cat}>
+                    {cat}
+                  </MenuItem>
                 ))}
               </Select>
             </FormControl>
@@ -344,7 +517,14 @@ export default function CompanyProfile() {
 
       {showSearch && (
         <Box>
-          <Typography variant="subtitle1" sx={{ fontWeight: 600, marginBottom: '16px', color: institutionalTheme.palette.text.primary }}>
+          <Typography
+            variant="subtitle1"
+            sx={{
+              fontWeight: 600,
+              marginBottom: '16px',
+              color: institutionalTheme.palette.text.primary,
+            }}
+          >
             Résultats ({searchResults.length})
           </Typography>
           {searchResults.length === 0 ? (
@@ -357,7 +537,10 @@ export default function CompanyProfile() {
                     <CardContent>
                       <Grid container alignItems="center" justifyContent="space-between">
                         <Grid xs={12} sm="auto">
-                          <Typography variant="h6" sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main }}>
+                          <Typography
+                            variant="h6"
+                            sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main }}
+                          >
                             {result.company_name}
                           </Typography>
                           <Typography variant="body2" sx={{ color: '#666666', marginTop: '4px' }}>
@@ -368,7 +551,10 @@ export default function CompanyProfile() {
                           </Typography>
                         </Grid>
                         <Grid xs={12} sm="auto">
-                          <Button variant="contained" sx={{ backgroundColor: institutionalTheme.palette.primary.main }}>
+                          <Button
+                            variant="contained"
+                            sx={{ backgroundColor: institutionalTheme.palette.primary.main }}
+                          >
                             Voir Profil
                           </Button>
                         </Grid>
@@ -386,7 +572,14 @@ export default function CompanyProfile() {
 
   const renderContact = () => (
     <Box>
-      <Typography variant="h5" sx={{ fontWeight: 600, marginBottom: '20px', color: institutionalTheme.palette.primary.main }}>
+      <Typography
+        variant="h5"
+        sx={{
+          fontWeight: 600,
+          marginBottom: '20px',
+          color: institutionalTheme.palette.primary.main,
+        }}
+      >
         CONTACTER L'ENTREPRISE
       </Typography>
       <Grid container spacing={2}>
@@ -397,8 +590,13 @@ export default function CompanyProfile() {
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                   <CallIcon sx={{ color: institutionalTheme.palette.primary.main }} />
                   <Box>
-                    <Typography variant="caption" sx={{ color: '#666666' }}>Téléphone</Typography>
-                    <Typography variant="body2" sx={{ fontWeight: 500, color: institutionalTheme.palette.text.primary }}>
+                    <Typography variant="caption" sx={{ color: '#666666' }}>
+                      Téléphone
+                    </Typography>
+                    <Typography
+                      variant="body2"
+                      sx={{ fontWeight: 500, color: institutionalTheme.palette.text.primary }}
+                    >
                       {companyData?.contact.phone}
                     </Typography>
                   </Box>
@@ -406,17 +604,29 @@ export default function CompanyProfile() {
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                   <EmailIcon sx={{ color: institutionalTheme.palette.primary.main }} />
                   <Box>
-                    <Typography variant="caption" sx={{ color: '#666666' }}>Email</Typography>
-                    <Typography variant="body2" sx={{ fontWeight: 500, color: institutionalTheme.palette.text.primary }}>
+                    <Typography variant="caption" sx={{ color: '#666666' }}>
+                      Email
+                    </Typography>
+                    <Typography
+                      variant="body2"
+                      sx={{ fontWeight: 500, color: institutionalTheme.palette.text.primary }}
+                    >
                       {companyData?.contact.email}
                     </Typography>
                   </Box>
                 </Box>
                 <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
-                  <LocationOnIcon sx={{ color: institutionalTheme.palette.primary.main, marginTop: '2px' }} />
+                  <LocationOnIcon
+                    sx={{ color: institutionalTheme.palette.primary.main, marginTop: '2px' }}
+                  />
                   <Box>
-                    <Typography variant="caption" sx={{ color: '#666666' }}>Adresse</Typography>
-                    <Typography variant="body2" sx={{ fontWeight: 500, color: institutionalTheme.palette.text.primary }}>
+                    <Typography variant="caption" sx={{ color: '#666666' }}>
+                      Adresse
+                    </Typography>
+                    <Typography
+                      variant="body2"
+                      sx={{ fontWeight: 500, color: institutionalTheme.palette.text.primary }}
+                    >
                       {companyData?.contact.address}
                     </Typography>
                   </Box>
@@ -428,17 +638,41 @@ export default function CompanyProfile() {
         <Grid xs={12} lg={6}>
           <Card sx={{ border: '1px solid #e0e0e0' }}>
             <CardContent>
-              <Typography variant="subtitle2" sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main, marginBottom: '12px' }}>
+              <Typography
+                variant="subtitle2"
+                sx={{
+                  fontWeight: 600,
+                  color: institutionalTheme.palette.primary.main,
+                  marginBottom: '12px',
+                }}
+              >
                 SUIVEZ-NOUS
               </Typography>
               <Stack spacing={2}>
-                <Button variant="outlined" fullWidth startIcon={<LinkedInIcon />} sx={{ borderColor: '#0056B3', color: institutionalTheme.palette.primary.main }}>
+                <Button
+                  variant="outlined"
+                  fullWidth
+                  startIcon={<LinkedInIcon />}
+                  sx={{ borderColor: '#0056B3', color: institutionalTheme.palette.primary.main }}
+                >
                   LinkedIn
                 </Button>
-                <Button variant="outlined" fullWidth startIcon={<FacebookIcon />} sx={{ borderColor: '#0056B3', color: institutionalTheme.palette.primary.main }}>
+                <Button
+                  variant="outlined"
+                  fullWidth
+                  startIcon={<FacebookIcon />}
+                  sx={{ borderColor: '#0056B3', color: institutionalTheme.palette.primary.main }}
+                >
                   Facebook
                 </Button>
-                <Button fullWidth variant="contained" sx={{ backgroundColor: institutionalTheme.palette.primary.main, marginTop: '12px' }}>
+                <Button
+                  fullWidth
+                  variant="contained"
+                  sx={{
+                    backgroundColor: institutionalTheme.palette.primary.main,
+                    marginTop: '12px',
+                  }}
+                >
                   Demander un Devis
                 </Button>
               </Stack>
@@ -451,7 +685,10 @@ export default function CompanyProfile() {
 
   if (loading && !companyData) {
     return (
-      <Container maxWidth="lg" sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '60vh' }}>
+      <Container
+        maxWidth="lg"
+        sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '60vh' }}
+      >
         <CircularProgress sx={{ color: institutionalTheme.palette.primary.main }} />
       </Container>
     );
@@ -471,15 +708,45 @@ export default function CompanyProfile() {
     <Box sx={{ backgroundColor: '#f9f9f9', paddingY: '40px' }}>
       <Container maxWidth="lg">
         {/* HEADER */}
-        <Box sx={{ backgroundColor: '#ffffff', padding: '30px', borderRadius: '4px', marginBottom: '30px', border: '1px solid #e0e0e0' }}>
+        <Box
+          sx={{
+            backgroundColor: '#ffffff',
+            padding: '30px',
+            borderRadius: '4px',
+            marginBottom: '30px',
+            border: '1px solid #e0e0e0',
+          }}
+        >
           <Grid container spacing={3} alignItems="center">
             <Grid xs={12} sm="auto">
-              <Box sx={{ width: '120px', height: '120px', borderRadius: '4px', backgroundColor: '#e0e0e0', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <img src={companyData.header.logo} alt="Logo" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              <Box
+                sx={{
+                  width: '120px',
+                  height: '120px',
+                  borderRadius: '4px',
+                  backgroundColor: '#e0e0e0',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                <img
+                  src={companyData.header.logo}
+                  alt="Logo"
+                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                />
               </Box>
             </Grid>
             <Grid xs={12} sm>
-              <Typography variant="h3" sx={{ fontSize: '28px', fontWeight: 600, color: institutionalTheme.palette.primary.main, marginBottom: '8px' }}>
+              <Typography
+                variant="h3"
+                sx={{
+                  fontSize: '28px',
+                  fontWeight: 600,
+                  color: institutionalTheme.palette.primary.main,
+                  marginBottom: '8px',
+                }}
+              >
                 {companyData.header.name}
               </Typography>
               <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
@@ -490,14 +757,29 @@ export default function CompanyProfile() {
               </Box>
               <Stack direction="row" spacing={1} sx={{ flexWrap: 'wrap', gap: '8px' }}>
                 {companyData.header.sectors.map((sector, idx) => (
-                  <Chip key={idx} label={sector} sx={{ backgroundColor: institutionalTheme.palette.primary.main, color: '#ffffff' }} />
+                  <Chip
+                    key={idx}
+                    label={sector}
+                    sx={{
+                      backgroundColor: institutionalTheme.palette.primary.main,
+                      color: '#ffffff',
+                    }}
+                  />
                 ))}
               </Stack>
               <Box sx={{ display: 'flex', gap: '8px', marginTop: '16px' }}>
-                <Button variant="outlined" startIcon={<LinkedInIcon />} sx={{ borderColor: '#0056B3', color: institutionalTheme.palette.primary.main }}>
+                <Button
+                  variant="outlined"
+                  startIcon={<LinkedInIcon />}
+                  sx={{ borderColor: '#0056B3', color: institutionalTheme.palette.primary.main }}
+                >
                   LinkedIn
                 </Button>
-                <Button variant="outlined" startIcon={<FacebookIcon />} sx={{ borderColor: '#0056B3', color: institutionalTheme.palette.primary.main }}>
+                <Button
+                  variant="outlined"
+                  startIcon={<FacebookIcon />}
+                  sx={{ borderColor: '#0056B3', color: institutionalTheme.palette.primary.main }}
+                >
                   Facebook
                 </Button>
               </Box>
@@ -507,7 +789,11 @@ export default function CompanyProfile() {
 
         {/* NAVIGATION */}
         <Box sx={{ marginBottom: '30px', overflowX: 'auto' }}>
-          <Stack direction="row" spacing={1} sx={{ paddingY: '8px', flexWrap: { xs: 'wrap', md: 'nowrap' } }}>
+          <Stack
+            direction="row"
+            spacing={1}
+            sx={{ paddingY: '8px', flexWrap: { xs: 'wrap', md: 'nowrap' } }}
+          >
             {navigationItems.map((item) => (
               <Button
                 key={item.id}
@@ -530,7 +816,14 @@ export default function CompanyProfile() {
         </Box>
 
         {/* CONTENT */}
-        <Box sx={{ backgroundColor: '#ffffff', padding: '30px', borderRadius: '4px', border: '1px solid #e0e0e0' }}>
+        <Box
+          sx={{
+            backgroundColor: '#ffffff',
+            padding: '30px',
+            borderRadius: '4px',
+            border: '1px solid #e0e0e0',
+          }}
+        >
           {loading && <CircularProgress />}
           {!loading && activeSection === 'presentation' && renderPresentation()}
           {!loading && activeSection === 'services' && renderServices()}

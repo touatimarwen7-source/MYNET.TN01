@@ -11,7 +11,7 @@ class ServiceValidator {
    * Validate required fields
    */
   static validateRequired(data, fields) {
-    const missing = fields.filter(field => !data[field]);
+    const missing = fields.filter((field) => !data[field]);
     if (missing.length > 0) {
       const error = new Error(`Missing required fields: ${missing.join(', ')}`);
       error.statusCode = 400;
@@ -62,9 +62,9 @@ class ServiceValidator {
   static validateWithSchema(data, schema) {
     const { error, value } = schema.validate(data, { abortEarly: false });
     if (error) {
-      const details = error.details.map(d => ({
+      const details = error.details.map((d) => ({
         field: d.path.join('.'),
-        message: d.message
+        message: d.message,
       }));
       const err = new Error('Validation failed');
       err.statusCode = 400;
@@ -129,7 +129,9 @@ class ServiceValidator {
    */
   static validateStringLength(value, minLength, maxLength, fieldName = 'field') {
     if (value.length < minLength || value.length > maxLength) {
-      const error = new Error(`${fieldName} must be between ${minLength} and ${maxLength} characters`);
+      const error = new Error(
+        `${fieldName} must be between ${minLength} and ${maxLength} characters`
+      );
       error.statusCode = 400;
       throw error;
     }

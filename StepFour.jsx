@@ -19,11 +19,11 @@ import {
 import institutionalTheme from '../../../theme/theme';
 
 /**
- * الخطوة الرابعة: شروط الأهلية والأمن
+ * Étape 4 : Critères d'Éligibilité et de Sécurité
  * @param {object} props
- * @param {object} props.formData - بيانات النموذج الحالية
- * @param {function} props.setFormData - دالة لتحديث بيانات النموذج
- * @param {boolean} props.loading - حالة التحميل
+ * @param {object} props.formData - Données actuelles du formulaire
+ * @param {function} props.setFormData - Fonction pour mettre à jour les données du formulaire
+ * @param {boolean} props.loading - État de chargement
  */
 const StepFour = ({ formData, setFormData, loading }) => {
 
@@ -54,7 +54,7 @@ const StepFour = ({ formData, setFormData, loading }) => {
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
       <Alert severity="info">
-        حدد الشروط التي يجب على الموردين استيفاؤها للمشاركة، وكيف سيتم ترسية المناقصة.
+        Définissez les conditions que les fournisseurs doivent remplir pour participer, et comment l'appel d'offres sera attribué.
       </Alert>
 
       <Grid container spacing={3}>
@@ -62,22 +62,22 @@ const StepFour = ({ formData, setFormData, loading }) => {
         <Grid item xs={12} md={6}>
           <FormControl component="fieldset" variant="standard">
             <FormLabel component="legend" sx={{ fontWeight: 'bold', color: institutionalTheme.palette.primary.main, mb: 1 }}>
-              شروط الأهلية الإلزامية
+              Critères d'éligibilité obligatoires
             </FormLabel>
             <FormGroup>
               <FormControlLabel
                 control={<Checkbox checked={(formData.eligibilityCriteria || []).includes('minRegistrationPeriod')} onChange={handleEligibilityChange} name="minRegistrationPeriod" />}
-                label="مسجل في المنصة لمدة 6 أشهر على الأقل"
+                label="Inscrit sur la plateforme depuis au moins 6 mois"
                 disabled={loading}
               />
               <FormControlLabel
                 control={<Checkbox checked={(formData.eligibilityCriteria || []).includes('hasPositiveRating')} onChange={handleEligibilityChange} name="hasPositiveRating" />}
-                label="لديه تقييم إيجابي (أكثر من 4 نجوم)"
+                label="A une évaluation positive (plus de 4 étoiles)"
                 disabled={loading}
               />
               <FormControlLabel
                 control={<Checkbox checked={(formData.eligibilityCriteria || []).includes('isVerified')} onChange={handleEligibilityChange} name="isVerified" />}
-                label="حسابه موثق (Verified)"
+                label="Compte vérifié (Verified)"
                 disabled={loading}
               />
             </FormGroup>
@@ -87,11 +87,11 @@ const StepFour = ({ formData, setFormData, loading }) => {
         {/* الموقع الجغرافي */}
         <Grid item xs={12} md={6}>
           <FormControl fullWidth>
-            <InputLabel>الموقع الجغرافي المسموح به</InputLabel>
-            <Select name="allowedLocation" value={formData.allowedLocation || 'all'} onChange={handleInputChange} label="الموقع الجغرافي المسموح به" disabled={loading}>
-              <MenuItem value="all">كل المناطق</MenuItem>
-              <MenuItem value="national">وطني فقط</MenuItem>
-              <MenuItem value="regional">إقليمي</MenuItem>
+            <InputLabel>Zone géographique autorisée</InputLabel>
+            <Select name="allowedLocation" value={formData.allowedLocation || 'all'} onChange={handleInputChange} label="Zone géographique autorisée" disabled={loading}>
+              <MenuItem value="all">Toutes les régions</MenuItem>
+              <MenuItem value="national">National uniquement</MenuItem>
+              <MenuItem value="regional">Régional</MenuItem>
             </Select>
           </FormControl>
         </Grid>
@@ -100,11 +100,11 @@ const StepFour = ({ formData, setFormData, loading }) => {
         <Grid item xs={12} md={6}>
           <FormControl component="fieldset">
             <FormLabel component="legend" sx={{ fontWeight: 'bold', color: institutionalTheme.palette.primary.main, mb: 1 }}>
-              شروط الترسية
+              Conditions d'attribution
             </FormLabel>
             <RadioGroup name="awardCondition" value={formData.awardCondition || 'lowestPrice'} onChange={handleInputChange}>
-              <FormControlLabel value="lowestPrice" control={<Radio />} label="الترسية بالكامل لأفضل سعر إجمالي" disabled={loading} />
-              <FormControlLabel value="partialByItem" control={<Radio />} label="الترسية الجزئية بناءً على البنود والامتثال" disabled={loading} />
+              <FormControlLabel value="lowestPrice" control={<Radio />} label="Attribution complète au meilleur prix global" disabled={loading} />
+              <FormControlLabel value="partialByItem" control={<Radio />} label="Attribution partielle par article et conformité" disabled={loading} />
             </RadioGroup>
           </FormControl>
         </Grid>
@@ -113,11 +113,11 @@ const StepFour = ({ formData, setFormData, loading }) => {
         <Grid item xs={12} md={6}>
           <FormControl component="fieldset">
             <FormLabel component="legend" sx={{ fontWeight: 'bold', color: institutionalTheme.palette.primary.main, mb: 1 }}>
-              إعدادات التفاوض
+              Paramètres de négociation
             </FormLabel>
             <FormControlLabel
               control={<Switch checked={formData.allowRenegotiation || false} onChange={handleSwitchChange} name="allowRenegotiation" />}
-              label="السماح بإعادة التفاوض مع الموردين المؤهلين"
+              label="Autoriser la renégociation avec les fournisseurs qualifiés"
               disabled={loading}
             />
           </FormControl>

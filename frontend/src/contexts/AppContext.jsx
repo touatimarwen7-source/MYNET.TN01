@@ -1,5 +1,12 @@
-import { createContext, useState, useCallback, useContext, useEffect } from 'react';
+import {
+  createContext,
+  useState,
+  useCallback,
+  useContext,
+  useEffect,
+} from 'react';
 import TokenManager from '../services/tokenManager';
+import { useToastContext } from './ToastContext';
 import { setupInactivityTimer } from '../utils/security';
 
 /**
@@ -10,7 +17,7 @@ import { setupInactivityTimer } from '../utils/security';
 
 export const AppContext = createContext();
 
-export function AppProvider({ children }) {
+export const AppProvider = ({ children }) => {
   // ===== Authentication State =====
   const [user, setUser] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -20,7 +27,7 @@ export function AppProvider({ children }) {
   // ===== App State =====
   const [appLoading, setAppLoading] = useState(false);
   const [appError, setAppError] = useState(null);
-  const [toasts, setToasts] = useState([]);
+  const { addToast } = useToastContext();
 
   // ===== App Settings =====
   const [sidebarOpen, setSidebarOpen] = useState(true);
@@ -106,35 +113,20 @@ export function AppProvider({ children }) {
   /**
    * Update user profile
    */
-  const updateUser = useCallback((updatedData) => {
-    try {
-      const newUserData = { ...user, ...updatedData };
-      TokenManager.setUserData(newUserData);
-      setUser(newUserData);
-      return true;
-    } catch (error) {
-      setAuthError(error.message);
-      return false;
-    }
-  }, [user]);
-
-  // ===== Toast Methods =====
-
-  /**
-   * Add toast notification
-   */
-  const addToast = useCallback((message, type = 'success') => {
-    const id = Date.now();
-    setToasts(prev => [...prev, { id, message, type }]);
-    setTimeout(() => removeToast(id), 3000);
-  }, []);
-
-  /**
-   * Remove toast notification
-   */
-  const removeToast = useCallback((id) => {
-    setToasts(prev => prev.filter(t => t.id !== id));
-  }, []);
+  const updateUser = useCallback(
+    (updatedData) => {
+      try {
+        const newUserData = { ...user, ...updatedData };
+        TokenManager.setUserData(newUserData);
+        setUser(newUserData);
+        return true;
+      } catch (error) {
+        setAuthError(error.message);
+        return false;
+      }
+    },
+    [user]
+  );
 
   // ===== Settings Methods =====
 
@@ -142,14 +134,14 @@ export function AppProvider({ children }) {
    * Toggle sidebar visibility
    */
   const toggleSidebar = useCallback(() => {
-    setSidebarOpen(prev => !prev);
+    setSidebarOpen((prev) => !prev);
   }, []);
 
   /**
    * Update app settings
    */
   const updateSettings = useCallback((newSettings) => {
-    setAppSettings(prev => ({ ...prev, ...newSettings }));
+    setAppSettings((prev) => ({ ...prev, ...newSettings }));
   }, []);
 
   /**
@@ -234,7 +226,6 @@ export function AppProvider({ children }) {
     // App State
     appLoading,
     appError,
-    toasts,
 
     // App Settings
     sidebarOpen,
@@ -245,10 +236,6 @@ export function AppProvider({ children }) {
     logout,
     updateUser,
     checkAuth,
-
-    // Toast Methods
-    addToast,
-    removeToast,
 
     // Settings Methods
     toggleSidebar,
@@ -263,27 +250,34 @@ export function AppProvider({ children }) {
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
-}
+};
 
 /**
  * 🪝 useApp Hook
  * Access global app state from any component
  */
-export function useApp() {
+export const useApp = () => {
   const context = useContext(AppContext);
   if (!context) {
     throw new Error('useApp must be used within AppProvider');
   }
   return context;
-}
+};
 
 /**
  * 🪝 useAuth Hook
  * Access authentication state from any component
  */
-export function useAuth() {
-  const { user, isAuthenticated, authLoading, authError, login, logout, updateUser } =
-    useContext(AppContext);
+export const useAuth = () => {
+  const {
+    user,
+    isAuthenticated,
+    authLoading,
+    authError,
+    login,
+    logout,
+    updateUser,
+  } = useContext(AppContext);
 
   if (!AppContext) {
     throw new Error('useAuth must be used within AppProvider');
@@ -298,18 +292,4 @@ export function useAuth() {
     logout,
     updateUser,
   };
-}
-
-/**
- * 🪝 useToast Hook
- * Access toast notifications from any component
- */
-export function useToast() {
-  const { addToast, removeToast, toasts } = useContext(AppContext);
-
-  if (!AppContext) {
-    throw new Error('useToast must be used within AppProvider');
-  }
-
-  return { addToast, removeToast, toasts };
-}
+};

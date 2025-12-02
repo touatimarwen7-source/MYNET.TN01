@@ -67,12 +67,21 @@ export default function EnhancedTable({
   };
 
   return (
-    <TableContainer component={Paper} sx={{ boxShadow: 'none', border: '1px solid #E0E0E0', borderRadius: '4px' }}>
+    <TableContainer
+      component={Paper}
+      sx={{ boxShadow: 'none', border: '1px solid #E0E0E0', borderRadius: '4px' }}
+    >
       <Table sx={{ backgroundColor: THEME_COLORS.bgPaper }}>
         <TableHead>
           <TableRow sx={{ backgroundColor: theme.palette.background.default }}>
             {groupBy && (
-              <TableCell sx={{ padding: '12px', backgroundColor: theme.palette.background.default, width: '40px' }} />
+              <TableCell
+                sx={{
+                  padding: '12px',
+                  backgroundColor: theme.palette.background.default,
+                  width: '40px',
+                }}
+              />
             )}
             {columns.map((col) => (
               <TableCell
@@ -98,7 +107,9 @@ export default function EnhancedTable({
                   )}
                   {col.tooltip && (
                     <Tooltip title={col.tooltip} arrow>
-                      <HelpOutlineIcon sx={{ fontSize: '16px', color: THEME_COLORS.textSecondary }} />
+                      <HelpOutlineIcon
+                        sx={{ fontSize: '16px', color: THEME_COLORS.textSecondary }}
+                      />
                     </Tooltip>
                   )}
                 </Box>
@@ -107,87 +118,87 @@ export default function EnhancedTable({
           </TableRow>
         </TableHead>
         <TableBody>
-          {groupBy ? (
-            Object.entries(groupedData).map(([groupName, groupRows]) => (
-              <Box key={groupName}>
-                <TableRow
-                  onClick={() => toggleGroup(groupName)}
-                  sx={{
-                    backgroundColor: 'THEME_COLORS.bgDefault',
-                    cursor: 'pointer',
-                    '&:hover': { backgroundColor: '#eeeeee' },
-                  }}
-                >
-                  <TableCell colSpan={columns.length + 1} sx={{ padding: '12px' }}>
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                      {expandedGroups[groupName] ? (
-                        <KeyboardArrowDownIcon sx={{ fontSize: '20px' }} />
-                      ) : (
-                        <KeyboardArrowUpIcon sx={{ fontSize: '20px' }} />
-                      )}
-                      <Typography sx={{ fontWeight: 600, color: theme.palette.text.primary }}>
-                        {groupName}
-                      </Typography>
-                      <Typography sx={{ color: THEME_COLORS.textSecondary, fontSize: '14px' }}>
-                        ({groupRows.length})
-                      </Typography>
-                    </Box>
-                  </TableCell>
-                </TableRow>
-                {expandedGroups[groupName] &&
-                  groupRows.map((row, idx) => (
-                    <TableRow
-                      key={idx}
-                      onClick={() => onRowClick?.(row)}
-                      sx={{
-                        backgroundColor: striped && idx % 2 === 0 ? '#FFFFFF' : 'THEME_COLORS.bgDefault',
-                        cursor: onRowClick ? 'pointer' : 'default',
-                        '&:hover': { backgroundColor: 'THEME_COLORS.bgDefault' },
-                      }}
-                    >
-                      <TableCell sx={{ padding: '12px', width: '40px' }} />
-                      {columns.map((col) => (
-                        <TableCell
-                          key={col.key}
-                          sx={{
-                            padding: '12px',
-                            color: theme.palette.text.primary,
-                            fontSize: '14px',
-                          }}
-                        >
-                          {col.render ? col.render(row[col.key], row) : row[col.key]}
-                        </TableCell>
-                      ))}
-                    </TableRow>
-                  ))}
-              </Box>
-            ))
-          ) : (
-            sortedData.map((row, idx) => (
-              <TableRow
-                key={idx}
-                onClick={() => onRowClick?.(row)}
-                sx={{
-                  backgroundColor: striped && idx % 2 === 0 ? '#FFFFFF' : 'THEME_COLORS.bgDefault',
-                  cursor: onRowClick ? 'pointer' : 'default',
-                  '&:hover': { backgroundColor: 'THEME_COLORS.bgDefault' },
-                }}
-              >
-                {columns.map((col) => (
-                  <TableCell
-                    key={col.key}
+          {groupBy
+            ? Object.entries(groupedData).map(([groupName, groupRows]) => (
+                <Box key={groupName}>
+                  <TableRow
+                    onClick={() => toggleGroup(groupName)}
                     sx={{
-                      padding: '12px',
-                      color: theme.palette.text.primary,
-                      fontSize: '14px',
+                      backgroundColor: 'THEME_COLORS.bgDefault',
+                      cursor: 'pointer',
+                      '&:hover': { backgroundColor: '#eeeeee' },
                     }}
                   >
-                    {col.render ? col.render(row[col.key], row) : row[col.key]}
-                  </TableCell>
-                ))}
-              </TableRow>
-            ))
-          )}
+                    <TableCell colSpan={columns.length + 1} sx={{ padding: '12px' }}>
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        {expandedGroups[groupName] ? (
+                          <KeyboardArrowDownIcon sx={{ fontSize: '20px' }} />
+                        ) : (
+                          <KeyboardArrowUpIcon sx={{ fontSize: '20px' }} />
+                        )}
+                        <Typography sx={{ fontWeight: 600, color: theme.palette.text.primary }}>
+                          {groupName}
+                        </Typography>
+                        <Typography sx={{ color: THEME_COLORS.textSecondary, fontSize: '14px' }}>
+                          ({groupRows.length})
+                        </Typography>
+                      </Box>
+                    </TableCell>
+                  </TableRow>
+                  {expandedGroups[groupName] &&
+                    groupRows.map((row, idx) => (
+                      <TableRow
+                        key={idx}
+                        onClick={() => onRowClick?.(row)}
+                        sx={{
+                          backgroundColor:
+                            striped && idx % 2 === 0 ? '#FFFFFF' : 'THEME_COLORS.bgDefault',
+                          cursor: onRowClick ? 'pointer' : 'default',
+                          '&:hover': { backgroundColor: 'THEME_COLORS.bgDefault' },
+                        }}
+                      >
+                        <TableCell sx={{ padding: '12px', width: '40px' }} />
+                        {columns.map((col) => (
+                          <TableCell
+                            key={col.key}
+                            sx={{
+                              padding: '12px',
+                              color: theme.palette.text.primary,
+                              fontSize: '14px',
+                            }}
+                          >
+                            {col.render ? col.render(row[col.key], row) : row[col.key]}
+                          </TableCell>
+                        ))}
+                      </TableRow>
+                    ))}
+                </Box>
+              ))
+            : sortedData.map((row, idx) => (
+                <TableRow
+                  key={idx}
+                  onClick={() => onRowClick?.(row)}
+                  sx={{
+                    backgroundColor:
+                      striped && idx % 2 === 0 ? '#FFFFFF' : 'THEME_COLORS.bgDefault',
+                    cursor: onRowClick ? 'pointer' : 'default',
+                    '&:hover': { backgroundColor: 'THEME_COLORS.bgDefault' },
+                  }}
+                >
+                  {columns.map((col) => (
+                    <TableCell
+                      key={col.key}
+                      sx={{
+                        padding: '12px',
+                        color: theme.palette.text.primary,
+                        fontSize: '14px',
+                      }}
+                    >
+                      {col.render ? col.render(row[col.key], row) : row[col.key]}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))}
         </TableBody>
       </Table>
     </TableContainer>

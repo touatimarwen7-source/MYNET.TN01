@@ -22,7 +22,7 @@ class EnhancedBackupScheduler {
     this.isRunning = false;
     this.backupHistory = [];
     this.schedulePattern = this.parseSchedule();
-    this.isEnabled = (process.env.BACKUP_ENABLED !== 'false');
+    this.isEnabled = process.env.BACKUP_ENABLED !== 'false';
     this.retentionDays = parseInt(process.env.BACKUP_RETENTION_DAYS) || 30;
     this.maxBackups = parseInt(process.env.BACKUP_MAX_COUNT) || 10;
     this.backupDir = process.env.BACKUP_DIR || path.join(__dirname, '../../backups');
@@ -35,7 +35,7 @@ class EnhancedBackupScheduler {
    */
   parseSchedule() {
     const defaultSchedule = '0 2 * * *'; // 2 AM UTC daily
-    
+
     if (process.env.BACKUP_SCHEDULE) {
       const parts = process.env.BACKUP_SCHEDULE.split(' ');
       if (parts.length === 5) {
@@ -62,14 +62,13 @@ class EnhancedBackupScheduler {
 
     try {
       this.ensureBackupDir();
-      
+
       const job = schedule.scheduleJob(this.schedulePattern, async () => {
         await this.runBackup();
       });
 
       this.jobs.push(job);
       this.isRunning = true;
-
     } catch (error) {
       // Silently fail scheduler startup
     }
@@ -98,7 +97,7 @@ class EnhancedBackupScheduler {
           path: backupPath,
           size: fs.statSync(backupPath).size,
           status: 'success',
-          verified: await this.verifyBackup(backupPath)
+          verified: await this.verifyBackup(backupPath),
         };
 
         this.backupHistory.push(backupRecord);
@@ -110,14 +109,14 @@ class EnhancedBackupScheduler {
           timestamp: new Date().toISOString(),
           name: backupName,
           status: 'failed',
-          error: result.error
+          error: result.error,
         });
       }
     } catch (error) {
       this.backupHistory.push({
         timestamp: new Date().toISOString(),
         status: 'error',
-        error: error.message
+        error: error.message,
       });
     }
   }
@@ -132,10 +131,10 @@ class EnhancedBackupScheduler {
   async verifyBackup(backupPath) {
     try {
       const data = JSON.parse(fs.readFileSync(backupPath, 'utf8'));
-      
+
       // Check required fields
       const requiredFields = ['timestamp', 'database', 'tables'];
-      const hasAllFields = requiredFields.every(field => field in data);
+      const hasAllFields = requiredFields.every((field) => field in data);
 
       return hasAllFields && Object.keys(data.tables || {}).length > 0;
     } catch (error) {
@@ -152,8 +151,9 @@ class EnhancedBackupScheduler {
    */
   async cleanupOldBackups() {
     try {
-      const files = fs.readdirSync(this.backupDir)
-        .filter(f => f.startsWith('backup-'))
+      const files = fs
+        .readdirSync(this.backupDir)
+        .filter((f) => f.startsWith('backup-'))
         .sort()
         .reverse();
 
@@ -193,7 +193,7 @@ class EnhancedBackupScheduler {
    * @returns {void}
    */
   stop() {
-    this.jobs.forEach(job => job.cancel());
+    this.jobs.forEach((job) => job.cancel());
     this.jobs = [];
     this.isRunning = false;
   }
@@ -214,11 +214,9 @@ class EnhancedBackupScheduler {
    * @returns {Object} .lastBackup - Metadata of most recent backup
    */
   getStats() {
-    const successCount = this.backupHistory.filter(b => b.status === 'success').length;
-    const failureCount = this.backupHistory.filter(b => b.status !== 'success').length;
-    const totalSize = this.backupHistory
-      .filter(b => b.size)
-      .reduce((sum, b) => sum + b.size, 0);
+    const successCount = this.backupHistory.filter((b) => b.status === 'success').length;
+    const failureCount = this.backupHistory.filter((b) => b.status !== 'success').length;
+    const totalSize = this.backupHistory.filter((b) => b.size).reduce((sum, b) => sum + b.size, 0);
 
     return {
       isRunning: this.isRunning,
@@ -230,7 +228,7 @@ class EnhancedBackupScheduler {
       totalSize: `${(totalSize / 1024).toFixed(2)} KB`,
       retentionDays: this.retentionDays,
       maxBackups: this.maxBackups,
-      lastBackup: this.backupHistory[this.backupHistory.length - 1]
+      lastBackup: this.backupHistory[this.backupHistory.length - 1],
     };
   }
 

@@ -78,7 +78,8 @@ export default function OfferSubmission({ tenderId }) {
   };
 
   const handleSubmit = async () => {
-    if (!offerData.total_amount || !commitment) { // ✅ التحقق من التعهد
+    if (!offerData.total_amount || !commitment) {
+      // ✅ التحقق من التعهد
       setError('يرجى ملء جميع الحقول المطلوبة');
       return;
     }
@@ -122,7 +123,10 @@ export default function OfferSubmission({ tenderId }) {
 
   const ReceiptCertificate = () => (
     <Paper sx={{ p: 3, backgroundColor: '#f0f7ff', borderRadius: '4px', direction: 'rtl' }}>
-      <Typography variant="h6" sx={{ fontWeight: 'bold', mb: 2, color: institutionalTheme.palette.primary.main }}>
+      <Typography
+        variant="h6"
+        sx={{ fontWeight: 'bold', mb: 2, color: institutionalTheme.palette.primary.main }}
+      >
         📄 شهادة استقبال العرض - Certificat d'Dépôt
       </Typography>
 
@@ -131,7 +135,8 @@ export default function OfferSubmission({ tenderId }) {
           <strong>رقم الشهادة:</strong> {receipt?.receipt_number}
         </Typography>
         <Typography variant="body2" sx={{ mb: 1 }}>
-          <strong>تاريخ الاستقبال:</strong> {new Date(receipt?.issued_at).toLocaleDateString('ar-TN')}
+          <strong>تاريخ الاستقبال:</strong>{' '}
+          {new Date(receipt?.issued_at).toLocaleDateString('ar-TN')}
         </Typography>
         <Typography variant="body2" sx={{ mb: 1 }}>
           <strong>الوقت:</strong> {new Date(receipt?.issued_at).toLocaleTimeString('ar-TN')}
@@ -168,12 +173,23 @@ export default function OfferSubmission({ tenderId }) {
 
   return (
     <Box sx={{ p: 3, direction: 'rtl' }}>
-      <Typography variant="h5" sx={{ mb: 3, color: institutionalTheme.palette.primary.main, fontWeight: 'bold' }}>
+      <Typography
+        variant="h5"
+        sx={{ mb: 3, color: institutionalTheme.palette.primary.main, fontWeight: 'bold' }}
+      >
         📝 إرسال عرض جديد
       </Typography>
 
       {/* ✅ شريط الأمان والحالة */}
-      <Paper sx={{ p: 2, mb: 3, display: 'flex', justifyContent: 'space-around', backgroundColor: '#eef2f6' }}>
+      <Paper
+        sx={{
+          p: 2,
+          mb: 3,
+          display: 'flex',
+          justifyContent: 'space-around',
+          backgroundColor: '#eef2f6',
+        }}
+      >
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
           <TimerIcon color={timeLeft.includes('مغلقة') ? 'error' : 'primary'} />
           <Typography variant="body2">
@@ -188,8 +204,16 @@ export default function OfferSubmission({ tenderId }) {
         </Box>
       </Paper>
 
-      {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
-      {success && <Alert severity="success" sx={{ mb: 2 }}>تم إرسال عرضك بنجاح!</Alert>}
+      {error && (
+        <Alert severity="error" sx={{ mb: 2 }}>
+          {error}
+        </Alert>
+      )}
+      {success && (
+        <Alert severity="success" sx={{ mb: 2 }}>
+          تم إرسال عرضك بنجاح!
+        </Alert>
+      )}
 
       <Stepper activeStep={step} sx={{ mb: 3 }}>
         {steps.map((label) => (
@@ -253,11 +277,7 @@ export default function OfferSubmission({ tenderId }) {
               <Typography variant="body2" sx={{ mb: 1 }}>
                 العرض الفني
               </Typography>
-              <Button
-                variant="outlined"
-                component="label"
-                sx={{ mb: 1, width: '100%' }}
-              >
+              <Button variant="outlined" component="label" sx={{ mb: 1, width: '100%' }}>
                 اختر ملف PDF
                 <input
                   hidden
@@ -267,7 +287,10 @@ export default function OfferSubmission({ tenderId }) {
                 />
               </Button>
               {offerData.technical_file && (
-                <Typography variant="caption" sx={{ color: institutionalTheme.palette.primary.main }}>
+                <Typography
+                  variant="caption"
+                  sx={{ color: institutionalTheme.palette.primary.main }}
+                >
                   ✓ {offerData.technical_file.name}
                 </Typography>
               )}
@@ -277,11 +300,7 @@ export default function OfferSubmission({ tenderId }) {
               <Typography variant="body2" sx={{ mb: 1 }}>
                 العرض المالي
               </Typography>
-              <Button
-                variant="outlined"
-                component="label"
-                sx={{ mb: 1, width: '100%' }}
-              >
+              <Button variant="outlined" component="label" sx={{ mb: 1, width: '100%' }}>
                 اختر ملف Excel
                 <input
                   hidden
@@ -291,7 +310,10 @@ export default function OfferSubmission({ tenderId }) {
                 />
               </Button>
               {offerData.financial_file && (
-                <Typography variant="caption" sx={{ color: institutionalTheme.palette.primary.main }}>
+                <Typography
+                  variant="caption"
+                  sx={{ color: institutionalTheme.palette.primary.main }}
+                >
                   ✓ {offerData.financial_file.name}
                 </Typography>
               )}
@@ -299,10 +321,7 @@ export default function OfferSubmission({ tenderId }) {
 
             <FormControlLabel
               control={
-                <Checkbox
-                  checked={encryption}
-                  onChange={(e) => setEncryption(e.target.checked)}
-                />
+                <Checkbox checked={encryption} onChange={(e) => setEncryption(e.target.checked)} />
               }
               label="تشفير العروض (اختياري)"
             />

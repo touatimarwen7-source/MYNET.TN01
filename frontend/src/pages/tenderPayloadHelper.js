@@ -24,6 +24,6 @@ export function prepareTenderPayload(formData) {
     evaluation_criteria: formData.evaluation_criteria || {},
     requirements: formData.requirements || {},
     documents: formData.documents || [],
-    additional_info: formData.additional_info || ''
+    additional_info: formData.additional_info || '',
   };
 }

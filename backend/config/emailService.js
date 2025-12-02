@@ -40,8 +40,8 @@ const initializeEmailService = async () => {
           service: 'gmail',
           auth: {
             user: KeyManagementHelper.getOptionalEnv('EMAIL_USER', ''),
-            pass: KeyManagementHelper.getOptionalEnv('EMAIL_PASSWORD', '')
-          }
+            pass: KeyManagementHelper.getOptionalEnv('EMAIL_PASSWORD', ''),
+          },
         });
         emailServiceEnabled = true;
         // Gmail initialized
@@ -68,21 +68,21 @@ const sendEmail = async (to, subject, htmlContent) => {
         to,
         from: emailFrom,
         subject,
-        html: htmlContent
+        html: htmlContent,
       });
     } else if (provider === 'resend') {
       await transporter.emails.send({
         to,
         from: emailFrom,
         subject,
-        html: htmlContent
+        html: htmlContent,
       });
     } else if (nodemailer) {
       await transporter.sendMail({
         to,
         from: emailFrom,
         subject,
-        html: htmlContent
+        html: htmlContent,
       });
     }
 
@@ -107,7 +107,7 @@ const emailTemplates = {
         <p><strong>Supplier:</strong> ${supplierName}</p>
         <p><strong>Price:</strong> $${price}</p>
         <a href="${frontendUrl}/tenders/${tenderId}" style="background-color: #0056B3; color: white; padding: 10px 20px; text-decoration: none; border-radius: 4px;">View Offer</a>
-      `
+      `,
     };
   },
 
@@ -119,7 +119,7 @@ const emailTemplates = {
         <h2>Tender Status Changed</h2>
         <p>Your tender has been ${status}.</p>
         <a href="${frontendUrl}/tenders/${tenderId}" style="background-color: #0056B3; color: white; padding: 10px 20px; text-decoration: none; border-radius: 4px;">View Tender</a>
-      `
+      `,
     };
   },
 
@@ -131,7 +131,7 @@ const emailTemplates = {
         <h2>You have a new message</h2>
         <p>From: <strong>${senderName}</strong> (${senderCompany})</p>
         <a href="${frontendUrl}/messages" style="background-color: #0056B3; color: white; padding: 10px 20px; text-decoration: none; border-radius: 4px;">Read Message</a>
-      `
+      `,
     };
   },
 
@@ -142,12 +142,12 @@ const emailTemplates = {
       <p>Rating: ${'⭐'.repeat(rating)}</p>
       <p>From: <strong>${reviewerName}</strong></p>
       <a href="${process.env.FRONTEND_URL}/reviews" style="background-color: #0056B3; color: white; padding: 10px 20px; text-decoration: none; border-radius: 4px;">View Reviews</a>
-    `
-  })
+    `,
+  }),
 };
 
 module.exports = {
   initializeEmailService,
   sendEmail,
-  emailTemplates
+  emailTemplates,
 };

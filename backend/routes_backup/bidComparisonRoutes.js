@@ -7,7 +7,7 @@ const router = express.Router();
 router.post('/compare', authMiddleware, async (req, res) => {
   try {
     const { bidIds } = req.body; // Array of offer IDs
-    
+
     if (!Array.isArray(bidIds) || bidIds.length < 2) {
       return res.status(400).json({ error: 'At least 2 bids required for comparison' });
     }
@@ -15,7 +15,8 @@ router.post('/compare', authMiddleware, async (req, res) => {
     const db = req.app.get('db');
     const placeholders = bidIds.map((_, i) => `$${i + 1}`).join(',');
 
-    const comparison = await db.query(`
+    const comparison = await db.query(
+      `
       SELECT 
         o.id,
         o.price,
@@ -30,19 +31,23 @@ router.post('/compare', authMiddleware, async (req, res) => {
       LEFT JOIN users u ON o.supplier_id = u.id
       WHERE o.id IN (${placeholders}) AND o.is_deleted = false
       ORDER BY o.price ASC
-    `, bidIds);
+    `,
+      bidIds
+    );
 
     // Calculate comparison metrics
     const bids = comparison.rows;
-    const lowestPrice = Math.min(...bids.map(b => b.price));
-    const highestPrice = Math.max(...bids.map(b => b.price));
+    const lowestPrice = Math.min(...bids.map((b) => b.price));
+    const highestPrice = Math.max(...bids.map((b) => b.price));
     const avgPrice = bids.reduce((sum, b) => sum + b.price, 0) / bids.length;
 
-    const scoredBids = bids.map(bid => ({
+    const scoredBids = bids.map((bid) => ({
       ...bid,
       price_score: ((highestPrice - bid.price) / (highestPrice - lowestPrice)) * 100,
-      quality_score: (bid.average_rating * 20) || 0,
-      overall_score: (((highestPrice - bid.price) / (highestPrice - lowestPrice)) * 100 * 0.6) + ((bid.average_rating * 20) * 0.4)
+      quality_score: bid.average_rating * 20 || 0,
+      overall_score:
+        ((highestPrice - bid.price) / (highestPrice - lowestPrice)) * 100 * 0.6 +
+        bid.average_rating * 20 * 0.4,
     }));
 
     res.json({
@@ -51,8 +56,8 @@ router.post('/compare', authMiddleware, async (req, res) => {
         lowest_price: lowestPrice,
         highest_price: highestPrice,
         avg_price: avgPrice,
-        price_range: highestPrice - lowestPrice
-      }
+        price_range: highestPrice - lowestPrice,
+      },
     });
   } catch (error) {
     res.status(500).json({ error: error.message });

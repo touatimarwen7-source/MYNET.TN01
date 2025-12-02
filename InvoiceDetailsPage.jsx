@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import {
   Container,
   Box,
@@ -15,20 +15,14 @@ import {
   TableHead,
   TableRow,
   Button,
-  ButtonGroup,
   Paper,
-  Popper,
-  Grow,
-  MenuList,
   MenuItem,
-  ClickAwayListener,
-} from '@mui/material';
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import { procurementAPI } from '../api/procurementAPI';
-import { useToast } from '../contexts/AppContext';
-import { setPageTitle } from '../utils/pageTitle';
-
-const EXPORT_OPTIONS = ['Exporter en PDF', 'Exporter en CSV'];
+  Menu,
+} from "@mui/material";
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+import { procurementAPI } from "../api/procurementAPI";
+import { useToast } from "../contexts/AppContext";
+import { setPageTitle } from "../utils/pageTitle";
 
 /**
  * A page that displays the details of a single invoice and allows exporting it.
@@ -41,8 +35,8 @@ const InvoiceDetailsPage = () => {
   const [error, setError] = useState(null);
 
   // State for the export button dropdown
-  const [open, setOpen] = useState(false);
-  const anchorRef = useRef(null);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const open = Boolean(anchorEl);
 
   useEffect(() => {
     setPageTitle(`Facture #${invoiceId}`);
@@ -51,7 +45,7 @@ const InvoiceDetailsPage = () => {
         const response = await procurementAPI.getInvoice(invoiceId);
         setInvoice(response.data.invoice);
       } catch (err) {
-        setError('Erreur lors du chargement de la facture.');
+        setError("Erreur lors du chargement de la facture.");
       } finally {
         setLoading(false);
       }
@@ -59,67 +53,117 @@ const InvoiceDetailsPage = () => {
     fetchInvoice();
   }, [invoiceId]);
 
+  const handleMenuClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
+
   const handleExport = async (format) => {
-    setOpen(false);
-    addToast(`Exportation en ${format.toUpperCase()} en cours...`, 'info');
+    handleMenuClose();
+    addToast(`Exportation en ${format.toUpperCase()} en cours...`, "info");
     try {
       await procurementAPI.exportInvoice(invoiceId, format);
     } catch (err) {
-      addToast(`Échec de l'exportation en ${format.toUpperCase()}.`, 'error');
+      addToast(`Échec de l'exportation en ${format.toUpperCase()}.`, "error");
     }
   };
 
   if (loading) {
-    return <Box sx={{ display: 'flex', justifyContent: 'center', mt: 8 }}><CircularProgress /></Box>;
+    return (
+      <Box sx={{ display: "flex", justifyContent: "center", mt: 8 }}>
+        <CircularProgress />
+      </Box>
+    );
   }
 
   if (error) {
-    return <Container maxWidth="md" sx={{ mt: 4 }}><Alert severity="error">{error}</Alert></Container>;
+    return (
+      <Container maxWidth="md" sx={{ mt: 4 }}>
+        <Alert severity="error">{error}</Alert>
+      </Container>
+    );
   }
 
   if (!invoice) {
-    return <Container maxWidth="md" sx={{ mt: 4 }}><Alert severity="info">Facture non trouvée.</Alert></Container>;
+    return (
+      <Container maxWidth="md" sx={{ mt: 4 }}>
+        <Alert severity="info">Facture non trouvée.</Alert>
+      </Container>
+    );
   }
 
   return (
-    <Box sx={{ backgroundColor: '#FAFAFA', paddingY: '40px' }}>
+    <Box sx={{ backgroundColor: "#FAFAFA", paddingY: "40px" }}>
       <Container maxWidth="lg">
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4 }}>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            mb: 4,
+          }}
+        >
           <Typography variant="h4" color="primary.main">
             Facture #{invoice.invoiceNumber}
           </Typography>
-          <ButtonGroup variant="contained" ref={anchorRef} aria-label="split button">
-            <Button onClick={() => handleExport('pdf')}>Exporter</Button>
-            <Button size="small" onClick={() => setOpen((prevOpen) => !prevOpen)}>
-              <ArrowDropDownIcon />
+          <Box>
+            <Button
+              variant="contained"
+              onClick={handleMenuClick}
+              endIcon={<ArrowDropDownIcon />}
+            >
+              Exporter
             </Button>
-          </ButtonGroup>
-          <Popper open={open} anchorEl={anchorRef.current} role={undefined} transition disablePortal>
-            {({ TransitionProps, placement }) => (
-              <Grow {...TransitionProps} style={{ transformOrigin: placement === 'bottom' ? 'center top' : 'center bottom' }}>
-                <Paper>
-                  <ClickAwayListener onClickAway={() => setOpen(false)}>
-                    <MenuList autoFocusItem>
-                      <MenuItem onClick={() => handleExport('pdf')}>Exporter en PDF</MenuItem>
-                      <MenuItem onClick={() => handleExport('csv')}>Exporter en CSV</MenuItem>
-                    </MenuList>
-                  </ClickAwayListener>
-                </Paper>
-              </Grow>
-            )}
-          </Popper>
+            <Menu
+              anchorEl={anchorEl}
+              open={open}
+              onClose={handleMenuClose}
+              anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+              transformOrigin={{ vertical: "top", horizontal: "right" }}
+            >
+              <MenuItem onClick={() => handleExport("pdf")}>
+                Exporter en PDF
+              </MenuItem>
+              <MenuItem onClick={() => handleExport("csv")}>
+                Exporter en CSV
+              </MenuItem>
+            </Menu>
+          </Box>
         </Box>
 
-        <Card sx={{ border: '1px solid #e0e0e0', boxShadow: 'none' }}>
+        <Card sx={{ border: "1px solid #e0e0e0", boxShadow: "none" }}>
           <CardContent sx={{ p: 4 }}>
             <Grid container spacing={3}>
-              <Grid item xs={6}><Typography><strong>Date de facturation:</strong> {new Date(invoice.invoiceDate).toLocaleDateString('fr-FR')}</Typography></Grid>
-              <Grid item xs={6}><Typography><strong>Date d'échéance:</strong> {new Date(invoice.dueDate).toLocaleDateString('fr-FR')}</Typography></Grid>
-              <Grid item xs={6}><Typography><strong>Acheteur:</strong> {invoice.buyer.name}</Typography></Grid>
-              <Grid item xs={6}><Typography><strong>Fournisseur:</strong> {invoice.supplier.name}</Typography></Grid>
+              <Grid item xs={6}>
+                <Typography>
+                  <strong>Date de facturation:</strong>{" "}
+                  {new Date(invoice.invoiceDate).toLocaleDateString("fr-FR")}
+                </Typography>
+              </Grid>
+              <Grid item xs={6}>
+                <Typography>
+                  <strong>Date d'échéance:</strong>{" "}
+                  {new Date(invoice.dueDate).toLocaleDateString("fr-FR")}
+                </Typography>
+              </Grid>
+              <Grid item xs={6}>
+                <Typography>
+                  <strong>Acheteur:</strong> {invoice.buyer.name}
+                </Typography>
+              </Grid>
+              <Grid item xs={6}>
+                <Typography>
+                  <strong>Fournisseur:</strong> {invoice.supplier.name}
+                </Typography>
+              </Grid>
             </Grid>
             <Divider sx={{ my: 3 }} />
-            <Typography variant="h6" sx={{ mb: 2 }}>Articles</Typography>
+            <Typography variant="h6" sx={{ mb: 2 }}>
+              Articles
+            </Typography>
             <Table>
               <TableHead>
                 <TableRow>
@@ -134,13 +178,32 @@ const InvoiceDetailsPage = () => {
                   <TableRow key={item.id}>
                     <TableCell>{item.description}</TableCell>
                     <TableCell align="right">{item.quantity}</TableCell>
-                    <TableCell align="right">{new Intl.NumberFormat('fr-TN', { style: 'currency', currency: 'TND' }).format(item.unitPrice)}</TableCell>
-                    <TableCell align="right">{new Intl.NumberFormat('fr-TN', { style: 'currency', currency: 'TND' }).format(item.totalPrice)}</TableCell>
+                    <TableCell align="right">
+                      {new Intl.NumberFormat("fr-TN", {
+                        style: "currency",
+                        currency: "TND",
+                      }).format(item.unitPrice)}
+                    </TableCell>
+                    <TableCell align="right">
+                      {new Intl.NumberFormat("fr-TN", {
+                        style: "currency",
+                        currency: "TND",
+                      }).format(item.totalPrice)}
+                    </TableCell>
                   </TableRow>
                 ))}
                 <TableRow>
-                  <TableCell colSpan={3} align="right"><strong>Total de la Facture</strong></TableCell>
-                  <TableCell align="right"><strong>{new Intl.NumberFormat('fr-TN', { style: 'currency', currency: 'TND' }).format(invoice.totalAmount)}</strong></TableCell>
+                  <TableCell colSpan={3} align="right">
+                    <strong>Total de la Facture</strong>
+                  </TableCell>
+                  <TableCell align="right">
+                    <strong>
+                      {new Intl.NumberFormat("fr-TN", {
+                        style: "currency",
+                        currency: "TND",
+                      }).format(invoice.totalAmount)}
+                    </strong>
+                  </TableCell>
                 </TableRow>
               </TableBody>
             </Table>

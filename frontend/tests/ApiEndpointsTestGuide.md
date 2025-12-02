@@ -7,11 +7,13 @@
 ## 📋 الاستفسارات (Inquiries)
 
 ### 1️⃣ إرسال استفسار جديد
+
 ```
 POST /api/tenders/:tenderId/inquiries
 ```
 
 **الطلب:**
+
 ```bash
 curl -X POST http://localhost:3000/api/tenders/1/inquiries \
   -H "Authorization: Bearer SUPPLIER_TOKEN" \
@@ -24,6 +26,7 @@ curl -X POST http://localhost:3000/api/tenders/1/inquiries \
 ```
 
 **الاستجابة الناجحة (201):**
+
 ```json
 {
   "success": true,
@@ -41,6 +44,7 @@ curl -X POST http://localhost:3000/api/tenders/1/inquiries \
 ```
 
 **رموز الأخطاء:**
+
 - `400`: الموضوع أو النص مفقود
 - `401`: لم يتم تسجيل الدخول
 - `500`: خطأ في الخادم
@@ -48,17 +52,20 @@ curl -X POST http://localhost:3000/api/tenders/1/inquiries \
 ---
 
 ### 2️⃣ عرض استفسارات المناقصة
+
 ```
 GET /api/tenders/:tenderId/inquiries?page=1&limit=10
 ```
 
 **الطلب:**
+
 ```bash
 curl http://localhost:3000/api/tenders/1/inquiries?page=1&limit=10 \
   -H "Authorization: Bearer BUYER_TOKEN"
 ```
 
 **الاستجابة (200):**
+
 ```json
 {
   "success": true,
@@ -88,17 +95,20 @@ curl http://localhost:3000/api/tenders/1/inquiries?page=1&limit=10 \
 ---
 
 ### 3️⃣ عرض استفسارات المتعهد
+
 ```
 GET /api/my-inquiries?page=1&limit=10
 ```
 
 **الطلب:**
+
 ```bash
 curl http://localhost:3000/api/my-inquiries?page=1&limit=10 \
   -H "Authorization: Bearer SUPPLIER_TOKEN"
 ```
 
 **الاستجابة (200):**
+
 ```json
 {
   "success": true,
@@ -122,11 +132,13 @@ curl http://localhost:3000/api/my-inquiries?page=1&limit=10 \
 ## 💬 الردود (Responses)
 
 ### 4️⃣ الرد على استفسار
+
 ```
 POST /api/inquiries/:inquiryId/respond
 ```
 
 **الطلب:**
+
 ```bash
 curl -X POST http://localhost:3000/api/inquiries/1/respond \
   -H "Authorization: Bearer BUYER_TOKEN" \
@@ -138,6 +150,7 @@ curl -X POST http://localhost:3000/api/inquiries/1/respond \
 ```
 
 **الاستجابة الناجحة (201):**
+
 ```json
 {
   "success": true,
@@ -155,23 +168,27 @@ curl -X POST http://localhost:3000/api/inquiries/1/respond \
 ```
 
 **تأثير الرد:**
+
 - ✅ تحديث حالة الاستفسار من `pending` إلى `answered`
 - ✅ تسجيل الشخص الذي رد ووقت الرد
 
 ---
 
 ### 5️⃣ عرض ردود الاستفسار
+
 ```
 GET /api/inquiries/:inquiryId/responses
 ```
 
 **الطلب:**
+
 ```bash
 curl http://localhost:3000/api/inquiries/1/responses \
   -H "Authorization: Bearer SUPPLIER_TOKEN"
 ```
 
 **الاستجابة (200):**
+
 ```json
 {
   "success": true,
@@ -194,11 +211,13 @@ curl http://localhost:3000/api/inquiries/1/responses \
 ## 📄 الملاحق (Addenda)
 
 ### 6️⃣ نشر ملحق جديد
+
 ```
 POST /api/tenders/:tenderId/addenda
 ```
 
 **الطلب:**
+
 ```bash
 curl -X POST http://localhost:3000/api/tenders/1/addenda \
   -H "Authorization: Bearer BUYER_TOKEN" \
@@ -212,6 +231,7 @@ curl -X POST http://localhost:3000/api/tenders/1/addenda \
 ```
 
 **الاستجابة الناجحة (201):**
+
 ```json
 {
   "success": true,
@@ -229,6 +249,7 @@ curl -X POST http://localhost:3000/api/tenders/1/addenda \
 ```
 
 **عملية تلقائية:**
+
 - ✅ توليد رقم فريد: `ADD-YYYY-XXXXX`
 - ✅ ضبط النسخة = 1
 - ✅ إرسال إشعارات لجميع المتعهدين المرسلة إليهم رسالة البريد
@@ -236,17 +257,20 @@ curl -X POST http://localhost:3000/api/tenders/1/addenda \
 ---
 
 ### 7️⃣ عرض ملاحق المناقصة
+
 ```
 GET /api/tenders/:tenderId/addenda?page=1&limit=10
 ```
 
 **الطلب:**
+
 ```bash
 curl http://localhost:3000/api/tenders/1/addenda?page=1&limit=10 \
   -H "Authorization: Bearer SUPPLIER_TOKEN"
 ```
 
 **الاستجابة (200):**
+
 ```json
 {
   "success": true,
@@ -277,17 +301,20 @@ curl http://localhost:3000/api/tenders/1/addenda?page=1&limit=10 \
 ## 🔔 الإشعارات (Notifications)
 
 ### 8️⃣ عرض إشعارات المستخدم
+
 ```
 GET /api/my-notifications?page=1&limit=10
 ```
 
 **الطلب:**
+
 ```bash
 curl http://localhost:3000/api/my-notifications?page=1&limit=10 \
   -H "Authorization: Bearer SUPPLIER_TOKEN"
 ```
 
 **الاستجابة (200):**
+
 ```json
 {
   "success": true,
@@ -318,11 +345,13 @@ curl http://localhost:3000/api/my-notifications?page=1&limit=10 \
 ---
 
 ### 9️⃣ تحديد الإشعار كمقروء
+
 ```
 POST /api/notifications/:notificationId/read
 ```
 
 **الطلب:**
+
 ```bash
 curl -X POST http://localhost:3000/api/notifications/1/read \
   -H "Authorization: Bearer SUPPLIER_TOKEN" \
@@ -330,6 +359,7 @@ curl -X POST http://localhost:3000/api/notifications/1/read \
 ```
 
 **الاستجابة الناجحة (200):**
+
 ```json
 {
   "success": true,
@@ -338,6 +368,7 @@ curl -X POST http://localhost:3000/api/notifications/1/read \
 ```
 
 **التأثير:**
+
 - ✅ تحديث `read_at` بوقت القراءة الحالي
 - ✅ سيختفي من قائمة الإشعارات الجديدة
 
@@ -346,6 +377,7 @@ curl -X POST http://localhost:3000/api/notifications/1/read \
 ## 📊 مثال عملي - الدورة الكاملة
 
 ### 1. المتعهد يرسل استفسار
+
 ```bash
 # الخطوة 1
 curl -X POST http://localhost:3000/api/tenders/1/inquiries \
@@ -356,6 +388,7 @@ curl -X POST http://localhost:3000/api/tenders/1/inquiries \
 ```
 
 ### 2. صاحب المناقصة يرد
+
 ```bash
 # الخطوة 2
 curl -X POST http://localhost:3000/api/inquiries/5/respond \
@@ -366,6 +399,7 @@ curl -X POST http://localhost:3000/api/inquiries/5/respond \
 ```
 
 ### 3. نشر ملحق
+
 ```bash
 # الخطوة 3
 curl -X POST http://localhost:3000/api/tenders/1/addenda \
@@ -381,6 +415,7 @@ curl -X POST http://localhost:3000/api/tenders/1/addenda \
 ```
 
 ### 4. المتعهد يستقبل الإشعار
+
 ```bash
 # الخطوة 4
 curl http://localhost:3000/api/my-notifications \
@@ -399,23 +434,24 @@ curl -X POST http://localhost:3000/api/notifications/[notif_id]/read \
 
 ## ✅ معايير النجاح للـ API
 
-| الـ Endpoint | الطلب | الاستجابة | الحالة |
-|-------------|------|----------|--------|
-| POST inquiries | موضوع + نص | 201 + inquiry id | ✅ |
-| GET inquiries | bearer token | 200 + array | ✅ |
-| GET my-inquiries | bearer token | 200 + my inquiries | ✅ |
-| POST respond | response text | 201 + response id | ✅ |
-| GET responses | inquiry id | 200 + array | ✅ |
-| POST addenda | title + content | 201 + ADD-YYYY-XXXXX | ✅ |
-| GET addenda | page + limit | 200 + array | ✅ |
-| GET notifications | page + limit | 200 + array | ✅ |
-| POST read | notification id | 200 + success | ✅ |
+| الـ Endpoint      | الطلب           | الاستجابة            | الحالة |
+| ----------------- | --------------- | -------------------- | ------ |
+| POST inquiries    | موضوع + نص      | 201 + inquiry id     | ✅     |
+| GET inquiries     | bearer token    | 200 + array          | ✅     |
+| GET my-inquiries  | bearer token    | 200 + my inquiries   | ✅     |
+| POST respond      | response text   | 201 + response id    | ✅     |
+| GET responses     | inquiry id      | 200 + array          | ✅     |
+| POST addenda      | title + content | 201 + ADD-YYYY-XXXXX | ✅     |
+| GET addenda       | page + limit    | 200 + array          | ✅     |
+| GET notifications | page + limit    | 200 + array          | ✅     |
+| POST read         | notification id | 200 + success        | ✅     |
 
 ---
 
 ## 🧪 أدوات الاختبار الموصى بها
 
 ### Postman / Insomnia
+
 ```
 1. استيراد جميع الـ endpoints
 2. تعيين متغيرات: token, tenderId, etc.
@@ -423,6 +459,7 @@ curl -X POST http://localhost:3000/api/notifications/[notif_id]/read \
 ```
 
 ### cURL (سطر الأوامر)
+
 ```bash
 # حفظ token
 TOKEN=$(curl -X POST http://localhost:3000/api/auth/login \
@@ -433,7 +470,7 @@ curl -H "Authorization: Bearer $TOKEN" http://localhost:3000/api/my-inquiries
 ```
 
 ### Swagger UI
+
 ```
 http://localhost:3000/api-docs
 ```
-

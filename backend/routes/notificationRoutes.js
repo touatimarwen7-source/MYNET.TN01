@@ -16,13 +16,16 @@ router.post('/', authMiddleware, async (req, res) => {
       return res.status(400).json({ error: 'Missing required fields' });
     }
 
-    const result = await db.query(`
+    const result = await db.query(
+      `
       INSERT INTO notifications (
         recipient_id, type, subject, message, related_entity_id, is_read
       )
       VALUES ($1, $2, $3, $4, $5, false)
       RETURNING *
-    `, [recipient_id, type, subject, message, related_entity_id || null]);
+    `,
+      [recipient_id, type, subject, message, related_entity_id || null]
+    );
 
     res.status(201).json(result.rows[0]);
   } catch (error) {
@@ -54,20 +57,25 @@ router.get('/', authMiddleware, async (req, res) => {
 });
 
 // Mark notification as read
-router.put('/:notificationId/read', validateIdMiddleware('notificationId'), authMiddleware, async (req, res) => {
-  try {
-    const { notificationId } = req.params;
-    const db = req.app.get('db');
+router.put(
+  '/:notificationId/read',
+  validateIdMiddleware('notificationId'),
+  authMiddleware,
+  async (req, res) => {
+    try {
+      const { notificationId } = req.params;
+      const db = req.app.get('db');
 
-    await db.query(
-      'UPDATE notifications SET is_read = true WHERE id = $1 AND recipient_id = $2',
-      [notificationId, req.user.id]
-    );
+      await db.query(
+        'UPDATE notifications SET is_read = true WHERE id = $1 AND recipient_id = $2',
+        [notificationId, req.user.id]
+      );
 
-    res.json({ success: true });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
+      res.json({ success: true });
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
   }
-});
+);
 
 module.exports = router;

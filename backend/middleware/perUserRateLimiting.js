@@ -32,14 +32,18 @@ class InMemoryRateLimitStore {
 
   cleanup() {
     // Cleanup old entries every 5 minutes
-    setInterval(() => {
-      const now = Date.now();
-      for (const [key, record] of this.users.entries()) {
-        if (now > record.resetTime + 60000) { // Remove 1 minute after expiry
-          this.users.delete(key);
+    setInterval(
+      () => {
+        const now = Date.now();
+        for (const [key, record] of this.users.entries()) {
+          if (now > record.resetTime + 60000) {
+            // Remove 1 minute after expiry
+            this.users.delete(key);
+          }
         }
-      }
-    }, 5 * 60 * 1000);
+      },
+      5 * 60 * 1000
+    );
   }
 }
 
@@ -59,8 +63,8 @@ const perUserLimiter = rateLimit({
       message: 'Too many requests from this user, please try again later',
       code: 'RATE_LIMIT_EXCEEDED',
       statusCode: 429,
-      retryAfter: '15 minutes'
-    }
+      retryAfter: '15 minutes',
+    },
   },
   standardHeaders: true,
   legacyHeaders: false,
@@ -71,7 +75,7 @@ const perUserLimiter = rateLimit({
   keyGenerator: (req) => {
     // Use user ID if authenticated, otherwise use IP
     return req.user?.id || `ip_${req.clientIP}`;
-  }
+  },
 });
 
 /**
@@ -87,8 +91,8 @@ const loginLimiter = rateLimit({
       message: 'Too many login attempts, please try again later',
       code: 'LOGIN_RATE_LIMIT_EXCEEDED',
       statusCode: 429,
-      retryAfter: '15 minutes'
-    }
+      retryAfter: '15 minutes',
+    },
   },
   standardHeaders: true,
   legacyHeaders: false,
@@ -96,7 +100,7 @@ const loginLimiter = rateLimit({
     // Rate limit by email + IP combination
     return `${req.body?.email || 'unknown'}_${req.clientIP}`;
   },
-  store: new rateLimit.MemoryStore()
+  store: new rateLimit.MemoryStore(),
 });
 
 /**
@@ -108,7 +112,7 @@ const apiLimiters = {
     windowMs: 60 * 60 * 1000,
     max: 10,
     keyGenerator: (req) => req.user?.id || req.clientIP,
-    message: { error: 'Export limit exceeded. Max 10 exports per hour' }
+    message: { error: 'Export limit exceeded. Max 10 exports per hour' },
   }),
 
   // File uploads - allow 20 per hour per user
@@ -116,7 +120,7 @@ const apiLimiters = {
     windowMs: 60 * 60 * 1000,
     max: 20,
     keyGenerator: (req) => req.user?.id || req.clientIP,
-    message: { error: 'Upload limit exceeded. Max 20 uploads per hour' }
+    message: { error: 'Upload limit exceeded. Max 20 uploads per hour' },
   }),
 
   // Tender creation - allow 50 per day per user
@@ -124,7 +128,7 @@ const apiLimiters = {
     windowMs: 24 * 60 * 60 * 1000,
     max: 50,
     keyGenerator: (req) => req.user?.id || req.clientIP,
-    message: { error: 'Tender creation limit exceeded. Max 50 per day' }
+    message: { error: 'Tender creation limit exceeded. Max 50 per day' },
   }),
 
   // API calls - standard 100 per 15 minutes
@@ -135,8 +139,8 @@ const apiLimiters = {
     windowMs: 60 * 1000,
     max: 30,
     keyGenerator: (req) => req.user?.id || req.clientIP,
-    message: { error: 'Search rate limit exceeded' }
-  })
+    message: { error: 'Search rate limit exceeded' },
+  }),
 };
 
 /**
@@ -150,7 +154,7 @@ const getRateLimitStatus = (req) => {
     return {
       remaining: 100,
       limit: 100,
-      resetTime: new Date(Date.now() + 15 * 60 * 1000)
+      resetTime: new Date(Date.now() + 15 * 60 * 1000),
     };
   }
 
@@ -158,7 +162,7 @@ const getRateLimitStatus = (req) => {
     used: userRecord.count,
     remaining: Math.max(0, 100 - userRecord.count),
     limit: 100,
-    resetTime: new Date(userRecord.resetTime)
+    resetTime: new Date(userRecord.resetTime),
   };
 };
 
@@ -166,5 +170,5 @@ module.exports = {
   perUserLimiter,
   loginLimiter,
   apiLimiters,
-  getRateLimitStatus
+  getRateLimitStatus,
 };

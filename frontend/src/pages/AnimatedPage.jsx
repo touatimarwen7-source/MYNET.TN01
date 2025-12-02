@@ -18,7 +18,13 @@ const pageAnimation = {
 
 const AnimatedPage = ({ children }) => {
   return (
-    <motion.div initial="initial" animate="in" exit="out" variants={pageAnimation} transition={{ duration: 0.5, ease: 'easeInOut' }}>
+    <motion.div
+      initial="initial"
+      animate="in"
+      exit="out"
+      variants={pageAnimation}
+      transition={{ duration: 0.5, ease: 'easeInOut' }}
+    >
       {children}
     </motion.div>
   );

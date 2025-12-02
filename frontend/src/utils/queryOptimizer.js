@@ -21,7 +21,7 @@ export const QueryOptimizer = {
    */
   queryCache: new Map(),
 
-  getCachedQuery: function(key, ttl = 5 * 60 * 1000) {
+  getCachedQuery: function (key, ttl = 5 * 60 * 1000) {
     const cached = this.queryCache.get(key);
     if (!cached) return null;
 
@@ -33,14 +33,14 @@ export const QueryOptimizer = {
     return cached.data;
   },
 
-  setCachedQuery: function(key, data) {
+  setCachedQuery: function (key, data) {
     this.queryCache.set(key, {
       data,
-      timestamp: Date.now()
+      timestamp: Date.now(),
     });
   },
 
-  clearCache: function() {
+  clearCache: function () {
     this.queryCache.clear();
   },
 
@@ -56,8 +56,8 @@ export const QueryOptimizer = {
         page,
         limit,
         total: items.length,
-        pages: Math.ceil(items.length / limit)
-      }
+        pages: Math.ceil(items.length / limit),
+      },
     };
   },
 
@@ -73,7 +73,7 @@ export const QueryOptimizer = {
       }
     }
     return results;
-  }
+  },
 };
 
 export default QueryOptimizer;

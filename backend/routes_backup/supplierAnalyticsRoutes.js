@@ -9,14 +9,17 @@ router.get('/overview', authMiddleware, async (req, res) => {
     const db = req.app.get('db');
     const userId = req.user.id;
 
-    const overview = await db.query(`
+    const overview = await db.query(
+      `
       SELECT
         (SELECT COUNT(*) FROM offers WHERE supplier_id = $1 AND is_deleted = false) as total_offers,
         (SELECT COUNT(*) FROM offers WHERE supplier_id = $1 AND status = 'accepted' AND is_deleted = false) as accepted_offers,
         (SELECT COALESCE(SUM(total_amount), 0) FROM purchase_orders WHERE supplier_id = $1 AND is_deleted = false) as total_value,
         (SELECT COUNT(*) FROM reviews WHERE reviewed_user_id = $1 AND is_deleted = false) as review_count,
         (SELECT average_rating FROM users WHERE id = $1) as avg_rating
-    `, [userId]);
+    `,
+      [userId]
+    );
 
     res.json(overview.rows[0]);
   } catch (error) {
@@ -30,11 +33,14 @@ router.get('/acceptance-rate', authMiddleware, async (req, res) => {
     const db = req.app.get('db');
     const userId = req.user.id;
 
-    const rate = await db.query(`
+    const rate = await db.query(
+      `
       SELECT
         (SELECT COUNT(*) FROM offers WHERE supplier_id = $1 AND status = 'accepted' AND is_deleted = false)::float / 
         NULLIF((SELECT COUNT(*) FROM offers WHERE supplier_id = $1 AND is_deleted = false), 0) * 100 as acceptance_rate
-    `, [userId]);
+    `,
+      [userId]
+    );
 
     res.json({ acceptance_rate: rate.rows[0].acceptance_rate || 0 });
   } catch (error) {
@@ -48,7 +54,8 @@ router.get('/revenue-by-month', authMiddleware, async (req, res) => {
     const db = req.app.get('db');
     const userId = req.user.id;
 
-    const revenue = await db.query(`
+    const revenue = await db.query(
+      `
       SELECT 
         DATE_TRUNC('month', po.created_at) as month,
         SUM(po.total_amount) as revenue
@@ -57,7 +64,9 @@ router.get('/revenue-by-month', authMiddleware, async (req, res) => {
       GROUP BY DATE_TRUNC('month', po.created_at)
       ORDER BY month DESC
       LIMIT 12
-    `, [userId]);
+    `,
+      [userId]
+    );
 
     res.json(revenue.rows);
   } catch (error) {
@@ -71,7 +80,8 @@ router.get('/recent-reviews', authMiddleware, async (req, res) => {
     const db = req.app.get('db');
     const userId = req.user.id;
 
-    const reviews = await db.query(`
+    const reviews = await db.query(
+      `
       SELECT 
         r.id,
         r.rating,
@@ -83,7 +93,9 @@ router.get('/recent-reviews', authMiddleware, async (req, res) => {
       WHERE r.reviewed_user_id = $1 AND r.is_deleted = false
       ORDER BY r.created_at DESC
       LIMIT 10
-    `, [userId]);
+    `,
+      [userId]
+    );
 
     res.json(reviews.rows);
   } catch (error) {

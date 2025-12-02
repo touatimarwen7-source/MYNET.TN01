@@ -2,9 +2,25 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import institutionalTheme from '../theme/theme';
 import {
-  Container, Box, Card, CardContent, Typography, Button, Table,
-  TableHead, TableBody, TableRow, TableCell, CircularProgress,
-  Alert, Stack, Chip, Dialog, DialogTitle, DialogContent, DialogActions,
+  Container,
+  Box,
+  Card,
+  CardContent,
+  Typography,
+  Button,
+  Table,
+  TableHead,
+  TableBody,
+  TableRow,
+  TableCell,
+  CircularProgress,
+  Alert,
+  Stack,
+  Chip,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
 } from '@mui/material';
 import DownloadIcon from '@mui/icons-material/Download';
 import PrintIcon from '@mui/icons-material/Print';
@@ -24,16 +40,16 @@ const OPENING_REPORT_CONSTANTS = {
     BACKGROUND_LIGHT: '#F5F5F5',
     BORDER: '#E0E0E0',
     TEXT_SECONDARY: '#666666',
-    TEXT_MUTED: '#999999'
+    TEXT_MUTED: '#999999',
   },
   SPACING: {
     LARGE: 40,
     MEDIUM: 24,
     SMALL: 16,
-    TINY: 8
+    TINY: 8,
   },
   BORDER_RADIUS: 4,
-  MIN_HEIGHT_FULL: '100vh'
+  MIN_HEIGHT_FULL: '100vh',
 };
 
 export default function OpeningReport() {
@@ -57,12 +73,12 @@ export default function OpeningReport() {
       setLoading(true);
       setError('');
       const res = await procurementAPI.get(`/opening-reports/tenders/${tenderId}/opening-report`);
-      
+
       if (!res.data.success || !res.data.report) {
         setError('لم يتم العثور على محضر الفتح');
         return;
       }
-      
+
       setReport(res.data.report);
     } catch (err) {
       const message = err?.response?.data?.message || err.message || 'خطأ في تحميل البيانات';
@@ -76,7 +92,7 @@ export default function OpeningReport() {
     try {
       setExporting(true);
       const res = await procurementAPI.get(`/opening-reports/${report.id}/export?format=${format}`);
-      
+
       if (res.data.success) {
         const dataStr = JSON.stringify(res.data.report, null, 2);
         const dataBlob = new Blob([dataStr], { type: 'application/json' });
@@ -97,12 +113,14 @@ export default function OpeningReport() {
 
   if (loading) {
     return (
-      <Box sx={{ 
-        display: 'flex', 
-        justifyContent: 'center', 
-        alignItems: 'center', 
-        minHeight: OPENING_REPORT_CONSTANTS.MIN_HEIGHT_FULL 
-      }}>
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          minHeight: OPENING_REPORT_CONSTANTS.MIN_HEIGHT_FULL,
+        }}
+      >
         <CircularProgress />
       </Box>
     );
@@ -118,63 +136,91 @@ export default function OpeningReport() {
     );
   }
 
-  const offersData = Array.isArray(report.offers_data) 
-    ? report.offers_data 
-    : (typeof report.offers_data === 'string' 
-      ? JSON.parse(report.offers_data) 
-      : []);
+  const offersData = Array.isArray(report.offers_data)
+    ? report.offers_data
+    : typeof report.offers_data === 'string'
+      ? JSON.parse(report.offers_data)
+      : [];
 
   return (
-    <Box sx={{ 
-      backgroundColor: OPENING_REPORT_CONSTANTS.COLORS.BACKGROUND_LIGHT, 
-      paddingY: `${OPENING_REPORT_CONSTANTS.SPACING.LARGE}px`, 
-      minHeight: OPENING_REPORT_CONSTANTS.MIN_HEIGHT_FULL,
-      direction: 'rtl'
-    }}>
+    <Box
+      sx={{
+        backgroundColor: OPENING_REPORT_CONSTANTS.COLORS.BACKGROUND_LIGHT,
+        paddingY: `${OPENING_REPORT_CONSTANTS.SPACING.LARGE}px`,
+        minHeight: OPENING_REPORT_CONSTANTS.MIN_HEIGHT_FULL,
+        direction: 'rtl',
+      }}
+    >
       <Container maxWidth="lg">
-        <Button 
-          startIcon={<ArrowBackIcon />} 
-          onClick={() => navigate(-1)} 
+        <Button
+          startIcon={<ArrowBackIcon />}
+          onClick={() => navigate(-1)}
           sx={{ mb: `${OPENING_REPORT_CONSTANTS.SPACING.SMALL}px` }}
         >
           رجوع
         </Button>
 
         {error && (
-          <Alert severity="error" onClose={() => setError('')} sx={{ mb: `${OPENING_REPORT_CONSTANTS.SPACING.MEDIUM}px` }}>
+          <Alert
+            severity="error"
+            onClose={() => setError('')}
+            sx={{ mb: `${OPENING_REPORT_CONSTANTS.SPACING.MEDIUM}px` }}
+          >
             {error}
           </Alert>
         )}
 
         {/* Header Card */}
-        <Card sx={{ 
-          border: `1px solid ${OPENING_REPORT_CONSTANTS.COLORS.BORDER}`, 
-          borderRadius: `${OPENING_REPORT_CONSTANTS.BORDER_RADIUS}px`, 
-          mb: `${OPENING_REPORT_CONSTANTS.SPACING.MEDIUM}px` 
-        }}>
+        <Card
+          sx={{
+            border: `1px solid ${OPENING_REPORT_CONSTANTS.COLORS.BORDER}`,
+            borderRadius: `${OPENING_REPORT_CONSTANTS.BORDER_RADIUS}px`,
+            mb: `${OPENING_REPORT_CONSTANTS.SPACING.MEDIUM}px`,
+          }}
+        >
           <CardContent sx={{ padding: `${OPENING_REPORT_CONSTANTS.SPACING.MEDIUM}px` }}>
-            <Typography 
-              variant="h4" 
-              sx={{ color: OPENING_REPORT_CONSTANTS.COLORS.PRIMARY, mb: `${OPENING_REPORT_CONSTANTS.SPACING.TINY}px` }}
+            <Typography
+              variant="h4"
+              sx={{
+                color: OPENING_REPORT_CONSTANTS.COLORS.PRIMARY,
+                mb: `${OPENING_REPORT_CONSTANTS.SPACING.TINY}px`,
+              }}
             >
               📋 محضر الفتح
             </Typography>
-            <Typography sx={{ fontSize: '14px', color: OPENING_REPORT_CONSTANTS.COLORS.TEXT_SECONDARY }}>
+            <Typography
+              sx={{ fontSize: '14px', color: OPENING_REPORT_CONSTANTS.COLORS.TEXT_SECONDARY }}
+            >
               تقرير رسمي بتفاصيل جميع العروض المستلمة
             </Typography>
           </CardContent>
         </Card>
 
         {/* Info Card */}
-        <Card sx={{ 
-          border: `1px solid ${OPENING_REPORT_CONSTANTS.COLORS.BORDER}`, 
-          borderRadius: `${OPENING_REPORT_CONSTANTS.BORDER_RADIUS}px`, 
-          mb: `${OPENING_REPORT_CONSTANTS.SPACING.MEDIUM}px` 
-        }}>
+        <Card
+          sx={{
+            border: `1px solid ${OPENING_REPORT_CONSTANTS.COLORS.BORDER}`,
+            borderRadius: `${OPENING_REPORT_CONSTANTS.BORDER_RADIUS}px`,
+            mb: `${OPENING_REPORT_CONSTANTS.SPACING.MEDIUM}px`,
+          }}
+        >
           <CardContent sx={{ padding: `${OPENING_REPORT_CONSTANTS.SPACING.MEDIUM}px` }}>
-            <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: `${OPENING_REPORT_CONSTANTS.SPACING.SMALL}px`, mb: `${OPENING_REPORT_CONSTANTS.SPACING.MEDIUM}px` }}>
+            <Box
+              sx={{
+                display: 'grid',
+                gridTemplateColumns: '1fr 1fr',
+                gap: `${OPENING_REPORT_CONSTANTS.SPACING.SMALL}px`,
+                mb: `${OPENING_REPORT_CONSTANTS.SPACING.MEDIUM}px`,
+              }}
+            >
               <Box>
-                <Typography sx={{ fontSize: '12px', fontWeight: 600, color: OPENING_REPORT_CONSTANTS.COLORS.TEXT_MUTED }}>
+                <Typography
+                  sx={{
+                    fontSize: '12px',
+                    fontWeight: 600,
+                    color: OPENING_REPORT_CONSTANTS.COLORS.TEXT_MUTED,
+                  }}
+                >
                   رقم المناقصة
                 </Typography>
                 <Typography sx={{ fontSize: '16px', fontWeight: 500 }}>
@@ -182,7 +228,13 @@ export default function OpeningReport() {
                 </Typography>
               </Box>
               <Box>
-                <Typography sx={{ fontSize: '12px', fontWeight: 600, color: OPENING_REPORT_CONSTANTS.COLORS.TEXT_MUTED }}>
+                <Typography
+                  sx={{
+                    fontSize: '12px',
+                    fontWeight: 600,
+                    color: OPENING_REPORT_CONSTANTS.COLORS.TEXT_MUTED,
+                  }}
+                >
                   وقت الفتح
                 </Typography>
                 <Typography sx={{ fontSize: '16px', fontWeight: 500 }}>
@@ -192,35 +244,61 @@ export default function OpeningReport() {
             </Box>
 
             {/* Statistics */}
-            <Box sx={{ 
-              display: 'grid', 
-              gridTemplateColumns: '1fr 1fr 1fr', 
-              gap: `${OPENING_REPORT_CONSTANTS.SPACING.SMALL}px`, 
-              p: `${OPENING_REPORT_CONSTANTS.SPACING.SMALL}px`, 
-              backgroundColor: OPENING_REPORT_CONSTANTS.COLORS.BACKGROUND_LIGHT, 
-              borderRadius: `${OPENING_REPORT_CONSTANTS.BORDER_RADIUS}px` 
-            }}>
+            <Box
+              sx={{
+                display: 'grid',
+                gridTemplateColumns: '1fr 1fr 1fr',
+                gap: `${OPENING_REPORT_CONSTANTS.SPACING.SMALL}px`,
+                p: `${OPENING_REPORT_CONSTANTS.SPACING.SMALL}px`,
+                backgroundColor: OPENING_REPORT_CONSTANTS.COLORS.BACKGROUND_LIGHT,
+                borderRadius: `${OPENING_REPORT_CONSTANTS.BORDER_RADIUS}px`,
+              }}
+            >
               <Box>
-                <Typography sx={{ fontSize: '12px', color: OPENING_REPORT_CONSTANTS.COLORS.TEXT_SECONDARY }}>
+                <Typography
+                  sx={{ fontSize: '12px', color: OPENING_REPORT_CONSTANTS.COLORS.TEXT_SECONDARY }}
+                >
                   العروض الكلية
                 </Typography>
-                <Typography sx={{ fontSize: '24px', fontWeight: 700, color: OPENING_REPORT_CONSTANTS.COLORS.PRIMARY }}>
+                <Typography
+                  sx={{
+                    fontSize: '24px',
+                    fontWeight: 700,
+                    color: OPENING_REPORT_CONSTANTS.COLORS.PRIMARY,
+                  }}
+                >
                   {report.total_offers_received || 0}
                 </Typography>
               </Box>
               <Box>
-                <Typography sx={{ fontSize: '12px', color: OPENING_REPORT_CONSTANTS.COLORS.TEXT_SECONDARY }}>
+                <Typography
+                  sx={{ fontSize: '12px', color: OPENING_REPORT_CONSTANTS.COLORS.TEXT_SECONDARY }}
+                >
                   الصالحة
                 </Typography>
-                <Typography sx={{ fontSize: '24px', fontWeight: 700, color: OPENING_REPORT_CONSTANTS.COLORS.SUCCESS }}>
+                <Typography
+                  sx={{
+                    fontSize: '24px',
+                    fontWeight: 700,
+                    color: OPENING_REPORT_CONSTANTS.COLORS.SUCCESS,
+                  }}
+                >
                   {report.total_valid_offers || 0}
                 </Typography>
               </Box>
               <Box>
-                <Typography sx={{ fontSize: '12px', color: OPENING_REPORT_CONSTANTS.COLORS.TEXT_SECONDARY }}>
+                <Typography
+                  sx={{ fontSize: '12px', color: OPENING_REPORT_CONSTANTS.COLORS.TEXT_SECONDARY }}
+                >
                   غير الصالحة
                 </Typography>
-                <Typography sx={{ fontSize: '24px', fontWeight: 700, color: OPENING_REPORT_CONSTANTS.COLORS.ERROR }}>
+                <Typography
+                  sx={{
+                    fontSize: '24px',
+                    fontWeight: 700,
+                    color: OPENING_REPORT_CONSTANTS.COLORS.ERROR,
+                  }}
+                >
                   {report.total_invalid_offers || 0}
                 </Typography>
               </Box>
@@ -229,19 +307,26 @@ export default function OpeningReport() {
         </Card>
 
         {/* Offers Table Card */}
-        <Card sx={{ 
-          border: `1px solid ${OPENING_REPORT_CONSTANTS.COLORS.BORDER}`, 
-          borderRadius: `${OPENING_REPORT_CONSTANTS.BORDER_RADIUS}px`, 
-          mb: `${OPENING_REPORT_CONSTANTS.SPACING.MEDIUM}px` 
-        }}>
+        <Card
+          sx={{
+            border: `1px solid ${OPENING_REPORT_CONSTANTS.COLORS.BORDER}`,
+            borderRadius: `${OPENING_REPORT_CONSTANTS.BORDER_RADIUS}px`,
+            mb: `${OPENING_REPORT_CONSTANTS.SPACING.MEDIUM}px`,
+          }}
+        >
           <CardContent sx={{ padding: `${OPENING_REPORT_CONSTANTS.SPACING.MEDIUM}px` }}>
-            <Typography variant="h6" sx={{ mb: `${OPENING_REPORT_CONSTANTS.SPACING.SMALL}px`, fontWeight: 600 }}>
+            <Typography
+              variant="h6"
+              sx={{ mb: `${OPENING_REPORT_CONSTANTS.SPACING.SMALL}px`, fontWeight: 600 }}
+            >
               📊 العروض المستلمة ({offersData.length})
             </Typography>
             <Box sx={{ overflowX: 'auto' }}>
               <Table>
                 <TableHead>
-                  <TableRow sx={{ backgroundColor: OPENING_REPORT_CONSTANTS.COLORS.BACKGROUND_LIGHT }}>
+                  <TableRow
+                    sx={{ backgroundColor: OPENING_REPORT_CONSTANTS.COLORS.BACKGROUND_LIGHT }}
+                  >
                     <TableCell sx={{ fontWeight: 600 }}>المورد</TableCell>
                     <TableCell sx={{ fontWeight: 600 }}>المبلغ</TableCell>
                     <TableCell sx={{ fontWeight: 600 }}>وقت الاستلام</TableCell>
@@ -254,10 +339,10 @@ export default function OpeningReport() {
                       <TableRow key={idx} hover>
                         <TableCell>{offer.supplier_name || 'Unknown'}</TableCell>
                         <TableCell>
-                          {(offer.total_amount || 0).toLocaleString('ar-TN', { 
+                          {(offer.total_amount || 0).toLocaleString('ar-TN', {
                             style: 'currency',
                             currency: 'TND',
-                            minimumFractionDigits: 2 
+                            minimumFractionDigits: 2,
                           })}
                         </TableCell>
                         <TableCell>
@@ -265,18 +350,21 @@ export default function OpeningReport() {
                         </TableCell>
                         <TableCell>
                           {offer.is_valid ? (
-                            <Chip 
-                              icon={<CheckCircleIcon />} 
-                              label="صالح" 
-                              color="success" 
-                              size="small" 
+                            <Chip
+                              icon={<CheckCircleIcon />}
+                              label="صالح"
+                              color="success"
+                              size="small"
                             />
                           ) : (
-                            <Chip 
-                              icon={<ErrorIcon />} 
-                              label="غير صالح" 
-                              size="small" 
-                              sx={{ backgroundColor: OPENING_REPORT_CONSTANTS.COLORS.ERROR, color: '#fff' }}
+                            <Chip
+                              icon={<ErrorIcon />}
+                              label="غير صالح"
+                              size="small"
+                              sx={{
+                                backgroundColor: OPENING_REPORT_CONSTANTS.COLORS.ERROR,
+                                color: '#fff',
+                              }}
                             />
                           )}
                         </TableCell>
@@ -296,18 +384,18 @@ export default function OpeningReport() {
         </Card>
 
         {/* Action Buttons */}
-        <Stack direction="row" spacing={2} sx={{ mb: `${OPENING_REPORT_CONSTANTS.SPACING.MEDIUM}px` }}>
-          <Button 
-            startIcon={<PrintIcon />} 
-            onClick={() => window.print()} 
-            variant="outlined"
-          >
+        <Stack
+          direction="row"
+          spacing={2}
+          sx={{ mb: `${OPENING_REPORT_CONSTANTS.SPACING.MEDIUM}px` }}
+        >
+          <Button startIcon={<PrintIcon />} onClick={() => window.print()} variant="outlined">
             طباعة
           </Button>
-          <Button 
-            startIcon={<DownloadIcon />} 
-            onClick={() => setExportDialog(true)} 
-            variant="contained" 
+          <Button
+            startIcon={<DownloadIcon />}
+            onClick={() => setExportDialog(true)}
+            variant="contained"
             sx={{ backgroundColor: OPENING_REPORT_CONSTANTS.COLORS.PRIMARY }}
             disabled={exporting}
           >
@@ -323,18 +411,10 @@ export default function OpeningReport() {
           </DialogContent>
           <DialogActions>
             <Button onClick={() => setExportDialog(false)}>إلغاء</Button>
-            <Button 
-              onClick={() => handleExport('json')} 
-              variant="contained"
-              disabled={exporting}
-            >
+            <Button onClick={() => handleExport('json')} variant="contained" disabled={exporting}>
               JSON
             </Button>
-            <Button 
-              onClick={() => handleExport('pdf')} 
-              variant="contained"
-              disabled={exporting}
-            >
+            <Button onClick={() => handleExport('pdf')} variant="contained" disabled={exporting}>
               PDF
             </Button>
           </DialogActions>

@@ -1,11 +1,13 @@
 # 🔒 Unified Error Handling System
 
 ## Overview
+
 All errors must use the unified error factory to ensure consistent responses.
 
 ## Error Factory Usage
 
 ### Import
+
 ```javascript
 const { ErrorFactory } = require('../utils/errorFactory');
 ```
@@ -13,36 +15,43 @@ const { ErrorFactory } = require('../utils/errorFactory');
 ### Error Types Available
 
 #### Validation Errors (400)
+
 ```javascript
 throw ErrorFactory.validation('Invalid email format');
 ```
 
 #### Not Found Errors (404)
+
 ```javascript
 throw ErrorFactory.notFound('Tender not found');
 ```
 
 #### Unauthorized Errors (401)
+
 ```javascript
 throw ErrorFactory.unauthorized('Missing authentication token');
 ```
 
 #### Forbidden Errors (403)
+
 ```javascript
 throw ErrorFactory.forbidden('Insufficient permissions');
 ```
 
 #### Conflict Errors (409)
+
 ```javascript
 throw ErrorFactory.conflict('Email already exists');
 ```
 
 #### Database Errors (400)
+
 ```javascript
 throw ErrorFactory.database('Invalid query');
 ```
 
 #### Server Errors (500)
+
 ```javascript
 throw ErrorFactory.server('Unexpected error occurred');
 ```
@@ -57,6 +66,7 @@ throw ErrorFactory.server('Unexpected error occurred');
 ## Response Format
 
 All errors return:
+
 ```json
 {
   "success": false,
@@ -72,23 +82,26 @@ All errors return:
 const { ErrorFactory } = require('../utils/errorFactory');
 const asyncHandler = require('../middleware/asyncHandler');
 
-router.get('/:id', asyncHandler(async (req, res) => {
-  // Validation
-  if (!req.params.id) {
-    throw ErrorFactory.validation('ID is required');
-  }
-  
-  // Fetch resource
-  const resource = await db.query('SELECT * FROM table WHERE id = $1', [req.params.id]);
-  
-  // Not found
-  if (!resource.rows.length) {
-    throw ErrorFactory.notFound('Resource not found');
-  }
-  
-  // Success - use ResponseFormatter
-  res.json(ResponseFormatter.success(resource.rows[0]));
-}));
+router.get(
+  '/:id',
+  asyncHandler(async (req, res) => {
+    // Validation
+    if (!req.params.id) {
+      throw ErrorFactory.validation('ID is required');
+    }
+
+    // Fetch resource
+    const resource = await db.query('SELECT * FROM table WHERE id = $1', [req.params.id]);
+
+    // Not found
+    if (!resource.rows.length) {
+      throw ErrorFactory.notFound('Resource not found');
+    }
+
+    // Success - use ResponseFormatter
+    res.json(ResponseFormatter.success(resource.rows[0]));
+  })
+);
 ```
 
 ## Key Rules
@@ -106,4 +119,3 @@ router.get('/:id', asyncHandler(async (req, res) => {
 - 🛡️ Safe error messages in production
 - 🔧 Easy to maintain and update
 - ✅ Standardized response structure
-

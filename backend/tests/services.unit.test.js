@@ -15,7 +15,6 @@ jest.mock('../services/AuditLogService');
 jest.mock('../services/NotificationService');
 
 describe('🧪 Backend Services - Unit Tests', () => {
-
   beforeEach(() => {
     jest.clearAllMocks();
   });
@@ -27,7 +26,7 @@ describe('🧪 Backend Services - Unit Tests', () => {
     test('generateTenderNumber should create unique tender numbers', () => {
       const num1 = tenderService.generateTenderNumber();
       const num2 = tenderService.generateTenderNumber();
-      
+
       expect(num1).toMatch(/^TND-\d{8}-[A-F0-9]{8}$/);
       expect(num1).not.toBe(num2);
     });
@@ -38,11 +37,11 @@ describe('🧪 Backend Services - Unit Tests', () => {
         description: 'Need 100 laptops',
         budget_min: 10000,
         budget_max: 50000,
-        publish_date: '2025-01-01'
+        publish_date: '2025-01-01',
       };
 
       const mapped = tenderService.mapFrontendToDatabaseFields(frontend);
-      
+
       expect(mapped.title).toBe('Supply Computers');
       expect(mapped.budget_min).toBe(10000);
       expect(mapped.budget_max).toBe(50000);
@@ -51,7 +50,7 @@ describe('🧪 Backend Services - Unit Tests', () => {
     test('mapFrontendToDatabaseFields should handle publication_date mapping', () => {
       const frontend = { publication_date: '2025-01-01' };
       const mapped = tenderService.mapFrontendToDatabaseFields(frontend);
-      
+
       expect(mapped.publish_date).toBe('2025-01-01');
     });
 
@@ -60,43 +59,39 @@ describe('🧪 Backend Services - Unit Tests', () => {
       CacheHelper.getOrSet.mockResolvedValueOnce(mockTender);
 
       const result = await tenderService.getTenderById(1);
-      
+
       expect(result).toEqual(mockTender);
-      expect(CacheHelper.getOrSet).toHaveBeenCalledWith(
-        'tender:1',
-        expect.any(Function),
-        1800
-      );
+      expect(CacheHelper.getOrSet).toHaveBeenCalledWith('tender:1', expect.any(Function), 1800);
     });
 
     test('getTenderById should return null for non-existent tender', async () => {
       CacheHelper.getOrSet.mockResolvedValueOnce(null);
 
       const result = await tenderService.getTenderById(999);
-      
+
       expect(result).toBeNull();
     });
 
     test('updateTender should invalidate cache', async () => {
       const pool = getPool();
       pool.query = jest.fn().mockResolvedValueOnce({
-        rows: [{ id: 1, title: 'Updated' }]
+        rows: [{ id: 1, title: 'Updated' }],
       });
       CacheHelper.delete = jest.fn();
 
       await tenderService.updateTender(1, { title: 'Updated' }, 'user123');
-      
+
       expect(CacheHelper.delete).toHaveBeenCalledWith('tender:1');
     });
 
     test('getAllTenders should apply status filter', async () => {
       const pool = getPool();
       pool.query = jest.fn().mockResolvedValueOnce({
-        rows: [{ id: 1, status: 'open' }]
+        rows: [{ id: 1, status: 'open' }],
       });
 
       await tenderService.getAllTenders({ status: 'open' }, 'user123');
-      
+
       const query = pool.query.mock.calls[0][0];
       expect(query).toContain('status');
     });
@@ -106,7 +101,7 @@ describe('🧪 Backend Services - Unit Tests', () => {
       pool.query = jest.fn().mockResolvedValueOnce({ rows: [] });
 
       await tenderService.getAllTenders({ category: 'technology' }, 'user123');
-      
+
       const query = pool.query.mock.calls[0][0];
       expect(query).toContain('category');
     });
@@ -114,11 +109,11 @@ describe('🧪 Backend Services - Unit Tests', () => {
     test('getMyTenders should filter by userId', async () => {
       const pool = getPool();
       pool.query = jest.fn().mockResolvedValueOnce({
-        rows: [{ id: 1, buyer_id: 'user123' }]
+        rows: [{ id: 1, buyer_id: 'user123' }],
       });
 
       await tenderService.getMyTenders('user123');
-      
+
       const params = pool.query.mock.calls[0][1];
       expect(params[0]).toBe('user123');
     });
@@ -131,7 +126,7 @@ describe('🧪 Backend Services - Unit Tests', () => {
     test('generateOfferNumber should create unique offer numbers', () => {
       const num1 = offerService.generateOfferNumber();
       const num2 = offerService.generateOfferNumber();
-      
+
       expect(num1).toMatch(/^OFF-\d{8}-[A-F0-9]{8}$/);
       expect(num1).not.toBe(num2);
     });
@@ -145,16 +140,16 @@ describe('🧪 Backend Services - Unit Tests', () => {
     test('createOfferBatch should handle multiple offers', async () => {
       const pool = getPool();
       pool.query = jest.fn().mockResolvedValueOnce({
-        rows: [{ id: 1 }, { id: 2 }]
+        rows: [{ id: 1 }, { id: 2 }],
       });
 
       const offers = [
         { tender_id: 1, total_amount: 5000 },
-        { tender_id: 1, total_amount: 6000 }
+        { tender_id: 1, total_amount: 6000 },
       ];
 
       const result = await offerService.createOfferBatch(offers, 'supplier1');
-      
+
       expect(result).toHaveLength(2);
       expect(pool.query).toHaveBeenCalled();
     });
@@ -255,7 +250,7 @@ describe('🧪 Backend Services - Unit Tests', () => {
       const requiredFields = ['tender_id', 'supplier_id', 'total_amount'];
       const offer = { tender_id: 1, supplier_id: 2 };
 
-      const missingFields = requiredFields.filter(f => offer[f] === undefined);
+      const missingFields = requiredFields.filter((f) => offer[f] === undefined);
 
       expect(missingFields).toContain('total_amount');
     });
@@ -295,7 +290,7 @@ describe('🧪 Backend Services - Unit Tests', () => {
     test('should handle missing required fields', () => {
       const data = { title: 'Test' };
       const requiredFields = ['title', 'description', 'budget_max'];
-      const missing = requiredFields.filter(f => !data[f]);
+      const missing = requiredFields.filter((f) => !data[f]);
 
       expect(missing).toContain('description');
       expect(missing).toContain('budget_max');
@@ -310,7 +305,7 @@ describe('🧪 Backend Services - Unit Tests', () => {
 
     test('should catch encoding errors', () => {
       const invalidJson = '{ invalid json }';
-      
+
       try {
         JSON.parse(invalidJson);
       } catch (e) {
@@ -324,12 +319,12 @@ describe('🧪 Backend Services - Unit Tests', () => {
     test('should complete tender creation within 1 second', async () => {
       const pool = getPool();
       pool.query = jest.fn().mockResolvedValueOnce({
-        rows: [{ id: 1 }]
+        rows: [{ id: 1 }],
       });
 
       const start = Date.now();
       const tenderService = new TenderService();
-      
+
       await tenderService.createTender(
         { title: 'Test', description: 'Test', budget_max: 1000 },
         'user1'
@@ -353,7 +348,7 @@ describe('🧪 Backend Services - Unit Tests', () => {
     test('batch operations should handle 100 items', async () => {
       const pool = getPool();
       pool.query = jest.fn().mockResolvedValueOnce({
-        rows: Array(100).fill({ id: 1 })
+        rows: Array(100).fill({ id: 1 }),
       });
 
       const offerService = new OfferService();
@@ -364,5 +359,4 @@ describe('🧪 Backend Services - Unit Tests', () => {
       expect(result.length).toBeGreaterThanOrEqual(100);
     });
   });
-
 });

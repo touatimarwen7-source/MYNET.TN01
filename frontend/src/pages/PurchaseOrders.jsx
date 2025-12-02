@@ -45,7 +45,7 @@ export default function PurchaseOrders() {
     try {
       setLoading(true);
       const response = await axiosInstance.get('/procurement/purchase-orders/my-orders', {
-        params: { status: filter || undefined }
+        params: { status: filter || undefined },
       });
       setOrders(response.data);
       setError('');
@@ -58,7 +58,9 @@ export default function PurchaseOrders() {
 
   if (loading) {
     return (
-      <Container sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '60vh' }}>
+      <Container
+        sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '60vh' }}
+      >
         <CircularProgress sx={{ color: theme.palette.primary.main }} />
       </Container>
     );
@@ -67,19 +69,26 @@ export default function PurchaseOrders() {
   return (
     <Box sx={{ backgroundColor: '#f9f9f9', paddingY: '40px', minHeight: '100vh' }}>
       <Container maxWidth="lg">
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '30px' }}>
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            marginBottom: '30px',
+          }}
+        >
           <Typography variant="h4" sx={{ fontWeight: 600, color: theme.palette.primary.main }}>
             أوامر الشراء
           </Typography>
           <Box sx={{ display: 'flex', gap: '8px' }}>
-            {['', 'pending', 'confirmed', 'delivered'].map(status => (
+            {['', 'pending', 'confirmed', 'delivered'].map((status) => (
               <Button
                 key={status}
                 variant={filter === status ? 'contained' : 'outlined'}
                 onClick={() => setFilter(status)}
-                sx={{ 
+                sx={{
                   backgroundColor: filter === status ? theme.palette.primary.main : 'transparent',
-                  color: filter === status ? 'white' : theme.palette.primary.main
+                  color: filter === status ? 'white' : theme.palette.primary.main,
                 }}
               >
                 {status || 'الكل'}
@@ -88,7 +97,11 @@ export default function PurchaseOrders() {
           </Box>
         </Box>
 
-        {error && <Alert severity="error" sx={{ marginBottom: '20px' }}>{error}</Alert>}
+        {error && (
+          <Alert severity="error" sx={{ marginBottom: '20px' }}>
+            {error}
+          </Alert>
+        )}
 
         {orders.length === 0 ? (
           <Alert severity="info">لا توجد أوامر شراء</Alert>
@@ -105,16 +118,12 @@ export default function PurchaseOrders() {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {orders.map(order => (
+                {orders.map((order) => (
                   <TableRow key={order.id}>
                     <TableCell sx={{ fontWeight: 600 }}>{order.po_number}</TableCell>
                     <TableCell>{order.total_amount?.toFixed(3)} TND</TableCell>
                     <TableCell>
-                      <Chip 
-                        label={order.status} 
-                        color={statusColors[order.status]}
-                        size="small"
-                      />
+                      <Chip label={order.status} color={statusColors[order.status]} size="small" />
                     </TableCell>
                     <TableCell>{new Date(order.created_at).toLocaleDateString('fr-FR')}</TableCell>
                     <TableCell>

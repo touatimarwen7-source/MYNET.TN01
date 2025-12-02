@@ -26,7 +26,7 @@ export const tokenStorage = {
     // Nettoyer les cookies
     document.cookie = 'accessToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
     document.cookie = 'refreshToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
-  }
+  },
 };
 
 // Demande au Backend: Ajouter le code suivant dans authController.js

@@ -84,13 +84,12 @@ export default function Profile({ user }) {
       if (response?.data) {
         setActivity(response.data.activity || []);
       }
-    } catch (err) {
-    }
+    } catch (err) {}
   };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (e) => {
@@ -105,7 +104,7 @@ export default function Profile({ user }) {
       setEditing(false);
       setSuccess('Les modifications ont été enregistrées avec succès');
     } catch (err) {
-      setError(err.response?.data?.error || 'Erreur lors de l\'enregistrement des modifications');
+      setError(err.response?.data?.error || "Erreur lors de l'enregistrement des modifications");
     } finally {
       setLoading(false);
     }
@@ -127,7 +126,7 @@ export default function Profile({ user }) {
       const newAlert = {
         id: Date.now(),
         ...alertData,
-        created_at: new Date().toLocaleDateString('fr-FR')
+        created_at: new Date().toLocaleDateString('fr-FR'),
       };
       setAlerts([...alerts, newAlert]);
       setAlertData({ type: 'tender', keyword: '' });
@@ -136,12 +135,14 @@ export default function Profile({ user }) {
   };
 
   const removeAlert = (id) => {
-    setAlerts(alerts.filter(a => a.id !== id));
+    setAlerts(alerts.filter((a) => a.id !== id));
   };
 
   if (loading) {
     return (
-      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '60vh' }}>
+      <Box
+        sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '60vh' }}
+      >
         <CircularProgress sx={{ color: theme.palette.primary.main }} />
       </Box>
     );
@@ -159,9 +160,19 @@ export default function Profile({ user }) {
     <Box sx={{ backgroundColor: '#fafafa', paddingY: '40px' }}>
       <Container maxWidth="lg">
         {/* Header */}
-        <Box sx={{ marginBottom: '32px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <Box
+          sx={{
+            marginBottom: '32px',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          }}
+        >
           <Box>
-            <Typography variant="h2" sx={{ fontSize: '32px', fontWeight: 500, color: theme.palette.text.primary }}>
+            <Typography
+              variant="h2"
+              sx={{ fontSize: '32px', fontWeight: 500, color: theme.palette.text.primary }}
+            >
               Mon Profil Professionnel
             </Typography>
             <Typography sx={{ color: '#616161', marginTop: '8px' }}>
@@ -185,8 +196,16 @@ export default function Profile({ user }) {
           </Button>
         </Box>
 
-        {error && <Alert severity="error" sx={{ marginBottom: '24px' }}>{error}</Alert>}
-        {success && <Alert severity="success" sx={{ marginBottom: '24px' }}>{success}</Alert>}
+        {error && (
+          <Alert severity="error" sx={{ marginBottom: '24px' }}>
+            {error}
+          </Alert>
+        )}
+        {success && (
+          <Alert severity="success" sx={{ marginBottom: '24px' }}>
+            {success}
+          </Alert>
+        )}
 
         {/* Profile Card */}
         <Card sx={{ marginBottom: '32px', border: '1px solid #e0e0e0' }}>
@@ -209,13 +228,26 @@ export default function Profile({ user }) {
                 {profile.full_name ? profile.full_name.charAt(0).toUpperCase() : 'U'}
               </Box>
               <Box>
-                <Typography variant="h3" sx={{ fontSize: '24px', fontWeight: 600, color: theme.palette.text.primary }}>
+                <Typography
+                  variant="h3"
+                  sx={{ fontSize: '24px', fontWeight: 600, color: theme.palette.text.primary }}
+                >
                   {profile.full_name || profile.username}
                 </Typography>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '8px' }}>
                   <Chip
-                    label={profile.role === 'buyer' ? 'Acheteur' : profile.role === 'supplier' ? 'Fournisseur' : 'Administrateur'}
-                    sx={{ backgroundColor: theme.palette.primary.main, color: 'white', fontWeight: 600 }}
+                    label={
+                      profile.role === 'buyer'
+                        ? 'Acheteur'
+                        : profile.role === 'supplier'
+                          ? 'Fournisseur'
+                          : 'Administrateur'
+                    }
+                    sx={{
+                      backgroundColor: theme.palette.primary.main,
+                      color: 'white',
+                      fontWeight: 600,
+                    }}
                   />
                   {profile.is_verified && (
                     <Chip
@@ -231,40 +263,84 @@ export default function Profile({ user }) {
             {!editing ? (
               <Grid container spacing={2}>
                 <Grid size={{ xs: 12, md: 6 }}>
-                  <Typography sx={{ fontSize: '12px', fontWeight: 600, color: '#616161', textTransform: 'uppercase', marginBottom: '8px' }}>
+                  <Typography
+                    sx={{
+                      fontSize: '12px',
+                      fontWeight: 600,
+                      color: '#616161',
+                      textTransform: 'uppercase',
+                      marginBottom: '8px',
+                    }}
+                  >
                     Email
                   </Typography>
-                  <Typography sx={{ fontSize: '16px', color: theme.palette.text.primary, fontWeight: 500 }}>
+                  <Typography
+                    sx={{ fontSize: '16px', color: theme.palette.text.primary, fontWeight: 500 }}
+                  >
                     {profile.email}
                   </Typography>
                 </Grid>
                 <Grid size={{ xs: 12, md: 6 }}>
-                  <Typography sx={{ fontSize: '12px', fontWeight: 600, color: '#616161', textTransform: 'uppercase', marginBottom: '8px' }}>
+                  <Typography
+                    sx={{
+                      fontSize: '12px',
+                      fontWeight: 600,
+                      color: '#616161',
+                      textTransform: 'uppercase',
+                      marginBottom: '8px',
+                    }}
+                  >
                     Téléphone
                   </Typography>
-                  <Typography sx={{ fontSize: '16px', color: theme.palette.text.primary, fontWeight: 500 }}>
+                  <Typography
+                    sx={{ fontSize: '16px', color: theme.palette.text.primary, fontWeight: 500 }}
+                  >
                     {profile.phone || '—'}
                   </Typography>
                 </Grid>
                 <Grid size={{ xs: 12, md: 6 }}>
-                  <Typography sx={{ fontSize: '12px', fontWeight: 600, color: '#616161', textTransform: 'uppercase', marginBottom: '8px' }}>
+                  <Typography
+                    sx={{
+                      fontSize: '12px',
+                      fontWeight: 600,
+                      color: '#616161',
+                      textTransform: 'uppercase',
+                      marginBottom: '8px',
+                    }}
+                  >
                     Entreprise
                   </Typography>
-                  <Typography sx={{ fontSize: '16px', color: theme.palette.text.primary, fontWeight: 500 }}>
+                  <Typography
+                    sx={{ fontSize: '16px', color: theme.palette.text.primary, fontWeight: 500 }}
+                  >
                     {profile.company_name || '—'}
                   </Typography>
                 </Grid>
                 <Grid size={{ xs: 12, md: 6 }}>
-                  <Typography sx={{ fontSize: '12px', fontWeight: 600, color: '#616161', textTransform: 'uppercase', marginBottom: '8px' }}>
+                  <Typography
+                    sx={{
+                      fontSize: '12px',
+                      fontWeight: 600,
+                      color: '#616161',
+                      textTransform: 'uppercase',
+                      marginBottom: '8px',
+                    }}
+                  >
                     Enregistrement
                   </Typography>
-                  <Typography sx={{ fontSize: '16px', color: theme.palette.text.primary, fontWeight: 500 }}>
+                  <Typography
+                    sx={{ fontSize: '16px', color: theme.palette.text.primary, fontWeight: 500 }}
+                  >
                     {profile.company_registration || '—'}
                   </Typography>
                 </Grid>
               </Grid>
             ) : (
-              <Box component="form" onSubmit={handleSubmit} sx={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+              <Box
+                component="form"
+                onSubmit={handleSubmit}
+                sx={{ display: 'flex', flexDirection: 'column', gap: '16px' }}
+              >
                 <TextField
                   fullWidth
                   label="Email"
@@ -332,12 +408,22 @@ export default function Profile({ user }) {
         {tabValue === 0 && (
           <Card sx={{ border: '1px solid #e0e0e0' }}>
             <CardContent sx={{ padding: '24px' }}>
-              <Typography variant="h4" sx={{ fontSize: '18px', fontWeight: 600, color: theme.palette.text.primary, marginBottom: '16px' }}>
+              <Typography
+                variant="h4"
+                sx={{
+                  fontSize: '18px',
+                  fontWeight: 600,
+                  color: theme.palette.text.primary,
+                  marginBottom: '16px',
+                }}
+              >
                 Secteurs d'Intérêt
               </Typography>
               <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '24px' }}>
                 {interests.length === 0 ? (
-                  <Typography sx={{ color: '#999', fontStyle: 'italic' }}>Aucun secteur défini</Typography>
+                  <Typography sx={{ color: '#999', fontStyle: 'italic' }}>
+                    Aucun secteur défini
+                  </Typography>
                 ) : (
                   interests.map((interest, idx) => (
                     <Chip
@@ -377,8 +463,18 @@ export default function Profile({ user }) {
         {tabValue === 1 && (
           <Card sx={{ border: '1px solid #e0e0e0' }}>
             <CardContent sx={{ padding: '24px' }}>
-              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-                <Typography variant="h4" sx={{ fontSize: '18px', fontWeight: 600, color: theme.palette.text.primary }}>
+              <Box
+                sx={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  marginBottom: '16px',
+                }}
+              >
+                <Typography
+                  variant="h4"
+                  sx={{ fontSize: '18px', fontWeight: 600, color: theme.palette.text.primary }}
+                >
                   Alertes de Recherche
                 </Typography>
                 <Button
@@ -395,7 +491,14 @@ export default function Profile({ user }) {
               </Box>
 
               {showAlertForm && (
-                <Box sx={{ backgroundColor: '#f5f5f5', padding: '16px', borderRadius: '4px', marginBottom: '16px' }}>
+                <Box
+                  sx={{
+                    backgroundColor: '#f5f5f5',
+                    padding: '16px',
+                    borderRadius: '4px',
+                    marginBottom: '16px',
+                  }}
+                >
                   <FormControl fullWidth size="small" sx={{ marginBottom: '12px' }}>
                     <InputLabel>Type</InputLabel>
                     <Select
@@ -431,14 +534,27 @@ export default function Profile({ user }) {
 
               <Stack spacing={2}>
                 {alerts.length === 0 ? (
-                  <Typography sx={{ color: '#999', fontStyle: 'italic' }}>Aucune alerte configurée</Typography>
+                  <Typography sx={{ color: '#999', fontStyle: 'italic' }}>
+                    Aucune alerte configurée
+                  </Typography>
                 ) : (
-                  alerts.map(alert => (
+                  alerts.map((alert) => (
                     <Paper key={alert.id} sx={{ padding: '12px', backgroundColor: '#f5f5f5' }}>
-                      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <Box
+                        sx={{
+                          display: 'flex',
+                          justifyContent: 'space-between',
+                          alignItems: 'center',
+                        }}
+                      >
                         <Box>
-                          <Typography sx={{ fontWeight: 600, color: theme.palette.text.primary }}>{alert.keyword}</Typography>
-                          <Typography sx={{ fontSize: '12px', color: '#616161' }}>{alert.type === 'tender' ? 'Appel d\'Offres' : 'Fournisseur'} • {alert.created_at}</Typography>
+                          <Typography sx={{ fontWeight: 600, color: theme.palette.text.primary }}>
+                            {alert.keyword}
+                          </Typography>
+                          <Typography sx={{ fontSize: '12px', color: '#616161' }}>
+                            {alert.type === 'tender' ? "Appel d'Offres" : 'Fournisseur'} •{' '}
+                            {alert.created_at}
+                          </Typography>
                         </Box>
                         <Button
                           size="small"
@@ -461,18 +577,37 @@ export default function Profile({ user }) {
         {tabValue === 2 && (
           <Card sx={{ border: '1px solid #e0e0e0' }}>
             <CardContent sx={{ padding: '24px' }}>
-              <Typography variant="h4" sx={{ fontSize: '18px', fontWeight: 600, color: theme.palette.text.primary, marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <Typography
+                variant="h4"
+                sx={{
+                  fontSize: '18px',
+                  fontWeight: 600,
+                  color: theme.palette.text.primary,
+                  marginBottom: '16px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                }}
+              >
                 <HistoryIcon sx={{ color: theme.palette.primary.main }} />
                 Historique d'Activité
               </Typography>
               <List>
                 {activity.length === 0 ? (
-                  <Typography sx={{ color: '#999', fontStyle: 'italic', padding: '16px' }}>Aucune activité disponible</Typography>
+                  <Typography sx={{ color: '#999', fontStyle: 'italic', padding: '16px' }}>
+                    Aucune activité disponible
+                  </Typography>
                 ) : (
                   activity.slice(0, 10).map((activity_item, idx) => (
                     <ListItem key={idx}>
                       <ListItemIcon sx={{ minWidth: 40, color: theme.palette.primary.main }}>
-                        {activity_item.type === 'login' ? '📥' : activity_item.type === 'update' ? '📝' : activity_item.type === 'tender' ? '📄' : '🎯'}
+                        {activity_item.type === 'login'
+                          ? '📥'
+                          : activity_item.type === 'update'
+                            ? '📝'
+                            : activity_item.type === 'tender'
+                              ? '📄'
+                              : '🎯'}
                       </ListItemIcon>
                       <ListItemText
                         primary={activity_item.description || activity_item.type}

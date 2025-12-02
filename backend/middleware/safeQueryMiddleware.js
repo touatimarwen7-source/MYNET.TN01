@@ -15,7 +15,7 @@ const { getPool } = require('../config/db');
 async function safeQuery(query, params = []) {
   const pool = getPool();
   let client;
-  
+
   try {
     client = await pool.connect();
     const result = await client.query(query, params);
@@ -45,9 +45,9 @@ async function safeQuery(query, params = []) {
 function augmentPoolWithSafeMethods(pool) {
   // Store original query method
   const originalQuery = pool.query.bind(pool);
-  
+
   // Override with safer version
-  pool.query = async function(query, params) {
+  pool.query = async function (query, params) {
     try {
       // Use pool's built-in query which doesn't require explicit connection
       return await originalQuery(query, params);
@@ -56,7 +56,7 @@ function augmentPoolWithSafeMethods(pool) {
       throw error;
     }
   };
-  
+
   return pool;
 }
 
@@ -67,10 +67,10 @@ function augmentPoolWithSafeMethods(pool) {
  */
 function safeQueryMiddleware(req, res, next) {
   const pool = getPool();
-  
+
   req.safeQuery = async (query, params = []) => {
     let client;
-    
+
     try {
       client = await pool.connect();
       const result = await client.query(query, params);
@@ -87,12 +87,12 @@ function safeQueryMiddleware(req, res, next) {
       }
     }
   };
-  
+
   next();
 }
 
 module.exports = {
   safeQuery,
   augmentPoolWithSafeMethods,
-  safeQueryMiddleware
+  safeQueryMiddleware,
 };

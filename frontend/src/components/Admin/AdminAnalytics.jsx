@@ -14,7 +14,7 @@ import {
   TableCell,
   Paper,
   CircularProgress,
-  Alert
+  Alert,
 } from '@mui/material';
 import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 import PeopleIcon from '@mui/icons-material/People';
@@ -41,7 +41,7 @@ export default function AdminAnalytics() {
 
       const [statsRes, activitiesRes] = await Promise.all([
         adminAPI.analytics.getStats(),
-        adminAPI.analytics.getActivities()
+        adminAPI.analytics.getActivities(),
       ]);
       setStats(statsRes.data || statsRes);
       setActivities(activitiesRes.data || activitiesRes);
@@ -50,21 +50,43 @@ export default function AdminAnalytics() {
         { label: 'Processeur (CPU)', usage: 65 },
         { label: 'Mémoire', usage: 48 },
         { label: 'Stockage', usage: 72 },
-        { label: 'Bande Passante', usage: 42 }
+        { label: 'Bande Passante', usage: 42 },
       ]);
     } catch (err) {
       setError('Erreur lors du chargement des données');
       setStats([
-        { label: 'Utilisateurs Actifs', value: '1,254', change: '+12%', iconType: 'people', color: theme.palette.primary.main },
-        { label: 'Appels d\'Offres Ouverts', value: '342', change: '+8%', iconType: 'trending', color: '#2E7D32' },
-        { label: 'Offres Envoyées', value: '1,847', change: '+25%', iconType: 'storage', color: '#F57C00' },
-        { label: 'Erreurs', value: '3', change: '-2%', iconType: 'error', color: '#C62828' }
+        {
+          label: 'Utilisateurs Actifs',
+          value: '1,254',
+          change: '+12%',
+          iconType: 'people',
+          color: theme.palette.primary.main,
+        },
+        {
+          label: "Appels d'Offres Ouverts",
+          value: '342',
+          change: '+8%',
+          iconType: 'trending',
+          color: '#2E7D32',
+        },
+        {
+          label: 'Offres Envoyées',
+          value: '1,847',
+          change: '+25%',
+          iconType: 'storage',
+          color: '#F57C00',
+        },
+        { label: 'Erreurs', value: '3', change: '-2%', iconType: 'error', color: '#C62828' },
       ]);
       setActivities([
-        { event: 'Nouvel utilisateur enregistré', timestamp: 'Il y a 2 heures', user: 'Entreprise XYZ' },
-        { event: 'Nouvel appel d\'offre', timestamp: 'Il y a 5 heures', user: 'Administrateur' },
+        {
+          event: 'Nouvel utilisateur enregistré',
+          timestamp: 'Il y a 2 heures',
+          user: 'Entreprise XYZ',
+        },
+        { event: "Nouvel appel d'offre", timestamp: 'Il y a 5 heures', user: 'Administrateur' },
         { event: 'Offre envoyée', timestamp: 'Il y a 8 heures', user: 'Entreprise ABC' },
-        { event: 'Sauvegarde système', timestamp: 'Aujourd\'hui 02:30', user: 'Système' }
+        { event: 'Sauvegarde système', timestamp: "Aujourd'hui 02:30", user: 'Système' },
       ]);
     } finally {
       setLoading(false);
@@ -72,38 +94,76 @@ export default function AdminAnalytics() {
   };
 
   const renderIcon = (iconType) => {
-    switch(iconType) {
-      case 'people': return <PeopleIcon />;
-      case 'trending': return <TrendingUpIcon />;
-      case 'storage': return <StorageIcon />;
-      case 'error': return <ErrorIcon />;
-      default: return null;
+    switch (iconType) {
+      case 'people':
+        return <PeopleIcon />;
+      case 'trending':
+        return <TrendingUpIcon />;
+      case 'storage':
+        return <StorageIcon />;
+      case 'error':
+        return <ErrorIcon />;
+      default:
+        return null;
     }
   };
 
   if (loading) {
-    return <Box sx={{ display: 'flex', justifyContent: 'center', py: 4 }}><CircularProgress /></Box>;
+    return (
+      <Box sx={{ display: 'flex', justifyContent: 'center', py: 4 }}>
+        <CircularProgress />
+      </Box>
+    );
   }
 
   const defaultStats = [
-    { label: 'Utilisateurs Actifs', value: '1,254', change: '+12%', iconType: 'people', color: theme.palette.primary.main },
-    { label: 'Appels d\'Offres Ouverts', value: '342', change: '+8%', iconType: 'trending', color: '#2E7D32' },
-    { label: 'Offres Envoyées', value: '1,847', change: '+25%', iconType: 'storage', color: '#F57C00' },
-    { label: 'Erreurs', value: '3', change: '-2%', iconType: 'error', color: '#C62828' }
+    {
+      label: 'Utilisateurs Actifs',
+      value: '1,254',
+      change: '+12%',
+      iconType: 'people',
+      color: theme.palette.primary.main,
+    },
+    {
+      label: "Appels d'Offres Ouverts",
+      value: '342',
+      change: '+8%',
+      iconType: 'trending',
+      color: '#2E7D32',
+    },
+    {
+      label: 'Offres Envoyées',
+      value: '1,847',
+      change: '+25%',
+      iconType: 'storage',
+      color: '#F57C00',
+    },
+    { label: 'Erreurs', value: '3', change: '-2%', iconType: 'error', color: '#C62828' },
   ];
 
   const displayStats = stats.length > 0 ? stats : defaultStats;
 
-  const displayActivities = activities.length > 0 ? activities : [
-    { event: 'Nouvel utilisateur enregistré', timestamp: 'Il y a 2 heures', user: 'Entreprise XYZ' },
-    { event: 'Nouvel appel d\'offre', timestamp: 'Il y a 5 heures', user: 'Administrateur' },
-    { event: 'Offre envoyée', timestamp: 'Il y a 8 heures', user: 'Entreprise ABC' },
-    { event: 'Sauvegarde système', timestamp: 'Aujourd\'hui 02:30', user: 'Système' }
-  ];
+  const displayActivities =
+    activities.length > 0
+      ? activities
+      : [
+          {
+            event: 'Nouvel utilisateur enregistré',
+            timestamp: 'Il y a 2 heures',
+            user: 'Entreprise XYZ',
+          },
+          { event: "Nouvel appel d'offre", timestamp: 'Il y a 5 heures', user: 'Administrateur' },
+          { event: 'Offre envoyée', timestamp: 'Il y a 8 heures', user: 'Entreprise ABC' },
+          { event: 'Sauvegarde système', timestamp: "Aujourd'hui 02:30", user: 'Système' },
+        ];
 
   return (
     <Box>
-      {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
+      {error && (
+        <Alert severity="error" sx={{ mb: 2 }}>
+          {error}
+        </Alert>
+      )}
 
       <Box sx={{ mb: 3 }}>
         <Typography variant="h6" sx={{ fontWeight: 600, mb: 1, color: theme.palette.primary.main }}>
@@ -119,9 +179,24 @@ export default function AdminAnalytics() {
           <Grid xs={12} sm={6} md={3} key={idx}>
             <Card sx={{ border: '1px solid #E0E0E0', boxShadow: 'none' }}>
               <CardContent>
-                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 1 }}>
-                  <Box sx={{ fontSize: '28px', color: stat.color }}>{renderIcon(stat.iconType || stat.icon)}</Box>
-                  <Typography sx={{ fontSize: '12px', fontWeight: 600, color: stat.change?.startsWith('+') ? '#2E7D32' : '#C62828' }}>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'flex-start',
+                    mb: 1,
+                  }}
+                >
+                  <Box sx={{ fontSize: '28px', color: stat.color }}>
+                    {renderIcon(stat.iconType || stat.icon)}
+                  </Box>
+                  <Typography
+                    sx={{
+                      fontSize: '12px',
+                      fontWeight: 600,
+                      color: stat.change?.startsWith('+') ? '#2E7D32' : '#C62828',
+                    }}
+                  >
                     {stat.change}
                   </Typography>
                 </Box>
@@ -137,7 +212,10 @@ export default function AdminAnalytics() {
         ))}
       </Grid>
 
-      <Typography variant="h6" sx={{ fontWeight: 600, mb: 2, color: theme.palette.primary.main, mt: 4 }}>
+      <Typography
+        variant="h6"
+        sx={{ fontWeight: 600, mb: 2, color: theme.palette.primary.main, mt: 4 }}
+      >
         Utilisation des Ressources
       </Typography>
 
@@ -151,9 +229,15 @@ export default function AdminAnalytics() {
                 </Typography>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                   <Box sx={{ flex: 1 }}>
-                    <LinearProgress variant="determinate" value={resource.usage} sx={{ height: '6px', borderRadius: '4px' }} />
+                    <LinearProgress
+                      variant="determinate"
+                      value={resource.usage}
+                      sx={{ height: '6px', borderRadius: '4px' }}
+                    />
                   </Box>
-                  <Typography sx={{ fontWeight: 600, fontSize: '14px' }}>{resource.usage}%</Typography>
+                  <Typography sx={{ fontWeight: 600, fontSize: '14px' }}>
+                    {resource.usage}%
+                  </Typography>
                 </Box>
               </CardContent>
             </Card>
@@ -161,25 +245,46 @@ export default function AdminAnalytics() {
         ))}
       </Grid>
 
-      <Typography variant="h6" sx={{ fontWeight: 600, mb: 2, color: theme.palette.primary.main, mt: 4 }}>
+      <Typography
+        variant="h6"
+        sx={{ fontWeight: 600, mb: 2, color: theme.palette.primary.main, mt: 4 }}
+      >
         Activités Récentes
       </Typography>
 
-      <Paper sx={{ border: '1px solid #E0E0E0', borderRadius: '8px', overflow: 'hidden', boxShadow: 'none' }}>
+      <Paper
+        sx={{
+          border: '1px solid #E0E0E0',
+          borderRadius: '8px',
+          overflow: 'hidden',
+          boxShadow: 'none',
+        }}
+      >
         <Table>
           <TableHead sx={{ backgroundColor: '#F5F5F5' }}>
             <TableRow>
-              <TableCell sx={{ fontWeight: 600, color: theme.palette.primary.main }}>Événement</TableCell>
-              <TableCell sx={{ fontWeight: 600, color: theme.palette.primary.main }}>Utilisateur</TableCell>
-              <TableCell sx={{ fontWeight: 600, color: theme.palette.primary.main }}>Heure</TableCell>
+              <TableCell sx={{ fontWeight: 600, color: theme.palette.primary.main }}>
+                Événement
+              </TableCell>
+              <TableCell sx={{ fontWeight: 600, color: theme.palette.primary.main }}>
+                Utilisateur
+              </TableCell>
+              <TableCell sx={{ fontWeight: 600, color: theme.palette.primary.main }}>
+                Heure
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {displayActivities.map((activity, idx) => (
-              <TableRow key={idx} sx={{ '&:hover': { backgroundColor: theme.palette.background.default } }}>
+              <TableRow
+                key={idx}
+                sx={{ '&:hover': { backgroundColor: theme.palette.background.default } }}
+              >
                 <TableCell sx={{ fontSize: '13px' }}>{activity.event}</TableCell>
                 <TableCell sx={{ fontSize: '13px' }}>{activity.user}</TableCell>
-                <TableCell sx={{ fontSize: '13px', color: '#616161' }}>{activity.timestamp}</TableCell>
+                <TableCell sx={{ fontSize: '13px', color: '#616161' }}>
+                  {activity.timestamp}
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>

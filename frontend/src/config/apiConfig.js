@@ -9,7 +9,7 @@ const PUBLIC_ENDPOINTS = [
   '/auth/refresh-token',
   '/auth/forgot-password',
   '/auth/verify-email',
-  '/auth/password-reset'
+  '/auth/password-reset',
 ];
 
 // Cache configuration with 2-minute default duration (reduced from 5)
@@ -21,15 +21,15 @@ const CACHE_CONFIG = {
     '/auth/profile',
     '/procurement/my-tenders',
     '/procurement/my-offers',
-    '/notifications'
+    '/notifications',
   ],
   // Custom cache duration per endpoint (in milliseconds)
   CUSTOM_DURATION: {
     '/procurement/tenders': 5 * 60 * 1000,
     '/procurement/offers': 5 * 60 * 1000,
     '/search/tenders': 3 * 60 * 1000,
-    '/admin/statistics': 10 * 60 * 1000
-  }
+    '/admin/statistics': 10 * 60 * 1000,
+  },
 };
 
 export const API_CONFIG = {
@@ -43,29 +43,29 @@ export const API_CONFIG = {
     REGISTER: '/api/auth/register',
     LOGOUT: '/api/auth/logout',
     REFRESH: '/api/auth/refresh',
-    
+
     // Procurement
     TENDERS: '/api/procurement/tenders',
     OFFERS: '/api/procurement/offers',
     INVOICES: '/api/procurement/invoices',
     PURCHASE_ORDERS: '/api/procurement/purchase-orders',
-    
+
     // Supplier
     CATALOG: '/api/supplier/catalog',
     PRODUCTS: '/api/supplier/products',
     DOCUMENTS: '/api/supplier/documents',
     PROFILE: '/api/supplier/profile',
-    
+
     // Admin
     USERS: '/api/admin/users',
     STATISTICS: '/api/admin/statistics',
     AUDIT_LOGS: '/api/admin/audit-logs',
     FEATURES: '/api/admin/features',
-    
+
     // MFA
     MFA_SETUP: '/api/auth/mfa/setup',
-    MFA_VERIFY: '/api/auth/mfa/verify-setup'
-  }
+    MFA_VERIFY: '/api/auth/mfa/verify-setup',
+  },
 };
 
 export const getAuthHeader = () => {
@@ -78,12 +78,12 @@ export const getFullUrl = (endpoint) => {
 };
 
 export const isPublicEndpoint = (endpoint) => {
-  return PUBLIC_ENDPOINTS.some(ep => endpoint === ep || endpoint?.includes(ep));
+  return PUBLIC_ENDPOINTS.some((ep) => endpoint === ep || endpoint?.includes(ep));
 };
 
 export const shouldCache = (endpoint) => {
   if (!CACHE_CONFIG.ENABLED) return false;
-  return !CACHE_CONFIG.NEVER_CACHE.some(ep => endpoint.includes(ep));
+  return !CACHE_CONFIG.NEVER_CACHE.some((ep) => endpoint.includes(ep));
 };
 
 export const getCacheDuration = (endpoint) => {

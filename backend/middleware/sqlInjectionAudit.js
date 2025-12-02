@@ -69,14 +69,11 @@ const sqlInjectionDetector = (req, res, next) => {
       ip: req.clientIP,
       user: req.user?.id || 'anonymous',
       suspicious,
-      message: `Potential SQL injection attempt detected (${suspicious.length} patterns)`
+      message: `Potential SQL injection attempt detected (${suspicious.length} patterns)`,
     };
 
     ensureAuditLog();
-    fs.appendFileSync(
-      AUDIT_LOG_FILE,
-      JSON.stringify(auditEntry) + '\n'
-    );
+    fs.appendFileSync(AUDIT_LOG_FILE, JSON.stringify(auditEntry) + '\n');
 
     // Warning tracking removed;
     // Warning tracking removed);
@@ -92,12 +89,12 @@ const sqlInjectionDetector = (req, res, next) => {
 function verifyQuerySafety(query, values, result) {
   // Query already executed safely with parameterized query
   // This is a verification point
-  
+
   return {
     safe: true,
     parameterized: true,
     valueCount: Array.isArray(values) ? values.length : 0,
-    queryLength: query.length
+    queryLength: query.length,
   };
 }
 
@@ -113,7 +110,7 @@ function recordQueryAudit(query, values, userId, safe = true) {
     safe,
     parameterized: true, // Verify using parameterized queries
     valueCount: Array.isArray(values) ? values.length : 0,
-    queryPattern: query.substring(0, 100) // First 100 chars only
+    queryPattern: query.substring(0, 100), // First 100 chars only
   };
 
   queryAuditTrail.push(record);
@@ -134,15 +131,16 @@ function recordQueryAudit(query, values, userId, safe = true) {
  */
 function getAuditSummary() {
   const total = queryAuditTrail.length;
-  const unsafe = queryAuditTrail.filter(q => !q.safe).length;
-  const parameterized = queryAuditTrail.filter(q => q.parameterized).length;
+  const unsafe = queryAuditTrail.filter((q) => !q.safe).length;
+  const parameterized = queryAuditTrail.filter((q) => q.parameterized).length;
 
   return {
     totalQueries: total,
     unsafeQueries: unsafe,
     parameterizedQueries: parameterized,
     safetyRate: total > 0 ? ((parameterized / total) * 100).toFixed(2) + '%' : 'N/A',
-    lastAuditTime: queryAuditTrail.length > 0 ? queryAuditTrail[queryAuditTrail.length - 1].timestamp : null
+    lastAuditTime:
+      queryAuditTrail.length > 0 ? queryAuditTrail[queryAuditTrail.length - 1].timestamp : null,
   };
 }
 
@@ -151,17 +149,19 @@ function getAuditSummary() {
  */
 function exportAuditLogs(limit = 100) {
   ensureAuditLog();
-  
+
   try {
     const content = fs.readFileSync(AUDIT_LOG_FILE, 'utf8');
     const lines = content.trim().split('\n').slice(-limit);
-    return lines.map(line => {
-      try {
-        return JSON.parse(line);
-      } catch {
-        return null;
-      }
-    }).filter(Boolean);
+    return lines
+      .map((line) => {
+        try {
+          return JSON.parse(line);
+        } catch {
+          return null;
+        }
+      })
+      .filter(Boolean);
   } catch {
     return [];
   }
@@ -173,5 +173,5 @@ module.exports = {
   verifyQuerySafety,
   recordQueryAudit,
   getAuditSummary,
-  exportAuditLogs
+  exportAuditLogs,
 };

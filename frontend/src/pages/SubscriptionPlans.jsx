@@ -28,7 +28,7 @@ export default function SubscriptionPlans() {
       period: 'Gratuit',
       description: 'Parfait pour débuter',
       features: [
-        'Jusqu\'à 5 appels d\'offres',
+        "Jusqu'à 5 appels d'offres",
         'Accès basique aux fournisseurs',
         'Support par email',
         'Rapports basiques',
@@ -43,13 +43,13 @@ export default function SubscriptionPlans() {
       period: '/mois',
       description: 'Pour les entreprises actives',
       features: [
-        'Appels d\'offres illimités',
+        "Appels d'offres illimités",
         'Accès complet aux fournisseurs',
         'Support prioritaire',
         'Analytics avancées',
         'Messagerie illimitée',
         'Export de données',
-        'API d\'accès',
+        "API d'accès",
       ],
       popular: true,
     },
@@ -79,11 +79,15 @@ export default function SubscriptionPlans() {
     <Box sx={{ backgroundColor: '#fafafa', paddingY: '40px' }}>
       <Container maxWidth="lg">
         <Box sx={{ textAlign: 'center', marginBottom: '48px' }}>
-          <Typography variant="h3" sx={{ fontWeight: 700, color: theme.palette.text.primary, marginBottom: '16px' }}>
+          <Typography
+            variant="h3"
+            sx={{ fontWeight: 700, color: theme.palette.text.primary, marginBottom: '16px' }}
+          >
             Plans d'Abonnement
           </Typography>
           <Typography sx={{ fontSize: '16px', color: '#666', maxWidth: '600px', margin: '0 auto' }}>
-            Choisissez le plan qui convient le mieux à vos besoins. Vous pouvez changer de plan à tout moment.
+            Choisissez le plan qui convient le mieux à vos besoins. Vous pouvez changer de plan à
+            tout moment.
           </Typography>
         </Box>
 
@@ -100,28 +104,39 @@ export default function SubscriptionPlans() {
                 }}
               >
                 {plan.popular && (
-                  <Box sx={{
-                    position: 'absolute',
-                    top: '-12px',
-                    left: '50%',
-                    transform: 'translateX(-50%)',
-                    backgroundColor: theme.palette.primary.main,
-                    color: '#fff',
-                    padding: '6px 16px',
-                    borderRadius: '20px',
-                    fontSize: '12px',
-                    fontWeight: 600,
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '6px',
-                  }}>
+                  <Box
+                    sx={{
+                      position: 'absolute',
+                      top: '-12px',
+                      left: '50%',
+                      transform: 'translateX(-50%)',
+                      backgroundColor: theme.palette.primary.main,
+                      color: '#fff',
+                      padding: '6px 16px',
+                      borderRadius: '20px',
+                      fontSize: '12px',
+                      fontWeight: 600,
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '6px',
+                    }}
+                  >
                     <StarIcon sx={{ fontSize: '14px' }} />
                     Le plus populaire
                   </Box>
                 )}
 
-                <CardContent sx={{ flex: 1, display: 'flex', flexDirection: 'column', padding: '32px 24px' }}>
-                  <Typography sx={{ fontWeight: 600, fontSize: '24px', color: theme.palette.text.primary, marginBottom: '8px' }}>
+                <CardContent
+                  sx={{ flex: 1, display: 'flex', flexDirection: 'column', padding: '32px 24px' }}
+                >
+                  <Typography
+                    sx={{
+                      fontWeight: 600,
+                      fontSize: '24px',
+                      color: theme.palette.text.primary,
+                      marginBottom: '8px',
+                    }}
+                  >
                     {plan.name}
                   </Typography>
                   <Typography sx={{ fontSize: '12px', color: '#666', marginBottom: '24px' }}>
@@ -129,7 +144,9 @@ export default function SubscriptionPlans() {
                   </Typography>
 
                   <Box sx={{ marginBottom: '32px' }}>
-                    <Typography sx={{ fontSize: '32px', fontWeight: 700, color: theme.palette.primary.main }}>
+                    <Typography
+                      sx={{ fontSize: '32px', fontWeight: 700, color: theme.palette.primary.main }}
+                    >
                       {plan.price}
                       <span style={{ fontSize: '14px', fontWeight: 400, color: '#666' }}>
                         {plan.period && ` ${plan.period}`}
@@ -154,7 +171,7 @@ export default function SubscriptionPlans() {
                       fontWeight: 600,
                       '&:hover': {
                         backgroundColor: plan.popular ? '#003d7a' : '#f5f5f5',
-                      }
+                      },
                     }}
                   >
                     Choisir ce plan
@@ -169,7 +186,7 @@ export default function SubscriptionPlans() {
                         <ListItemText
                           primary={feature}
                           primaryTypographyProps={{
-                            sx: { fontSize: '14px', color: theme.palette.text.primary }
+                            sx: { fontSize: '14px', color: theme.palette.text.primary },
                           }}
                         />
                       </ListItem>
@@ -183,7 +200,15 @@ export default function SubscriptionPlans() {
 
         {/* FAQ Section */}
         <Box sx={{ marginTop: '64px' }}>
-          <Typography variant="h4" sx={{ fontWeight: 600, color: theme.palette.text.primary, marginBottom: '32px', textAlign: 'center' }}>
+          <Typography
+            variant="h4"
+            sx={{
+              fontWeight: 600,
+              color: theme.palette.text.primary,
+              marginBottom: '32px',
+              textAlign: 'center',
+            }}
+          >
             Questions Fréquemment Posées
           </Typography>
 
@@ -191,11 +216,18 @@ export default function SubscriptionPlans() {
             <Grid xs={12} lg={6}>
               <Card sx={{ border: '1px solid #e0e0e0' }}>
                 <CardContent>
-                  <Typography sx={{ fontWeight: 600, color: theme.palette.primary.main, marginBottom: '12px' }}>
+                  <Typography
+                    sx={{
+                      fontWeight: 600,
+                      color: theme.palette.primary.main,
+                      marginBottom: '12px',
+                    }}
+                  >
                     Puis-je changer de plan?
                   </Typography>
                   <Typography sx={{ fontSize: '14px', color: '#666' }}>
-                    Oui, vous pouvez changer de plan à tout moment. Les modifications prennent effet immédiatement.
+                    Oui, vous pouvez changer de plan à tout moment. Les modifications prennent effet
+                    immédiatement.
                   </Typography>
                 </CardContent>
               </Card>
@@ -204,11 +236,18 @@ export default function SubscriptionPlans() {
             <Grid xs={12} lg={6}>
               <Card sx={{ border: '1px solid #e0e0e0' }}>
                 <CardContent>
-                  <Typography sx={{ fontWeight: 600, color: theme.palette.primary.main, marginBottom: '12px' }}>
+                  <Typography
+                    sx={{
+                      fontWeight: 600,
+                      color: theme.palette.primary.main,
+                      marginBottom: '12px',
+                    }}
+                  >
                     Y a-t-il une période d'essai?
                   </Typography>
                   <Typography sx={{ fontSize: '14px', color: '#666' }}>
-                    Oui, le plan Starter est gratuit. Commencez dès aujourd'hui sans carte de crédit.
+                    Oui, le plan Starter est gratuit. Commencez dès aujourd'hui sans carte de
+                    crédit.
                   </Typography>
                 </CardContent>
               </Card>
@@ -217,7 +256,13 @@ export default function SubscriptionPlans() {
             <Grid xs={12} lg={6}>
               <Card sx={{ border: '1px solid #e0e0e0' }}>
                 <CardContent>
-                  <Typography sx={{ fontWeight: 600, color: theme.palette.primary.main, marginBottom: '12px' }}>
+                  <Typography
+                    sx={{
+                      fontWeight: 600,
+                      color: theme.palette.primary.main,
+                      marginBottom: '12px',
+                    }}
+                  >
                     Que se passe-t-il si j'annule?
                   </Typography>
                   <Typography sx={{ fontSize: '14px', color: '#666' }}>
@@ -230,7 +275,13 @@ export default function SubscriptionPlans() {
             <Grid xs={12} lg={6}>
               <Card sx={{ border: '1px solid #e0e0e0' }}>
                 <CardContent>
-                  <Typography sx={{ fontWeight: 600, color: theme.palette.primary.main, marginBottom: '12px' }}>
+                  <Typography
+                    sx={{
+                      fontWeight: 600,
+                      color: theme.palette.primary.main,
+                      marginBottom: '12px',
+                    }}
+                  >
                     Offrez-vous des rabais?
                   </Typography>
                   <Typography sx={{ fontSize: '14px', color: '#666' }}>

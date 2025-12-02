@@ -20,7 +20,7 @@ import {
   IconButton,
   InputAdornment,
   Alert,
-  CircularProgress
+  CircularProgress,
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import BlockIcon from '@mui/icons-material/Block';
@@ -36,18 +36,18 @@ const ITEMS_PER_PAGE = 10;
 
 // Role labels en français
 const roleLabels = {
-  'buyer': 'Acheteur',
-  'supplier': 'Fournisseur',
-  'admin': 'Administrateur',
-  'super_admin': 'Super Admin'
+  buyer: 'Acheteur',
+  supplier: 'Fournisseur',
+  admin: 'Administrateur',
+  super_admin: 'Super Admin',
 };
 
 // Status labels en français
 const statusLabels = {
-  'active': 'Actif',
-  'blocked': 'Bloqué',
-  'inactive': 'Inactif',
-  'pending': 'En attente'
+  active: 'Actif',
+  blocked: 'Bloqué',
+  inactive: 'Inactif',
+  pending: 'En attente',
 };
 
 export default function UserRoleManagement() {
@@ -55,10 +55,10 @@ export default function UserRoleManagement() {
 
   // Role colors - must be inside component after theme is defined
   const roleColors = {
-    'buyer': theme.palette.primary.main,
-    'supplier': '#2E7D32',
-    'admin': '#F57C00',
-    'super_admin': '#7B1FA2'
+    buyer: theme.palette.primary.main,
+    supplier: '#2E7D32',
+    admin: '#F57C00',
+    super_admin: '#7B1FA2',
   };
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -78,7 +78,7 @@ export default function UserRoleManagement() {
       company: 'Entreprise Acheteur 1',
       role: 'buyer',
       status: 'active',
-      joinedDate: '2024-11-01'
+      joinedDate: '2024-11-01',
     },
     {
       id: 2,
@@ -86,7 +86,7 @@ export default function UserRoleManagement() {
       company: 'Entreprise Fournisseur 1',
       role: 'supplier',
       status: 'active',
-      joinedDate: '2024-11-02'
+      joinedDate: '2024-11-02',
     },
     {
       id: 3,
@@ -94,7 +94,7 @@ export default function UserRoleManagement() {
       company: 'Administration',
       role: 'admin',
       status: 'active',
-      joinedDate: '2024-11-03'
+      joinedDate: '2024-11-03',
     },
     {
       id: 4,
@@ -102,7 +102,7 @@ export default function UserRoleManagement() {
       company: 'Entreprise Fournisseur 2',
       role: 'supplier',
       status: 'active',
-      joinedDate: '2024-11-04'
+      joinedDate: '2024-11-04',
     },
     {
       id: 5,
@@ -110,8 +110,8 @@ export default function UserRoleManagement() {
       company: 'Entreprise Acheteur 2',
       role: 'buyer',
       status: 'blocked',
-      joinedDate: '2024-11-05'
-    }
+      joinedDate: '2024-11-05',
+    },
   ];
 
   useEffect(() => {
@@ -139,10 +139,13 @@ export default function UserRoleManagement() {
     }
   }, [search, currentPage]);
 
-  const filteredUsers = Array.isArray(users) ? users.filter(u =>
-    (u.email?.toLowerCase().includes(search.toLowerCase())) ||
-    (u.company?.toLowerCase().includes(search.toLowerCase()))
-  ) : [];
+  const filteredUsers = Array.isArray(users)
+    ? users.filter(
+        (u) =>
+          u.email?.toLowerCase().includes(search.toLowerCase()) ||
+          u.company?.toLowerCase().includes(search.toLowerCase())
+      )
+    : [];
 
   const totalPages = Math.ceil(filteredUsers.length / ITEMS_PER_PAGE);
 
@@ -158,12 +161,10 @@ export default function UserRoleManagement() {
     try {
       setUpdating(true);
       setErrorMsg('');
-      
+
       await adminAPI.users.updateRole(editingUser.id, selectedRole);
-      
-      setUsers(users.map(u =>
-        u.id === editingUser.id ? { ...u, role: selectedRole } : u
-      ));
+
+      setUsers(users.map((u) => (u.id === editingUser.id ? { ...u, role: selectedRole } : u)));
       setSuccessMsg(`Rôle mis à jour pour ${editingUser.email}`);
       setOpenDialog(false);
       setTimeout(() => setSuccessMsg(''), 3000);
@@ -180,12 +181,10 @@ export default function UserRoleManagement() {
       setUpdating(true);
       setErrorMsg('');
       const newStatus = currentStatus === 'active' ? 'blocked' : 'active';
-      
+
       await adminAPI.users.toggleBlock(userId, newStatus === 'blocked');
-      
-      setUsers(users.map(u =>
-        u.id === userId ? { ...u, status: newStatus } : u
-      ));
+
+      setUsers(users.map((u) => (u.id === userId ? { ...u, status: newStatus } : u)));
       setSuccessMsg(`Utilisateur ${newStatus === 'blocked' ? 'bloqué' : 'débloqué'}`);
       setTimeout(() => setSuccessMsg(''), 3000);
     } catch (error) {
@@ -200,16 +199,16 @@ export default function UserRoleManagement() {
     try {
       setUpdating(true);
       setErrorMsg('');
-      const user = users.find(u => u.email === email);
+      const user = users.find((u) => u.email === email);
       if (!user) throw new Error('Utilisateur non trouvé');
-      
+
       await adminAPI.users.resetPassword(user.id);
-      
+
       setSuccessMsg(`Email de réinitialisation envoyé à ${email}`);
       setTimeout(() => setSuccessMsg(''), 3000);
     } catch (error) {
       const formatted = errorHandler.getUserMessage(error);
-      setErrorMsg(formatted.message || 'Erreur lors de l\'envoi de l\'email');
+      setErrorMsg(formatted.message || "Erreur lors de l'envoi de l'email");
     } finally {
       setUpdating(false);
     }
@@ -221,10 +220,10 @@ export default function UserRoleManagement() {
     try {
       setUpdating(true);
       setErrorMsg('');
-      
+
       await adminAPI.users.delete(userId);
-      
-      setUsers(users.filter(u => u.id !== userId));
+
+      setUsers(users.filter((u) => u.id !== userId));
       setSuccessMsg(`Utilisateur ${email} supprimé`);
       setTimeout(() => setSuccessMsg(''), 3000);
     } catch (error) {
@@ -240,7 +239,7 @@ export default function UserRoleManagement() {
       buyer: 'Acheteur',
       supplier: 'Fournisseur',
       admin: 'Administrateur',
-      super_admin: 'Super Administrateur'
+      super_admin: 'Super Administrateur',
     };
     return labels[role] || role;
   };
@@ -251,8 +250,16 @@ export default function UserRoleManagement() {
 
   return (
     <Box>
-      {successMsg && <Alert severity="success" sx={{ mb: 2 }}>{successMsg}</Alert>}
-      {errorMsg && <Alert severity="error" sx={{ mb: 2 }}>{errorMsg}</Alert>}
+      {successMsg && (
+        <Alert severity="success" sx={{ mb: 2 }}>
+          {successMsg}
+        </Alert>
+      )}
+      {errorMsg && (
+        <Alert severity="error" sx={{ mb: 2 }}>
+          {errorMsg}
+        </Alert>
+      )}
 
       <Box sx={{ mb: 3, display: 'flex', gap: 1.5 }}>
         <TextField
@@ -267,31 +274,62 @@ export default function UserRoleManagement() {
           sx={{ flex: 1 }}
           disabled={loading}
           InputProps={{
-            endAdornment: <InputAdornment position="end"><SearchIcon /></InputAdornment>
+            endAdornment: (
+              <InputAdornment position="end">
+                <SearchIcon />
+              </InputAdornment>
+            ),
           }}
         />
       </Box>
 
-      {loading ? <LoadingSpinner message="Chargement des utilisateurs..." /> : (
+      {loading ? (
+        <LoadingSpinner message="Chargement des utilisateurs..." />
+      ) : (
         <>
           {filteredUsers.length === 0 ? (
             <Alert severity="info">Aucun résultat trouvé</Alert>
           ) : (
-            <Paper sx={{ border: '1px solid #E0E0E0', borderRadius: '8px', overflow: 'hidden', boxShadow: 'none' }}>
+            <Paper
+              sx={{
+                border: '1px solid #E0E0E0',
+                borderRadius: '8px',
+                overflow: 'hidden',
+                boxShadow: 'none',
+              }}
+            >
               <Table>
                 <TableHead sx={{ backgroundColor: '#F5F5F5' }}>
                   <TableRow>
-                    <TableCell sx={{ fontWeight: 600, color: theme.palette.primary.main }}>Email</TableCell>
-                    <TableCell sx={{ fontWeight: 600, color: theme.palette.primary.main }}>Entreprise</TableCell>
-                    <TableCell sx={{ fontWeight: 600, color: theme.palette.primary.main }}>Rôle</TableCell>
-                    <TableCell sx={{ fontWeight: 600, color: theme.palette.primary.main }}>Statut</TableCell>
-                    <TableCell sx={{ fontWeight: 600, color: theme.palette.primary.main }}>Date d\'Adhésion</TableCell>
-                    <TableCell sx={{ fontWeight: 600, color: theme.palette.primary.main }} align="center">Actions</TableCell>
+                    <TableCell sx={{ fontWeight: 600, color: theme.palette.primary.main }}>
+                      Email
+                    </TableCell>
+                    <TableCell sx={{ fontWeight: 600, color: theme.palette.primary.main }}>
+                      Entreprise
+                    </TableCell>
+                    <TableCell sx={{ fontWeight: 600, color: theme.palette.primary.main }}>
+                      Rôle
+                    </TableCell>
+                    <TableCell sx={{ fontWeight: 600, color: theme.palette.primary.main }}>
+                      Statut
+                    </TableCell>
+                    <TableCell sx={{ fontWeight: 600, color: theme.palette.primary.main }}>
+                      Date d\'Adhésion
+                    </TableCell>
+                    <TableCell
+                      sx={{ fontWeight: 600, color: theme.palette.primary.main }}
+                      align="center"
+                    >
+                      Actions
+                    </TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {filteredUsers.map(user => (
-                    <TableRow key={user.id} sx={{ '&:hover': { backgroundColor: theme.palette.background.default } }}>
+                  {filteredUsers.map((user) => (
+                    <TableRow
+                      key={user.id}
+                      sx={{ '&:hover': { backgroundColor: theme.palette.background.default } }}
+                    >
                       <TableCell sx={{ fontSize: '13px' }}>{user.email}</TableCell>
                       <TableCell sx={{ fontSize: '13px' }}>{user.company}</TableCell>
                       <TableCell>
@@ -299,9 +337,11 @@ export default function UserRoleManagement() {
                           label={roleLabels[user.role] || user.role}
                           size="small"
                           sx={{
-                            backgroundColor: roleColors[user.role] ? `${roleColors[user.role]}20` : theme.palette.divider,
+                            backgroundColor: roleColors[user.role]
+                              ? `${roleColors[user.role]}20`
+                              : theme.palette.divider,
                             color: roleColors[user.role] || '#616161',
-                            fontWeight: 500
+                            fontWeight: 500,
                           }}
                         />
                       </TableCell>
@@ -312,23 +352,47 @@ export default function UserRoleManagement() {
                           sx={{
                             backgroundColor: user.status === 'active' ? '#E8F5E9' : '#FFEBEE',
                             color: user.status === 'active' ? '#2E7D32' : '#C62828',
-                            fontWeight: 500
+                            fontWeight: 500,
                           }}
                         />
                       </TableCell>
                       <TableCell sx={{ fontSize: '13px' }}>{user.joinedDate}</TableCell>
                       <TableCell align="center">
                         <Box sx={{ display: 'flex', gap: 0.5, justifyContent: 'center' }}>
-                          <IconButton size="small" onClick={() => handleEditRole(user)} disabled={updating} title="Modifier">
-                            <EditIcon sx={{ fontSize: '18px', color: theme.palette.primary.main }} />
+                          <IconButton
+                            size="small"
+                            onClick={() => handleEditRole(user)}
+                            disabled={updating}
+                            title="Modifier"
+                          >
+                            <EditIcon
+                              sx={{ fontSize: '18px', color: theme.palette.primary.main }}
+                            />
                           </IconButton>
-                          <IconButton size="small" onClick={() => handleBlockUser(user.id, user.status)} disabled={updating} title={user.status === 'active' ? 'Bloquer' : 'Débloquer'}>
+                          <IconButton
+                            size="small"
+                            onClick={() => handleBlockUser(user.id, user.status)}
+                            disabled={updating}
+                            title={user.status === 'active' ? 'Bloquer' : 'Débloquer'}
+                          >
                             <BlockIcon sx={{ fontSize: '18px', color: '#F57C00' }} />
                           </IconButton>
-                          <IconButton size="small" onClick={() => handleResetPassword(user.email)} disabled={updating} title="Réinitialiser le mot de passe">
-                            <LockResetIcon sx={{ fontSize: '18px', color: theme.palette.primary.main }} />
+                          <IconButton
+                            size="small"
+                            onClick={() => handleResetPassword(user.email)}
+                            disabled={updating}
+                            title="Réinitialiser le mot de passe"
+                          >
+                            <LockResetIcon
+                              sx={{ fontSize: '18px', color: theme.palette.primary.main }}
+                            />
                           </IconButton>
-                          <IconButton size="small" onClick={() => handleDeleteUser(user.id, user.email)} disabled={updating} title="Supprimer">
+                          <IconButton
+                            size="small"
+                            onClick={() => handleDeleteUser(user.id, user.email)}
+                            disabled={updating}
+                            title="Supprimer"
+                          >
                             <DeleteForeverIcon sx={{ fontSize: '18px', color: '#C62828' }} />
                           </IconButton>
                         </Box>
@@ -355,7 +419,12 @@ export default function UserRoleManagement() {
       <Dialog open={openDialog} onClose={() => setOpenDialog(false)} maxWidth="sm" fullWidth>
         <DialogTitle>Modifier le Rôle de l\'Utilisateur</DialogTitle>
         <DialogContent sx={{ py: 3 }}>
-          <Select fullWidth value={selectedRole} onChange={(e) => setSelectedRole(e.target.value)} disabled={updating}>
+          <Select
+            fullWidth
+            value={selectedRole}
+            onChange={(e) => setSelectedRole(e.target.value)}
+            disabled={updating}
+          >
             <MenuItem value="buyer">Acheteur</MenuItem>
             <MenuItem value="supplier">Fournisseur</MenuItem>
             <MenuItem value="admin">Administrateur</MenuItem>
@@ -363,8 +432,15 @@ export default function UserRoleManagement() {
           </Select>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setOpenDialog(false)} disabled={updating}>Annuler</Button>
-          <Button onClick={handleSaveRole} variant="contained" sx={{ backgroundColor: theme.palette.primary.main }} disabled={updating}>
+          <Button onClick={() => setOpenDialog(false)} disabled={updating}>
+            Annuler
+          </Button>
+          <Button
+            onClick={handleSaveRole}
+            variant="contained"
+            sx={{ backgroundColor: theme.palette.primary.main }}
+            disabled={updating}
+          >
             {updating ? <CircularProgress size={20} sx={{ color: '#FFF' }} /> : 'Enregistrer'}
           </Button>
         </DialogActions>

@@ -32,13 +32,13 @@ export const useWebSocket = (userId) => {
       const token = localStorage.getItem('token');
       const newSocket = io(getSocketURL(), {
         auth: {
-          token
+          token,
         },
         reconnection: true,
         reconnectionDelay: 1000,
         reconnectionDelayMax: 5000,
         reconnectionAttempts: maxReconnectAttempts,
-        transports: ['websocket', 'polling']
+        transports: ['websocket', 'polling'],
       });
 
       socketRef.current = newSocket;
@@ -75,7 +75,7 @@ export const useWebSocket = (userId) => {
           title: 'Nouvelle Offre',
           message: `Offre de ${data.supplierName || 'Fournisseur'} - ${data.price} ${data.currency}`,
           data,
-          icon: '📦'
+          icon: '📦',
         });
         setLastUpdate(data.timestamp);
       });
@@ -84,10 +84,10 @@ export const useWebSocket = (userId) => {
         // Debug: removed;
         addNotification({
           type: 'offer-status',
-          title: 'Statut de l\'Offre Modifié',
+          title: "Statut de l'Offre Modifié",
           message: `Statut: ${data.status}`,
           data,
-          icon: '📋'
+          icon: '📋',
         });
         setLastUpdate(data.timestamp);
       });
@@ -98,10 +98,10 @@ export const useWebSocket = (userId) => {
         // Debug: removed;
         addNotification({
           type: 'tender',
-          title: 'Appel d\'Offres Modifié',
+          title: "Appel d'Offres Modifié",
           message: `Statut: ${data.status}`,
           data,
-          icon: '🎯'
+          icon: '🎯',
         });
         setLastUpdate(data.timestamp);
       });
@@ -110,10 +110,10 @@ export const useWebSocket = (userId) => {
         // Debug: removed;
         addNotification({
           type: 'tender-update',
-          title: 'Appel d\'Offres Mis à Jour',
+          title: "Appel d'Offres Mis à Jour",
           message: `${data.field} a été modifié`,
           data,
-          icon: '📝'
+          icon: '📝',
         });
         setLastUpdate(data.timestamp);
       });
@@ -127,7 +127,7 @@ export const useWebSocket = (userId) => {
           title: 'Nouveau Message',
           message: `De: ${data.senderName || 'Utilisateur'}`,
           data,
-          icon: '💬'
+          icon: '💬',
         });
         setLastUpdate(data.timestamp);
       });
@@ -149,7 +149,7 @@ export const useWebSocket = (userId) => {
           title: 'Nouvelle Évaluation',
           message: `${data.rating}⭐ de ${data.reviewer}`,
           data,
-          icon: '⭐'
+          icon: '⭐',
         });
         setLastUpdate(data.timestamp);
       });
@@ -161,7 +161,7 @@ export const useWebSocket = (userId) => {
           title: 'Nouvel Avis',
           message: `${data.title} - ${data.reviewer}`,
           data,
-          icon: '✍️'
+          icon: '✍️',
         });
         setLastUpdate(data.timestamp);
       });
@@ -175,7 +175,7 @@ export const useWebSocket = (userId) => {
           title: data.title,
           message: data.message,
           data,
-          icon: data.icon || '🔔'
+          icon: data.icon || '🔔',
         });
         setLastUpdate(data.timestamp);
       });
@@ -188,7 +188,7 @@ export const useWebSocket = (userId) => {
           message: data.message,
           data,
           icon: '🚨',
-          severity: 'critical'
+          severity: 'critical',
         });
         setLastUpdate(data.timestamp);
       });
@@ -204,12 +204,12 @@ export const useWebSocket = (userId) => {
 
       newSocket.on('user-online', (data) => {
         // Debug: removed;
-        setOnlineUsers(prev => new Set([...prev, data.userId]));
+        setOnlineUsers((prev) => new Set([...prev, data.userId]));
       });
 
       newSocket.on('user-offline', (data) => {
         // Debug: removed;
-        setOnlineUsers(prev => {
+        setOnlineUsers((prev) => {
           const updated = new Set(prev);
           updated.delete(data.userId);
           return updated;
@@ -236,8 +236,8 @@ export const useWebSocket = (userId) => {
   const addNotification = useCallback((notification) => {
     const id = Date.now();
     const notificationWithId = { ...notification, id };
-    
-    setNotifications(prev => [...prev, notificationWithId]);
+
+    setNotifications((prev) => [...prev, notificationWithId]);
 
     // Auto-remove notification after 5 seconds
     setTimeout(() => {
@@ -249,7 +249,7 @@ export const useWebSocket = (userId) => {
    * Remove notification
    */
   const removeNotification = useCallback((id) => {
-    setNotifications(prev => prev.filter(n => n.id !== id));
+    setNotifications((prev) => prev.filter((n) => n.id !== id));
   }, []);
 
   /**
@@ -264,101 +264,134 @@ export const useWebSocket = (userId) => {
   /**
    * Join tender room
    */
-  const joinTender = useCallback((tenderId) => {
-    if (socket) {
-      socket.emit('join-tender', tenderId);
-    }
-  }, [socket]);
+  const joinTender = useCallback(
+    (tenderId) => {
+      if (socket) {
+        socket.emit('join-tender', tenderId);
+      }
+    },
+    [socket]
+  );
 
   /**
    * Leave tender room
    */
-  const leaveTender = useCallback((tenderId) => {
-    if (socket) {
-      socket.emit('leave-tender', tenderId);
-    }
-  }, [socket]);
+  const leaveTender = useCallback(
+    (tenderId) => {
+      if (socket) {
+        socket.emit('leave-tender', tenderId);
+      }
+    },
+    [socket]
+  );
 
   /**
    * Send new offer
    */
-  const sendOffer = useCallback((tenderId, offerData) => {
-    if (socket) {
-      socket.emit('new-offer', { tenderId, ...offerData });
-    }
-  }, [socket]);
+  const sendOffer = useCallback(
+    (tenderId, offerData) => {
+      if (socket) {
+        socket.emit('new-offer', { tenderId, ...offerData });
+      }
+    },
+    [socket]
+  );
 
   /**
    * Update tender status
    */
-  const updateTenderStatus = useCallback((tenderId, status, changedBy) => {
-    if (socket) {
-      socket.emit('tender-status-changed', { tenderId, status, changedBy });
-    }
-  }, [socket]);
+  const updateTenderStatus = useCallback(
+    (tenderId, status, changedBy) => {
+      if (socket) {
+        socket.emit('tender-status-changed', { tenderId, status, changedBy });
+      }
+    },
+    [socket]
+  );
 
   /**
    * Send message
    */
-  const sendMessage = useCallback((recipientId, message, senderName) => {
-    if (socket) {
-      socket.emit('new-message', { recipientId, message, senderName });
-    }
-  }, [socket]);
+  const sendMessage = useCallback(
+    (recipientId, message, senderName) => {
+      if (socket) {
+        socket.emit('new-message', { recipientId, message, senderName });
+      }
+    },
+    [socket]
+  );
 
   /**
    * Emit typing indicator
    */
-  const emitTyping = useCallback((recipientId, userId) => {
-    if (socket) {
-      socket.emit('user-typing', { recipientId, userId });
-    }
-  }, [socket]);
+  const emitTyping = useCallback(
+    (recipientId, userId) => {
+      if (socket) {
+        socket.emit('user-typing', { recipientId, userId });
+      }
+    },
+    [socket]
+  );
 
   /**
    * Emit stop typing
    */
-  const emitStopTyping = useCallback((recipientId, userId) => {
-    if (socket) {
-      socket.emit('user-stop-typing', { recipientId, userId });
-    }
-  }, [socket]);
+  const emitStopTyping = useCallback(
+    (recipientId, userId) => {
+      if (socket) {
+        socket.emit('user-stop-typing', { recipientId, userId });
+      }
+    },
+    [socket]
+  );
 
   /**
    * Send rating
    */
-  const sendRating = useCallback((supplierId, rating, reviewer, comment) => {
-    if (socket) {
-      socket.emit('new-rating', { supplierId, rating, reviewer, comment });
-    }
-  }, [socket]);
+  const sendRating = useCallback(
+    (supplierId, rating, reviewer, comment) => {
+      if (socket) {
+        socket.emit('new-rating', { supplierId, rating, reviewer, comment });
+      }
+    },
+    [socket]
+  );
 
   /**
    * Send review
    */
-  const sendReview = useCallback((supplierId, title, content, reviewer) => {
-    if (socket) {
-      socket.emit('new-review', { supplierId, title, content, reviewer });
-    }
-  }, [socket]);
+  const sendReview = useCallback(
+    (supplierId, title, content, reviewer) => {
+      if (socket) {
+        socket.emit('new-review', { supplierId, title, content, reviewer });
+      }
+    },
+    [socket]
+  );
 
   /**
    * Send notification (admin)
    */
-  const sendNotification = useCallback((recipientId, notification) => {
-    if (socket) {
-      socket.emit('send-notification', { userId: recipientId, ...notification });
-    }
-  }, [socket]);
+  const sendNotification = useCallback(
+    (recipientId, notification) => {
+      if (socket) {
+        socket.emit('send-notification', { userId: recipientId, ...notification });
+      }
+    },
+    [socket]
+  );
 
   /**
    * Send alert (admin)
    */
-  const sendAlert = useCallback((recipientId, alert) => {
-    if (socket) {
-      socket.emit('send-alert', { userId: recipientId, ...alert });
-    }
-  }, [socket]);
+  const sendAlert = useCallback(
+    (recipientId, alert) => {
+      if (socket) {
+        socket.emit('send-alert', { userId: recipientId, ...alert });
+      }
+    },
+    [socket]
+  );
 
   return {
     socket,
@@ -379,7 +412,7 @@ export const useWebSocket = (userId) => {
     sendRating,
     sendReview,
     sendNotification,
-    sendAlert
+    sendAlert,
   };
 };
 

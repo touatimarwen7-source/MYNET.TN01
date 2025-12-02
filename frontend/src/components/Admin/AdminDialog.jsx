@@ -1,12 +1,5 @@
 import React from 'react';
-import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  Button,
-  Box,
-} from '@mui/material';
+import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Box } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import institutionalTheme from '../../theme/theme';
 
@@ -55,12 +48,7 @@ export default function AdminDialog({
         }}
       >
         {title}
-        <Button
-          size="small"
-          onClick={onClose}
-          disabled={loading}
-          sx={{ minWidth: 'auto', p: 0.5 }}
-        >
+        <Button size="small" onClick={onClose} disabled={loading} sx={{ minWidth: 'auto', p: 0.5 }}>
           <CloseIcon fontSize="small" />
         </Button>
       </DialogTitle>

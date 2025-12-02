@@ -1,4 +1,14 @@
-import { Box, Typography, TextField, FormControl, InputLabel, Select, MenuItem, FormControlLabel, Checkbox } from '@mui/material';
+import {
+  Box,
+  Typography,
+  TextField,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  FormControlLabel,
+  Checkbox,
+} from '@mui/material';
 import institutionalTheme from '../../theme/theme';
 import { THEME_COLORS, THEME_STYLES } from './themeHelpers';
 
@@ -12,14 +22,12 @@ const CATEGORIES = [
 
 export default function StepOne({ formData, handleChange, loading }) {
   const theme = institutionalTheme;
-  
+
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
       {/* Consultation Number */}
       <Box>
-        <Typography sx={THEME_STYLES.label}>
-          N° Consultation *
-        </Typography>
+        <Typography sx={THEME_STYLES.label}>N° Consultation *</Typography>
         <TextField
           fullWidth
           placeholder="Ex: CONS-2024-001"
@@ -33,9 +41,7 @@ export default function StepOne({ formData, handleChange, loading }) {
 
       {/* Title */}
       <Box>
-        <Typography sx={THEME_STYLES.label}>
-          Titre de l'Appel d'Offres *
-        </Typography>
+        <Typography sx={THEME_STYLES.label}>Titre de l'Appel d'Offres *</Typography>
         <TextField
           fullWidth
           placeholder="Ex: Fourniture d'équipements informatiques"
@@ -53,9 +59,7 @@ export default function StepOne({ formData, handleChange, loading }) {
 
       {/* Description */}
       <Box>
-        <Typography sx={THEME_STYLES.label}>
-          Description Détaillée *
-        </Typography>
+        <Typography sx={THEME_STYLES.label}>Description Détaillée *</Typography>
         <TextField
           fullWidth
           placeholder="Décrivez l'objet de votre appel d'offres en détail..."

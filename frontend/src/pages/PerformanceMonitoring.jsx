@@ -1,6 +1,15 @@
 import { useEffect } from 'react';
 import institutionalTheme from '../theme/theme';
-import { Container, Box, Card, CardContent, CardHeader, Grid, Typography, LinearProgress } from '@mui/material';
+import {
+  Container,
+  Box,
+  Card,
+  CardContent,
+  CardHeader,
+  Grid,
+  Typography,
+  LinearProgress,
+} from '@mui/material';
 import { setPageTitle } from '../utils/pageTitle';
 
 export default function PerformanceMonitoring() {
@@ -9,7 +18,7 @@ export default function PerformanceMonitoring() {
     { name: 'Temps de réponse du serveur', value: 95, target: 99 },
     { name: 'Vitesse de chargement des pages', value: 87, target: 90 },
     { name: 'Disponibilité du système', value: 99.9, target: 99.9 },
-    { name: 'Utilisation mémoire', value: 62, target: 80 }
+    { name: 'Utilisation mémoire', value: 62, target: 80 },
   ];
 
   useEffect(() => {
@@ -17,9 +26,23 @@ export default function PerformanceMonitoring() {
   }, []);
 
   return (
-    <Box sx={{ backgroundColor: institutionalTheme.palette.background.default, paddingY: '40px', minHeight: '80vh' }}>
+    <Box
+      sx={{
+        backgroundColor: institutionalTheme.palette.background.default,
+        paddingY: '40px',
+        minHeight: '80vh',
+      }}
+    >
       <Container maxWidth="lg">
-        <Typography variant="h2" sx={{ fontSize: '32px', fontWeight: 600, color: institutionalTheme.palette.primary.main, mb: 3 }}>
+        <Typography
+          variant="h2"
+          sx={{
+            fontSize: '32px',
+            fontWeight: 600,
+            color: institutionalTheme.palette.primary.main,
+            mb: 3,
+          }}
+        >
           Surveillance des performances
         </Typography>
 
@@ -28,13 +51,29 @@ export default function PerformanceMonitoring() {
             <Grid xs={12} lg={6} key={idx}>
               <Card sx={{ border: '1px solid #E0E0E0' }}>
                 <CardContent>
-                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                      mb: 1,
+                    }}
+                  >
                     <Typography>{metric.name}</Typography>
-                    <Typography sx={{ color: metric.value >= metric.target ? '#4caf50' : '#ff9800', fontWeight: 600 }}>
+                    <Typography
+                      sx={{
+                        color: metric.value >= metric.target ? '#4caf50' : '#ff9800',
+                        fontWeight: 600,
+                      }}
+                    >
                       {metric.value}%
                     </Typography>
                   </Box>
-                  <LinearProgress variant="determinate" value={metric.value} sx={{ height: '8px', borderRadius: '4px' }} />
+                  <LinearProgress
+                    variant="determinate"
+                    value={metric.value}
+                    sx={{ height: '8px', borderRadius: '4px' }}
+                  />
                   <Typography variant="caption" sx={{ color: '#999', mt: 1, display: 'block' }}>
                     Objectif: {metric.target}%
                   </Typography>

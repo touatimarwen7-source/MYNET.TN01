@@ -14,7 +14,7 @@ import {
   FormControl,
   InputLabel,
   Alert,
-  Container
+  Container,
 } from '@mui/material';
 import { useOptimizedFetch } from '../hooks/useOptimizedFetch';
 import TenderCard from '../components/TenderCard';
@@ -25,23 +25,18 @@ const DEFAULT_PAGE_SIZE = 20;
 
 export default function TenderListOptimized() {
   const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
-  const {
-    data,
-    loading,
-    error,
-    pagination,
-    fetchData,
-    goToPage
-  } = useOptimizedFetch('/api/procurement/tenders');
+  const { data, loading, error, pagination, fetchData, goToPage } = useOptimizedFetch(
+    '/api/procurement/tenders'
+  );
 
   useEffect(() => {
     setPageTitle('قائمة المناقصات');
   }, []);
 
   useEffect(() => {
-    fetchData('/api/procurement/tenders', { 
-      page: pagination.page, 
-      limit: pageSize 
+    fetchData('/api/procurement/tenders', {
+      page: pagination.page,
+      limit: pageSize,
     });
   }, [pagination.page, pageSize, fetchData]);
 
@@ -59,12 +54,8 @@ export default function TenderListOptimized() {
         {/* Page Size Control */}
         <FormControl sx={{ minWidth: 200, mb: 2 }}>
           <InputLabel>عدد العناصر في الصفحة</InputLabel>
-          <Select 
-            value={pageSize} 
-            onChange={handlePageSizeChange}
-            label="عدد العناصر في الصفحة"
-          >
-            {PAGE_SIZE_OPTIONS.map(size => (
+          <Select value={pageSize} onChange={handlePageSizeChange} label="عدد العناصر في الصفحة">
+            {PAGE_SIZE_OPTIONS.map((size) => (
               <MenuItem key={size} value={size}>
                 {size}
               </MenuItem>
@@ -88,27 +79,22 @@ export default function TenderListOptimized() {
 
         {/* Tenders Grid */}
         {!loading && tenders.length > 0 && (
-          <Box sx={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))',
-            gap: 2,
-            mb: 3
-          }}>
-            {tenders.map(tender => (
-              <TenderCard 
-                key={tender.id} 
-                tender={tender}
-              />
+          <Box
+            sx={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))',
+              gap: 2,
+              mb: 3,
+            }}
+          >
+            {tenders.map((tender) => (
+              <TenderCard key={tender.id} tender={tender} />
             ))}
           </Box>
         )}
 
         {/* Empty State */}
-        {!loading && tenders.length === 0 && (
-          <Alert severity="info">
-            لا توجد مناقصات متاحة
-          </Alert>
-        )}
+        {!loading && tenders.length === 0 && <Alert severity="info">لا توجد مناقصات متاحة</Alert>}
 
         {/* Pagination Controls */}
         {!loading && maxPages > 1 && (

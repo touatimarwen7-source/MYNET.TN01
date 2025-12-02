@@ -13,7 +13,7 @@ import {
   Typography,
   Paper,
   Grid,
-  Button
+  Button,
 } from '@mui/material';
 import { useParallelFetch } from '../hooks/useOptimizedFetch';
 import { setPageTitle } from '../utils/pageTitle';
@@ -26,13 +26,13 @@ export default function TenderDetailOptimized({ tenderId }) {
     {
       key: 'tender',
       url: `/api/procurement/tenders/${tenderId}`,
-      params: {}
+      params: {},
     },
     {
       key: 'offers',
       url: `/api/procurement/tenders/${tenderId}/offers`,
-      params: { limit: 50, page: 1 }
-    }
+      params: { limit: 50, page: 1 },
+    },
   ]);
 
   useEffect(() => {
@@ -50,11 +50,11 @@ export default function TenderDetailOptimized({ tenderId }) {
     return {
       budget: new Intl.NumberFormat('fr-TN', {
         style: 'currency',
-        currency: tender.currency || 'TND'
+        currency: tender.currency || 'TND',
       }).format(tender.budget_max || 0),
       deadline: new Date(tender.deadline).toLocaleDateString('fr-TN'),
       offers: offers.length,
-      status: tender.status
+      status: tender.status,
     };
   }, [tender, offers]);
 
@@ -104,9 +104,7 @@ export default function TenderDetailOptimized({ tenderId }) {
                 <Typography variant="caption" sx={{ color: '#616161' }}>
                   الميزانية
                 </Typography>
-                <Typography variant="h6">
-                  {tenderStats.budget}
-                </Typography>
+                <Typography variant="h6">{tenderStats.budget}</Typography>
               </Paper>
             </Grid>
             <Grid xs={12} lg={6} lg={3}>
@@ -114,9 +112,7 @@ export default function TenderDetailOptimized({ tenderId }) {
                 <Typography variant="caption" sx={{ color: '#616161' }}>
                   آخر موعد
                 </Typography>
-                <Typography variant="h6">
-                  {tenderStats.deadline}
-                </Typography>
+                <Typography variant="h6">{tenderStats.deadline}</Typography>
               </Paper>
             </Grid>
             <Grid xs={12} lg={6} lg={3}>
@@ -124,9 +120,7 @@ export default function TenderDetailOptimized({ tenderId }) {
                 <Typography variant="caption" sx={{ color: '#616161' }}>
                   العروض المستلمة
                 </Typography>
-                <Typography variant="h6">
-                  {tenderStats.offers}
-                </Typography>
+                <Typography variant="h6">{tenderStats.offers}</Typography>
               </Paper>
             </Grid>
             <Grid xs={12} lg={6} lg={3}>
@@ -134,9 +128,7 @@ export default function TenderDetailOptimized({ tenderId }) {
                 <Typography variant="caption" sx={{ color: '#616161' }}>
                   الحالة
                 </Typography>
-                <Typography variant="h6">
-                  {tenderStats.status}
-                </Typography>
+                <Typography variant="h6">{tenderStats.status}</Typography>
               </Paper>
             </Grid>
           </Grid>
@@ -147,9 +139,7 @@ export default function TenderDetailOptimized({ tenderId }) {
           <Typography variant="h6" sx={{ fontWeight: 600, mb: 1 }}>
             الوصف
           </Typography>
-          <Typography sx={{ whiteSpace: 'pre-wrap' }}>
-            {tender.description}
-          </Typography>
+          <Typography sx={{ whiteSpace: 'pre-wrap' }}>{tender.description}</Typography>
         </Paper>
 
         {/* Offers Section */}
@@ -159,21 +149,20 @@ export default function TenderDetailOptimized({ tenderId }) {
           </Typography>
 
           {offers.length === 0 ? (
-            <Alert severity="info">
-              لم تصل أي عروض لهذه المناقصة حتى الآن
-            </Alert>
+            <Alert severity="info">لم تصل أي عروض لهذه المناقصة حتى الآن</Alert>
           ) : (
             <Grid container spacing={2}>
-              {offers.map(offer => (
+              {offers.map((offer) => (
                 <Grid xs={12} lg={6} md={4} key={offer.id}>
                   <Paper sx={{ p: 2, border: '1px solid #E0E0E0' }}>
                     <Typography variant="subtitle2" sx={{ fontWeight: 600 }}>
                       {offer.offer_number}
                     </Typography>
                     <Typography variant="body2" sx={{ color: '#616161', mt: 1 }}>
-                      المبلغ: {new Intl.NumberFormat('fr-TN', {
+                      المبلغ:{' '}
+                      {new Intl.NumberFormat('fr-TN', {
                         style: 'currency',
-                        currency: offer.currency || 'TND'
+                        currency: offer.currency || 'TND',
                       }).format(offer.total_amount)}
                     </Typography>
                     <Typography variant="body2" sx={{ color: '#616161', mt: 0.5 }}>

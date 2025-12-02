@@ -17,7 +17,9 @@ export default function PaymentOrders() {
   const fetchPaymentOrders = async () => {
     try {
       setLoading(true);
-      const response = await procurementAPI.getPurchaseOrders?.() || { data: { purchaseOrders: [] } };
+      const response = (await procurementAPI.getPurchaseOrders?.()) || {
+        data: { purchaseOrders: [] },
+      };
       setOrders(response.data.purchaseOrders || []);
     } catch (error) {
       setOrders([]);
@@ -32,7 +34,7 @@ export default function PaymentOrders() {
       approved: '#2e7d32',
       in_progress: '#0288d1',
       completed: '#1b5e20',
-      cancelled: '#c62828'
+      cancelled: '#c62828',
     };
     return colorMap[status] || '#616161';
   };
@@ -41,10 +43,12 @@ export default function PaymentOrders() {
     return new Intl.NumberFormat('fr-TN', { style: 'currency', currency }).format(amount);
   };
 
-  const filteredOrders = orders.filter(order => filter === 'all' || order.status === filter);
+  const filteredOrders = orders.filter((order) => filter === 'all' || order.status === filter);
 
   if (loading) {
-    return <Box sx={{ padding: '20px', textAlign: 'center' }}>Chargement des ordres de paiement...</Box>;
+    return (
+      <Box sx={{ padding: '20px', textAlign: 'center' }}>Chargement des ordres de paiement...</Box>
+    );
   }
 
   return (
@@ -59,8 +63,8 @@ export default function PaymentOrders() {
           { value: 'pending', label: 'En attente' },
           { value: 'approved', label: 'Approuvé' },
           { value: 'in_progress', label: 'En cours' },
-          { value: 'completed', label: 'Complété' }
-        ].map(tab => (
+          { value: 'completed', label: 'Complété' },
+        ].map((tab) => (
           <Button
             key={tab.value}
             variant={filter === tab.value ? 'contained' : 'outlined'}
@@ -73,34 +77,61 @@ export default function PaymentOrders() {
       </Stack>
 
       {filteredOrders.length === 0 ? (
-        <Card sx={{ backgroundColor: THEME_COLORS.bgPaper, border: '1px solid #E0E0E0', borderRadius: '4px' }}>
+        <Card
+          sx={{
+            backgroundColor: THEME_COLORS.bgPaper,
+            border: '1px solid #E0E0E0',
+            borderRadius: '4px',
+          }}
+        >
           <CardContent sx={{ textAlign: 'center', padding: '48px' }}>
             <Typography sx={{ fontSize: '24px', marginBottom: '12px' }}>📋</Typography>
-            <Typography sx={{ color: THEME_COLORS.textSecondary }}>Aucun ordre de paiement</Typography>
-            <Typography sx={{ fontSize: '13px', color: '#9e9e9e' }}>Les ordres apparaîtront ici lors de leur création</Typography>
+            <Typography sx={{ color: THEME_COLORS.textSecondary }}>
+              Aucun ordre de paiement
+            </Typography>
+            <Typography sx={{ fontSize: '13px', color: '#9e9e9e' }}>
+              Les ordres apparaîtront ici lors de leur création
+            </Typography>
           </CardContent>
         </Card>
       ) : (
         <Stack spacing={2}>
-          {filteredOrders.map(order => (
-            <Card key={order.id} sx={{ backgroundColor: THEME_COLORS.bgPaper, border: '1px solid #E0E0E0', borderRadius: '4px' }}>
+          {filteredOrders.map((order) => (
+            <Card
+              key={order.id}
+              sx={{
+                backgroundColor: THEME_COLORS.bgPaper,
+                border: '1px solid #E0E0E0',
+                borderRadius: '4px',
+              }}
+            >
               <CardContent sx={{ padding: '24px' }}>
-                <Stack direction={{ xs: 'column', md: 'row' }} justifyContent="space-between" sx={{ marginBottom: '16px' }}>
+                <Stack
+                  direction={{ xs: 'column', md: 'row' }}
+                  justifyContent="space-between"
+                  sx={{ marginBottom: '16px' }}
+                >
                   <Box>
-                    <Typography sx={{ fontWeight: 600, fontSize: '16px', color: theme.palette.text.primary }}>
+                    <Typography
+                      sx={{ fontWeight: 600, fontSize: '16px', color: theme.palette.text.primary }}
+                    >
                       {order.po_number || 'Numéro non défini'}
                     </Typography>
                     <Typography sx={{ fontSize: '13px', color: THEME_COLORS.textSecondary }}>
-                      {order.tender_title || 'Appel d\'offres'}
+                      {order.tender_title || "Appel d'offres"}
                     </Typography>
                   </Box>
                   <Chip
                     label={
-                      order.status === 'pending' ? 'En attente' :
-                      order.status === 'approved' ? 'Approuvé' :
-                      order.status === 'in_progress' ? 'En cours' :
-                      order.status === 'completed' ? 'Complété' :
-                      'Annulé'
+                      order.status === 'pending'
+                        ? 'En attente'
+                        : order.status === 'approved'
+                          ? 'Approuvé'
+                          : order.status === 'in_progress'
+                            ? 'En cours'
+                            : order.status === 'completed'
+                              ? 'Complété'
+                              : 'Annulé'
                     }
                     sx={{ backgroundColor: getStatusColor(order.status), color: '#FFFFFF' }}
                   />
@@ -108,25 +139,37 @@ export default function PaymentOrders() {
 
                 <Stack spacing={1} sx={{ marginBottom: '16px' }}>
                   <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <Typography sx={{ fontSize: '13px', color: THEME_COLORS.textSecondary }}>Fournisseur:</Typography>
-                    <Typography sx={{ fontSize: '13px', fontWeight: 500, color: theme.palette.text.primary }}>
+                    <Typography sx={{ fontSize: '13px', color: THEME_COLORS.textSecondary }}>
+                      Fournisseur:
+                    </Typography>
+                    <Typography
+                      sx={{ fontSize: '13px', fontWeight: 500, color: theme.palette.text.primary }}
+                    >
                       {order.supplier_name || 'Non défini'}
                     </Typography>
                   </Box>
                   <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <Typography sx={{ fontSize: '13px', color: THEME_COLORS.textSecondary }}>Montant Total:</Typography>
-                    <Typography sx={{ fontSize: '14px', fontWeight: 600, color: theme.palette.primary.main }}>
+                    <Typography sx={{ fontSize: '13px', color: THEME_COLORS.textSecondary }}>
+                      Montant Total:
+                    </Typography>
+                    <Typography
+                      sx={{ fontSize: '14px', fontWeight: 600, color: theme.palette.primary.main }}
+                    >
                       {formatCurrency(order.total_amount, order.currency)}
                     </Typography>
                   </Box>
                   <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <Typography sx={{ fontSize: '13px', color: THEME_COLORS.textSecondary }}>Conditions de Paiement:</Typography>
+                    <Typography sx={{ fontSize: '13px', color: THEME_COLORS.textSecondary }}>
+                      Conditions de Paiement:
+                    </Typography>
                     <Typography sx={{ fontSize: '13px', color: theme.palette.text.primary }}>
                       {order.payment_terms || 'Standard'}
                     </Typography>
                   </Box>
                   <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <Typography sx={{ fontSize: '13px', color: THEME_COLORS.textSecondary }}>Date de Création:</Typography>
+                    <Typography sx={{ fontSize: '13px', color: THEME_COLORS.textSecondary }}>
+                      Date de Création:
+                    </Typography>
                     <Typography sx={{ fontSize: '13px', color: theme.palette.text.primary }}>
                       {new Date(order.created_at).toLocaleDateString('fr-TN')}
                     </Typography>
@@ -134,8 +177,12 @@ export default function PaymentOrders() {
                 </Stack>
 
                 <Stack direction="row" spacing={1}>
-                  <Button size="small" variant="outlined">Afficher les détails</Button>
-                  <Button size="small" variant="outlined">Mettre à jour le statut</Button>
+                  <Button size="small" variant="outlined">
+                    Afficher les détails
+                  </Button>
+                  <Button size="small" variant="outlined">
+                    Mettre à jour le statut
+                  </Button>
                 </Stack>
               </CardContent>
             </Card>

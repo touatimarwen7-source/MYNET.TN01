@@ -66,8 +66,12 @@ export default function StepFour({ formData, setFormData, loading }) {
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
       {/* Input Area */}
-      <Box sx={{ p: '16px', backgroundColor: `${THEME_COLORS.warningLight}15`, borderRadius: '4px' }}>
-        <Typography sx={{ fontSize: '13px', fontWeight: 600, color: THEME_COLORS.warning, mb: '16px' }}>
+      <Box
+        sx={{ p: '16px', backgroundColor: `${THEME_COLORS.warningLight}15`, borderRadius: '4px' }}
+      >
+        <Typography
+          sx={{ fontSize: '13px', fontWeight: 600, color: THEME_COLORS.warning, mb: '16px' }}
+        >
           ➕ Ajouter une Exigence
         </Typography>
 
@@ -148,7 +152,9 @@ export default function StepFour({ formData, setFormData, loading }) {
       {/* Requirements List */}
       {requirements.length > 0 && (
         <Box>
-          <Typography sx={{ fontSize: '13px', fontWeight: 600, color: THEME_COLORS.textPrimary, mb: '12px' }}>
+          <Typography
+            sx={{ fontSize: '13px', fontWeight: 600, color: THEME_COLORS.textPrimary, mb: '12px' }}
+          >
             Exigences ({requirements.length})
           </Typography>
           <Stack spacing={1}>

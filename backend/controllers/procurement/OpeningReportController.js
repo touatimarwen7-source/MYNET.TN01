@@ -32,7 +32,10 @@ async function exportOpeningReport(req, res) {
       res.setHeader('Content-Disposition', `attachment; filename="opening-report-${reportId}.pdf"`);
     } else {
       res.setHeader('Content-Type', 'application/json');
-      res.setHeader('Content-Disposition', `attachment; filename="opening-report-${reportId}.json"`);
+      res.setHeader(
+        'Content-Disposition',
+        `attachment; filename="opening-report-${reportId}.json"`
+      );
     }
     res.status(200).json(result);
   } catch (error) {

@@ -33,7 +33,9 @@ async function testUploadProposals() {
 
   try {
     // Find an open tender
-    const tenderResponse = await axios.get(`${BASE_URL}/procurement/tenders?status=published&limit=1`);
+    const tenderResponse = await axios.get(
+      `${BASE_URL}/procurement/tenders?status=published&limit=1`
+    );
     if (!tenderResponse.data.tenders?.length) {
       error('No published tenders found');
       return false;
@@ -41,7 +43,7 @@ async function testUploadProposals() {
 
     const tender = tenderResponse.data.tenders[0];
     const tenderId = tender.id;
-    
+
     info(`Using Tender: ${tender.tender_number} (ID: ${tenderId})`);
     info(`Deadline: ${new Date(tender.deadline).toLocaleString('ar-TN')}`);
 
@@ -71,11 +73,9 @@ Financial Proposal:
     };
 
     info('Submitting offer with proposals...');
-    const offerResponse = await axios.post(
-      `${BASE_URL}/procurement/offers`,
-      offerData,
-      { headers: { Authorization: `Bearer ${authTokens.supplier}` } }
-    );
+    const offerResponse = await axios.post(`${BASE_URL}/procurement/offers`, offerData, {
+      headers: { Authorization: `Bearer ${authTokens.supplier}` },
+    });
 
     if (offerResponse.data.success && offerResponse.data.offer) {
       testOffer = offerResponse.data.offer;
@@ -83,12 +83,12 @@ Financial Proposal:
       console.log(`  - Offer ID: ${testOffer.id}`);
       console.log(`  - Status: ${testOffer.status}`);
       console.log(`  - Amount: ${testOffer.total_amount} ${testOffer.currency}`);
-      
+
       // Verify proposals stored
       if (testOffer.technical_proposal && testOffer.financial_proposal) {
         success('Both proposals stored successfully');
       }
-      
+
       return true;
     } else {
       error('Failed to create offer');
@@ -192,11 +192,9 @@ async function testDeadlineEnforcement() {
         financial_proposal: 'Test',
       };
 
-      const response = await axios.post(
-        `${BASE_URL}/procurement/offers`,
-        offerData,
-        { headers: { Authorization: `Bearer ${authTokens.supplier}` } }
-      );
+      const response = await axios.post(`${BASE_URL}/procurement/offers`, offerData, {
+        headers: { Authorization: `Bearer ${authTokens.supplier}` },
+      });
 
       error('FAILED: System allowed offer AFTER deadline!');
       return false;
@@ -215,11 +213,9 @@ async function testDeadlineEnforcement() {
         financial_proposal: 'Test financials',
       };
 
-      const response = await axios.post(
-        `${BASE_URL}/procurement/offers`,
-        offerData,
-        { headers: { Authorization: `Bearer ${authTokens.supplier}` } }
-      );
+      const response = await axios.post(`${BASE_URL}/procurement/offers`, offerData, {
+        headers: { Authorization: `Bearer ${authTokens.supplier}` },
+      });
 
       if (response.data.success) {
         success('Offer accepted - still within deadline');
@@ -230,7 +226,10 @@ async function testDeadlineEnforcement() {
     return true;
   } catch (err) {
     if (err.response?.status === 403 || err.response?.status === 400) {
-      if (err.response.data?.error?.includes('deadline') || err.response.data?.error?.includes('expired')) {
+      if (
+        err.response.data?.error?.includes('deadline') ||
+        err.response.data?.error?.includes('expired')
+      ) {
         success('System correctly REJECTED offer after deadline');
         console.log(`  - Rejection Reason: "${err.response.data?.error}"`);
         return true;
@@ -245,7 +244,7 @@ async function testDeadlineEnforcement() {
  * Scenario 4: Issue deposit receipt
  */
 async function testDepositReceipt() {
-  log('SCENARIO 4', 'Issue Deposit Receipt (Certificat d\'Dépôt)');
+  log('SCENARIO 4', "Issue Deposit Receipt (Certificat d'Dépôt)");
 
   try {
     if (!testOffer.id) {
@@ -254,17 +253,18 @@ async function testDepositReceipt() {
     }
 
     info('Retrieving offer details...');
-    const offerResponse = await axios.get(
-      `${BASE_URL}/procurement/offers/${testOffer.id}`,
-      { headers: { Authorization: `Bearer ${authTokens.supplier}` } }
-    );
+    const offerResponse = await axios.get(`${BASE_URL}/procurement/offers/${testOffer.id}`, {
+      headers: { Authorization: `Bearer ${authTokens.supplier}` },
+    });
 
     const offer = offerResponse.data.offer;
 
     // Check for receipt/certificate
     if (offer.receipt_number || offer.certificate_number || offer.depositReceipt) {
       success('Deposit Receipt/Certificate found');
-      console.log(`  - Receipt Number: ${offer.receipt_number || offer.certificate_number || 'Generated'}`);
+      console.log(
+        `  - Receipt Number: ${offer.receipt_number || offer.certificate_number || 'Generated'}`
+      );
       console.log(`  - Issued At: ${new Date().toLocaleString('ar-TN')}`);
       console.log(`  - Tender: ${offer.tender_number}`);
       console.log(`  - Amount: ${offer.total_amount} TND`);
@@ -289,13 +289,12 @@ async function testDepositReceipt() {
         info('Receipt endpoint not available - checking notifications...');
 
         // Check if notification was sent
-        const notifResponse = await axios.get(
-          `/api/my-notifications`,
-          { headers: { Authorization: `Bearer ${authTokens.supplier}` } }
-        );
+        const notifResponse = await axios.get(`/api/my-notifications`, {
+          headers: { Authorization: `Bearer ${authTokens.supplier}` },
+        });
 
-        const offerNotif = notifResponse.data.notifications?.find(n =>
-          n.title?.includes('تم') && n.title?.includes('عرض')
+        const offerNotif = notifResponse.data.notifications?.find(
+          (n) => n.title?.includes('تم') && n.title?.includes('عرض')
         );
 
         if (offerNotif) {
@@ -364,10 +363,10 @@ Scenario 2 - Prevent Modification:   ${results.preventModification ? '✅ PASS' 
 Scenario 3 - Deadline Enforcement:   ${results.deadlineEnforcement ? '✅ PASS' : '❌ FAIL'}
 Scenario 4 - Deposit Receipt:        ${results.depositReceipt ? '✅ PASS' : '❌ FAIL'}
 
-Overall Status: ${Object.values(results).filter(r => r).length}/4 tests passed
+Overall Status: ${Object.values(results).filter((r) => r).length}/4 tests passed
   `);
 
-  process.exit(Object.values(results).every(r => r) ? 0 : 1);
+  process.exit(Object.values(results).every((r) => r) ? 0 : 1);
 }
 
 runAllTests();

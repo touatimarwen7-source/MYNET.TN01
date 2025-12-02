@@ -3,7 +3,7 @@ import { TextField, Box } from '@mui/material';
 /**
  * Search input component for AdminTable
  */
-export default function AdminTableSearch({ value, onChange, placeholder = "Rechercher..." }) {
+export default function AdminTableSearch({ value, onChange, placeholder = 'Rechercher...' }) {
   return (
     <Box sx={{ mb: 2 }}>
       <TextField

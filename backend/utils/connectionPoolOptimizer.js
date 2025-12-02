@@ -13,7 +13,7 @@ class PoolOptimizer {
         max: 10,
         min: 2,
         idleTimeoutMillis: 60000,
-        connectionTimeoutMillis: 10000
+        connectionTimeoutMillis: 10000,
       },
       production: {
         max: 20,
@@ -21,14 +21,14 @@ class PoolOptimizer {
         idleTimeoutMillis: 30000,
         connectionTimeoutMillis: 10000,
         statement_timeout: 30000,
-        query_timeout: 30000
+        query_timeout: 30000,
       },
       testing: {
         max: 5,
         min: 1,
         idleTimeoutMillis: 10000,
-        connectionTimeoutMillis: 5000
-      }
+        connectionTimeoutMillis: 5000,
+      },
     };
 
     return configs[env] || configs.production;
@@ -50,7 +50,7 @@ class PoolOptimizer {
       available,
       inUse,
       waitingQueue,
-      utilization: ((inUse / total) * 100).toFixed(2) + '%'
+      utilization: ((inUse / total) * 100).toFixed(2) + '%',
     };
   }
 

@@ -18,14 +18,34 @@ const createTenderSchema = Joi.object({
   title: Joi.string().max(255).required(),
   description: Joi.string().max(5000).required(),
   category: Joi.string().max(100).required(),
-  quantity_required: Joi.alternatives().try(Joi.number().integer().positive(), Joi.string().allow(''), Joi.allow(null)),
+  quantity_required: Joi.alternatives().try(
+    Joi.number().integer().positive(),
+    Joi.string().allow(''),
+    Joi.allow(null)
+  ),
   unit: Joi.string().max(50).allow(null, ''),
-  publication_date: Joi.alternatives().try(Joi.date().iso(), Joi.string().allow(''), Joi.allow(null)),
+  publication_date: Joi.alternatives().try(
+    Joi.date().iso(),
+    Joi.string().allow(''),
+    Joi.allow(null)
+  ),
   deadline: Joi.alternatives().try(Joi.date().iso(), Joi.string().allow(''), Joi.allow(null)),
   opening_date: Joi.alternatives().try(Joi.date().iso(), Joi.string().allow(''), Joi.allow(null)),
-  queries_start_date: Joi.alternatives().try(Joi.date().iso(), Joi.string().allow(''), Joi.allow(null)),
-  queries_end_date: Joi.alternatives().try(Joi.date().iso(), Joi.string().allow(''), Joi.allow(null)),
-  offer_validity_days: Joi.alternatives().try(Joi.number().integer().positive(), Joi.string().allow(''), Joi.allow(null)),
+  queries_start_date: Joi.alternatives().try(
+    Joi.date().iso(),
+    Joi.string().allow(''),
+    Joi.allow(null)
+  ),
+  queries_end_date: Joi.alternatives().try(
+    Joi.date().iso(),
+    Joi.string().allow(''),
+    Joi.allow(null)
+  ),
+  offer_validity_days: Joi.alternatives().try(
+    Joi.number().integer().positive(),
+    Joi.string().allow(''),
+    Joi.allow(null)
+  ),
   alert_type: Joi.string().max(100).allow(null, ''),
   is_public: Joi.boolean().allow(null),
   lots: Joi.array().items(Joi.object()).allow(null),
@@ -44,7 +64,7 @@ const createTenderSchema = Joi.object({
   specification_documents: Joi.array().items(Joi.object()).allow(null),
   evaluation_criteria: Joi.object().allow(null),
   budget_min: Joi.alternatives().try(Joi.number(), Joi.string().allow(''), Joi.allow(null)),
-  budget_max: Joi.alternatives().try(Joi.number(), Joi.string().allow(''), Joi.allow(null))
+  budget_max: Joi.alternatives().try(Joi.number(), Joi.string().allow(''), Joi.allow(null)),
 }).unknown(true);
 
 const updateTenderSchema = Joi.object({
@@ -56,7 +76,7 @@ const updateTenderSchema = Joi.object({
   opening_date: dateSchema,
   closing_date: dateSchema,
   opening_location: Joi.string().max(500).allow(null),
-  is_public: Joi.boolean()
+  is_public: Joi.boolean(),
 });
 
 // Offer Schemas
@@ -68,14 +88,14 @@ const createOfferSchema = Joi.object({
   delivery_date: dateSchema,
   warranty_period: Joi.number().integer().min(0).allow(null),
   payment_terms: Joi.string().max(500).allow(null),
-  currency: Joi.string().length(3).uppercase().required()
+  currency: Joi.string().length(3).uppercase().required(),
 });
 
 const evaluateOfferSchema = Joi.object({
   offer_id: idSchema,
   technical_score: Joi.number().min(0).max(100).required(),
   financial_score: Joi.number().min(0).max(100).required(),
-  notes: Joi.string().max(1000).allow(null)
+  notes: Joi.string().max(1000).allow(null),
 });
 
 // Invoice Schemas
@@ -86,28 +106,28 @@ const createInvoiceSchema = Joi.object({
   tax_amount: Joi.number().min(0).required(),
   invoice_number: Joi.string().max(50).required(),
   invoice_date: dateSchema,
-  due_date: dateSchema
+  due_date: dateSchema,
 });
 
 const markInvoiceAsPaidSchema = Joi.object({
   invoice_id: idSchema,
   payment_date: dateSchema,
-  payment_method: Joi.string().max(50).allow(null)
+  payment_method: Joi.string().max(50).allow(null),
 });
 
 // User Schemas
 const userIdSchema = Joi.object({
-  userId: idSchema
+  userId: idSchema,
 });
 
 const updateUserRoleSchema = Joi.object({
   user_id: idSchema,
-  role: Joi.string().valid('admin', 'super_admin', 'buyer', 'supplier', 'user').required()
+  role: Joi.string().valid('admin', 'super_admin', 'buyer', 'supplier', 'user').required(),
 });
 
 const blockUserSchema = Joi.object({
   user_id: idSchema,
-  reason: Joi.string().max(500).allow(null)
+  reason: Joi.string().max(500).allow(null),
 });
 
 // Search Schemas
@@ -115,13 +135,13 @@ const searchSchema = Joi.object({
   query: Joi.string().max(255).required(),
   filters: Joi.object().allow(null),
   page: Joi.number().integer().min(1).default(1),
-  limit: Joi.number().integer().min(1).max(100).default(20)
+  limit: Joi.number().integer().min(1).max(100).default(20),
 });
 
 // Pagination Schemas
 const paginationSchema = Joi.object({
   page: Joi.number().integer().min(1).default(1),
-  limit: Joi.number().integer().min(1).max(100).default(20)
+  limit: Joi.number().integer().min(1).max(100).default(20),
 });
 
 // Review Schemas
@@ -130,7 +150,7 @@ const createReviewSchema = Joi.object({
   target_type: Joi.string().valid('supplier', 'buyer', 'tender').required(),
   rating: Joi.number().min(1).max(5).required(),
   comment: Joi.string().max(1000).allow(null),
-  reviewer_id: idSchema
+  reviewer_id: idSchema,
 });
 
 // Notification Schemas
@@ -140,7 +160,7 @@ const createNotificationSchema = Joi.object({
   title: Joi.string().max(255).required(),
   message: Joi.string().max(1000).required(),
   entity_type: Joi.string().max(50).allow(null),
-  entity_id: idSchema.allow(null)
+  entity_id: idSchema.allow(null),
 });
 
 // Message Schemas
@@ -150,7 +170,7 @@ const createMessageSchema = Joi.object({
   subject: Joi.string().max(255).required(),
   content: Joi.string().max(5000).required(),
   entity_type: Joi.string().max(50).allow(null),
-  entity_id: idSchema.allow(null)
+  entity_id: idSchema.allow(null),
 });
 
 // Validation helper function
@@ -158,16 +178,16 @@ const validateSchema = (data, schema) => {
   const { error, value } = schema.validate(data, {
     abortEarly: false,
     stripUnknown: true,
-    convert: true
+    convert: true,
   });
 
   if (error) {
-    const details = error.details.map(d => ({
+    const details = error.details.map((d) => ({
       field: d.path.join('.'),
       message: d.message,
-      type: d.type
+      type: d.type,
     }));
-    
+
     const err = new Error('Validation failed');
     err.statusCode = 400;
     err.details = details;
@@ -181,39 +201,39 @@ module.exports = {
   // Tender
   createTenderSchema,
   updateTenderSchema,
-  
+
   // Offer
   createOfferSchema,
   evaluateOfferSchema,
-  
+
   // Invoice
   createInvoiceSchema,
   markInvoiceAsPaidSchema,
-  
+
   // User
   userIdSchema,
   updateUserRoleSchema,
   blockUserSchema,
-  
+
   // Search & Pagination
   searchSchema,
   paginationSchema,
-  
+
   // Review
   createReviewSchema,
-  
+
   // Notification
   createNotificationSchema,
-  
+
   // Message
   createMessageSchema,
-  
+
   // Base schemas
   idSchema,
   uuidSchema,
   emailSchema,
   dateSchema,
-  
+
   // Helper
-  validateSchema
+  validateSchema,
 };

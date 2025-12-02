@@ -1,7 +1,7 @@
 /**
  * Performance Monitoring Routes
  * Endpoints to retrieve performance metrics and monitoring data
- * 
+ *
  * @module performanceRoutes
  * @example
  * const performanceRoutes = require('./performanceRoutes');
@@ -23,12 +23,12 @@ router.get('/metrics', authMiddleware, (req, res) => {
     const metrics = performanceMonitor.getMetrics();
     res.json({
       success: true,
-      data: metrics
+      data: metrics,
     });
   } catch (error) {
     res.status(500).json({
       success: false,
-      error: error.message
+      error: error.message,
     });
   }
 });
@@ -43,12 +43,12 @@ router.get('/summary', authMiddleware, (req, res) => {
     const summary = performanceMonitor.getSummary();
     res.json({
       success: true,
-      data: summary
+      data: summary,
     });
   } catch (error) {
     res.status(500).json({
       success: false,
-      error: error.message
+      error: error.message,
     });
   }
 });
@@ -65,12 +65,12 @@ router.get('/slow-endpoints', authMiddleware, (req, res) => {
     const slowEndpoints = performanceMonitor.getTopSlowEndpoints(limit);
     res.json({
       success: true,
-      data: slowEndpoints
+      data: slowEndpoints,
     });
   } catch (error) {
     res.status(500).json({
       success: false,
-      error: error.message
+      error: error.message,
     });
   }
 });
@@ -86,19 +86,19 @@ router.delete('/metrics', authMiddleware, (req, res) => {
     if (req.user.role !== 'admin' && req.user.role !== 'super_admin') {
       return res.status(403).json({
         success: false,
-        error: 'Unauthorized'
+        error: 'Unauthorized',
       });
     }
 
     performanceMonitor.clearMetrics();
     res.json({
       success: true,
-      message: 'Performance metrics cleared'
+      message: 'Performance metrics cleared',
     });
   } catch (error) {
     res.status(500).json({
       success: false,
-      error: error.message
+      error: error.message,
     });
   }
 });

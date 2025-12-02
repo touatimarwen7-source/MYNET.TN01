@@ -23,28 +23,15 @@ export const preloadRoute = (path) => {
  * Prefetch routes based on user role
  */
 export const prefetchRoleBasedRoutes = (role) => {
-  const buyerRoutes = [
-    '/tenders',
-    '/tender/create',
-    '/my-tenders',
-    '/dashboard'
-  ];
+  const buyerRoutes = ['/tenders', '/tender/create', '/my-tenders', '/dashboard'];
 
-  const supplierRoutes = [
-    '/tenders',
-    '/my-offers',
-    '/supplier-dashboard',
-    '/invoices'
-  ];
+  const supplierRoutes = ['/tenders', '/my-offers', '/supplier-dashboard', '/invoices'];
 
-  const adminRoutes = [
-    '/admin/dashboard',
-    '/admin/users',
-    '/admin/statistics'
-  ];
+  const adminRoutes = ['/admin/dashboard', '/admin/users', '/admin/statistics'];
 
-  const routes = role === 'buyer' ? buyerRoutes : role === 'supplier' ? supplierRoutes : adminRoutes;
-  routes.forEach(route => prefetchRoute(route));
+  const routes =
+    role === 'buyer' ? buyerRoutes : role === 'supplier' ? supplierRoutes : adminRoutes;
+  routes.forEach((route) => prefetchRoute(route));
 };
 
 /**
@@ -52,12 +39,9 @@ export const prefetchRoleBasedRoutes = (role) => {
  */
 export const prefetchAssets = () => {
   // Prefetch critical images
-  const images = [
-    '/logo.png',
-    '/hero-image.jpg'
-  ];
+  const images = ['/logo.png', '/hero-image.jpg'];
 
-  images.forEach(img => {
+  images.forEach((img) => {
     const link = document.createElement('link');
     link.rel = 'prefetch';
     link.href = img;

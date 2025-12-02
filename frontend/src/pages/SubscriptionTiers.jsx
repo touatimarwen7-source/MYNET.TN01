@@ -83,13 +83,33 @@ export default function SubscriptionTiers() {
   ]);
 
   const [services, setServices] = useState([
-    { id: 1, name: 'Appels d\'offres généraux', description: 'Créer et gérer les appels d\'offres', enabled: true },
-    { id: 2, name: 'Offres directes', description: 'Requêtes d\'approvisionnement direct', enabled: true },
+    {
+      id: 1,
+      name: "Appels d'offres généraux",
+      description: "Créer et gérer les appels d'offres",
+      enabled: true,
+    },
+    {
+      id: 2,
+      name: 'Offres directes',
+      description: "Requêtes d'approvisionnement direct",
+      enabled: true,
+    },
     { id: 3, name: 'Analytics basiques', description: 'Rapports simples', enabled: true },
-    { id: 4, name: 'Analytics avancées', description: 'Rapports détaillés et insights', enabled: true },
+    {
+      id: 4,
+      name: 'Analytics avancées',
+      description: 'Rapports détaillés et insights',
+      enabled: true,
+    },
     { id: 5, name: 'Accès API', description: 'Intégrations externes', enabled: true },
     { id: 6, name: 'Support prioritaire', description: 'Support 24/7 dédié', enabled: true },
-    { id: 7, name: 'Intégrations personnalisées', description: 'Configurations sur mesure', enabled: true },
+    {
+      id: 7,
+      name: 'Intégrations personnalisées',
+      description: 'Configurations sur mesure',
+      enabled: true,
+    },
   ]);
 
   // Dialog states
@@ -126,13 +146,17 @@ export default function SubscriptionTiers() {
     }
 
     if (tierDialogType === 'edit') {
-      setTiers(tiers.map(t =>
-        t.id === selectedTier.id ? { ...tierFormData, id: selectedTier.id, services: selectedServices } : t
-      ));
+      setTiers(
+        tiers.map((t) =>
+          t.id === selectedTier.id
+            ? { ...tierFormData, id: selectedTier.id, services: selectedServices }
+            : t
+        )
+      );
       setMessage(`Plan ${tierFormData.name} mis à jour avec les services`);
     } else {
       const newTier = {
-        id: Math.max(...tiers.map(t => t.id), 0) + 1,
+        id: Math.max(...tiers.map((t) => t.id), 0) + 1,
         ...tierFormData,
         subscriberCount: 0,
         services: selectedServices,
@@ -144,21 +168,17 @@ export default function SubscriptionTiers() {
   };
 
   const handleDeleteTier = (tier) => {
-    setTiers(tiers.filter(t => t.id !== tier.id));
+    setTiers(tiers.filter((t) => t.id !== tier.id));
     setMessage(`Plan ${tier.name} supprimé`);
   };
 
   const toggleTierStatus = (tier) => {
-    setTiers(tiers.map(t =>
-      t.id === tier.id ? { ...t, active: !t.active } : t
-    ));
+    setTiers(tiers.map((t) => (t.id === tier.id ? { ...t, active: !t.active } : t)));
   };
 
   const toggleServiceForTier = (serviceId) => {
-    setSelectedServices(prev =>
-      prev.includes(serviceId)
-        ? prev.filter(id => id !== serviceId)
-        : [...prev, serviceId]
+    setSelectedServices((prev) =>
+      prev.includes(serviceId) ? prev.filter((id) => id !== serviceId) : [...prev, serviceId]
     );
   };
 
@@ -175,7 +195,7 @@ export default function SubscriptionTiers() {
     }
 
     const newService = {
-      id: Math.max(...services.map(s => s.id), 0) + 1,
+      id: Math.max(...services.map((s) => s.id), 0) + 1,
       ...serviceFormData,
     };
     setServices([...services, newService]);
@@ -184,24 +204,24 @@ export default function SubscriptionTiers() {
   };
 
   const handleDeleteService = (service) => {
-    setServices(services.filter(s => s.id !== service.id));
+    setServices(services.filter((s) => s.id !== service.id));
     // Remove from all tiers
-    setTiers(tiers.map(t => ({
-      ...t,
-      services: t.services.filter(sId => sId !== service.id)
-    })));
+    setTiers(
+      tiers.map((t) => ({
+        ...t,
+        services: t.services.filter((sId) => sId !== service.id),
+      }))
+    );
     setMessage(`Service ${service.name} supprimé`);
   };
 
   const toggleServiceStatus = (service) => {
-    setServices(services.map(s =>
-      s.id === service.id ? { ...s, enabled: !s.enabled } : s
-    ));
+    setServices(services.map((s) => (s.id === service.id ? { ...s, enabled: !s.enabled } : s)));
   };
 
   // Helper to get service name by ID
   const getServiceName = (serviceId) => {
-    return services.find(s => s.id === serviceId)?.name || 'Service Unknown';
+    return services.find((s) => s.id === serviceId)?.name || 'Service Unknown';
   };
 
   return (
@@ -209,7 +229,10 @@ export default function SubscriptionTiers() {
       <Container maxWidth="lg">
         {/* Header */}
         <Box sx={{ marginBottom: '32px' }}>
-          <Typography variant="h3" sx={{ fontWeight: 700, color: theme.palette.text.primary, marginBottom: '12px' }}>
+          <Typography
+            variant="h3"
+            sx={{ fontWeight: 700, color: theme.palette.text.primary, marginBottom: '12px' }}
+          >
             Gestion des Plans et Services - Subscription Plans & Services
           </Typography>
           <Typography sx={{ fontSize: '14px', color: '#666', marginBottom: '24px' }}>
@@ -253,7 +276,9 @@ export default function SubscriptionTiers() {
                 <Typography sx={{ fontSize: '12px', color: '#666', marginBottom: '8px' }}>
                   Total des plans
                 </Typography>
-                <Typography sx={{ fontSize: '24px', fontWeight: 700, color: theme.palette.primary.main }}>
+                <Typography
+                  sx={{ fontSize: '24px', fontWeight: 700, color: theme.palette.primary.main }}
+                >
                   {tiers.length}
                 </Typography>
               </CardContent>
@@ -274,7 +299,7 @@ export default function SubscriptionTiers() {
                   Services disponibles
                 </Typography>
                 <Typography sx={{ fontSize: '24px', fontWeight: 700, color: '#f57c00' }}>
-                  {services.filter(s => s.enabled).length}/{services.length}
+                  {services.filter((s) => s.enabled).length}/{services.length}
                 </Typography>
               </CardContent>
             </Card>
@@ -283,7 +308,9 @@ export default function SubscriptionTiers() {
           {/* Plans Grid */}
           <Grid container spacing={3}>
             {tiers.map((tier) => {
-              const tierServices = tier.services.map(id => services.find(s => s.id === id)).filter(Boolean);
+              const tierServices = tier.services
+                .map((id) => services.find((s) => s.id === id))
+                .filter(Boolean);
               return (
                 <Grid xs={12} lg={6} md={4} key={tier.id}>
                   <Card
@@ -297,14 +324,24 @@ export default function SubscriptionTiers() {
                         boxShadow: '0 8px 16px rgba(0,0,0,0.1)',
                         transform: 'translateY(-4px)',
                         transition: 'all 0.3s ease',
-                      }
+                      },
                     }}
                   >
                     <CardContent sx={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
                       {/* Header */}
                       <Box sx={{ marginBottom: '16px' }}>
-                        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-                          <Typography variant="h5" sx={{ fontWeight: 700, color: theme.palette.text.primary }}>
+                        <Box
+                          sx={{
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            alignItems: 'center',
+                            marginBottom: '8px',
+                          }}
+                        >
+                          <Typography
+                            variant="h5"
+                            sx={{ fontWeight: 700, color: theme.palette.text.primary }}
+                          >
                             {tier.name}
                           </Typography>
                           {!tier.active && (
@@ -314,18 +351,32 @@ export default function SubscriptionTiers() {
                         <Typography sx={{ fontSize: '14px', color: '#666', marginBottom: '12px' }}>
                           {tier.description}
                         </Typography>
-                        <Typography sx={{ fontSize: '24px', fontWeight: 700, color: theme.palette.primary.main, marginBottom: '8px' }}>
+                        <Typography
+                          sx={{
+                            fontSize: '24px',
+                            fontWeight: 700,
+                            color: theme.palette.primary.main,
+                            marginBottom: '8px',
+                          }}
+                        >
                           {tier.price}
                         </Typography>
                       </Box>
 
                       {/* Services */}
                       <Box sx={{ marginBottom: '16px', flex: 1 }}>
-                        <Typography sx={{ fontSize: '12px', fontWeight: 600, color: theme.palette.text.primary, marginBottom: '8px' }}>
+                        <Typography
+                          sx={{
+                            fontSize: '12px',
+                            fontWeight: 600,
+                            color: theme.palette.text.primary,
+                            marginBottom: '8px',
+                          }}
+                        >
                           Services ({tier.services.length}):
                         </Typography>
                         <Stack direction="column" spacing={1}>
-                          {tierServices.map(service => (
+                          {tierServices.map((service) => (
                             <Box
                               key={service.id}
                               sx={{
@@ -338,16 +389,21 @@ export default function SubscriptionTiers() {
                               }}
                             >
                               <CheckIcon sx={{ fontSize: '16px', color: '#4caf50' }} />
-                              <Typography sx={{ fontSize: '12px' }}>
-                                {service.name}
-                              </Typography>
+                              <Typography sx={{ fontSize: '12px' }}>{service.name}</Typography>
                             </Box>
                           ))}
                         </Stack>
                       </Box>
 
                       {/* Subscribers */}
-                      <Box sx={{ marginBottom: '16px', padding: '12px', backgroundColor: '#f5f5f5', borderRadius: '4px' }}>
+                      <Box
+                        sx={{
+                          marginBottom: '16px',
+                          padding: '12px',
+                          backgroundColor: '#f5f5f5',
+                          borderRadius: '4px',
+                        }}
+                      >
                         <Typography sx={{ fontSize: '12px', color: '#666' }}>
                           Abonnés: <strong>{tier.subscriberCount}</strong>
                         </Typography>
@@ -407,37 +463,55 @@ export default function SubscriptionTiers() {
             <Table>
               <TableHead>
                 <TableRow sx={{ backgroundColor: '#f5f5f5' }}>
-                  <TableCell sx={{ fontWeight: 700, color: theme.palette.text.primary }}>Nom du Service</TableCell>
-                  <TableCell sx={{ fontWeight: 700, color: theme.palette.text.primary }}>Description</TableCell>
-                  <TableCell sx={{ fontWeight: 700, color: theme.palette.text.primary }}>Utilisé dans</TableCell>
-                  <TableCell sx={{ fontWeight: 700, color: theme.palette.text.primary }}>Statut</TableCell>
-                  <TableCell sx={{ fontWeight: 700, color: theme.palette.text.primary }} align="right">
+                  <TableCell sx={{ fontWeight: 700, color: theme.palette.text.primary }}>
+                    Nom du Service
+                  </TableCell>
+                  <TableCell sx={{ fontWeight: 700, color: theme.palette.text.primary }}>
+                    Description
+                  </TableCell>
+                  <TableCell sx={{ fontWeight: 700, color: theme.palette.text.primary }}>
+                    Utilisé dans
+                  </TableCell>
+                  <TableCell sx={{ fontWeight: 700, color: theme.palette.text.primary }}>
+                    Statut
+                  </TableCell>
+                  <TableCell
+                    sx={{ fontWeight: 700, color: theme.palette.text.primary }}
+                    align="right"
+                  >
                     Actions
                   </TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
                 {services.map((service) => {
-                  const usedInTiers = tiers.filter(t => t.services.includes(service.id));
+                  const usedInTiers = tiers.filter((t) => t.services.includes(service.id));
                   return (
                     <TableRow key={service.id} sx={{ '&:hover': { backgroundColor: '#f9f9f9' } }}>
                       <TableCell sx={{ fontWeight: 600 }}>{service.name}</TableCell>
-                      <TableCell sx={{ fontSize: '13px', color: '#666' }}>{service.description}</TableCell>
+                      <TableCell sx={{ fontSize: '13px', color: '#666' }}>
+                        {service.description}
+                      </TableCell>
                       <TableCell>
                         {usedInTiers.length > 0 ? (
                           <Stack direction="row" spacing={1} sx={{ flexWrap: 'wrap', gap: '4px' }}>
-                            {usedInTiers.map(t => (
+                            {usedInTiers.map((t) => (
                               <Chip
                                 key={t.id}
                                 label={t.name}
                                 size="small"
                                 variant="outlined"
-                                sx={{ borderColor: theme.palette.primary.main, color: theme.palette.primary.main }}
+                                sx={{
+                                  borderColor: theme.palette.primary.main,
+                                  color: theme.palette.primary.main,
+                                }}
                               />
                             ))}
                           </Stack>
                         ) : (
-                          <Typography sx={{ fontSize: '12px', color: '#999' }}>Non utilisé</Typography>
+                          <Typography sx={{ fontSize: '12px', color: '#999' }}>
+                            Non utilisé
+                          </Typography>
                         )}
                       </TableCell>
                       <TableCell>
@@ -480,7 +554,10 @@ export default function SubscriptionTiers() {
           <Grid container spacing={3}>
             {/* Plans Summary */}
             <Grid xs={12}>
-              <Typography variant="h6" sx={{ fontWeight: 700, marginBottom: '16px', color: theme.palette.text.primary }}>
+              <Typography
+                variant="h6"
+                sx={{ fontWeight: 700, marginBottom: '16px', color: theme.palette.text.primary }}
+              >
                 📦 Résumé des Plans
               </Typography>
               <Paper sx={{ border: '1px solid #e0e0e0', overflow: 'auto' }}>
@@ -495,12 +572,14 @@ export default function SubscriptionTiers() {
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {tiers.map(tier => (
+                    {tiers.map((tier) => (
                       <TableRow key={tier.id}>
                         <TableCell sx={{ fontWeight: 600 }}>{tier.name}</TableCell>
                         <TableCell>{tier.price}</TableCell>
                         <TableCell>{tier.services.length} services</TableCell>
-                        <TableCell sx={{ fontWeight: 600, color: theme.palette.primary.main }}>{tier.subscriberCount}</TableCell>
+                        <TableCell sx={{ fontWeight: 600, color: theme.palette.primary.main }}>
+                          {tier.subscriberCount}
+                        </TableCell>
                         <TableCell>
                           <Chip
                             label={tier.active ? 'Actif' : 'Inactif'}
@@ -518,7 +597,10 @@ export default function SubscriptionTiers() {
 
             {/* Services Summary */}
             <Grid xs={12}>
-              <Typography variant="h6" sx={{ fontWeight: 700, marginBottom: '16px', color: theme.palette.text.primary }}>
+              <Typography
+                variant="h6"
+                sx={{ fontWeight: 700, marginBottom: '16px', color: theme.palette.text.primary }}
+              >
                 ⚙️ Résumé des Services
               </Typography>
               <Paper sx={{ border: '1px solid #e0e0e0', overflow: 'auto' }}>
@@ -531,8 +613,8 @@ export default function SubscriptionTiers() {
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {services.map(service => {
-                      const tierCount = tiers.filter(t => t.services.includes(service.id)).length;
+                    {services.map((service) => {
+                      const tierCount = tiers.filter((t) => t.services.includes(service.id)).length;
                       return (
                         <TableRow key={service.id}>
                           <TableCell sx={{ fontWeight: 600 }}>{service.name}</TableCell>
@@ -556,10 +638,13 @@ export default function SubscriptionTiers() {
         </TabPanel>
 
         {/* TIER DIALOG */}
-        <Dialog open={openTierDialog} onClose={() => setOpenTierDialog(false)} maxWidth="sm" fullWidth>
-          <DialogTitle>
-            {tierDialogType === 'edit' ? 'Modifier Plan' : 'Créer un Plan'}
-          </DialogTitle>
+        <Dialog
+          open={openTierDialog}
+          onClose={() => setOpenTierDialog(false)}
+          maxWidth="sm"
+          fullWidth
+        >
+          <DialogTitle>{tierDialogType === 'edit' ? 'Modifier Plan' : 'Créer un Plan'}</DialogTitle>
           <DialogContent>
             <Box sx={{ paddingY: '16px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
               <TextField
@@ -586,11 +671,21 @@ export default function SubscriptionTiers() {
 
               {/* Services Selection */}
               <Box>
-                <Typography sx={{ fontWeight: 600, marginBottom: '12px', color: theme.palette.text.primary }}>
+                <Typography
+                  sx={{ fontWeight: 600, marginBottom: '12px', color: theme.palette.text.primary }}
+                >
                   Sélectionner les services inclus:
                 </Typography>
-                <Box sx={{ border: '1px solid #e0e0e0', borderRadius: '4px', padding: '12px', maxHeight: '250px', overflow: 'auto' }}>
-                  {services.map(service => (
+                <Box
+                  sx={{
+                    border: '1px solid #e0e0e0',
+                    borderRadius: '4px',
+                    padding: '12px',
+                    maxHeight: '250px',
+                    overflow: 'auto',
+                  }}
+                >
+                  {services.map((service) => (
                     <FormControlLabel
                       key={service.id}
                       control={
@@ -614,7 +709,14 @@ export default function SubscriptionTiers() {
                     />
                   ))}
                 </Box>
-                <Typography sx={{ fontSize: '12px', color: theme.palette.primary.main, marginTop: '12px', fontWeight: 600 }}>
+                <Typography
+                  sx={{
+                    fontSize: '12px',
+                    color: theme.palette.primary.main,
+                    marginTop: '12px',
+                    fontWeight: 600,
+                  }}
+                >
                   {selectedServices.length} service(s) sélectionné(s)
                 </Typography>
               </Box>
@@ -633,7 +735,12 @@ export default function SubscriptionTiers() {
         </Dialog>
 
         {/* SERVICE DIALOG */}
-        <Dialog open={openServiceDialog} onClose={() => setOpenServiceDialog(false)} maxWidth="sm" fullWidth>
+        <Dialog
+          open={openServiceDialog}
+          onClose={() => setOpenServiceDialog(false)}
+          maxWidth="sm"
+          fullWidth
+        >
           <DialogTitle>Ajouter un Service</DialogTitle>
           <DialogContent>
             <Box sx={{ paddingY: '16px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
@@ -647,7 +754,9 @@ export default function SubscriptionTiers() {
                 fullWidth
                 label="Description"
                 value={serviceFormData.description || ''}
-                onChange={(e) => setServiceFormData({ ...serviceFormData, description: e.target.value })}
+                onChange={(e) =>
+                  setServiceFormData({ ...serviceFormData, description: e.target.value })
+                }
                 multiline
                 rows={3}
               />

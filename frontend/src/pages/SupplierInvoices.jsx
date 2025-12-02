@@ -19,7 +19,7 @@ import {
   Alert,
   TableContainer,
   Stack,
-  Grid
+  Grid,
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import DownloadIcon from '@mui/icons-material/Download';
@@ -44,11 +44,11 @@ export default function SupplierInvoices() {
     try {
       setLoading(true);
       setError('');
-      
+
       // Get purchase orders for supplier
       const [posRes, invoicesRes] = await Promise.all([
         procurementAPI.getPurchaseOrders(),
-        procurementAPI.getMyInvoices()
+        procurementAPI.getMyInvoices(),
       ]);
 
       setPurchaseOrders(posRes.data || []);
@@ -71,29 +71,31 @@ export default function SupplierInvoices() {
 
   const getStatusColor = (status) => {
     const colors = {
-      'draft': 'default',
-      'sent': 'info',
-      'paid': 'success',
-      'overdue': 'error',
-      'pending': 'warning'
+      draft: 'default',
+      sent: 'info',
+      paid: 'success',
+      overdue: 'error',
+      pending: 'warning',
     };
     return colors[status] || 'default';
   };
 
   const getPoStatusLabel = (status) => {
     const labels = {
-      'pending': 'En attente',
-      'approved': 'Approuvée',
-      'in_progress': 'En cours',
-      'completed': 'Complétée',
-      'cancelled': 'Annulée'
+      pending: 'En attente',
+      approved: 'Approuvée',
+      in_progress: 'En cours',
+      completed: 'Complétée',
+      cancelled: 'Annulée',
     };
     return labels[status] || status;
   };
 
   if (loading) {
     return (
-      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '80vh' }}>
+      <Box
+        sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '80vh' }}
+      >
         <CircularProgress />
       </Box>
     );
@@ -110,7 +112,7 @@ export default function SupplierInvoices() {
               fontSize: '32px',
               fontWeight: 600,
               color: theme.palette.primary.main,
-              marginBottom: '8px'
+              marginBottom: '8px',
             }}
           >
             📄 Gestion des Factures
@@ -129,8 +131,18 @@ export default function SupplierInvoices() {
         {/* Section: Purchase Orders */}
         <Card sx={{ border: '1px solid #e0e0e0', marginBottom: '40px' }}>
           <CardContent sx={{ padding: '24px' }}>
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-              <Typography variant="h5" sx={{ fontSize: '20px', fontWeight: 600, color: theme.palette.text.primary }}>
+            <Box
+              sx={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                marginBottom: '20px',
+              }}
+            >
+              <Typography
+                variant="h5"
+                sx={{ fontSize: '20px', fontWeight: 600, color: theme.palette.text.primary }}
+              >
                 📦 Vos Commandes
               </Typography>
               <Typography sx={{ fontSize: '12px', color: '#999' }}>
@@ -145,21 +157,36 @@ export default function SupplierInvoices() {
                 <Table size="small">
                   <TableHead sx={{ backgroundColor: '#F5F5F5' }}>
                     <TableRow>
-                      <TableCell sx={{ fontWeight: 600, color: theme.palette.primary.main }}>N° Commande</TableCell>
-                      <TableCell sx={{ fontWeight: 600, color: theme.palette.primary.main }}>Appel d'offres</TableCell>
-                      <TableCell sx={{ fontWeight: 600, color: theme.palette.primary.main }}>Montant</TableCell>
-                      <TableCell sx={{ fontWeight: 600, color: theme.palette.primary.main }}>Statut</TableCell>
-                      <TableCell sx={{ fontWeight: 600, color: theme.palette.primary.main }} align="center">Actions</TableCell>
+                      <TableCell sx={{ fontWeight: 600, color: theme.palette.primary.main }}>
+                        N° Commande
+                      </TableCell>
+                      <TableCell sx={{ fontWeight: 600, color: theme.palette.primary.main }}>
+                        Appel d'offres
+                      </TableCell>
+                      <TableCell sx={{ fontWeight: 600, color: theme.palette.primary.main }}>
+                        Montant
+                      </TableCell>
+                      <TableCell sx={{ fontWeight: 600, color: theme.palette.primary.main }}>
+                        Statut
+                      </TableCell>
+                      <TableCell
+                        sx={{ fontWeight: 600, color: theme.palette.primary.main }}
+                        align="center"
+                      >
+                        Actions
+                      </TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
                     {purchaseOrders.map((po) => {
-                      const poInvoices = invoices.filter(inv => inv.purchase_order_id === po.id);
+                      const poInvoices = invoices.filter((inv) => inv.purchase_order_id === po.id);
                       return (
                         <TableRow key={po.id} sx={{ '&:hover': { backgroundColor: '#fafafa' } }}>
                           <TableCell sx={{ fontWeight: 500 }}>{po.po_number}</TableCell>
                           <TableCell>{po.tender_title || 'N/A'}</TableCell>
-                          <TableCell>{po.total_amount?.toLocaleString('fr-TN')} {po.currency}</TableCell>
+                          <TableCell>
+                            {po.total_amount?.toLocaleString('fr-TN')} {po.currency}
+                          </TableCell>
                           <TableCell>
                             <Chip
                               label={getPoStatusLabel(po.status)}
@@ -202,8 +229,18 @@ export default function SupplierInvoices() {
         {/* Section: Your Invoices */}
         <Card sx={{ border: '1px solid #e0e0e0' }}>
           <CardContent sx={{ padding: '24px' }}>
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-              <Typography variant="h5" sx={{ fontSize: '20px', fontWeight: 600, color: theme.palette.text.primary }}>
+            <Box
+              sx={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                marginBottom: '20px',
+              }}
+            >
+              <Typography
+                variant="h5"
+                sx={{ fontSize: '20px', fontWeight: 600, color: theme.palette.text.primary }}
+              >
                 📋 Vos Factures
               </Typography>
               <Typography sx={{ fontSize: '12px', color: '#999' }}>
@@ -218,12 +255,27 @@ export default function SupplierInvoices() {
                 <Table size="small">
                   <TableHead sx={{ backgroundColor: '#F5F5F5' }}>
                     <TableRow>
-                      <TableCell sx={{ fontWeight: 600, color: theme.palette.primary.main }}>N° Facture</TableCell>
-                      <TableCell sx={{ fontWeight: 600, color: theme.palette.primary.main }}>Commande</TableCell>
-                      <TableCell sx={{ fontWeight: 600, color: theme.palette.primary.main }}>Montant</TableCell>
-                      <TableCell sx={{ fontWeight: 600, color: theme.palette.primary.main }}>Date</TableCell>
-                      <TableCell sx={{ fontWeight: 600, color: theme.palette.primary.main }}>Statut</TableCell>
-                      <TableCell sx={{ fontWeight: 600, color: theme.palette.primary.main }} align="center">Actions</TableCell>
+                      <TableCell sx={{ fontWeight: 600, color: theme.palette.primary.main }}>
+                        N° Facture
+                      </TableCell>
+                      <TableCell sx={{ fontWeight: 600, color: theme.palette.primary.main }}>
+                        Commande
+                      </TableCell>
+                      <TableCell sx={{ fontWeight: 600, color: theme.palette.primary.main }}>
+                        Montant
+                      </TableCell>
+                      <TableCell sx={{ fontWeight: 600, color: theme.palette.primary.main }}>
+                        Date
+                      </TableCell>
+                      <TableCell sx={{ fontWeight: 600, color: theme.palette.primary.main }}>
+                        Statut
+                      </TableCell>
+                      <TableCell
+                        sx={{ fontWeight: 600, color: theme.palette.primary.main }}
+                        align="center"
+                      >
+                        Actions
+                      </TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
@@ -232,10 +284,18 @@ export default function SupplierInvoices() {
                         <TableCell sx={{ fontWeight: 500 }}>{invoice.invoice_number}</TableCell>
                         <TableCell>{invoice.order_number || 'N/A'}</TableCell>
                         <TableCell>{invoice.total?.toLocaleString('fr-TN')} TND</TableCell>
-                        <TableCell>{new Date(invoice.issue_date).toLocaleDateString('fr-TN')}</TableCell>
+                        <TableCell>
+                          {new Date(invoice.issue_date).toLocaleDateString('fr-TN')}
+                        </TableCell>
                         <TableCell>
                           <Chip
-                            label={invoice.status === 'paid' ? 'Payée' : invoice.status === 'sent' ? 'Envoyée' : 'Brouillon'}
+                            label={
+                              invoice.status === 'paid'
+                                ? 'Payée'
+                                : invoice.status === 'sent'
+                                  ? 'Envoyée'
+                                  : 'Brouillon'
+                            }
                             size="small"
                             color={getStatusColor(invoice.status)}
                           />

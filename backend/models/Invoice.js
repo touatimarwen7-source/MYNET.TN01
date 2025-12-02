@@ -1,4 +1,3 @@
-
 const BaseEntity = require('./BaseEntity');
 
 class Invoice extends BaseEntity {

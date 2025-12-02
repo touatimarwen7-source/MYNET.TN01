@@ -10,9 +10,7 @@ export default function BuyerAnalytics() {
         <Typography variant="h4" sx={{ fontWeight: 600, mb: 3, color: theme.palette.primary.main }}>
           تحليلات المشتري
         </Typography>
-        <Typography color="textSecondary">
-          سيتم تطوير هذه الميزة قريباً.
-        </Typography>
+        <Typography color="textSecondary">سيتم تطوير هذه الميزة قريباً.</Typography>
       </Box>
     </Container>
   );

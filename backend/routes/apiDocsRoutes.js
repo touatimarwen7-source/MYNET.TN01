@@ -25,7 +25,7 @@ module.exports = (app) => {
       docs: 'https://swagger.io',
       openapi: '3.0.0',
       endpoints: 95,
-      status: 'ready'
+      status: 'ready',
     });
   });
 

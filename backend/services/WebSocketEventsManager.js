@@ -59,7 +59,7 @@ class WebSocketEventsManager {
       supplierName: offerData.supplier_name,
       price: offerData.price,
       currency: offerData.currency,
-      timestamp: new Date()
+      timestamp: new Date(),
     });
   }
 
@@ -76,7 +76,7 @@ class WebSocketEventsManager {
       tenderId,
       status,
       changedBy,
-      timestamp: new Date()
+      timestamp: new Date(),
     });
   }
 
@@ -92,7 +92,7 @@ class WebSocketEventsManager {
       senderId: senderData.senderId,
       senderName: senderData.senderName,
       message: senderData.message,
-      timestamp: new Date()
+      timestamp: new Date(),
     });
   }
 
@@ -108,7 +108,7 @@ class WebSocketEventsManager {
       rating: ratingData.rating,
       reviewer: ratingData.reviewer,
       comment: ratingData.comment,
-      timestamp: new Date()
+      timestamp: new Date(),
     });
   }
 
@@ -123,7 +123,7 @@ class WebSocketEventsManager {
       type: 'email-sent',
       subject: emailData.subject,
       recipientEmail: emailData.recipientEmail,
-      timestamp: new Date()
+      timestamp: new Date(),
     });
   }
 
@@ -136,7 +136,7 @@ class WebSocketEventsManager {
     this.io.emit('user-online', {
       type: 'user-online',
       userId,
-      timestamp: new Date()
+      timestamp: new Date(),
     });
   }
 
@@ -149,7 +149,7 @@ class WebSocketEventsManager {
     this.io.emit('user-offline', {
       type: 'user-offline',
       userId,
-      timestamp: new Date()
+      timestamp: new Date(),
     });
   }
 
@@ -166,7 +166,7 @@ class WebSocketEventsManager {
       message: notification.message,
       icon: notification.icon,
       action: notification.action,
-      timestamp: new Date()
+      timestamp: new Date(),
     });
   }
 
@@ -184,7 +184,7 @@ class WebSocketEventsManager {
       newValue: updateData.newValue,
       oldValue: updateData.oldValue,
       changedBy: updateData.changedBy,
-      timestamp: new Date()
+      timestamp: new Date(),
     });
   }
 
@@ -198,7 +198,7 @@ class WebSocketEventsManager {
     this.io.to(`user-${userId}`).emit('statistics-updated', {
       type: 'statistics-updated',
       stats,
-      timestamp: new Date()
+      timestamp: new Date(),
     });
   }
 
@@ -215,7 +215,7 @@ class WebSocketEventsManager {
       title: alert.title,
       message: alert.message,
       action: alert.action,
-      timestamp: new Date()
+      timestamp: new Date(),
     });
   }
 

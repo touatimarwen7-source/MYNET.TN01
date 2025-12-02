@@ -5,6 +5,7 @@ Production-ready B2B procurement platform for Tunisia featuring comprehensive te
 ## 📋 Quick Start
 
 ### Prerequisites
+
 - Node.js 20+
 - PostgreSQL database
 - npm or yarn
@@ -54,6 +55,7 @@ MyNet.tn/
 ## 🛠️ Technology Stack
 
 ### Backend
+
 - **Framework**: Express.js
 - **Database**: PostgreSQL
 - **Authentication**: JWT + httpOnly cookies
@@ -62,6 +64,7 @@ MyNet.tn/
 - **Real-time**: WebSocket (socket.io)
 
 ### Frontend
+
 - **Library**: React 18
 - **Build**: Vite
 - **UI**: Material-UI

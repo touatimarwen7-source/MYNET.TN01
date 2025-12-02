@@ -39,9 +39,9 @@ const SubmitReviewPage = () => {
   } = useReviewForm(purchaseOrderId);
 
   return (
-    <Box sx={{ backgroundColor: '#FAFAFA', paddingY: '40px', minHeight: '100vh' }}>
+    <Box sx={{ backgroundColor: 'background.default', paddingY: '40px', minHeight: '100vh' }}>
       <Container maxWidth="sm">
-        <Card sx={{ border: '1px solid #e0e0e0', boxShadow: 'none' }}>
+        <Card sx={{ border: (theme) => `1px solid ${theme.palette.divider}`, boxShadow: 'none' }}>
           <CardContent sx={{ padding: '40px' }}>
             <Button startIcon={<ArrowBackIcon />} onClick={() => navigate('/reviewable-orders')} sx={{ mb: 3 }}>
               Retour

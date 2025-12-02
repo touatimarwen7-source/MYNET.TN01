@@ -50,7 +50,6 @@ function initializeSentry(app) {
 
   // Attach Sentry error handler (must be last middleware)
   app.use(Sentry.Handlers.errorHandler());
-
 }
 
 /**

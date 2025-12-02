@@ -1,8 +1,11 @@
-
 const { getPool } = require('../config/db');
 const Invoice = require('../models/Invoice');
 const DataMapper = require('../helpers/DataMapper');
-const { validateSchema, createInvoiceSchema, markInvoiceAsPaidSchema } = require('../utils/validationSchemas');
+const {
+  validateSchema,
+  createInvoiceSchema,
+  markInvoiceAsPaidSchema,
+} = require('../utils/validationSchemas');
 const { logger } = require('../utils/logger');
 
 class InvoiceService {
@@ -17,7 +20,7 @@ class InvoiceService {
   async createInvoice(invoiceData) {
     // Validate input data type
     const validatedData = validateSchema(invoiceData, createInvoiceSchema);
-    
+
     const pool = getPool();
     const client = await pool.connect();
     try {
@@ -41,7 +44,7 @@ class InvoiceService {
       const invoice = new Invoice({
         ...mappedData,
         invoice_number: invoiceNumber,
-        total: parseFloat(mappedData.amount) + parseFloat(mappedData.tax || 0)
+        total: parseFloat(mappedData.amount) + parseFloat(mappedData.tax || 0),
       });
 
       const result = await client.query(
@@ -50,9 +53,19 @@ class InvoiceService {
          issue_date, due_date, status, notes) 
         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) 
         RETURNING *`,
-        [invoice.id, validatedData.po_id, validatedData.supplier_id, 
-         invoice.invoice_number, validatedData.amount, validatedData.tax || 0, invoice.total,
-         validatedData.invoice_date, validatedData.due_date, invoice.status, invoice.notes]
+        [
+          invoice.id,
+          validatedData.po_id,
+          validatedData.supplier_id,
+          invoice.invoice_number,
+          validatedData.amount,
+          validatedData.tax || 0,
+          invoice.total,
+          validatedData.invoice_date,
+          validatedData.due_date,
+          invoice.status,
+          invoice.notes,
+        ]
       );
 
       await client.query('COMMIT');
@@ -96,7 +109,7 @@ class InvoiceService {
   async markAsPaid(paymentData) {
     // Validate input data type
     const validatedData = validateSchema(paymentData, markInvoiceAsPaidSchema);
-    
+
     const pool = getPool();
     const result = await pool.query(
       `UPDATE invoices 

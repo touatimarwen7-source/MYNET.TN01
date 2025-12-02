@@ -50,7 +50,7 @@ class BatchLoader {
     if (this.queue.length === 0) return;
 
     const batch = this.queue.splice(0, this.batchSize);
-    const keys = batch.map(b => b.key);
+    const keys = batch.map((b) => b.key);
     const startTime = Date.now();
 
     try {
@@ -70,7 +70,7 @@ class BatchLoader {
       logger.debug('BATCH_LOADER_EXECUTED', {
         batchSize: batch.length,
         duration: `${Date.now() - startTime}ms`,
-        uniqueKeys: new Set(keys).size
+        uniqueKeys: new Set(keys).size,
       });
 
       // Continue with next batch if exists
@@ -109,7 +109,7 @@ function selectColumns(columns) {
     select: columns.reduce((acc, col) => {
       acc[col] = true;
       return acc;
-    }, {})
+    }, {}),
   };
 }
 
@@ -118,8 +118,8 @@ function selectColumns(columns) {
  */
 async function withRelations(query, relations = []) {
   const optimized = query;
-  
-  relations.forEach(relation => {
+
+  relations.forEach((relation) => {
     optimized.include = optimized.include || {};
     optimized.include[relation] = true;
   });
@@ -172,7 +172,7 @@ class QueryCache {
   set(key, value) {
     this.cache.set(key, {
       value,
-      timestamp: Date.now()
+      timestamp: Date.now(),
     });
   }
 
@@ -202,7 +202,7 @@ class QueryCache {
 function detectN1Queries(queries) {
   const grouped = new Map();
 
-  queries.forEach(q => {
+  queries.forEach((q) => {
     const key = q.sql;
     if (!grouped.has(key)) {
       grouped.set(key, []);
@@ -216,7 +216,7 @@ function detectN1Queries(queries) {
       n1Issues.push({
         query: sql,
         count: executions.length,
-        duration: executions.reduce((sum, q) => sum + q.duration, 0)
+        duration: executions.reduce((sum, q) => sum + q.duration, 0),
       });
     }
   }
@@ -230,5 +230,5 @@ module.exports = {
   withRelations,
   paginate,
   QueryCache,
-  detectN1Queries
+  detectN1Queries,
 };

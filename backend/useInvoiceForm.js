@@ -42,13 +42,13 @@ export const useInvoiceForm = (purchaseOrderId) => {
           setFormData(draft);
         } else {
           // Initialize form with PO data if no draft exists
-          setFormData(prev => ({
+          setFormData((prev) => ({
             ...prev,
             line_items: po.items || [],
           }));
         }
       } catch (err) {
-        setFormErrors({ general: "Erreur lors du chargement du bon de commande." });
+        setFormErrors({ general: 'Erreur lors du chargement du bon de commande.' });
       } finally {
         setLoading(false);
       }
@@ -65,7 +65,8 @@ export const useInvoiceForm = (purchaseOrderId) => {
   );
 
   useEffect(() => {
-    if (purchaseOrder) { // Only save after initial data has loaded
+    if (purchaseOrder) {
+      // Only save after initial data has loaded
       debouncedSave(formData);
     }
   }, [formData, purchaseOrder, debouncedSave]);
@@ -75,11 +76,12 @@ export const useInvoiceForm = (purchaseOrderId) => {
     const newErrors = {};
     switch (currentStep) {
       case 0: // Invoice Details
-        if (!formData.invoice_number.trim()) newErrors.invoice_number = 'Le numéro de facture est requis.';
+        if (!formData.invoice_number.trim())
+          newErrors.invoice_number = 'Le numéro de facture est requis.';
         if (!formData.invoice_date) newErrors.invoice_date = 'La date de facturation est requise.';
-        if (!formData.due_date) newErrors.due_date = 'La date d\'échéance est requise.';
+        if (!formData.due_date) newErrors.due_date = "La date d'échéance est requise.";
         break;
-      
+
       case 1: // Review Items
         if (!formData.line_items || formData.line_items.length === 0) {
           newErrors.line_items = 'La facture doit contenir au moins un article.';
@@ -115,8 +117,11 @@ export const useInvoiceForm = (purchaseOrderId) => {
 
   const handleSubmit = async () => {
     if (!validateStep()) {
-        setFormErrors(prev => ({ ...prev, general: 'Veuillez corriger les erreurs avant de soumettre.' }));
-        return;
+      setFormErrors((prev) => ({
+        ...prev,
+        general: 'Veuillez corriger les erreurs avant de soumettre.',
+      }));
+      return;
     }
 
     setSubmitting(true);
@@ -127,7 +132,7 @@ export const useInvoiceForm = (purchaseOrderId) => {
         if (key === 'line_items') {
           submitData.append(key, JSON.stringify(value));
         } else if (key === 'attachments') {
-          value.forEach(file => submitData.append('attachments', file));
+          value.forEach((file) => submitData.append('attachments', file));
         } else {
           submitData.append(key, value);
         }

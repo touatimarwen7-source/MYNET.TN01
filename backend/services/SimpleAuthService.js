@@ -8,7 +8,7 @@ class SimpleAuthService {
     this.credentialsMap = {
       'admin@mynet.tn': 'Admin@MyNet.2025',
       'buyer@mynet.tn': 'Buyer@Test.2025',
-      'supplier@mynet.tn': 'Supplier@Test.2025'
+      'supplier@mynet.tn': 'Supplier@Test.2025',
     };
   }
 
@@ -23,8 +23,7 @@ class SimpleAuthService {
         const data = fs.readFileSync(this.usersFile, 'utf-8');
         return JSON.parse(data);
       }
-    } catch (error) {
-    }
+    } catch (error) {}
     return [];
   }
 
@@ -39,7 +38,7 @@ class SimpleAuthService {
    */
   async authenticate(email, password) {
     const users = this.loadUsers();
-    const user = users.find(u => u.email === email);
+    const user = users.find((u) => u.email === email);
 
     if (!user) {
       throw new Error('Invalid credentials');
@@ -55,7 +54,9 @@ class SimpleAuthService {
     const jwtRefreshSecret = process.env.JWT_REFRESH_SECRET;
 
     if (!jwtSecret || !jwtRefreshSecret) {
-      throw new Error('FATAL_ERROR: JWT_SECRET and JWT_REFRESH_SECRET environment variables must be set.');
+      throw new Error(
+        'FATAL_ERROR: JWT_SECRET and JWT_REFRESH_SECRET environment variables must be set.'
+      );
     }
 
     const accessToken = jwt.sign(
@@ -64,17 +65,13 @@ class SimpleAuthService {
       { expiresIn: '1h' }
     );
 
-    const refreshToken = jwt.sign(
-      { userId: user.id },
-      jwtRefreshSecret,
-      { expiresIn: '7d' }
-    );
+    const refreshToken = jwt.sign({ userId: user.id }, jwtRefreshSecret, { expiresIn: '7d' });
 
     const { password_hash, ...userWithoutPassword } = user;
     return {
       user: userWithoutPassword,
       accessToken,
-      refreshToken
+      refreshToken,
     };
   }
 
@@ -85,7 +82,7 @@ class SimpleAuthService {
    */
   getUserById(userId) {
     const users = this.loadUsers();
-    const user = users.find(u => u.id === userId);
+    const user = users.find((u) => u.id === userId);
     if (user) {
       const { password_hash, ...userWithoutPassword } = user;
       return userWithoutPassword;

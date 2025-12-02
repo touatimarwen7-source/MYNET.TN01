@@ -15,7 +15,7 @@ import {
   Grid,
   CircularProgress,
   Alert,
-  Pagination
+  Pagination,
 } from '@mui/material';
 import DownloadIcon from '@mui/icons-material/Download';
 import VisibilityIcon from '@mui/icons-material/Visibility';
@@ -23,15 +23,17 @@ import { setPageTitle } from '../utils/pageTitle';
 import { useOptimizedFetch } from '../hooks/useOptimizedFetch';
 
 const STATUS_COLORS = {
-  'paid': '#4caf50',
-  'pending': '#ff9800',
-  'overdue': '#f44336',
-  'cancelled': '#616161'
+  paid: '#4caf50',
+  pending: '#ff9800',
+  overdue: '#f44336',
+  cancelled: '#616161',
 };
 
 export default function InvoiceManagement() {
   const theme = institutionalTheme;
-  const { data, loading, error, pagination, goToPage, fetchData } = useOptimizedFetch('/api/procurement/invoices');
+  const { data, loading, error, pagination, goToPage, fetchData } = useOptimizedFetch(
+    '/api/procurement/invoices'
+  );
 
   useEffect(() => {
     setPageTitle('Gestion des factures');
@@ -51,7 +53,7 @@ export default function InvoiceManagement() {
     return new Intl.NumberFormat('fr-TN', {
       style: 'currency',
       currency: 'TND',
-      minimumFractionDigits: 2
+      minimumFractionDigits: 2,
     }).format(amount || 0);
   };
 
@@ -59,7 +61,7 @@ export default function InvoiceManagement() {
     return new Date(dateString).toLocaleDateString('fr-TN', {
       year: 'numeric',
       month: '2-digit',
-      day: '2-digit'
+      day: '2-digit',
     });
   };
 
@@ -67,22 +69,34 @@ export default function InvoiceManagement() {
     return [
       { label: 'إجمالي الفواتير', value: pagination?.total || 0 },
       { label: 'الفواتير المعروضة', value: invoices.length },
-      { label: 'المبلغ الإجمالي', value: formatCurrency(invoices.reduce((sum, inv) => sum + (inv.amount || 0), 0)) }
+      {
+        label: 'المبلغ الإجمالي',
+        value: formatCurrency(invoices.reduce((sum, inv) => sum + (inv.amount || 0), 0)),
+      },
     ];
   }, [invoices, pagination]);
 
   const maxPages = Math.ceil(pagination.total / pagination.limit);
 
   return (
-    <Box sx={{ backgroundColor: institutionalTheme.palette.background.default, paddingY: '40px', minHeight: '80vh' }}>
+    <Box
+      sx={{
+        backgroundColor: institutionalTheme.palette.background.default,
+        paddingY: '40px',
+        minHeight: '80vh',
+      }}
+    >
       <Container maxWidth="lg">
-        <Typography variant="h2" sx={{
-          fontSize: '32px',
-          fontWeight: 600,
-          color: institutionalTheme.palette.primary.main,
-          mb: 3,
-          direction: 'rtl'
-        }}>
+        <Typography
+          variant="h2"
+          sx={{
+            fontSize: '32px',
+            fontWeight: 600,
+            color: institutionalTheme.palette.primary.main,
+            mb: 3,
+            direction: 'rtl',
+          }}
+        >
           Gestion des factures
         </Typography>
 
@@ -96,17 +110,25 @@ export default function InvoiceManagement() {
         <Grid container spacing={2} sx={{ mb: 3 }}>
           {stats.map((stat, idx) => (
             <Grid xs={12} lg={6} md={4} key={idx}>
-              <Box sx={{
-                backgroundColor: '#FFF',
-                p: 2,
-                borderRadius: '8px',
-                border: '1px solid #E0E0E0',
-                boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
-              }}>
+              <Box
+                sx={{
+                  backgroundColor: '#FFF',
+                  p: 2,
+                  borderRadius: '8px',
+                  border: '1px solid #E0E0E0',
+                  boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
+                }}
+              >
                 <Typography sx={{ color: '#616161', fontSize: '12px', mb: 1 }}>
                   {stat.label}
                 </Typography>
-                <Typography sx={{ fontWeight: 600, fontSize: '20px', color: institutionalTheme.palette.primary.main }}>
+                <Typography
+                  sx={{
+                    fontWeight: 600,
+                    fontSize: '20px',
+                    color: institutionalTheme.palette.primary.main,
+                  }}
+                >
                   {stat.value}
                 </Typography>
               </Box>
@@ -126,19 +148,48 @@ export default function InvoiceManagement() {
               <Table>
                 <TableHead sx={{ backgroundColor: '#F5F5F5' }}>
                   <TableRow>
-                    <TableCell sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main }}>N° de facture</TableCell>
-                    <TableCell sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main }}>Montant</TableCell>
-                    <TableCell sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main }}>Statut</TableCell>
-                    <TableCell sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main }}>Date</TableCell>
-                    <TableCell sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main }}>Échéance</TableCell>
-                    <TableCell sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main }} align="center">Actions</TableCell>
+                    <TableCell
+                      sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main }}
+                    >
+                      N° de facture
+                    </TableCell>
+                    <TableCell
+                      sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main }}
+                    >
+                      Montant
+                    </TableCell>
+                    <TableCell
+                      sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main }}
+                    >
+                      Statut
+                    </TableCell>
+                    <TableCell
+                      sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main }}
+                    >
+                      Date
+                    </TableCell>
+                    <TableCell
+                      sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main }}
+                    >
+                      Échéance
+                    </TableCell>
+                    <TableCell
+                      sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main }}
+                      align="center"
+                    >
+                      Actions
+                    </TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
                   {invoices.map((inv) => (
                     <TableRow
                       key={inv.id}
-                      sx={{ '&:hover': { backgroundColor: institutionalTheme.palette.background.default } }}
+                      sx={{
+                        '&:hover': {
+                          backgroundColor: institutionalTheme.palette.background.default,
+                        },
+                      }}
                     >
                       <TableCell>{inv.id}</TableCell>
                       <TableCell>{formatCurrency(inv.amount)}</TableCell>
@@ -149,7 +200,7 @@ export default function InvoiceManagement() {
                           sx={{
                             backgroundColor: getStatusColor(inv.status) + '30',
                             color: getStatusColor(inv.status),
-                            fontWeight: 500
+                            fontWeight: 500,
                           }}
                         />
                       </TableCell>

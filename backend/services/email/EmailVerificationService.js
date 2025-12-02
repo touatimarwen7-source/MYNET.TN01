@@ -18,7 +18,7 @@ class EmailVerificationService {
   generateVerificationToken() {
     return {
       token: crypto.randomBytes(32).toString('hex'),
-      expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000)
+      expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000),
     };
   }
 
@@ -76,7 +76,7 @@ class EmailVerificationService {
         `UPDATE users SET email_verified = true, verified_at = NOW() WHERE id = $1`,
         [user_id]
       );
-      
+
       // Mark token as used
       await client.query(
         `UPDATE email_verification_tokens SET used = true, used_at = NOW() WHERE token = $1`,
@@ -111,7 +111,7 @@ class EmailVerificationService {
       }
 
       const { id: userId } = userResult.rows[0];
-      
+
       // Invalidate previous verification tokens
       await client.query(
         `UPDATE email_verification_tokens SET used = true WHERE user_id = $1 AND used = false`,
@@ -138,10 +138,7 @@ class EmailVerificationService {
    */
   async isEmailVerified(userId) {
     const pool = getPool();
-    const result = await pool.query(
-      `SELECT email_verified FROM users WHERE id = $1`,
-      [userId]
-    );
+    const result = await pool.query(`SELECT email_verified FROM users WHERE id = $1`, [userId]);
     return result.rows.length > 0 ? result.rows[0].email_verified === true : false;
   }
 }

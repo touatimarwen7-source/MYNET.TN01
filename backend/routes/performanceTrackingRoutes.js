@@ -7,35 +7,41 @@ const router = express.Router();
 const { validateIdMiddleware } = require('../middleware/validateIdMiddleware');
 
 // Get supplier performance score (optimized + cached)
-router.get('/supplier/:supplierId', validateIdMiddleware('supplierId'), authMiddleware, cacheMiddleware(600), async (req, res) => {
-  try {
-    const { supplierId } = req.params;
-    const db = req.app.get('db');
+router.get(
+  '/supplier/:supplierId',
+  validateIdMiddleware('supplierId'),
+  authMiddleware,
+  cacheMiddleware(600),
+  async (req, res) => {
+    try {
+      const { supplierId } = req.params;
+      const db = req.app.get('db');
 
-    const performance = await QueryOptimizer.getSupplierPerformance(db, supplierId);
+      const performance = await QueryOptimizer.getSupplierPerformance(db, supplierId);
 
-    if (performance.rows.length === 0) {
-      return res.status(404).json({ error: 'Supplier not found' });
+      if (performance.rows.length === 0) {
+        return res.status(404).json({ error: 'Supplier not found' });
+      }
+
+      const perf = performance.rows[0];
+      const completionRate = (perf.completed_orders / perf.total_offers) * 100 || 0;
+      const ratingScore = perf.avg_rating * 20 || 0;
+      const reviewScore = (perf.positive_reviews / perf.total_reviews) * 100 || 0;
+      const overallScore = completionRate * 0.4 + ratingScore * 0.4 + reviewScore * 0.2;
+
+      res.json({
+        ...perf,
+        completion_rate: parseFloat(completionRate.toFixed(2)),
+        rating_score: parseFloat(ratingScore.toFixed(2)),
+        review_score: parseFloat(reviewScore.toFixed(2)),
+        overall_score: parseFloat(overallScore.toFixed(2)),
+        performance_tier: overallScore >= 80 ? 'Excellent' : overallScore >= 60 ? 'Good' : 'Fair',
+      });
+    } catch (error) {
+      res.status(500).json({ error: error.message });
     }
-
-    const perf = performance.rows[0];
-    const completionRate = (perf.completed_orders / perf.total_offers) * 100 || 0;
-    const ratingScore = (perf.avg_rating * 20) || 0;
-    const reviewScore = (perf.positive_reviews / perf.total_reviews) * 100 || 0;
-    const overallScore = (completionRate * 0.4 + ratingScore * 0.4 + reviewScore * 0.2);
-
-    res.json({
-      ...perf,
-      completion_rate: parseFloat(completionRate.toFixed(2)),
-      rating_score: parseFloat(ratingScore.toFixed(2)),
-      review_score: parseFloat(reviewScore.toFixed(2)),
-      overall_score: parseFloat(overallScore.toFixed(2)),
-      performance_tier: overallScore >= 80 ? 'Excellent' : overallScore >= 60 ? 'Good' : 'Fair'
-    });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
   }
-});
+);
 
 // Get top suppliers by performance
 router.get('/top-suppliers', authMiddleware, async (req, res) => {
@@ -63,12 +69,17 @@ router.get('/top-suppliers', authMiddleware, async (req, res) => {
 });
 
 // Get supplier performance history
-router.get('/history/:supplierId', validateIdMiddleware('supplierId'), authMiddleware, async (req, res) => {
-  try {
-    const { supplierId } = req.params;
-    const db = req.app.get('db');
+router.get(
+  '/history/:supplierId',
+  validateIdMiddleware('supplierId'),
+  authMiddleware,
+  async (req, res) => {
+    try {
+      const { supplierId } = req.params;
+      const db = req.app.get('db');
 
-    const history = await db.query(`
+      const history = await db.query(
+        `
       SELECT 
         o.id,
         o.price,
@@ -80,12 +91,15 @@ router.get('/history/:supplierId', validateIdMiddleware('supplierId'), authMiddl
       WHERE o.supplier_id = $1 AND o.is_deleted = false
       ORDER BY o.created_at DESC
       LIMIT 50
-    `, [supplierId]);
+    `,
+        [supplierId]
+      );
 
-    res.json(history.rows);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
+      res.json(history.rows);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
   }
-});
+);
 
 module.exports = router;

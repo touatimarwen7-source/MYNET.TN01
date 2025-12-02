@@ -16,7 +16,7 @@ const sensitiveEndpointLimiter = rateLimit({
   message: 'Too many attempts, please try again later',
   standardHeaders: true,
   legacyHeaders: false,
-  skip: (req) => req.user?.isAdmin === true // Skip for admins
+  skip: (req) => req.user?.isAdmin === true, // Skip for admins
 });
 
 /**
@@ -27,7 +27,7 @@ const apiEndpointLimiter = rateLimit({
   max: 30, // 30 requests per minute
   message: 'Rate limit exceeded',
   standardHeaders: true,
-  legacyHeaders: false
+  legacyHeaders: false,
 });
 
 /**
@@ -39,7 +39,7 @@ const authLimiter = rateLimit({
   message: 'Too many login attempts',
   standardHeaders: true,
   legacyHeaders: false,
-  skipSuccessfulRequests: false
+  skipSuccessfulRequests: false,
 });
 
 /**
@@ -50,7 +50,7 @@ const uploadLimiter = rateLimit({
   max: 3, // 3 uploads per minute
   message: 'Too many uploads, please wait',
   standardHeaders: true,
-  legacyHeaders: false
+  legacyHeaders: false,
 });
 
 /**
@@ -60,7 +60,7 @@ function ddosProtectionMiddleware(req, res, next) {
   // Track request rate by IP
   const ip = req.ip || req.connection.remoteAddress;
   const path = req.path;
-  
+
   // Store request timestamp
   if (!req.app.locals.requestTimestamps) {
     req.app.locals.requestTimestamps = new Map();
@@ -68,10 +68,10 @@ function ddosProtectionMiddleware(req, res, next) {
 
   const key = `${ip}:${path}`;
   const timestamps = req.app.locals.requestTimestamps.get(key) || [];
-  
+
   const now = Date.now();
-  const recentRequests = timestamps.filter(t => now - t < 60000); // Last 60 seconds
-  
+  const recentRequests = timestamps.filter((t) => now - t < 60000); // Last 60 seconds
+
   // DDoS detection: More than 100 requests from same IP in 60s
   if (recentRequests.length > 100) {
     logger.warn('DDOS_ATTACK_DETECTED', { ip, path, requestCount: recentRequests.length });
@@ -79,8 +79,8 @@ function ddosProtectionMiddleware(req, res, next) {
       success: false,
       error: {
         message: 'Too many requests. Access temporarily blocked.',
-        code: 'DDOS_PROTECTION_ACTIVE'
-      }
+        code: 'DDOS_PROTECTION_ACTIVE',
+      },
     });
   }
 
@@ -99,7 +99,7 @@ function exponentialBackoffLimiter(options = {}) {
     windowMs = 60000,
     baseDelay = 100,
     maxDelay = 3600000, // 1 hour
-    maxAttempts = 10
+    maxAttempts = 10,
   } = options;
 
   const attempts = new Map();
@@ -116,20 +116,17 @@ function exponentialBackoffLimiter(options = {}) {
     attemptData.count++;
 
     if (attemptData.count > maxAttempts) {
-      const delay = Math.min(
-        baseDelay * Math.pow(2, attemptData.count - maxAttempts),
-        maxDelay
-      );
-      
+      const delay = Math.min(baseDelay * Math.pow(2, attemptData.count - maxAttempts), maxDelay);
+
       res.set('Retry-After', Math.ceil(delay / 1000));
-      
+
       return res.status(429).json({
         success: false,
         error: {
           message: `Too many attempts. Please wait ${Math.ceil(delay / 1000)} seconds`,
           code: 'RATE_LIMIT_EXCEEDED',
-          retryAfter: Math.ceil(delay / 1000)
-        }
+          retryAfter: Math.ceil(delay / 1000),
+        },
       });
     }
 
@@ -144,15 +141,15 @@ function exponentialBackoffLimiter(options = {}) {
 function requestSizeValidation(maxSize = REQUEST_SIZE_LIMIT.FORMAT) {
   return (req, res, next) => {
     const contentLength = req.get('content-length');
-    
+
     if (contentLength && contentLength > REQUEST_SIZE_LIMIT.MAX_BYTES) {
       logger.warn('OVERSIZED_REQUEST', { ip: req.ip, size: contentLength });
       return res.status(413).json({
         success: false,
         error: {
           message: 'Request payload too large',
-          code: 'PAYLOAD_TOO_LARGE'
-        }
+          code: 'PAYLOAD_TOO_LARGE',
+        },
       });
     }
 
@@ -167,5 +164,5 @@ module.exports = {
   uploadLimiter,
   ddosProtectionMiddleware,
   exponentialBackoffLimiter,
-  requestSizeValidation
+  requestSizeValidation,
 };

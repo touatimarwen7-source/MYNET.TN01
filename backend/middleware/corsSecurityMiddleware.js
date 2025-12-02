@@ -9,19 +9,19 @@ const cors = require('cors');
  * CORS configuration with security options
  */
 const corsOptions = {
-  origin: function(origin, callback) {
+  origin: function (origin, callback) {
     // Allow requests from frontend
     const allowedOrigins = [
       process.env.FRONTEND_URL || 'http://localhost:5000',
       'http://localhost:5000',
       'http://localhost:3000',
-      process.env.REPLIT_ORIGIN || 'http://127.0.0.1:5000'
+      process.env.REPLIT_ORIGIN || 'http://127.0.0.1:5000',
     ];
 
     // Add Replit domain if available
     if (process.env.REPLIT_DOMAINS) {
       const replitDomains = process.env.REPLIT_DOMAINS.split(',');
-      replitDomains.forEach(domain => {
+      replitDomains.forEach((domain) => {
         allowedOrigins.push(`https://${domain.trim()}`);
         allowedOrigins.push(`http://${domain.trim()}`);
       });
@@ -48,7 +48,7 @@ const corsOptions = {
     'X-CSRF-Token',
     'Accept',
     'Accept-Language',
-    'Content-Language'
+    'Content-Language',
   ],
   exposedHeaders: [
     'X-Total-Count',
@@ -57,10 +57,10 @@ const corsOptions = {
     'Content-Range',
     'X-RateLimit-Limit',
     'X-RateLimit-Remaining',
-    'X-RateLimit-Reset'
+    'X-RateLimit-Reset',
   ],
   maxAge: 3600, // 1 hour
-  preflightContinue: false
+  preflightContinue: false,
 };
 
 /**
@@ -80,10 +80,7 @@ function securityHeadersMiddleware(req, res, next) {
   res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
 
   // Permissions policy
-  res.setHeader(
-    'Permissions-Policy',
-    'geolocation=(), microphone=(), camera=(), payment=()'
-  );
+  res.setHeader('Permissions-Policy', 'geolocation=(), microphone=(), camera=(), payment=()');
 
   // Content Security Policy (strict)
   res.setHeader(
@@ -92,10 +89,7 @@ function securityHeadersMiddleware(req, res, next) {
   );
 
   // Strict Transport Security (HSTS)
-  res.setHeader(
-    'Strict-Transport-Security',
-    'max-age=31536000; includeSubDomains; preload'
-  );
+  res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload');
 
   // Cache control for sensitive resources
   if (req.path.includes('/api/')) {
@@ -126,5 +120,5 @@ module.exports = {
   corsOptions,
   corsMiddleware: cors(corsOptions),
   securityHeadersMiddleware,
-  rateLimitHeadersMiddleware
+  rateLimitHeadersMiddleware,
 };

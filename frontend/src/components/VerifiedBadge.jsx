@@ -5,7 +5,7 @@ export default function VerifiedBadge({ size = 'md', showText = true }) {
   const sizeMap = {
     sm: 16,
     md: 20,
-    lg: 24
+    lg: 24,
   };
 
   return (
@@ -15,12 +15,10 @@ export default function VerifiedBadge({ size = 'md', showText = true }) {
           display: 'inline-flex',
           alignItems: 'center',
           gap: '4px',
-          cursor: 'default'
+          cursor: 'default',
         }}
       >
-        <Box sx={{ fontSize: sizeMap[size] }}>
-          ✓
-        </Box>
+        <Box sx={{ fontSize: sizeMap[size] }}>✓</Box>
         {showText && (
           <Typography variant="caption" sx={{ fontWeight: 600, color: THEME_COLORS.success }}>
             Vérifiée

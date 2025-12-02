@@ -1,5 +1,5 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
 
 export default defineConfig({
   plugins: [react()],
@@ -13,13 +13,13 @@ export default defineConfig({
         target: 'http://127.0.0.1:3000',
         changeOrigin: true,
         secure: false,
-        ws: true
-      }
-    }
+        ws: true,
+      },
+    },
   },
   preview: {
     host: '0.0.0.0',
-    port: 5000
+    port: 5000,
   },
   build: {
     // Optimize chunk strategy for faster first load
@@ -57,17 +57,29 @@ export default defineConfig({
             return 'admin-components';
           }
           // Pages grouped by feature
-          if (id.includes('pages/Tender') || id.includes('pages/Offer') || id.includes('pages/Bid')) {
+          if (
+            id.includes('pages/Tender') ||
+            id.includes('pages/Offer') ||
+            id.includes('pages/Bid')
+          ) {
             return 'tender-pages';
           }
-          if (id.includes('pages/Invoice') || id.includes('pages/Financial') || id.includes('pages/Budget')) {
+          if (
+            id.includes('pages/Invoice') ||
+            id.includes('pages/Financial') ||
+            id.includes('pages/Budget')
+          ) {
             return 'financial-pages';
           }
-          if (id.includes('pages/Admin') || id.includes('pages/SuperAdmin') || id.includes('pages/User')) {
+          if (
+            id.includes('pages/Admin') ||
+            id.includes('pages/SuperAdmin') ||
+            id.includes('pages/User')
+          ) {
             return 'admin-pages';
           }
-        }
-      }
+        },
+      },
     },
     // Larger limit for better loading
     chunkSizeWarningLimit: 1000,
@@ -75,8 +87,8 @@ export default defineConfig({
     minify: 'terser',
     terserOptions: {
       compress: {
-        drop_console: true
-      }
+        drop_console: true,
+      },
     },
     // Enable source maps only in dev
     sourcemap: false,
@@ -85,7 +97,7 @@ export default defineConfig({
     // Increase report size
     reportCompressedSize: false,
     // Optimize lib entry point
-    lib: undefined
+    lib: undefined,
   },
   // Optimize resolution
   resolve: {
@@ -96,8 +108,8 @@ export default defineConfig({
       '@pages': '/src/pages',
       '@hooks': '/src/hooks',
       '@utils': '/src/utils',
-      '@contexts': '/src/contexts'
-    }
+      '@contexts': '/src/contexts',
+    },
   },
   // Optimize dependency pre-bundling
   optimizeDeps: {
@@ -109,8 +121,8 @@ export default defineConfig({
       '@mui/icons-material',
       'axios',
       'i18next',
-      'react-i18next'
+      'react-i18next',
     ],
-    exclude: ['@vitest/ui']
-  }
-})
+    exclude: ['@vitest/ui'],
+  },
+});

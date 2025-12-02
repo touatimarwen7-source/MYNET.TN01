@@ -9,7 +9,7 @@ class ParamValidator {
    */
   static validateRequired(params, required) {
     const missing = [];
-    required.forEach(param => {
+    required.forEach((param) => {
       if (!params[param]) {
         missing.push(param);
       }
@@ -44,7 +44,7 @@ class ParamValidator {
    */
   static validatePagination(page, limit) {
     const errors = [];
-    
+
     const pageNum = parseInt(page) || 1;
     if (pageNum < 1) errors.push('Page must be >= 1');
 

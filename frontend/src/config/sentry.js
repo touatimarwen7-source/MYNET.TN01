@@ -23,9 +23,7 @@ export function initializeSentry() {
   Sentry.init({
     dsn: sentryDSN,
     environment: environment,
-    integrations: [
-      new BrowserTracing(),
-    ],
+    integrations: [new BrowserTracing()],
     tracesSampleRate: environment === 'production' ? 0.1 : 1.0,
     beforeSend(event) {
       // Filter out network errors in development

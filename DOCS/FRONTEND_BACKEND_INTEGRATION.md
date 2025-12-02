@@ -1,7 +1,9 @@
 # Frontend-Backend Integration Documentation
 
 ## Overview
+
 MyNet.tn platform features a complete, production-ready frontend-backend integration with:
+
 - ✅ Real-time API communication
 - ✅ Secure JWT authentication
 - ✅ Token management and refresh
@@ -15,6 +17,7 @@ MyNet.tn platform features a complete, production-ready frontend-backend integra
 ## Architecture
 
 ### System Diagram
+
 ```
 ┌─────────────────────────────────────────────────────────────────┐
 │                       FRONTEND (React/Vite)                     │
@@ -93,13 +96,25 @@ MyNet.tn platform features a complete, production-ready frontend-backend integra
 ## 1. Frontend Service Layer
 
 ### 1.1 Main API Module (`frontend/src/api.js`)
+
 Exports all API endpoint groups:
+
 ```javascript
-export const authAPI = { /* 6 endpoints */ }
-export const procurementAPI = { /* 15+ endpoints */ }
-export const searchAPI = { /* 2 endpoints */ }
-export const adminAPI = { /* 4 endpoints */ }
-export const directSupplyAPI = { /* 5 endpoints */ }
+export const authAPI = {
+  /* 6 endpoints */
+};
+export const procurementAPI = {
+  /* 15+ endpoints */
+};
+export const searchAPI = {
+  /* 2 endpoints */
+};
+export const adminAPI = {
+  /* 4 endpoints */
+};
+export const directSupplyAPI = {
+  /* 5 endpoints */
+};
 // ... more exports
 ```
 
@@ -108,6 +123,7 @@ export const directSupplyAPI = { /* 5 endpoints */ }
 ### 1.2 Axios Configuration (`frontend/src/services/axiosConfig.js`)
 
 **Features:**
+
 - ✅ Base URL: `/api` (relative, proxied to backend)
 - ✅ Automatic token injection in headers
 - ✅ CSRF token handling
@@ -118,6 +134,7 @@ export const directSupplyAPI = { /* 5 endpoints */ }
 - ✅ httpOnly cookie support
 
 **Request Flow:**
+
 ```
 1. Component calls API → authAPI.login()
 2. axiosInstance.post('/auth/login', data)
@@ -139,20 +156,22 @@ export const directSupplyAPI = { /* 5 endpoints */ }
 ### 1.3 Token Manager (`frontend/src/services/tokenManager.js`)
 
 **Secure Token Storage:**
+
 ```javascript
 // Local Storage + In-Memory
-TokenManager.setAccessToken(token, expiresIn)
-TokenManager.getAccessToken()
-TokenManager.setRefreshTokenId(token)
-TokenManager.getRefreshTokenId()
+TokenManager.setAccessToken(token, expiresIn);
+TokenManager.getAccessToken();
+TokenManager.setRefreshTokenId(token);
+TokenManager.getRefreshTokenId();
 
 // Token Validation
-TokenManager.isTokenValid() // Checks expiration
-TokenManager.shouldRefreshToken() // 2 min before expiry
-TokenManager.clearTokens() // On logout
+TokenManager.isTokenValid(); // Checks expiration
+TokenManager.shouldRefreshToken(); // 2 min before expiry
+TokenManager.clearTokens(); // On logout
 ```
 
 **Token Persistence:**
+
 - Access Token: In-memory cache + localStorage
 - Refresh Token: httpOnly cookie (secure)
 - User Data: localStorage (encrypted)
@@ -164,6 +183,7 @@ TokenManager.clearTokens() // On logout
 ### 2.1 AppContext (`frontend/src/contexts/AppContext.jsx`)
 
 **Global App State:**
+
 ```javascript
 {
   // Authentication
@@ -171,12 +191,12 @@ TokenManager.clearTokens() // On logout
   isAuthenticated: boolean,
   authLoading: boolean,
   authError: null,
-  
+
   // App State
   appLoading: boolean,
   appError: null,
   toasts: [],
-  
+
   // Settings
   sidebarOpen: boolean,
   appSettings: { language, theme, notifications }
@@ -184,15 +204,17 @@ TokenManager.clearTokens() // On logout
 ```
 
 **Available Hooks:**
+
 ```javascript
-const { user, logout, login, updateUser } = useAuth()
-const { addToast, removeToast } = useToast()
-const { appLoading, appError } = useApp()
+const { user, logout, login, updateUser } = useAuth();
+const { addToast, removeToast } = useToast();
+const { appLoading, appError } = useApp();
 ```
 
 ### 2.2 SuperAdminContext (`frontend/src/contexts/SuperAdminContext.jsx`)
 
 **Admin-Specific State:**
+
 ```javascript
 {
   pages: [],
@@ -208,26 +230,38 @@ const { appLoading, appError } = useApp()
 ```
 
 **Available Methods:**
+
 ```javascript
 const {
   // Pages
-  fetchPages, createPage, updatePage, deletePage,
-  
+  fetchPages,
+  createPage,
+  updatePage,
+  deletePage,
+
   // Files
-  fetchFiles, uploadFile, deleteFile,
-  
+  fetchFiles,
+  uploadFile,
+  deleteFile,
+
   // Users
-  fetchUsers, blockUser, unblockUser,
-  
+  fetchUsers,
+  blockUser,
+  unblockUser,
+
   // Audit Logs
   fetchAuditLogs,
-  
+
   // Backups
-  fetchBackups, createBackup, restoreBackup,
-  
+  fetchBackups,
+  createBackup,
+  restoreBackup,
+
   // Loading states
-  loading, error, success
-} = useSuperAdmin()
+  loading,
+  error,
+  success,
+} = useSuperAdmin();
 ```
 
 ---
@@ -237,6 +271,7 @@ const {
 ### 3.1 Authentication Flow
 
 **Component:**
+
 ```javascript
 // pages/Login.jsx
 const { addToast } = useToast();
@@ -245,15 +280,16 @@ const handleLogin = async (email, password) => {
   try {
     const response = await authAPI.login({ email, password });
     TokenManager.setAccessToken(response.data.accessToken);
-    addToast('Login successful', 'success');
-    navigate('/dashboard');
+    addToast("Login successful", "success");
+    navigate("/dashboard");
   } catch (error) {
-    addToast(error.message, 'error');
+    addToast(error.message, "error");
   }
 };
 ```
 
 **Network Request:**
+
 ```
 POST /api/auth/login HTTP/1.1
 Host: localhost:5000
@@ -275,6 +311,7 @@ Response:
 ```
 
 **Backend Processing:**
+
 ```
 1. Express Route: POST /api/auth/login
 2. authController.login()
@@ -288,6 +325,7 @@ Response:
 ### 3.2 File Upload Integration
 
 **Component:**
+
 ```javascript
 // pages/FileManagement.jsx
 const { uploadFile } = useSuperAdmin();
@@ -295,17 +333,18 @@ const { uploadFile } = useSuperAdmin();
 const handleFileUpload = async (file) => {
   try {
     const formData = new FormData();
-    formData.append('file', file);
-    
+    formData.append("file", file);
+
     await uploadFile(formData);
-    addToast('File uploaded', 'success');
+    addToast("File uploaded", "success");
   } catch (error) {
-    addToast(error.message, 'error');
+    addToast(error.message, "error");
   }
 };
 ```
 
 **Network Request:**
+
 ```
 POST /api/super-admin/files HTTP/1.1
 Host: localhost:5000
@@ -329,6 +368,7 @@ Response:
 ```
 
 **Backend Processing:**
+
 ```
 1. Express Route: POST /api/super-admin/files
 2. Middleware: verifyToken, checkRole(['super_admin'])
@@ -343,16 +383,18 @@ Response:
 ### 3.3 Audit Log Retrieval
 
 **Component:**
+
 ```javascript
 // pages/AuditLogViewer.jsx
 const { auditLogs, loading, error, fetchAuditLogs } = useSuperAdmin();
 
 useEffect(() => {
-  fetchAuditLogs({ page: 1, limit: 10, action: 'CREATE_PAGE' });
+  fetchAuditLogs({ page: 1, limit: 10, action: "CREATE_PAGE" });
 }, []);
 ```
 
 **Network Request:**
+
 ```
 GET /api/super-admin/audit-logs?page=1&limit=10&action=CREATE_PAGE HTTP/1.1
 Host: localhost:5000
@@ -380,6 +422,7 @@ Response:
 ```
 
 **Backend Processing:**
+
 ```
 1. Express Route: GET /api/super-admin/audit-logs
 2. Middleware: verifyToken, checkRole(['super_admin'])
@@ -504,16 +547,16 @@ try {
 } catch (error) {
   if (error.response?.status === 401) {
     // Unauthorized - show login error
-    addToast('Invalid credentials', 'error');
+    addToast("Invalid credentials", "error");
   } else if (error.response?.status === 403) {
     // Forbidden - user blocked
-    addToast('Account blocked', 'error');
+    addToast("Account blocked", "error");
   } else if (error.response?.status === 500) {
     // Server error
-    addToast('Server error', 'error');
+    addToast("Server error", "error");
   } else if (!error.response) {
     // Network error
-    addToast('Network connection failed', 'error');
+    addToast("Network connection failed", "error");
   }
 }
 ```
@@ -530,6 +573,7 @@ All endpoints return consistent error structure:
 ```
 
 With HTTP status codes:
+
 - **400** - Bad Request (validation error)
 - **401** - Unauthorized (missing/invalid token)
 - **403** - Forbidden (insufficient permissions)
@@ -725,7 +769,7 @@ Frontend receives response
 Frontend Component
   ↓
   const { auditLogs, fetchAuditLogs } = useSuperAdmin()
-  
+
   useEffect(() => {
     fetchAuditLogs({ page: 1, limit: 10, action: 'CREATE_PAGE' })
   })
@@ -791,19 +835,19 @@ Response:
 
 ✅ **Frontend-Backend Integration Status: COMPLETE**
 
-| Component | Status | Details |
-|-----------|--------|---------|
-| **Axios Configuration** | ✅ | Token management, interceptors, caching |
-| **API Service Layer** | ✅ | All endpoints properly exported |
-| **Super Admin Service** | ✅ | 10 admin functions, 30 endpoints |
-| **Global Context** | ✅ | AppContext + SuperAdminContext |
-| **Authentication** | ✅ | JWT + token refresh + httpOnly cookies |
-| **Authorization** | ✅ | Role-based access control |
-| **Error Handling** | ✅ | Comprehensive error responses |
-| **Audit Logging** | ✅ | All actions logged with IP tracking |
-| **Security** | ✅ | CSRF protection, XSS prevention |
-| **Caching** | ✅ | Response caching, stale-while-revalidate |
-| **Real Data** | ✅ | All data stored in PostgreSQL database |
-| **API Documentation** | ✅ | ADMIN_API.md + Postman collection |
+| Component               | Status | Details                                  |
+| ----------------------- | ------ | ---------------------------------------- |
+| **Axios Configuration** | ✅     | Token management, interceptors, caching  |
+| **API Service Layer**   | ✅     | All endpoints properly exported          |
+| **Super Admin Service** | ✅     | 10 admin functions, 30 endpoints         |
+| **Global Context**      | ✅     | AppContext + SuperAdminContext           |
+| **Authentication**      | ✅     | JWT + token refresh + httpOnly cookies   |
+| **Authorization**       | ✅     | Role-based access control                |
+| **Error Handling**      | ✅     | Comprehensive error responses            |
+| **Audit Logging**       | ✅     | All actions logged with IP tracking      |
+| **Security**            | ✅     | CSRF protection, XSS prevention          |
+| **Caching**             | ✅     | Response caching, stale-while-revalidate |
+| **Real Data**           | ✅     | All data stored in PostgreSQL database   |
+| **API Documentation**   | ✅     | ADMIN_API.md + Postman collection        |
 
 **The frontend and backend are fully integrated with real API communication, secure authentication, and complete data persistence.**

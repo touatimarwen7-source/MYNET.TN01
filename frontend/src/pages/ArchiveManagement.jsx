@@ -31,7 +31,7 @@ import { useSuperAdmin } from '../contexts/SuperAdminContext';
 export default function ArchiveManagement() {
   const theme = institutionalTheme;
   const { backups, loading, error, fetchBackups, createBackup, restoreBackup } = useSuperAdmin();
-  
+
   const [openDialog, setOpenDialog] = useState(false);
   const [selectedBackup, setSelectedBackup] = useState(null);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -61,7 +61,7 @@ export default function ArchiveManagement() {
 
   const confirmRestore = async () => {
     if (!selectedBackup) return;
-    
+
     setIsProcessing(true);
     try {
       await restoreBackup(selectedBackup.id);
@@ -95,14 +95,21 @@ export default function ArchiveManagement() {
 
   const backupsList = Array.isArray(backups) ? backups : [];
   const totalSize = backupsList.reduce((sum, b) => sum + (b.size_bytes || 0), 0);
-  const successCount = backupsList.filter(b => b.status === 'completed').length;
+  const successCount = backupsList.filter((b) => b.status === 'completed').length;
 
   return (
     <Box sx={{ backgroundColor: '#fafafa', paddingY: '40px', minHeight: '100vh' }}>
       <Container maxWidth="lg">
         {/* Header */}
         <Box sx={{ marginBottom: '32px' }}>
-          <Typography variant="h3" sx={{ fontWeight: 700, color: institutionalTheme.palette.text.primary, marginBottom: '12px' }}>
+          <Typography
+            variant="h3"
+            sx={{
+              fontWeight: 700,
+              color: institutionalTheme.palette.text.primary,
+              marginBottom: '12px',
+            }}
+          >
             Sauvegarde & Restauration - Backup & Restore
           </Typography>
           <Typography sx={{ fontSize: '14px', color: '#666', marginBottom: '24px' }}>
@@ -128,7 +135,11 @@ export default function ArchiveManagement() {
               startIcon={<CloudUploadIcon />}
               onClick={handleCreateBackup}
               disabled={isProcessing || loading}
-              sx={{ backgroundColor: institutionalTheme.palette.primary.main, color: 'white', '&:hover': { backgroundColor: '#004399' } }}
+              sx={{
+                backgroundColor: institutionalTheme.palette.primary.main,
+                color: 'white',
+                '&:hover': { backgroundColor: '#004399' },
+              }}
             >
               {isProcessing ? 'Création en cours...' : 'Créer Sauvegarde'}
             </Button>
@@ -151,7 +162,13 @@ export default function ArchiveManagement() {
               <Typography sx={{ fontSize: '12px', color: '#666', marginBottom: '8px' }}>
                 Total des sauvegardes
               </Typography>
-              <Typography sx={{ fontSize: '24px', fontWeight: 700, color: institutionalTheme.palette.primary.main }}>
+              <Typography
+                sx={{
+                  fontSize: '24px',
+                  fontWeight: 700,
+                  color: institutionalTheme.palette.primary.main,
+                }}
+              >
                 {backupsList.length}
               </Typography>
             </CardContent>
@@ -188,11 +205,30 @@ export default function ArchiveManagement() {
             <Table>
               <TableHead>
                 <TableRow sx={{ backgroundColor: '#f5f5f5' }}>
-                  <TableCell sx={{ fontWeight: 700, color: institutionalTheme.palette.text.primary }}>Nom</TableCell>
-                  <TableCell sx={{ fontWeight: 700, color: institutionalTheme.palette.text.primary }}>Taille</TableCell>
-                  <TableCell sx={{ fontWeight: 700, color: institutionalTheme.palette.text.primary }}>Date</TableCell>
-                  <TableCell sx={{ fontWeight: 700, color: institutionalTheme.palette.text.primary }}>Statut</TableCell>
-                  <TableCell sx={{ fontWeight: 700, color: institutionalTheme.palette.text.primary }} align="right">
+                  <TableCell
+                    sx={{ fontWeight: 700, color: institutionalTheme.palette.text.primary }}
+                  >
+                    Nom
+                  </TableCell>
+                  <TableCell
+                    sx={{ fontWeight: 700, color: institutionalTheme.palette.text.primary }}
+                  >
+                    Taille
+                  </TableCell>
+                  <TableCell
+                    sx={{ fontWeight: 700, color: institutionalTheme.palette.text.primary }}
+                  >
+                    Date
+                  </TableCell>
+                  <TableCell
+                    sx={{ fontWeight: 700, color: institutionalTheme.palette.text.primary }}
+                  >
+                    Statut
+                  </TableCell>
+                  <TableCell
+                    sx={{ fontWeight: 700, color: institutionalTheme.palette.text.primary }}
+                    align="right"
+                  >
                     Actions
                   </TableCell>
                 </TableRow>
@@ -201,10 +237,16 @@ export default function ArchiveManagement() {
                 {backupsList.length > 0 ? (
                   backupsList.map((backup) => (
                     <TableRow key={backup.id} sx={{ '&:hover': { backgroundColor: '#f9f9f9' } }}>
-                      <TableCell sx={{ fontSize: '13px', fontWeight: 600 }}>{backup.name}</TableCell>
-                      <TableCell sx={{ fontSize: '13px' }}>{formatFileSize(backup.size_bytes)}</TableCell>
+                      <TableCell sx={{ fontSize: '13px', fontWeight: 600 }}>
+                        {backup.name}
+                      </TableCell>
                       <TableCell sx={{ fontSize: '13px' }}>
-                        {backup.created_at ? new Date(backup.created_at).toLocaleDateString('ar-TN') : '-'}
+                        {formatFileSize(backup.size_bytes)}
+                      </TableCell>
+                      <TableCell sx={{ fontSize: '13px' }}>
+                        {backup.created_at
+                          ? new Date(backup.created_at).toLocaleDateString('ar-TN')
+                          : '-'}
                       </TableCell>
                       <TableCell>
                         <Box
@@ -216,19 +258,23 @@ export default function ArchiveManagement() {
                               backup.status === 'completed'
                                 ? '#4caf5020'
                                 : backup.status === 'failed'
-                                ? '#d32f2f20'
-                                : '#ff980020',
+                                  ? '#d32f2f20'
+                                  : '#ff980020',
                             color:
                               backup.status === 'completed'
                                 ? '#4caf50'
                                 : backup.status === 'failed'
-                                ? '#d32f2f'
-                                : '#ff9800',
+                                  ? '#d32f2f'
+                                  : '#ff9800',
                             fontSize: '12px',
                             fontWeight: 600,
                           }}
                         >
-                          {backup.status === 'completed' ? 'نجح' : backup.status === 'failed' ? 'فشل' : 'قيد المعالجة'}
+                          {backup.status === 'completed'
+                            ? 'نجح'
+                            : backup.status === 'failed'
+                              ? 'فشل'
+                              : 'قيد المعالجة'}
                         </Box>
                       </TableCell>
                       <TableCell align="right">
@@ -238,7 +284,10 @@ export default function ArchiveManagement() {
                             variant="outlined"
                             startIcon={<DownloadIcon />}
                             onClick={() => handleDownloadBackup(backup)}
-                            sx={{ borderColor: institutionalTheme.palette.primary.main, color: institutionalTheme.palette.primary.main }}
+                            sx={{
+                              borderColor: institutionalTheme.palette.primary.main,
+                              color: institutionalTheme.palette.primary.main,
+                            }}
                           >
                             تحميل
                           </Button>
@@ -259,7 +308,11 @@ export default function ArchiveManagement() {
                   ))
                 ) : (
                   <TableRow>
-                    <TableCell colSpan={5} align="center" sx={{ padding: '40px', color: '#616161' }}>
+                    <TableCell
+                      colSpan={5}
+                      align="center"
+                      sx={{ padding: '40px', color: '#616161' }}
+                    >
                       لا توجد نسخ احتياطية
                     </TableCell>
                   </TableRow>
@@ -270,13 +323,25 @@ export default function ArchiveManagement() {
         )}
 
         {/* Restore Dialog */}
-        <Dialog open={openDialog} onClose={() => !isProcessing && setOpenDialog(false)} maxWidth="sm" fullWidth>
-          <DialogTitle sx={{ backgroundColor: institutionalTheme.palette.primary.main, color: 'white', fontWeight: 'bold' }}>
+        <Dialog
+          open={openDialog}
+          onClose={() => !isProcessing && setOpenDialog(false)}
+          maxWidth="sm"
+          fullWidth
+        >
+          <DialogTitle
+            sx={{
+              backgroundColor: institutionalTheme.palette.primary.main,
+              color: 'white',
+              fontWeight: 'bold',
+            }}
+          >
             تأكيد الاسترجاع
           </DialogTitle>
           <DialogContent sx={{ padding: '20px' }}>
             <Alert severity="warning" sx={{ marginBottom: '16px', marginTop: '16px' }}>
-              ⚠️ هذا الإجراء سيستعيد جميع البيانات إلى حالة النسخة الاحتياطية المحددة. سيتم استبدال البيانات الحالية.
+              ⚠️ هذا الإجراء سيستعيد جميع البيانات إلى حالة النسخة الاحتياطية المحددة. سيتم استبدال
+              البيانات الحالية.
             </Alert>
             {selectedBackup && (
               <Box>
@@ -284,7 +349,10 @@ export default function ArchiveManagement() {
                   {selectedBackup.name}
                 </Typography>
                 <Typography sx={{ fontSize: '13px', color: '#666' }}>
-                  التاريخ: {selectedBackup.created_at ? new Date(selectedBackup.created_at).toLocaleDateString('ar-TN') : '-'}
+                  التاريخ:{' '}
+                  {selectedBackup.created_at
+                    ? new Date(selectedBackup.created_at).toLocaleDateString('ar-TN')
+                    : '-'}
                 </Typography>
                 <Typography sx={{ fontSize: '13px', color: '#666' }}>
                   الحجم: {formatFileSize(selectedBackup.size_bytes)}
@@ -293,7 +361,11 @@ export default function ArchiveManagement() {
             )}
           </DialogContent>
           <DialogActions sx={{ padding: '20px', gap: '10px' }}>
-            <Button onClick={() => setOpenDialog(false)} disabled={isProcessing} sx={{ color: '#616161' }}>
+            <Button
+              onClick={() => setOpenDialog(false)}
+              disabled={isProcessing}
+              sx={{ color: '#616161' }}
+            >
               إلغاء
             </Button>
             <Button

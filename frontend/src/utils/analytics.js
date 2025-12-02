@@ -11,7 +11,7 @@ class Analytics {
     this.sessionId = this.generateSessionId();
     this.userId = null;
     this.startTime = Date.now();
-    
+
     // Track page views automatically
     this.trackPageView();
   }
@@ -105,14 +105,14 @@ class Analytics {
   getStats() {
     const now = Date.now();
     const sessionDuration = now - this.startTime;
-    
+
     return {
       sessionId: this.sessionId,
       userId: this.userId,
       totalEvents: this.events.length,
       sessionDuration: sessionDuration,
       sessionDurationMinutes: Math.round(sessionDuration / 1000 / 60),
-      eventTypes: [...new Set(this.events.map(e => e.eventName))],
+      eventTypes: [...new Set(this.events.map((e) => e.eventName))],
     };
   }
 
@@ -138,7 +138,7 @@ class Analytics {
    */
   trackTimeSpent(pageName, callback) {
     const startTime = Date.now();
-    
+
     return () => {
       const duration = Date.now() - startTime;
       this.trackMetric('time_spent', duration, 'ms');
@@ -153,7 +153,7 @@ class Analytics {
     const start = performance.now();
     const result = fn(...args);
     const duration = performance.now() - start;
-    
+
     this.trackMetric(`function_${functionName}`, duration, 'ms');
     return result;
   }

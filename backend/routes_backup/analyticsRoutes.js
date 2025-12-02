@@ -19,17 +19,22 @@ router.get('/dashboard/buyer', authMiddleware, cacheMiddleware({ ttl: 600 }), as
 });
 
 // Get dashboard statistics for suppliers (optimized + cached)
-router.get('/dashboard/supplier', authMiddleware, cacheMiddleware({ ttl: 600 }), async (req, res) => {
-  try {
-    const db = req.app.get('db');
-    const userId = req.user.id;
+router.get(
+  '/dashboard/supplier',
+  authMiddleware,
+  cacheMiddleware({ ttl: 600 }),
+  async (req, res) => {
+    try {
+      const db = req.app.get('db');
+      const userId = req.user.id;
 
-    const result = await QueryOptimizer.getSupplierAnalytics(db, userId);
-    res.json(result.rows[0] || {});
-  } catch (error) {
-    res.status(500).json({ error: error.message });
+      const result = await QueryOptimizer.getSupplierAnalytics(db, userId);
+      res.json(result.rows[0] || {});
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
   }
-});
+);
 
 // Get tender trends (last 30 days)
 router.get('/trends/tenders', authMiddleware, async (req, res) => {

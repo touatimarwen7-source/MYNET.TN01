@@ -32,7 +32,7 @@ export default function SupplierPerformanceTracking() {
   const fetchSuppliers = async () => {
     try {
       setLoading(true);
-      await new Promise(resolve => setTimeout(resolve, 1200));
+      await new Promise((resolve) => setTimeout(resolve, 1200));
       const mockSuppliers = [
         {
           id: 1,
@@ -97,7 +97,9 @@ export default function SupplierPerformanceTracking() {
     return (
       <Box sx={{ backgroundColor: '#fafafa', paddingY: '40px' }}>
         <Container maxWidth="lg">
-          <Typography sx={{ marginBottom: '24px', fontWeight: 600, color: theme.palette.primary.main }}>
+          <Typography
+            sx={{ marginBottom: '24px', fontWeight: 600, color: theme.palette.primary.main }}
+          >
             Suivi de Performance des Fournisseurs
           </Typography>
           <TableSkeleton rows={5} columns={6} />
@@ -109,7 +111,10 @@ export default function SupplierPerformanceTracking() {
   return (
     <Box sx={{ backgroundColor: '#fafafa', paddingY: '40px' }}>
       <Container maxWidth="lg">
-        <Typography variant="h4" sx={{ fontWeight: 600, color: theme.palette.text.primary, marginBottom: '32px' }}>
+        <Typography
+          variant="h4"
+          sx={{ fontWeight: 600, color: theme.palette.text.primary, marginBottom: '32px' }}
+        >
           Suivi de Performance des Fournisseurs
         </Typography>
 
@@ -119,12 +124,27 @@ export default function SupplierPerformanceTracking() {
             <Grid xs={12} lg={6} key={supplier.id}>
               <Card sx={{ border: '1px solid #e0e0e0', position: 'relative' }}>
                 <CardContent>
-                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', marginBottom: '16px' }}>
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'start',
+                      marginBottom: '16px',
+                    }}
+                  >
                     <Box>
-                      <Typography sx={{ fontWeight: 600, color: theme.palette.text.primary, fontSize: '18px' }}>
+                      <Typography
+                        sx={{
+                          fontWeight: 600,
+                          color: theme.palette.text.primary,
+                          fontSize: '18px',
+                        }}
+                      >
                         #{supplier.rank} - {supplier.name}
                       </Typography>
-                      <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '8px' }}>
+                      <Box
+                        sx={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '8px' }}
+                      >
                         <Rating value={supplier.rating} readOnly size="small" />
                         <Typography sx={{ fontSize: '12px', color: '#666' }}>
                           {supplier.rating} ({supplier.reviews} avis)
@@ -141,38 +161,85 @@ export default function SupplierPerformanceTracking() {
 
                   <Stack spacing={2}>
                     <Box>
-                      <Box sx={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px' }}>
+                      <Box
+                        sx={{
+                          display: 'flex',
+                          justifyContent: 'space-between',
+                          marginBottom: '4px',
+                        }}
+                      >
                         <Typography sx={{ fontSize: '12px', color: '#666' }}>Livraison</Typography>
-                        <Typography sx={{ fontSize: '12px', fontWeight: 600 }}>{supplier.deliveryScore}%</Typography>
+                        <Typography sx={{ fontSize: '12px', fontWeight: 600 }}>
+                          {supplier.deliveryScore}%
+                        </Typography>
                       </Box>
-                      <LinearProgress variant="determinate" value={supplier.deliveryScore} sx={{ height: '6px', borderRadius: '3px' }} />
+                      <LinearProgress
+                        variant="determinate"
+                        value={supplier.deliveryScore}
+                        sx={{ height: '6px', borderRadius: '3px' }}
+                      />
                     </Box>
 
                     <Box>
-                      <Box sx={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px' }}>
+                      <Box
+                        sx={{
+                          display: 'flex',
+                          justifyContent: 'space-between',
+                          marginBottom: '4px',
+                        }}
+                      >
                         <Typography sx={{ fontSize: '12px', color: '#666' }}>Qualité</Typography>
-                        <Typography sx={{ fontSize: '12px', fontWeight: 600 }}>{supplier.qualityScore}%</Typography>
+                        <Typography sx={{ fontSize: '12px', fontWeight: 600 }}>
+                          {supplier.qualityScore}%
+                        </Typography>
                       </Box>
-                      <LinearProgress variant="determinate" value={supplier.qualityScore} sx={{ height: '6px', borderRadius: '3px' }} />
+                      <LinearProgress
+                        variant="determinate"
+                        value={supplier.qualityScore}
+                        sx={{ height: '6px', borderRadius: '3px' }}
+                      />
                     </Box>
 
                     <Box>
-                      <Box sx={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px' }}>
+                      <Box
+                        sx={{
+                          display: 'flex',
+                          justifyContent: 'space-between',
+                          marginBottom: '4px',
+                        }}
+                      >
                         <Typography sx={{ fontSize: '12px', color: '#666' }}>Réactivité</Typography>
-                        <Typography sx={{ fontSize: '12px', fontWeight: 600 }}>{supplier.responseScore}%</Typography>
+                        <Typography sx={{ fontSize: '12px', fontWeight: 600 }}>
+                          {supplier.responseScore}%
+                        </Typography>
                       </Box>
-                      <LinearProgress variant="determinate" value={supplier.responseScore} sx={{ height: '6px', borderRadius: '3px' }} />
+                      <LinearProgress
+                        variant="determinate"
+                        value={supplier.responseScore}
+                        sx={{ height: '6px', borderRadius: '3px' }}
+                      />
                     </Box>
                   </Stack>
 
-                  <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '12px', marginTop: '16px' }}>
+                  <Box
+                    sx={{
+                      display: 'grid',
+                      gridTemplateColumns: 'repeat(2, 1fr)',
+                      gap: '12px',
+                      marginTop: '16px',
+                    }}
+                  >
                     <Box sx={{ backgroundColor: '#f5f5f5', padding: '12px', borderRadius: '4px' }}>
                       <Typography sx={{ fontSize: '12px', color: '#666' }}>Commandes</Typography>
-                      <Typography sx={{ fontWeight: 600, color: theme.palette.primary.main }}>{supplier.completedOrders}</Typography>
+                      <Typography sx={{ fontWeight: 600, color: theme.palette.primary.main }}>
+                        {supplier.completedOrders}
+                      </Typography>
                     </Box>
                     <Box sx={{ backgroundColor: '#f5f5f5', padding: '12px', borderRadius: '4px' }}>
                       <Typography sx={{ fontSize: '12px', color: '#666' }}>À l'heure</Typography>
-                      <Typography sx={{ fontWeight: 600, color: '#2e7d32' }}>{supplier.onTimeDelivery}%</Typography>
+                      <Typography sx={{ fontWeight: 600, color: '#2e7d32' }}>
+                        {supplier.onTimeDelivery}%
+                      </Typography>
                     </Box>
                   </Box>
                 </CardContent>
@@ -184,7 +251,9 @@ export default function SupplierPerformanceTracking() {
         {/* Performance Ranking Table */}
         <Card sx={{ border: '1px solid #e0e0e0' }}>
           <CardContent>
-            <Typography sx={{ fontWeight: 600, color: theme.palette.primary.main, marginBottom: '16px' }}>
+            <Typography
+              sx={{ fontWeight: 600, color: theme.palette.primary.main, marginBottom: '16px' }}
+            >
               Classement Détaillé
             </Typography>
             <Paper sx={{ border: '1px solid #e0e0e0' }}>
@@ -202,7 +271,9 @@ export default function SupplierPerformanceTracking() {
                 <TableBody>
                   {suppliers.map((supplier) => (
                     <TableRow key={supplier.id} hover>
-                      <TableCell sx={{ color: theme.palette.primary.main, fontWeight: 700 }}>#{supplier.rank}</TableCell>
+                      <TableCell sx={{ color: theme.palette.primary.main, fontWeight: 700 }}>
+                        #{supplier.rank}
+                      </TableCell>
                       <TableCell sx={{ fontWeight: 600 }}>{supplier.name}</TableCell>
                       <TableCell>
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
@@ -212,26 +283,86 @@ export default function SupplierPerformanceTracking() {
                       </TableCell>
                       <TableCell>
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                          <Box sx={{ flex: 1, height: '4px', backgroundColor: '#e0e0e0', borderRadius: '2px', position: 'relative' }}>
-                            <Box sx={{ position: 'absolute', top: 0, left: 0, height: '100%', width: `${supplier.deliveryScore}%`, backgroundColor: '#2e7d32', borderRadius: '2px' }} />
+                          <Box
+                            sx={{
+                              flex: 1,
+                              height: '4px',
+                              backgroundColor: '#e0e0e0',
+                              borderRadius: '2px',
+                              position: 'relative',
+                            }}
+                          >
+                            <Box
+                              sx={{
+                                position: 'absolute',
+                                top: 0,
+                                left: 0,
+                                height: '100%',
+                                width: `${supplier.deliveryScore}%`,
+                                backgroundColor: '#2e7d32',
+                                borderRadius: '2px',
+                              }}
+                            />
                           </Box>
-                          <Typography sx={{ fontSize: '12px', fontWeight: 600, width: '30px' }}>{supplier.deliveryScore}%</Typography>
+                          <Typography sx={{ fontSize: '12px', fontWeight: 600, width: '30px' }}>
+                            {supplier.deliveryScore}%
+                          </Typography>
                         </Box>
                       </TableCell>
                       <TableCell>
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                          <Box sx={{ flex: 1, height: '4px', backgroundColor: '#e0e0e0', borderRadius: '2px', position: 'relative' }}>
-                            <Box sx={{ position: 'absolute', top: 0, left: 0, height: '100%', width: `${supplier.qualityScore}%`, backgroundColor: theme.palette.primary.main, borderRadius: '2px' }} />
+                          <Box
+                            sx={{
+                              flex: 1,
+                              height: '4px',
+                              backgroundColor: '#e0e0e0',
+                              borderRadius: '2px',
+                              position: 'relative',
+                            }}
+                          >
+                            <Box
+                              sx={{
+                                position: 'absolute',
+                                top: 0,
+                                left: 0,
+                                height: '100%',
+                                width: `${supplier.qualityScore}%`,
+                                backgroundColor: theme.palette.primary.main,
+                                borderRadius: '2px',
+                              }}
+                            />
                           </Box>
-                          <Typography sx={{ fontSize: '12px', fontWeight: 600, width: '30px' }}>{supplier.qualityScore}%</Typography>
+                          <Typography sx={{ fontSize: '12px', fontWeight: 600, width: '30px' }}>
+                            {supplier.qualityScore}%
+                          </Typography>
                         </Box>
                       </TableCell>
                       <TableCell>
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                          <Box sx={{ flex: 1, height: '4px', backgroundColor: '#e0e0e0', borderRadius: '2px', position: 'relative' }}>
-                            <Box sx={{ position: 'absolute', top: 0, left: 0, height: '100%', width: `${supplier.onTimeDelivery}%`, backgroundColor: '#f57c00', borderRadius: '2px' }} />
+                          <Box
+                            sx={{
+                              flex: 1,
+                              height: '4px',
+                              backgroundColor: '#e0e0e0',
+                              borderRadius: '2px',
+                              position: 'relative',
+                            }}
+                          >
+                            <Box
+                              sx={{
+                                position: 'absolute',
+                                top: 0,
+                                left: 0,
+                                height: '100%',
+                                width: `${supplier.onTimeDelivery}%`,
+                                backgroundColor: '#f57c00',
+                                borderRadius: '2px',
+                              }}
+                            />
                           </Box>
-                          <Typography sx={{ fontSize: '12px', fontWeight: 600, width: '30px' }}>{supplier.onTimeDelivery}%</Typography>
+                          <Typography sx={{ fontSize: '12px', fontWeight: 600, width: '30px' }}>
+                            {supplier.onTimeDelivery}%
+                          </Typography>
                         </Box>
                       </TableCell>
                     </TableRow>

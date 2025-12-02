@@ -30,19 +30,23 @@ class AwardNotificationService {
 
       // Validate partial award constraints
       if (!tender.allow_partial_award && winnersIds.length > 1) {
-        throw new Error(`This tender allows only 1 winner (partial award disabled). You selected ${winnersIds.length} winners.`);
+        throw new Error(
+          `This tender allows only 1 winner (partial award disabled). You selected ${winnersIds.length} winners.`
+        );
       }
 
       if (tender.max_winners && winnersIds.length > tender.max_winners) {
-        throw new Error(`Maximum ${tender.max_winners} winner(s) allowed. You selected ${winnersIds.length}.`);
+        throw new Error(
+          `Maximum ${tender.max_winners} winner(s) allowed. You selected ${winnersIds.length}.`
+        );
       }
 
       // Mark winners with exact timestamp
       for (const winnerId of winnersIds) {
-        await pool.query(
-          'UPDATE offers SET award_status = $1, awarded_at = NOW() WHERE id = $2',
-          ['awarded', winnerId]
-        );
+        await pool.query('UPDATE offers SET award_status = $1, awarded_at = NOW() WHERE id = $2', [
+          'awarded',
+          winnerId,
+        ]);
       }
 
       // Get all participants for notification
@@ -59,25 +63,44 @@ class AwardNotificationService {
       for (const participant of participants) {
         if (participant.email) {
           if (winnersIds.includes(participant.offer_id)) {
-            sendEmail(participant.email, `إخطار بالترسية - ${tender.tender_number}`, 
-              `تم اختيارك كفائز في المناقصة برقم عرض ${participant.offer_number}`)
-              .catch(e => logger.error('Winner notification failed', { email: participant.email, error: e.message }));
+            sendEmail(
+              participant.email,
+              `إخطار بالترسية - ${tender.tender_number}`,
+              `تم اختيارك كفائز في المناقصة برقم عرض ${participant.offer_number}`
+            ).catch((e) =>
+              logger.error('Winner notification failed', {
+                email: participant.email,
+                error: e.message,
+              })
+            );
           } else {
-            sendEmail(participant.email, `نتيجة المناقصة - ${tender.tender_number}`, 
-              `للأسف لم يتم قبول عرضك في هذه المناقصة`)
-              .catch(e => logger.error('Rejection notification failed', { email: participant.email, error: e.message }));
+            sendEmail(
+              participant.email,
+              `نتيجة المناقصة - ${tender.tender_number}`,
+              `للأسف لم يتم قبول عرضك في هذه المناقصة`
+            ).catch((e) =>
+              logger.error('Rejection notification failed', {
+                email: participant.email,
+                error: e.message,
+              })
+            );
           }
         }
       }
 
-      await AuditLogService.log(buyerId, 'award_selection', tenderId, 'create', 
-        `${winnersIds.length} winner(s) selected. Notifications sent to ${participants.length} participants`);
+      await AuditLogService.log(
+        buyerId,
+        'award_selection',
+        tenderId,
+        'create',
+        `${winnersIds.length} winner(s) selected. Notifications sent to ${participants.length} participants`
+      );
 
-      return { 
-        success: true, 
-        winnersCount: winnersIds.length, 
+      return {
+        success: true,
+        winnersCount: winnersIds.length,
         notificationsCount: participants.length,
-        message: `${winnersIds.length} فائز(ين) اختيار وإشعارات أرسلت`
+        message: `${winnersIds.length} فائز(ين) اختيار وإشعارات أرسلت`,
       };
     } catch (error) {
       throw error;

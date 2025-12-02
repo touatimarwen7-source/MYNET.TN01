@@ -1,4 +1,3 @@
-
 const { getPool } = require('../config/db');
 const PurchaseRequest = require('../models/PurchaseRequest');
 
@@ -28,10 +27,19 @@ class PurchaseRequestService {
       (id, buyer_id, supplier_id, title, description, category, quantity, unit, budget, status, notes) 
       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) 
       RETURNING *`,
-      [purchaseRequest.id, purchaseRequest.buyer_id, purchaseRequest.supplier_id,
-       purchaseRequest.title, purchaseRequest.description, purchaseRequest.category,
-       purchaseRequest.quantity, purchaseRequest.unit, purchaseRequest.budget,
-       purchaseRequest.status, purchaseRequest.notes]
+      [
+        purchaseRequest.id,
+        purchaseRequest.buyer_id,
+        purchaseRequest.supplier_id,
+        purchaseRequest.title,
+        purchaseRequest.description,
+        purchaseRequest.category,
+        purchaseRequest.quantity,
+        purchaseRequest.unit,
+        purchaseRequest.budget,
+        purchaseRequest.status,
+        purchaseRequest.notes,
+      ]
     );
 
     return result.rows[0];

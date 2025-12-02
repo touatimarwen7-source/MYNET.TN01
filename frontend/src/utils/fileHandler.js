@@ -6,10 +6,17 @@ export const fileHandler = {
 
   // Allowed file types
   ALLOWED_TYPES: {
-    DOCUMENTS: ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'],
+    DOCUMENTS: [
+      'application/pdf',
+      'application/msword',
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    ],
     IMAGES: ['image/jpeg', 'image/png', 'image/gif', 'image/webp'],
-    SPREADSHEETS: ['application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'],
-    ALL: ['application/pdf', 'image/jpeg', 'image/png']
+    SPREADSHEETS: [
+      'application/vnd.ms-excel',
+      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    ],
+    ALL: ['application/pdf', 'image/jpeg', 'image/png'],
   },
 
   // Validate file
@@ -38,7 +45,7 @@ export const fileHandler = {
 
     return {
       isValid: errors.length === 0,
-      errors
+      errors,
     };
   },
 
@@ -53,11 +60,11 @@ export const fileHandler = {
       'image/gif': ['.gif'],
       'image/webp': ['.webp'],
       'application/vnd.ms-excel': ['.xls'],
-      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': ['.xlsx']
+      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': ['.xlsx'],
     };
 
     const extensions = [];
-    mimeTypes.forEach(mime => {
+    mimeTypes.forEach((mime) => {
       if (extensionMap[mime]) {
         extensions.push(...extensionMap[mime]);
       }
@@ -109,7 +116,7 @@ export const fileHandler = {
   // Check if file is document
   isDocument: (file) => {
     return file && this.ALLOWED_TYPES.DOCUMENTS.includes(file.type);
-  }
+  },
 };
 
 export default fileHandler;

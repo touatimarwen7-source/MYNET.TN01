@@ -17,11 +17,14 @@ router.post('/enable', authMiddleware, async (req, res) => {
     // Generate secret (in production: TOTP library or SMS gateway)
     const secret = Math.random().toString(36).substring(2, 15);
 
-    await db.query(`
+    await db.query(
+      `
       UPDATE users 
       SET mfa_enabled = true, mfa_method = $1, mfa_secret = $2
       WHERE id = $3
-    `, [method, secret, userId]);
+    `,
+      [method, secret, userId]
+    );
 
     res.json({ success: true, message: 'MFA enabled', secret });
   } catch (error) {
@@ -35,11 +38,14 @@ router.post('/disable', authMiddleware, async (req, res) => {
     const userId = req.user.id;
     const db = req.app.get('db');
 
-    await db.query(`
+    await db.query(
+      `
       UPDATE users 
       SET mfa_enabled = false, mfa_method = null, mfa_secret = null
       WHERE id = $1
-    `, [userId]);
+    `,
+      [userId]
+    );
 
     res.json({ success: true, message: 'MFA disabled' });
   } catch (error) {

@@ -41,7 +41,15 @@ const TenderFormLayout = ({
     <Box sx={{ backgroundColor: '#fafafa', py: 5, minHeight: '100vh' }}>
       <Container maxWidth="lg">
         <Paper sx={{ p: 4, borderRadius: '8px' }}>
-          <Typography variant="h4" sx={{ mb: 4, fontWeight: 'bold', color: institutionalTheme.palette.primary.main, textAlign: 'center' }}>
+          <Typography
+            variant="h4"
+            sx={{
+              mb: 4,
+              fontWeight: 'bold',
+              color: institutionalTheme.palette.primary.main,
+              textAlign: 'center',
+            }}
+          >
             إنشاء مناقصة جديدة
           </Typography>
 
@@ -55,15 +63,25 @@ const TenderFormLayout = ({
           </Stepper>
 
           {/* عرض رسائل الخطأ */}
-          {error && <Alert severity="error" sx={{ mb: 3 }}>{error}</Alert>}
+          {error && (
+            <Alert severity="error" sx={{ mb: 3 }}>
+              {error}
+            </Alert>
+          )}
 
           {/* 3. عرض محتوى الخطوة الحالية */}
-          <Box sx={{ my: 4 }}>
-            {children}
-          </Box>
+          <Box sx={{ my: 4 }}>{children}</Box>
 
           {/* 4. أزرار التنقل */}
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 4, pt: 2, borderTop: '1px solid #eee' }}>
+          <Box
+            sx={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              mt: 4,
+              pt: 2,
+              borderTop: '1px solid #eee',
+            }}
+          >
             <Button
               startIcon={<ArrowBackIcon />}
               onClick={handlePrevious}

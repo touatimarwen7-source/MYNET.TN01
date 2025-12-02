@@ -51,10 +51,10 @@ const STEPS = [
   { label: 'Produits/Services', icon: '🛍️' },
   { label: 'Quantités et Prix', icon: '📊' },
   { label: 'Calendrier de Livraison', icon: '📅' },
-  { label: 'Conditions d\'Exécution', icon: '⚙️' },
+  { label: "Conditions d'Exécution", icon: '⚙️' },
   { label: 'Documents', icon: '📎' },
   { label: 'Adresse de Livraison', icon: '📍' },
-  { label: 'Révision et Envoi', icon: '✅' }
+  { label: 'Révision et Envoi', icon: '✅' },
 ];
 
 export default function CreateSupplyRequest() {
@@ -62,7 +62,7 @@ export default function CreateSupplyRequest() {
   const navigate = useNavigate();
   const { offerId } = useParams();
   const [activeStep, setActiveStep] = useState(0);
-  
+
   const [offer, setOffer] = useState(null);
   const [formData, setFormData] = useState({
     offer_id: offerId,
@@ -82,11 +82,16 @@ export default function CreateSupplyRequest() {
     quality_standards: '',
     attachments: [],
     total_amount: 0,
-    notes: ''
+    notes: '',
   });
 
   const [items, setItems] = useState([]);
-  const [newItem, setNewItem] = useState({ description: '', quantity: '', unit_price: '', unit: 'pièce' });
+  const [newItem, setNewItem] = useState({
+    description: '',
+    quantity: '',
+    unit_price: '',
+    unit: 'pièce',
+  });
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -117,37 +122,37 @@ export default function CreateSupplyRequest() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const addItem = () => {
     if (newItem.description && newItem.quantity && newItem.unit_price) {
       const totalPrice = parseFloat(newItem.quantity) * parseFloat(newItem.unit_price);
-      setItems(prev => [...prev, { ...newItem, totalPrice, id: Date.now() }]);
-      setFormData(prev => ({
+      setItems((prev) => [...prev, { ...newItem, totalPrice, id: Date.now() }]);
+      setFormData((prev) => ({
         ...prev,
-        total_amount: prev.total_amount + totalPrice
+        total_amount: prev.total_amount + totalPrice,
       }));
       setNewItem({ description: '', quantity: '', unit_price: '', unit: 'pièce' });
     }
   };
 
   const removeItem = (id) => {
-    const item = items.find(i => i.id === id);
-    setItems(prev => prev.filter(i => i.id !== id));
-    setFormData(prev => ({
+    const item = items.find((i) => i.id === id);
+    setItems((prev) => prev.filter((i) => i.id !== id));
+    setFormData((prev) => ({
       ...prev,
-      total_amount: prev.total_amount - (item?.totalPrice || 0)
+      total_amount: prev.total_amount - (item?.totalPrice || 0),
     }));
   };
 
   const handleFileUpload = (e) => {
     const files = Array.from(e.target.files || []);
-    setSelectedFiles(prev => [...prev, ...files]);
+    setSelectedFiles((prev) => [...prev, ...files]);
   };
 
   const removeAttachment = (index) => {
-    setSelectedFiles(prev => prev.filter((_, i) => i !== index));
+    setSelectedFiles((prev) => prev.filter((_, i) => i !== index));
   };
 
   const validateStep = (step) => {
@@ -173,7 +178,7 @@ export default function CreateSupplyRequest() {
         break;
       case 6:
         if (!formData.delivery_address.trim()) {
-          setError('L\'adresse de livraison est requise');
+          setError("L'adresse de livraison est requise");
           return false;
         }
         break;
@@ -187,19 +192,19 @@ export default function CreateSupplyRequest() {
   const handleNext = () => {
     if (validateStep(activeStep)) {
       autoSaveDraft();
-      setStepsCompleted(prev => ({ ...prev, [activeStep]: true }));
-      setActiveStep(prev => Math.min(prev + 1, STEPS.length - 1));
+      setStepsCompleted((prev) => ({ ...prev, [activeStep]: true }));
+      setActiveStep((prev) => Math.min(prev + 1, STEPS.length - 1));
     }
   };
 
   const handlePrevious = () => {
-    setActiveStep(prev => Math.max(prev - 1, 0));
+    setActiveStep((prev) => Math.max(prev - 1, 0));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
-    
+
     if (items.length === 0) {
       setError('Ajoutez au moins un article');
       return;
@@ -212,12 +217,12 @@ export default function CreateSupplyRequest() {
         ...formData,
         items,
         total_amount: formData.total_amount,
-        status: 'submitted'
+        status: 'submitted',
       };
 
       await procurementAPI.createSupplyRequest(submitData);
       localStorage.removeItem(`supplyRequestDraft_${offerId}`);
-      
+
       setTimeout(() => {
         navigate(`/offer/${offerId}`);
       }, 1000);
@@ -351,19 +356,31 @@ export default function CreateSupplyRequest() {
             <TableHead>
               <TableRow sx={{ backgroundColor: 'action.hover' }}>
                 <TableCell sx={{ fontWeight: 600, color: 'primary.main' }}>Description</TableCell>
-                <TableCell align="right" sx={{ fontWeight: 600, color: 'primary.main' }}>Quantité</TableCell>
-                <TableCell align="right" sx={{ fontWeight: 600, color: 'primary.main' }}>Prix Unit.</TableCell>
-                <TableCell align="right" sx={{ fontWeight: 600, color: 'primary.main' }}>Total</TableCell>
-                <TableCell align="center" sx={{ fontWeight: 600, color: 'primary.main' }}>Action</TableCell>
+                <TableCell align="right" sx={{ fontWeight: 600, color: 'primary.main' }}>
+                  Quantité
+                </TableCell>
+                <TableCell align="right" sx={{ fontWeight: 600, color: 'primary.main' }}>
+                  Prix Unit.
+                </TableCell>
+                <TableCell align="right" sx={{ fontWeight: 600, color: 'primary.main' }}>
+                  Total
+                </TableCell>
+                <TableCell align="center" sx={{ fontWeight: 600, color: 'primary.main' }}>
+                  Action
+                </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {items.map((item) => (
                 <TableRow key={item.id}>
                   <TableCell>{item.description}</TableCell>
-                  <TableCell align="right">{item.quantity} {item.unit}</TableCell>
+                  <TableCell align="right">
+                    {item.quantity} {item.unit}
+                  </TableCell>
                   <TableCell align="right">{parseFloat(item.unit_price).toFixed(2)}</TableCell>
-                  <TableCell align="right"><strong>{item.totalPrice.toFixed(2)}</strong></TableCell>
+                  <TableCell align="right">
+                    <strong>{item.totalPrice.toFixed(2)}</strong>
+                  </TableCell>
                   <TableCell align="center">
                     <IconButton
                       size="small"
@@ -377,7 +394,9 @@ export default function CreateSupplyRequest() {
                 </TableRow>
               ))}
               <TableRow sx={{ backgroundColor: 'action.hover' }}>
-                <TableCell colSpan={3} sx={{ fontWeight: 600 }}>Total</TableCell>
+                <TableCell colSpan={3} sx={{ fontWeight: 600 }}>
+                  Total
+                </TableCell>
                 <TableCell align="right" sx={{ fontWeight: 600, color: 'primary.main' }}>
                   {formData.total_amount.toFixed(2)} TND
                 </TableCell>
@@ -476,8 +495,12 @@ export default function CreateSupplyRequest() {
             <TableHead>
               <TableRow sx={{ backgroundColor: 'action.hover' }}>
                 <TableCell sx={{ fontWeight: 600 }}>Nom du document</TableCell>
-                <TableCell align="right" sx={{ fontWeight: 600 }}>Taille</TableCell>
-                <TableCell align="center" sx={{ fontWeight: 600 }}>Action</TableCell>
+                <TableCell align="right" sx={{ fontWeight: 600 }}>
+                  Taille
+                </TableCell>
+                <TableCell align="center" sx={{ fontWeight: 600 }}>
+                  Action
+                </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -571,16 +594,31 @@ export default function CreateSupplyRequest() {
       </Alert>
 
       <Paper sx={{ padding: '16px', backgroundColor: 'action.hover' }}>
-        <Typography variant="h6" sx={{ color: 'primary.main', marginBottom: '12px', fontSize: '14px' }}>
+        <Typography
+          variant="h6"
+          sx={{ color: 'primary.main', marginBottom: '12px', fontSize: '14px' }}
+        >
           Résumé de la Demande
         </Typography>
         <Stack spacing={1} sx={{ fontSize: '13px' }}>
-          <Box><strong>Référence:</strong> {formData.po_reference}</Box>
-          <Box><strong>Nombre d'articles:</strong> {items.length}</Box>
-          <Box><strong>Montant total:</strong> {formData.total_amount.toFixed(2)} TND</Box>
-          <Box><strong>Date de livraison:</strong> {formData.delivery_date}</Box>
-          <Box><strong>Incoterms:</strong> {formData.incoterms}</Box>
-          <Box><strong>Adresse:</strong> {formData.delivery_address}, {formData.delivery_city}</Box>
+          <Box>
+            <strong>Référence:</strong> {formData.po_reference}
+          </Box>
+          <Box>
+            <strong>Nombre d'articles:</strong> {items.length}
+          </Box>
+          <Box>
+            <strong>Montant total:</strong> {formData.total_amount.toFixed(2)} TND
+          </Box>
+          <Box>
+            <strong>Date de livraison:</strong> {formData.delivery_date}
+          </Box>
+          <Box>
+            <strong>Incoterms:</strong> {formData.incoterms}
+          </Box>
+          <Box>
+            <strong>Adresse:</strong> {formData.delivery_address}, {formData.delivery_city}
+          </Box>
         </Stack>
       </Paper>
     </Box>
@@ -588,21 +626,31 @@ export default function CreateSupplyRequest() {
 
   const renderStepContent = () => {
     switch (activeStep) {
-      case 0: return <Step1Content />;
+      case 0:
+        return <Step1Content />;
       case 1:
-      case 2: return <StepItemsContent />;
-      case 3: return <Step4Content />;
-      case 4: return <Step5Content />;
-      case 5: return <Step6Content />;
-      case 6: return <Step7Content />;
-      case 7: return <Step8Content />;
-      default: return null;
+      case 2:
+        return <StepItemsContent />;
+      case 3:
+        return <Step4Content />;
+      case 4:
+        return <Step5Content />;
+      case 5:
+        return <Step6Content />;
+      case 6:
+        return <Step7Content />;
+      case 7:
+        return <Step8Content />;
+      default:
+        return null;
     }
   };
 
   if (!offer) {
     return (
-      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}>
+      <Box
+        sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}
+      >
         <CircularProgress />
       </Box>
     );
@@ -613,37 +661,40 @@ export default function CreateSupplyRequest() {
       <Container maxWidth="md">
         <Card sx={{ border: '1px solid #e0e0e0', borderRadius: '4px', boxShadow: 'none' }}>
           <CardContent sx={{ padding: '40px' }}>
-            <Typography 
-              variant="h2" 
-              sx={{ 
-                fontSize: '28px', 
-                fontWeight: 500, 
-                color: 'primary.main', 
+            <Typography
+              variant="h2"
+              sx={{
+                fontSize: '28px',
+                fontWeight: 500,
+                color: 'primary.main',
                 marginBottom: '8px',
                 display: 'flex',
                 alignItems: 'center',
-                gap: '8px'
+                gap: '8px',
               }}
             >
               {STEPS[activeStep].icon} {STEPS[activeStep].label}
             </Typography>
-            <Typography 
-              sx={{ 
-                color: 'text.secondary', 
+            <Typography
+              sx={{
+                color: 'text.secondary',
                 marginBottom: '32px',
-                fontSize: '14px'
+                fontSize: '14px',
               }}
             >
               Étape {activeStep + 1} sur {STEPS.length}
             </Typography>
 
-            <LinearProgress 
-              variant="determinate" 
+            <LinearProgress
+              variant="determinate"
               value={(activeStep / (STEPS.length - 1)) * 100}
               sx={{ marginBottom: '24px', height: '4px' }}
             />
 
-            <Stepper activeStep={activeStep} sx={{ marginBottom: '32px', display: { xs: 'none', sm: 'flex' } }}>
+            <Stepper
+              activeStep={activeStep}
+              sx={{ marginBottom: '32px', display: { xs: 'none', sm: 'flex' } }}
+            >
               {STEPS.map((step, index) => (
                 <Step key={index} completed={stepsCompleted[index] || false}>
                   <StepLabel>{step.label}</StepLabel>
@@ -652,20 +703,24 @@ export default function CreateSupplyRequest() {
             </Stepper>
 
             {error && (
-              <Alert severity="error" sx={{ marginBottom: '24px', backgroundColor: '#ffebee', color: '#c62828' }}>
+              <Alert
+                severity="error"
+                sx={{ marginBottom: '24px', backgroundColor: '#ffebee', color: '#c62828' }}
+              >
                 {error}
               </Alert>
             )}
 
             {autoSaved && (
-              <Alert severity="success" sx={{ marginBottom: '16px', backgroundColor: '#e8f5e9', color: '#2e7d32' }}>
+              <Alert
+                severity="success"
+                sx={{ marginBottom: '16px', backgroundColor: '#e8f5e9', color: '#2e7d32' }}
+              >
                 ✓ Brouillon enregistré automatiquement
               </Alert>
             )}
 
-            <Box sx={{ minHeight: '300px', marginBottom: '32px' }}>
-              {renderStepContent()}
-            </Box>
+            <Box sx={{ minHeight: '300px', marginBottom: '32px' }}>{renderStepContent()}</Box>
 
             <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} sx={{ marginTop: '32px' }}>
               <Button
@@ -743,7 +798,7 @@ export default function CreateSupplyRequest() {
               sx={{
                 marginTop: '16px',
                 color: 'text.secondary',
-                textTransform: 'none'
+                textTransform: 'none',
               }}
             >
               Enregistrer le brouillon

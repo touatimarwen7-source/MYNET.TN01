@@ -32,7 +32,9 @@ async function testAwardWinners() {
     info(`Using Tender: ${tender.tender_number}`);
 
     // Get award status
-    const statusResponse = await axios.get(`${BASE_URL}/tender-management/award-status/${tender.id}`);
+    const statusResponse = await axios.get(
+      `${BASE_URL}/tender-management/award-status/${tender.id}`
+    );
     const offers = statusResponse.data.status || [];
 
     if (offers.length === 0) {
@@ -42,7 +44,7 @@ async function testAwardWinners() {
 
     // Select first offer as winner
     const winnerId = offers[0].id;
-    
+
     // Award the winner
     const awardResponse = await axios.post(
       `${BASE_URL}/tender-management/award-winners/${tender.id}`,
@@ -91,9 +93,9 @@ async function testArchiveDocuments() {
         docData: {
           tender_number: tender.tender_number,
           opened_at: new Date().toISOString(),
-          content: 'Opening report data'
+          content: 'Opening report data',
         },
-        retention_years: 7
+        retention_years: 7,
       },
       { headers: { Authorization: `Bearer test-buyer-token` } }
     );
@@ -102,7 +104,9 @@ async function testArchiveDocuments() {
       success('Documents archived securely');
       console.log(`  - Archive ID: ${archiveResponse.data.archive.archive_id}`);
       console.log(`  - Retention: ${archiveResponse.data.archive.retention_years} years`);
-      console.log(`  - Expires: ${new Date(archiveResponse.data.archive.expiration_date).toLocaleDateString('ar-TN')}`);
+      console.log(
+        `  - Expires: ${new Date(archiveResponse.data.archive.expiration_date).toLocaleDateString('ar-TN')}`
+      );
       success('Data encrypted with AES-256');
       success('Long-term storage: 7 years');
       return true;
@@ -125,7 +129,7 @@ async function testCancelTender() {
   try {
     // Create a test tender first (or use existing draft)
     const tenderResponse = await axios.get(`${BASE_URL}/procurement/tenders?status=draft&limit=1`);
-    
+
     if (!tenderResponse.data.tenders?.length) {
       info('No draft tenders available for cancellation test');
       return true;
@@ -195,10 +199,10 @@ Scenario 1 - Award Winners:               ${results.awardWinners ? '✅ PASS' : 
 Scenario 2 - Archive Documents:           ${results.archiveDocuments ? '✅ PASS' : '❌ FAIL'}
 Scenario 3 - Cancel Tender:               ${results.cancelTender ? '✅ PASS' : '❌ FAIL'}
 
-Overall Status: ${Object.values(results).filter(r => r).length}/3 tests passed
+Overall Status: ${Object.values(results).filter((r) => r).length}/3 tests passed
   `);
 
-  process.exit(Object.values(results).every(r => r) ? 0 : 1);
+  process.exit(Object.values(results).every((r) => r) ? 0 : 1);
 }
 
 runAllTests();

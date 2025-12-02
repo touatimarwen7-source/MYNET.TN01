@@ -19,12 +19,12 @@ class OfferOpeningService {
   static canOpenOffers(tenderDeadline, openingDate) {
     const now = new Date();
     const opening = new Date(openingDate);
-    
+
     if (now < opening) {
       const timeLeft = Math.ceil((opening - now) / 1000);
       throw new Error(`Opening time not yet reached. Time until opening: ${timeLeft} seconds`);
     }
-    
+
     return true;
   }
 
@@ -52,7 +52,7 @@ class OfferOpeningService {
       }
 
       const tender = tenderResult.rows[0];
-      
+
       // Check if opening time has arrived
       this.canOpenOffers(null, tender.opening_date);
 
@@ -67,7 +67,7 @@ class OfferOpeningService {
       );
 
       // Decrypt offers if encrypted
-      const decryptedOffers = offersResult.rows.map(offer => {
+      const decryptedOffers = offersResult.rows.map((offer) => {
         if (offer.encrypted_data) {
           try {
             const decryptedData = KeyManagementService.decryptData(
@@ -75,7 +75,7 @@ class OfferOpeningService {
               offer.encryption_iv,
               offer.decryption_key_id
             );
-            
+
             const sensitive = JSON.parse(decryptedData);
             return {
               ...offer,
@@ -120,12 +120,12 @@ class OfferOpeningService {
 
     try {
       const reportNumber = `RPT-${new Date().toISOString().split('T')[0].replace(/-/g, '')}-${Math.random().toString(36).substring(2, 7).toUpperCase()}`;
-      
+
       const summary = {
         total_offers: offers.length,
-        valid_offers: offers.filter(o => !o.decryption_failed).length,
-        invalid_offers: offers.filter(o => o.decryption_failed).length,
-        offers_list: offers.map(o => ({
+        valid_offers: offers.filter((o) => !o.decryption_failed).length,
+        invalid_offers: offers.filter((o) => o.decryption_failed).length,
+        offers_list: offers.map((o) => ({
           offer_number: o.offer_number,
           supplier_name: o.company_name || o.username,
           amount: o.total_amount,
@@ -145,7 +145,7 @@ class OfferOpeningService {
           summary.valid_offers,
           summary.invalid_offers,
           JSON.stringify(summary),
-          'open'
+          'open',
         ]
       );
 
@@ -166,10 +166,7 @@ class OfferOpeningService {
     const pool = getPool();
 
     try {
-      const result = await pool.query(
-        'SELECT * FROM opening_reports WHERE id = $1',
-        [reportId]
-      );
+      const result = await pool.query('SELECT * FROM opening_reports WHERE id = $1', [reportId]);
 
       return result.rows[0] || null;
     } catch (error) {

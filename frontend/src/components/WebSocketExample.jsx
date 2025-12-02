@@ -18,7 +18,7 @@ export const WebSocketExample = ({ userId, tenderId }) => {
     leaveTender,
     sendMessage,
     sendRating,
-    removeNotification
+    removeNotification,
   } = useWebSocket(userId);
 
   // Join tender room on mount
@@ -37,13 +37,9 @@ export const WebSocketExample = ({ userId, tenderId }) => {
       <Card sx={{ mb: 2, backgroundColor: connected ? '#E8F5E9' : '#FFEBEE' }}>
         <CardContent>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-            <span style={{ fontSize: '20px' }}>
-              {connected ? '🟢' : '🔴'}
-            </span>
+            <span style={{ fontSize: '20px' }}>{connected ? '🟢' : '🔴'}</span>
             <Box>
-              <Typography variant="h6">
-                {connected ? 'Connecté' : 'Déconnecté'}
-              </Typography>
+              <Typography variant="h6">{connected ? 'Connecté' : 'Déconnecté'}</Typography>
               <Typography sx={{ fontSize: '12px', color: THEME_COLORS.textSecondary }}>
                 {connected ? 'Prêt à recevoir les mises à jour en temps réel' : 'En reconnexion...'}
               </Typography>
@@ -66,11 +62,13 @@ export const WebSocketExample = ({ userId, tenderId }) => {
                   mb: 1,
                   backgroundColor: '#f5f5f5',
                   cursor: 'pointer',
-                  '&:hover': { backgroundColor: '#eeeeee' }
+                  '&:hover': { backgroundColor: '#eeeeee' },
                 }}
               >
                 <CardContent sx={{ p: 1 }}>
-                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <Box
+                    sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
+                  >
                     <Box>
                       <div style={{ fontWeight: 600, fontSize: '13px' }}>
                         {notif.icon} {notif.title}
@@ -79,10 +77,7 @@ export const WebSocketExample = ({ userId, tenderId }) => {
                         {notif.message}
                       </div>
                     </Box>
-                    <Button
-                      size="small"
-                      onClick={() => removeNotification(notif.id)}
-                    >
+                    <Button size="small" onClick={() => removeNotification(notif.id)}>
                       ✕
                     </Button>
                   </Box>

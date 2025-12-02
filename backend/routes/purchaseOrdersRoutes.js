@@ -9,7 +9,7 @@ const { validateIdMiddleware } = require('../middleware/validateIdMiddleware');
 router.post('/', authMiddleware, async (req, res) => {
   try {
     const { offer_id, notes } = req.body;
-    
+
     // ISSUE FIX #3: Validation
     if (!offer_id) {
       return res.status(400).json({ error: 'offer_id is required' });
@@ -17,14 +17,11 @@ router.post('/', authMiddleware, async (req, res) => {
     if (notes && notes.length > 2000) {
       return res.status(400).json({ error: 'notes too long (max 2000 chars)' });
     }
-    
+
     const db = req.app.get('db');
 
     // Get offer details
-    const offerResult = await db.query(
-      'SELECT * FROM offers WHERE id = $1',
-      [offer_id]
-    );
+    const offerResult = await db.query('SELECT * FROM offers WHERE id = $1', [offer_id]);
 
     if (offerResult.rows.length === 0) {
       return res.status(404).json({ error: 'Offer not found' });
@@ -32,23 +29,26 @@ router.post('/', authMiddleware, async (req, res) => {
 
     const offer = offerResult.rows[0];
 
-    const result = await db.query(`
+    const result = await db.query(
+      `
       INSERT INTO purchase_orders (
         buyer_id, supplier_id, tender_id, offer_id, po_number, 
         total_amount, status, notes
       )
       VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
       RETURNING *
-    `, [
-      offer.buyer_id,
-      offer.supplier_id,
-      offer.tender_id,
-      offer_id,
-      `PO-${Date.now()}`,
-      offer.total_amount,
-      'pending',
-      notes || null
-    ]);
+    `,
+      [
+        offer.buyer_id,
+        offer.supplier_id,
+        offer.tender_id,
+        offer_id,
+        `PO-${Date.now()}`,
+        offer.total_amount,
+        'pending',
+        notes || null,
+      ]
+    );
 
     res.status(201).json({ success: true, data: result.rows[0] });
   } catch (error) {
@@ -112,34 +112,36 @@ router.put('/:poId/status', validateIdMiddleware('poId'), authMiddleware, async 
   try {
     const { poId } = req.params;
     const { status } = req.body;
-    
+
     // ISSUE FIX #3: Validation
     if (!status || !['pending', 'confirmed', 'delivered', 'cancelled'].includes(status)) {
       return res.status(400).json({ error: 'Invalid status value' });
     }
-    
+
     const db = req.app.get('db');
 
     // ISSUE FIX #2: Authorization check
-    const poResult = await db.query(
-      'SELECT * FROM purchase_orders WHERE id = $1',
-      [poId]
-    );
+    const poResult = await db.query('SELECT * FROM purchase_orders WHERE id = $1', [poId]);
     if (poResult.rows.length === 0) {
       return res.status(404).json({ error: 'PO not found' });
     }
     const po = poResult.rows[0];
     // Purchase Orders: فقط بين المشترين والمزودين - لا تدخل للإدارة
     if (po.buyer_id !== req.user.id && po.supplier_id !== req.user.id) {
-      return res.status(403).json({ error: 'Unauthorized - Only buyer or supplier can update PO status' });
+      return res
+        .status(403)
+        .json({ error: 'Unauthorized - Only buyer or supplier can update PO status' });
     }
 
-    const result = await db.query(`
+    const result = await db.query(
+      `
       UPDATE purchase_orders 
       SET status = $1, updated_at = CURRENT_TIMESTAMP
       WHERE id = $2
       RETURNING *
-    `, [status, poId]);
+    `,
+      [status, poId]
+    );
 
     res.json({ success: true, data: result.rows[0] });
   } catch (error) {
@@ -154,10 +156,7 @@ router.delete('/:poId', validateIdMiddleware('poId'), authMiddleware, async (req
     const db = req.app.get('db');
 
     // ISSUE FIX #2: Authorization - only buyer or admin can delete
-    const poResult = await db.query(
-      'SELECT * FROM purchase_orders WHERE id = $1',
-      [poId]
-    );
+    const poResult = await db.query('SELECT * FROM purchase_orders WHERE id = $1', [poId]);
     if (poResult.rows.length === 0) {
       return res.status(404).json({ error: 'PO not found' });
     }

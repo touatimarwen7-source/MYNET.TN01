@@ -1,5 +1,26 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Card, CardContent, Button, Dialog, DialogTitle, DialogContent, DialogActions, TextField, Checkbox, Table, TableBody, TableCell, TableHead, TableRow, Typography, Alert, CircularProgress, Paper, Grid } from '@mui/material';
+import {
+  Box,
+  Card,
+  CardContent,
+  Button,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  TextField,
+  Checkbox,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  Typography,
+  Alert,
+  CircularProgress,
+  Paper,
+  Grid,
+} from '@mui/material';
 import axios from '../api/axiosConfig';
 import { theme } from '../theme/theme';
 
@@ -26,8 +47,8 @@ export default function TenderManagement({ tenderId }) {
 
       // ✅ تهيئة الكميات المترسية بالكميات الكاملة افتراضيًا
       const initialQuantities = {};
-      offersData.forEach(offer => {
-        (offer.lineItems || []).forEach(item => {
+      offersData.forEach((offer) => {
+        (offer.lineItems || []).forEach((item) => {
           initialQuantities[`${offer.id}-${item.id}`] = item.quantity;
         });
       });
@@ -41,18 +62,20 @@ export default function TenderManagement({ tenderId }) {
   };
 
   const handleSelectWinner = (offerId) => {
-    setSelectedWinners(prev =>
-      prev.includes(offerId) ? prev.filter(id => id !== offerId) : [...prev, offerId]
+    setSelectedWinners((prev) =>
+      prev.includes(offerId) ? prev.filter((id) => id !== offerId) : [...prev, offerId]
     );
   };
 
   // ✅ دالة جديدة لتحديث الكميات المترسية
   const handleQuantityChange = (offerId, itemId, value) => {
-    const originalItem = offers.find(o => o.id === offerId)?.lineItems?.find(i => i.id === itemId);
+    const originalItem = offers
+      .find((o) => o.id === offerId)
+      ?.lineItems?.find((i) => i.id === itemId);
     const maxQuantity = originalItem?.quantity || 0;
     const newQuantity = Math.max(0, Math.min(maxQuantity, Number(value)));
 
-    setAwardedQuantities(prev => ({
+    setAwardedQuantities((prev) => ({
       ...prev,
       [`${offerId}-${itemId}`]: newQuantity,
     }));
@@ -66,13 +89,16 @@ export default function TenderManagement({ tenderId }) {
 
     // ✅ بناء بنية البيانات الجديدة للترسية الجزئية
     const payload = {
-      awards: selectedWinners.map(winnerId => ({
-        supplierId: offers.find(o => o.id === winnerId)?.supplierId,
-        lineItems: offers.find(o => o.id === winnerId)?.lineItems
-          ?.map(item => ({
-            id: item.id,
-            awardedQuantity: awardedQuantities[`${winnerId}-${item.id}`] || 0,
-          })).filter(item => item.awardedQuantity > 0) || [],
+      awards: selectedWinners.map((winnerId) => ({
+        supplierId: offers.find((o) => o.id === winnerId)?.supplierId,
+        lineItems:
+          offers
+            .find((o) => o.id === winnerId)
+            ?.lineItems?.map((item) => ({
+              id: item.id,
+              awardedQuantity: awardedQuantities[`${winnerId}-${item.id}`] || 0,
+            }))
+            .filter((item) => item.awardedQuantity > 0) || [],
       })),
     };
 
@@ -110,10 +136,17 @@ export default function TenderManagement({ tenderId }) {
 
   return (
     <Box sx={{ p: 3, direction: 'rtl' }}>
-      <Typography variant="h5" sx={{ mb: 3, color: theme.palette.primary.main, fontWeight: 'bold' }}>
+      <Typography
+        variant="h5"
+        sx={{ mb: 3, color: theme.palette.primary.main, fontWeight: 'bold' }}
+      >
         📋 إدارة المناقصة
       </Typography>
-      {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
+      {error && (
+        <Alert severity="error" sx={{ mb: 2 }}>
+          {error}
+        </Alert>
+      )}
       {loading ? (
         <Box sx={{ display: 'flex', justifyContent: 'center', py: 4 }}>
           <CircularProgress />
@@ -135,10 +168,13 @@ export default function TenderManagement({ tenderId }) {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {offers.map(offer => (
+                {offers.map((offer) => (
                   <TableRow key={offer.id}>
                     <TableCell>
-                      <Checkbox checked={selectedWinners.includes(offer.id)} onChange={() => handleSelectWinner(offer.id)} />
+                      <Checkbox
+                        checked={selectedWinners.includes(offer.id)}
+                        onChange={() => handleSelectWinner(offer.id)}
+                      />
                     </TableCell>
                     <TableCell>{offer.offer_number}</TableCell>
                     <TableCell>{offer.company_name}</TableCell>
@@ -155,10 +191,18 @@ export default function TenderManagement({ tenderId }) {
               </TableBody>
             </Table>
             <Box sx={{ mt: 2, display: 'flex', gap: 2 }}>
-              <Button variant="contained" onClick={() => setAwardDialogOpen(true)} sx={{ backgroundColor: theme.palette.primary.main }}>
+              <Button
+                variant="contained"
+                onClick={() => setAwardDialogOpen(true)}
+                sx={{ backgroundColor: theme.palette.primary.main }}
+              >
                 تأكيد اختيار الفائزين
               </Button>
-              <Button variant="outlined" onClick={() => setCancelDialogOpen(true)} sx={{ color: '#f44336', borderColor: '#f44336' }}>
+              <Button
+                variant="outlined"
+                onClick={() => setCancelDialogOpen(true)}
+                sx={{ color: '#f44336', borderColor: '#f44336' }}
+              >
                 ⚠️ إلغاء المناقصة
               </Button>
             </Box>
@@ -171,11 +215,16 @@ export default function TenderManagement({ tenderId }) {
           <Alert severity="info" sx={{ mb: 2 }}>
             يمكنك تعديل الكميات لكل بند. إذا تركت الكمية كما هي، فسيتم ترسية البند بالكامل.
           </Alert>
-          {selectedWinners.map(winnerId => {
-            const offer = offers.find(o => o.id === winnerId);
+          {selectedWinners.map((winnerId) => {
+            const offer = offers.find((o) => o.id === winnerId);
             return (
-              <Paper key={winnerId} sx={{ p: 2, mb: 2, borderLeft: `4px solid ${theme.palette.primary.main}` }}>
-                <Typography variant="subtitle1" sx={{ fontWeight: 'bold', mb: 1 }}>{offer.company_name}</Typography>
+              <Paper
+                key={winnerId}
+                sx={{ p: 2, mb: 2, borderLeft: `4px solid ${theme.palette.primary.main}` }}
+              >
+                <Typography variant="subtitle1" sx={{ fontWeight: 'bold', mb: 1 }}>
+                  {offer.company_name}
+                </Typography>
                 <Table size="small">
                   <TableHead>
                     <TableRow>
@@ -185,7 +234,7 @@ export default function TenderManagement({ tenderId }) {
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {(offer.lineItems || []).map(item => (
+                    {(offer.lineItems || []).map((item) => (
                       <TableRow key={item.id}>
                         <TableCell>{item.description}</TableCell>
                         <TableCell align="right">{item.quantity}</TableCell>
@@ -194,8 +243,14 @@ export default function TenderManagement({ tenderId }) {
                             type="number"
                             size="small"
                             value={awardedQuantities[`${winnerId}-${item.id}`] || ''}
-                            onChange={(e) => handleQuantityChange(winnerId, item.id, e.target.value)}
-                            inputProps={{ min: 0, max: item.quantity, style: { textAlign: 'right' } }}
+                            onChange={(e) =>
+                              handleQuantityChange(winnerId, item.id, e.target.value)
+                            }
+                            inputProps={{
+                              min: 0,
+                              max: item.quantity,
+                              style: { textAlign: 'right' },
+                            }}
                             sx={{ width: '80px' }}
                           />
                         </TableCell>
@@ -209,22 +264,43 @@ export default function TenderManagement({ tenderId }) {
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setAwardDialogOpen(false)}>إلغاء</Button>
-          <Button onClick={handleAwardWinners} variant="contained" sx={{ backgroundColor: theme.palette.primary.main }}>
+          <Button
+            onClick={handleAwardWinners}
+            variant="contained"
+            sx={{ backgroundColor: theme.palette.primary.main }}
+          >
             تأكيد
           </Button>
         </DialogActions>
       </Dialog>
-      <Dialog open={cancelDialogOpen} onClose={() => setCancelDialogOpen(false)} maxWidth="sm" fullWidth>
+      <Dialog
+        open={cancelDialogOpen}
+        onClose={() => setCancelDialogOpen(false)}
+        maxWidth="sm"
+        fullWidth
+      >
         <DialogTitle>إلغاء المناقصة</DialogTitle>
         <DialogContent sx={{ pt: 2 }}>
           <Alert severity="warning" sx={{ mb: 2 }}>
             ⚠️ هذا الإجراء سيلغي المناقصة وسيتم إرسال إخطارات الإلغاء لجميع المزودين
           </Alert>
-          <TextField fullWidth label="سبب الإلغاء" value={cancellationReason} onChange={(e) => setCancellationReason(e.target.value)} multiline rows={4} placeholder="أدخل سبب الإلغاء (إلزامي)" />
+          <TextField
+            fullWidth
+            label="سبب الإلغاء"
+            value={cancellationReason}
+            onChange={(e) => setCancellationReason(e.target.value)}
+            multiline
+            rows={4}
+            placeholder="أدخل سبب الإلغاء (إلزامي)"
+          />
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setCancelDialogOpen(false)}>إغلاق</Button>
-          <Button onClick={handleCancelTender} variant="contained" sx={{ backgroundColor: '#f44336' }}>
+          <Button
+            onClick={handleCancelTender}
+            variant="contained"
+            sx={{ backgroundColor: '#f44336' }}
+          >
             إلغاء المناقصة
           </Button>
         </DialogActions>

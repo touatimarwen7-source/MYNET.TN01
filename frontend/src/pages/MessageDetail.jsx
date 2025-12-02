@@ -59,13 +59,15 @@ export default function MessageDetail() {
       state: {
         receiver_id: message.sender_id,
         subject: message.subject ? `Réponse: ${message.subject}` : 'Réponse',
-      }
+      },
     });
   };
 
   if (loading) {
     return (
-      <Container sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '60vh' }}>
+      <Container
+        sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '60vh' }}
+      >
         <CircularProgress sx={{ color: institutionalTheme.palette.primary.main }} />
       </Container>
     );
@@ -90,13 +92,31 @@ export default function MessageDetail() {
           العودة إلى الصندوق
         </Button>
 
-        {error && <Alert severity="error" sx={{ marginBottom: '20px' }}>{error}</Alert>}
+        {error && (
+          <Alert severity="error" sx={{ marginBottom: '20px' }}>
+            {error}
+          </Alert>
+        )}
 
         <Card>
           <CardContent sx={{ padding: '40px' }}>
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '20px' }}>
+            <Box
+              sx={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'flex-start',
+                marginBottom: '20px',
+              }}
+            >
               <Box>
-                <Typography variant="h5" sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main, marginBottom: '8px' }}>
+                <Typography
+                  variant="h5"
+                  sx={{
+                    fontWeight: 600,
+                    color: institutionalTheme.palette.primary.main,
+                    marginBottom: '8px',
+                  }}
+                >
                   {message.subject || '(بدون موضوع)'}
                 </Typography>
                 <Typography variant="body2" sx={{ color: '#666' }}>
@@ -120,11 +140,7 @@ export default function MessageDetail() {
                 >
                   Réponse
                 </Button>
-                <Button
-                  startIcon={<DeleteIcon />}
-                  onClick={handleDelete}
-                  sx={{ color: '#f44336' }}
-                >
+                <Button startIcon={<DeleteIcon />} onClick={handleDelete} sx={{ color: '#f44336' }}>
                   حذف
                 </Button>
               </Box>
@@ -132,7 +148,10 @@ export default function MessageDetail() {
 
             <Divider sx={{ marginY: '20px' }} />
 
-            <Typography variant="body1" sx={{ color: '#333', lineHeight: 1.8, whiteSpace: 'pre-wrap' }}>
+            <Typography
+              variant="body1"
+              sx={{ color: '#333', lineHeight: 1.8, whiteSpace: 'pre-wrap' }}
+            >
               {message.content}
             </Typography>
 

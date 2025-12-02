@@ -10,7 +10,7 @@ export const PROCUREMENT_STAGES = {
       { name: 'Informations', description: 'Détails généraux' },
       { name: 'Lots', description: 'Division en lots' },
       { name: 'Exigences', description: 'Critères obligatoires' },
-      { name: 'Évaluation', description: 'Critères d\'évaluation' },
+      { name: 'Évaluation', description: "Critères d'évaluation" },
       { name: 'Spécifications', description: 'Cahier des charges et documents' },
       { name: 'Finalisation', description: 'Révision finale' },
     ],
@@ -67,7 +67,11 @@ export const DEFAULT_VALUES = {
 export const FILE_CONSTRAINTS = {
   MAX_SIZE_MB: 10,
   MAX_SIZE_BYTES: 10 * 1024 * 1024,
-  ALLOWED_TYPES: ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'],
+  ALLOWED_TYPES: [
+    'application/pdf',
+    'application/msword',
+    'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+  ],
 };
 
 // ============ Draft Configuration ============
@@ -82,7 +86,7 @@ export const API_ERROR_MESSAGES = {
   DEFAULT: 'Une erreur est survenue',
   LOAD_TENDER: 'Erreur lors du chargement de la marchandise',
   CREATE_TENDER: 'Erreur lors de la création de la marchandise',
-  SUBMIT_OFFER: 'Erreur lors de la soumission de l\'offre',
+  SUBMIT_OFFER: "Erreur lors de la soumission de l'offre",
 };
 
 // ============ Award Levels ============
@@ -93,7 +97,7 @@ export const AWARD_LEVELS = {
   LABELS: {
     lot: 'Par Lot',
     article: 'Par Article',
-    tender: 'Global (Toute l\'appel d\'offres)',
+    tender: "Global (Toute l'appel d'offres)",
   },
 };
 

@@ -1,6 +1,6 @@
 /**
  * 🚀 Distributed Redis Cache Manager
- * 
+ *
  * Implements distributed caching with Redis
  * - Falls back to in-memory cache if Redis unavailable
  * - Automatic connection management
@@ -69,8 +69,8 @@ class DistributedCacheManager {
         reconnectStrategy: (retries) => {
           if (retries > 10) return new Error('Max retries reached');
           return Math.min(retries * 50, 500);
-        }
-      }
+        },
+      },
     };
 
     if (!this.options.password) delete this.options.password;
@@ -82,7 +82,7 @@ class DistributedCacheManager {
       misses: 0,
       errors: 0,
       evictions: 0,
-      connectionFailures: 0
+      connectionFailures: 0,
     };
 
     this.memoryCache = new MemoryCache();
@@ -92,7 +92,7 @@ class DistributedCacheManager {
   async initialize() {
     try {
       this.client = redis.createClient(this.options);
-      
+
       this.client.on('connect', () => {
         this.connected = true;
       });
@@ -101,8 +101,7 @@ class DistributedCacheManager {
         this.stats.errors++;
       });
 
-      this.client.on('reconnecting', () => {
-      });
+      this.client.on('reconnecting', () => {});
 
       await this.client.connect();
     } catch (error) {
@@ -186,15 +185,16 @@ class DistributedCacheManager {
   }
 
   getStats() {
-    const hitRate = this.stats.hits + this.stats.misses > 0
-      ? ((this.stats.hits / (this.stats.hits + this.stats.misses)) * 100).toFixed(2)
-      : 0;
+    const hitRate =
+      this.stats.hits + this.stats.misses > 0
+        ? ((this.stats.hits / (this.stats.hits + this.stats.misses)) * 100).toFixed(2)
+        : 0;
 
     return {
       ...this.stats,
       hitRate: `${hitRate}%`,
       connected: this.connected,
-      cacheType: this.connected ? 'redis + memory' : 'memory-only'
+      cacheType: this.connected ? 'redis + memory' : 'memory-only',
     };
   }
 
@@ -215,5 +215,5 @@ module.exports = {
     }
     return instance;
   },
-  DistributedCacheManager
+  DistributedCacheManager,
 };

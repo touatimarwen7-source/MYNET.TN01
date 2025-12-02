@@ -3,9 +3,11 @@
 ## ResponsiveTable Component
 
 ### Purpose
+
 Mobile-first responsive table that adapts to all screen sizes.
 
 ### Features
+
 - **Desktop (md+)**: Full table view
 - **Tablet (sm-md)**: Compact table with horizontal scroll
 - **Mobile (xs-sm)**: Card-based stack with collapsible rows
@@ -47,19 +49,15 @@ function UserManagement() {
       actions={[
         {
           render: (row) => (
-            <IconButton 
-              size="small" 
-              onClick={() => editUser(row)}
-              title="Modifier"
-            >
+            <IconButton size="small" onClick={() => editUser(row)} title="Modifier">
               <Edit />
             </IconButton>
           ),
         },
         {
           render: (row) => (
-            <IconButton 
-              size="small" 
+            <IconButton
+              size="small"
               color="error"
               onClick={() => deleteUser(row.id)}
               title="Supprimer"
@@ -76,20 +74,21 @@ function UserManagement() {
 
 ### Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `columns` | Array | Required | Column definitions: `[{ id, label, width? }]` |
-| `rows` | Array | `[]` | Data rows to display |
-| `getRowId` | Function | `null` | Function to get unique row ID (recommended) |
-| `renderCell` | Function | `null` | Custom cell renderer: `(value, column, row) => JSX` |
-| `onRowClick` | Function | `null` | Row click handler: `(row) => void` |
-| `actions` | Array | `null` | Action buttons: `[{ render: (row, idx) => JSX }]` |
-| `title` | String | `'Données'` | Title for mobile card headers |
-| `emptyMessage` | String | `'Aucune donnée'` | Empty state message |
+| Prop           | Type     | Default           | Description                                         |
+| -------------- | -------- | ----------------- | --------------------------------------------------- |
+| `columns`      | Array    | Required          | Column definitions: `[{ id, label, width? }]`       |
+| `rows`         | Array    | `[]`              | Data rows to display                                |
+| `getRowId`     | Function | `null`            | Function to get unique row ID (recommended)         |
+| `renderCell`   | Function | `null`            | Custom cell renderer: `(value, column, row) => JSX` |
+| `onRowClick`   | Function | `null`            | Row click handler: `(row) => void`                  |
+| `actions`      | Array    | `null`            | Action buttons: `[{ render: (row, idx) => JSX }]`   |
+| `title`        | String   | `'Données'`       | Title for mobile card headers                       |
+| `emptyMessage` | String   | `'Aucune donnée'` | Empty state message                                 |
 
 ### Best Practices
 
 1. **Always use `getRowId`** for performance
+
 ```jsx
 <ResponsiveTable
   getRowId={(row) => row.id}
@@ -98,6 +97,7 @@ function UserManagement() {
 ```
 
 2. **Use French labels** for all columns
+
 ```jsx
 columns={[
   { id: 'name', label: 'Nom' },        // ✅ French
@@ -106,6 +106,7 @@ columns={[
 ```
 
 3. **Render custom cells safely**
+
 ```jsx
 renderCell={(value, column, row) => {
   if (!value) return '-';  // Safe default
@@ -114,8 +115,11 @@ renderCell={(value, column, row) => {
 ```
 
 4. **Use theme colors in actions**
+
 ```jsx
-<IconButton color="primary">  // ✅ Use theme colors
+<IconButton color="primary">
+  {' '}
+  // ✅ Use theme colors
   <Edit />
 </IconButton>
 ```
@@ -140,13 +144,15 @@ import { useConsistentTheme } from '@/utils/consistencyHelper';
 
 const { colors, spacing } = useConsistentTheme();
 
-<Box sx={{
-  backgroundColor: colors.primary,
-  padding: spacing.md,
-  color: colors.text,
-}}>
+<Box
+  sx={{
+    backgroundColor: colors.primary,
+    padding: spacing.md,
+    color: colors.text,
+  }}
+>
   Content
-</Box>
+</Box>;
 ```
 
 ### Pre-built Patterns
@@ -164,12 +170,15 @@ import { CONSISTENT_SX } from '@/utils/consistencyHelper';
 ## Performance Optimization
 
 ### Memoization
+
 All components use React memoization:
+
 - `useMemo` for expensive computations
 - `useCallback` for event handlers
 - Key props for list rendering
 
 ### Tips
+
 - Always pass `getRowId` to ResponsiveTable
 - Avoid inline functions in props
 - Use `useCallback` for action handlers
@@ -179,11 +188,13 @@ All components use React memoization:
 ## Accessibility
 
 ### Keyboard Navigation
+
 - Expandable rows: Enter/Space to toggle
 - Buttons: Tab navigation
 - Links: Standard keyboard access
 
 ### Screen Readers
+
 - Semantic HTML with proper labels
 - ARIA attributes where needed
 - Descriptive button titles
@@ -193,19 +204,25 @@ All components use React memoization:
 ## Troubleshooting
 
 ### Issue: Table shows warnings about keys
+
 **Solution**: Always pass `getRowId` function
+
 ```jsx
 <ResponsiveTable getRowId={(row) => row.id} />
 ```
 
 ### Issue: Cells not rendering correctly
+
 **Solution**: Use `renderCell` with proper null checking
+
 ```jsx
 renderCell={(value) => value || '-'}
 ```
 
 ### Issue: Actions not working on mobile
+
 **Solution**: Use proper event handlers with `stopPropagation`
+
 ```jsx
 onClick={(e) => {
   e.stopPropagation();

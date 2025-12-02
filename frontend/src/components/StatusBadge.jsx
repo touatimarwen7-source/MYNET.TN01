@@ -19,7 +19,7 @@ const statusConfigs = {
 
   // Active statuses
   active: { label: 'Active', color: 'success', icon: '✓' },
-  inactive: { label: 'Inactive', color: 'default', icon: '◯' }
+  inactive: { label: 'Inactive', color: 'default', icon: '◯' },
 };
 
 export default function StatusBadge({ status, variant = 'filled' }) {

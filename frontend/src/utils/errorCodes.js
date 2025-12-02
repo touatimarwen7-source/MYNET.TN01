@@ -1,7 +1,7 @@
 /**
  * Error Codes System
  * Centralized error definitions for application-wide error handling
- * 
+ *
  * Format: { code: 'ERROR_TYPE', message: 'User-friendly message', severity: 'error|warning|info' }
  * Severity: error (critical), warning (recoverable), info (informational)
  */
@@ -13,33 +13,33 @@ export const AUTH_ERRORS = {
   INVALID_CREDENTIALS: {
     code: 'A001',
     message: 'Identifiants incorrects. Veuillez vérifier votre email et votre mot de passe.',
-    severity: 'error'
+    severity: 'error',
   },
   ACCOUNT_LOCKED: {
     code: 'A002',
     message: 'Votre compte est verrouillé. Veuillez réessayer plus tard.',
-    severity: 'error'
+    severity: 'error',
   },
   INVALID_TOKEN: {
     code: 'A003',
     message: 'Le jeton est invalide ou expiré.',
-    severity: 'error'
+    severity: 'error',
   },
   TOKEN_EXPIRED: {
     code: 'A004',
     message: 'Votre session a expiré. Veuillez vous reconnecter.',
-    severity: 'warning'
+    severity: 'warning',
   },
   UNAUTHORIZED: {
     code: 'A005',
-    message: 'Vous n\'êtes pas autorisé à accéder à cette ressource.',
-    severity: 'error'
+    message: "Vous n'êtes pas autorisé à accéder à cette ressource.",
+    severity: 'error',
   },
   SESSION_EXPIRED: {
     code: 'A006',
     message: 'Votre session a expiré. Vous serez redirigé vers la page de connexion.',
-    severity: 'warning'
-  }
+    severity: 'warning',
+  },
 };
 
 // ============================================
@@ -48,34 +48,35 @@ export const AUTH_ERRORS = {
 export const VALIDATION_ERRORS = {
   INVALID_EMAIL: {
     code: 'V001',
-    message: 'Le format de l\'email est invalide.',
-    severity: 'error'
+    message: "Le format de l'email est invalide.",
+    severity: 'error',
   },
   PASSWORD_TOO_SHORT: {
     code: 'V002',
     message: 'Le mot de passe doit contenir au moins 8 caractères.',
-    severity: 'error'
+    severity: 'error',
   },
   WEAK_PASSWORD: {
     code: 'V003',
-    message: 'Le mot de passe est faible. Utilisez des majuscules, des chiffres et des caractères spéciaux.',
-    severity: 'warning'
+    message:
+      'Le mot de passe est faible. Utilisez des majuscules, des chiffres et des caractères spéciaux.',
+    severity: 'warning',
   },
   REQUIRED_FIELD: {
     code: 'V004',
     message: 'Ce champ est obligatoire.',
-    severity: 'error'
+    severity: 'error',
   },
   INVALID_FORMAT: {
     code: 'V005',
     message: 'Le format est invalide.',
-    severity: 'error'
+    severity: 'error',
   },
   FIELD_ALREADY_EXISTS: {
     code: 'V006',
     message: 'Cet élément existe déjà.',
-    severity: 'error'
-  }
+    severity: 'error',
+  },
 };
 
 // ============================================
@@ -85,33 +86,33 @@ export const NETWORK_ERRORS = {
   NETWORK_TIMEOUT: {
     code: 'N001',
     message: 'La connexion a été perdue. Veuillez réessayer.',
-    severity: 'warning'
+    severity: 'warning',
   },
   NO_INTERNET: {
     code: 'N002',
-    message: 'Vous n\'avez pas de connexion Internet.',
-    severity: 'error'
+    message: "Vous n'avez pas de connexion Internet.",
+    severity: 'error',
   },
   BAD_GATEWAY: {
     code: 'N003',
-    message: 'Le serveur Web n\'est pas disponible. Veuillez réessayer plus tard.',
-    severity: 'error'
+    message: "Le serveur Web n'est pas disponible. Veuillez réessayer plus tard.",
+    severity: 'error',
   },
   SERVICE_UNAVAILABLE: {
     code: 'N004',
-    message: 'Le service n\'est pas disponible pour le moment.',
-    severity: 'warning'
+    message: "Le service n'est pas disponible pour le moment.",
+    severity: 'warning',
   },
   RATE_LIMIT: {
     code: 'N005',
     message: 'Vous avez dépassé la limite de requêtes. Veuillez réessayer plus tard.',
-    severity: 'warning'
+    severity: 'warning',
   },
   REQUEST_FAILED: {
     code: 'N006',
     message: 'La requête a échoué. Veuillez réessayer.',
-    severity: 'error'
-  }
+    severity: 'error',
+  },
 };
 
 // ============================================
@@ -120,34 +121,34 @@ export const NETWORK_ERRORS = {
 export const BUSINESS_ERRORS = {
   TENDER_NOT_FOUND: {
     code: 'B001',
-    message: 'L\'appel d\'offres n\'a pas été trouvé.',
-    severity: 'error'
+    message: "L'appel d'offres n'a pas été trouvé.",
+    severity: 'error',
   },
   OFFER_NOT_FOUND: {
     code: 'B002',
-    message: 'L\'offre n\'a pas été trouvée.',
-    severity: 'error'
+    message: "L'offre n'a pas été trouvée.",
+    severity: 'error',
   },
   INSUFFICIENT_BUDGET: {
     code: 'B003',
     message: 'Le budget est insuffisant.',
-    severity: 'error'
+    severity: 'error',
   },
   DUPLICATE_OFFER: {
     code: 'B004',
-    message: 'Vous avez déjà soumis une offre pour cet appel d\'offres.',
-    severity: 'warning'
+    message: "Vous avez déjà soumis une offre pour cet appel d'offres.",
+    severity: 'warning',
   },
   TENDER_CLOSED: {
     code: 'B005',
-    message: 'La date limite de cet appel d\'offres est dépassée.',
-    severity: 'error'
+    message: "La date limite de cet appel d'offres est dépassée.",
+    severity: 'error',
   },
   PERMISSION_DENIED: {
     code: 'B006',
-    message: 'Vous n\'avez pas les permissions suffisantes pour effectuer cette action.',
-    severity: 'error'
-  }
+    message: "Vous n'avez pas les permissions suffisantes pour effectuer cette action.",
+    severity: 'error',
+  },
 };
 
 // ============================================
@@ -157,23 +158,23 @@ export const FILE_ERRORS = {
   FILE_TOO_LARGE: {
     code: 'F001',
     message: 'La taille du fichier est trop grande. La limite maximale est de 10 Mo.',
-    severity: 'error'
+    severity: 'error',
   },
   INVALID_FILE_TYPE: {
     code: 'F002',
-    message: 'Le type de fichier n\'est pas supporté.',
-    severity: 'error'
+    message: "Le type de fichier n'est pas supporté.",
+    severity: 'error',
   },
   UPLOAD_FAILED: {
     code: 'F003',
     message: 'Le téléchargement du fichier a échoué. Veuillez réessayer.',
-    severity: 'error'
+    severity: 'error',
   },
   DOWNLOAD_FAILED: {
     code: 'F004',
     message: 'Le téléchargement du fichier a échoué.',
-    severity: 'error'
-  }
+    severity: 'error',
+  },
 };
 
 // ============================================
@@ -182,24 +183,24 @@ export const FILE_ERRORS = {
 export const SYSTEM_ERRORS = {
   INTERNAL_SERVER_ERROR: {
     code: 'S001',
-    message: 'Une erreur système s\'est produite. Veuillez réessayer plus tard.',
-    severity: 'error'
+    message: "Une erreur système s'est produite. Veuillez réessayer plus tard.",
+    severity: 'error',
   },
   DATABASE_ERROR: {
     code: 'S002',
     message: 'Erreur de base de données.',
-    severity: 'error'
+    severity: 'error',
   },
   CACHE_ERROR: {
     code: 'S003',
     message: 'Erreur de cache.',
-    severity: 'warning'
+    severity: 'warning',
   },
   CONFIGURATION_ERROR: {
     code: 'S004',
     message: 'Erreur de configuration.',
-    severity: 'error'
-  }
+    severity: 'error',
+  },
 };
 
 // ============================================
@@ -215,7 +216,7 @@ export const HTTP_ERROR_MAP = {
   500: SYSTEM_ERRORS.INTERNAL_SERVER_ERROR,
   502: NETWORK_ERRORS.BAD_GATEWAY,
   503: NETWORK_ERRORS.SERVICE_UNAVAILABLE,
-  504: NETWORK_ERRORS.NETWORK_TIMEOUT
+  504: NETWORK_ERRORS.NETWORK_TIMEOUT,
 };
 
 // ============================================
@@ -234,10 +235,10 @@ export function getErrorByCode(code) {
     ...NETWORK_ERRORS,
     ...BUSINESS_ERRORS,
     ...FILE_ERRORS,
-    ...SYSTEM_ERRORS
+    ...SYSTEM_ERRORS,
   };
-  
-  return Object.values(allErrors).find(err => err.code === code) || null;
+
+  return Object.values(allErrors).find((err) => err.code === code) || null;
 }
 
 /**
@@ -258,8 +259,8 @@ export function formatError(error) {
   if (!error) {
     return {
       code: 'UNKNOWN',
-      message: 'Une erreur inconnue s\'est produite.',
-      severity: 'error'
+      message: "Une erreur inconnue s'est produite.",
+      severity: 'error',
     };
   }
 
@@ -278,7 +279,7 @@ export function formatError(error) {
     return {
       code: 'ERROR',
       message: error,
-      severity: 'error'
+      severity: 'error',
     };
   }
 
@@ -296,5 +297,5 @@ export default {
   HTTP_ERROR_MAP,
   getErrorByCode,
   getErrorFromStatusCode,
-  formatError
+  formatError,
 };

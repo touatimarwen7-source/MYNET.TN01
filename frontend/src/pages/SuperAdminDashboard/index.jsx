@@ -78,19 +78,26 @@ const THEME_COLORS = institutionalTheme.palette;
  */
 function StatCard({ title, value, change, icon: Icon, color, loading }) {
   return (
-    <Card sx={{ 
-      height: '100%',
-      backgroundColor: '#FFFFFF',
-      border: `1px solid ${THEME_COLORS.divider}`,
-      borderRadius: '8px',
-      boxShadow: 'none',
-      transition: 'all 0.3s ease',
-      '&:hover': {
-        borderColor: THEME_COLORS.primary.main,
-      }
-    }}>
+    <Card
+      sx={{
+        height: '100%',
+        backgroundColor: '#FFFFFF',
+        border: `1px solid ${THEME_COLORS.divider}`,
+        borderRadius: '8px',
+        boxShadow: 'none',
+        transition: 'all 0.3s ease',
+        '&:hover': {
+          borderColor: THEME_COLORS.primary.main,
+        },
+      }}
+    >
       <CardContent>
-        <Stack direction="row" justifyContent="space-between" alignItems="flex-start" sx={{ mb: 2 }}>
+        <Stack
+          direction="row"
+          justifyContent="space-between"
+          alignItems="flex-start"
+          sx={{ mb: 2 }}
+        >
           <Box>
             <Typography color="textSecondary" variant="body2" sx={{ fontWeight: 500 }}>
               {title}
@@ -98,7 +105,10 @@ function StatCard({ title, value, change, icon: Icon, color, loading }) {
             {loading ? (
               <CircularProgress size={24} />
             ) : (
-              <Typography variant="h4" sx={{ fontWeight: 600, mt: 1, color: THEME_COLORS.primary.main }}>
+              <Typography
+                variant="h4"
+                sx={{ fontWeight: 600, mt: 1, color: THEME_COLORS.primary.main }}
+              >
                 {value}
               </Typography>
             )}
@@ -109,8 +119,16 @@ function StatCard({ title, value, change, icon: Icon, color, loading }) {
         </Stack>
         {change && (
           <Stack direction="row" alignItems="center" gap={0.5}>
-            <TrendingUp sx={{ fontSize: 16, color: change > 0 ? THEME_COLORS.success.main : THEME_COLORS.error.main }} />
-            <Typography variant="body2" sx={{ color: change > 0 ? THEME_COLORS.success.main : THEME_COLORS.error.main }}>
+            <TrendingUp
+              sx={{
+                fontSize: 16,
+                color: change > 0 ? THEME_COLORS.success.main : THEME_COLORS.error.main,
+              }}
+            />
+            <Typography
+              variant="body2"
+              sx={{ color: change > 0 ? THEME_COLORS.success.main : THEME_COLORS.error.main }}
+            >
               {Math.abs(change)}% {change > 0 ? 'augmentation' : 'diminution'}
             </Typography>
           </Stack>
@@ -126,10 +144,14 @@ function StatCard({ title, value, change, icon: Icon, color, loading }) {
 function SystemHealth({ status, loading }) {
   const getStatusColor = (status) => {
     switch (status) {
-      case 'operational': return THEME_COLORS.success.main;
-      case 'degraded': return THEME_COLORS.warning.main;
-      case 'critical': return THEME_COLORS.error.main;
-      default: return THEME_COLORS.secondary.main;
+      case 'operational':
+        return THEME_COLORS.success.main;
+      case 'degraded':
+        return THEME_COLORS.warning.main;
+      case 'critical':
+        return THEME_COLORS.error.main;
+      default:
+        return THEME_COLORS.secondary.main;
     }
   };
 
@@ -143,23 +165,27 @@ function SystemHealth({ status, loading }) {
   };
 
   return (
-    <Card sx={{ 
-      backgroundColor: '#FFFFFF',
-      border: `1px solid ${THEME_COLORS.divider}`,
-      borderRadius: '8px',
-      boxShadow: 'none',
-    }}>
-      <CardHeader 
-        title="Santé du Système" 
+    <Card
+      sx={{
+        backgroundColor: '#FFFFFF',
+        border: `1px solid ${THEME_COLORS.divider}`,
+        borderRadius: '8px',
+        boxShadow: 'none',
+      }}
+    >
+      <CardHeader
+        title="Santé du Système"
         avatar={<Activity sx={{ color: getStatusColor(status) }} />}
       />
       <CardContent>
         <Stack spacing={2}>
           <Stack direction="row" justifyContent="space-between" alignItems="center">
             <Typography variant="body2">État Global</Typography>
-            <Chip 
+            <Chip
               label={getStatusText(status)}
-              color={status === 'operational' ? 'success' : status === 'degraded' ? 'warning' : 'error'}
+              color={
+                status === 'operational' ? 'success' : status === 'degraded' ? 'warning' : 'error'
+              }
               variant="filled"
               size="small"
             />
@@ -167,23 +193,41 @@ function SystemHealth({ status, loading }) {
           <Box>
             <Stack direction="row" justifyContent="space-between" sx={{ mb: 1 }}>
               <Typography variant="body2">Performance</Typography>
-              <Typography variant="body2" sx={{ fontWeight: 600 }}>95%</Typography>
+              <Typography variant="body2" sx={{ fontWeight: 600 }}>
+                95%
+              </Typography>
             </Stack>
-            <LinearProgress variant="determinate" value={95} sx={{ height: 8, borderRadius: '4px' }} />
+            <LinearProgress
+              variant="determinate"
+              value={95}
+              sx={{ height: 8, borderRadius: '4px' }}
+            />
           </Box>
           <Box>
             <Stack direction="row" justifyContent="space-between" sx={{ mb: 1 }}>
               <Typography variant="body2">Disponibilité API</Typography>
-              <Typography variant="body2" sx={{ fontWeight: 600 }}>99.9%</Typography>
+              <Typography variant="body2" sx={{ fontWeight: 600 }}>
+                99.9%
+              </Typography>
             </Stack>
-            <LinearProgress variant="determinate" value={99.9} sx={{ height: 8, borderRadius: '4px' }} />
+            <LinearProgress
+              variant="determinate"
+              value={99.9}
+              sx={{ height: 8, borderRadius: '4px' }}
+            />
           </Box>
           <Box>
             <Stack direction="row" justifyContent="space-between" sx={{ mb: 1 }}>
               <Typography variant="body2">Base de Données</Typography>
-              <Typography variant="body2" sx={{ fontWeight: 600 }}>98%</Typography>
+              <Typography variant="body2" sx={{ fontWeight: 600 }}>
+                98%
+              </Typography>
             </Stack>
-            <LinearProgress variant="determinate" value={98} sx={{ height: 8, borderRadius: '4px' }} />
+            <LinearProgress
+              variant="determinate"
+              value={98}
+              sx={{ height: 8, borderRadius: '4px' }}
+            />
           </Box>
         </Stack>
       </CardContent>
@@ -203,12 +247,14 @@ function QuickActions({ navigate }) {
   ];
 
   return (
-    <Card sx={{ 
-      backgroundColor: '#FFFFFF',
-      border: `1px solid ${THEME_COLORS.divider}`,
-      borderRadius: '8px',
-      boxShadow: 'none',
-    }}>
+    <Card
+      sx={{
+        backgroundColor: '#FFFFFF',
+        border: `1px solid ${THEME_COLORS.divider}`,
+        borderRadius: '8px',
+        boxShadow: 'none',
+      }}
+    >
       <CardHeader title="Actions Rapides" />
       <CardContent>
         <Stack spacing={1}>
@@ -227,7 +273,7 @@ function QuickActions({ navigate }) {
                 '&:hover': {
                   borderColor: THEME_COLORS.primary.main,
                   backgroundColor: `${THEME_COLORS.primary.main}08`,
-                }
+                },
               }}
             >
               {action.label}
@@ -251,18 +297,27 @@ function RecentActivity() {
   ];
 
   return (
-    <Card sx={{ 
-      backgroundColor: '#FFFFFF',
-      border: `1px solid ${THEME_COLORS.divider}`,
-      borderRadius: '8px',
-      boxShadow: 'none',
-    }}>
+    <Card
+      sx={{
+        backgroundColor: '#FFFFFF',
+        border: `1px solid ${THEME_COLORS.divider}`,
+        borderRadius: '8px',
+        boxShadow: 'none',
+      }}
+    >
       <CardHeader title="Activité Récente" />
       <CardContent>
         <Stack spacing={2}>
           {activities.map((activity) => (
             <Stack key={activity.id} direction="row" spacing={2} alignItems="center">
-              <Box sx={{ width: 4, height: 4, borderRadius: '50%', backgroundColor: THEME_COLORS.primary.main }} />
+              <Box
+                sx={{
+                  width: 4,
+                  height: 4,
+                  borderRadius: '50%',
+                  backgroundColor: THEME_COLORS.primary.main,
+                }}
+              />
               <Stack flex={1} spacing={0.5}>
                 <Typography variant="body2" sx={{ fontWeight: 500 }}>
                   {activity.action}
@@ -315,7 +370,9 @@ function SuperAdminDashboardContent() {
         systemHealth: data.system_health || 95,
       });
 
-      setSystemStatus(data.system_health > 90 ? 'operational' : data.system_health > 70 ? 'degraded' : 'critical');
+      setSystemStatus(
+        data.system_health > 90 ? 'operational' : data.system_health > 70 ? 'degraded' : 'critical'
+      );
       logger.info('Statistiques super admin chargées');
     } catch (error) {
       logger.error('Erreur chargement stats super admin', error);
@@ -370,12 +427,12 @@ function SuperAdminDashboardContent() {
       <Container maxWidth="xl" sx={{ py: 4 }}>
         {/* Alert Section */}
         {systemStatus !== 'operational' && (
-          <Alert 
+          <Alert
             severity={systemStatus === 'degraded' ? 'warning' : 'error'}
             icon={systemStatus === 'degraded' ? <Warning /> : <Warning />}
             sx={{ mb: 3, borderRadius: '8px' }}
           >
-            {systemStatus === 'degraded' 
+            {systemStatus === 'degraded'
               ? 'Système en performance dégradée - Veuillez vérifier les logs'
               : 'État critique du système - Action immédiate requise'}
           </Alert>

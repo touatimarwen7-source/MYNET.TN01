@@ -1,6 +1,16 @@
 // Advanced Search Page - TURN 3 ENHANCEMENT
 import React, { useState, useEffect } from 'react';
-import { Box, TextField, Button, Grid, Card, Typography, Slider, Select, MenuItem } from '@mui/material';
+import {
+  Box,
+  TextField,
+  Button,
+  Grid,
+  Card,
+  Typography,
+  Slider,
+  Select,
+  MenuItem,
+} from '@mui/material';
 import axios from 'axios';
 
 const AdvancedSearchPage = () => {
@@ -11,7 +21,7 @@ const AdvancedSearchPage = () => {
     maxBudget: 1000000,
     category: '',
     location: '',
-    minRating: 0
+    minRating: 0,
   });
 
   const handleSearch = async () => {
@@ -19,16 +29,17 @@ const AdvancedSearchPage = () => {
       const token = localStorage.getItem('token');
       const res = await axios.get('/api/search/advanced/tenders/advanced', {
         params: filters,
-        headers: { Authorization: `Bearer ${token}` }
+        headers: { Authorization: `Bearer ${token}` },
       });
       setResults(res.data);
-    } catch (error) {
-    }
+    } catch (error) {}
   };
 
   return (
     <Box sx={{ p: 3 }}>
-      <Typography variant="h4" sx={{ mb: 3 }}>🔍 Advanced Search</Typography>
+      <Typography variant="h4" sx={{ mb: 3 }}>
+        🔍 Advanced Search
+      </Typography>
 
       {/* Filters */}
       <Card sx={{ p: 2, mb: 3 }}>
@@ -54,7 +65,7 @@ const AdvancedSearchPage = () => {
               <MenuItem value="Products">Products</MenuItem>
             </Select>
           </Grid>
-          
+
           <Grid xs={12} lg={6}>
             <TextField
               fullWidth

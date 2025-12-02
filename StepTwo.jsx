@@ -15,11 +15,11 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import institutionalTheme from '../../../theme/theme';
 
 /**
- * الخطوة الثانية: الجدولة والتواريخ
+ * Étape 2 : Calendrier et Dates
  * @param {object} props
- * @param {object} props.formData - بيانات النموذج الحالية
- * @param {function} props.setFormData - دالة لتحديث بيانات النموذج
- * @param {boolean} props.loading - حالة التحميل
+ * @param {object} props.formData - Données actuelles du formulaire
+ * @param {function} props.setFormData - Fonction pour mettre à jour les données du formulaire
+ * @param {boolean} props.loading - État de chargement
  */
 const StepTwo = ({ formData, setFormData, loading }) => {
   
@@ -45,14 +45,14 @@ const StepTwo = ({ formData, setFormData, loading }) => {
     <LocalizationProvider dateAdapter={AdapterDateFns}>
       <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
         <Alert severity="info">
-          حدد التواريخ الرئيسية لدورة حياة المناقصة. هذه التواريخ ستتحكم في فتح وإغلاق تقديم العروض تلقائيًا.
+          Définissez les dates clés du cycle de vie de l'appel d'offres. Ces dates contrôleront automatiquement l'ouverture et la fermeture de la soumission des offres.
         </Alert>
 
         <Grid container spacing={3}>
           {/* تاريخ الإغلاق */}
           <Grid item xs={12} md={6}>
             <DateTimePicker
-              label="تاريخ الإغلاق (Submission Deadline) *"
+              label="Date de Clôture (Submission Deadline) *"
               value={submissionDeadline}
               onChange={(newValue) => handleDateChange('submissionDeadline', newValue)}
               renderInput={(params) => <TextField {...params} fullWidth />}
@@ -64,20 +64,20 @@ const StepTwo = ({ formData, setFormData, loading }) => {
           {/* تاريخ الفتح (فك التشفير) */}
           <Grid item xs={12} md={6}>
             <DateTimePicker
-              label="تاريخ الفتح (Decryption Date) *"
+              label="Date d'Ouverture (Déchiffrement) *"
               value={formData.decryptionDate ? new Date(formData.decryptionDate) : null}
               onChange={(newValue) => handleDateChange('decryptionDate', newValue)}
               renderInput={(params) => <TextField {...params} fullWidth />}
               disabled={loading || !submissionDeadline}
-              minDateTime={submissionDeadline} // ✅ التحقق: يجب أن يكون بعد تاريخ الإغلاق
-              helperText={!submissionDeadline ? "الرجاء تحديد تاريخ الإغلاق أولاً" : ""}
+              minDateTime={submissionDeadline} // ✅ Validation: Doit être après la date de clôture
+              helperText={!submissionDeadline ? "Veuillez d'abord définir la date de clôture" : ""}
             />
           </Grid>
 
           {/* بداية فترة الاستفسارات */}
           <Grid item xs={12} md={6}>
             <DateTimePicker
-              label="بداية فترة الاستفسارات"
+              label="Début de la période de questions"
               value={formData.inquiryStartDate ? new Date(formData.inquiryStartDate) : null}
               onChange={(newValue) => handleDateChange('inquiryStartDate', newValue)}
               renderInput={(params) => <TextField {...params} fullWidth />}
@@ -89,7 +89,7 @@ const StepTwo = ({ formData, setFormData, loading }) => {
           {/* نهاية فترة الاستفسارات */}
           <Grid item xs={12} md={6}>
             <DateTimePicker
-              label="نهاية فترة الاستفسارات"
+              label="Fin de la période de questions"
               value={formData.inquiryEndDate ? new Date(formData.inquiryEndDate) : null}
               onChange={(newValue) => handleDateChange('inquiryEndDate', newValue)}
               renderInput={(params) => <TextField {...params} fullWidth />}
@@ -103,15 +103,15 @@ const StepTwo = ({ formData, setFormData, loading }) => {
           <Grid item xs={12} md={6}>
             <TextField
               name="offerValidityPeriod"
-              label="فترة صلاحية العرض (بالأيام)"
+              label="Période de validité de l'offre (en jours)"
               type="number"
               value={formData.offerValidityPeriod || ''}
               onChange={handleInputChange}
               fullWidth
-              placeholder="مثال: 90"
+              placeholder="Exemple : 90"
               disabled={loading}
               InputProps={{
-                endAdornment: <Typography variant="body2" sx={{ color: 'text.secondary', mr: 1 }}>يومًا</Typography>,
+                endAdornment: <Typography variant="body2" sx={{ color: 'text.secondary', mr: 1 }}>jours</Typography>,
               }}
             />
           </Grid>
@@ -119,12 +119,12 @@ const StepTwo = ({ formData, setFormData, loading }) => {
           {/* نظام الإنذار */}
           <Grid item xs={12} md={6}>
             <FormControl fullWidth>
-              <InputLabel>نظام الإنذار</InputLabel>
-              <Select name="alertSystem" value={formData.alertSystem || ''} onChange={handleInputChange} label="نظام الإنذار" disabled={loading}>
-                <MenuItem value="none">بدون تنبيه</MenuItem>
-                <MenuItem value="24h">تنبيه قبل الإغلاق بـ 24 ساعة</MenuItem>
-                <MenuItem value="48h">تنبيه قبل الإغلاق بـ 48 ساعة</MenuItem>
-                <MenuItem value="7d">تنبيه قبل الإغلاق بأسبوع</MenuItem>
+              <InputLabel>Système d'alerte</InputLabel>
+              <Select name="alertSystem" value={formData.alertSystem || ''} onChange={handleInputChange} label="Système d'alerte" disabled={loading}>
+                <MenuItem value="none">Aucune alerte</MenuItem>
+                <MenuItem value="24h">Alerte 24h avant la clôture</MenuItem>
+                <MenuItem value="48h">Alerte 48h avant la clôture</MenuItem>
+                <MenuItem value="7d">Alerte 1 semaine avant la clôture</MenuItem>
               </Select>
             </FormControl>
           </Grid>

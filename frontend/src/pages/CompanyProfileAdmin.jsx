@@ -31,7 +31,7 @@ export default function CompanyProfileAdmin() {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
-  
+
   const [formData, setFormData] = useState({
     company_name: '',
     company_registration: '',
@@ -44,15 +44,33 @@ export default function CompanyProfileAdmin() {
     preferred_categories: [],
     service_locations: [],
   });
-  
+
   const [newCategory, setNewCategory] = useState('');
   const [newLocation, setNewLocation] = useState('');
-  
-  const categories = ['Sécurité', 'Gardiennage', 'Surveillance', 'Transport', 'Événementiel', 'Audit', 'Logistique', 'Consulting'];
-  const locations = ['Tunis', 'Ariana', 'Ben Arous', 'Mannouba', 'Sfax', 'Sousse', 'Nabeul', 'Gabès'];
+
+  const categories = [
+    'Sécurité',
+    'Gardiennage',
+    'Surveillance',
+    'Transport',
+    'Événementiel',
+    'Audit',
+    'Logistique',
+    'Consulting',
+  ];
+  const locations = [
+    'Tunis',
+    'Ariana',
+    'Ben Arous',
+    'Mannouba',
+    'Sfax',
+    'Sousse',
+    'Nabeul',
+    'Gabès',
+  ];
 
   useEffect(() => {
-    setPageTitle('Gestion du Profil d\'Entreprise');
+    setPageTitle("Gestion du Profil d'Entreprise");
     // Get current user's ID from localStorage
     const user = JSON.parse(localStorage.getItem('user') || '{}');
     if (!user.id) {
@@ -69,7 +87,7 @@ export default function CompanyProfileAdmin() {
     try {
       setLoading(true);
       const data = await companyProfileAPI.getSupplierProfile(supplierId);
-      
+
       setFormData({
         company_name: data.company_name || '',
         company_registration: data.company_registration || '',
@@ -91,43 +109,43 @@ export default function CompanyProfileAdmin() {
   };
 
   const handleInputChange = (field, value) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [field]: value
+      [field]: value,
     }));
   };
 
   const handleAddCategory = () => {
     if (newCategory && !formData.preferred_categories.includes(newCategory)) {
-      setFormData(prev => ({
+      setFormData((prev) => ({
         ...prev,
-        preferred_categories: [...prev.preferred_categories, newCategory]
+        preferred_categories: [...prev.preferred_categories, newCategory],
       }));
       setNewCategory('');
     }
   };
 
   const handleRemoveCategory = (category) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      preferred_categories: prev.preferred_categories.filter(c => c !== category)
+      preferred_categories: prev.preferred_categories.filter((c) => c !== category),
     }));
   };
 
   const handleAddLocation = () => {
     if (newLocation && !formData.service_locations.includes(newLocation)) {
-      setFormData(prev => ({
+      setFormData((prev) => ({
         ...prev,
-        service_locations: [...prev.service_locations, newLocation]
+        service_locations: [...prev.service_locations, newLocation],
       }));
       setNewLocation('');
     }
   };
 
   const handleRemoveLocation = (location) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      service_locations: prev.service_locations.filter(l => l !== location)
+      service_locations: prev.service_locations.filter((l) => l !== location),
     }));
   };
 
@@ -141,9 +159,9 @@ export default function CompanyProfileAdmin() {
         setSaving(false);
         return;
       }
-      
+
       await companyProfileAPI.updateSupplierProfile(user.id, formData);
-      
+
       setSuccess('Profil mis à jour avec succès!');
       setTimeout(() => setSuccess(''), 3000);
       setError('');
@@ -163,7 +181,10 @@ export default function CompanyProfileAdmin() {
 
   if (loading) {
     return (
-      <Container maxWidth="lg" sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '60vh' }}>
+      <Container
+        maxWidth="lg"
+        sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '60vh' }}
+      >
         <CircularProgress sx={{ color: institutionalTheme.palette.primary.main }} />
       </Container>
     );
@@ -172,17 +193,39 @@ export default function CompanyProfileAdmin() {
   return (
     <Box sx={{ backgroundColor: '#f9f9f9', paddingY: '40px' }}>
       <Container maxWidth="lg">
-        <Typography variant="h4" sx={{ fontWeight: 600, marginBottom: '30px', color: institutionalTheme.palette.primary.main }}>
+        <Typography
+          variant="h4"
+          sx={{
+            fontWeight: 600,
+            marginBottom: '30px',
+            color: institutionalTheme.palette.primary.main,
+          }}
+        >
           Gestion du Profil d'Entreprise
         </Typography>
 
-        {error && <Alert severity="error" sx={{ marginBottom: '20px' }}>{error}</Alert>}
-        {success && <Alert severity="success" sx={{ marginBottom: '20px' }}>{success}</Alert>}
+        {error && (
+          <Alert severity="error" sx={{ marginBottom: '20px' }}>
+            {error}
+          </Alert>
+        )}
+        {success && (
+          <Alert severity="success" sx={{ marginBottom: '20px' }}>
+            {success}
+          </Alert>
+        )}
 
         {/* Information Générale */}
         <Card sx={{ border: '1px solid #e0e0e0', marginBottom: '20px' }}>
           <CardContent>
-            <Typography variant="h6" sx={{ fontWeight: 600, marginBottom: '20px', color: institutionalTheme.palette.primary.main }}>
+            <Typography
+              variant="h6"
+              sx={{
+                fontWeight: 600,
+                marginBottom: '20px',
+                color: institutionalTheme.palette.primary.main,
+              }}
+            >
               INFORMATIONS GÉNÉRALES
             </Typography>
             <Grid container spacing={2}>
@@ -227,7 +270,14 @@ export default function CompanyProfileAdmin() {
         {/* Adresse et Localisation */}
         <Card sx={{ border: '1px solid #e0e0e0', marginBottom: '20px' }}>
           <CardContent>
-            <Typography variant="h6" sx={{ fontWeight: 600, marginBottom: '20px', color: institutionalTheme.palette.primary.main }}>
+            <Typography
+              variant="h6"
+              sx={{
+                fontWeight: 600,
+                marginBottom: '20px',
+                color: institutionalTheme.palette.primary.main,
+              }}
+            >
               ADRESSE ET LOCALISATION
             </Typography>
             <Grid container spacing={2}>
@@ -264,7 +314,14 @@ export default function CompanyProfileAdmin() {
         {/* Biographie */}
         <Card sx={{ border: '1px solid #e0e0e0', marginBottom: '20px' }}>
           <CardContent>
-            <Typography variant="h6" sx={{ fontWeight: 600, marginBottom: '20px', color: institutionalTheme.palette.primary.main }}>
+            <Typography
+              variant="h6"
+              sx={{
+                fontWeight: 600,
+                marginBottom: '20px',
+                color: institutionalTheme.palette.primary.main,
+              }}
+            >
               BIOGRAPHIE
             </Typography>
             <TextField
@@ -282,7 +339,14 @@ export default function CompanyProfileAdmin() {
         {/* Catégories de Services */}
         <Card sx={{ border: '1px solid #e0e0e0', marginBottom: '20px' }}>
           <CardContent>
-            <Typography variant="h6" sx={{ fontWeight: 600, marginBottom: '20px', color: institutionalTheme.palette.primary.main }}>
+            <Typography
+              variant="h6"
+              sx={{
+                fontWeight: 600,
+                marginBottom: '20px',
+                color: institutionalTheme.palette.primary.main,
+              }}
+            >
               CATÉGORIES DE SERVICES
             </Typography>
             <Box sx={{ marginBottom: '16px' }}>
@@ -295,7 +359,9 @@ export default function CompanyProfileAdmin() {
                     label="Sélectionner une catégorie"
                   >
                     {categories.map((cat) => (
-                      <MenuItem key={cat} value={cat}>{cat}</MenuItem>
+                      <MenuItem key={cat} value={cat}>
+                        {cat}
+                      </MenuItem>
                     ))}
                   </Select>
                 </FormControl>
@@ -313,7 +379,10 @@ export default function CompanyProfileAdmin() {
                     key={cat}
                     label={cat}
                     onDelete={() => handleRemoveCategory(cat)}
-                    sx={{ backgroundColor: institutionalTheme.palette.primary.main, color: '#ffffff' }}
+                    sx={{
+                      backgroundColor: institutionalTheme.palette.primary.main,
+                      color: '#ffffff',
+                    }}
                   />
                 ))}
               </Stack>
@@ -324,7 +393,14 @@ export default function CompanyProfileAdmin() {
         {/* Zones de Couverture */}
         <Card sx={{ border: '1px solid #e0e0e0', marginBottom: '20px' }}>
           <CardContent>
-            <Typography variant="h6" sx={{ fontWeight: 600, marginBottom: '20px', color: institutionalTheme.palette.primary.main }}>
+            <Typography
+              variant="h6"
+              sx={{
+                fontWeight: 600,
+                marginBottom: '20px',
+                color: institutionalTheme.palette.primary.main,
+              }}
+            >
               ZONES DE COUVERTURE
             </Typography>
             <Box sx={{ marginBottom: '16px' }}>
@@ -337,7 +413,9 @@ export default function CompanyProfileAdmin() {
                     label="Sélectionner une localité"
                   >
                     {locations.map((loc) => (
-                      <MenuItem key={loc} value={loc}>{loc}</MenuItem>
+                      <MenuItem key={loc} value={loc}>
+                        {loc}
+                      </MenuItem>
                     ))}
                   </Select>
                 </FormControl>
@@ -355,7 +433,10 @@ export default function CompanyProfileAdmin() {
                     key={loc}
                     label={loc}
                     onDelete={() => handleRemoveLocation(loc)}
-                    sx={{ backgroundColor: institutionalTheme.palette.primary.main, color: '#ffffff' }}
+                    sx={{
+                      backgroundColor: institutionalTheme.palette.primary.main,
+                      color: '#ffffff',
+                    }}
                   />
                 ))}
               </Stack>

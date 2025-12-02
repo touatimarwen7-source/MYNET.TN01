@@ -1,7 +1,7 @@
 /**
  * 🔐 ADMIN MIDDLEWARE SUITE
  * Comprehensive middleware for admin operations
- * 
+ *
  * Features:
  * - Admin-specific rate limiting
  * - Permission validation
@@ -26,7 +26,7 @@ const adminLimiter = rateLimit({
   message: 'Too many admin requests, please try again later',
   standardHeaders: true,
   legacyHeaders: false,
-  skip: (req) => req.user?.role !== 'super_admin'
+  skip: (req) => req.user?.role !== 'super_admin',
 });
 
 const adminMutationLimiter = rateLimit({
@@ -35,7 +35,7 @@ const adminMutationLimiter = rateLimit({
   message: 'Too many admin modifications, please try again later',
   standardHeaders: true,
   legacyHeaders: false,
-  skip: (req) => req.user?.role !== 'super_admin' || req.method === 'GET'
+  skip: (req) => req.user?.role !== 'super_admin' || req.method === 'GET',
 });
 
 const adminFileUploadLimiter = rateLimit({
@@ -43,7 +43,7 @@ const adminFileUploadLimiter = rateLimit({
   max: 10,
   message: 'File upload limit reached, try again later',
   standardHeaders: true,
-  skip: (req) => req.user?.role !== 'super_admin'
+  skip: (req) => req.user?.role !== 'super_admin',
 });
 
 // ===== 2. INPUT VALIDATION MIDDLEWARE =====
@@ -55,9 +55,9 @@ const validateAdminInput = (req, res, next) => {
     // Sanitize request body
     if (req.body && typeof req.body === 'object') {
       // Remove dangerous characters
-      Object.keys(req.body).forEach(key => {
+      Object.keys(req.body).forEach((key) => {
         const value = req.body[key];
-        
+
         // String sanitization
         if (typeof value === 'string') {
           // Remove HTML/script tags
@@ -65,19 +65,17 @@ const validateAdminInput = (req, res, next) => {
             .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
             .replace(/<[^>]*>/g, '')
             .trim();
-          
+
           // Remove SQL injection attempts
-          req.body[key] = req.body[key]
-            .replace(/['";\\]/g, '')
-            .substring(0, 5000); // Max length
+          req.body[key] = req.body[key].replace(/['";\\]/g, '').substring(0, 5000); // Max length
         }
       });
     }
     next();
   } catch (error) {
-    res.status(400).json({ 
-      success: false, 
-      error: 'Invalid input format' 
+    res.status(400).json({
+      success: false,
+      error: 'Invalid input format',
     });
   }
 };
@@ -97,7 +95,7 @@ const validateFileUpload = (req, res, next) => {
     if (req.file.size > MAX_FILE_SIZE) {
       return res.status(413).json({
         success: false,
-        error: 'File too large. Maximum size: 50MB'
+        error: 'File too large. Maximum size: 50MB',
       });
     }
 
@@ -113,13 +111,13 @@ const validateFileUpload = (req, res, next) => {
       'image/gif',
       'image/webp',
       'application/zip',
-      'application/x-rar-compressed'
+      'application/x-rar-compressed',
     ];
 
     if (!ALLOWED_TYPES.includes(req.file.mimetype)) {
       return res.status(415).json({
         success: false,
-        error: `File type not allowed. Allowed types: ${ALLOWED_TYPES.join(', ')}`
+        error: `File type not allowed. Allowed types: ${ALLOWED_TYPES.join(', ')}`,
       });
     }
 
@@ -128,7 +126,7 @@ const validateFileUpload = (req, res, next) => {
     if (UNSAFE_FILENAME_CHARS.test(req.file.originalname)) {
       return res.status(400).json({
         success: false,
-        error: 'Invalid filename'
+        error: 'Invalid filename',
       });
     }
 
@@ -136,7 +134,7 @@ const validateFileUpload = (req, res, next) => {
   } catch (error) {
     res.status(400).json({
       success: false,
-      error: 'File validation error'
+      error: 'File validation error',
     });
   }
 };
@@ -151,21 +149,19 @@ const verifyAdminPermission = (requiredPermissions = []) => {
       if (!req.user || req.user.role !== 'super_admin') {
         return res.status(403).json({
           success: false,
-          error: 'Admin access required'
+          error: 'Admin access required',
         });
       }
 
       // Check specific permissions if provided
       if (requiredPermissions.length > 0) {
         const userPermissions = req.user.permissions || [];
-        const hasPermission = requiredPermissions.some(perm => 
-          userPermissions.includes(perm)
-        );
+        const hasPermission = requiredPermissions.some((perm) => userPermissions.includes(perm));
 
         if (!hasPermission) {
           return res.status(403).json({
             success: false,
-            error: 'Insufficient permissions for this operation'
+            error: 'Insufficient permissions for this operation',
           });
         }
       }
@@ -174,7 +170,7 @@ const verifyAdminPermission = (requiredPermissions = []) => {
     } catch (error) {
       res.status(500).json({
         success: false,
-        error: 'Permission verification failed'
+        error: 'Permission verification failed',
       });
     }
   };
@@ -187,7 +183,7 @@ const verifyAdminPermission = (requiredPermissions = []) => {
 const protectSensitiveData = (req, res, next) => {
   const originalJson = res.json;
 
-  res.json = function(data) {
+  res.json = function (data) {
     // Remove sensitive fields from response
     const sensitiveFields = [
       'password',
@@ -197,7 +193,7 @@ const protectSensitiveData = (req, res, next) => {
       'apiKey',
       'secret',
       'ssn',
-      'bankAccount'
+      'bankAccount',
     ];
 
     const sanitizeObject = (obj) => {
@@ -208,7 +204,7 @@ const protectSensitiveData = (req, res, next) => {
       }
 
       const sanitized = { ...obj };
-      sensitiveFields.forEach(field => {
+      sensitiveFields.forEach((field) => {
         if (field in sanitized) {
           delete sanitized[field];
         }
@@ -234,7 +230,7 @@ const logAdminAction = async (req, res, next) => {
     const originalSend = res.send;
     let responseData;
 
-    res.send = function(data) {
+    res.send = function (data) {
       responseData = data;
       return originalSend.call(this, data);
     };
@@ -245,7 +241,7 @@ const logAdminAction = async (req, res, next) => {
         if (req.user && req.user.role === 'super_admin') {
           const action = `${req.method}_${req.path}`;
           const status = res.statusCode < 400 ? 'success' : 'failure';
-          
+
           // Log details
           const logEntry = {
             userId: req.user.id,
@@ -257,7 +253,7 @@ const logAdminAction = async (req, res, next) => {
             ipAddress: req.clientIP,
             userAgent: req.get('user-agent'),
             timestamp: new Date(),
-            requestId: req.id
+            requestId: req.id,
           };
 
           // Send to logging service (async, doesn't block response)
@@ -280,11 +276,20 @@ const logAdminAction = async (req, res, next) => {
  */
 const validateQueryParams = (req, res, next) => {
   try {
-    const allowedParams = ['page', 'limit', 'search', 'filter', 'sort', 'action', 'status', 'user_id'];
+    const allowedParams = [
+      'page',
+      'limit',
+      'search',
+      'filter',
+      'sort',
+      'action',
+      'status',
+      'user_id',
+    ];
     const queryKeys = Object.keys(req.query);
 
     // Check for suspicious parameters
-    const suspiciousParams = queryKeys.filter(key => !allowedParams.includes(key));
+    const suspiciousParams = queryKeys.filter((key) => !allowedParams.includes(key));
     if (suspiciousParams.length > 0) {
       // Warning tracking removed;
     }
@@ -303,7 +308,7 @@ const validateQueryParams = (req, res, next) => {
   } catch (error) {
     res.status(400).json({
       success: false,
-      error: 'Invalid query parameters'
+      error: 'Invalid query parameters',
     });
   }
 };
@@ -319,13 +324,13 @@ const concurrentRequestLimiter = () => {
     if (!req.user) return next();
 
     const userId = req.user.id;
-    const currentCount = (concurrentRequests.get(userId) || 0);
+    const currentCount = concurrentRequests.get(userId) || 0;
     const MAX_CONCURRENT = 10;
 
     if (currentCount >= MAX_CONCURRENT) {
       return res.status(429).json({
         success: false,
-        error: 'Too many concurrent requests, please wait'
+        error: 'Too many concurrent requests, please wait',
       });
     }
 
@@ -355,14 +360,14 @@ const validateSchema = (schema) => {
     try {
       if (req.body && schema) {
         const requiredFields = Object.keys(schema);
-        const missingFields = requiredFields.filter(field => 
-          req.body[field] === undefined || req.body[field] === null
+        const missingFields = requiredFields.filter(
+          (field) => req.body[field] === undefined || req.body[field] === null
         );
 
         if (missingFields.length > 0) {
           return res.status(400).json({
             success: false,
-            error: `Missing required fields: ${missingFields.join(', ')}`
+            error: `Missing required fields: ${missingFields.join(', ')}`,
           });
         }
 
@@ -371,7 +376,7 @@ const validateSchema = (schema) => {
           if (typeof req.body[field] !== type) {
             return res.status(400).json({
               success: false,
-              error: `Field ${field} must be type ${type}`
+              error: `Field ${field} must be type ${type}`,
             });
           }
         });
@@ -380,7 +385,7 @@ const validateSchema = (schema) => {
     } catch (error) {
       res.status(400).json({
         success: false,
-        error: 'Schema validation failed'
+        error: 'Schema validation failed',
       });
     }
   };
@@ -395,7 +400,7 @@ const adminErrorHandler = (err, req, res, next) => {
     success: false,
     error: err.message || 'Internal server error',
     requestId: req.id,
-    timestamp: new Date().toISOString()
+    timestamp: new Date().toISOString(),
   };
 
   // Log admin errors
@@ -408,7 +413,7 @@ const adminErrorHandler = (err, req, res, next) => {
         path: req.path,
         method: req.method,
         userId: req.user.id,
-        stack: err.stack
+        stack: err.stack,
       });
     }
   }
@@ -441,5 +446,5 @@ module.exports = {
   concurrentRequestLimiter,
 
   // Error handling
-  adminErrorHandler
+  adminErrorHandler,
 };

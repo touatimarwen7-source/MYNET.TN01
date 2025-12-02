@@ -8,10 +8,10 @@ const { getPool } = require('../config/db');
 /**
  * Execute operations in a database transaction
  * If any operation fails, all are rolled back
- * 
+ *
  * @param {Function} callback - Async function with pool client
  * @returns {Promise} Result from callback
- * 
+ *
  * Usage:
  * const result = await withTransaction(async (client) => {
  *   await client.query('UPDATE users SET active=true WHERE id=$1', [userId]);
@@ -39,8 +39,7 @@ async function withTransaction(callback) {
     // Rollback on any error
     try {
       await client.query('ROLLBACK');
-    } catch (rollbackErr) {
-    }
+    } catch (rollbackErr) {}
     throw error;
   } finally {
     // Always release client safely (only once)
@@ -159,19 +158,18 @@ const examples = {
       );
 
       // Update tender invoice count
-      await client.query(
-        `UPDATE tenders SET invoice_count = invoice_count + 1 WHERE id=$1`,
-        [invoiceData.tender_id]
-      );
+      await client.query(`UPDATE tenders SET invoice_count = invoice_count + 1 WHERE id=$1`, [
+        invoiceData.tender_id,
+      ]);
 
       return invoiceId;
     });
-  }
+  },
 };
 
 module.exports = {
   withTransaction,
   withMultipleTransactions,
   withSavePoint,
-  examples
+  examples,
 };

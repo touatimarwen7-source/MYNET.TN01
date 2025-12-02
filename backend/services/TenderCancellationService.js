@@ -51,20 +51,32 @@ class TenderCancellationService {
       // Send notifications
       for (const participant of participantsResult.rows) {
         if (participant.email) {
-          sendEmail(participant.email, `إخطار بإلغاء المناقصة - ${tender.tender_number}`, 
-            `تم إلغاء المناقصة.\n\nالسبب: ${cancellationReason}`)
-            .catch(e => logger.error('Email notification failed', { email: participant.email, error: e.message }));
+          sendEmail(
+            participant.email,
+            `إخطار بإلغاء المناقصة - ${tender.tender_number}`,
+            `تم إلغاء المناقصة.\n\nالسبب: ${cancellationReason}`
+          ).catch((e) =>
+            logger.error('Email notification failed', {
+              email: participant.email,
+              error: e.message,
+            })
+          );
         }
       }
 
       // Mark offers as cancelled
-      await pool.query(
-        `UPDATE offers SET status = $1, is_deleted = TRUE WHERE tender_id = $2`,
-        ['cancelled', tenderId]
-      );
+      await pool.query(`UPDATE offers SET status = $1, is_deleted = TRUE WHERE tender_id = $2`, [
+        'cancelled',
+        tenderId,
+      ]);
 
-      await AuditLogService.log(buyerId, 'tender_cancelled', tenderId, 'cancel', 
-        `Tender cancelled. Reason: ${cancellationReason}`);
+      await AuditLogService.log(
+        buyerId,
+        'tender_cancelled',
+        tenderId,
+        'cancel',
+        `Tender cancelled. Reason: ${cancellationReason}`
+      );
 
       return {
         success: true,

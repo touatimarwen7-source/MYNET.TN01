@@ -28,7 +28,7 @@ class CacheManager {
         this.cache.delete(key);
         this.timers.delete(key);
       }, ttl * 1000);
-      
+
       this.timers.set(key, timer);
     }
   }
@@ -62,7 +62,7 @@ class CacheManager {
    * Clear all cache
    */
   clear() {
-    this.timers.forEach(timer => clearTimeout(timer));
+    this.timers.forEach((timer) => clearTimeout(timer));
     this.timers.clear();
     this.cache.clear();
   }
@@ -113,7 +113,7 @@ export const getCachedResponse = (key) => {
  * Invalidate cache by pattern
  */
 export const invalidateCache = (pattern) => {
-  globalCache.keys().forEach(key => {
+  globalCache.keys().forEach((key) => {
     if (key.includes(pattern)) {
       globalCache.delete(key);
     }

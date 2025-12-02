@@ -3,12 +3,12 @@
  * Example tests for utility functions using Jest
  */
 
-import { 
-  searchItems, 
-  filterItems, 
-  sortItems, 
-  bulkDelete, 
-  bulkUpdate, 
+import {
+  searchItems,
+  filterItems,
+  sortItems,
+  bulkDelete,
+  bulkUpdate,
   paginate,
   exportToJSON,
   exportToCSV,

@@ -9,13 +9,43 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import institutionalTheme from '../theme/theme';
 import {
-  Container, Box, Card, CardContent, Grid, Button, Typography, Table, TableHead, TableBody,
-  TableRow, TableCell, Chip, Dialog, DialogTitle, DialogContent, DialogActions, Alert,
-  Stack, Paper, IconButton, Tooltip, Avatar, LinearProgress, Divider
+  Container,
+  Box,
+  Card,
+  CardContent,
+  Grid,
+  Button,
+  Typography,
+  Table,
+  TableHead,
+  TableBody,
+  TableRow,
+  TableCell,
+  Chip,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Alert,
+  Stack,
+  Paper,
+  IconButton,
+  Tooltip,
+  Avatar,
+  LinearProgress,
+  Divider,
 } from '@mui/material';
 import {
-  Edit, Delete, Restore, FileDownload, Clock, CheckCircle, Warning,
-  ChevronRight, ArrowForward, Trash2
+  Edit,
+  Delete,
+  Restore,
+  FileDownload,
+  Clock,
+  CheckCircle,
+  Warning,
+  ChevronRight,
+  ArrowForward,
+  Trash2,
 } from '@mui/icons-material';
 import { setPageTitle } from '../utils/pageTitle';
 import { logger } from '../utils/logger';
@@ -47,17 +77,17 @@ function DraftsPageContent() {
     setLoading(true);
     try {
       const allDrafts = [];
-      
+
       DRAFT_TYPES.forEach(({ key, name, icon, color }) => {
         const draft = localStorage.getItem(key);
         if (draft) {
           try {
             const parsedDraft = JSON.parse(draft);
             const savedTime = localStorage.getItem(`${key}_timestamp`) || new Date().toISOString();
-            
+
             // حساب نسبة الإكمال
             const completeness = calculateCompleteness(parsedDraft);
-            
+
             allDrafts.push({
               id: key,
               name: parsedDraft.title || parsedDraft.consultation_number || `${name} جديد`,
@@ -85,17 +115,17 @@ function DraftsPageContent() {
 
   const calculateCompleteness = (draft) => {
     if (!draft) return 0;
-    
+
     const requiredFields = ['title', 'description', 'deadline'];
-    const filledFields = requiredFields.filter(f => draft[f] && String(draft[f]).trim());
-    
+    const filledFields = requiredFields.filter((f) => draft[f] && String(draft[f]).trim());
+
     // فحص الحقول الاختيارية
     let optionalScore = 0;
     if (draft.lots?.length > 0) optionalScore += 20;
     if (draft.requirements?.length > 0) optionalScore += 20;
     if (draft.evaluation_criteria) optionalScore += 20;
     if (draft.specification_documents?.length > 0) optionalScore += 20;
-    
+
     return Math.min(100, (filledFields.length / requiredFields.length) * 60 + optionalScore);
   };
 
@@ -112,7 +142,7 @@ function DraftsPageContent() {
     if (selectedDraft) {
       clearDraft(selectedDraft.id);
       localStorage.removeItem(`${selectedDraft.id}_timestamp`);
-      setDrafts(drafts.filter(d => d.id !== selectedDraft.id));
+      setDrafts(drafts.filter((d) => d.id !== selectedDraft.id));
       setOpenDelete(false);
       setSelectedDraft(null);
     }
@@ -138,13 +168,16 @@ function DraftsPageContent() {
     <Box sx={{ minHeight: '100vh', backgroundColor: '#F9F9F9', paddingY: 4 }}>
       <Container maxWidth="xl">
         {/* الرأس */}
-        <Paper elevation={0} sx={{
-          background: 'linear-gradient(135deg, #0056B3 0%, #003d82 100%)',
-          borderRadius: '12px',
-          padding: '32px',
-          marginBottom: '32px',
-          color: 'white',
-        }}>
+        <Paper
+          elevation={0}
+          sx={{
+            background: 'linear-gradient(135deg, #0056B3 0%, #003d82 100%)',
+            borderRadius: '12px',
+            padding: '32px',
+            marginBottom: '32px',
+            color: 'white',
+          }}
+        >
           <Stack spacing={1}>
             <Typography variant="h4" sx={{ fontWeight: 700 }}>
               📝 المسودات المحفوظة
@@ -192,7 +225,9 @@ function DraftsPageContent() {
                         <TableCell sx={{ fontWeight: 600 }}>تاريخ الحفظ</TableCell>
                         <TableCell sx={{ fontWeight: 600 }}>نسبة الإكمال</TableCell>
                         <TableCell sx={{ fontWeight: 600 }}>الحجم</TableCell>
-                        <TableCell sx={{ fontWeight: 600, textAlign: 'center' }}>الإجراءات</TableCell>
+                        <TableCell sx={{ fontWeight: 600, textAlign: 'center' }}>
+                          الإجراءات
+                        </TableCell>
                       </TableRow>
                     </TableHead>
                     <TableBody>
@@ -217,9 +252,7 @@ function DraftsPageContent() {
                           <TableCell>
                             <Stack direction="row" alignItems="center" spacing={1}>
                               <Clock sx={{ fontSize: 16, color: '#999' }} />
-                              <Typography variant="caption">
-                                {formatDate(draft.savedAt)}
-                              </Typography>
+                              <Typography variant="caption">{formatDate(draft.savedAt)}</Typography>
                             </Stack>
                           </TableCell>
                           <TableCell>
@@ -233,7 +266,7 @@ function DraftsPageContent() {
                                   backgroundColor: '#e0e0e0',
                                   '& .MuiLinearProgress-bar': {
                                     backgroundColor: getCompletenessColor(draft.completeness),
-                                  }
+                                  },
                                 }}
                               />
                               <Typography variant="caption" sx={{ fontSize: '11px' }}>
@@ -242,11 +275,7 @@ function DraftsPageContent() {
                             </Stack>
                           </TableCell>
                           <TableCell>
-                            <Chip
-                              label={`${draft.size} KB`}
-                              size="small"
-                              variant="outlined"
-                            />
+                            <Chip label={`${draft.size} KB`} size="small" variant="outlined" />
                           </TableCell>
                           <TableCell sx={{ textAlign: 'center' }}>
                             <Stack direction="row" justifyContent="center" spacing={1}>
@@ -281,16 +310,18 @@ function DraftsPageContent() {
             {/* عرض البطاقات */}
             {drafts.map((draft) => (
               <Grid item xs={12} lg={6} md={4} key={draft.id}>
-                <Card sx={{
-                  border: `2px solid ${draft.color}20`,
-                  borderRadius: '12px',
-                  transition: 'all 0.3s ease',
-                  '&:hover': {
-                    borderColor: draft.color,
-                    boxShadow: `0 8px 24px ${draft.color}15`,
-                    transform: 'translateY(-2px)',
-                  }
-                }}>
+                <Card
+                  sx={{
+                    border: `2px solid ${draft.color}20`,
+                    borderRadius: '12px',
+                    transition: 'all 0.3s ease',
+                    '&:hover': {
+                      borderColor: draft.color,
+                      boxShadow: `0 8px 24px ${draft.color}15`,
+                      transform: 'translateY(-2px)',
+                    },
+                  }}
+                >
                   <CardContent>
                     <Stack spacing={2}>
                       {/* الرأس */}
@@ -327,7 +358,13 @@ function DraftsPageContent() {
                       <Box>
                         <Stack direction="row" justifyContent="space-between" sx={{ mb: 1 }}>
                           <Typography variant="caption">نسبة الإكمال</Typography>
-                          <Typography variant="caption" sx={{ fontWeight: 600, color: getCompletenessColor(draft.completeness) }}>
+                          <Typography
+                            variant="caption"
+                            sx={{
+                              fontWeight: 600,
+                              color: getCompletenessColor(draft.completeness),
+                            }}
+                          >
                             {Math.round(draft.completeness)}%
                           </Typography>
                         </Stack>
@@ -340,7 +377,7 @@ function DraftsPageContent() {
                             backgroundColor: '#e0e0e0',
                             '& .MuiLinearProgress-bar': {
                               backgroundColor: getCompletenessColor(draft.completeness),
-                            }
+                            },
                           }}
                         />
                       </Box>
@@ -375,7 +412,7 @@ function DraftsPageContent() {
                             '&:hover': {
                               backgroundColor: THEME.palette.error.light,
                               borderColor: THEME.palette.error.main,
-                            }
+                            },
                           }}
                         >
                           حذف
@@ -412,21 +449,16 @@ function DraftsPageContent() {
 
       {/* حوار حذف */}
       <Dialog open={openDelete} onClose={() => setOpenDelete(false)} maxWidth="sm" fullWidth>
-        <DialogTitle sx={{ fontWeight: 600 }}>
-          ⚠️ حذف المسودة
-        </DialogTitle>
+        <DialogTitle sx={{ fontWeight: 600 }}>⚠️ حذف المسودة</DialogTitle>
         <DialogContent>
           <Typography sx={{ mt: 2 }}>
-            هل أنت متأكد من حذف المسودة "<strong>{selectedDraft?.name}</strong>"؟ لا يمكن التراجع عن هذا الإجراء.
+            هل أنت متأكد من حذف المسودة "<strong>{selectedDraft?.name}</strong>"؟ لا يمكن التراجع عن
+            هذا الإجراء.
           </Typography>
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setOpenDelete(false)}>إلغاء</Button>
-          <Button
-            onClick={confirmDelete}
-            variant="contained"
-            color="error"
-          >
+          <Button onClick={confirmDelete} variant="contained" color="error">
             حذف نهائياً
           </Button>
         </DialogActions>

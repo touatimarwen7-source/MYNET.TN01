@@ -1,12 +1,12 @@
 /**
  * Input Validation Utilities
- * 
+ *
  * Features:
  * - Manual field validation functions (email, phone, numbers, etc)
  * - Zod schema definitions for form validation
  * - Error code mapping for validation failures
  * - XSS prevention with string sanitization
- * 
+ *
  * @module validation
  * @requires zod - TypeScript-first schema validation
  */
@@ -91,11 +91,11 @@ export const validation = {
    */
   isValidFile: (file, maxSizeMB = 10, allowedTypes = []) => {
     const maxSize = maxSizeMB * 1024 * 1024;
-    
+
     if (!file) return false;
     if (file.size > maxSize) return false;
     if (allowedTypes.length > 0 && !allowedTypes.includes(file.type)) return false;
-    
+
     return true;
   },
 
@@ -130,37 +130,37 @@ export const validation = {
   // Validate form data
   validateFormData: (data, schema) => {
     const errors = {};
-    
+
     for (const [field, rules] of Object.entries(schema)) {
       const value = data[field];
-      
+
       if (rules.required && !value) {
         errors[field] = `${field} est requis`;
         continue;
       }
-      
+
       if (rules.minLength && value?.length < rules.minLength) {
         errors[field] = `${field} doit contenir au moins ${rules.minLength} caractères`;
         continue;
       }
-      
+
       if (rules.maxLength && value?.length > rules.maxLength) {
         errors[field] = `${field} ne peut pas dépasser ${rules.maxLength} caractères`;
         continue;
       }
-      
+
       if (rules.pattern && value && !rules.pattern.test(value)) {
         errors[field] = rules.message || `${field} est invalide`;
         continue;
       }
-      
+
       if (rules.custom && !rules.custom(value)) {
         errors[field] = rules.message || `${field} est invalide`;
       }
     }
-    
+
     return errors;
-  }
+  },
 };
 
 // ============================================
@@ -168,40 +168,33 @@ export const validation = {
 // ============================================
 
 export const LoginSchema = z.object({
-  email: z
-    .string()
-    .email('Le format de l\'email est invalide')
-    .min(1, 'L\'email est obligatoire'),
+  email: z.string().email("Le format de l'email est invalide").min(1, "L'email est obligatoire"),
   password: z
     .string()
     .min(8, 'Le mot de passe doit contenir au moins 8 caractères')
     .regex(/[A-Z]/, 'Le mot de passe doit contenir une majuscule')
-    .regex(/[0-9]/, 'Le mot de passe doit contenir un chiffre')
+    .regex(/[0-9]/, 'Le mot de passe doit contenir un chiffre'),
 });
 
-export const RegisterSchema = z.object({
-  email: z
-    .string()
-    .email('Le format de l\'email est invalide'),
-  password: z
-    .string()
-    .min(8, 'Le mot de passe doit contenir au moins 8 caractères'),
-  confirmPassword: z.string(),
-  companyName: z
-    .string()
-    .min(2, 'Le nom de la société est obligatoire'),
-  role: z.enum(['buyer', 'supplier'])
-}).refine((data) => data.password === data.confirmPassword, {
-  message: 'Les mots de passe ne correspondent pas',
-  path: ['confirmPassword']
-});
+export const RegisterSchema = z
+  .object({
+    email: z.string().email("Le format de l'email est invalide"),
+    password: z.string().min(8, 'Le mot de passe doit contenir au moins 8 caractères'),
+    confirmPassword: z.string(),
+    companyName: z.string().min(2, 'Le nom de la société est obligatoire'),
+    role: z.enum(['buyer', 'supplier']),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: 'Les mots de passe ne correspondent pas',
+    path: ['confirmPassword'],
+  });
 
 export const TenderSchema = z.object({
   title: z.string().min(5).max(200),
   description: z.string().min(20).max(5000),
   budget: z.number().positive(),
   deadline: z.string(),
-  category: z.string().min(1)
+  category: z.string().min(1),
 });
 
 /**

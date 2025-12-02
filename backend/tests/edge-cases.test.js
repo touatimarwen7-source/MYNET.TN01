@@ -4,7 +4,6 @@
  */
 
 describe('Edge Cases & Boundary Tests - 25+ Tests', () => {
-
   describe('Input Validation Edge Cases', () => {
     test('should handle empty string input', () => {
       const input = '';
@@ -76,7 +75,10 @@ describe('Edge Cases & Boundary Tests - 25+ Tests', () => {
     });
 
     test('should handle nested array', () => {
-      const arr = [[1, 2], [3, 4]];
+      const arr = [
+        [1, 2],
+        [3, 4],
+      ];
       expect(arr.length).toBe(2);
     });
 
@@ -144,8 +146,8 @@ describe('Edge Cases & Boundary Tests - 25+ Tests', () => {
 
     test('should handle race condition', async () => {
       const tasks = [
-        new Promise(r => setTimeout(() => r(1), 10)),
-        new Promise(r => setTimeout(() => r(2), 5))
+        new Promise((r) => setTimeout(() => r(1), 10)),
+        new Promise((r) => setTimeout(() => r(2), 5)),
       ];
       const result = await Promise.race(tasks);
       expect(result).toBeDefined();
@@ -186,5 +188,4 @@ describe('Edge Cases & Boundary Tests - 25+ Tests', () => {
       expect(user.is_suspended).toBe(true);
     });
   });
-
 });

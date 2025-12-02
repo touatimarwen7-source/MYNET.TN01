@@ -25,7 +25,7 @@ function requestLoggingMiddleware(req, res, next) {
     ip: req.ip || req.connection.remoteAddress,
     userAgent: req.get('user-agent'),
     userId: req.user?.id || req.user?.userId || undefined,
-    timestamp: new Date().toISOString()
+    timestamp: new Date().toISOString(),
   };
 
   // Attach requestId to response locals
@@ -34,14 +34,14 @@ function requestLoggingMiddleware(req, res, next) {
   // Log incoming request
   logger.info('REQUEST_RECEIVED', {
     ...requestInfo,
-    body: req.method !== 'GET' ? (req.body ? Object.keys(req.body) : undefined) : undefined
+    body: req.method !== 'GET' ? (req.body ? Object.keys(req.body) : undefined) : undefined,
   });
 
   // Override response.json()
-  res.json = function(data) {
+  res.json = function (data) {
     const responseTime = Date.now() - startTime;
     const isError = res.statusCode >= 400;
-    
+
     logger.info('RESPONSE_SENT', {
       requestId,
       method: req.method,
@@ -49,24 +49,24 @@ function requestLoggingMiddleware(req, res, next) {
       statusCode: res.statusCode,
       responseTime: `${responseTime}ms`,
       dataKeys: data && typeof data === 'object' ? Object.keys(data).slice(0, 5) : 'N/A',
-      isError
+      isError,
     });
 
     return originalJson.call(this, data);
   };
 
   // Override response.send()
-  res.send = function(data) {
+  res.send = function (data) {
     const responseTime = Date.now() - startTime;
     const isError = res.statusCode >= 400;
-    
+
     logger.info('RESPONSE_SENT', {
       requestId,
       method: req.method,
       path: req.path,
       statusCode: res.statusCode,
       responseTime: `${responseTime}ms`,
-      isError
+      isError,
     });
 
     return originalSend.call(this, data);
@@ -80,7 +80,7 @@ function requestLoggingMiddleware(req, res, next) {
  */
 function errorLoggingMiddleware(err, req, res, next) {
   const requestId = res.locals?.requestId || 'UNKNOWN';
-  
+
   const errorInfo = {
     requestId,
     method: req.method,
@@ -89,7 +89,7 @@ function errorLoggingMiddleware(err, req, res, next) {
     message: err.message,
     code: err.code || 'INTERNAL_ERROR',
     stack: process.env.NODE_ENV === 'development' ? err.stack : undefined,
-    timestamp: new Date().toISOString()
+    timestamp: new Date().toISOString(),
   };
 
   // Log based on status code
@@ -106,5 +106,5 @@ function errorLoggingMiddleware(err, req, res, next) {
 
 module.exports = {
   requestLoggingMiddleware,
-  errorLoggingMiddleware
+  errorLoggingMiddleware,
 };

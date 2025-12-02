@@ -12,8 +12,8 @@ import { errorHandler } from '../utils/errorHandler';
  */
 export const setupErrorInterceptor = (axiosInstance, handleError) => {
   axiosInstance.interceptors.response.use(
-    response => response,
-    error => {
+    (response) => response,
+    (error) => {
       // Get error details
       const status = error.response?.status;
       const data = error.response?.data;
@@ -25,7 +25,7 @@ export const setupErrorInterceptor = (axiosInstance, handleError) => {
         data,
         message,
         isAuthError: errorHandler.isAuthError(error),
-        isRetryable: errorHandler.isRetryable(error)
+        isRetryable: errorHandler.isRetryable(error),
       };
 
       // Log error for debugging

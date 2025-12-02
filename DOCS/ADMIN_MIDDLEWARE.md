@@ -1,7 +1,9 @@
 # Admin Middleware Documentation
 
 ## Overview
+
 MyNet.tn platform features a comprehensive admin middleware suite that provides:
+
 - ✅ Admin-specific rate limiting
 - ✅ Input validation and sanitization
 - ✅ File upload validation
@@ -17,9 +19,11 @@ MyNet.tn platform features a comprehensive admin middleware suite that provides:
 ## Middleware Stack
 
 ### Location
+
 `backend/middleware/adminMiddleware.js`
 
 ### Imported Into
+
 `backend/routes/superAdminRoutes.js`
 
 ---
@@ -27,58 +31,69 @@ MyNet.tn platform features a comprehensive admin middleware suite that provides:
 ## Complete Middleware List
 
 ### 1. **Admin Rate Limiter**
+
 ```javascript
-adminMiddleware.adminLimiter
+adminMiddleware.adminLimiter;
 ```
 
 **Features:**
+
 - 50 requests per 15 minutes for general admin operations
 - Applied to all super admin routes
 - Only active for super_admin users
 - Returns 429 (Too Many Requests) when limit exceeded
 
 **Usage:**
+
 ```javascript
 router.use(adminMiddleware.adminLimiter);
 ```
 
 ### 2. **Admin Mutation Limiter**
+
 ```javascript
-adminMiddleware.adminMutationLimiter
+adminMiddleware.adminMutationLimiter;
 ```
 
 **Features:**
+
 - Stricter limit: 20 requests per 15 minutes
 - Applied to POST/PUT/DELETE operations
 - Prevents abuse of data modification endpoints
 - Skips GET requests
 
 **Applied to:**
+
 - User role updates
 - Block/unblock operations
 - Delete operations
 - File operations
 
 ### 3. **File Upload Limiter**
+
 ```javascript
-adminMiddleware.adminFileUploadLimiter
+adminMiddleware.adminFileUploadLimiter;
 ```
 
 **Features:**
+
 - 10 file uploads per 1 hour
 - Prevents storage abuse
 - Applied only to file upload endpoints
 - Returns 429 when limit exceeded
 
 **Applied to:**
+
 - POST `/api/super-admin/files` (file upload)
 
 ### 4. **Input Validation**
+
 ```javascript
-adminMiddleware.validateAdminInput
+adminMiddleware.validateAdminInput;
 ```
 
 **Features:**
+
 - Removes HTML/script tags from input
 - Prevents SQL injection attempts
 - Sanitizes all string fields
@@ -86,6 +101,7 @@ adminMiddleware.validateAdminInput
 - Applied globally to all admin routes
 
 **Validation Rules:**
+
 ```javascript
 // Dangerous characters removed
 <script>alert('xss')</script> → alert('xss')
@@ -98,17 +114,20 @@ adminMiddleware.validateAdminInput
 ```
 
 ### 5. **Query Parameter Validation**
+
 ```javascript
-adminMiddleware.validateQueryParams
+adminMiddleware.validateQueryParams;
 ```
 
 **Features:**
+
 - Whitelist allowed parameters
 - Validate pagination values
 - Prevent suspicious parameters
 - Normalize page/limit values
 
 **Allowed Parameters:**
+
 ```
 - page (default: 1, min: 1)
 - limit (default: 10, max: 100)
@@ -121,6 +140,7 @@ adminMiddleware.validateQueryParams
 ```
 
 **Example:**
+
 ```javascript
 GET /api/super-admin/audit-logs?page=abc&limit=500&malicious=true
 
@@ -133,17 +153,20 @@ After validation:
 ```
 
 ### 6. **File Upload Validation**
+
 ```javascript
-adminMiddleware.validateFileUpload
+adminMiddleware.validateFileUpload;
 ```
 
 **Features:**
+
 - Validates file size (max 50MB)
 - Whitelist allowed MIME types
 - Validate filenames
 - Prevent double extensions
 
 **Allowed File Types:**
+
 ```
 - PDF: application/pdf
 - Word: .doc, .docx
@@ -153,6 +176,7 @@ adminMiddleware.validateFileUpload
 ```
 
 **Validation:**
+
 ```javascript
 // File too large → 413 Payload Too Large
 // Invalid type → 415 Unsupported Media Type
@@ -160,36 +184,43 @@ adminMiddleware.validateFileUpload
 ```
 
 ### 7. **Permission Validator**
+
 ```javascript
-adminMiddleware.verifyAdminPermission(permissions)
+adminMiddleware.verifyAdminPermission(permissions);
 ```
 
 **Features:**
+
 - Verify super_admin role
 - Check specific permissions
 - Return 403 on insufficient permission
 - Flexible permission system
 
 **Usage:**
+
 ```javascript
-router.post('/users/:id/delete',
-  adminMiddleware.verifyAdminPermission(['user_delete']),
-  superAdminController.deleteUser
+router.post(
+  "/users/:id/delete",
+  adminMiddleware.verifyAdminPermission(["user_delete"]),
+  superAdminController.deleteUser,
 );
 ```
 
 ### 8. **Sensitive Data Protection**
+
 ```javascript
-adminMiddleware.protectSensitiveData
+adminMiddleware.protectSensitiveData;
 ```
 
 **Features:**
+
 - Remove sensitive fields from responses
 - Applied to all response objects
 - Recursive sanitization (includes nested objects/arrays)
 - Prevents data leakage
 
 **Protected Fields:**
+
 ```
 - password
 - passwordHash
@@ -202,6 +233,7 @@ adminMiddleware.protectSensitiveData
 ```
 
 **Example:**
+
 ```javascript
 // Response before:
 {
@@ -219,11 +251,13 @@ adminMiddleware.protectSensitiveData
 ```
 
 ### 9. **Admin Action Logging**
+
 ```javascript
-adminMiddleware.logAdminAction
+adminMiddleware.logAdminAction;
 ```
 
 **Features:**
+
 - Log all admin operations
 - Capture request/response details
 - Track IP addresses
@@ -231,6 +265,7 @@ adminMiddleware.logAdminAction
 - Include request ID for tracing
 
 **Logged Information:**
+
 ```javascript
 {
   userId: 1,
@@ -247,17 +282,20 @@ adminMiddleware.logAdminAction
 ```
 
 ### 10. **Concurrent Request Limiter**
+
 ```javascript
-adminMiddleware.concurrentRequestLimiter()
+adminMiddleware.concurrentRequestLimiter();
 ```
 
 **Features:**
+
 - Limit concurrent requests per admin
 - Maximum 10 concurrent requests per user
 - Return 429 when limit exceeded
 - Automatic cleanup on request completion
 
 **Prevents:**
+
 - Resource exhaustion attacks
 - Denial of service
 - Overwhelming the server
@@ -412,18 +450,21 @@ Response 429:
 ## Security Features
 
 ### 1. XSS Prevention
+
 ```javascript
 Input: <script>alert('xss')</script>
 Result: Stripped → script>alert('xss')</script>
 ```
 
 ### 2. SQL Injection Prevention
+
 ```javascript
 Input: '; DROP TABLE users; --
 Result: Stripped → DROP TABLE users
 ```
 
 ### 3. File Upload Security
+
 ```javascript
 - MIME type validation
 - Size limit enforcement
@@ -432,6 +473,7 @@ Result: Stripped → DROP TABLE users
 ```
 
 ### 4. Rate Limiting
+
 ```javascript
 - Admin: 50 requests/15 min
 - Mutations: 20 requests/15 min
@@ -440,6 +482,7 @@ Result: Stripped → DROP TABLE users
 ```
 
 ### 5. Data Protection
+
 ```javascript
 - Password never exposed
 - API keys stripped
@@ -459,8 +502,8 @@ To modify rate limits, edit `backend/middleware/adminMiddleware.js`:
 ```javascript
 // General admin limit
 const adminLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000,  // Time window
-  max: 50,                    // Request limit
+  windowMs: 15 * 60 * 1000, // Time window
+  max: 50, // Request limit
 });
 
 // Mutation limit
@@ -471,8 +514,8 @@ const adminMutationLimiter = rateLimit({
 
 // File upload limit
 const adminFileUploadLimiter = rateLimit({
-  windowMs: 60 * 60 * 1000,   // 1 hour
-  max: 10,                     // 10 uploads per hour
+  windowMs: 60 * 60 * 1000, // 1 hour
+  max: 10, // 10 uploads per hour
 });
 ```
 
@@ -482,8 +525,8 @@ Edit allowed file types:
 
 ```javascript
 const ALLOWED_TYPES = [
-  'application/pdf',
-  'application/msword',
+  "application/pdf",
+  "application/msword",
   // Add more types here
 ];
 ```
@@ -493,11 +536,11 @@ const ALLOWED_TYPES = [
 Edit in `backend/routes/superAdminRoutes.js`:
 
 ```javascript
-const multer = require('multer');
-upload = multer({ 
+const multer = require("multer");
+upload = multer({
   storage: multer.memoryStorage(),
-  limits: { fileSize: 50 * 1024 * 1024 } // Change this
-}).single('file');
+  limits: { fileSize: 50 * 1024 * 1024 }, // Change this
+}).single("file");
 ```
 
 ---
@@ -505,7 +548,9 @@ upload = multer({
 ## Monitoring
 
 ### Audit Logs
+
 All admin actions are logged with:
+
 - User ID
 - Action type
 - HTTP method and path
@@ -519,7 +564,9 @@ All admin actions are logged with:
 View logs at: `/api/super-admin/audit-logs`
 
 ### Request ID Tracking
+
 Every request gets a unique ID for tracing:
+
 ```javascript
 // In response headers or logs
 X-Request-ID: req_abc123def456
@@ -532,6 +579,7 @@ X-Request-ID: req_abc123def456
 ## Error Responses
 
 ### 400 Bad Request
+
 ```json
 {
   "success": false,
@@ -540,6 +588,7 @@ X-Request-ID: req_abc123def456
 ```
 
 ### 413 Payload Too Large
+
 ```json
 {
   "success": false,
@@ -548,6 +597,7 @@ X-Request-ID: req_abc123def456
 ```
 
 ### 415 Unsupported Media Type
+
 ```json
 {
   "success": false,
@@ -556,6 +606,7 @@ X-Request-ID: req_abc123def456
 ```
 
 ### 429 Too Many Requests
+
 ```json
 {
   "success": false,
@@ -564,6 +615,7 @@ X-Request-ID: req_abc123def456
 ```
 
 ### 500 Server Error
+
 ```json
 {
   "success": false,
@@ -577,30 +629,34 @@ X-Request-ID: req_abc123def456
 ## Best Practices
 
 ### 1. Always Sanitize Input
+
 ```javascript
 // ✓ Good - Input is sanitized
-req.body.title // Already HTML-stripped
+req.body.title; // Already HTML-stripped
 
 // ✗ Bad - Never trust client input
 const unsafeHtml = req.body.html; // Don't use directly
 ```
 
 ### 2. Check Rate Limits
+
 ```javascript
 // Handle 429 responses in frontend
 if (error.status === 429) {
-  showToast('Too many requests, please wait');
+  showToast("Too many requests, please wait");
   // Implement exponential backoff
 }
 ```
 
 ### 3. Log Important Actions
+
 ```javascript
 // Always use audit logging for critical operations
-await logAuditAction(userId, 'DELETE_USER', `Deleted user ${id}`, 'success');
+await logAuditAction(userId, "DELETE_USER", `Deleted user ${id}`, "success");
 ```
 
 ### 4. Validate on Both Sides
+
 ```javascript
 // Frontend validation (UX)
 if (file.size > 50 * 1024 * 1024) {
@@ -611,12 +667,13 @@ adminMiddleware.validateFileUpload checks again
 ```
 
 ### 5. Protect Sensitive Data
+
 ```javascript
 // ✓ Good - Middleware removes password
-const response = { id: 1, email: '...', role: '...' };
+const response = { id: 1, email: "...", role: "..." };
 
 // ✗ Bad - Never include secrets
-const response = { id: 1, email: '...', apiKey: '...' };
+const response = { id: 1, email: "...", apiKey: "..." };
 ```
 
 ---

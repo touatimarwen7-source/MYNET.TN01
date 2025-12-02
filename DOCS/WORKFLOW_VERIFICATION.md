@@ -1,6 +1,7 @@
 # MyNet.tn Procurement Platform - Workflow Verification Report
 
 ## Executive Summary
+
 The platform implements a complete 3-phase procurement workflow with proper status tracking, notifications, and data security.
 
 ---
@@ -8,6 +9,7 @@ The platform implements a complete 3-phase procurement workflow with proper stat
 ## Phase 1: Preparation & Creation (Préparation et Création)
 
 ### 1.1 Tender Request Creation
+
 - **Frontend Component**: `/create-tender` (CreateTender.jsx)
 - **Status**: `draft`
 - **Operations**:
@@ -18,9 +20,10 @@ The platform implements a complete 3-phase procurement workflow with proper stat
   - ✅ Set evaluation criteria (price, quality, delivery, experience weights)
 
 ### 1.2 Tender Publishing
+
 - **Backend**: `TenderService.publishTender()`
 - **Status Transition**: `draft` → `published` (Ouverte)
-- **Database Update**: 
+- **Database Update**:
   - `status = 'published'`
   - `publish_date = CURRENT_TIMESTAMP`
 - **Notifications**: ✅ `NotificationService.notifyTenderPublished()`
@@ -31,6 +34,7 @@ The platform implements a complete 3-phase procurement workflow with proper stat
 ## Phase 2: Submission & Review (Soumission et Révision)
 
 ### 2.1 Supplier Tender Search
+
 - **Frontend**: TenderList.jsx / BuyerActiveTenders.jsx
 - **Operations**:
   - ✅ Suppliers (registered users with supplier role) search available tenders
@@ -38,6 +42,7 @@ The platform implements a complete 3-phase procurement workflow with proper stat
   - ✅ View tender details before submitting
 
 ### 2.2 Offer Preparation & Submission
+
 - **Frontend Component**: CreateBid.jsx / BidSubmission.jsx
 - **Backend**: `OfferService.createOffer()`
 - **Status**: `submitted` (Soumis)
@@ -49,6 +54,7 @@ The platform implements a complete 3-phase procurement workflow with proper stat
   - ✅ Offer created with unique offer number
 
 ### 2.3 Auto-Close Deadline
+
 - **Trigger**: Scheduled job at tender deadline
 - **Backend**: `TenderService.closeTender()`
 - **Status Transition**: `published` (Ouverte) → `closed` (Fermée)
@@ -62,6 +68,7 @@ The platform implements a complete 3-phase procurement workflow with proper stat
 ## Phase 3: Evaluation & Award (Évaluation et Adjudication)
 
 ### 3.1 Review Submitted Offers
+
 - **Frontend**: TenderEvaluation.jsx
 - **Buyer Operations**:
   - ✅ View all submitted offers in comparison table
@@ -69,6 +76,7 @@ The platform implements a complete 3-phase procurement workflow with proper stat
   - ✅ See technical proposals and attachments
 
 ### 3.2 Evaluate Offers
+
 - **Backend**: `OfferService.evaluateOffer()`
 - **Status Update**: `submitted` → `evaluated`
 - **Database Update**:
@@ -77,6 +85,7 @@ The platform implements a complete 3-phase procurement workflow with proper stat
   - `status = 'evaluated'`
 
 ### 3.3 Select Winner & Multiple Awards
+
 - **Frontend**: TenderAwarding.jsx
 - **Backend**: `TenderAwardService` (supports partial/multi-supplier awards)
 - **Operations**:
@@ -86,6 +95,7 @@ The platform implements a complete 3-phase procurement workflow with proper stat
   - ✅ Finalize award decision
 
 ### 3.4 Final Status Update
+
 - **Winner Offer**:
   - Status: `submitted` → `accepted` (Gagnant)
   - `is_winner = TRUE`
@@ -100,6 +110,7 @@ The platform implements a complete 3-phase procurement workflow with proper stat
   - Database: `UPDATE tenders SET status = 'awarded' WHERE id = ?`
 
 ### 3.5 Award Notifications
+
 - **To Winning Supplier**: ✅ Winner notification with award details
 - **To Other Suppliers**: ✅ Rejection notification
 - **Audit Trail**: ✅ Complete award history logged
@@ -109,23 +120,28 @@ The platform implements a complete 3-phase procurement workflow with proper stat
 ## Phase 4: Post-Award (Après Adjudication)
 
 ### 4.1 Contract Management
+
 - **Frontend**: ContractManagement.jsx (planned)
 - **Operations**: Contract signing, documentation
 
 ### 4.2 Purchase Orders
+
 - **Frontend**: PurchaseOrderService
 - **Operations**: PO generation from awarded offers
 
 ### 4.3 Invoicing
+
 - **Frontend**: InvoiceGeneration.jsx
 - **Backend**: `InvoiceService`
 - **Operations**: Invoice creation linked to orders
 
 ### 4.4 Delivery Tracking
+
 - **Frontend**: DeliveryManagement.jsx (planned)
 - **Operations**: Delivery status monitoring
 
 ### 4.5 Supplier Performance
+
 - **Frontend**: PerformanceMonitoring.jsx (planned)
 - **Operations**: Performance scoring and ranking
 
@@ -134,20 +150,22 @@ The platform implements a complete 3-phase procurement workflow with proper stat
 ## Status Transition Matrix
 
 ### Tender Statuses
+
 ```
-draft 
-  ↓ (publish) 
-published (Ouverte) 
-  ↓ (deadline reached) 
-closed (Fermée) 
-  ↓ (award finalized) 
+draft
+  ↓ (publish)
+published (Ouverte)
+  ↓ (deadline reached)
+closed (Fermée)
+  ↓ (award finalized)
 awarded (Adjugée)
 ```
 
 ### Offer Statuses
+
 ```
 submitted (Soumis)
-  ├→ (evaluated) 
+  ├→ (evaluated)
   │  └→ accepted (Gagnant) [Winner offer]
   │  └→ rejected (Perdu) [Losing offers]
   └→ (rejected manually)
@@ -159,22 +177,26 @@ submitted (Soumis)
 ## Security & Data Integrity
 
 ### ✅ Encryption
+
 - Financial proposal data encrypted with AES-256
 - Decryption only allowed after opening date (except for supplier)
 - Key management with unique key IDs
 
 ### ✅ Access Control
+
 - Buyers can only view/manage their own tenders
 - Suppliers can only submit/view their own offers
 - Role-based permissions (SUBMIT_OFFER, APPROVE_OFFER, etc.)
 
 ### ✅ Audit Logging
+
 - All tender operations logged
 - All offer operations logged
 - Award operations tracked in tender_award_line_items
 - User actions recorded with timestamps
 
 ### ✅ Soft Deletes
+
 - All deletes are soft (is_deleted flag)
 - Maintains data for compliance and history
 
@@ -182,31 +204,34 @@ submitted (Soumis)
 
 ## Notifications Workflow
 
-| Phase | Trigger | Recipient | Status |
-|-------|---------|-----------|--------|
-| Publication | Tender published | All suppliers | ✅ Implemented |
-| Submission Deadline | Deadline reached | Active bidders | ✅ Implemented |
-| Evaluation Complete | Award finalized | Winner | ✅ Implemented |
-| Award Notification | Winner selected | Winning supplier | ✅ Implemented |
-| Rejection | Offer rejected | Losing suppliers | ✅ Implemented |
+| Phase               | Trigger          | Recipient        | Status         |
+| ------------------- | ---------------- | ---------------- | -------------- |
+| Publication         | Tender published | All suppliers    | ✅ Implemented |
+| Submission Deadline | Deadline reached | Active bidders   | ✅ Implemented |
+| Evaluation Complete | Award finalized  | Winner           | ✅ Implemented |
+| Award Notification  | Winner selected  | Winning supplier | ✅ Implemented |
+| Rejection           | Offer rejected   | Losing suppliers | ✅ Implemented |
 
 ---
 
 ## Validation & Error Handling
 
 ### ✅ Frontend Validation
+
 - Required fields checked before submission
 - Budget constraints validated
 - Deadline in future required
 - Submit button disabled until valid
 
 ### ✅ Backend Validation
+
 - All data re-validated server-side
 - Budget comparisons enforced
 - Deadline checks enforced
 - Role-based permission checks
 
 ### ✅ Error Messages (French)
+
 - "Le titre doit contenir au moins 5 caractères"
 - "La date de fermeture doit être dans le futur"
 - "Les budgets minimum et maximum sont requis"
@@ -215,15 +240,15 @@ submitted (Soumis)
 
 ## Implementation Status
 
-| Component | Status | Notes |
-|-----------|--------|-------|
-| Phase 1 - Create Tender | ✅ Complete | Full specification UI with requirements |
-| Phase 2 - Submit Offer | ✅ Complete | Encrypted financial data |
-| Phase 3 - Evaluate & Award | ✅ Complete | Multi-supplier award support |
-| Phase 4 - Post-Award | ✅ Partial | PO & Invoice frameworks ready |
-| Notifications | ✅ Complete | All critical phases covered |
-| Audit Logging | ✅ Complete | Full history tracking |
-| Security | ✅ Complete | AES-256 encryption, RBAC |
+| Component                  | Status      | Notes                                   |
+| -------------------------- | ----------- | --------------------------------------- |
+| Phase 1 - Create Tender    | ✅ Complete | Full specification UI with requirements |
+| Phase 2 - Submit Offer     | ✅ Complete | Encrypted financial data                |
+| Phase 3 - Evaluate & Award | ✅ Complete | Multi-supplier award support            |
+| Phase 4 - Post-Award       | ✅ Partial  | PO & Invoice frameworks ready           |
+| Notifications              | ✅ Complete | All critical phases covered             |
+| Audit Logging              | ✅ Complete | Full history tracking                   |
+| Security                   | ✅ Complete | AES-256 encryption, RBAC                |
 
 ---
 
@@ -313,6 +338,7 @@ PHASE 4: POST-AWARD
 **Status**: ✅ **WORKFLOW LOGIC FULLY VERIFIED**
 
 The MyNet.tn platform implements a complete, logically sound 3-phase procurement workflow with:
+
 - Proper status transitions (draft → Ouverte → Fermée → Adjugée)
 - Secure data handling (AES-256 encryption)
 - Comprehensive notifications

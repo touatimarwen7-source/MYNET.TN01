@@ -36,7 +36,7 @@ export default function PODetail() {
   const fetchPODetail = async () => {
     try {
       setLoading(true);
-      await new Promise(resolve => setTimeout(resolve, 500));
+      await new Promise((resolve) => setTimeout(resolve, 500));
       const mockPO = {
         id,
         number: 'PO-2025-001',
@@ -65,7 +65,9 @@ export default function PODetail() {
 
   if (loading) {
     return (
-      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '60vh' }}>
+      <Box
+        sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '60vh' }}
+      >
         <Typography>Chargement...</Typography>
       </Box>
     );
@@ -90,9 +92,16 @@ export default function PODetail() {
           Retour
         </Button>
 
-        <Stack direction={{ xs: 'column', md: 'row' }} spacing={2} sx={{ marginBottom: '32px', justifyContent: 'space-between' }}>
+        <Stack
+          direction={{ xs: 'column', md: 'row' }}
+          spacing={2}
+          sx={{ marginBottom: '32px', justifyContent: 'space-between' }}
+        >
           <Box>
-            <Typography variant="h4" sx={{ fontWeight: 600, color: institutionalTheme.palette.text.primary }}>
+            <Typography
+              variant="h4"
+              sx={{ fontWeight: 600, color: institutionalTheme.palette.text.primary }}
+            >
               {po.number}
             </Typography>
             <StatusBadge status={po.status} />
@@ -109,7 +118,10 @@ export default function PODetail() {
             <Button
               variant="outlined"
               startIcon={<PrintIcon />}
-              sx={{ color: institutionalTheme.palette.primary.main, borderColor: institutionalTheme.palette.primary.main }}
+              sx={{
+                color: institutionalTheme.palette.primary.main,
+                borderColor: institutionalTheme.palette.primary.main,
+              }}
             >
               Imprimer
             </Button>
@@ -120,7 +132,13 @@ export default function PODetail() {
           <Grid xs={12} lg={6}>
             <Card sx={{ border: '1px solid #e0e0e0' }}>
               <CardContent>
-                <Typography sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main, marginBottom: '16px' }}>
+                <Typography
+                  sx={{
+                    fontWeight: 600,
+                    color: institutionalTheme.palette.primary.main,
+                    marginBottom: '16px',
+                  }}
+                >
                   Informations Fournisseur
                 </Typography>
                 <Stack spacing={1}>
@@ -144,16 +162,26 @@ export default function PODetail() {
           <Grid xs={12} lg={6}>
             <Card sx={{ border: '1px solid #e0e0e0' }}>
               <CardContent>
-                <Typography sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main, marginBottom: '16px' }}>
+                <Typography
+                  sx={{
+                    fontWeight: 600,
+                    color: institutionalTheme.palette.primary.main,
+                    marginBottom: '16px',
+                  }}
+                >
                   Détails du Bon
                 </Typography>
                 <Stack spacing={1}>
                   <Box>
-                    <Typography sx={{ fontSize: '12px', color: '#666' }}>Date de Création</Typography>
+                    <Typography sx={{ fontSize: '12px', color: '#666' }}>
+                      Date de Création
+                    </Typography>
                     <Typography sx={{ fontWeight: 500 }}>{po.createdAt}</Typography>
                   </Box>
                   <Box>
-                    <Typography sx={{ fontSize: '12px', color: '#666' }}>Date de Livraison</Typography>
+                    <Typography sx={{ fontSize: '12px', color: '#666' }}>
+                      Date de Livraison
+                    </Typography>
                     <Typography sx={{ fontWeight: 500 }}>{po.deliveryDate}</Typography>
                   </Box>
                   <Box>
@@ -168,7 +196,13 @@ export default function PODetail() {
 
         <Card sx={{ marginBottom: '32px', border: '1px solid #e0e0e0' }}>
           <CardContent>
-            <Typography sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main, marginBottom: '16px' }}>
+            <Typography
+              sx={{
+                fontWeight: 600,
+                color: institutionalTheme.palette.primary.main,
+                marginBottom: '16px',
+              }}
+            >
               Articles du Bon
             </Typography>
             <Table>
@@ -185,8 +219,12 @@ export default function PODetail() {
                   <TableRow key={item.id}>
                     <TableCell>{item.description}</TableCell>
                     <TableCell>{item.qty}</TableCell>
-                    <TableCell>{item.unitPrice.toLocaleString()} {po.currency}</TableCell>
-                    <TableCell sx={{ fontWeight: 600 }}>{item.total.toLocaleString()} {po.currency}</TableCell>
+                    <TableCell>
+                      {item.unitPrice.toLocaleString()} {po.currency}
+                    </TableCell>
+                    <TableCell sx={{ fontWeight: 600 }}>
+                      {item.total.toLocaleString()} {po.currency}
+                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>
@@ -200,15 +238,25 @@ export default function PODetail() {
               <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: '32px' }}>
                 <Box>
                   <Typography sx={{ fontSize: '12px', color: '#666' }}>Sous-total</Typography>
-                  <Typography sx={{ fontWeight: 600 }}>{po.amount.toLocaleString()} {po.currency}</Typography>
+                  <Typography sx={{ fontWeight: 600 }}>
+                    {po.amount.toLocaleString()} {po.currency}
+                  </Typography>
                 </Box>
                 <Box>
                   <Typography sx={{ fontSize: '12px', color: '#666' }}>TVA (10%)</Typography>
-                  <Typography sx={{ fontWeight: 600 }}>{po.tax.toLocaleString()} {po.currency}</Typography>
+                  <Typography sx={{ fontWeight: 600 }}>
+                    {po.tax.toLocaleString()} {po.currency}
+                  </Typography>
                 </Box>
                 <Box sx={{ borderLeft: '1px solid #e0e0e0', paddingLeft: '32px' }}>
                   <Typography sx={{ fontSize: '12px', color: '#666' }}>Total</Typography>
-                  <Typography sx={{ fontWeight: 700, fontSize: '18px', color: institutionalTheme.palette.primary.main }}>
+                  <Typography
+                    sx={{
+                      fontWeight: 700,
+                      fontSize: '18px',
+                      color: institutionalTheme.palette.primary.main,
+                    }}
+                  >
                     {po.total.toLocaleString()} {po.currency}
                   </Typography>
                 </Box>

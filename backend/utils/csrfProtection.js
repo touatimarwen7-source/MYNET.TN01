@@ -1,7 +1,7 @@
 /**
  * 🛡️ CSRF PROTECTION
  * Cross-Site Request Forgery protection
- * 
+ *
  * How it works:
  * 1. Backend generates CSRF token and sends to frontend
  * 2. Frontend includes token in X-CSRF-Token header
@@ -18,12 +18,12 @@ const csrfTokens = new Map();
  */
 function generateCSRFToken(sessionId) {
   const token = crypto.randomBytes(32).toString('hex');
-  
+
   // Store token with expiry (30 minutes)
   csrfTokens.set(token, {
     sessionId,
     createdAt: Date.now(),
-    expiresAt: Date.now() + 30 * 60 * 1000
+    expiresAt: Date.now() + 30 * 60 * 1000,
   });
 
   return token;
@@ -36,7 +36,7 @@ function validateCSRFToken(token, sessionId) {
   if (!token) return false;
 
   const tokenData = csrfTokens.get(token);
-  
+
   if (!tokenData) {
     return false; // Token doesn't exist
   }
@@ -81,7 +81,7 @@ function csrfProtection(req, res, next) {
 
   // Skip for public endpoints
   const publicEndpoints = ['/api/auth/login', '/api/auth/register'];
-  if (publicEndpoints.some(endpoint => req.path === endpoint)) {
+  if (publicEndpoints.some((endpoint) => req.path === endpoint)) {
     return next();
   }
 
@@ -96,8 +96,8 @@ function csrfProtection(req, res, next) {
       error: {
         message: 'Invalid or missing CSRF token',
         code: 'CSRF_TOKEN_INVALID',
-        statusCode: 403
-      }
+        statusCode: 403,
+      },
     });
   }
 
@@ -112,7 +112,7 @@ function csrfProtection(req, res, next) {
  */
 function cleanupExpiredTokens() {
   const now = Date.now();
-  
+
   for (const [token, data] of csrfTokens.entries()) {
     if (data.expiresAt < now) {
       csrfTokens.delete(token);
@@ -128,5 +128,5 @@ module.exports = {
   validateCSRFToken,
   csrfTokenProvider,
   csrfProtection,
-  cleanupExpiredTokens
+  cleanupExpiredTokens,
 };

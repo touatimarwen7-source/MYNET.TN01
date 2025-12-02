@@ -15,7 +15,7 @@ class QueryMonitor {
    */
   trackQueryPerformance(req, res, next) {
     const originalQuery = req.app.get('db')?.query;
-    
+
     if (originalQuery) {
       req.app.get('db').query = async (...args) => {
         const start = Date.now();
@@ -47,7 +47,7 @@ class QueryMonitor {
       query: query.substring(0, 200),
       duration,
       endpoint: req.path,
-      method: req.method
+      method: req.method,
     };
 
     this.slowQueries.push(record);
@@ -60,9 +60,7 @@ class QueryMonitor {
    * Get slow query stats
    */
   getSlowQueries(limit = 10) {
-    return this.slowQueries
-      .sort((a, b) => b.duration - a.duration)
-      .slice(0, limit);
+    return this.slowQueries.sort((a, b) => b.duration - a.duration).slice(0, limit);
   }
 }
 

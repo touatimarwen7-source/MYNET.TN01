@@ -7,12 +7,14 @@ const router = express.Router();
 // Log an action (used internally)
 const logAction = async (db, userId, action, entityType, entityId, details = {}) => {
   try {
-    await db.query(`
+    await db.query(
+      `
       INSERT INTO audit_logs (user_id, action, entity_type, entity_id, details)
       VALUES ($1, $2, $3, $4, $5)
-    `, [userId, action, entityType, entityId, JSON.stringify(details)]);
-  } catch (error) {
-  }
+    `,
+      [userId, action, entityType, entityId, JSON.stringify(details)]
+    );
+  } catch (error) {}
 };
 
 // Get audit logs (admin only)
@@ -58,12 +60,15 @@ router.get('/user/:userId', authMiddleware, async (req, res) => {
     const { limit, offset, sql } = buildPaginationQuery(req.query.limit, req.query.offset);
     const db = req.app.get('db');
 
-    const result = await db.query(`
+    const result = await db.query(
+      `
       SELECT * FROM audit_logs 
       WHERE user_id = $1
       ORDER BY created_at DESC
       ${sql}
-    `, [userId, limit, offset]);
+    `,
+      [userId, limit, offset]
+    );
 
     res.json(result.rows);
   } catch (error) {

@@ -54,11 +54,12 @@ export default function PageEditor() {
       id: pageId || 1,
       title: 'Accueil',
       slug: 'home',
-      description: 'Page d\'accueil de MyNet.tn',
-      content: '<h1>Bienvenue sur MyNet.tn</h1><p>Plateforme B2B d\'approvisionnement...</p>',
+      description: "Page d'accueil de MyNet.tn",
+      content: "<h1>Bienvenue sur MyNet.tn</h1><p>Plateforme B2B d'approvisionnement...</p>",
       status: 'publié',
-      seoTitle: 'MyNet.tn - Plateforme B2B d\'Approvisionnement',
-      seoDescription: 'Plateforme de gestion d\'appels d\'offres et d\'approvisionnement pour les entreprises tunisiennes',
+      seoTitle: "MyNet.tn - Plateforme B2B d'Approvisionnement",
+      seoDescription:
+        "Plateforme de gestion d'appels d'offres et d'approvisionnement pour les entreprises tunisiennes",
       keywords: 'appel offre, approvisionnement, B2B, Tunisie',
     };
 
@@ -77,7 +78,7 @@ export default function PageEditor() {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       [name]: value,
     }));
@@ -97,7 +98,7 @@ export default function PageEditor() {
     setSaving(true);
     try {
       // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      await new Promise((resolve) => setTimeout(resolve, 1000));
       setOriginalData(formData);
       showMessage('Page modifiée avec succès', 'success');
     } catch (err) {
@@ -116,7 +117,7 @@ export default function PageEditor() {
     setSaving(true);
     try {
       // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      await new Promise((resolve) => setTimeout(resolve, 1000));
       const updatedData = { ...formData, status: 'publié' };
       setFormData(updatedData);
       setOriginalData(updatedData);
@@ -169,24 +170,33 @@ export default function PageEditor() {
             >
               Retour
             </Button>
-            <Typography variant="h4" sx={{ fontWeight: 600, color: institutionalTheme.palette.text.primary, flex: 1 }}>
+            <Typography
+              variant="h4"
+              sx={{ fontWeight: 600, color: institutionalTheme.palette.text.primary, flex: 1 }}
+            >
               Modifier la Page: {formData.title}
             </Typography>
-            <Box sx={{
-              display: 'inline-block',
-              padding: '6px 16px',
-              borderRadius: '4px',
-              backgroundColor: formData.status === 'publié' ? '#e8f5e9' : '#fff3e0',
-              color: formData.status === 'publié' ? '#2e7d32' : '#e65100',
-              fontSize: '12px',
-              fontWeight: 600,
-            }}>
+            <Box
+              sx={{
+                display: 'inline-block',
+                padding: '6px 16px',
+                borderRadius: '4px',
+                backgroundColor: formData.status === 'publié' ? '#e8f5e9' : '#fff3e0',
+                color: formData.status === 'publié' ? '#2e7d32' : '#e65100',
+                fontSize: '12px',
+                fontWeight: 600,
+              }}
+            >
               {formData.status === 'publié' ? 'Publié' : 'Brouillon'}
             </Box>
           </Box>
 
           {message && (
-            <Alert severity={messageType} onClose={() => setMessage('')} sx={{ marginBottom: '16px' }}>
+            <Alert
+              severity={messageType}
+              onClose={() => setMessage('')}
+              sx={{ marginBottom: '16px' }}
+            >
               {message}
             </Alert>
           )}
@@ -206,7 +216,13 @@ export default function PageEditor() {
               {/* Basic Info */}
               <Card sx={{ border: '1px solid #e0e0e0' }}>
                 <CardContent>
-                  <Typography sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main, marginBottom: '16px' }}>
+                  <Typography
+                    sx={{
+                      fontWeight: 600,
+                      color: institutionalTheme.palette.primary.main,
+                      marginBottom: '16px',
+                    }}
+                  >
                     Informations Générales
                   </Typography>
                   <Stack spacing={2}>
@@ -249,7 +265,13 @@ export default function PageEditor() {
               {/* Content Editor */}
               <Card sx={{ border: '1px solid #e0e0e0' }}>
                 <CardContent>
-                  <Typography sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main, marginBottom: '16px' }}>
+                  <Typography
+                    sx={{
+                      fontWeight: 600,
+                      color: institutionalTheme.palette.primary.main,
+                      marginBottom: '16px',
+                    }}
+                  >
                     Contenu de la Page
                   </Typography>
                   <TextField
@@ -271,7 +293,13 @@ export default function PageEditor() {
               {/* SEO Settings */}
               <Card sx={{ border: '1px solid #e0e0e0' }}>
                 <CardContent>
-                  <Typography sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main, marginBottom: '16px' }}>
+                  <Typography
+                    sx={{
+                      fontWeight: 600,
+                      color: institutionalTheme.palette.primary.main,
+                      marginBottom: '16px',
+                    }}
+                  >
                     Paramètres SEO
                   </Typography>
                   <Stack spacing={2}>
@@ -319,7 +347,13 @@ export default function PageEditor() {
               {/* Actions */}
               <Card sx={{ border: '1px solid #e0e0e0', backgroundColor: '#f9f9f9' }}>
                 <CardContent>
-                  <Typography sx={{ fontWeight: 600, color: institutionalTheme.palette.text.primary, marginBottom: '16px' }}>
+                  <Typography
+                    sx={{
+                      fontWeight: 600,
+                      color: institutionalTheme.palette.text.primary,
+                      marginBottom: '16px',
+                    }}
+                  >
                     Actions
                   </Typography>
                   <Stack spacing={2}>
@@ -348,7 +382,10 @@ export default function PageEditor() {
                       variant="outlined"
                       startIcon={<PreviewIcon />}
                       onClick={() => setOpenPreview(true)}
-                      sx={{ color: institutionalTheme.palette.primary.main, borderColor: institutionalTheme.palette.primary.main }}
+                      sx={{
+                        color: institutionalTheme.palette.primary.main,
+                        borderColor: institutionalTheme.palette.primary.main,
+                      }}
                     >
                       Aperçu
                     </Button>
@@ -359,13 +396,27 @@ export default function PageEditor() {
               {/* Info Panel */}
               <Card sx={{ border: '1px solid #e0e0e0' }}>
                 <CardContent>
-                  <Typography sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main, marginBottom: '16px' }}>
+                  <Typography
+                    sx={{
+                      fontWeight: 600,
+                      color: institutionalTheme.palette.primary.main,
+                      marginBottom: '16px',
+                    }}
+                  >
                     Informations
                   </Typography>
                   <Stack spacing={2} sx={{ fontSize: '13px' }}>
                     <Box>
-                      <Typography sx={{ color: '#666', fontSize: '11px' }}>URL de la Page</Typography>
-                      <Typography sx={{ fontFamily: 'monospace', color: institutionalTheme.palette.primary.main, fontWeight: 500 }}>
+                      <Typography sx={{ color: '#666', fontSize: '11px' }}>
+                        URL de la Page
+                      </Typography>
+                      <Typography
+                        sx={{
+                          fontFamily: 'monospace',
+                          color: institutionalTheme.palette.primary.main,
+                          fontWeight: 500,
+                        }}
+                      >
                         /{formData.slug}
                       </Typography>
                     </Box>
@@ -388,13 +439,23 @@ export default function PageEditor() {
               {/* Aide */}
               <Card sx={{ border: '1px solid #e0e0e0', backgroundColor: '#f0f8ff' }}>
                 <CardContent>
-                  <Typography sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main, marginBottom: '12px', fontSize: '14px' }}>
+                  <Typography
+                    sx={{
+                      fontWeight: 600,
+                      color: institutionalTheme.palette.primary.main,
+                      marginBottom: '12px',
+                      fontSize: '14px',
+                    }}
+                  >
                     Aide
                   </Typography>
                   <Typography sx={{ fontSize: '12px', color: '#666', lineHeight: '1.6' }}>
-                    <strong>Slug:</strong> Identifiant unique dans l'URL<br/>
-                    <strong>Statut:</strong> Brouillon (caché) ou Publié (visible)<br/>
-                    <strong>Contenu:</strong> Accepte le HTML standard<br/>
+                    <strong>Slug:</strong> Identifiant unique dans l'URL
+                    <br />
+                    <strong>Statut:</strong> Brouillon (caché) ou Publié (visible)
+                    <br />
+                    <strong>Contenu:</strong> Accepte le HTML standard
+                    <br />
                     <strong>SEO:</strong> Pour améliorer le classement Google
                   </Typography>
                 </CardContent>
@@ -412,7 +473,12 @@ export default function PageEditor() {
         <DialogContent sx={{ paddingTop: '20px' }}>
           <Paper sx={{ padding: '24px', backgroundColor: '#fff', border: '1px solid #e0e0e0' }}>
             <Box
-              sx={{ '& h1, & h2, & h3': { color: institutionalTheme.palette.primary.main, marginTop: '16px' } }}
+              sx={{
+                '& h1, & h2, & h3': {
+                  color: institutionalTheme.palette.primary.main,
+                  marginTop: '16px',
+                },
+              }}
               dangerouslySetInnerHTML={{ __html: formData.content }}
             />
           </Paper>
@@ -425,7 +491,12 @@ export default function PageEditor() {
       </Dialog>
 
       {/* Back Confirmation Dialog */}
-      <Dialog open={openBackDialog} onClose={() => setOpenBackDialog(false)} maxWidth="sm" fullWidth>
+      <Dialog
+        open={openBackDialog}
+        onClose={() => setOpenBackDialog(false)}
+        maxWidth="sm"
+        fullWidth
+      >
         <DialogTitle sx={{ fontWeight: 600, color: '#ff9800' }}>
           Modifications Non Sauvegardées
         </DialogTitle>
@@ -438,11 +509,7 @@ export default function PageEditor() {
           <Button onClick={() => setOpenBackDialog(false)} sx={{ color: '#666' }}>
             Continuer
           </Button>
-          <Button
-            variant="contained"
-            onClick={confirmBack}
-            sx={{ backgroundColor: '#ff9800' }}
-          >
+          <Button variant="contained" onClick={confirmBack} sx={{ backgroundColor: '#ff9800' }}>
             Quitter sans Sauvegarder
           </Button>
         </DialogActions>

@@ -30,9 +30,33 @@ import { setPageTitle } from '../utils/pageTitle';
 export default function BudgetManagement() {
   const theme = institutionalTheme;
   const [budgets, setBudgets] = useState([
-    { id: 1, name: 'Budget Fournitures', total: 50000, spent: 32500, remaining: 17500, category: 'Fournitures', year: 2025 },
-    { id: 2, name: 'Budget Services', total: 80000, spent: 45000, remaining: 35000, category: 'Services', year: 2025 },
-    { id: 3, name: 'Budget Construction', total: 150000, spent: 89500, remaining: 60500, category: 'Construction', year: 2025 }
+    {
+      id: 1,
+      name: 'Budget Fournitures',
+      total: 50000,
+      spent: 32500,
+      remaining: 17500,
+      category: 'Fournitures',
+      year: 2025,
+    },
+    {
+      id: 2,
+      name: 'Budget Services',
+      total: 80000,
+      spent: 45000,
+      remaining: 35000,
+      category: 'Services',
+      year: 2025,
+    },
+    {
+      id: 3,
+      name: 'Budget Construction',
+      total: 150000,
+      spent: 89500,
+      remaining: 60500,
+      category: 'Construction',
+      year: 2025,
+    },
   ]);
   const [showForm, setShowForm] = useState(false);
   const [newBudget, setNewBudget] = useState({ name: '', total: '', category: '' });
@@ -43,15 +67,18 @@ export default function BudgetManagement() {
 
   const handleAddBudget = () => {
     if (newBudget.name && newBudget.total) {
-      setBudgets([...budgets, {
-        id: budgets.length + 1,
-        name: newBudget.name,
-        total: parseFloat(newBudget.total),
-        spent: 0,
-        remaining: parseFloat(newBudget.total),
-        category: newBudget.category,
-        year: 2025
-      }]);
+      setBudgets([
+        ...budgets,
+        {
+          id: budgets.length + 1,
+          name: newBudget.name,
+          total: parseFloat(newBudget.total),
+          spent: 0,
+          remaining: parseFloat(newBudget.total),
+          category: newBudget.category,
+          year: 2025,
+        },
+      ]);
       setNewBudget({ name: '', total: '', category: '' });
       setShowForm(false);
     }
@@ -64,7 +91,9 @@ export default function BudgetManagement() {
   const StatCard = ({ label, value, color }) => (
     <Card sx={{ border: '1px solid #e0e0e0' }}>
       <CardContent sx={{ padding: '24px' }}>
-        <Typography sx={{ fontSize: '12px', fontWeight: 600, color: '#616161', marginBottom: '8px' }}>
+        <Typography
+          sx={{ fontSize: '12px', fontWeight: 600, color: '#616161', marginBottom: '8px' }}
+        >
           {label}
         </Typography>
         <Typography sx={{ fontSize: '24px', fontWeight: 600, color }}>
@@ -77,9 +106,24 @@ export default function BudgetManagement() {
   return (
     <Box sx={{ backgroundColor: '#fafafa', paddingY: '40px' }}>
       <Container maxWidth="lg">
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '32px' }}>
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            marginBottom: '32px',
+          }}
+        >
           <Box>
-            <Typography variant="h2" sx={{ fontSize: '32px', fontWeight: 500, color: institutionalTheme.palette.text.primary, marginBottom: '8px' }}>
+            <Typography
+              variant="h2"
+              sx={{
+                fontSize: '32px',
+                fontWeight: 500,
+                color: institutionalTheme.palette.text.primary,
+                marginBottom: '8px',
+              }}
+            >
               💰 Gestion des Budgets
             </Typography>
             <Typography sx={{ color: '#616161' }}>
@@ -104,7 +148,15 @@ export default function BudgetManagement() {
         {showForm && (
           <Card sx={{ marginBottom: '32px', border: '1px solid #e0e0e0' }}>
             <CardContent sx={{ padding: '24px' }}>
-              <Typography variant="h4" sx={{ fontSize: '18px', fontWeight: 600, color: institutionalTheme.palette.text.primary, marginBottom: '16px' }}>
+              <Typography
+                variant="h4"
+                sx={{
+                  fontSize: '18px',
+                  fontWeight: 600,
+                  color: institutionalTheme.palette.text.primary,
+                  marginBottom: '16px',
+                }}
+              >
                 Créer un Nouveau Budget
               </Typography>
               <Stack spacing={2}>
@@ -112,20 +164,20 @@ export default function BudgetManagement() {
                   fullWidth
                   label="Nom du Budget"
                   value={newBudget.name}
-                  onChange={(e) => setNewBudget({...newBudget, name: e.target.value})}
+                  onChange={(e) => setNewBudget({ ...newBudget, name: e.target.value })}
                 />
                 <TextField
                   fullWidth
                   label="Montant Total (TND)"
                   type="number"
                   value={newBudget.total}
-                  onChange={(e) => setNewBudget({...newBudget, total: e.target.value})}
+                  onChange={(e) => setNewBudget({ ...newBudget, total: e.target.value })}
                 />
                 <FormControl fullWidth>
                   <InputLabel>Catégorie</InputLabel>
                   <Select
                     value={newBudget.category}
-                    onChange={(e) => setNewBudget({...newBudget, category: e.target.value})}
+                    onChange={(e) => setNewBudget({ ...newBudget, category: e.target.value })}
                     label="Catégorie"
                   >
                     <MenuItem value="Fournitures">Fournitures</MenuItem>
@@ -146,7 +198,10 @@ export default function BudgetManagement() {
                     variant="outlined"
                     onClick={() => setShowForm(false)}
                     startIcon={<CancelIcon />}
-                    sx={{ color: institutionalTheme.palette.primary.main, borderColor: institutionalTheme.palette.primary.main }}
+                    sx={{
+                      color: institutionalTheme.palette.primary.main,
+                      borderColor: institutionalTheme.palette.primary.main,
+                    }}
                   >
                     Annuler
                   </Button>
@@ -158,7 +213,11 @@ export default function BudgetManagement() {
 
         <Grid container spacing={2} sx={{ marginBottom: '32px' }}>
           <Grid item xs={12} md={4}>
-            <StatCard label="Budget Total" value={totalBudget} color={institutionalTheme.palette.primary.main} />
+            <StatCard
+              label="Budget Total"
+              value={totalBudget}
+              color={institutionalTheme.palette.primary.main}
+            />
           </Grid>
           <Grid item xs={12} md={4}>
             <StatCard label="Total Dépensé" value={totalSpent} color="#f57c00" />
@@ -173,26 +232,73 @@ export default function BudgetManagement() {
             <Table>
               <TableHead sx={{ backgroundColor: '#f5f5f5' }}>
                 <TableRow sx={{ height: '56px' }}>
-                  <TableCell sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main }}>Nom du Budget</TableCell>
-                  <TableCell sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main }}>Catégorie</TableCell>
-                  <TableCell sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main }} align="right">Total</TableCell>
-                  <TableCell sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main }} align="right">Dépensé</TableCell>
-                  <TableCell sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main }} align="right">Restant</TableCell>
-                  <TableCell sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main }} align="center">Utilisation</TableCell>
-                  <TableCell sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main }} align="center">Actions</TableCell>
+                  <TableCell
+                    sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main }}
+                  >
+                    Nom du Budget
+                  </TableCell>
+                  <TableCell
+                    sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main }}
+                  >
+                    Catégorie
+                  </TableCell>
+                  <TableCell
+                    sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main }}
+                    align="right"
+                  >
+                    Total
+                  </TableCell>
+                  <TableCell
+                    sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main }}
+                    align="right"
+                  >
+                    Dépensé
+                  </TableCell>
+                  <TableCell
+                    sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main }}
+                    align="right"
+                  >
+                    Restant
+                  </TableCell>
+                  <TableCell
+                    sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main }}
+                    align="center"
+                  >
+                    Utilisation
+                  </TableCell>
+                  <TableCell
+                    sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main }}
+                    align="center"
+                  >
+                    Actions
+                  </TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {budgets.map(budget => {
+                {budgets.map((budget) => {
                   const usage = (budget.spent / budget.total) * 100;
                   return (
-                    <TableRow key={budget.id} sx={{ borderBottom: '1px solid #e0e0e0', '&:hover': { backgroundColor: '#fafafa' } }}>
-                      <TableCell sx={{ color: institutionalTheme.palette.text.primary }}>{budget.name}</TableCell>
+                    <TableRow
+                      key={budget.id}
+                      sx={{
+                        borderBottom: '1px solid #e0e0e0',
+                        '&:hover': { backgroundColor: '#fafafa' },
+                      }}
+                    >
+                      <TableCell sx={{ color: institutionalTheme.palette.text.primary }}>
+                        {budget.name}
+                      </TableCell>
                       <TableCell sx={{ color: '#616161' }}>{budget.category}</TableCell>
-                      <TableCell align="right" sx={{ color: institutionalTheme.palette.primary.main, fontWeight: 600 }}>
+                      <TableCell
+                        align="right"
+                        sx={{ color: institutionalTheme.palette.primary.main, fontWeight: 600 }}
+                      >
                         {budget.total.toLocaleString()} TND
                       </TableCell>
-                      <TableCell align="right" sx={{ color: institutionalTheme.palette.text.primary }}>
+                      <TableCell
+                        align="right"
+                        sx={{ color: institutionalTheme.palette.text.primary }}
+                      >
                         {budget.spent.toLocaleString()} TND
                       </TableCell>
                       <TableCell align="right" sx={{ color: '#2e7d32', fontWeight: 600 }}>
@@ -201,13 +307,27 @@ export default function BudgetManagement() {
                       <TableCell align="center">
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                           <LinearProgress variant="determinate" value={usage} sx={{ flex: 1 }} />
-                          <Typography sx={{ fontSize: '12px', fontWeight: 600, color: institutionalTheme.palette.text.primary, minWidth: '40px' }}>
+                          <Typography
+                            sx={{
+                              fontSize: '12px',
+                              fontWeight: 600,
+                              color: institutionalTheme.palette.text.primary,
+                              minWidth: '40px',
+                            }}
+                          >
                             {usage.toFixed(0)}%
                           </Typography>
                         </Box>
                       </TableCell>
                       <TableCell align="center">
-                        <Button size="small" startIcon={<EditIcon />} sx={{ color: institutionalTheme.palette.primary.main, textTransform: 'none' }}>
+                        <Button
+                          size="small"
+                          startIcon={<EditIcon />}
+                          sx={{
+                            color: institutionalTheme.palette.primary.main,
+                            textTransform: 'none',
+                          }}
+                        >
                           Éditer
                         </Button>
                       </TableCell>

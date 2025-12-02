@@ -47,8 +47,8 @@ exports.listPages = async (req, res) => {
         total: parseInt(countRes.rows[0]?.total || 0),
         page: parseInt(page),
         limit: parseInt(limit),
-        pages: Math.ceil(parseInt(countRes.rows[0]?.total || 0) / limit)
-      }
+        pages: Math.ceil(parseInt(countRes.rows[0]?.total || 0) / limit),
+      },
     });
   } catch (error) {
     return res.status(500).json({ success: false, error: error.message });
@@ -97,7 +97,13 @@ exports.createPage = async (req, res) => {
     );
 
     // Log audit
-    await logAuditAction(req.user.id, 'CREATE_PAGE', `Created page: ${title}`, 'success', req.clientIP);
+    await logAuditAction(
+      req.user.id,
+      'CREATE_PAGE',
+      `Created page: ${title}`,
+      'success',
+      req.clientIP
+    );
 
     return res.status(201).json({ success: true, data: result.rows[0] });
   } catch (error) {
@@ -127,7 +133,13 @@ exports.updatePage = async (req, res) => {
     }
 
     // Log audit
-    await logAuditAction(req.user.id, 'UPDATE_PAGE', `Updated page: ${title}`, 'success', req.clientIP);
+    await logAuditAction(
+      req.user.id,
+      'UPDATE_PAGE',
+      `Updated page: ${title}`,
+      'success',
+      req.clientIP
+    );
 
     return res.json({ success: true, data: result.rows[0] });
   } catch (error) {
@@ -156,7 +168,13 @@ exports.deletePage = async (req, res) => {
     }
 
     // Log audit
-    await logAuditAction(req.user.id, 'DELETE_PAGE', `Deleted page ID: ${id}`, 'success', req.clientIP);
+    await logAuditAction(
+      req.user.id,
+      'DELETE_PAGE',
+      `Deleted page ID: ${id}`,
+      'success',
+      req.clientIP
+    );
 
     return res.json({ success: true, message: 'Page deleted successfully' });
   } catch (error) {
@@ -200,8 +218,8 @@ exports.listFiles = async (req, res) => {
       pagination: {
         total: parseInt(countRes.rows[0]?.total || 0),
         page: parseInt(page),
-        limit: parseInt(limit)
-      }
+        limit: parseInt(limit),
+      },
     });
   } catch (error) {
     return res.status(500).json({ success: false, error: error.message });
@@ -220,7 +238,7 @@ exports.uploadFile = async (req, res) => {
 
     const { originalname, size, mimetype } = req.file;
     const fileName = originalname || 'unnamed_file';
-    
+
     // In production, save file to cloud storage (S3, GCS, etc.)
     // For now, store metadata in database with placeholder URL
     const fileUrl = `/files/${Date.now()}_${fileName}`;
@@ -233,7 +251,13 @@ exports.uploadFile = async (req, res) => {
     );
 
     // Log audit
-    await logAuditAction(req.user.id, 'UPLOAD_FILE', `Uploaded: ${fileName}`, 'success', req.clientIP);
+    await logAuditAction(
+      req.user.id,
+      'UPLOAD_FILE',
+      `Uploaded: ${fileName}`,
+      'success',
+      req.clientIP
+    );
 
     return res.status(201).json({ success: true, data: result.rows[0] });
   } catch (error) {
@@ -260,7 +284,13 @@ exports.deleteFile = async (req, res) => {
     }
 
     // Log audit
-    await logAuditAction(req.user.id, 'DELETE_FILE', `Deleted file ID: ${id}`, 'success', req.clientIP);
+    await logAuditAction(
+      req.user.id,
+      'DELETE_FILE',
+      `Deleted file ID: ${id}`,
+      'success',
+      req.clientIP
+    );
 
     return res.json({ success: true, message: 'File deleted successfully' });
   } catch (error) {
@@ -297,8 +327,8 @@ exports.listDocuments = async (req, res) => {
       pagination: {
         total: parseInt(countRes.rows[0]?.total || 0),
         page: parseInt(page),
-        limit: parseInt(limit)
-      }
+        limit: parseInt(limit),
+      },
     });
   } catch (error) {
     return res.status(500).json({ success: false, error: error.message });
@@ -325,7 +355,13 @@ exports.createDocument = async (req, res) => {
     );
 
     // Log audit
-    await logAuditAction(req.user.id, 'CREATE_DOCUMENT', `Created document: ${name}`, 'success', req.clientIP);
+    await logAuditAction(
+      req.user.id,
+      'CREATE_DOCUMENT',
+      `Created document: ${name}`,
+      'success',
+      req.clientIP
+    );
 
     return res.status(201).json({ success: true, data: result.rows[0] });
   } catch (error) {
@@ -348,7 +384,13 @@ exports.deleteDocument = async (req, res) => {
     );
 
     // Log audit
-    await logAuditAction(req.user.id, 'DELETE_DOCUMENT', `Deleted document ID: ${id}`, 'success', req.clientIP);
+    await logAuditAction(
+      req.user.id,
+      'DELETE_DOCUMENT',
+      `Deleted document ID: ${id}`,
+      'success',
+      req.clientIP
+    );
 
     return res.json({ success: true, message: 'Document deleted successfully' });
   } catch (error) {
@@ -390,8 +432,8 @@ exports.listEmails = async (req, res) => {
       pagination: {
         total: parseInt(countRes.rows[0]?.total || 0),
         page: parseInt(page),
-        limit: parseInt(limit)
-      }
+        limit: parseInt(limit),
+      },
     });
   } catch (error) {
     return res.status(500).json({ success: false, error: error.message });
@@ -418,9 +460,17 @@ exports.sendEmail = async (req, res) => {
     );
 
     // Log audit
-    await logAuditAction(req.user.id, 'SEND_EMAIL', `Sent email to: ${recipient}`, 'success', req.clientIP);
+    await logAuditAction(
+      req.user.id,
+      'SEND_EMAIL',
+      `Sent email to: ${recipient}`,
+      'success',
+      req.clientIP
+    );
 
-    return res.status(201).json({ success: true, data: result.rows[0], message: 'Email sent successfully' });
+    return res
+      .status(201)
+      .json({ success: true, data: result.rows[0], message: 'Email sent successfully' });
   } catch (error) {
     return res.status(500).json({ success: false, error: error.message });
   }
@@ -451,9 +501,7 @@ exports.listUsers = async (req, res) => {
       params.push(role);
     }
 
-    const countRes = await db.query(
-      query.replace('SELECT id, email', 'SELECT COUNT(*) as total')
-    );
+    const countRes = await db.query(query.replace('SELECT id, email', 'SELECT COUNT(*) as total'));
 
     query += ` ORDER BY created_at DESC LIMIT $${params.length + 1} OFFSET $${params.length + 2}`;
     params.push(limit, offset);
@@ -466,8 +514,8 @@ exports.listUsers = async (req, res) => {
       pagination: {
         total: parseInt(countRes.rows[0]?.total || 0),
         page: parseInt(page),
-        limit: parseInt(limit)
-      }
+        limit: parseInt(limit),
+      },
     });
   } catch (error) {
     return res.status(500).json({ success: false, error: error.message });
@@ -487,17 +535,23 @@ exports.updateUserRole = async (req, res) => {
       return res.status(400).json({ success: false, error: 'Invalid role' });
     }
 
-    const result = await db.query(
-      `UPDATE users SET role = $1 WHERE id = $2 RETURNING id, role`,
-      [role, id]
-    );
+    const result = await db.query(`UPDATE users SET role = $1 WHERE id = $2 RETURNING id, role`, [
+      role,
+      id,
+    ]);
 
     if (result.rows.length === 0) {
       return res.status(404).json({ success: false, error: 'User not found' });
     }
 
     // Log audit
-    await logAuditAction(req.user.id, 'UPDATE_USER_ROLE', `Changed user ${id} role to ${role}`, 'success', req.clientIP);
+    await logAuditAction(
+      req.user.id,
+      'UPDATE_USER_ROLE',
+      `Changed user ${id} role to ${role}`,
+      'success',
+      req.clientIP
+    );
 
     return res.json({ success: true, data: result.rows[0] });
   } catch (error) {
@@ -516,7 +570,13 @@ exports.blockUser = async (req, res) => {
     await db.query(`UPDATE users SET is_active = false WHERE id = $1`, [id]);
 
     // Log audit
-    await logAuditAction(req.user.id, 'BLOCK_USER', `Blocked user ID: ${id}`, 'success', req.clientIP);
+    await logAuditAction(
+      req.user.id,
+      'BLOCK_USER',
+      `Blocked user ID: ${id}`,
+      'success',
+      req.clientIP
+    );
 
     return res.json({ success: true, message: 'User blocked successfully' });
   } catch (error) {
@@ -535,7 +595,13 @@ exports.unblockUser = async (req, res) => {
     await db.query(`UPDATE users SET is_active = true WHERE id = $1`, [id]);
 
     // Log audit
-    await logAuditAction(req.user.id, 'UNBLOCK_USER', `Unblocked user ID: ${id}`, 'success', req.clientIP);
+    await logAuditAction(
+      req.user.id,
+      'UNBLOCK_USER',
+      `Unblocked user ID: ${id}`,
+      'success',
+      req.clientIP
+    );
 
     return res.json({ success: true, message: 'User unblocked successfully' });
   } catch (error) {
@@ -583,8 +649,8 @@ exports.getAuditLogs = async (req, res) => {
       pagination: {
         total: parseInt(countRes.rows[0]?.total || 0),
         page: parseInt(page),
-        limit: parseInt(limit)
-      }
+        limit: parseInt(limit),
+      },
     });
   } catch (error) {
     return res.status(500).json({ success: false, error: error.message });
@@ -604,7 +670,7 @@ exports.getSystemHealth = async (req, res) => {
       cpu: Math.floor(Math.random() * 80),
       memory: Math.floor(Math.random() * 70),
       disk: Math.floor(Math.random() * 60),
-      status: 'healthy'
+      status: 'healthy',
     };
 
     return res.json({
@@ -613,8 +679,8 @@ exports.getSystemHealth = async (req, res) => {
         database: dbHealth,
         server: serverHealth,
         timestamp: new Date(),
-        uptime: process.uptime()
-      }
+        uptime: process.uptime(),
+      },
     });
   } catch (error) {
     return res.status(500).json({ success: false, error: error.message });
@@ -635,7 +701,7 @@ exports.listBackups = async (req, res) => {
 
     return res.json({
       success: true,
-      data: result.rows
+      data: result.rows,
     });
   } catch (error) {
     return res.status(500).json({ success: false, error: error.message });
@@ -658,7 +724,13 @@ exports.createBackup = async (req, res) => {
     );
 
     // Log audit
-    await logAuditAction(req.user.id, 'CREATE_BACKUP', `Created backup: ${backupName}`, 'success', req.clientIP);
+    await logAuditAction(
+      req.user.id,
+      'CREATE_BACKUP',
+      `Created backup: ${backupName}`,
+      'success',
+      req.clientIP
+    );
 
     return res.status(201).json({ success: true, data: result.rows[0] });
   } catch (error) {
@@ -675,7 +747,13 @@ exports.restoreBackup = async (req, res) => {
     const { id } = req.params;
 
     // Log audit
-    await logAuditAction(req.user.id, 'RESTORE_BACKUP', `Restored from backup ID: ${id}`, 'success', req.clientIP);
+    await logAuditAction(
+      req.user.id,
+      'RESTORE_BACKUP',
+      `Restored from backup ID: ${id}`,
+      'success',
+      req.clientIP
+    );
 
     return res.json({ success: true, message: 'Backup restored successfully' });
   } catch (error) {
@@ -698,7 +776,7 @@ exports.listSubscriptionPlans = async (req, res) => {
 
     return res.json({
       success: true,
-      data: result.rows
+      data: result.rows,
     });
   } catch (error) {
     return res.status(500).json({ success: false, error: error.message });
@@ -725,7 +803,13 @@ exports.createSubscriptionPlan = async (req, res) => {
     );
 
     // Log audit
-    await logAuditAction(req.user.id, 'CREATE_PLAN', `Created plan: ${name}`, 'success', req.clientIP);
+    await logAuditAction(
+      req.user.id,
+      'CREATE_PLAN',
+      `Created plan: ${name}`,
+      'success',
+      req.clientIP
+    );
 
     return res.status(201).json({ success: true, data: result.rows[0] });
   } catch (error) {
@@ -754,7 +838,13 @@ exports.updateSubscriptionPlan = async (req, res) => {
     }
 
     // Log audit
-    await logAuditAction(req.user.id, 'UPDATE_PLAN', `Updated plan: ${name}`, 'success', req.clientIP);
+    await logAuditAction(
+      req.user.id,
+      'UPDATE_PLAN',
+      `Updated plan: ${name}`,
+      'success',
+      req.clientIP
+    );
 
     return res.json({ success: true, data: result.rows[0] });
   } catch (error) {
@@ -773,7 +863,13 @@ exports.deleteSubscriptionPlan = async (req, res) => {
     await db.query(`DELETE FROM subscription_plans WHERE id = $1`, [id]);
 
     // Log audit
-    await logAuditAction(req.user.id, 'DELETE_PLAN', `Deleted plan ID: ${id}`, 'success', req.clientIP);
+    await logAuditAction(
+      req.user.id,
+      'DELETE_PLAN',
+      `Deleted plan ID: ${id}`,
+      'success',
+      req.clientIP
+    );
 
     return res.json({ success: true, message: 'Plan deleted successfully' });
   } catch (error) {
@@ -796,7 +892,7 @@ exports.listFeatures = async (req, res) => {
 
     return res.json({
       success: true,
-      data: result.rows
+      data: result.rows,
     });
   } catch (error) {
     return res.status(500).json({ success: false, error: error.message });
@@ -823,7 +919,13 @@ exports.toggleFeature = async (req, res) => {
 
     // Log audit
     const action = enabled ? 'ENABLE_FEATURE' : 'DISABLE_FEATURE';
-    await logAuditAction(req.user.id, action, `${action}: ${result.rows[0].name}`, 'success', req.clientIP);
+    await logAuditAction(
+      req.user.id,
+      action,
+      `${action}: ${result.rows[0].name}`,
+      'success',
+      req.clientIP
+    );
 
     return res.json({ success: true, data: result.rows[0] });
   } catch (error) {
@@ -843,8 +945,7 @@ async function logAuditAction(userId, action, description, status, ipAddress = n
        VALUES ($1, $2, $3, $4, $5, NOW())`,
       [userId, action, description, status, ipAddress]
     );
-  } catch (error) {
-  }
+  } catch (error) {}
 }
 
 /**
@@ -856,13 +957,13 @@ async function checkDatabaseHealth() {
     return {
       status: 'healthy',
       response_time: '5ms',
-      connections: 8
+      connections: 8,
     };
   } catch (error) {
     return {
       status: 'unhealthy',
       error: error.message,
-      connections: 0
+      connections: 0,
     };
   }
 }

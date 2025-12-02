@@ -8,7 +8,7 @@ export default function AdminTablePaginationComponent({
   page,
   rowsPerPage,
   onPageChange,
-  onRowsPerPageChange
+  onRowsPerPageChange,
 }) {
   return (
     <TablePagination
@@ -19,9 +19,7 @@ export default function AdminTablePaginationComponent({
       rowsPerPage={rowsPerPage}
       onRowsPerPageChange={onRowsPerPageChange}
       labelRowsPerPage="Lignes par page:"
-      labelDisplayedRows={({ from, to, count }) =>
-        `${from}–${to} sur ${count}`
-      }
+      labelDisplayedRows={({ from, to, count }) => `${from}–${to} sur ${count}`}
     />
   );
 }

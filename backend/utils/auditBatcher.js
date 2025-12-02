@@ -22,7 +22,7 @@ class AuditBatcher {
       entityType,
       entityId,
       details: JSON.stringify(details),
-      createdAt: new Date()
+      createdAt: new Date(),
     });
 
     if (this.queue.length >= this.batchSize) {
@@ -50,21 +50,23 @@ class AuditBatcher {
     }
 
     const batch = this.queue.splice(0, this.batchSize);
-    
+
     try {
       const query = `
         INSERT INTO audit_logs (user_id, action, entity_type, entity_id, details, created_at)
-        VALUES ${batch.map((_, i) => 
-          `($${i * 5 + 1}, $${i * 5 + 2}, $${i * 5 + 3}, $${i * 5 + 4}, $${i * 5 + 5})`
-        ).join(', ')}
+        VALUES ${batch
+          .map(
+            (_, i) => `($${i * 5 + 1}, $${i * 5 + 2}, $${i * 5 + 3}, $${i * 5 + 4}, $${i * 5 + 5})`
+          )
+          .join(', ')}
       `;
 
-      const values = batch.flatMap(log => [
+      const values = batch.flatMap((log) => [
         log.userId,
         log.action,
         log.entityType,
         log.entityId,
-        log.details
+        log.details,
       ]);
 
       await db.query(query, values);
@@ -84,7 +86,7 @@ class AuditBatcher {
   getStats() {
     return {
       queueSize: this.queue.length,
-      isScheduled: this.isFlushingScheduled
+      isScheduled: this.isFlushingScheduled,
     };
   }
 }

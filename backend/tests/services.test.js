@@ -4,14 +4,13 @@
  */
 
 describe('Service Layer Tests - 30+ Tests', () => {
-
   describe('UserService Tests', () => {
     test('should create user with valid data', () => {
       const userData = {
         username: 'newuser',
         email: 'new@test.com',
         password: 'Pass123!',
-        role: 'supplier'
+        role: 'supplier',
       };
       expect(userData.email).toContain('@');
       expect(userData.password.length).toBeGreaterThanOrEqual(6);
@@ -46,7 +45,7 @@ describe('Service Layer Tests - 30+ Tests', () => {
         tender_id: 1,
         supplier_id: 5,
         total_amount: 5000,
-        delivery_time: '30 days'
+        delivery_time: '30 days',
       };
       expect(offerData.total_amount).toBeGreaterThan(0);
     });
@@ -85,7 +84,7 @@ describe('Service Layer Tests - 30+ Tests', () => {
         title: 'Supply Computers',
         description: 'Need 100 laptops',
         budget: 50000,
-        deadline: new Date('2025-12-31')
+        deadline: new Date('2025-12-31'),
       };
       expect(tenderData.budget).toBeGreaterThan(0);
     });
@@ -107,9 +106,7 @@ describe('Service Layer Tests - 30+ Tests', () => {
     });
 
     test('should calculate tender statistics', () => {
-      const offers = [
-        { amount: 5000 }, { amount: 4000 }, { amount: 6000 }
-      ];
+      const offers = [{ amount: 5000 }, { amount: 4000 }, { amount: 6000 }];
       const average = offers.reduce((a, b) => a + b.amount, 0) / offers.length;
       expect(average).toBeGreaterThan(0);
     });
@@ -120,7 +117,7 @@ describe('Service Layer Tests - 30+ Tests', () => {
       const review = {
         reviewed_user_id: 5,
         rating: 4,
-        comment: 'Good service'
+        comment: 'Good service',
       };
       expect(review.rating).toBeGreaterThanOrEqual(1);
       expect(review.rating).toBeLessThanOrEqual(5);
@@ -128,7 +125,7 @@ describe('Service Layer Tests - 30+ Tests', () => {
 
     test('should reject invalid rating', () => {
       const invalidRatings = [0, 6, -1];
-      invalidRatings.forEach(rating => {
+      invalidRatings.forEach((rating) => {
         expect(rating < 1 || rating > 5).toBe(true);
       });
     });
@@ -170,9 +167,7 @@ describe('Service Layer Tests - 30+ Tests', () => {
     });
 
     test('should sort by price ascending', () => {
-      const items = [
-        { price: 100 }, { price: 50 }, { price: 150 }
-      ];
+      const items = [{ price: 100 }, { price: 50 }, { price: 150 }];
       const sorted = items.sort((a, b) => a.price - b.price);
       expect(sorted[0].price).toBe(50);
     });
@@ -188,7 +183,7 @@ describe('Service Layer Tests - 30+ Tests', () => {
       const message = {
         sender_id: 1,
         recipient_id: 5,
-        content: 'Hello'
+        content: 'Hello',
       };
       expect(message.sender_id).not.toBe(message.recipient_id);
     });
@@ -217,7 +212,7 @@ describe('Service Layer Tests - 30+ Tests', () => {
       const notification = {
         user_id: 1,
         type: 'offer_received',
-        message: 'New offer'
+        message: 'New offer',
       };
       expect(notification.type).toBeDefined();
     });
@@ -260,5 +255,4 @@ describe('Service Layer Tests - 30+ Tests', () => {
       expect(statusCode).toBe(500);
     });
   });
-
 });

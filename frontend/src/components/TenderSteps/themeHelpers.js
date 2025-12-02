@@ -8,38 +8,38 @@ const theme = institutionalTheme;
  */
 export const THEME_COLORS = {
   // Primary
-  primary: theme.palette.primary.main,        // #0056B3
-  primaryLight: theme.palette.primary.light,  // #1976d2
-  primaryDark: theme.palette.primary.dark,    // #003d7a
+  primary: theme.palette.primary.main, // #0056B3
+  primaryLight: theme.palette.primary.light, // #1976d2
+  primaryDark: theme.palette.primary.dark, // #003d7a
 
   // Secondary
-  secondary: theme.palette.secondary.main,    // #616161
-  secondaryLight: theme.palette.secondary.light,  // #9e9e9e
-  secondaryDark: theme.palette.secondary.dark,    // #424242
+  secondary: theme.palette.secondary.main, // #616161
+  secondaryLight: theme.palette.secondary.light, // #9e9e9e
+  secondaryDark: theme.palette.secondary.dark, // #424242
 
   // Success
-  success: theme.palette.success.main,        // #2e7d32
-  successLight: theme.palette.success.light,  // #4caf50
+  success: theme.palette.success.main, // #2e7d32
+  successLight: theme.palette.success.light, // #4caf50
 
   // Warning
-  warning: theme.palette.warning.main,        // #f57c00
-  warningLight: theme.palette.warning.light,  // #ff9800
+  warning: theme.palette.warning.main, // #f57c00
+  warningLight: theme.palette.warning.light, // #ff9800
 
   // Error
-  error: theme.palette.error.main,            // #c62828
-  errorLight: theme.palette.error.light,      // #ef5350 (close to #d32f2f)
+  error: theme.palette.error.main, // #c62828
+  errorLight: theme.palette.error.light, // #ef5350 (close to #d32f2f)
 
   // Text
-  textPrimary: theme.palette.text.primary,    // #212121
-  textSecondary: theme.palette.text.secondary,  // #616161
-  textDisabled: theme.palette.text.disabled,  // #9e9e9e
+  textPrimary: theme.palette.text.primary, // #212121
+  textSecondary: theme.palette.text.secondary, // #616161
+  textDisabled: theme.palette.text.disabled, // #9e9e9e
 
   // Background
-  bgDefault: theme.palette.background.default,  // #F9F9F9
-  bgPaper: theme.palette.background.paper,      // #FFFFFF
+  bgDefault: theme.palette.background.default, // #F9F9F9
+  bgPaper: theme.palette.background.paper, // #FFFFFF
 
   // Divider
-  divider: theme.palette.divider,  // #E0E0E0
+  divider: theme.palette.divider, // #E0E0E0
 };
 
 /**
@@ -117,7 +117,7 @@ export const THEME_STYLES = {
 
   // Alert boxes
   alertInfo: {
-    backgroundColor: `${THEME_COLORS.primary}15`,  // Primary with opacity
+    backgroundColor: `${THEME_COLORS.primary}15`, // Primary with opacity
     color: THEME_COLORS.primary,
   },
 
@@ -183,14 +183,14 @@ export const COLOR_MAP = {
   '#ff9800': THEME_COLORS.warningLight,
   '#c62828': THEME_COLORS.error,
   '#ef5350': THEME_COLORS.errorLight,
-  '#d32f2f': THEME_COLORS.errorLight,  // Alternative red
+  '#d32f2f': THEME_COLORS.errorLight, // Alternative red
   '#212121': THEME_COLORS.textPrimary,
   '#666666': THEME_COLORS.textSecondary,
   '#999999': THEME_COLORS.textDisabled,
   '#F9F9F9': THEME_COLORS.bgDefault,
   '#FFFFFF': THEME_COLORS.bgPaper,
   '#E0E0E0': THEME_COLORS.divider,
-  '#FAFAFA': THEME_COLORS.bgDefault,  // Very close to #F9F9F9
+  '#FAFAFA': THEME_COLORS.bgDefault, // Very close to #F9F9F9
 };
 
 export default { THEME_COLORS, THEME_STYLES, COLOR_MAP };

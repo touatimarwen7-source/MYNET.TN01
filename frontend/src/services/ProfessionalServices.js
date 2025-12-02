@@ -56,7 +56,7 @@ export const DataService = {
    */
   formatNumber: (num) => {
     return new Intl.NumberFormat('ar-TN').format(num);
-  }
+  },
 };
 
 /**
@@ -83,18 +83,20 @@ export const ValidationService = {
    * التحقق من كلمة المرور
    */
   isStrongPassword: (password) => {
-    return password.length >= 8 &&
-           /[A-Z]/.test(password) &&
-           /[a-z]/.test(password) &&
-           /[0-9]/.test(password);
+    return (
+      password.length >= 8 &&
+      /[A-Z]/.test(password) &&
+      /[a-z]/.test(password) &&
+      /[0-9]/.test(password)
+    );
   },
 
   /**
    * التحقق من البيانات المطلوبة
    */
   validateRequired: (fields) => {
-    return Object.values(fields).every(field => field && field.trim() !== '');
-  }
+    return Object.values(fields).every((field) => field && field.trim() !== '');
+  },
 };
 
 /**
@@ -109,12 +111,12 @@ export const NotificationService = {
   /**
    * إضافة تنبيه
    */
-  add: function(message, type = 'info') {
+  add: function (message, type = 'info') {
     const alert = {
       id: Date.now(),
       message,
       type,
-      timestamp: new Date()
+      timestamp: new Date(),
     };
     this.alerts.push(alert);
     logger.info(`Alert: ${message}`);
@@ -124,16 +126,16 @@ export const NotificationService = {
   /**
    * إزالة تنبيه
    */
-  remove: function(id) {
-    this.alerts = this.alerts.filter(a => a.id !== id);
+  remove: function (id) {
+    this.alerts = this.alerts.filter((a) => a.id !== id);
   },
 
   /**
    * الحصول على جميع التنبيهات
    */
-  getAll: function() {
+  getAll: function () {
     return this.alerts;
-  }
+  },
 };
 
 /**
@@ -144,7 +146,7 @@ export const FilterService = {
    * تصفية البيانات
    */
   filter: (data, criteria) => {
-    return data.filter(item => {
+    return data.filter((item) => {
       return Object.entries(criteria).every(([key, value]) => {
         if (!value) return true;
         return String(item[key]).toLowerCase().includes(String(value).toLowerCase());
@@ -173,7 +175,7 @@ export const FilterService = {
       acc[key].push(item);
       return acc;
     }, {});
-  }
+  },
 };
 
 /**
@@ -191,14 +193,14 @@ export const PerformanceService = {
       return {
         result,
         duration: (end - start).toFixed(2),
-        success: true
+        success: true,
       };
     } catch (error) {
       const end = performance.now();
       return {
         error,
         duration: (end - start).toFixed(2),
-        success: false
+        success: false,
       };
     }
   },
@@ -210,11 +212,11 @@ export const PerformanceService = {
     if (performance.memory) {
       return {
         used: (performance.memory.usedJSHeapSize / 1048576).toFixed(2),
-        limit: (performance.memory.jsHeapSizeLimit / 1048576).toFixed(2)
+        limit: (performance.memory.jsHeapSizeLimit / 1048576).toFixed(2),
       };
     }
     return null;
-  }
+  },
 };
 
 /**
@@ -271,5 +273,5 @@ export const StorageService = {
       logger.error('Storage clear error:', error);
       return false;
     }
-  }
+  },
 };

@@ -34,7 +34,7 @@ export const throttle = (func, interval) => {
 export const arePropsSame = (prevProps, nextProps) => {
   const keys = Object.keys(nextProps);
   if (keys.length !== Object.keys(prevProps).length) return false;
-  
+
   for (let key of keys) {
     if (prevProps[key] !== nextProps[key]) return false;
   }
@@ -46,15 +46,18 @@ export const arePropsSame = (prevProps, nextProps) => {
  */
 export const createImageIntersectionObserver = (element, callback) => {
   if ('IntersectionObserver' in window) {
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          callback(entry.target);
-          observer.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.1 });
-    
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            callback(entry.target);
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+
     observer.observe(element);
     return observer;
   }
@@ -76,5 +79,5 @@ export default {
   throttle,
   arePropsSame,
   createImageIntersectionObserver,
-  requestIdleCallback
+  requestIdleCallback,
 };

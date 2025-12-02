@@ -26,11 +26,11 @@ class CSRFProtection {
    */
   static getToken() {
     let token = sessionStorage.getItem(CSRF_TOKEN_KEY);
-    
+
     if (!token) {
       token = this.generateToken();
     }
-    
+
     return token;
   }
 
@@ -41,13 +41,13 @@ class CSRFProtection {
    */
   static updateMetaTag(token) {
     let metaTag = document.querySelector('meta[name="csrf-token"]');
-    
+
     if (!metaTag) {
       metaTag = document.createElement('meta');
       metaTag.setAttribute('name', 'csrf-token');
       document.head.appendChild(metaTag);
     }
-    
+
     metaTag.setAttribute('content', token);
   }
 

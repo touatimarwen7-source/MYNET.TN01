@@ -1,7 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { Box, Button, TextField, Typography, Container, CircularProgress, Alert } from '@mui/material';
+import {
+  Box,
+  Button,
+  TextField,
+  Typography,
+  Container,
+  CircularProgress,
+  Alert,
+} from '@mui/material';
 
 const LoginPage = () => {
   const [email, setEmail] = useState('');
@@ -12,9 +20,9 @@ const LoginPage = () => {
 
   // 1. استخلاص الرسالة من الـ state الذي تم تمريره بواسطة ProtectedRoute
   const message = location.state?.message;
-  
+
   // استخلاص المسار الذي كان المستخدم يحاول الوصول إليه
-  const from = location.state?.from?.pathname || "/";
+  const from = location.state?.from?.pathname || '/';
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -38,12 +46,20 @@ const LoginPage = () => {
         <Typography component="h1" variant="h5">
           تسجيل الدخول
         </Typography>
-        
+
         {/* 2. عرض الرسالة إذا كانت موجودة (مثل "انتهت صلاحية الجلسة") */}
-        {message && <Alert severity="info" sx={{ mt: 2, width: '100%' }}>{message}</Alert>}
-        
+        {message && (
+          <Alert severity="info" sx={{ mt: 2, width: '100%' }}>
+            {message}
+          </Alert>
+        )}
+
         {/* عرض أخطاء تسجيل الدخول من سياق المصادقة */}
-        {error && <Alert severity="error" sx={{ mt: 2, width: '100%' }}>{error}</Alert>}
+        {error && (
+          <Alert severity="error" sx={{ mt: 2, width: '100%' }}>
+            {error}
+          </Alert>
+        )}
 
         <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
           <TextField

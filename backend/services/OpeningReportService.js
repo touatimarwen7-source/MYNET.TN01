@@ -22,17 +22,19 @@ class OpeningReportService {
         throw new Error('Invalid tender ID or offers data');
       }
 
-      const validOffers = offers.filter(o => o && o.id);
-      const totalValid = validOffers.filter(o => o.status === 'submitted' || o.status === 'received').length;
+      const validOffers = offers.filter((o) => o && o.id);
+      const totalValid = validOffers.filter(
+        (o) => o.status === 'submitted' || o.status === 'received'
+      ).length;
 
-      const offersData = validOffers.map(offer => ({
+      const offersData = validOffers.map((offer) => ({
         id: offer.id,
         supplier_name: offer.supplier_name || 'Unknown',
         supplier_id: offer.supplier_id,
         total_amount: offer.total_amount || 0,
         submitted_at: offer.submitted_at,
         status: offer.status,
-        is_valid: offer.status === 'submitted' || offer.status === 'received'
+        is_valid: offer.status === 'submitted' || offer.status === 'received',
       }));
 
       const pool = getPool();
@@ -56,7 +58,7 @@ class OpeningReportService {
           totalValid,
           offersData.length - totalValid,
           JSON.stringify(offersData),
-          'open'
+          'open',
         ]
       );
 
@@ -100,9 +102,10 @@ class OpeningReportService {
       }
 
       const report = result.rows[0];
-      report.offers_data = typeof report.offers_data === 'string' 
-        ? JSON.parse(report.offers_data) 
-        : (report.offers_data || []);
+      report.offers_data =
+        typeof report.offers_data === 'string'
+          ? JSON.parse(report.offers_data)
+          : report.offers_data || [];
 
       return report;
     } catch (error) {
@@ -143,11 +146,12 @@ class OpeningReportService {
         [buyerId, limit, offset]
       );
 
-      return result.rows.map(report => ({
+      return result.rows.map((report) => ({
         ...report,
-        offers_data: typeof report.offers_data === 'string' 
-          ? JSON.parse(report.offers_data) 
-          : (report.offers_data || [])
+        offers_data:
+          typeof report.offers_data === 'string'
+            ? JSON.parse(report.offers_data)
+            : report.offers_data || [],
       }));
     } catch (error) {
       throw new Error(`Failed to fetch opening reports: ${error.message}`);
@@ -194,15 +198,16 @@ class OpeningReportService {
       }
 
       const report = result.rows[0];
-      report.offers_data = typeof report.offers_data === 'string' 
-        ? JSON.parse(report.offers_data) 
-        : (report.offers_data || []);
+      report.offers_data =
+        typeof report.offers_data === 'string'
+          ? JSON.parse(report.offers_data)
+          : report.offers_data || [];
 
       return {
         success: true,
         format,
         report,
-        exportedAt: new Date().toISOString()
+        exportedAt: new Date().toISOString(),
       };
     } catch (error) {
       throw new Error(`Failed to export opening report: ${error.message}`);

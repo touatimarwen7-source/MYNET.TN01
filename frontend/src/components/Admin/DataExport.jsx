@@ -23,17 +23,21 @@ export default function DataExport({ data, filename = 'export' }) {
 
       <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={() => setAnchorEl(null)}>
         {isFeatureEnabled('CSV_EXPORT') && (
-          <MenuItem onClick={() => {
-            exportToCSV(data, `${filename}.csv`);
-            setAnchorEl(null);
-          }}>
+          <MenuItem
+            onClick={() => {
+              exportToCSV(data, `${filename}.csv`);
+              setAnchorEl(null);
+            }}
+          >
             CSV
           </MenuItem>
         )}
-        <MenuItem onClick={() => {
-          exportToJSON(data, `${filename}.json`);
-          setAnchorEl(null);
-        }}>
+        <MenuItem
+          onClick={() => {
+            exportToJSON(data, `${filename}.json`);
+            setAnchorEl(null);
+          }}
+        >
           JSON
         </MenuItem>
       </Menu>

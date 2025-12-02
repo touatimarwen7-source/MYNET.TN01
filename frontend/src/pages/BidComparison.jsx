@@ -62,7 +62,7 @@ export default function BidComparison() {
       setLoading(true);
       const tenderRes = await procurementAPI.getTender(tenderId);
       const offersRes = await procurementAPI.getOffers(tenderId);
-      
+
       setTender(tenderRes.data.tender);
       setOffers(offersRes.data.offers || []);
     } catch (err) {
@@ -83,8 +83,8 @@ export default function BidComparison() {
 
   const getSortedOffers = () => {
     let sorted = [...offers];
-    
-    switch(sortBy) {
+
+    switch (sortBy) {
       case 'amount':
         sorted.sort((a, b) => parseFloat(a.total_amount) - parseFloat(b.total_amount));
         break;
@@ -100,7 +100,7 @@ export default function BidComparison() {
       default:
         sorted.sort((a, b) => parseFloat(a.total_amount) - parseFloat(b.total_amount));
     }
-    
+
     if (sortOrder === 'desc') sorted.reverse();
     return sorted;
   };
@@ -110,10 +110,10 @@ export default function BidComparison() {
 
   const exportToCSV = () => {
     let csv = 'Fournisseur,Montant Total (TND),Délai,Paiement,Statut,Score\n';
-    sortedOffers.forEach(offer => {
+    sortedOffers.forEach((offer) => {
       csv += `"${offer.supplier_name || 'N/A'}",${offer.total_amount || 0},"${offer.delivery_time || 'N/A'}","${offer.payment_terms || 'N/A'}","${offer.status || 'submitted'}",${offer.evaluation_score || 0}\n`;
     });
-    
+
     const element = document.createElement('a');
     element.href = `data:text/csv;charset=utf-8,%EF%BB%BF${encodeURIComponent(csv)}`;
     element.download = `bid-comparison-${tenderId}.csv`;
@@ -127,7 +127,7 @@ export default function BidComparison() {
       submitted: 'info',
       accepted: 'success',
       rejected: 'error',
-      shortlisted: 'warning'
+      shortlisted: 'warning',
     };
     return colors[status] || 'default';
   };
@@ -155,17 +155,27 @@ export default function BidComparison() {
       <Container maxWidth="lg">
         {/* Breadcrumb Navigation */}
         <Breadcrumbs sx={{ mb: '24px' }}>
-          <Link 
+          <Link
             component="button"
             onClick={() => navigate('/tenders')}
-            sx={{ cursor: 'pointer', color: institutionalTheme.palette.primary.main, textDecoration: 'none', '&:hover': { textDecoration: 'underline' } }}
+            sx={{
+              cursor: 'pointer',
+              color: institutionalTheme.palette.primary.main,
+              textDecoration: 'none',
+              '&:hover': { textDecoration: 'underline' },
+            }}
           >
             Appels d'offres
           </Link>
           <Link
             component="button"
             onClick={() => navigate(`/tender/${tenderId}`)}
-            sx={{ cursor: 'pointer', color: institutionalTheme.palette.primary.main, textDecoration: 'none', '&:hover': { textDecoration: 'underline' } }}
+            sx={{
+              cursor: 'pointer',
+              color: institutionalTheme.palette.primary.main,
+              textDecoration: 'none',
+              '&:hover': { textDecoration: 'underline' },
+            }}
           >
             Appel d'offres
           </Link>
@@ -185,13 +195,19 @@ export default function BidComparison() {
               Retour
             </Button>
           </Box>
-          <Typography variant="h2" sx={{ fontSize: '32px', fontWeight: 500, color: institutionalTheme.palette.text.primary, marginBottom: '8px' }}>
+          <Typography
+            variant="h2"
+            sx={{
+              fontSize: '32px',
+              fontWeight: 500,
+              color: institutionalTheme.palette.text.primary,
+              marginBottom: '8px',
+            }}
+          >
             📊 Comparaison des Offres
           </Typography>
           {tender && (
-            <Typography sx={{ color: '#616161', marginBottom: '16px' }}>
-              {tender.title}
-            </Typography>
+            <Typography sx={{ color: '#616161', marginBottom: '16px' }}>{tender.title}</Typography>
           )}
         </Box>
 
@@ -201,7 +217,11 @@ export default function BidComparison() {
           <Stack spacing={3}>
             {/* Sorting & Export Controls */}
             <Paper sx={{ p: '16px', backgroundColor: '#F5F5F5' }}>
-              <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} sx={{ alignItems: 'center' }}>
+              <Stack
+                direction={{ xs: 'column', sm: 'row' }}
+                spacing={2}
+                sx={{ alignItems: 'center' }}
+              >
                 <FormControl size="small" sx={{ minWidth: 150 }}>
                   <InputLabel>Trier par</InputLabel>
                   <Select
@@ -235,7 +255,10 @@ export default function BidComparison() {
                   onClick={exportToCSV}
                   variant="outlined"
                   size="small"
-                  sx={{ color: institutionalTheme.palette.primary.main, borderColor: institutionalTheme.palette.primary.main }}
+                  sx={{
+                    color: institutionalTheme.palette.primary.main,
+                    borderColor: institutionalTheme.palette.primary.main,
+                  }}
                 >
                   Exporter en CSV
                 </Button>
@@ -249,21 +272,63 @@ export default function BidComparison() {
                   <Table>
                     <TableHead sx={{ backgroundColor: '#f5f5f5' }}>
                       <TableRow>
-                        <TableCell sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main }}>Fournisseur</TableCell>
-                        <TableCell sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main }} align="center">Montant</TableCell>
-                        <TableCell sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main }} align="center">Livraison</TableCell>
-                        <TableCell sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main }} align="center">Paiement</TableCell>
-                        <TableCell sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main }} align="center">Statut</TableCell>
-                        <TableCell sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main }} align="center">Évaluation</TableCell>
+                        <TableCell
+                          sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main }}
+                        >
+                          Fournisseur
+                        </TableCell>
+                        <TableCell
+                          sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main }}
+                          align="center"
+                        >
+                          Montant
+                        </TableCell>
+                        <TableCell
+                          sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main }}
+                          align="center"
+                        >
+                          Livraison
+                        </TableCell>
+                        <TableCell
+                          sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main }}
+                          align="center"
+                        >
+                          Paiement
+                        </TableCell>
+                        <TableCell
+                          sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main }}
+                          align="center"
+                        >
+                          Statut
+                        </TableCell>
+                        <TableCell
+                          sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main }}
+                          align="center"
+                        >
+                          Évaluation
+                        </TableCell>
                       </TableRow>
                     </TableHead>
                     <TableBody>
                       {paginatedOffers.map((offer, idx) => (
-                        <TableRow key={offer.id} sx={{ backgroundColor: idx % 2 === 0 ? '#ffffff' : '#f9f9f9', '&:hover': { backgroundColor: '#E3F2FD' } }}>
+                        <TableRow
+                          key={offer.id}
+                          sx={{
+                            backgroundColor: idx % 2 === 0 ? '#ffffff' : '#f9f9f9',
+                            '&:hover': { backgroundColor: '#E3F2FD' },
+                          }}
+                        >
                           <TableCell sx={{ fontSize: '13px', fontWeight: 600 }}>
                             {offer.supplier_name || 'N/A'}
                           </TableCell>
-                          <TableCell sx={{ fontSize: '13px', fontWeight: 600, color: institutionalTheme.palette.primary.main, textAlign: 'center' }}>
+                          <TableCell
+                            sx={{
+                              fontSize: '13px',
+                              fontWeight: 600,
+                              color: institutionalTheme.palette.primary.main,
+                              textAlign: 'center',
+                            }}
+                          >
                             {parseFloat(offer.total_amount).toFixed(2)} TND
                           </TableCell>
                           <TableCell sx={{ fontSize: '13px', textAlign: 'center' }}>
@@ -281,7 +346,9 @@ export default function BidComparison() {
                             />
                           </TableCell>
                           <TableCell sx={{ fontSize: '13px', textAlign: 'center' }}>
-                            {offer.evaluation_score ? `${offer.evaluation_score.toFixed(1)}/100` : '-'}
+                            {offer.evaluation_score
+                              ? `${offer.evaluation_score.toFixed(1)}/100`
+                              : '-'}
                           </TableCell>
                         </TableRow>
                       ))}
@@ -306,10 +373,23 @@ export default function BidComparison() {
         {/* Tender Summary */}
         {tender && (
           <Paper sx={{ marginTop: '32px', padding: '16px', backgroundColor: '#f5f5f5' }}>
-            <Typography sx={{ fontWeight: 700, marginBottom: '12px', color: institutionalTheme.palette.primary.main, fontSize: '14px' }}>
+            <Typography
+              sx={{
+                fontWeight: 700,
+                marginBottom: '12px',
+                color: institutionalTheme.palette.primary.main,
+                fontSize: '14px',
+              }}
+            >
               🔐 ID Référence (Plateforme): <strong>{tender.id || 'N/A'}</strong>
             </Typography>
-            <Typography sx={{ fontWeight: 600, marginBottom: '12px', color: institutionalTheme.palette.primary.main }}>
+            <Typography
+              sx={{
+                fontWeight: 600,
+                marginBottom: '12px',
+                color: institutionalTheme.palette.primary.main,
+              }}
+            >
               📋 Résumé de l'Appel d'Offres
             </Typography>
             <Stack spacing={1}>
@@ -317,14 +397,20 @@ export default function BidComparison() {
                 <strong>N° Consultation:</strong> {tender.consultation_number || 'N/A'}
               </Typography>
               <Typography sx={{ fontSize: '13px', color: '#666' }}>
-                <strong>Date Limite:</strong> {new Date(tender.submission_deadline).toLocaleDateString('fr-FR')}
+                <strong>Date Limite:</strong>{' '}
+                {new Date(tender.submission_deadline).toLocaleDateString('fr-FR')}
               </Typography>
               <Typography sx={{ fontSize: '13px', color: '#666' }}>
                 <strong>Nombre d'offres:</strong> {sortedOffers.length}
               </Typography>
               {tender.awardLevel && (
                 <Typography sx={{ fontSize: '13px', color: '#0056B3', fontWeight: 600 }}>
-                  <strong>🎯 Niveau d'Attribution:</strong> {tender.award_level === 'lot' ? 'Par Lot' : tender.award_level === 'article' ? 'Par Article' : 'Global'}
+                  <strong>🎯 Niveau d'Attribution:</strong>{' '}
+                  {tender.award_level === 'lot'
+                    ? 'Par Lot'
+                    : tender.award_level === 'article'
+                      ? 'Par Article'
+                      : 'Global'}
                 </Typography>
               )}
             </Stack>

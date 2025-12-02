@@ -1,7 +1,7 @@
 /**
  * Query Cache Manager
  * Implements intelligent caching with TTL and pattern-based invalidation
- * 
+ *
  * @module queryCacheManager
  * @example
  * const cacheManager = require('./queryCacheManager');
@@ -15,7 +15,7 @@ class QueryCacheManager {
     this.stats = {
       hits: 0,
       misses: 0,
-      evictions: 0
+      evictions: 0,
     };
   }
 
@@ -100,10 +100,10 @@ class QueryCacheManager {
    */
   invalidatePattern(pattern) {
     let invalidated = 0;
-    
+
     // Convert pattern to regex
     const regex = new RegExp(`^${pattern.replace(/\*/g, '.*')}$`);
-    
+
     for (const key of this.cache.keys()) {
       if (regex.test(key)) {
         this.cache.delete(key);
@@ -145,7 +145,7 @@ class QueryCacheManager {
       evictions: this.stats.evictions,
       total,
       hitRate: `${hitRate}%`,
-      cachedItems: this.cache.size
+      cachedItems: this.cache.size,
     };
   }
 

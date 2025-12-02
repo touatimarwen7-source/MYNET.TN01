@@ -27,7 +27,12 @@ import { useNavigate } from 'react-router-dom';
 import { setPageTitle } from '../utils/pageTitle';
 import { procurementAPI } from '../api';
 
-const steps = ['Sélectionner un fournisseur', 'Détails du produit', 'Budget et notes', 'Confirmation'];
+const steps = [
+  'Sélectionner un fournisseur',
+  'Détails du produit',
+  'Budget et notes',
+  'Confirmation',
+];
 
 export default function DirectSupplyRequest() {
   const theme = institutionalTheme;
@@ -37,7 +42,7 @@ export default function DirectSupplyRequest() {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
-  
+
   const [suppliers, setSuppliers] = useState([]);
   const [formData, setFormData] = useState({
     supplier_id: '',
@@ -68,9 +73,9 @@ export default function DirectSupplyRequest() {
   };
 
   const handleInputChange = (field, value) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [field]: value
+      [field]: value,
     }));
   };
 
@@ -88,7 +93,7 @@ export default function DirectSupplyRequest() {
       setError('Veuillez entrer un budget');
       return;
     }
-    
+
     setError('');
     setActiveStep((prevStep) => prevStep + 1);
   };
@@ -102,7 +107,7 @@ export default function DirectSupplyRequest() {
     try {
       setSubmitting(true);
       setError('');
-      
+
       const payload = {
         supplier_id: parseInt(formData.supplier_id),
         title: formData.title,
@@ -112,18 +117,18 @@ export default function DirectSupplyRequest() {
         unit: formData.unit,
         budget: parseFloat(formData.budget),
         notes: formData.notes,
-        status: 'pending'
+        status: 'pending',
       };
 
       // Call API to create supply request
       const response = await procurementAPI.createSupplyRequest(payload);
-      
+
       setSuccess('Demande de fourniture envoyée avec succès!');
       setTimeout(() => {
         navigate('/my-supply-requests');
       }, 2000);
     } catch (err) {
-      setError(err.response?.data?.error || 'Erreur lors de l\'envoi de la demande');
+      setError(err.response?.data?.error || "Erreur lors de l'envoi de la demande");
     } finally {
       setSubmitting(false);
     }
@@ -137,7 +142,10 @@ export default function DirectSupplyRequest() {
       case 0:
         return (
           <Box>
-            <Typography variant="h6" sx={{ marginBottom: '20px', color: institutionalTheme.palette.primary.main }}>
+            <Typography
+              variant="h6"
+              sx={{ marginBottom: '20px', color: institutionalTheme.palette.primary.main }}
+            >
               Étape 1: Sélectionner un fournisseur
             </Typography>
             {loading ? (
@@ -162,11 +170,14 @@ export default function DirectSupplyRequest() {
             )}
           </Box>
         );
-      
+
       case 1:
         return (
           <Box>
-            <Typography variant="h6" sx={{ marginBottom: '20px', color: institutionalTheme.palette.primary.main }}>
+            <Typography
+              variant="h6"
+              sx={{ marginBottom: '20px', color: institutionalTheme.palette.primary.main }}
+            >
               Étape 2: Détails du produit
             </Typography>
             <Grid container spacing={2}>
@@ -199,7 +210,9 @@ export default function DirectSupplyRequest() {
                     required
                   >
                     {categories.map((cat) => (
-                      <MenuItem key={cat} value={cat}>{cat}</MenuItem>
+                      <MenuItem key={cat} value={cat}>
+                        {cat}
+                      </MenuItem>
                     ))}
                   </Select>
                 </FormControl>
@@ -222,7 +235,9 @@ export default function DirectSupplyRequest() {
                     label="Unité"
                   >
                     {units.map((unit) => (
-                      <MenuItem key={unit} value={unit}>{unit}</MenuItem>
+                      <MenuItem key={unit} value={unit}>
+                        {unit}
+                      </MenuItem>
                     ))}
                   </Select>
                 </FormControl>
@@ -230,11 +245,14 @@ export default function DirectSupplyRequest() {
             </Grid>
           </Box>
         );
-      
+
       case 2:
         return (
           <Box>
-            <Typography variant="h6" sx={{ marginBottom: '20px', color: institutionalTheme.palette.primary.main }}>
+            <Typography
+              variant="h6"
+              sx={{ marginBottom: '20px', color: institutionalTheme.palette.primary.main }}
+            >
               Étape 3: Budget et notes
             </Typography>
             <Grid container spacing={2}>
@@ -263,48 +281,66 @@ export default function DirectSupplyRequest() {
             </Grid>
           </Box>
         );
-      
+
       case 3:
         return (
           <Box>
-            <Typography variant="h6" sx={{ marginBottom: '20px', color: institutionalTheme.palette.primary.main }}>
+            <Typography
+              variant="h6"
+              sx={{ marginBottom: '20px', color: institutionalTheme.palette.primary.main }}
+            >
               Étape 4: Confirmation
             </Typography>
             <Paper sx={{ padding: '20px', backgroundColor: '#f5f5f5', borderRadius: '4px' }}>
               <Grid container spacing={2}>
                 <Grid xs={12} lg={6}>
-                  <Typography variant="body2" sx={{ color: '#666' }}>Fournisseur:</Typography>
+                  <Typography variant="body2" sx={{ color: '#666' }}>
+                    Fournisseur:
+                  </Typography>
                   <Typography variant="body1" sx={{ fontWeight: 600 }}>
-                    {suppliers.find(s => s.id === parseInt(formData.supplier_id))?.company_name}
+                    {suppliers.find((s) => s.id === parseInt(formData.supplier_id))?.company_name}
                   </Typography>
                 </Grid>
                 <Grid xs={12} lg={6}>
-                  <Typography variant="body2" sx={{ color: '#666' }}>Produit:</Typography>
+                  <Typography variant="body2" sx={{ color: '#666' }}>
+                    Produit:
+                  </Typography>
                   <Typography variant="body1" sx={{ fontWeight: 600 }}>
                     {formData.title}
                   </Typography>
                 </Grid>
                 <Grid xs={12} lg={6}>
-                  <Typography variant="body2" sx={{ color: '#666' }}>Catégorie:</Typography>
+                  <Typography variant="body2" sx={{ color: '#666' }}>
+                    Catégorie:
+                  </Typography>
                   <Typography variant="body1" sx={{ fontWeight: 600 }}>
                     {formData.category}
                   </Typography>
                 </Grid>
                 <Grid xs={12} lg={6}>
-                  <Typography variant="body2" sx={{ color: '#666' }}>Quantité:</Typography>
+                  <Typography variant="body2" sx={{ color: '#666' }}>
+                    Quantité:
+                  </Typography>
                   <Typography variant="body1" sx={{ fontWeight: 600 }}>
                     {formData.quantity} {formData.unit}
                   </Typography>
                 </Grid>
                 <Grid xs={12} lg={6}>
-                  <Typography variant="body2" sx={{ color: '#666' }}>Budget:</Typography>
-                  <Typography variant="body1" sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main }}>
+                  <Typography variant="body2" sx={{ color: '#666' }}>
+                    Budget:
+                  </Typography>
+                  <Typography
+                    variant="body1"
+                    sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main }}
+                  >
                     {parseFloat(formData.budget).toFixed(3)} DT
                   </Typography>
                 </Grid>
                 {formData.description && (
                   <Grid xs={12}>
-                    <Typography variant="body2" sx={{ color: '#666' }}>Description:</Typography>
+                    <Typography variant="body2" sx={{ color: '#666' }}>
+                      Description:
+                    </Typography>
                     <Typography variant="body2" sx={{ fontWeight: 500 }}>
                       {formData.description}
                     </Typography>
@@ -312,7 +348,9 @@ export default function DirectSupplyRequest() {
                 )}
                 {formData.notes && (
                   <Grid xs={12}>
-                    <Typography variant="body2" sx={{ color: '#666' }}>Notes:</Typography>
+                    <Typography variant="body2" sx={{ color: '#666' }}>
+                      Notes:
+                    </Typography>
                     <Typography variant="body2" sx={{ fontWeight: 500 }}>
                       {formData.notes}
                     </Typography>
@@ -322,7 +360,7 @@ export default function DirectSupplyRequest() {
             </Paper>
           </Box>
         );
-      
+
       default:
         return null;
     }
@@ -339,7 +377,10 @@ export default function DirectSupplyRequest() {
           >
             Retour
           </Button>
-          <Typography variant="h4" sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main }}>
+          <Typography
+            variant="h4"
+            sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main }}
+          >
             Demande de Fourniture Directe
           </Typography>
           <Typography variant="body2" sx={{ color: '#666', marginTop: '8px' }}>
@@ -347,8 +388,16 @@ export default function DirectSupplyRequest() {
           </Typography>
         </Box>
 
-        {error && <Alert severity="error" sx={{ marginBottom: '20px' }}>{error}</Alert>}
-        {success && <Alert severity="success" sx={{ marginBottom: '20px' }}>{success}</Alert>}
+        {error && (
+          <Alert severity="error" sx={{ marginBottom: '20px' }}>
+            {error}
+          </Alert>
+        )}
+        {success && (
+          <Alert severity="success" sx={{ marginBottom: '20px' }}>
+            {success}
+          </Alert>
+        )}
 
         <Card sx={{ marginBottom: '20px' }}>
           <CardContent>
@@ -363,9 +412,7 @@ export default function DirectSupplyRequest() {
         </Card>
 
         <Card sx={{ marginBottom: '20px' }}>
-          <CardContent sx={{ minHeight: '400px' }}>
-            {renderStepContent()}
-          </CardContent>
+          <CardContent sx={{ minHeight: '400px' }}>{renderStepContent()}</CardContent>
         </Card>
 
         <Box sx={{ display: 'flex', gap: '12px', justifyContent: 'flex-end' }}>

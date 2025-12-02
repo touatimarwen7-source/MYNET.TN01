@@ -16,20 +16,20 @@ const validator = require('validator');
  */
 const sanitizeString = (str) => {
   if (typeof str !== 'string') return str;
-  
+
   // Remove control characters
   str = str.replace(/[\x00-\x1F\x7F]/g, '');
-  
+
   // XSS protection
   str = xss(str, {
     whiteList: {},
     stripIgnoredTag: true,
-    stripLeakedHtml: true
+    stripLeakedHtml: true,
   });
-  
+
   // Trim whitespace
   str = str.trim();
-  
+
   return str;
 };
 
@@ -38,14 +38,14 @@ const sanitizeString = (str) => {
  */
 const sanitizeEmail = (email) => {
   if (typeof email !== 'string') return email;
-  
+
   email = email.toLowerCase().trim();
-  
+
   // Validate email format
   if (!validator.isEmail(email)) {
     throw new Error('Invalid email format');
   }
-  
+
   return email;
 };
 
@@ -54,15 +54,15 @@ const sanitizeEmail = (email) => {
  */
 const sanitizePhone = (phone) => {
   if (typeof phone !== 'string') return phone;
-  
+
   // Remove non-numeric characters except +
   phone = phone.replace(/[^\d+]/g, '');
-  
+
   // Validate international phone format
   if (!validator.isMobilePhone(phone, 'any')) {
     throw new Error('Invalid phone number format');
   }
-  
+
   return phone;
 };
 
@@ -71,15 +71,15 @@ const sanitizePhone = (phone) => {
  */
 const sanitizeUrl = (url) => {
   if (typeof url !== 'string') return url;
-  
+
   try {
     const parsed = new URL(url);
-    
+
     // Only allow http/https
     if (!['http:', 'https:'].includes(parsed.protocol)) {
       throw new Error('Only HTTP/HTTPS URLs allowed');
     }
-    
+
     return url;
   } catch (error) {
     throw new Error('Invalid URL format');
@@ -91,21 +91,21 @@ const sanitizeUrl = (url) => {
  */
 const sanitizeNumber = (num, options = {}) => {
   const { min, max, integer = false } = options;
-  
+
   const parsed = integer ? parseInt(num, 10) : parseFloat(num);
-  
+
   if (isNaN(parsed)) {
     throw new Error('Invalid number');
   }
-  
+
   if (min !== undefined && parsed < min) {
     throw new Error(`Number must be >= ${min}`);
   }
-  
+
   if (max !== undefined && parsed > max) {
     throw new Error(`Number must be <= ${max}`);
   }
-  
+
   return parsed;
 };
 
@@ -114,21 +114,21 @@ const sanitizeNumber = (num, options = {}) => {
  */
 const sanitizeObject = (obj, schema = {}) => {
   if (!obj || typeof obj !== 'object') return obj;
-  
+
   if (Array.isArray(obj)) {
     return obj.map((item, idx) => sanitizeObject(item, schema[idx] || {}));
   }
-  
+
   const sanitized = {};
-  
+
   for (const [key, value] of Object.entries(obj)) {
     // Skip null/undefined
     if (value === null || value === undefined) {
       continue;
     }
-    
+
     const fieldSchema = schema[key] || { type: 'string' };
-    
+
     try {
       switch (fieldSchema.type) {
         case 'email':
@@ -151,8 +151,8 @@ const sanitizeObject = (obj, schema = {}) => {
           break;
         case 'array':
           if (Array.isArray(value)) {
-            sanitized[key] = value.map(item => 
-              fieldSchema.itemType === 'object' 
+            sanitized[key] = value.map((item) =>
+              fieldSchema.itemType === 'object'
                 ? sanitizeObject(item, fieldSchema.itemSchema || {})
                 : sanitizeString(String(item))
             );
@@ -165,7 +165,7 @@ const sanitizeObject = (obj, schema = {}) => {
       throw new Error(`Invalid ${key}: ${error.message}`);
     }
   }
-  
+
   return sanitized;
 };
 
@@ -179,7 +179,7 @@ const sanitizationMiddleware = (schema = {}) => {
       if (req.body && typeof req.body === 'object') {
         req.body = sanitizeObject(req.body, schema);
       }
-      
+
       // Sanitize query parameters
       if (req.query && typeof req.query === 'object') {
         for (const [key, value] of Object.entries(req.query)) {
@@ -188,7 +188,7 @@ const sanitizationMiddleware = (schema = {}) => {
           }
         }
       }
-      
+
       // Sanitize URL parameters
       if (req.params && typeof req.params === 'object') {
         for (const [key, value] of Object.entries(req.params)) {
@@ -197,13 +197,13 @@ const sanitizationMiddleware = (schema = {}) => {
           }
         }
       }
-      
+
       next();
     } catch (error) {
       return res.status(400).json({
         success: false,
         error: 'Invalid input: ' + error.message,
-        code: 'INVALID_INPUT'
+        code: 'INVALID_INPUT',
       });
     }
   };
@@ -216,5 +216,5 @@ module.exports = {
   sanitizeUrl,
   sanitizeNumber,
   sanitizeObject,
-  sanitizationMiddleware
+  sanitizationMiddleware,
 };

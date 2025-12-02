@@ -31,10 +31,13 @@ export default function AdminForm({
   };
 
   return (
-    <Box component="form" onSubmit={(e) => {
-      e.preventDefault();
-      onSubmit();
-    }}>
+    <Box
+      component="form"
+      onSubmit={(e) => {
+        e.preventDefault();
+        onSubmit();
+      }}
+    >
       <Stack spacing={2}>
         {fields.map((field) => {
           if (field.type === 'select') {

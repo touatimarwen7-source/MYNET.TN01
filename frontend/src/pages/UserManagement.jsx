@@ -88,10 +88,13 @@ export default function UserManagement() {
   const [statusFilter, setStatusFilter] = useState('');
   const [message, setMessage] = useState('');
 
-  const filteredUsers = users.filter(user =>
-    (filter === '' || user.email.toLowerCase().includes(filter.toLowerCase()) || user.name.toLowerCase().includes(filter.toLowerCase())) &&
-    (roleFilter === '' || user.role === roleFilter) &&
-    (statusFilter === '' || user.status === statusFilter)
+  const filteredUsers = users.filter(
+    (user) =>
+      (filter === '' ||
+        user.email.toLowerCase().includes(filter.toLowerCase()) ||
+        user.name.toLowerCase().includes(filter.toLowerCase())) &&
+      (roleFilter === '' || user.role === roleFilter) &&
+      (statusFilter === '' || user.status === statusFilter)
   );
 
   const handleEditUser = (user) => {
@@ -102,16 +105,16 @@ export default function UserManagement() {
   };
 
   const handleBlockUser = (user) => {
-    setUsers(users.map(u =>
-      u.id === user.id
-        ? { ...u, status: u.status === 'bloqué' ? 'actif' : 'bloqué' }
-        : u
-    ));
+    setUsers(
+      users.map((u) =>
+        u.id === user.id ? { ...u, status: u.status === 'bloqué' ? 'actif' : 'bloqué' } : u
+      )
+    );
     setMessage(`Utilisateur ${user.status === 'bloqué' ? 'débloqué' : 'bloqué'} avec succès`);
   };
 
   const handleDeleteUser = (user) => {
-    setUsers(users.filter(u => u.id !== user.id));
+    setUsers(users.filter((u) => u.id !== user.id));
     setMessage(`Utilisateur ${user.name} supprimé`);
   };
 
@@ -121,11 +124,7 @@ export default function UserManagement() {
       return;
     }
 
-    setUsers(users.map(u =>
-      u.id === selectedUser.id
-        ? { ...formData }
-        : u
-    ));
+    setUsers(users.map((u) => (u.id === selectedUser.id ? { ...formData } : u)));
     setOpenDialog(false);
     setMessage(`Utilisateur ${formData.name} mis à jour avec succès`);
   };
@@ -144,7 +143,7 @@ export default function UserManagement() {
     }
 
     const newUser = {
-      id: Math.max(...users.map(u => u.id), 0) + 1,
+      id: Math.max(...users.map((u) => u.id), 0) + 1,
       ...formData,
       createdAt: new Date().toISOString().split('T')[0],
       lastLogin: 'Jamais',
@@ -157,19 +156,19 @@ export default function UserManagement() {
 
   const getStatusColor = (status) => {
     const colors = {
-      'actif': '#4caf50',
-      'inactif': '#ff9800',
-      'bloqué': '#d32f2f',
+      actif: '#4caf50',
+      inactif: '#ff9800',
+      bloqué: '#d32f2f',
     };
     return colors[status] || '#666';
   };
 
   const getRoleLabel = (role) => {
     const labels = {
-      'super_admin': 'Super Admin',
-      'admin': 'Admin',
-      'buyer': 'Acheteur',
-      'supplier': 'Fournisseur',
+      super_admin: 'Super Admin',
+      admin: 'Admin',
+      buyer: 'Acheteur',
+      supplier: 'Fournisseur',
     };
     return labels[role] || role;
   };
@@ -179,7 +178,10 @@ export default function UserManagement() {
       <Container maxWidth="lg">
         {/* Header */}
         <Box sx={{ marginBottom: '32px' }}>
-          <Typography variant="h3" sx={{ fontWeight: 700, color: theme.palette.text.primary, marginBottom: '12px' }}>
+          <Typography
+            variant="h3"
+            sx={{ fontWeight: 700, color: theme.palette.text.primary, marginBottom: '12px' }}
+          >
             Gestion des Utilisateurs
           </Typography>
           <Typography sx={{ fontSize: '14px', color: '#666', marginBottom: '24px' }}>
@@ -246,7 +248,9 @@ export default function UserManagement() {
               <Typography sx={{ fontSize: '12px', color: '#666', marginBottom: '8px' }}>
                 Total des utilisateurs
               </Typography>
-              <Typography sx={{ fontSize: '24px', fontWeight: 700, color: theme.palette.primary.main }}>
+              <Typography
+                sx={{ fontSize: '24px', fontWeight: 700, color: theme.palette.primary.main }}
+              >
                 {users.length}
               </Typography>
             </CardContent>
@@ -257,7 +261,7 @@ export default function UserManagement() {
                 Actifs
               </Typography>
               <Typography sx={{ fontSize: '24px', fontWeight: 700, color: '#4caf50' }}>
-                {users.filter(u => u.status === 'actif').length}
+                {users.filter((u) => u.status === 'actif').length}
               </Typography>
             </CardContent>
           </Card>
@@ -267,7 +271,7 @@ export default function UserManagement() {
                 Bloqués
               </Typography>
               <Typography sx={{ fontSize: '24px', fontWeight: 700, color: '#d32f2f' }}>
-                {users.filter(u => u.status === 'bloqué').length}
+                {users.filter((u) => u.status === 'bloqué').length}
               </Typography>
             </CardContent>
           </Card>
@@ -278,12 +282,25 @@ export default function UserManagement() {
           <Table>
             <TableHead>
               <TableRow sx={{ backgroundColor: '#f5f5f5' }}>
-                <TableCell sx={{ fontWeight: 700, color: theme.palette.text.primary }}>Email</TableCell>
-                <TableCell sx={{ fontWeight: 700, color: theme.palette.text.primary }}>Nom</TableCell>
-                <TableCell sx={{ fontWeight: 700, color: theme.palette.text.primary }}>Rôle</TableCell>
-                <TableCell sx={{ fontWeight: 700, color: theme.palette.text.primary }}>Statut</TableCell>
-                <TableCell sx={{ fontWeight: 700, color: theme.palette.text.primary }}>Dernier accès</TableCell>
-                <TableCell sx={{ fontWeight: 700, color: theme.palette.text.primary }} align="right">
+                <TableCell sx={{ fontWeight: 700, color: theme.palette.text.primary }}>
+                  Email
+                </TableCell>
+                <TableCell sx={{ fontWeight: 700, color: theme.palette.text.primary }}>
+                  Nom
+                </TableCell>
+                <TableCell sx={{ fontWeight: 700, color: theme.palette.text.primary }}>
+                  Rôle
+                </TableCell>
+                <TableCell sx={{ fontWeight: 700, color: theme.palette.text.primary }}>
+                  Statut
+                </TableCell>
+                <TableCell sx={{ fontWeight: 700, color: theme.palette.text.primary }}>
+                  Dernier accès
+                </TableCell>
+                <TableCell
+                  sx={{ fontWeight: 700, color: theme.palette.text.primary }}
+                  align="right"
+                >
                   Actions
                 </TableCell>
               </TableRow>
@@ -298,7 +315,10 @@ export default function UserManagement() {
                       label={getRoleLabel(user.role)}
                       size="small"
                       variant="outlined"
-                      sx={{ borderColor: theme.palette.primary.main, color: theme.palette.primary.main }}
+                      sx={{
+                        borderColor: theme.palette.primary.main,
+                        color: theme.palette.primary.main,
+                      }}
                     />
                   </TableCell>
                   <TableCell>

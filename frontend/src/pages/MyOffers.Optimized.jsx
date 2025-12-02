@@ -14,7 +14,7 @@ import {
   Typography,
   Alert,
   CircularProgress,
-  Pagination
+  Pagination,
 } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -22,12 +22,12 @@ import { setPageTitle } from '../utils/pageTitle';
 import { useOptimizedFetch } from '../hooks/useOptimizedFetch';
 
 const STATUS_COLORS = {
-  'submitted': '#4caf50',
-  'rejected': '#f44336',
-  'pending': '#ff9800',
-  'opened': '#2196f3',
-  'accepted': '#388e3c',
-  'closed': '#616161'
+  submitted: '#4caf50',
+  rejected: '#f44336',
+  pending: '#ff9800',
+  opened: '#2196f3',
+  accepted: '#388e3c',
+  closed: '#616161',
 };
 
 const OfferTableRow = ({ offer, onEdit, onDelete, formatCurrency, formatDate, getStatusColor }) => (
@@ -41,7 +41,7 @@ const OfferTableRow = ({ offer, onEdit, onDelete, formatCurrency, formatDate, ge
         sx={{
           backgroundColor: getStatusColor(offer.status) + '30',
           color: getStatusColor(offer.status),
-          fontWeight: 500
+          fontWeight: 500,
         }}
       />
     </TableCell>
@@ -69,7 +69,9 @@ const OfferTableRow = ({ offer, onEdit, onDelete, formatCurrency, formatDate, ge
 
 export default function MyOffersOptimized() {
   const theme = institutionalTheme;
-  const { data, loading, error, pagination, goToPage, fetchData } = useOptimizedFetch('/api/procurement/my-offers');
+  const { data, loading, error, pagination, goToPage, fetchData } = useOptimizedFetch(
+    '/api/procurement/my-offers'
+  );
 
   useEffect(() => {
     setPageTitle('Mes offres');
@@ -89,7 +91,7 @@ export default function MyOffersOptimized() {
     return new Intl.NumberFormat('fr-TN', {
       style: 'currency',
       currency: currency,
-      minimumFractionDigits: 2
+      minimumFractionDigits: 2,
     }).format(amount);
   }, []);
 
@@ -97,12 +99,12 @@ export default function MyOffersOptimized() {
     return new Date(dateString).toLocaleDateString('fr-TN', {
       year: 'numeric',
       month: '2-digit',
-      day: '2-digit'
+      day: '2-digit',
     });
   }, []);
 
-  const maxPages = useMemo(() => 
-    Math.ceil(pagination.total / pagination.limit),
+  const maxPages = useMemo(
+    () => Math.ceil(pagination.total / pagination.limit),
     [pagination.total, pagination.limit]
   );
 
@@ -115,15 +117,24 @@ export default function MyOffersOptimized() {
   }, []);
 
   return (
-    <Box sx={{ backgroundColor: institutionalTheme.palette.background.default, paddingY: '40px', minHeight: '80vh' }}>
+    <Box
+      sx={{
+        backgroundColor: institutionalTheme.palette.background.default,
+        paddingY: '40px',
+        minHeight: '80vh',
+      }}
+    >
       <Container maxWidth="lg">
-        <Typography variant="h2" sx={{
-          fontSize: '32px',
-          fontWeight: 600,
-          color: institutionalTheme.palette.primary.main,
-          mb: 3,
-          direction: 'rtl'
-        }}>
+        <Typography
+          variant="h2"
+          sx={{
+            fontSize: '32px',
+            fontWeight: 600,
+            color: institutionalTheme.palette.primary.main,
+            mb: 3,
+            direction: 'rtl',
+          }}
+        >
           Mes offres
         </Typography>
 
@@ -145,11 +156,32 @@ export default function MyOffersOptimized() {
               <Table>
                 <TableHead sx={{ backgroundColor: '#F5F5F5' }}>
                   <TableRow>
-                    <TableCell sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main }}>N° d'offre</TableCell>
-                    <TableCell sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main }}>Montant</TableCell>
-                    <TableCell sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main }}>Statut</TableCell>
-                    <TableCell sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main }}>Date</TableCell>
-                    <TableCell sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main }} align="center">Actions</TableCell>
+                    <TableCell
+                      sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main }}
+                    >
+                      N° d'offre
+                    </TableCell>
+                    <TableCell
+                      sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main }}
+                    >
+                      Montant
+                    </TableCell>
+                    <TableCell
+                      sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main }}
+                    >
+                      Statut
+                    </TableCell>
+                    <TableCell
+                      sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main }}
+                    >
+                      Date
+                    </TableCell>
+                    <TableCell
+                      sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main }}
+                      align="center"
+                    >
+                      Actions
+                    </TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>

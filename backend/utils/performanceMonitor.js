@@ -1,16 +1,16 @@
 /**
  * Performance Monitoring Utility
  * Tracks request duration, memory usage, and database query performance
- * 
+ *
  * @module performanceMonitor
  * @example
  * const { trackRequest, getMetrics } = require('./performanceMonitor');
- * 
+ *
  * // Track a request
  * const endTracking = trackRequest('GET /api/users');
  * // ... do work ...
  * endTracking({ statusCode: 200, method: 'GET' });
- * 
+ *
  * // Get metrics
  * const metrics = getMetrics();
  */
@@ -22,7 +22,7 @@ class PerformanceMonitor {
       averageResponseTime: 0,
       slowQueries: [],
       memoryUsage: [],
-      errorRate: 0
+      errorRate: 0,
     };
     this.slowQueryThreshold = 1000; // 1 second
   }
@@ -49,7 +49,7 @@ class PerformanceMonitor {
         statusCode: options.statusCode,
         method: options.method,
         timestamp: new Date().toISOString(),
-        slow: duration > 100 // Mark as slow if > 100ms
+        slow: duration > 100, // Mark as slow if > 100ms
       };
 
       this.metrics.requests.push(requestMetric);
@@ -61,7 +61,7 @@ class PerformanceMonitor {
           this.metrics.slowQueries.push({
             endpoint,
             duration,
-            timestamp: requestMetric.timestamp
+            timestamp: requestMetric.timestamp,
           });
         }
       }
@@ -79,7 +79,7 @@ class PerformanceMonitor {
         type: 'database',
         query: query.substring(0, 100),
         duration,
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       });
     }
   }
@@ -93,7 +93,7 @@ class PerformanceMonitor {
     const totalDuration = this.metrics.requests.reduce((sum, req) => sum + req.duration, 0);
     this.metrics.averageResponseTime = Math.round(totalDuration / this.metrics.requests.length);
 
-    const errorCount = this.metrics.requests.filter(req => req.statusCode >= 400).length;
+    const errorCount = this.metrics.requests.filter((req) => req.statusCode >= 400).length;
     this.metrics.errorRate = Math.round((errorCount / this.metrics.requests.length) * 100);
   }
 
@@ -106,8 +106,8 @@ class PerformanceMonitor {
       ...this.metrics,
       totalRequests: this.metrics.requests.length,
       averageResponseTime: this.metrics.averageResponseTime,
-      slowRequestCount: this.metrics.requests.filter(r => r.slow).length,
-      errorRate: this.metrics.errorRate
+      slowRequestCount: this.metrics.requests.filter((r) => r.slow).length,
+      errorRate: this.metrics.errorRate,
     };
   }
 
@@ -124,7 +124,7 @@ class PerformanceMonitor {
       slowRequests: metrics.slowRequestCount,
       errorRate: `${metrics.errorRate}%`,
       topSlowEndpoints: this.getTopSlowEndpoints(5),
-      memoryUsage: `${Math.round(process.memoryUsage().heapUsed / 1024 / 1024)}MB`
+      memoryUsage: `${Math.round(process.memoryUsage().heapUsed / 1024 / 1024)}MB`,
     };
   }
 
@@ -136,12 +136,12 @@ class PerformanceMonitor {
   getTopSlowEndpoints(limit = 5) {
     const endpointStats = {};
 
-    this.metrics.requests.forEach(req => {
+    this.metrics.requests.forEach((req) => {
       if (!endpointStats[req.endpoint]) {
         endpointStats[req.endpoint] = {
           count: 0,
           totalDuration: 0,
-          avgDuration: 0
+          avgDuration: 0,
         };
       }
       endpointStats[req.endpoint].count++;
@@ -166,7 +166,7 @@ class PerformanceMonitor {
       averageResponseTime: 0,
       slowQueries: [],
       memoryUsage: [],
-      errorRate: 0
+      errorRate: 0,
     };
   }
 }

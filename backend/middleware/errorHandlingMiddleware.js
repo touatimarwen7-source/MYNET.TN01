@@ -9,7 +9,7 @@ const {
   AuthenticationError,
   AuthorizationError,
   NotFoundError,
-  DatabaseError
+  DatabaseError,
 } = require('../utils/errorClasses');
 
 /**
@@ -40,7 +40,7 @@ const globalErrorHandler = (err, req, res, next) => {
     message: err.message,
     requestId: req.id,
     userId: req.user?.id || 'anonymous',
-    ipAddress: req.clientIP
+    ipAddress: req.clientIP,
   };
 
   // Log based on severity
@@ -54,7 +54,7 @@ const globalErrorHandler = (err, req, res, next) => {
   }
 
   // Handle specific error types
-  
+
   // MongoDB duplicate key error
   if (err.code === 11000) {
     const field = Object.keys(err.keyValue)[0];
@@ -103,8 +103,8 @@ const globalErrorHandler = (err, req, res, next) => {
       message: err.message,
       code: err.code || err.name || 'UNKNOWN_ERROR',
       statusCode: err.statusCode,
-      requestId: req.id
-    }
+      requestId: req.id,
+    },
   };
 
   // Add details if present
@@ -149,7 +149,9 @@ const validateIdParam = (req, res, next) => {
   }
 
   // Validate ID format (UUID or numeric)
-  const isValidId = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$|^\d+$/i.test(id);
+  const isValidId = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$|^\d+$/i.test(
+    id
+  );
 
   if (!isValidId) {
     return next(new ValidationError('Invalid ID format', { id }));
@@ -169,8 +171,8 @@ const sendValidationError = (res, errors, statusCode = 400) => {
       code: 'VALIDATION_ERROR',
       statusCode,
       validation: errors,
-      timestamp: new Date().toISOString()
-    }
+      timestamp: new Date().toISOString(),
+    },
   });
 };
 
@@ -181,7 +183,7 @@ const sendSuccess = (res, data = null, statusCode = 200, message = 'Success') =>
   const response = {
     success: true,
     message,
-    timestamp: new Date().toISOString()
+    timestamp: new Date().toISOString(),
   };
 
   if (data !== null) {
@@ -203,9 +205,9 @@ const sendPaginatedSuccess = (res, data, total, page, limit, message = 'Success'
       total,
       page: parseInt(page),
       limit: parseInt(limit),
-      pages: Math.ceil(total / limit)
+      pages: Math.ceil(total / limit),
     },
-    timestamp: new Date().toISOString()
+    timestamp: new Date().toISOString(),
   });
 };
 
@@ -220,8 +222,8 @@ const sendError = (res, message, statusCode = 500, details = {}) => {
       code: 'ERROR',
       statusCode,
       details: Object.keys(details).length > 0 ? details : undefined,
-      timestamp: new Date().toISOString()
-    }
+      timestamp: new Date().toISOString(),
+    },
   });
 };
 
@@ -233,5 +235,5 @@ module.exports = {
   sendValidationError,
   sendSuccess,
   sendPaginatedSuccess,
-  sendError
+  sendError,
 };

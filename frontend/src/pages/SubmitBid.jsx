@@ -154,8 +154,8 @@ export default function SubmitBid() {
       });
 
       setConfirmDialog(false);
-      navigate('/my-offers', { 
-        state: { message: '✅ تم تقديم العرض بنجاح!' } 
+      navigate('/my-offers', {
+        state: { message: '✅ تم تقديم العرض بنجاح!' },
       });
     } catch (err) {
       setError('خطأ في تقديم العرض: ' + err.message);
@@ -182,7 +182,9 @@ export default function SubmitBid() {
 
   if (loading) {
     return (
-      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '60vh' }}>
+      <Box
+        sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '60vh' }}
+      >
         <CircularProgress sx={{ color: theme.palette.primary.main }} />
       </Box>
     );
@@ -200,13 +202,13 @@ export default function SubmitBid() {
           >
             العودة
           </Button>
-          <Typography 
-            variant="h2" 
-            sx={{ 
-              fontSize: '32px', 
-              fontWeight: 600, 
+          <Typography
+            variant="h2"
+            sx={{
+              fontSize: '32px',
+              fontWeight: 600,
               color: theme.palette.primary.main,
-              mb: '8px'
+              mb: '8px',
             }}
           >
             📝 تقديم عرض بديل
@@ -245,7 +247,9 @@ export default function SubmitBid() {
               <Grid container spacing={2}>
                 <Grid xs={12} lg={6} lg={3}>
                   <Box>
-                    <Typography sx={{ fontSize: '12px', color: '#666666', mb: '4px', fontWeight: 600 }}>
+                    <Typography
+                      sx={{ fontSize: '12px', color: '#666666', mb: '4px', fontWeight: 600 }}
+                    >
                       الفئة
                     </Typography>
                     <Typography sx={{ fontSize: '16px', fontWeight: 600, color: '#0056B3' }}>
@@ -255,20 +259,26 @@ export default function SubmitBid() {
                 </Grid>
                 <Grid xs={12} lg={6} lg={3}>
                   <Box>
-                    <Typography sx={{ fontSize: '12px', color: '#666666', mb: '4px', fontWeight: 600 }}>
+                    <Typography
+                      sx={{ fontSize: '12px', color: '#666666', mb: '4px', fontWeight: 600 }}
+                    >
                       الموعد النهائي
                     </Typography>
                     <Typography sx={{ fontSize: '16px', fontWeight: 600, color: '#0056B3' }}>
-                      {tender?.deadline ? new Date(tender.deadline).toLocaleDateString('ar-TN') : 'N/A'}
+                      {tender?.deadline
+                        ? new Date(tender.deadline).toLocaleDateString('ar-TN')
+                        : 'N/A'}
                     </Typography>
                   </Box>
                 </Grid>
                 <Grid xs={12} lg={6} lg={3}>
                   <Box>
-                    <Typography sx={{ fontSize: '12px', color: '#666666', mb: '4px', fontWeight: 600 }}>
+                    <Typography
+                      sx={{ fontSize: '12px', color: '#666666', mb: '4px', fontWeight: 600 }}
+                    >
                       عدد الـ Lots
                     </Typography>
-                    <Chip 
+                    <Chip
                       label={`${tender?.lots?.length || 0} Lot`}
                       size="small"
                       sx={{ backgroundColor: '#E3F2FD', color: '#0056B3' }}
@@ -280,19 +290,33 @@ export default function SubmitBid() {
               {/* Lots Display */}
               {tender?.lots && tender.lots.length > 0 && (
                 <Box sx={{ mt: '20px', pt: '20px', borderTop: '1px solid #E0E0E0' }}>
-                  <Typography sx={{ fontSize: '12px', fontWeight: 600, color: '#0056B3', mb: '12px' }}>
+                  <Typography
+                    sx={{ fontSize: '12px', fontWeight: 600, color: '#0056B3', mb: '12px' }}
+                  >
                     📦 الـ Lots والمواد
                   </Typography>
                   <Stack spacing={1}>
                     {tender.lots.map((lot, idx) => (
-                      <Paper key={idx} sx={{ p: '12px', backgroundColor: '#F9F9F9', borderLeft: '3px solid #0056B3' }}>
-                        <Typography sx={{ fontSize: '12px', fontWeight: 600, color: '#212121', mb: '4px' }}>
+                      <Paper
+                        key={idx}
+                        sx={{
+                          p: '12px',
+                          backgroundColor: '#F9F9F9',
+                          borderLeft: '3px solid #0056B3',
+                        }}
+                      >
+                        <Typography
+                          sx={{ fontSize: '12px', fontWeight: 600, color: '#212121', mb: '4px' }}
+                        >
                           Lot {lot.numero}: {lot.objet}
                         </Typography>
                         {lot.articles && lot.articles.length > 0 && (
                           <Stack spacing={0.5}>
                             {lot.articles.map((article, aIdx) => (
-                              <Typography key={aIdx} sx={{ fontSize: '11px', color: '#666666', ml: '8px' }}>
+                              <Typography
+                                key={aIdx}
+                                sx={{ fontSize: '11px', color: '#666666', ml: '8px' }}
+                              >
                                 └─ {article.name}: {article.quantity} {article.unit}
                               </Typography>
                             ))}
@@ -459,7 +483,7 @@ export default function SubmitBid() {
               <Typography sx={{ fontSize: '14px', fontWeight: 600, color: '#0056B3', mb: '16px' }}>
                 📄 الوثائق المرفقة
               </Typography>
-              
+
               {/* Drag & Drop */}
               <Box
                 onDragOver={(e) => {
@@ -518,7 +542,9 @@ export default function SubmitBid() {
               {/* Files List */}
               {bidData.documents.length > 0 && (
                 <Box>
-                  <Typography sx={{ fontSize: '12px', fontWeight: 600, color: '#212121', mb: '8px' }}>
+                  <Typography
+                    sx={{ fontSize: '12px', fontWeight: 600, color: '#212121', mb: '8px' }}
+                  >
                     الملفات المرفوعة ({bidData.documents.length})
                   </Typography>
                   <Stack spacing={1}>
@@ -537,7 +563,9 @@ export default function SubmitBid() {
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: '12px', flex: 1 }}>
                           <AttachFileIcon sx={{ color: '#0056B3', fontSize: 18 }} />
                           <Box>
-                            <Typography sx={{ fontSize: '13px', fontWeight: 600, color: '#212121' }}>
+                            <Typography
+                              sx={{ fontSize: '13px', fontWeight: 600, color: '#212121' }}
+                            >
                               {doc.name}
                             </Typography>
                             <Typography sx={{ fontSize: '11px', color: '#999999' }}>
@@ -632,10 +660,7 @@ export default function SubmitBid() {
           </Paper>
         </DialogContent>
         <DialogActions>
-          <Button 
-            onClick={() => setConfirmDialog(false)}
-            disabled={submitting}
-          >
+          <Button onClick={() => setConfirmDialog(false)} disabled={submitting}>
             إلغاء
           </Button>
           <Button

@@ -4,7 +4,20 @@
  */
 import { THEME_COLORS } from './themeHelpers';
 import React, { useState } from 'react';
-import { Box, Badge, IconButton, Popover, List, ListItem, ListItemText, Typography, Button, Chip, Snackbar, Alert } from '@mui/material';
+import {
+  Box,
+  Badge,
+  IconButton,
+  Popover,
+  List,
+  ListItem,
+  ListItemText,
+  Typography,
+  Button,
+  Chip,
+  Snackbar,
+  Alert,
+} from '@mui/material';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import ClearIcon from '@mui/icons-material/Clear';
 import useWebSocket from '../hooks/useWebSocket';
@@ -33,7 +46,7 @@ const NotificationCenter = ({ userId }) => {
       </IconButton>
 
       {/* Connection Status */}
-      <Chip 
+      <Chip
         icon={<span style={{ color: connected ? '#4CAF50' : '#f44336' }}>●</span>}
         label={connected ? 'En direct' : 'Hors ligne'}
         size="small"
@@ -55,7 +68,16 @@ const NotificationCenter = ({ userId }) => {
         }}
       >
         <Box sx={{ width: 450, maxHeight: 500, overflow: 'auto', backgroundColor: '#fafafa' }}>
-          <Box sx={{ p: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center', backgroundColor: '#fff', borderBottom: '1px solid #e0e0e0' }}>
+          <Box
+            sx={{
+              p: 2,
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              backgroundColor: '#fff',
+              borderBottom: '1px solid #e0e0e0',
+            }}
+          >
             <Typography variant="h6" sx={{ fontWeight: 600 }}>
               🔔 Notifications en Temps Réel
             </Typography>
@@ -67,18 +89,20 @@ const NotificationCenter = ({ userId }) => {
           </Box>
 
           {notifications.length === 0 ? (
-            <Typography sx={{ p: 3, textAlign: 'center', color: THEME_COLORS.textDisabled, fontSize: '13px' }}>
+            <Typography
+              sx={{ p: 3, textAlign: 'center', color: THEME_COLORS.textDisabled, fontSize: '13px' }}
+            >
               ✨ Aucune notification
             </Typography>
           ) : (
             <List sx={{ p: 0 }}>
               {notifications.map((notif) => (
-                <ListItem 
-                  key={notif.id} 
-                  sx={{ 
+                <ListItem
+                  key={notif.id}
+                  sx={{
                     borderBottom: '1px solid #e0e0e0',
                     backgroundColor: '#fff',
-                    '&:hover': { backgroundColor: '#f5f5f5' }
+                    '&:hover': { backgroundColor: '#f5f5f5' },
                   }}
                 >
                   <ListItemText
@@ -86,7 +110,14 @@ const NotificationCenter = ({ userId }) => {
                       <Box sx={{ display: 'flex', gap: 1, alignItems: 'flex-start' }}>
                         <span style={{ fontSize: '18px', minWidth: '24px' }}>{notif.icon}</span>
                         <Box sx={{ flex: 1 }}>
-                          <div style={{ fontWeight: 600, fontSize: '13px', color: THEME_COLORS.textPrimary, marginBottom: '4px' }}>
+                          <div
+                            style={{
+                              fontWeight: 600,
+                              fontSize: '13px',
+                              color: THEME_COLORS.textPrimary,
+                              marginBottom: '4px',
+                            }}
+                          >
                             {notif.title}
                           </div>
                           <div style={{ fontSize: '12px', color: THEME_COLORS.textSecondary }}>

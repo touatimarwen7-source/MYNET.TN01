@@ -27,11 +27,11 @@ class TokenManager {
     }
 
     const tokenExpiryMs = Date.now() + expiresIn * 1000;
-    
+
     // Set in memory FIRST (fastest, no iframe issues)
     memoryAccessToken = token;
     tokenExpiryTime = tokenExpiryMs;
-    
+
     // Try to persist using sessionStorage
     try {
       sessionStorage.setItem(TOKEN_KEY, token);
@@ -58,7 +58,7 @@ class TokenManager {
     try {
       const token = sessionStorage.getItem(TOKEN_KEY);
       const expiryStr = sessionStorage.getItem(TOKEN_EXPIRY_KEY);
-      
+
       if (token && expiryStr) {
         const expiryTime = parseInt(expiryStr, 10);
         if (!isNaN(expiryTime) && Date.now() < expiryTime) {
@@ -193,7 +193,7 @@ class TokenManager {
   static onAuthChange(callback) {
     authChangeListeners.push(callback);
     return () => {
-      authChangeListeners = authChangeListeners.filter(cb => cb !== callback);
+      authChangeListeners = authChangeListeners.filter((cb) => cb !== callback);
     };
   }
 
@@ -201,15 +201,14 @@ class TokenManager {
    * Notify all listeners of auth change
    */
   static _notifyListeners() {
-    authChangeListeners.forEach(cb => {
+    authChangeListeners.forEach((cb) => {
       try {
         cb({
           token: memoryAccessToken,
           user: memoryUserData,
-          isAuthenticated: !!memoryAccessToken && this.isTokenValid()
+          isAuthenticated: !!memoryAccessToken && this.isTokenValid(),
         });
-      } catch (e) {
-      }
+      } catch (e) {}
     });
   }
 

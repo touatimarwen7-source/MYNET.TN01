@@ -1,4 +1,3 @@
-
 const InvoiceService = require('../../services/InvoiceService');
 
 class InvoiceController {
@@ -7,15 +6,15 @@ class InvoiceController {
       const userId = req.user.id;
       const invoiceData = {
         ...req.body,
-        supplier_id: userId
+        supplier_id: userId,
       };
 
       const invoice = await InvoiceService.createInvoice(invoiceData);
-      
+
       res.status(201).json({
         success: true,
         message: 'Invoice created successfully',
-        data: invoice
+        data: invoice,
       });
     } catch (error) {
       next(error);
@@ -26,10 +25,10 @@ class InvoiceController {
     try {
       const userId = req.user.id;
       const invoices = await InvoiceService.getInvoicesBySupplier(userId);
-      
+
       res.json({
         success: true,
-        data: invoices
+        data: invoices,
       });
     } catch (error) {
       next(error);
@@ -42,11 +41,11 @@ class InvoiceController {
       const { payment_date } = req.body;
 
       const invoice = await InvoiceService.markAsPaid(id, payment_date);
-      
+
       res.json({
         success: true,
         message: 'Invoice marked as paid',
-        data: invoice
+        data: invoice,
       });
     } catch (error) {
       next(error);

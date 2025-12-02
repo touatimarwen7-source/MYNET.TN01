@@ -188,17 +188,27 @@ export default function OfferAnalysis() {
       <Container maxWidth="lg">
         {/* Breadcrumb Navigation */}
         <Breadcrumbs sx={{ mb: '24px' }}>
-          <Link 
+          <Link
             component="button"
             onClick={() => navigate('/tenders')}
-            sx={{ cursor: 'pointer', color: institutionalTheme.palette.primary.main, textDecoration: 'none', '&:hover': { textDecoration: 'underline' } }}
+            sx={{
+              cursor: 'pointer',
+              color: institutionalTheme.palette.primary.main,
+              textDecoration: 'none',
+              '&:hover': { textDecoration: 'underline' },
+            }}
           >
             المناقصات
           </Link>
           <Link
             component="button"
             onClick={() => navigate(`/tender/${tenderId}`)}
-            sx={{ cursor: 'pointer', color: institutionalTheme.palette.primary.main, textDecoration: 'none', '&:hover': { textDecoration: 'underline' } }}
+            sx={{
+              cursor: 'pointer',
+              color: institutionalTheme.palette.primary.main,
+              textDecoration: 'none',
+              '&:hover': { textDecoration: 'underline' },
+            }}
           >
             المناقصة
           </Link>
@@ -208,7 +218,14 @@ export default function OfferAnalysis() {
         </Breadcrumbs>
 
         {/* Header */}
-        <Box sx={{ marginBottom: '32px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+        <Box
+          sx={{
+            marginBottom: '32px',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'flex-start',
+          }}
+        >
           <Box>
             <Typography
               variant="h2"
@@ -231,7 +248,10 @@ export default function OfferAnalysis() {
               onClick={exportToCSV}
               variant="outlined"
               size="small"
-              sx={{ color: institutionalTheme.palette.primary.main, borderColor: institutionalTheme.palette.primary.main }}
+              sx={{
+                color: institutionalTheme.palette.primary.main,
+                borderColor: institutionalTheme.palette.primary.main,
+              }}
             >
               تصدير CSV
             </Button>
@@ -240,7 +260,10 @@ export default function OfferAnalysis() {
               onClick={exportToJSON}
               variant="outlined"
               size="small"
-              sx={{ color: institutionalTheme.palette.primary.main, borderColor: institutionalTheme.palette.primary.main }}
+              sx={{
+                color: institutionalTheme.palette.primary.main,
+                borderColor: institutionalTheme.palette.primary.main,
+              }}
             >
               تصدير JSON
             </Button>
@@ -265,10 +288,14 @@ export default function OfferAnalysis() {
                 }}
               >
                 <CardContent>
-                  <Typography sx={{ color: '#666666', fontSize: '12px', fontWeight: 600, mb: '8px' }}>
+                  <Typography
+                    sx={{ color: '#666666', fontSize: '12px', fontWeight: 600, mb: '8px' }}
+                  >
                     {item.title}
                   </Typography>
-                  <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <Box
+                    sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}
+                  >
                     <Typography
                       sx={{
                         fontWeight: 600,
@@ -278,9 +305,15 @@ export default function OfferAnalysis() {
                     >
                       {item.value}
                     </Typography>
-                    {item.trend === 'up' && <TrendingUpIcon sx={{ color: '#4CAF50', fontSize: 24 }} />}
-                    {item.trend === 'down' && <TrendingDownIcon sx={{ color: '#FF9800', fontSize: 24 }} />}
-                    {item.trend === 'neutral' && <CompareArrowsIcon sx={{ color: '#2196F3', fontSize: 24 }} />}
+                    {item.trend === 'up' && (
+                      <TrendingUpIcon sx={{ color: '#4CAF50', fontSize: 24 }} />
+                    )}
+                    {item.trend === 'down' && (
+                      <TrendingDownIcon sx={{ color: '#FF9800', fontSize: 24 }} />
+                    )}
+                    {item.trend === 'neutral' && (
+                      <CompareArrowsIcon sx={{ color: '#2196F3', fontSize: 24 }} />
+                    )}
                   </Box>
                 </CardContent>
               </Card>
@@ -303,8 +336,7 @@ export default function OfferAnalysis() {
                 <Typography sx={{ fontSize: '13px', color: '#212121' }}>
                   نطاق الأسعار المقترحة يتراوح بين{' '}
                   <strong>{analysis.minPrice.toLocaleString('ar-TN')} TND</strong> و
-                  <strong> {analysis.maxPrice.toLocaleString('ar-TN')} TND</strong>
-                  ، بمتوسط{' '}
+                  <strong> {analysis.maxPrice.toLocaleString('ar-TN')} TND</strong>، بمتوسط{' '}
                   <strong>{analysis.avgPrice.toLocaleString('ar-TN')} TND</strong> من قبل{' '}
                   <strong>{analysis.totalOffers} مورد</strong>.
                 </Typography>
@@ -349,25 +381,73 @@ export default function OfferAnalysis() {
                   <Table>
                     <TableHead sx={{ backgroundColor: '#F5F5F5' }}>
                       <TableRow>
-                        <TableCell sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main, fontSize: '12px' }}>
+                        <TableCell
+                          sx={{
+                            fontWeight: 600,
+                            color: institutionalTheme.palette.primary.main,
+                            fontSize: '12px',
+                          }}
+                        >
                           المورد
                         </TableCell>
-                        <TableCell sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main, fontSize: '12px', textAlign: 'center' }}>
+                        <TableCell
+                          sx={{
+                            fontWeight: 600,
+                            color: institutionalTheme.palette.primary.main,
+                            fontSize: '12px',
+                            textAlign: 'center',
+                          }}
+                        >
                           المبلغ (TND)
                         </TableCell>
-                        <TableCell sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main, fontSize: '12px', textAlign: 'center' }}>
+                        <TableCell
+                          sx={{
+                            fontWeight: 600,
+                            color: institutionalTheme.palette.primary.main,
+                            fontSize: '12px',
+                            textAlign: 'center',
+                          }}
+                        >
                           مقارنة
                         </TableCell>
-                        <TableCell sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main, fontSize: '12px', textAlign: 'center' }}>
+                        <TableCell
+                          sx={{
+                            fontWeight: 600,
+                            color: institutionalTheme.palette.primary.main,
+                            fontSize: '12px',
+                            textAlign: 'center',
+                          }}
+                        >
                           التسليم
                         </TableCell>
-                        <TableCell sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main, fontSize: '12px', textAlign: 'center' }}>
+                        <TableCell
+                          sx={{
+                            fontWeight: 600,
+                            color: institutionalTheme.palette.primary.main,
+                            fontSize: '12px',
+                            textAlign: 'center',
+                          }}
+                        >
                           الدفع
                         </TableCell>
-                        <TableCell sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main, fontSize: '12px', textAlign: 'center' }}>
+                        <TableCell
+                          sx={{
+                            fontWeight: 600,
+                            color: institutionalTheme.palette.primary.main,
+                            fontSize: '12px',
+                            textAlign: 'center',
+                          }}
+                        >
                           الحالة
                         </TableCell>
-                        <TableCell sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main, fontSize: '12px', textAlign: 'center' }}>
+                        <TableCell
+                          sx={{
+                            fontWeight: 600,
+                            color: institutionalTheme.palette.primary.main,
+                            fontSize: '12px',
+                            textAlign: 'center',
+                          }}
+                        >
                           الإجراء
                         </TableCell>
                       </TableRow>
@@ -386,11 +466,20 @@ export default function OfferAnalysis() {
                             <TableCell sx={{ fontSize: '12px', fontWeight: 600 }}>
                               {offer.supplier_name || 'غير محدد'}
                               <br />
-                              <span style={{ fontSize: '11px', color: '#666666', fontWeight: 'normal' }}>
+                              <span
+                                style={{ fontSize: '11px', color: '#666666', fontWeight: 'normal' }}
+                              >
                                 {offer.supplier_email || 'N/A'}
                               </span>
                             </TableCell>
-                            <TableCell sx={{ fontSize: '12px', fontWeight: 600, color: '#0056B3', textAlign: 'center' }}>
+                            <TableCell
+                              sx={{
+                                fontSize: '12px',
+                                fontWeight: 600,
+                                color: '#0056B3',
+                                textAlign: 'center',
+                              }}
+                            >
                               {typeof offer.total_amount === 'number'
                                 ? offer.total_amount.toLocaleString('ar-TN')
                                 : '0'}{' '}
@@ -442,13 +531,26 @@ export default function OfferAnalysis() {
                             </TableCell>
                             <TableCell sx={{ fontSize: '12px', textAlign: 'center' }}>
                               {offer.evaluation_status === 'accepted' && (
-                                <Chip label="مقبول" size="small" sx={{ backgroundColor: '#E8F5E9', color: '#2E7D32' }} />
+                                <Chip
+                                  label="مقبول"
+                                  size="small"
+                                  sx={{ backgroundColor: '#E8F5E9', color: '#2E7D32' }}
+                                />
                               )}
                               {offer.evaluation_status === 'rejected' && (
-                                <Chip label="مرفوض" size="small" sx={{ backgroundColor: '#FFEBEE', color: '#C62828' }} />
+                                <Chip
+                                  label="مرفوض"
+                                  size="small"
+                                  sx={{ backgroundColor: '#FFEBEE', color: '#C62828' }}
+                                />
                               )}
-                              {(!offer.evaluation_status || offer.evaluation_status === 'pending') && (
-                                <Chip label="معلق" size="small" sx={{ backgroundColor: '#FFF3E0', color: '#E65100' }} />
+                              {(!offer.evaluation_status ||
+                                offer.evaluation_status === 'pending') && (
+                                <Chip
+                                  label="معلق"
+                                  size="small"
+                                  sx={{ backgroundColor: '#FFF3E0', color: '#E65100' }}
+                                />
                               )}
                             </TableCell>
                             <TableCell sx={{ textAlign: 'center' }}>
@@ -499,7 +601,10 @@ export default function OfferAnalysis() {
                     </Typography>
                     <Typography sx={{ fontSize: '14px', fontWeight: 600, color: '#0056B3' }}>
                       {analysis.minPrice > 0
-                        ? (((analysis.maxPrice - analysis.minPrice) / analysis.minPrice) * 100).toFixed(2)
+                        ? (
+                            ((analysis.maxPrice - analysis.minPrice) / analysis.minPrice) *
+                            100
+                          ).toFixed(2)
                         : '0'}
                       %
                     </Typography>
@@ -535,7 +640,9 @@ export default function OfferAnalysis() {
 
       {/* Offer Details Dialog */}
       <Dialog open={detailsOpen} onClose={() => setDetailsOpen(false)} maxWidth="sm" fullWidth>
-        <DialogTitle sx={{ fontSize: '16px', fontWeight: 600, color: institutionalTheme.palette.primary.main }}>
+        <DialogTitle
+          sx={{ fontSize: '16px', fontWeight: 600, color: institutionalTheme.palette.primary.main }}
+        >
           تفاصيل العرض
         </DialogTitle>
         <DialogContent>
@@ -591,7 +698,9 @@ export default function OfferAnalysis() {
               </Box>
               {selectedOffer.quality_notes && (
                 <Box>
-                  <Typography sx={{ fontSize: '12px', color: '#666666', fontWeight: 600, mb: '4px' }}>
+                  <Typography
+                    sx={{ fontSize: '12px', color: '#666666', fontWeight: 600, mb: '4px' }}
+                  >
                     ملاحظات الجودة
                   </Typography>
                   <Typography sx={{ fontSize: '13px', color: '#666666' }}>

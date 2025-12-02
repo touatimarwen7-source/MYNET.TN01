@@ -19,7 +19,7 @@ const ErrorFallback = ({ error, resetError }) => {
         backgroundColor: theme.palette.background.default,
         borderRadius: '4px',
         border: '1px solid #E0E0E0',
-        textAlign: 'center'
+        textAlign: 'center',
       }}
     >
       <Box sx={{ display: 'flex', justifyContent: 'center', marginBottom: '16px' }}>
@@ -31,7 +31,7 @@ const ErrorFallback = ({ error, resetError }) => {
         sx={{
           color: theme.palette.text.primary,
           fontWeight: 600,
-          marginBottom: '8px'
+          marginBottom: '8px',
         }}
       >
         Erreur de chargement du contenu
@@ -41,7 +41,7 @@ const ErrorFallback = ({ error, resetError }) => {
         variant="body2"
         sx={{
           color: THEME_COLORS.textSecondary,
-          marginBottom: '16px'
+          marginBottom: '16px',
         }}
       >
         Un problème s'est produit lors du chargement de cette section. Veuillez réessayer.
@@ -68,8 +68,8 @@ const ErrorFallback = ({ error, resetError }) => {
           fontWeight: 500,
           borderRadius: '4px',
           '&:hover': {
-            backgroundColor: 'THEME_COLORS.primaryDark'
-          }
+            backgroundColor: 'THEME_COLORS.primaryDark',
+          },
         }}
       >
         Réessayer

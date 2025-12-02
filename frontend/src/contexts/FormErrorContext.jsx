@@ -50,22 +50,28 @@ export const FormErrorProvider = ({ children }) => {
   }, []);
 
   // Parse API error response
-  const handleAPIError = useCallback((error) => {
-    const errorMsg = 
-      error.response?.data?.error || 
-      error.response?.data?.message || 
-      error.message || 
-      'Une erreur est survenue';
-    
-    setGlobalError(errorMsg);
+  const handleAPIError = useCallback(
+    (error) => {
+      const errorMsg =
+        error.response?.data?.error ||
+        error.response?.data?.message ||
+        error.message ||
+        'Une erreur est survenue';
 
-    // If validation errors object exists, set field errors
-    if (error.response?.data?.errors && typeof error.response.data.errors === 'object') {
-      setFieldErrors(error.response.data.errors);
-    }
+      setGlobalError(errorMsg);
 
-    return errorMsg;
-  }, [setFieldErrors]);
+      // If validation errors object exists, set field errors
+      if (
+        error.response?.data?.errors &&
+        typeof error.response.data.errors === 'object'
+      ) {
+        setFieldErrors(error.response.data.errors);
+      }
+
+      return errorMsg;
+    },
+    [setFieldErrors]
+  );
 
   // Set global error message
   const setGlobal = useCallback((message) => {

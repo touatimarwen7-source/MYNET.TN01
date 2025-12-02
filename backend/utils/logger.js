@@ -20,7 +20,7 @@ class Logger {
     this.logDir = logDir;
     this.logFile = path.join(logDir, `${new Date().toISOString().split('T')[0]}.log`);
     this.minLevel = LOG_LEVELS.INFO;
-    
+
     // Create logs directory if it doesn't exist
     if (!fs.existsSync(logDir)) {
       fs.mkdirSync(logDir, { recursive: true });
@@ -61,10 +61,7 @@ class Logger {
 
     // Console output with color
     const colorCode = this.getColorCode(level);
-    console.log(
-      `${colorCode}[${level}]${'\x1b[0m'} ${this.name}: ${message}`,
-      data
-    );
+    console.log(`${colorCode}[${level}]${'\x1b[0m'} ${this.name}: ${message}`, data);
   }
 
   /**
@@ -93,8 +90,8 @@ class Logger {
   getColorCode(level) {
     const colors = {
       DEBUG: '\x1b[36m', // Cyan
-      INFO: '\x1b[34m',  // Blue
-      WARN: '\x1b[33m',  // Yellow
+      INFO: '\x1b[34m', // Blue
+      WARN: '\x1b[33m', // Yellow
       ERROR: '\x1b[31m', // Red
       FATAL: '\x1b[35m', // Magenta
     };
@@ -102,11 +99,21 @@ class Logger {
   }
 
   // Convenience methods
-  debug(message, data) { this.log('DEBUG', message, data); }
-  info(message, data) { this.log('INFO', message, data); }
-  warn(message, data) { this.log('WARN', message, data); }
-  error(message, data) { this.log('ERROR', message, data); }
-  fatal(message, data) { this.log('FATAL', message, data); }
+  debug(message, data) {
+    this.log('DEBUG', message, data);
+  }
+  info(message, data) {
+    this.log('INFO', message, data);
+  }
+  warn(message, data) {
+    this.log('WARN', message, data);
+  }
+  error(message, data) {
+    this.log('ERROR', message, data);
+  }
+  fatal(message, data) {
+    this.log('FATAL', message, data);
+  }
 
   /**
    * Express middleware for request logging
@@ -116,7 +123,7 @@ class Logger {
       const start = Date.now();
       const originalEnd = res.end;
 
-      res.end = function(...args) {
+      res.end = function (...args) {
         const duration = Date.now() - start;
         this.info(`${req.method} ${req.path} - ${res.statusCode} (${duration}ms)`, {
           method: req.method,

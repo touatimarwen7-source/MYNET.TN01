@@ -25,7 +25,7 @@ class PerformanceMonitor {
     return () => {
       const endTime = performance.now();
       const duration = endTime - startTime;
-      
+
       this.recordMetric({
         label,
         duration,
@@ -58,10 +58,7 @@ class PerformanceMonitor {
 
     // Report slow APIs
     if (isSlow) {
-      Sentry?.captureMessage(
-        `Slow API: ${method} ${route} took ${duration}ms`,
-        'warning'
-      );
+      Sentry?.captureMessage(`Slow API: ${method} ${route} took ${duration}ms`, 'warning');
     }
   }
 
@@ -139,10 +136,10 @@ class PerformanceMonitor {
 
     if (this.metrics.length === 0) return stats;
 
-    const durations = this.metrics.map(m => m.duration).filter(d => d > 0);
+    const durations = this.metrics.map((m) => m.duration).filter((d) => d > 0);
     stats.averageResponseTime = durations.reduce((a, b) => a + b, 0) / durations.length;
-    stats.slowRequests = this.metrics.filter(m => m.slow).length;
-    stats.errorRequests = this.metrics.filter(m => m.error).length;
+    stats.slowRequests = this.metrics.filter((m) => m.slow).length;
+    stats.errorRequests = this.metrics.filter((m) => m.error).length;
 
     return stats;
   }

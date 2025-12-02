@@ -1,10 +1,5 @@
 import { useState } from 'react';
-import {
-  Box,
-  Tabs,
-  Tab,
-  Typography
-} from '@mui/material';
+import { Box, Tabs, Tab, Typography } from '@mui/material';
 import ArticleIcon from '@mui/icons-material/Article';
 import ImageIcon from '@mui/icons-material/Image';
 import StorageIcon from '@mui/icons-material/Storage';
@@ -19,32 +14,44 @@ export default function ContentManager() {
     {
       label: 'Pages Statiques',
       icon: <ArticleIcon />,
-      component: <StaticPagesManager />
+      component: <StaticPagesManager />,
     },
     {
       label: 'Fichiers',
       icon: <StorageIcon />,
-      component: <Box sx={{ p: 2, textAlign: 'center' }}>
-        <StorageIcon sx={{ fontSize: 48, color: '#D9D9D9', mb: 1 }} />
-        <Typography sx={{ color: '#999999', fontSize: '14px' }}>Gestion des fichiers - Disponible bientôt</Typography>
-      </Box>
+      component: (
+        <Box sx={{ p: 2, textAlign: 'center' }}>
+          <StorageIcon sx={{ fontSize: 48, color: '#D9D9D9', mb: 1 }} />
+          <Typography sx={{ color: '#999999', fontSize: '14px' }}>
+            Gestion des fichiers - Disponible bientôt
+          </Typography>
+        </Box>
+      ),
     },
     {
       label: 'Images',
       icon: <ImageIcon />,
-      component: <Box sx={{ p: 2, textAlign: 'center' }}>
-        <ImageIcon sx={{ fontSize: 48, color: '#D9D9D9', mb: 1 }} />
-        <Typography sx={{ color: '#999999', fontSize: '14px' }}>Galerie d\'images - Disponible bientôt</Typography>
-      </Box>
+      component: (
+        <Box sx={{ p: 2, textAlign: 'center' }}>
+          <ImageIcon sx={{ fontSize: 48, color: '#D9D9D9', mb: 1 }} />
+          <Typography sx={{ color: '#999999', fontSize: '14px' }}>
+            Galerie d\'images - Disponible bientôt
+          </Typography>
+        </Box>
+      ),
     },
     {
       label: 'Documents',
       icon: <DescriptionIcon />,
-      component: <Box sx={{ p: 2, textAlign: 'center' }}>
-        <DescriptionIcon sx={{ fontSize: 48, color: '#D9D9D9', mb: 1 }} />
-        <Typography sx={{ color: '#999999', fontSize: '14px' }}>Gestion des documents - Disponible bientôt</Typography>
-      </Box>
-    }
+      component: (
+        <Box sx={{ p: 2, textAlign: 'center' }}>
+          <DescriptionIcon sx={{ fontSize: 48, color: '#D9D9D9', mb: 1 }} />
+          <Typography sx={{ color: '#999999', fontSize: '14px' }}>
+            Gestion des documents - Disponible bientôt
+          </Typography>
+        </Box>
+      ),
+    },
   ];
 
   return (
@@ -62,9 +69,9 @@ export default function ContentManager() {
             padding: '12px 16px',
             '&.Mui-selected': {
               color: theme.palette.primary.main,
-              backgroundColor: '#F0F4FF'
-            }
-          }
+              backgroundColor: '#F0F4FF',
+            },
+          },
         }}
       >
         {tabs.map((tab, idx) => (
@@ -78,9 +85,7 @@ export default function ContentManager() {
         ))}
       </Tabs>
 
-      <Box sx={{ p: 3 }}>
-        {tabs[currentTab].component}
-      </Box>
+      <Box sx={{ p: 3 }}>{tabs[currentTab].component}</Box>
     </Box>
   );
 }

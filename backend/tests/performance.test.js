@@ -4,13 +4,12 @@
  */
 
 describe('Performance Benchmarks', () => {
-  
   describe('Query Performance', () => {
     test('should execute simple queries <500ms', () => {
       const start = Date.now();
       const queries = Array(100).fill(null);
       const duration = Date.now() - start;
-      
+
       expect(duration).toBeLessThan(500);
     });
 
@@ -18,7 +17,7 @@ describe('Performance Benchmarks', () => {
       const operations = Array(50).fill({ action: 'insert' });
       const batchSize = 10;
       const batches = Math.ceil(operations.length / batchSize);
-      
+
       expect(batches).toBe(5);
     });
   });
@@ -27,11 +26,11 @@ describe('Performance Benchmarks', () => {
     test('should return cached values <10ms', () => {
       const cache = new Map();
       cache.set('key', 'value');
-      
+
       const start = Date.now();
       cache.get('key');
       const duration = Date.now() - start;
-      
+
       expect(duration).toBeLessThan(10);
     });
 
@@ -39,7 +38,7 @@ describe('Performance Benchmarks', () => {
       const hits = 70;
       const total = 100;
       const hitRate = (hits / total) * 100;
-      
+
       expect(hitRate).toBeGreaterThanOrEqual(70);
     });
   });
@@ -63,16 +62,16 @@ describe('Performance Benchmarks', () => {
       const pool = {
         connections: 20,
         available: 15,
-        inUse: 5
+        inUse: 5,
       };
-      
+
       expect(pool.connections).toBe(pool.available + pool.inUse);
     });
 
     test('should queue requests when full', () => {
       const pool = { maxConnections: 20, currentConnections: 20 };
       const queued = pool.currentConnections >= pool.maxConnections;
-      
+
       expect(queued).toBe(true);
     });
   });
@@ -82,7 +81,7 @@ describe('Performance Benchmarks', () => {
       const start = Date.now();
       const response = { status: 200, data: 'ok' };
       const duration = Date.now() - start;
-      
+
       expect(duration).toBeLessThan(200);
       expect(response.status).toBe(200);
     });
@@ -91,7 +90,7 @@ describe('Performance Benchmarks', () => {
       const start = Date.now();
       const response = { status: 200, data: Array(1000).fill('data') };
       const duration = Date.now() - start;
-      
+
       expect(duration).toBeLessThan(1000);
     });
   });
@@ -100,17 +99,13 @@ describe('Performance Benchmarks', () => {
     test('should handle multiple requests', async () => {
       const requests = Array(10).fill(Promise.resolve('ok'));
       const results = await Promise.all(requests);
-      
+
       expect(results.length).toBe(10);
     });
 
     test('should not block on I/O', async () => {
-      const operations = [
-        Promise.resolve(1),
-        Promise.resolve(2),
-        Promise.resolve(3)
-      ];
-      
+      const operations = [Promise.resolve(1), Promise.resolve(2), Promise.resolve(3)];
+
       const results = await Promise.all(operations);
       expect(results).toEqual([1, 2, 3]);
     });

@@ -15,7 +15,7 @@ class ErrorBoundary extends React.Component {
     this.state = {
       hasError: false,
       error: null,
-      errorInfo: null
+      errorInfo: null,
     };
   }
 
@@ -26,7 +26,7 @@ class ErrorBoundary extends React.Component {
   componentDidCatch(error, errorInfo) {
     this.setState({
       error,
-      errorInfo
+      errorInfo,
     });
   }
 
@@ -34,7 +34,7 @@ class ErrorBoundary extends React.Component {
     this.setState({
       hasError: false,
       error: null,
-      errorInfo: null
+      errorInfo: null,
     });
   };
 
@@ -55,37 +55,38 @@ class ErrorBoundary extends React.Component {
               justifyContent: 'center',
               minHeight: '60vh',
               padding: '40px 20px',
-              textAlign: 'center'
+              textAlign: 'center',
             }}
           >
             <ErrorOutlineIcon
               sx={{
                 fontSize: 80,
                 color: THEME_COLORS.error,
-                marginBottom: '20px'
+                marginBottom: '20px',
               }}
             />
-            
+
             <Typography
               variant="h3"
               sx={{
                 color: THEME_COLORS.textPrimary,
                 fontWeight: 600,
-                marginBottom: '16px'
+                marginBottom: '16px',
               }}
             >
               Désolé, une erreur s'est produite
             </Typography>
-            
+
             <Typography
               variant="body1"
               sx={{
                 color: THEME_COLORS.textSecondary,
                 marginBottom: '24px',
-                maxWidth: '500px'
+                maxWidth: '500px',
               }}
             >
-              Un problème inattendu s'est produit. Veuillez essayer de rafraîchir la page ou de retourner à l'accueil.
+              Un problème inattendu s'est produit. Veuillez essayer de rafraîchir la page ou de
+              retourner à l'accueil.
             </Typography>
 
             <Box sx={{ display: 'flex', gap: '12px', justifyContent: 'center' }}>
@@ -100,13 +101,13 @@ class ErrorBoundary extends React.Component {
                   fontWeight: 500,
                   minHeight: '40px',
                   '&:hover': {
-                    backgroundColor: THEME_COLORS.primaryDark
-                  }
+                    backgroundColor: THEME_COLORS.primaryDark,
+                  },
                 }}
               >
                 Réessayer
               </Button>
-              
+
               <Button
                 variant="outlined"
                 onClick={this.handleReload}
@@ -119,8 +120,8 @@ class ErrorBoundary extends React.Component {
                   minHeight: '40px',
                   '&:hover': {
                     borderColor: THEME_COLORS.primaryDark,
-                    backgroundColor: `${THEME_COLORS.primary}10`
-                  }
+                    backgroundColor: `${THEME_COLORS.primary}10`,
+                  },
                 }}
               >
                 Aller à l'accueil

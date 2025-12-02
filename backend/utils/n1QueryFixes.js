@@ -1,6 +1,6 @@
 /**
  * N+1 Query Fixes - Applied Patterns
- * 
+ *
  * All queries in the system should follow these patterns
  */
 

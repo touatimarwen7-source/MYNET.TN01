@@ -1,4 +1,4 @@
-import apiClient from './apiClient';
+import apiClient from "api/apiClient";
 
 /**
  * An object containing all API functions related to procurement.
@@ -10,7 +10,7 @@ export const procurementAPI = {
    * @param {object} params - Query parameters for filtering (e.g., { page, limit, category }).
    * @returns {Promise<AxiosResponse<any>>}
    */
-  getTenders: (params) => apiClient.get('/tenders', { params }),
+  getTenders: (params) => apiClient.get("/tenders", { params }),
 
   /**
    * Fetches the details for a single tender.
@@ -27,9 +27,9 @@ export const procurementAPI = {
   createOffer: (formData) => {
     // For multipart/form-data, we let the browser set the Content-Type header
     // to ensure the boundary is set correctly.
-    return apiClient.post('/offers', formData, {
+    return apiClient.post("/offers", formData, {
       headers: {
-        'Content-Type': 'multipart/form-data',
+        "Content-Type": "multipart/form-data",
       },
     });
   },
@@ -38,7 +38,7 @@ export const procurementAPI = {
    * Fetches all offers submitted by the current supplier.
    * @returns {Promise<AxiosResponse<any>>}
    */
-  getMyOffers: () => apiClient.get('/my-offers'),
+  getMyOffers: () => apiClient.get("/my-offers"),
 
   /**
    * --- PHASE 2: Awarding & PO ---
@@ -57,14 +57,16 @@ export const procurementAPI = {
    * @param {string} winningOfferId - The ID of the winning offer.
    * @returns {Promise<AxiosResponse<any>>} - The response should contain the newly created Purchase Order.
    */
-  awardTender: (tenderId, winningOfferId) => apiClient.post(`/tenders/${tenderId}/award`, { winningOfferId }),
+  awardTender: (tenderId, winningOfferId) =>
+    apiClient.post(`/tenders/${tenderId}/award`, { winningOfferId }),
 
   /**
    * Fetches the details of a specific Purchase Order.
    * @param {string} purchaseOrderId - The ID of the purchase order.
    * @returns {Promise<AxiosResponse<any>>}
    */
-  getPurchaseOrder: (purchaseOrderId) => apiClient.get(`/purchase-orders/${purchaseOrderId}`),
+  getPurchaseOrder: (purchaseOrderId) =>
+    apiClient.get(`/purchase-orders/${purchaseOrderId}`),
 
   /**
    * --- PHASE 2: Invoicing ---
@@ -79,12 +81,12 @@ export const procurementAPI = {
    */
   createInvoice: (purchaseOrderId, invoiceData) =>
     apiClient.post(`/purchase-orders/${purchaseOrderId}/invoices`, invoiceData),
-  
+
   /**
    * Fetches all purchase orders received by the current supplier.
    * @returns {Promise<AxiosResponse<any>>}
    */
-  getMyPurchaseOrders: () => apiClient.get('/my-purchase-orders'),
+  getMyPurchaseOrders: () => apiClient.get("/my-purchase-orders"),
 
   /**
    * --- PHASE 2: Audit Log ---
@@ -95,7 +97,8 @@ export const procurementAPI = {
    * @param {string} tenderId - The ID of the tender.
    * @returns {Promise<AxiosResponse<any>>}
    */
-  getTenderHistory: (tenderId) => apiClient.get(`/tenders/${tenderId}/audit-log`),
+  getTenderHistory: (tenderId) =>
+    apiClient.get(`/tenders/${tenderId}/audit-log`),
 
   /**
    * --- ADMIN: User Management ---
@@ -106,7 +109,7 @@ export const procurementAPI = {
    * @param {object} params - Query parameters for filtering/searching (e.g., { search, role }).
    * @returns {Promise<AxiosResponse<any>>}
    */
-  getUsers: (params) => apiClient.get('/admin/users', { params }),
+  getUsers: (params) => apiClient.get("/admin/users", { params }),
 
   /**
    * Updates a user's details (e.g., role, status).
@@ -114,7 +117,8 @@ export const procurementAPI = {
    * @param {object} userData - The data to update (e.g., { role: 'Buyer', isActive: false }).
    * @returns {Promise<AxiosResponse<any>>}
    */
-  updateUser: (userId, userData) => apiClient.patch(`/admin/users/${userId}`, userData),
+  updateUser: (userId, userData) =>
+    apiClient.patch(`/admin/users/${userId}`, userData),
 
   /**
    * --- PHASE 2: Subscriptions & Payments ---
@@ -124,7 +128,7 @@ export const procurementAPI = {
    * Fetches the available subscription plans.
    * @returns {Promise<AxiosResponse<any>>}
    */
-  getSubscriptionPlans: () => apiClient.get('/subscriptions/plans'),
+  getSubscriptionPlans: () => apiClient.get("/subscriptions/plans"),
 
   /**
    * Creates a checkout session with the payment gateway (e.g., Stripe).
@@ -132,7 +136,8 @@ export const procurementAPI = {
    * @param {string} planId - The ID of the plan to subscribe to.
    * @returns {Promise<AxiosResponse<any>>}
    */
-  createCheckoutSession: (planId) => apiClient.post('/subscriptions/create-checkout-session', { planId }),
+  createCheckoutSession: (planId) =>
+    apiClient.post("/subscriptions/create-checkout-session", { planId }),
 
   /**
    * --- PHASE 3: Direct Purchase ---
@@ -143,14 +148,15 @@ export const procurementAPI = {
    * @param {object} params - Query parameters for searching suppliers (e.g., { search }).
    * @returns {Promise<AxiosResponse<any>>}
    */
-  getSuppliers: (params) => apiClient.get('/suppliers', { params }),
+  getSuppliers: (params) => apiClient.get("/suppliers", { params }),
 
   /**
    * Creates and sends a direct purchase request to a specific supplier.
    * @param {object} requestData - The direct purchase request data.
    * @returns {Promise<AxiosResponse<any>>}
    */
-  createDirectPurchaseRequest: (requestData) => apiClient.post('/direct-purchase-requests', requestData),
+  createDirectPurchaseRequest: (requestData) =>
+    apiClient.post("/direct-purchase-requests", requestData),
 
   /**
    * --- PHASE 3: Reviews & Ratings ---
@@ -160,14 +166,14 @@ export const procurementAPI = {
    * Fetches a list of completed orders that are eligible for a review by the current user.
    * @returns {Promise<AxiosResponse<any>>}
    */
-  getReviewableOrders: () => apiClient.get('/reviews/reviewable-orders'),
+  getReviewableOrders: () => apiClient.get("/reviews/reviewable-orders"),
 
   /**
    * Submits a review for a completed purchase order.
    * @param {object} reviewData - The review data (e.g., { purchaseOrderId, rating, comment }).
    * @returns {Promise<AxiosResponse<any>>}
    */
-  submitReview: (reviewData) => apiClient.post('/reviews', reviewData),
+  submitReview: (reviewData) => apiClient.post("/reviews", reviewData),
 
   /**
    * --- PHASE 3: Offer Analysis Engine ---
@@ -178,7 +184,8 @@ export const procurementAPI = {
    * @param {string} tenderId - The ID of the tender.
    * @returns {Promise<AxiosResponse<any>>}
    */
-  getTenderAnalysisReport: (tenderId) => apiClient.get(`/tenders/${tenderId}/analysis-report`),
+  getTenderAnalysisReport: (tenderId) =>
+    apiClient.get(`/tenders/${tenderId}/analysis-report`),
 
   /**
    * --- PHASE 3: Smart Alerts ---
@@ -188,18 +195,20 @@ export const procurementAPI = {
    * Fetches the current user's notification preferences.
    * @returns {Promise<AxiosResponse<any>>}
    */
-  getNotificationPreferences: () => apiClient.get('/user/notification-preferences'),
+  getNotificationPreferences: () =>
+    apiClient.get("/user/notification-preferences"),
 
   /**
    * Updates the current user's notification preferences.
    * @param {object} preferences - The new preferences object.
    * @returns {Promise<AxiosResponse<any>>}
    */
-  updateNotificationPreferences: (preferences) => apiClient.put('/user/notification-preferences', preferences),
+  updateNotificationPreferences: (preferences) =>
+    apiClient.put("/user/notification-preferences", preferences),
 
   /**
    * Fetches the list of all available business categories for preferences.
    * @returns {Promise<AxiosResponse<any>>}
    */
-  getSystemCategories: () => apiClient.get('/system/categories'),
+  getSystemCategories: () => apiClient.get("/system/categories"),
 };

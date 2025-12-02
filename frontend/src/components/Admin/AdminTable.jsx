@@ -45,12 +45,7 @@ export default function AdminTable({
     if (search) {
       const searchLower = search.toLowerCase();
       filtered = filtered.filter((row) =>
-        columns.some(
-          (col) =>
-            String(row[col.field])
-              .toLowerCase()
-              .includes(searchLower)
-        )
+        columns.some((col) => String(row[col.field]).toLowerCase().includes(searchLower))
       );
     }
 
@@ -67,18 +62,18 @@ export default function AdminTable({
     return filtered;
   }, [rows, search, sortBy, sortOrder, columns, sortable]);
 
-  const paginatedRows = useMemo(() =>
-    filteredRows.slice(
-      page * rowsPerPage,
-      page * rowsPerPage + rowsPerPage
-    ),
+  const paginatedRows = useMemo(
+    () => filteredRows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage),
     [filteredRows, page, rowsPerPage]
   );
 
-  const handleSort = useCallback((field) => {
-    setSortOrder(sortBy === field && sortOrder === 'asc' ? 'desc' : 'asc');
-    setSortBy(field);
-  }, [sortBy, sortOrder]);
+  const handleSort = useCallback(
+    (field) => {
+      setSortOrder(sortBy === field && sortOrder === 'asc' ? 'desc' : 'asc');
+      setSortBy(field);
+    },
+    [sortBy, sortOrder]
+  );
 
   const handleSearch = useCallback((value) => {
     setSearch(value);
@@ -101,11 +96,7 @@ export default function AdminTable({
   return (
     <Box>
       {searchable && (
-        <AdminTableSearch 
-          value={search} 
-          onChange={handleSearch}
-          placeholder="Rechercher..."
-        />
+        <AdminTableSearch value={search} onChange={handleSearch} placeholder="Rechercher..." />
       )}
 
       <TableContainer component={Paper}>

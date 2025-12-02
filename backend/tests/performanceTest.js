@@ -20,7 +20,7 @@ const generateMockData = (count) => {
       status: ['draft', 'published', 'closed'][i % 3],
       is_public: i % 2 === 0,
       buyer_id: Math.floor(i / 10) + 1,
-      created_at: new Date(Date.now() - Math.random() * 365 * 24 * 60 * 60 * 1000)
+      created_at: new Date(Date.now() - Math.random() * 365 * 24 * 60 * 60 * 1000),
     });
   }
   return records;
@@ -52,7 +52,9 @@ for (let page = 1; page <= 100; page++) {
 const duration1 = Date.now() - startTime;
 
 console.log(`⏱️  Total Time: ${duration1}ms`);
-console.log(`📦 Total Data Size: ${Math.round(totalSize / 1024)}KB (${Math.round(totalSize / 1024 / 1024)}MB)`);
+console.log(
+  `📦 Total Data Size: ${Math.round(totalSize / 1024)}KB (${Math.round(totalSize / 1024 / 1024)}MB)`
+);
 console.log(`📊 Average Response Size: ${Math.round(totalSize / 100)}KB`);
 console.log(`🚀 Throughput: ${Math.round(100 / (duration1 / 1000))} pages/second\n`);
 
@@ -64,14 +66,26 @@ console.log('══════════════════════�
 startTime = Date.now();
 totalSize = 0;
 
-const selectiveColumns = ['id', 'tender_number', 'title', 'category', 'budget_min', 'budget_max', 'deadline', 'status', 'is_public', 'buyer_id', 'created_at'];
+const selectiveColumns = [
+  'id',
+  'tender_number',
+  'title',
+  'category',
+  'budget_min',
+  'budget_max',
+  'deadline',
+  'status',
+  'is_public',
+  'buyer_id',
+  'created_at',
+];
 
 // Simulate 1000 pages with selective columns
 for (let page = 1; page <= 100; page++) {
   const offset = (page - 1) * 10;
-  const pageData = allRecords.slice(offset, offset + 10).map(record => {
+  const pageData = allRecords.slice(offset, offset + 10).map((record) => {
     const selective = {};
-    selectiveColumns.forEach(col => {
+    selectiveColumns.forEach((col) => {
       selective[col] = record[col];
     });
     return selective;
@@ -83,7 +97,9 @@ for (let page = 1; page <= 100; page++) {
 const duration2 = Date.now() - startTime;
 
 console.log(`⏱️  Total Time: ${duration2}ms`);
-console.log(`📦 Total Data Size: ${Math.round(totalSize / 1024)}KB (${Math.round(totalSize / 1024 / 1024)}MB)`);
+console.log(
+  `📦 Total Data Size: ${Math.round(totalSize / 1024)}KB (${Math.round(totalSize / 1024 / 1024)}MB)`
+);
 console.log(`📊 Average Response Size: ${Math.round(totalSize / 100)}KB`);
 console.log(`🚀 Throughput: ${Math.round(100 / (duration2 / 1000))} pages/second\n`);
 
@@ -100,9 +116,9 @@ const heapUsed1 = process.memoryUsage().heapUsed;
 
 // Selective columns (optimized)
 const selectiveData = JSON.stringify(
-  allRecords.map(record => {
+  allRecords.map((record) => {
     const selective = {};
-    selectiveColumns.forEach(col => {
+    selectiveColumns.forEach((col) => {
       selective[col] = record[col];
     });
     return selective;
@@ -112,7 +128,7 @@ const heapUsed2 = process.memoryUsage().heapUsed;
 
 console.log(`SELECT * Memory: ${Math.round(heapUsed1 / 1024 / 1024)}MB`);
 console.log(`Selective Columns Memory: ${Math.round(heapUsed2 / 1024 / 1024)}MB`);
-console.log(`Memory Reduction: ${Math.round((heapUsed1 - heapUsed2) / heapUsed1 * 100)}%\n`);
+console.log(`Memory Reduction: ${Math.round(((heapUsed1 - heapUsed2) / heapUsed1) * 100)}%\n`);
 
 // Summary
 console.log('═══════════════════════════════════════════════════════════════');
@@ -127,7 +143,9 @@ console.log(`  Improvement: ${Math.round((1 - duration2 / duration1) * 100)}% fa
 console.log('📦 DATA SIZE:');
 console.log(`  Before: ${Math.round(totalSize / 1024)}KB`);
 console.log(`  After: ${Math.round(totalSize / 1024)}KB`);
-console.log(`  Reduction: ${Math.round((heapUsed1 - heapUsed2) / heapUsed1 * 100)}% smaller ✅\n`);
+console.log(
+  `  Reduction: ${Math.round(((heapUsed1 - heapUsed2) / heapUsed1) * 100)}% smaller ✅\n`
+);
 
 console.log('✅ OPTIMIZATION VERDICT:');
 console.log('  🟢 EXCELLENT - Optimization successfully reduces memory and response size');
@@ -138,7 +156,9 @@ console.log('══════════════════════�
 
 console.log('🎯 KEY FINDINGS:');
 console.log(`  1. Query Performance: 100 pages in ${duration2}ms`);
-console.log(`  2. Memory Efficient: ${Math.round((heapUsed1 - heapUsed2) / heapUsed1 * 100)}% reduction`);
+console.log(
+  `  2. Memory Efficient: ${Math.round(((heapUsed1 - heapUsed2) / heapUsed1) * 100)}% reduction`
+);
 console.log(`  3. Pagination Impact: Default 20 items per page`);
 console.log(`  4. Scalability: Can handle 10k+ records efficiently\n`);
 

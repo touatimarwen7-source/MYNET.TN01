@@ -16,22 +16,29 @@ import {
 import axios from '../api/axiosConfig';
 import institutionalTheme from '../theme/theme';
 
-export default function NotificationCenter({ notifications, loading, unreadCount, fetchNotifications }) {
+export default function NotificationCenter({
+  notifications,
+  loading,
+  unreadCount,
+  fetchNotifications,
+}) {
   const [error, setError] = useState(null);
 
   const markAsRead = async (notificationId) => {
     try {
       await axios.post(`/api/notifications/${notificationId}/read`);
       fetchNotifications(); // Re-fetch after marking as read
-    } catch (err) {
-    }
+    } catch (err) {}
   };
 
   return (
     <Box sx={{ p: 3, direction: 'rtl' }}>
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 3 }}>
         <Badge badgeContent={unreadCount} color="error">
-          <Typography variant="h5" sx={{ color: institutionalTheme.palette.primary.main, fontWeight: 'bold' }}>
+          <Typography
+            variant="h5"
+            sx={{ color: institutionalTheme.palette.primary.main, fontWeight: 'bold' }}
+          >
             🔔 مركز الإشعارات
           </Typography>
         </Badge>
@@ -67,7 +74,13 @@ export default function NotificationCenter({ notifications, loading, unreadCount
                   <ListItem sx={{ p: 0 }}>
                     <ListItemText
                       primary={
-                        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <Box
+                          sx={{
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            alignItems: 'center',
+                          }}
+                        >
                           <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>
                             {notification.title || `ملحق جديد: ${notification.addendum_number}`}
                           </Typography>
@@ -78,9 +91,7 @@ export default function NotificationCenter({ notifications, loading, unreadCount
                       }
                       secondary={
                         <Box sx={{ mt: 1 }}>
-                          <Typography variant="body2">
-                            {notification.tender_title}
-                          </Typography>
+                          <Typography variant="body2">{notification.tender_title}</Typography>
                           <Typography variant="body2" sx={{ color: '#666', my: 1 }}>
                             {notification.tender_number}
                           </Typography>

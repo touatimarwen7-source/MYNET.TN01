@@ -16,7 +16,7 @@ export default function LoadingSpinner({ message = 'Chargement en cours...' }) {
         justifyContent: 'center',
         alignItems: 'center',
         minHeight: '60vh',
-        gap: '16px'
+        gap: '16px',
       }}
     >
       <CircularProgress sx={{ color: theme.palette.primary.main }} size={50} />

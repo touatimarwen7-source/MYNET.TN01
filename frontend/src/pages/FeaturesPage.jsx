@@ -10,8 +10,8 @@ export default function FeaturesPage() {
     { title: 'Sécurisé et fiable', desc: 'Niveaux de sécurité et de protection les plus élevés' },
     { title: 'Support complet', desc: 'Support français complet pour la plateforme' },
     { title: 'Rapports avancés', desc: 'Analyses et rapports complets' },
-    { title: 'Intégration complète', desc: 'Intégration transparente avec d\'autres systèmes' },
-    { title: 'Support technique', desc: 'Support technique disponible 24h/24, 7j/7' }
+    { title: 'Intégration complète', desc: "Intégration transparente avec d'autres systèmes" },
+    { title: 'Support technique', desc: 'Support technique disponible 24h/24, 7j/7' },
   ];
 
   useEffect(() => {
@@ -19,9 +19,24 @@ export default function FeaturesPage() {
   }, []);
 
   return (
-    <Box sx={{ backgroundColor: institutionalTheme.palette.background.default, paddingY: '40px', minHeight: '80vh' }}>
+    <Box
+      sx={{
+        backgroundColor: institutionalTheme.palette.background.default,
+        paddingY: '40px',
+        minHeight: '80vh',
+      }}
+    >
       <Container maxWidth="lg">
-        <Typography variant="h2" sx={{ fontSize: '32px', fontWeight: 600, color: institutionalTheme.palette.primary.main, mb: 3, textAlign: 'center' }}>
+        <Typography
+          variant="h2"
+          sx={{
+            fontSize: '32px',
+            fontWeight: 600,
+            color: institutionalTheme.palette.primary.main,
+            mb: 3,
+            textAlign: 'center',
+          }}
+        >
           Nos fonctionnalités
         </Typography>
         <Grid container spacing={3}>
@@ -29,7 +44,16 @@ export default function FeaturesPage() {
             <Grid xs={12} lg={6} md={4} key={idx}>
               <Card sx={{ border: '1px solid #E0E0E0', height: '100%' }}>
                 <CardContent>
-                  <Typography sx={{ fontSize: '18px', fontWeight: 600, mb: 1, color: institutionalTheme.palette.primary.main }}>{f.title}</Typography>
+                  <Typography
+                    sx={{
+                      fontSize: '18px',
+                      fontWeight: 600,
+                      mb: 1,
+                      color: institutionalTheme.palette.primary.main,
+                    }}
+                  >
+                    {f.title}
+                  </Typography>
                   <Typography sx={{ color: '#616161' }}>{f.desc}</Typography>
                 </CardContent>
               </Card>

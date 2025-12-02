@@ -7,9 +7,27 @@ import institutionalTheme from '../theme/theme';
 export default function DynamicAdvertisement() {
   const theme = institutionalTheme;
   const [advertisements] = useState([
-    { id: 1, type: 'success', title: 'Succès Client', message: 'Banque Tunisienne adopte MyNet.tn pour gérer 500M TND d\'achats annuels', cta: 'En savoir plus' },
-    { id: 2, type: 'webinar', title: 'Webinaire Gratuit', message: 'Masterclass: Optimiser vos appels d\'offres avec l\'IA - Jeudi 20h', cta: 'S\'inscrire gratuitement' },
-    { id: 3, type: 'promo', title: 'Offre Limitée', message: 'Gold Plan à -30% pour les 3 premiers mois - Code: GROWTH30', cta: 'Profiter de l\'offre' }
+    {
+      id: 1,
+      type: 'success',
+      title: 'Succès Client',
+      message: "Banque Tunisienne adopte MyNet.tn pour gérer 500M TND d'achats annuels",
+      cta: 'En savoir plus',
+    },
+    {
+      id: 2,
+      type: 'webinar',
+      title: 'Webinaire Gratuit',
+      message: "Masterclass: Optimiser vos appels d'offres avec l'IA - Jeudi 20h",
+      cta: "S'inscrire gratuitement",
+    },
+    {
+      id: 3,
+      type: 'promo',
+      title: 'Offre Limitée',
+      message: 'Gold Plan à -30% pour les 3 premiers mois - Code: GROWTH30',
+      cta: "Profiter de l'offre",
+    },
   ]);
 
   const [currentAd, setCurrentAd] = useState(0);
@@ -22,16 +40,34 @@ export default function DynamicAdvertisement() {
 
   return (
     <Box sx={{ padding: '24px' }}>
-      <Card sx={{ backgroundColor: THEME_COLORS.bgPaper, border: '1px solid #E0E0E0', borderRadius: '4px', boxShadow: 'none' }}>
+      <Card
+        sx={{
+          backgroundColor: THEME_COLORS.bgPaper,
+          border: '1px solid #E0E0E0',
+          borderRadius: '4px',
+          boxShadow: 'none',
+        }}
+      >
         <CardContent sx={{ padding: '32px' }}>
-          <Typography variant="h5" sx={{ fontSize: '18px', fontWeight: 600, color: theme.palette.text.primary, marginBottom: '12px' }}>
+          <Typography
+            variant="h5"
+            sx={{
+              fontSize: '18px',
+              fontWeight: 600,
+              color: theme.palette.text.primary,
+              marginBottom: '12px',
+            }}
+          >
             {ad.title}
           </Typography>
-          <Typography variant="body2" sx={{ fontSize: '14px', color: THEME_COLORS.textSecondary, marginBottom: '16px' }}>
+          <Typography
+            variant="body2"
+            sx={{ fontSize: '14px', color: THEME_COLORS.textSecondary, marginBottom: '16px' }}
+          >
             {ad.message}
           </Typography>
-          <Button 
-            variant="contained" 
+          <Button
+            variant="contained"
             sx={{ backgroundColor: theme.palette.primary.main, color: '#FFFFFF' }}
             onClick={() => {}}
           >
@@ -48,7 +84,8 @@ export default function DynamicAdvertisement() {
                   width: '12px',
                   height: '12px',
                   borderRadius: '50%',
-                  backgroundColor: idx === currentAd ? theme.palette.primary.main : theme.palette.divider,
+                  backgroundColor:
+                    idx === currentAd ? theme.palette.primary.main : theme.palette.divider,
                   border: 'none',
                   cursor: 'pointer',
                 }}

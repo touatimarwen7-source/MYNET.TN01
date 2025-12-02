@@ -15,6 +15,7 @@ npm run db:push --force
 ### ❌ DO NOT: Manual SQL Migrations
 
 Never write raw SQL migrations like:
+
 ```sql
 ALTER TABLE users DROP COLUMN old_field;
 ```
@@ -36,6 +37,7 @@ If something goes wrong:
 ### Testing Migrations
 
 Before production:
+
 1. Test on development database
 2. Verify schema changes with `npm run db:push`
 3. Check data integrity
@@ -51,4 +53,3 @@ Before production:
 ❌ **Never write SQL migrations manually**
 ❌ **Never alter ID column types**
 ❌ **Never delete tables without backup**
-

@@ -16,7 +16,7 @@ class BackupScheduler {
     this.jobs = [];
     this.isRunning = false;
     this.schedulePattern = this.parseSchedule();
-    this.isEnabled = (process.env.BACKUP_ENABLED !== 'false');
+    this.isEnabled = process.env.BACKUP_ENABLED !== 'false';
   }
 
   /**
@@ -28,7 +28,7 @@ class BackupScheduler {
    */
   parseSchedule() {
     const defaultSchedule = '0 2 * * *'; // 2 AM UTC daily
-    
+
     if (process.env.BACKUP_SCHEDULE) {
       // Validate cron pattern (basic validation - 5 fields)
       const parts = process.env.BACKUP_SCHEDULE.split(' ');
@@ -36,7 +36,7 @@ class BackupScheduler {
         return process.env.BACKUP_SCHEDULE;
       }
     }
-    
+
     return defaultSchedule;
   }
 
@@ -54,7 +54,7 @@ class BackupScheduler {
       '0 */6 * * *': 'Every 6 hours (0, 6, 12, 18)',
       '0 */12 * * *': 'Every 12 hours (0, 12)',
       '0 3 * * 0': 'Weekly on Sunday at 3:00 AM UTC',
-      '0 3 * * 1': 'Weekly on Monday at 3:00 AM UTC'
+      '0 3 * * 1': 'Weekly on Monday at 3:00 AM UTC',
     };
     return patterns[this.schedulePattern] || this.schedulePattern;
   }
@@ -78,7 +78,6 @@ class BackupScheduler {
 
       this.jobs.push(backupJob);
       this.isRunning = true;
-
     } catch (error) {
       // Silently fail scheduler startup
     }
@@ -113,7 +112,7 @@ class BackupScheduler {
    * @returns {void}
    */
   stop() {
-    this.jobs.forEach(job => job.cancel());
+    this.jobs.forEach((job) => job.cancel());
     this.jobs = [];
     this.isRunning = false;
   }
@@ -143,8 +142,8 @@ class BackupScheduler {
       configurable: true,
       environmentVariables: {
         BACKUP_SCHEDULE: 'Cron pattern (e.g., "0 2 * * *")',
-        BACKUP_ENABLED: 'Set to "false" to disable backups'
-      }
+        BACKUP_ENABLED: 'Set to "false" to disable backups',
+      },
     };
   }
 }

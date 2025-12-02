@@ -8,16 +8,8 @@ const { validateIdMiddleware } = require('../middleware/validateIdMiddleware');
 // Advanced search tenders with filters
 router.get('/tenders/advanced', authMiddleware, async (req, res) => {
   try {
-    const { 
-      search, 
-      minBudget, 
-      maxBudget, 
-      category, 
-      location, 
-      minRating, 
-      status
-    } = req.query;
-    
+    const { search, minBudget, maxBudget, category, location, minRating, status } = req.query;
+
     const { limit, offset, sql } = buildPaginationQuery(req.query.limit, req.query.offset);
     const db = req.app.get('db');
 
@@ -77,15 +69,8 @@ router.get('/tenders/advanced', authMiddleware, async (req, res) => {
 // Advanced search suppliers with filters
 router.get('/suppliers/advanced', authMiddleware, async (req, res) => {
   try {
-    const { 
-      search,
-      minRating,
-      maxRating,
-      category,
-      location,
-      verified
-    } = req.query;
-    
+    const { search, minRating, maxRating, category, location, verified } = req.query;
+
     const { limit, offset, sql } = buildPaginationQuery(req.query.limit, req.query.offset);
     const db = req.app.get('db');
 

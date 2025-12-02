@@ -134,10 +134,7 @@ class FrontendAnalyticsTracker {
 
     // Also report to Sentry if available
     if (Sentry?.captureMessage) {
-      Sentry.captureMessage(
-        `UI Error: ${errorType} - ${errorMessage}`,
-        'error'
-      );
+      Sentry.captureMessage(`UI Error: ${errorType} - ${errorMessage}`, 'error');
     }
   }
 
@@ -207,7 +204,7 @@ class FrontendAnalyticsTracker {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(event),
-      }).catch(err => {
+      }).catch((err) => {
         console.warn('Failed to send analytics:', err);
       });
     } catch (error) {

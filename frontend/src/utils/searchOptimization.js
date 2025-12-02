@@ -24,9 +24,9 @@ export const optimizedSearch = (items, term, fields) => {
   if (!term || term.length < 2) return items;
 
   const normalized = normalizeSearchTerm(term);
-  
-  return items.filter(item =>
-    fields.some(field => {
+
+  return items.filter((item) =>
+    fields.some((field) => {
       const value = item[field];
       if (!value) return false;
       return normalizeSearchTerm(String(value)).includes(normalized);
@@ -37,7 +37,7 @@ export const optimizedSearch = (items, term, fields) => {
 // Highlight search results
 export const highlightSearchTerm = (text, term) => {
   if (!term) return text;
-  
+
   const regex = new RegExp(`(${term})`, 'gi');
   return String(text).replace(regex, '<mark style="background-color: #ffeb3b;">$1</mark>');
 };
@@ -45,7 +45,7 @@ export const highlightSearchTerm = (text, term) => {
 // Cache search results for performance
 export const createSearchCache = (maxSize = 50) => {
   const cache = new Map();
-  
+
   return {
     get: (key) => cache.get(key),
     set: (key, value) => {
@@ -55,7 +55,7 @@ export const createSearchCache = (maxSize = 50) => {
       }
       cache.set(key, value);
     },
-    clear: () => cache.clear()
+    clear: () => cache.clear(),
   };
 };
 

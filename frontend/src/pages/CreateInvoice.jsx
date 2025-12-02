@@ -53,7 +53,7 @@ const STEPS = [
   { label: 'Conditions de Paiement', icon: '🏦' },
   { label: 'Documents', icon: '📎' },
   { label: 'Informations Bancaires', icon: '🏧' },
-  { label: 'Révision et Envoi', icon: '✅' }
+  { label: 'Révision et Envoi', icon: '✅' },
 ];
 
 export default function CreateInvoice() {
@@ -61,7 +61,7 @@ export default function CreateInvoice() {
   const navigate = useNavigate();
   const { supplyRequestId } = useParams();
   const [activeStep, setActiveStep] = useState(0);
-  
+
   const [supplyRequest, setSupplyRequest] = useState(null);
   const [formData, setFormData] = useState({
     supply_request_id: supplyRequestId,
@@ -89,7 +89,12 @@ export default function CreateInvoice() {
   });
 
   const [items, setItems] = useState([]);
-  const [newItem, setNewItem] = useState({ description: '', quantity: '', unit_price: '', unit: 'pièce' });
+  const [newItem, setNewItem] = useState({
+    description: '',
+    quantity: '',
+    unit_price: '',
+    unit: 'pièce',
+  });
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -105,8 +110,7 @@ export default function CreateInvoice() {
         const savedData = JSON.parse(saved);
         setFormData(savedData);
         setItems(savedData.items || []);
-      } catch (e) {
-      }
+      } catch (e) {}
     }
   }, [supplyRequestId]);
 
@@ -119,7 +123,7 @@ export default function CreateInvoice() {
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-    setFormData(prev => ({ ...prev, [name]: type === 'checkbox' ? checked : value }));
+    setFormData((prev) => ({ ...prev, [name]: type === 'checkbox' ? checked : value }));
   };
 
   const calculateTotals = (newItems) => {
@@ -134,41 +138,41 @@ export default function CreateInvoice() {
       const newItemData = { ...newItem, totalPrice, id: Date.now() };
       const updatedItems = [...items, newItemData];
       setItems(updatedItems);
-      
+
       const totals = calculateTotals(updatedItems);
-      setFormData(prev => ({
+      setFormData((prev) => ({
         ...prev,
         items: updatedItems,
         subtotal: totals.subtotal,
         tax_amount: totals.tax,
-        total_amount: totals.total
+        total_amount: totals.total,
       }));
-      
+
       setNewItem({ description: '', quantity: '', unit_price: '', unit: 'pièce' });
     }
   };
 
   const removeItem = (id) => {
-    const updatedItems = items.filter(i => i.id !== id);
+    const updatedItems = items.filter((i) => i.id !== id);
     setItems(updatedItems);
-    
+
     const totals = calculateTotals(updatedItems);
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       items: updatedItems,
       subtotal: totals.subtotal,
       tax_amount: totals.tax,
-      total_amount: totals.total
+      total_amount: totals.total,
     }));
   };
 
   const handleFileUpload = (e) => {
     const files = Array.from(e.target.files || []);
-    setSelectedFiles(prev => [...prev, ...files]);
+    setSelectedFiles((prev) => [...prev, ...files]);
   };
 
   const removeAttachment = (index) => {
-    setSelectedFiles(prev => prev.filter((_, i) => i !== index));
+    setSelectedFiles((prev) => prev.filter((_, i) => i !== index));
   };
 
   const validateStep = (step) => {
@@ -209,19 +213,19 @@ export default function CreateInvoice() {
   const handleNext = () => {
     if (validateStep(activeStep)) {
       autoSaveDraft();
-      setStepsCompleted(prev => ({ ...prev, [activeStep]: true }));
-      setActiveStep(prev => Math.min(prev + 1, STEPS.length - 1));
+      setStepsCompleted((prev) => ({ ...prev, [activeStep]: true }));
+      setActiveStep((prev) => Math.min(prev + 1, STEPS.length - 1));
     }
   };
 
   const handlePrevious = () => {
-    setActiveStep(prev => Math.max(prev - 1, 0));
+    setActiveStep((prev) => Math.max(prev - 1, 0));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
-    
+
     if (items.length === 0) {
       setError('Ajoutez au moins un article');
       return;
@@ -233,12 +237,12 @@ export default function CreateInvoice() {
       const submitData = {
         ...formData,
         items,
-        status: 'submitted'
+        status: 'submitted',
       };
 
       await procurementAPI.createInvoice(submitData);
       localStorage.removeItem(`invoiceDraft_${supplyRequestId}`);
-      
+
       setTimeout(() => {
         navigate(`/supply-request/${supplyRequestId}`);
       }, 1000);
@@ -394,19 +398,31 @@ export default function CreateInvoice() {
             <TableHead>
               <TableRow sx={{ backgroundColor: 'action.hover' }}>
                 <TableCell sx={{ fontWeight: 600, color: 'primary.main' }}>Description</TableCell>
-                <TableCell align="right" sx={{ fontWeight: 600, color: 'primary.main' }}>Quantité</TableCell>
-                <TableCell align="right" sx={{ fontWeight: 600, color: 'primary.main' }}>Prix Unit.</TableCell>
-                <TableCell align="right" sx={{ fontWeight: 600, color: 'primary.main' }}>Total</TableCell>
-                <TableCell align="center" sx={{ fontWeight: 600, color: 'primary.main' }}>Action</TableCell>
+                <TableCell align="right" sx={{ fontWeight: 600, color: 'primary.main' }}>
+                  Quantité
+                </TableCell>
+                <TableCell align="right" sx={{ fontWeight: 600, color: 'primary.main' }}>
+                  Prix Unit.
+                </TableCell>
+                <TableCell align="right" sx={{ fontWeight: 600, color: 'primary.main' }}>
+                  Total
+                </TableCell>
+                <TableCell align="center" sx={{ fontWeight: 600, color: 'primary.main' }}>
+                  Action
+                </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {items.map((item) => (
                 <TableRow key={item.id}>
                   <TableCell>{item.description}</TableCell>
-                  <TableCell align="right">{item.quantity} {item.unit}</TableCell>
+                  <TableCell align="right">
+                    {item.quantity} {item.unit}
+                  </TableCell>
                   <TableCell align="right">{parseFloat(item.unit_price).toFixed(2)}</TableCell>
-                  <TableCell align="right"><strong>{item.totalPrice.toFixed(2)}</strong></TableCell>
+                  <TableCell align="right">
+                    <strong>{item.totalPrice.toFixed(2)}</strong>
+                  </TableCell>
                   <TableCell align="center">
                     <IconButton
                       size="small"
@@ -430,21 +446,30 @@ export default function CreateInvoice() {
   const Step3Content = () => (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
       <Paper sx={{ padding: '16px', backgroundColor: 'action.hover' }}>
-        <Typography variant="h6" sx={{ fontSize: '14px', fontWeight: 600, marginBottom: '12px', color: 'primary.main' }}>
+        <Typography
+          variant="h6"
+          sx={{ fontSize: '14px', fontWeight: 600, marginBottom: '12px', color: 'primary.main' }}
+        >
           Calcul des Totaux
         </Typography>
         <Stack spacing={1} sx={{ fontSize: '13px' }}>
           <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
             <strong>Sous-total:</strong>
-            <strong>{formData.subtotal.toFixed(2)} {formData.currency}</strong>
+            <strong>
+              {formData.subtotal.toFixed(2)} {formData.currency}
+            </strong>
           </Box>
           <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
             <strong>Taxe ({formData.tax_rate}%):</strong>
-            <strong>{formData.tax_amount.toFixed(2)} {formData.currency}</strong>
+            <strong>
+              {formData.tax_amount.toFixed(2)} {formData.currency}
+            </strong>
           </Box>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', fontSize: '15px' }}>
             <strong>Total:</strong>
-            <strong style={{ color: 'primary.main' }}>{formData.total_amount.toFixed(2)} {formData.currency}</strong>
+            <strong style={{ color: 'primary.main' }}>
+              {formData.total_amount.toFixed(2)} {formData.currency}
+            </strong>
           </Box>
         </Stack>
       </Paper>
@@ -584,8 +609,12 @@ export default function CreateInvoice() {
             <TableHead>
               <TableRow sx={{ backgroundColor: 'action.hover' }}>
                 <TableCell sx={{ fontWeight: 600 }}>Nom du document</TableCell>
-                <TableCell align="right" sx={{ fontWeight: 600 }}>Taille</TableCell>
-                <TableCell align="center" sx={{ fontWeight: 600 }}>Action</TableCell>
+                <TableCell align="right" sx={{ fontWeight: 600 }}>
+                  Taille
+                </TableCell>
+                <TableCell align="center" sx={{ fontWeight: 600 }}>
+                  Action
+                </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -679,17 +708,34 @@ export default function CreateInvoice() {
       </Alert>
 
       <Paper sx={{ padding: '16px', backgroundColor: 'action.hover' }}>
-        <Typography variant="h6" sx={{ color: 'primary.main', marginBottom: '12px', fontSize: '14px' }}>
+        <Typography
+          variant="h6"
+          sx={{ color: 'primary.main', marginBottom: '12px', fontSize: '14px' }}
+        >
           Résumé de la Facture
         </Typography>
         <Stack spacing={1} sx={{ fontSize: '13px' }}>
-          <Box><strong>Numéro de Facture:</strong> {formData.invoice_number}</Box>
-          <Box><strong>Nombre d'articles:</strong> {items.length}</Box>
-          <Box><strong>Sous-total:</strong> {formData.subtotal.toFixed(2)} {formData.currency}</Box>
-          <Box><strong>Taxe:</strong> {formData.tax_amount.toFixed(2)} {formData.currency}</Box>
-          <Box><strong>Total:</strong> {formData.total_amount.toFixed(2)} {formData.currency}</Box>
-          <Box><strong>Date limite de paiement:</strong> {formData.due_date}</Box>
-          <Box><strong>Méthode de paiement:</strong> {formData.payment_method}</Box>
+          <Box>
+            <strong>Numéro de Facture:</strong> {formData.invoice_number}
+          </Box>
+          <Box>
+            <strong>Nombre d'articles:</strong> {items.length}
+          </Box>
+          <Box>
+            <strong>Sous-total:</strong> {formData.subtotal.toFixed(2)} {formData.currency}
+          </Box>
+          <Box>
+            <strong>Taxe:</strong> {formData.tax_amount.toFixed(2)} {formData.currency}
+          </Box>
+          <Box>
+            <strong>Total:</strong> {formData.total_amount.toFixed(2)} {formData.currency}
+          </Box>
+          <Box>
+            <strong>Date limite de paiement:</strong> {formData.due_date}
+          </Box>
+          <Box>
+            <strong>Méthode de paiement:</strong> {formData.payment_method}
+          </Box>
         </Stack>
       </Paper>
     </Box>
@@ -697,15 +743,24 @@ export default function CreateInvoice() {
 
   const renderStepContent = () => {
     switch (activeStep) {
-      case 0: return <Step1Content />;
-      case 1: return <Step2Content />;
-      case 2: return <Step3Content />;
-      case 3: return <Step4Content />;
-      case 4: return <Step5Content />;
-      case 5: return <Step6Content />;
-      case 6: return <Step7Content />;
-      case 7: return <Step8Content />;
-      default: return null;
+      case 0:
+        return <Step1Content />;
+      case 1:
+        return <Step2Content />;
+      case 2:
+        return <Step3Content />;
+      case 3:
+        return <Step4Content />;
+      case 4:
+        return <Step5Content />;
+      case 5:
+        return <Step6Content />;
+      case 6:
+        return <Step7Content />;
+      case 7:
+        return <Step8Content />;
+      default:
+        return null;
     }
   };
 
@@ -714,37 +769,40 @@ export default function CreateInvoice() {
       <Container maxWidth="md">
         <Card sx={{ border: '1px solid #e0e0e0', borderRadius: '4px', boxShadow: 'none' }}>
           <CardContent sx={{ padding: '40px' }}>
-            <Typography 
-              variant="h2" 
-              sx={{ 
-                fontSize: '28px', 
-                fontWeight: 500, 
-                color: 'primary.main', 
+            <Typography
+              variant="h2"
+              sx={{
+                fontSize: '28px',
+                fontWeight: 500,
+                color: 'primary.main',
                 marginBottom: '8px',
                 display: 'flex',
                 alignItems: 'center',
-                gap: '8px'
+                gap: '8px',
               }}
             >
               {STEPS[activeStep].icon} {STEPS[activeStep].label}
             </Typography>
-            <Typography 
-              sx={{ 
-                color: 'text.secondary', 
+            <Typography
+              sx={{
+                color: 'text.secondary',
                 marginBottom: '32px',
-                fontSize: '14px'
+                fontSize: '14px',
               }}
             >
               Étape {activeStep + 1} sur {STEPS.length}
             </Typography>
 
-            <LinearProgress 
-              variant="determinate" 
+            <LinearProgress
+              variant="determinate"
               value={(activeStep / (STEPS.length - 1)) * 100}
               sx={{ marginBottom: '24px', height: '4px' }}
             />
 
-            <Stepper activeStep={activeStep} sx={{ marginBottom: '32px', display: { xs: 'none', sm: 'flex' } }}>
+            <Stepper
+              activeStep={activeStep}
+              sx={{ marginBottom: '32px', display: { xs: 'none', sm: 'flex' } }}
+            >
               {STEPS.map((step, index) => (
                 <Step key={index} completed={stepsCompleted[index] || false}>
                   <StepLabel>{step.label}</StepLabel>
@@ -753,20 +811,24 @@ export default function CreateInvoice() {
             </Stepper>
 
             {error && (
-              <Alert severity="error" sx={{ marginBottom: '24px', backgroundColor: '#ffebee', color: '#c62828' }}>
+              <Alert
+                severity="error"
+                sx={{ marginBottom: '24px', backgroundColor: '#ffebee', color: '#c62828' }}
+              >
                 {error}
               </Alert>
             )}
 
             {autoSaved && (
-              <Alert severity="success" sx={{ marginBottom: '16px', backgroundColor: '#e8f5e9', color: '#2e7d32' }}>
+              <Alert
+                severity="success"
+                sx={{ marginBottom: '16px', backgroundColor: '#e8f5e9', color: '#2e7d32' }}
+              >
                 ✓ Brouillon enregistré automatiquement
               </Alert>
             )}
 
-            <Box sx={{ minHeight: '300px', marginBottom: '32px' }}>
-              {renderStepContent()}
-            </Box>
+            <Box sx={{ minHeight: '300px', marginBottom: '32px' }}>{renderStepContent()}</Box>
 
             <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} sx={{ marginTop: '32px' }}>
               <Button
@@ -844,7 +906,7 @@ export default function CreateInvoice() {
               sx={{
                 marginTop: '16px',
                 color: 'text.secondary',
-                textTransform: 'none'
+                textTransform: 'none',
               }}
             >
               Enregistrer le brouillon

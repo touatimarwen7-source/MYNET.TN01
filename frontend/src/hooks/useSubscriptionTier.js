@@ -4,7 +4,7 @@ export const useSubscriptionTier = (userSubscription) => {
   const [upgradeModal, setUpgradeModal] = useState({
     isOpen: false,
     featureKey: null,
-    currentTier: { id: 'enterprise', name: 'Enterprise' }
+    currentTier: { id: 'enterprise', name: 'Enterprise' },
   });
 
   // ✅ Toutes les fonctionnalités sont disponibles pour tous
@@ -17,9 +17,9 @@ export const useSubscriptionTier = (userSubscription) => {
   }, []);
 
   const closeUpgradeModal = useCallback(() => {
-    setUpgradeModal(prev => ({
+    setUpgradeModal((prev) => ({
       ...prev,
-      isOpen: false
+      isOpen: false,
     }));
   }, []);
 
@@ -28,6 +28,6 @@ export const useSubscriptionTier = (userSubscription) => {
     checkFeatureAccess,
     handleLockedFeatureClick,
     closeUpgradeModal,
-    upgradeModal
+    upgradeModal,
   };
 };

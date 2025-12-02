@@ -9,8 +9,28 @@ const DeliveryPaymentForm = ({ data, onChange, submitting, sx }) => (
       </Typography>
       <Stack spacing={2}>
         <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
-          <TextField fullWidth label={FRENCH_LABELS.delai_livraison_exemple} name="delivery_time" value={data.delivery_time} onChange={onChange} disabled={submitting} variant="outlined" size="small" required />
-          <TextField fullWidth label={FRENCH_LABELS.conditions_paiement_exemple} name="payment_terms" value={data.payment_terms} onChange={onChange} disabled={submitting} variant="outlined" size="small" required />
+          <TextField
+            fullWidth
+            label={FRENCH_LABELS.delai_livraison_exemple}
+            name="delivery_time"
+            value={data.delivery_time}
+            onChange={onChange}
+            disabled={submitting}
+            variant="outlined"
+            size="small"
+            required
+          />
+          <TextField
+            fullWidth
+            label={FRENCH_LABELS.conditions_paiement_exemple}
+            name="payment_terms"
+            value={data.payment_terms}
+            onChange={onChange}
+            disabled={submitting}
+            variant="outlined"
+            size="small"
+            required
+          />
         </Box>
       </Stack>
     </CardContent>

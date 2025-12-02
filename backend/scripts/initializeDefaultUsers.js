@@ -15,22 +15,22 @@ const defaultUsers = [
     email: 'admin@mynet.tn',
     password: 'Admin@MyNet.2025',
     role: 'super_admin',
-    name: 'Administrateur MyNet'
+    name: 'Administrateur MyNet',
   },
   {
     id: '2',
     email: 'buyer@mynet.tn',
     password: 'Buyer@Test.2025',
     role: 'buyer',
-    name: 'Acheteur Test'
+    name: 'Acheteur Test',
   },
   {
     id: '3',
     email: 'supplier@mynet.tn',
     password: 'Supplier@Test.2025',
     role: 'supplier',
-    name: 'Fournisseur Test'
-  }
+    name: 'Fournisseur Test',
+  },
 ];
 
 const usersFile = path.join(__dirname, '../data/users.json');
@@ -43,12 +43,11 @@ if (!fs.existsSync(dataDir)) {
 
 // Initialize users if file doesn't exist
 if (!fs.existsSync(usersFile)) {
-  const usersWithHashedPasswords = defaultUsers.map(user => ({
+  const usersWithHashedPasswords = defaultUsers.map((user) => ({
     ...user,
     password: hashPassword(user.password),
-    createdAt: new Date().toISOString()
+    createdAt: new Date().toISOString(),
   }));
-  
+
   fs.writeFileSync(usersFile, JSON.stringify(usersWithHashedPasswords, null, 2));
 }
-

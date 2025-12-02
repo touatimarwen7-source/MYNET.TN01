@@ -1,6 +1,6 @@
 /**
  * 🎨 Consistency Helper - Ensured 100% French + Theme Compliance
- * 
+ *
  * Functions to ensure:
  * 1. All text uses French translations
  * 2. All colors use theme.js palette
@@ -28,7 +28,7 @@ export const FRENCH_LABELS = {
   charger: 'Charger',
   dupliquer: 'Dupliquer',
   fermer: 'Fermer',
-  
+
   // Status
   actif: 'Actif',
   inactif: 'Inactif',
@@ -39,7 +39,7 @@ export const FRENCH_LABELS = {
   archivé: 'Archivé',
   approuvé: 'Approuvé',
   rejeté: 'Rejeté',
-  
+
   // Messages
   chargement: 'Chargement...',
   aucune_donnée: 'Aucune donnée',
@@ -48,7 +48,7 @@ export const FRENCH_LABELS = {
   avertissement: 'Avertissement',
   info: 'Information',
   confirmez_action: 'Êtes-vous sûr?',
-  
+
   // Form fields
   email: 'Email',
   mot_de_passe: 'Mot de passe',
@@ -58,7 +58,7 @@ export const FRENCH_LABELS = {
   téléphone: 'Téléphone',
   adresse: 'Adresse',
   description: 'Description',
-  
+
   // Table columns
   actions: 'Actions',
   date: 'Date',
@@ -85,7 +85,7 @@ export const getFrenchLabel = (key) => {
  */
 export const useConsistentTheme = () => {
   const theme = useTheme();
-  
+
   return {
     // Colors - Always use theme palette
     colors: {
@@ -103,7 +103,7 @@ export const useConsistentTheme = () => {
       textSecondary: theme.palette.text.secondary,
       divider: theme.palette.divider,
     },
-    
+
     // Spacing - Always use theme spacing
     spacing: {
       xs: theme.spacing(0.5),
@@ -113,7 +113,7 @@ export const useConsistentTheme = () => {
       xl: theme.spacing(4),
       xxl: theme.spacing(5),
     },
-    
+
     // Typography - Use theme variants
     typography: {
       h1: { ...theme.typography.h1 },
@@ -123,10 +123,10 @@ export const useConsistentTheme = () => {
       body: { ...theme.typography.body1 },
       caption: { ...theme.typography.caption },
     },
-    
+
     // Border radius - Use theme shape
     borderRadius: theme.shape.borderRadius,
-    
+
     // Shadows - None (institutional style)
     shadows: 'none',
   };
@@ -141,13 +141,13 @@ export const useConsistentTheme = () => {
  */
 export const createThemedSx = (baseStyles, theme) => {
   if (!baseStyles || !theme) return {};
-  
+
   return {
     ...baseStyles,
     // Force theme-based colors
     color: baseStyles.color ? theme.palette[baseStyles.color]?.main || baseStyles.color : 'inherit',
-    backgroundColor: baseStyles.backgroundColor 
-      ? theme.palette[baseStyles.backgroundColor]?.main || baseStyles.backgroundColor 
+    backgroundColor: baseStyles.backgroundColor
+      ? theme.palette[baseStyles.backgroundColor]?.main || baseStyles.backgroundColor
       : 'transparent',
     // Force theme-based spacing
     padding: baseStyles.padding ? theme.spacing(baseStyles.padding / 8) : 'auto',
@@ -185,7 +185,7 @@ export const CONSISTENT_SX = {
       borderColor: theme.palette.primary.main,
     },
   }),
-  
+
   // Button with consistent styling
   button: (theme) => ({
     textTransform: 'none',
@@ -197,7 +197,7 @@ export const CONSISTENT_SX = {
       boxShadow: 'none',
     },
   }),
-  
+
   // Input with consistent styling
   input: (theme) => ({
     '& .MuiOutlinedInput-root': {
@@ -211,7 +211,7 @@ export const CONSISTENT_SX = {
       borderColor: theme.palette.primary.main,
     },
   }),
-  
+
   // Table with consistent styling
   table: (theme) => ({
     borderCollapse: 'collapse',
@@ -239,17 +239,17 @@ export const validateConsistency = {
     if (!element || typeof element !== 'object') return false;
     return element?.getAttribute?.('style') !== null;
   },
-  
+
   // Check for non-theme colors
   hasNonThemeColors: (color, theme) => {
     if (!color || !theme) return false;
     const themeColors = Object.values(theme.palette);
-    return !themeColors.some(paletteColor => 
-      paletteColor === color || 
-      (typeof paletteColor === 'object' && paletteColor.main === color)
+    return !themeColors.some(
+      (paletteColor) =>
+        paletteColor === color || (typeof paletteColor === 'object' && paletteColor.main === color)
     );
   },
-  
+
   // Check for non-French text (simple check)
   hasNonFrenchText: (text) => {
     if (!text || typeof text !== 'string') return false;

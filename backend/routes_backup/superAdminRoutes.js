@@ -8,9 +8,9 @@ const adminMiddleware = require('../middleware/adminMiddleware');
 let upload;
 try {
   const multer = require('multer');
-  upload = multer({ 
+  upload = multer({
     storage: multer.memoryStorage(),
-    limits: { fileSize: 50 * 1024 * 1024 } // 50MB max
+    limits: { fileSize: 50 * 1024 * 1024 }, // 50MB max
   }).single('file');
 } catch (e) {
   upload = (req, res, next) => next();
@@ -27,12 +27,12 @@ router.use(authMiddleware.verifyToken);
 router.use(authMiddleware.checkRole(['super_admin']));
 
 // Admin-specific middleware stack
-router.use(adminMiddleware.adminLimiter);                    // Rate limiting
-router.use(adminMiddleware.validateQueryParams);            // Query validation
-router.use(adminMiddleware.validateAdminInput);             // Input sanitization
-router.use(adminMiddleware.protectSensitiveData);           // Sensitive data protection
-router.use(adminMiddleware.logAdminAction);                 // Audit logging
-router.use(adminMiddleware.concurrentRequestLimiter());     // Concurrent request limit
+router.use(adminMiddleware.adminLimiter); // Rate limiting
+router.use(adminMiddleware.validateQueryParams); // Query validation
+router.use(adminMiddleware.validateAdminInput); // Input sanitization
+router.use(adminMiddleware.protectSensitiveData); // Sensitive data protection
+router.use(adminMiddleware.logAdminAction); // Audit logging
+router.use(adminMiddleware.concurrentRequestLimiter()); // Concurrent request limit
 
 // ===== 1. STATIC PAGES =====
 router.get('/pages', superAdminController.listPages);
@@ -43,9 +43,10 @@ router.delete('/pages/:id', superAdminController.deletePage);
 
 // ===== 2. FILE MANAGEMENT =====
 router.get('/files', superAdminController.listFiles);
-router.post('/files', 
+router.post(
+  '/files',
   adminMiddleware.adminFileUploadLimiter,
-  upload, 
+  upload,
   adminMiddleware.validateFileUpload,
   superAdminController.uploadFile
 );
@@ -62,9 +63,21 @@ router.post('/emails/send', superAdminController.sendEmail);
 
 // ===== 5. USER MANAGEMENT =====
 router.get('/users', superAdminController.listUsers);
-router.put('/users/:id/role', adminMiddleware.adminMutationLimiter, superAdminController.updateUserRole);
-router.post('/users/:id/block', adminMiddleware.adminMutationLimiter, superAdminController.blockUser);
-router.post('/users/:id/unblock', adminMiddleware.adminMutationLimiter, superAdminController.unblockUser);
+router.put(
+  '/users/:id/role',
+  adminMiddleware.adminMutationLimiter,
+  superAdminController.updateUserRole
+);
+router.post(
+  '/users/:id/block',
+  adminMiddleware.adminMutationLimiter,
+  superAdminController.blockUser
+);
+router.post(
+  '/users/:id/unblock',
+  adminMiddleware.adminMutationLimiter,
+  superAdminController.unblockUser
+);
 
 // ===== 6. AUDIT LOGS =====
 router.get('/audit-logs', superAdminController.getAuditLogs);

@@ -20,11 +20,8 @@ function getTTLForRoute(path, method) {
     if (config.Routes && Array.isArray(config.Routes)) {
       for (const route of config.Routes) {
         // Simple pattern matching
-        const pattern = route
-          .replace(/:\w+/g, '[^/]+')
-          .replace(/\//g, '\\/')
-          .replace(/\*/g, '.*');
-        
+        const pattern = route.replace(/:\w+/g, '[^/]+').replace(/\//g, '\\/').replace(/\*/g, '.*');
+
         if (new RegExp(`^${pattern}$`).test(path)) {
           return config.TTL;
         }
@@ -50,7 +47,7 @@ const comprehensiveCacheMiddleware = (req, res, next) => {
   }
 
   const ttl = getTTLForRoute(req.path, req.method);
-  
+
   // Skip if TTL is 0
   if (ttl === 0) {
     return next();
@@ -69,7 +66,7 @@ const comprehensiveCacheMiddleware = (req, res, next) => {
 
   // Wrap res.json to cache response
   const originalJson = res.json.bind(res);
-  res.json = function(data) {
+  res.json = function (data) {
     // Only cache successful responses
     if (res.statusCode === 200) {
       queryCacheManager.set(cacheKey, data, ttl);

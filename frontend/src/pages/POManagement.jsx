@@ -47,7 +47,7 @@ export default function POManagement() {
   const fetchPOs = async () => {
     try {
       setLoading(true);
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      await new Promise((resolve) => setTimeout(resolve, 1000));
       const mockPOs = [
         {
           id: 'PO-001',
@@ -89,10 +89,11 @@ export default function POManagement() {
     }
   };
 
-  const filteredPOs = pos.filter(po =>
-    (po.supplier.toLowerCase().includes(filter.toLowerCase()) ||
-     po.number.toLowerCase().includes(filter.toLowerCase())) &&
-    (!statusFilter || po.status === statusFilter)
+  const filteredPOs = pos.filter(
+    (po) =>
+      (po.supplier.toLowerCase().includes(filter.toLowerCase()) ||
+        po.number.toLowerCase().includes(filter.toLowerCase())) &&
+      (!statusFilter || po.status === statusFilter)
   );
 
   const totalPages = Math.ceil(filteredPOs.length / ITEMS_PER_PAGE);
@@ -103,7 +104,13 @@ export default function POManagement() {
     return (
       <Box sx={{ backgroundColor: '#fafafa', paddingY: '40px' }}>
         <Container maxWidth="lg">
-          <Typography sx={{ marginBottom: '24px', fontWeight: 600, color: institutionalTheme.palette.primary.main }}>
+          <Typography
+            sx={{
+              marginBottom: '24px',
+              fontWeight: 600,
+              color: institutionalTheme.palette.primary.main,
+            }}
+          >
             Gestion des Bons de Commande
           </Typography>
           <TableSkeleton rows={5} columns={6} />
@@ -115,8 +122,15 @@ export default function POManagement() {
   return (
     <Box sx={{ backgroundColor: '#fafafa', paddingY: '40px' }}>
       <Container maxWidth="lg">
-        <Stack direction={{ xs: 'column', md: 'row' }} spacing={2} sx={{ marginBottom: '32px', justifyContent: 'space-between', alignItems: 'center' }}>
-          <Typography variant="h4" sx={{ fontWeight: 600, color: institutionalTheme.palette.text.primary }}>
+        <Stack
+          direction={{ xs: 'column', md: 'row' }}
+          spacing={2}
+          sx={{ marginBottom: '32px', justifyContent: 'space-between', alignItems: 'center' }}
+        >
+          <Typography
+            variant="h4"
+            sx={{ fontWeight: 600, color: institutionalTheme.palette.text.primary }}
+          >
             Gestion des Bons de Commande
           </Typography>
           <Button
@@ -164,20 +178,38 @@ export default function POManagement() {
           <Table>
             <TableHead sx={{ backgroundColor: '#f5f5f5' }}>
               <TableRow>
-                <TableCell sx={{ fontWeight: 600, color: institutionalTheme.palette.text.primary }}>N° Bon</TableCell>
-                <TableCell sx={{ fontWeight: 600, color: institutionalTheme.palette.text.primary }}>Fournisseur</TableCell>
-                <TableCell sx={{ fontWeight: 600, color: institutionalTheme.palette.text.primary }}>Montant</TableCell>
-                <TableCell sx={{ fontWeight: 600, color: institutionalTheme.palette.text.primary }}>Statut</TableCell>
-                <TableCell sx={{ fontWeight: 600, color: institutionalTheme.palette.text.primary }}>Livraison</TableCell>
-                <TableCell sx={{ fontWeight: 600, color: institutionalTheme.palette.text.primary }}>Actions</TableCell>
+                <TableCell sx={{ fontWeight: 600, color: institutionalTheme.palette.text.primary }}>
+                  N° Bon
+                </TableCell>
+                <TableCell sx={{ fontWeight: 600, color: institutionalTheme.palette.text.primary }}>
+                  Fournisseur
+                </TableCell>
+                <TableCell sx={{ fontWeight: 600, color: institutionalTheme.palette.text.primary }}>
+                  Montant
+                </TableCell>
+                <TableCell sx={{ fontWeight: 600, color: institutionalTheme.palette.text.primary }}>
+                  Statut
+                </TableCell>
+                <TableCell sx={{ fontWeight: 600, color: institutionalTheme.palette.text.primary }}>
+                  Livraison
+                </TableCell>
+                <TableCell sx={{ fontWeight: 600, color: institutionalTheme.palette.text.primary }}>
+                  Actions
+                </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {paginatedPOs.map((po) => (
                 <TableRow key={po.id} hover>
-                  <TableCell sx={{ color: institutionalTheme.palette.primary.main, fontWeight: 500 }}>{po.number}</TableCell>
+                  <TableCell
+                    sx={{ color: institutionalTheme.palette.primary.main, fontWeight: 500 }}
+                  >
+                    {po.number}
+                  </TableCell>
                   <TableCell>{po.supplier}</TableCell>
-                  <TableCell>{po.amount.toLocaleString()} {po.currency}</TableCell>
+                  <TableCell>
+                    {po.amount.toLocaleString()} {po.currency}
+                  </TableCell>
                   <TableCell>
                     <StatusBadge status={po.status} />
                   </TableCell>
@@ -210,9 +242,7 @@ export default function POManagement() {
 
         {paginatedPOs.length === 0 && (
           <Box sx={{ textAlign: 'center', paddingY: '40px' }}>
-            <Typography sx={{ color: '#666' }}>
-              Aucun bon de commande trouvé
-            </Typography>
+            <Typography sx={{ color: '#666' }}>Aucun bon de commande trouvé</Typography>
           </Box>
         )}
 

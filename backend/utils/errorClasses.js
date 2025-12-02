@@ -24,8 +24,8 @@ class AppError extends Error {
         message: this.message,
         statusCode: this.statusCode,
         details: this.details,
-        timestamp: this.timestamp
-      }
+        timestamp: this.timestamp,
+      },
     };
   }
 }
@@ -65,9 +65,7 @@ class AuthorizationError extends AppError {
  */
 class NotFoundError extends AppError {
   constructor(resource, id = null) {
-    const message = id 
-      ? `${resource} with ID ${id} not found`
-      : `${resource} not found`;
+    const message = id ? `${resource} with ID ${id} not found` : `${resource} not found`;
     super(message, 404, { resource, id });
     this.name = 'NotFoundError';
   }
@@ -135,5 +133,5 @@ module.exports = {
   RateLimitError,
   DatabaseError,
   FileError,
-  ExternalServiceError
+  ExternalServiceError,
 };

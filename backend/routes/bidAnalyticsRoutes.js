@@ -7,25 +7,36 @@ const router = express.Router();
 const { validateIdMiddleware } = require('../middleware/validateIdMiddleware');
 
 // Get bid statistics for a tender (optimized + cached)
-router.get('/tender/:tenderId', validateIdMiddleware('tenderId'), authMiddleware, cacheMiddleware(600), async (req, res) => {
-  try {
-    const { tenderId } = req.params;
-    const db = req.app.get('db');
+router.get(
+  '/tender/:tenderId',
+  validateIdMiddleware('tenderId'),
+  authMiddleware,
+  cacheMiddleware(600),
+  async (req, res) => {
+    try {
+      const { tenderId } = req.params;
+      const db = req.app.get('db');
 
-    const stats = await QueryOptimizer.getBidAnalytics(db, tenderId);
-    res.json(stats.rows[0] || {});
-  } catch (error) {
-    res.status(500).json({ error: error.message });
+      const stats = await QueryOptimizer.getBidAnalytics(db, tenderId);
+      res.json(stats.rows[0] || {});
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
   }
-});
+);
 
 // Get bid distribution (price ranges)
-router.get('/distribution/:tenderId', validateIdMiddleware('tenderId'), authMiddleware, async (req, res) => {
-  try {
-    const { tenderId } = req.params;
-    const db = req.app.get('db');
+router.get(
+  '/distribution/:tenderId',
+  validateIdMiddleware('tenderId'),
+  authMiddleware,
+  async (req, res) => {
+    try {
+      const { tenderId } = req.params;
+      const db = req.app.get('db');
 
-    const distribution = await db.query(`
+      const distribution = await db.query(
+        `
       SELECT
         CASE 
           WHEN price < 10000 THEN 'Under 10k'
@@ -38,21 +49,29 @@ router.get('/distribution/:tenderId', validateIdMiddleware('tenderId'), authMidd
       WHERE tender_id = $1 AND is_deleted = false
       GROUP BY price_range
       ORDER BY price_range
-    `, [tenderId]);
+    `,
+        [tenderId]
+      );
 
-    res.json(distribution.rows);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
+      res.json(distribution.rows);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
   }
-});
+);
 
 // Compare bids
-router.get('/compare/:tenderId', validateIdMiddleware('tenderId'), authMiddleware, async (req, res) => {
-  try {
-    const { tenderId } = req.params;
-    const db = req.app.get('db');
+router.get(
+  '/compare/:tenderId',
+  validateIdMiddleware('tenderId'),
+  authMiddleware,
+  async (req, res) => {
+    try {
+      const { tenderId } = req.params;
+      const db = req.app.get('db');
 
-    const comparison = await db.query(`
+      const comparison = await db.query(
+        `
       SELECT 
         o.id,
         o.price,
@@ -65,12 +84,15 @@ router.get('/compare/:tenderId', validateIdMiddleware('tenderId'), authMiddlewar
       LEFT JOIN users u ON o.supplier_id = u.id
       WHERE o.tender_id = $1 AND o.is_deleted = false
       ORDER BY o.price ASC
-    `, [tenderId]);
+    `,
+        [tenderId]
+      );
 
-    res.json(comparison.rows);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
+      res.json(comparison.rows);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
   }
-});
+);
 
 module.exports = router;

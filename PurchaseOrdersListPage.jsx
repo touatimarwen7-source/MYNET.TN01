@@ -10,14 +10,16 @@ import {
   TableBody,
   TableCell,
   TableHead,
+  TableContainer,
+  Paper,
   TableRow,
   Button,
-  CircularProgress,
   Alert,
   Chip,
 } from '@mui/material';
 import { procurementAPI } from '../api/procurementAPI';
 import { setPageTitle } from '../utils/pageTitle';
+import AsyncViewWrapper from '../components/AsyncViewWrapper';
 
 /**
  * A page that lists all purchase orders for the current supplier,
@@ -55,59 +57,55 @@ const PurchaseOrdersListPage = () => {
     return <Chip label={label} color={color} size="small" />;
   };
 
-  if (loading) {
-    return <Box sx={{ display: 'flex', justifyContent: 'center', mt: 8 }}><CircularProgress /></Box>;
-  }
-
-  if (error) {
-    return <Container maxWidth="md" sx={{ mt: 4 }}><Alert severity="error">{error}</Alert></Container>;
-  }
-
   return (
-    <Box sx={{ backgroundColor: '#FAFAFA', paddingY: '40px', minHeight: '100vh' }}>
-      <Container maxWidth="lg">
-        <Typography variant="h4" sx={{ mb: 4, color: 'primary.main' }}>
-          Mes Bons de Commande
-        </Typography>
-        <Card sx={{ border: '1px solid #e0e0e0', boxShadow: 'none' }}>
-          <CardContent>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell>Numéro du BC</TableCell>
-                  <TableCell>Acheteur</TableCell>
-                  <TableCell>Date</TableCell>
-                  <TableCell align="right">Montant Total</TableCell>
-                  <TableCell align="center">Statut</TableCell>
-                  <TableCell align="center">Action</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {purchaseOrders.map((po) => (
-                  <TableRow key={po.id}>
-                    <TableCell><strong>{po.purchaseOrderNumber}</strong></TableCell>
-                    <TableCell>{po.buyer.name}</TableCell>
-                    <TableCell>{new Date(po.createdAt).toLocaleDateString('fr-FR')}</TableCell>
-                    <TableCell align="right">{new Intl.NumberFormat('fr-TN', { style: 'currency', currency: 'TND' }).format(po.totalPrice)}</TableCell>
-                    <TableCell align="center">{getStatusChip(po.status)}</TableCell>
-                    <TableCell align="center">
-                      <Button
-                        variant="contained"
-                        size="small"
-                        onClick={() => navigate(`/create-invoice/${po.id}`)}
-                        disabled={po.status !== 'Approved'} // Only allow invoicing for approved POs
-                      >
-                        Créer une facture
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </CardContent>
-        </Card>
-      </Container>
-    </Box>
+    <AsyncViewWrapper loading={loading} error={error}>
+      <Box sx={{ backgroundColor: 'background.default', paddingY: '40px', minHeight: '100vh' }}>
+        <Container maxWidth="lg">
+          <Typography variant="h4" sx={{ mb: 4, color: 'primary.main' }}>
+            Mes Bons de Commande
+          </Typography>
+          <Card sx={{ border: (theme) => `1px solid ${theme.palette.divider}`, boxShadow: 'none' }}>
+            <CardContent>
+              <TableContainer component={Paper} sx={{ boxShadow: 'none' }}>
+                <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>Numéro du BC</TableCell>
+                      <TableCell>Acheteur</TableCell>
+                      <TableCell>Date</TableCell>
+                      <TableCell align="right">Montant Total</TableCell>
+                      <TableCell align="center">Statut</TableCell>
+                      <TableCell align="center">Action</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {purchaseOrders.map((po) => (
+                      <TableRow key={po.id}>
+                        <TableCell><strong>{po.purchaseOrderNumber}</strong></TableCell>
+                        <TableCell>{po.buyer.name}</TableCell>
+                        <TableCell>{new Date(po.createdAt).toLocaleDateString('fr-FR')}</TableCell>
+                        <TableCell align="right">{new Intl.NumberFormat('fr-TN', { style: 'currency', currency: 'TND' }).format(po.totalPrice)}</TableCell>
+                        <TableCell align="center">{getStatusChip(po.status)}</TableCell>
+                        <TableCell align="center">
+                          <Button
+                            variant="contained"
+                            size="small"
+                            onClick={() => navigate(`/create-invoice/${po.id}`)}
+                            disabled={po.status !== 'Approved'} // Only allow invoicing for approved POs
+                          >
+                            Créer une facture
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </CardContent>
+          </Card>
+        </Container>
+      </Box>
+    </AsyncViewWrapper>
   );
 };
 

@@ -9,25 +9,25 @@ import { validatePage, validateLimit } from '../utils/paginationValidator';
  * Pagination Component
  * Provides page navigation with info display with validation
  */
-export default function Pagination({ 
-  currentPage, 
-  totalPages, 
-  onPageChange, 
+export default function Pagination({
+  currentPage,
+  totalPages,
+  onPageChange,
   itemsPerPage = 10,
-  totalItems = 0 
+  totalItems = 0,
 }) {
   const theme = institutionalTheme;
-  
+
   // Validate pagination parameters
   const validPage = validatePage(currentPage, totalPages);
   const validLimit = validateLimit(itemsPerPage);
   const validTotalPages = Math.max(1, parseInt(totalPages, 10) || 1);
-  
+
   // Recalculate if validation changed values
   if (validPage !== currentPage && onPageChange) {
     onPageChange(validPage);
   }
-  
+
   const startItem = (validPage - 1) * validLimit + 1;
   const endItem = Math.min(validPage * validLimit, totalItems);
 
@@ -59,14 +59,13 @@ export default function Pagination({
         backgroundColor: theme.palette.background.default,
         padding: '16px 24px',
         borderRadius: '4px',
-        marginTop: '24px'
+        marginTop: '24px',
       }}
     >
       <Typography sx={{ fontSize: '13px', color: THEME_COLORS.textSecondary }}>
-        {totalItems > 0 
+        {totalItems > 0
           ? `Affichage ${startItem}-${endItem} sur ${totalItems} éléments`
-          : `Page ${validPage} sur ${validTotalPages}`
-        }
+          : `Page ${validPage} sur ${validTotalPages}`}
       </Typography>
 
       <Stack direction="row" spacing={1}>
@@ -78,7 +77,7 @@ export default function Pagination({
           sx={{
             textTransform: 'none',
             color: validPage === 1 ? '#ccc' : theme.palette.primary.main,
-            '&:disabled': { color: '#ccc' }
+            '&:disabled': { color: '#ccc' },
           }}
         >
           Précédent
@@ -89,13 +88,13 @@ export default function Pagination({
             display: 'flex',
             alignItems: 'center',
             gap: '8px',
-            padding: '0 16px'
+            padding: '0 16px',
           }}
         >
           {Array.from({ length: Math.min(5, validTotalPages) }, (_, i) => {
             const pageNum = i + 1;
             if (pageNum > validTotalPages) return null;
-            
+
             const isActive = pageNum === validPage;
             return (
               <Button
@@ -115,8 +114,8 @@ export default function Pagination({
                   fontSize: '13px',
                   fontWeight: 500,
                   '&:hover': {
-                    backgroundColor: isActive ? theme.palette.primary.main : '#f0f0f0'
-                  }
+                    backgroundColor: isActive ? theme.palette.primary.main : '#f0f0f0',
+                  },
                 }}
               >
                 {pageNum}
@@ -133,7 +132,7 @@ export default function Pagination({
           sx={{
             textTransform: 'none',
             color: validPage === validTotalPages ? '#ccc' : theme.palette.primary.main,
-            '&:disabled': { color: '#ccc' }
+            '&:disabled': { color: '#ccc' },
           }}
         >
           Suivant

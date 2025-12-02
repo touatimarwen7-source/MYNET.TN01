@@ -53,7 +53,7 @@ class ErrorTracker {
       method: context.method,
       statusCode: context.statusCode || 500,
       requestBody: this.sanitize(context.requestBody),
-      context: context
+      context: context,
     };
 
     this.errors.push(errorRecord);
@@ -81,11 +81,11 @@ class ErrorTracker {
       message,
       severity: 'warning',
       userId: context.userId,
-      endpoint: context.endpoint
+      endpoint: context.endpoint,
     };
 
     this.warnings.push(warning);
-    
+
     if (this.warnings.length > 500) {
       this.warnings.shift();
     }
@@ -101,7 +101,7 @@ class ErrorTracker {
    */
   updateStats(errorRecord) {
     const pattern = `${errorRecord.code}:${errorRecord.endpoint}`;
-    
+
     if (this.errorCounts.has(pattern)) {
       this.errorCounts.set(pattern, this.errorCounts.get(pattern) + 1);
     } else {
@@ -130,7 +130,9 @@ class ErrorTracker {
 
     const recursiveSanitize = (obj) => {
       for (const key in obj) {
-        if (sensitiveKeys.some(sensitive => key.toLowerCase().includes(sensitive.toLowerCase()))) {
+        if (
+          sensitiveKeys.some((sensitive) => key.toLowerCase().includes(sensitive.toLowerCase()))
+        ) {
           obj[key] = '***REDACTED***';
         } else if (typeof obj[key] === 'object' && obj[key] !== null) {
           recursiveSanitize(obj[key]);
@@ -176,7 +178,7 @@ class ErrorTracker {
       topErrors: Array.from(this.errorCounts.entries())
         .sort((a, b) => b[1] - a[1])
         .slice(0, 10)
-        .map(([pattern, count]) => ({ pattern, count }))
+        .map(([pattern, count]) => ({ pattern, count })),
     };
   }
 
@@ -195,7 +197,7 @@ class ErrorTracker {
    * @returns {Array} Array of errors matching severity
    */
   getErrorsBySeverity(severity) {
-    return this.errors.filter(e => e.severity === severity);
+    return this.errors.filter((e) => e.severity === severity);
   }
 
   /**
@@ -207,7 +209,7 @@ class ErrorTracker {
     const cutoffTime = new Date();
     cutoffTime.setDate(cutoffTime.getDate() - daysToKeep);
 
-    this.errors = this.errors.filter(e => new Date(e.timestamp) > cutoffTime);
+    this.errors = this.errors.filter((e) => new Date(e.timestamp) > cutoffTime);
   }
 
   /**
@@ -219,7 +221,7 @@ class ErrorTracker {
       exportedAt: new Date().toISOString(),
       stats: this.getStats(),
       recentErrors: this.getRecentErrors(50),
-      recentWarnings: this.warnings.slice(-50)
+      recentWarnings: this.warnings.slice(-50),
     };
   }
 }
@@ -228,5 +230,5 @@ const errorTracker = new ErrorTracker();
 
 module.exports = {
   errorTracker,
-  ErrorTracker
+  ErrorTracker,
 };

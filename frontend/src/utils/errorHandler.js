@@ -9,7 +9,7 @@
  * @module errorHandler
  * @description Provides a comprehensive set of functions for robust error management.
  * Comprehensive error handling with error codes, logging, and user notifications
- * 
+ *
  * Features:
  * - Centralized error formatting (error codes + messages)
  * - Authentication error handling
@@ -33,11 +33,13 @@ export const errorHandler = {
    * @returns {Object} { code, message, severity }
    */
   getUserMessage: (error, defaultMessage = 'Une erreur est survenue') => {
-    return formatError(error) || {
-      code: 'UNKNOWN',
-      message: defaultMessage,
-      severity: 'error'
-    };
+    return (
+      formatError(error) || {
+        code: 'UNKNOWN',
+        message: defaultMessage,
+        severity: 'error',
+      }
+    );
   },
 
   /**
@@ -78,14 +80,14 @@ export const errorHandler = {
   isRetryable: (error) => {
     const status = error.response?.status;
     const code = error.code;
-    
+
     // Retry on timeout, rate limit, server error, or network error
     return (
-      status === 408 ||        // Request Timeout
-      status === 429 ||        // Too Many Requests
-      (status >= 500 && status < 600) ||  // Server errors
+      status === 408 || // Request Timeout
+      status === 429 || // Too Many Requests
+      (status >= 500 && status < 600) || // Server errors
       code === 'ECONNABORTED' || // Connection aborted
-      code === 'ERR_NETWORK'     // Network error
+      code === 'ERR_NETWORK' // Network error
     );
   },
 
@@ -96,25 +98,25 @@ export const errorHandler = {
    */
   formatValidationErrors: (errors) => {
     if (!errors) return {};
-    
+
     const formatted = {};
 
     if (errors.errors) {
       // Zod format
-      errors.errors.forEach(err => {
+      errors.errors.forEach((err) => {
         const field = err.path.join('.');
         formatted[field] = {
           code: 'V005',
-          message: err.message
+          message: err.message,
         };
       });
     } else if (Array.isArray(errors)) {
       // Array format
-      errors.forEach(err => {
+      errors.forEach((err) => {
         if (err.field) {
           formatted[err.field] = {
             code: 'V005',
-            message: err.message
+            message: err.message,
           };
         }
       });
@@ -123,7 +125,7 @@ export const errorHandler = {
       Object.entries(errors).forEach(([field, message]) => {
         formatted[field] = {
           code: 'V005',
-          message: Array.isArray(message) ? message[0] : message
+          message: Array.isArray(message) ? message[0] : message,
         };
       });
     }
@@ -145,14 +147,11 @@ export const errorHandler = {
       code: error?.response?.data?.code || error?.code || 'UNKNOWN',
       message: error?.message || 'Unknown error',
       status: error?.response?.status,
-      url: error?.response?.config?.url
+      url: error?.response?.config?.url,
     };
 
     if (import.meta.env.MODE === 'development') {
-      console.error(
-        `[${context}] [${errorInfo.code}] ${errorInfo.message}`,
-        error
-      );
+      console.error(`[${context}] [${errorInfo.code}] ${errorInfo.message}`, error);
     }
 
     // Production: Send to error tracking service (Sentry, LogRocket, etc.)
@@ -194,7 +193,7 @@ export const errorHandler = {
         return await fn();
       } catch (error) {
         lastError = error;
-        
+
         // Don't retry if not retryable or on last attempt
         if (!errorHandler.isRetryable(error) || attempt === maxRetries - 1) {
           throw error;
@@ -202,12 +201,12 @@ export const errorHandler = {
 
         // Exponential backoff: 1s, 2s, 4s, 8s, etc.
         const delay = initialDelay * Math.pow(2, attempt);
-        await new Promise(resolve => setTimeout(resolve, delay));
+        await new Promise((resolve) => setTimeout(resolve, delay));
       }
     }
 
     throw lastError;
-  }
+  },
 };
 
 export default errorHandler;

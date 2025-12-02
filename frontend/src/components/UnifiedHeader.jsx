@@ -50,19 +50,21 @@ export default function UnifiedHeader() {
     return () => window.removeEventListener('authChanged', checkAuth);
   }, []);
 
-  const isPublicPage = ['/', '/about', '/features', '/pricing', '/contact'].includes(location.pathname);
+  const isPublicPage = ['/', '/about', '/features', '/pricing', '/contact'].includes(
+    location.pathname
+  );
 
   const publicLinks = [
     { label: 'Accueil', href: '/' },
     { label: 'À Propos', href: '/about' },
     { label: 'Solutions', href: '/features' },
     { label: 'Tarification', href: '/pricing' },
-    { label: 'Contact', href: '/contact' }
+    { label: 'Contact', href: '/contact' },
   ];
 
   const authenticatedLinks = [
-    { label: 'Appels d\'Offres', href: '/tenders' },
-    { label: 'Mon Profil', href: '/profile' }
+    { label: "Appels d'Offres", href: '/tenders' },
+    { label: 'Mon Profil', href: '/profile' },
   ];
 
   const shouldShowAuthLinks = isAuthenticated;
@@ -100,7 +102,10 @@ export default function UnifiedHeader() {
         key={link.href}
         onClick={() => handleNavigate(link.href)}
         sx={{
-          color: location.pathname === link.href ? theme.palette.primary.main : theme.palette.text.primary,
+          color:
+            location.pathname === link.href
+              ? theme.palette.primary.main
+              : theme.palette.text.primary,
           fontWeight: location.pathname === link.href ? 600 : 500,
           textTransform: 'none',
           fontSize: '14px',
@@ -214,7 +219,10 @@ export default function UnifiedHeader() {
                   {userName.charAt(0).toUpperCase()}
                 </Avatar>
                 <Box sx={{ minWidth: '80px' }}>
-                  <Typography variant="body2" sx={{ fontWeight: 500, color: theme.palette.text.primary }}>
+                  <Typography
+                    variant="body2"
+                    sx={{ fontWeight: 500, color: theme.palette.text.primary }}
+                  >
                     {userName}
                   </Typography>
                   <Typography variant="caption" sx={{ color: THEME_COLORS.textSecondary }}>
@@ -234,10 +242,20 @@ export default function UnifiedHeader() {
                   },
                 }}
               >
-                <MenuItem onClick={() => { navigate('/profile'); handleProfileMenuClose(); }}>
+                <MenuItem
+                  onClick={() => {
+                    navigate('/profile');
+                    handleProfileMenuClose();
+                  }}
+                >
                   Paramètres
                 </MenuItem>
-                <MenuItem onClick={() => { navigate('/security'); handleProfileMenuClose(); }}>
+                <MenuItem
+                  onClick={() => {
+                    navigate('/security');
+                    handleProfileMenuClose();
+                  }}
+                >
                   Sécurité
                 </MenuItem>
                 <MenuItem onClick={handleLogout} sx={{ color: THEME_COLORS.errorLight }}>
@@ -301,34 +319,42 @@ export default function UnifiedHeader() {
       >
         <Box sx={{ width: '100%', padding: '16px', backgroundColor: THEME_COLORS.bgPaper }}>
           <List>
-            {shouldShowAuthLinks && authenticatedLinks.map((link) => (
-              <ListItem
-                button
-                key={link.href}
-                onClick={() => handleNavigate(link.href)}
-                sx={{
-                  backgroundColor: location.pathname === link.href ? '#e3f2fd' : 'transparent',
-                  color: location.pathname === link.href ? theme.palette.primary.main : theme.palette.text.primary,
-                  borderLeft: location.pathname === link.href ? '4px solid #0056B3' : 'none',
-                }}
-              >
-                <ListItemText primary={link.label} />
-              </ListItem>
-            ))}
-            {shouldShowPublicLinks && publicLinks.map((link) => (
-              <ListItem
-                button
-                key={link.href}
-                onClick={() => handleNavigate(link.href)}
-                sx={{
-                  backgroundColor: location.pathname === link.href ? '#e3f2fd' : 'transparent',
-                  color: location.pathname === link.href ? theme.palette.primary.main : theme.palette.text.primary,
-                  borderLeft: location.pathname === link.href ? '4px solid #0056B3' : 'none',
-                }}
-              >
-                <ListItemText primary={link.label} />
-              </ListItem>
-            ))}
+            {shouldShowAuthLinks &&
+              authenticatedLinks.map((link) => (
+                <ListItem
+                  button
+                  key={link.href}
+                  onClick={() => handleNavigate(link.href)}
+                  sx={{
+                    backgroundColor: location.pathname === link.href ? '#e3f2fd' : 'transparent',
+                    color:
+                      location.pathname === link.href
+                        ? theme.palette.primary.main
+                        : theme.palette.text.primary,
+                    borderLeft: location.pathname === link.href ? '4px solid #0056B3' : 'none',
+                  }}
+                >
+                  <ListItemText primary={link.label} />
+                </ListItem>
+              ))}
+            {shouldShowPublicLinks &&
+              publicLinks.map((link) => (
+                <ListItem
+                  button
+                  key={link.href}
+                  onClick={() => handleNavigate(link.href)}
+                  sx={{
+                    backgroundColor: location.pathname === link.href ? '#e3f2fd' : 'transparent',
+                    color:
+                      location.pathname === link.href
+                        ? theme.palette.primary.main
+                        : theme.palette.text.primary,
+                    borderLeft: location.pathname === link.href ? '4px solid #0056B3' : 'none',
+                  }}
+                >
+                  <ListItemText primary={link.label} />
+                </ListItem>
+              ))}
           </List>
 
           {isAuthenticated ? (
@@ -336,16 +362,14 @@ export default function UnifiedHeader() {
               <Button
                 fullWidth
                 variant="outlined"
-                onClick={() => { navigate('/profile'); setMobileMenuOpen(false); }}
+                onClick={() => {
+                  navigate('/profile');
+                  setMobileMenuOpen(false);
+                }}
               >
                 Profil
               </Button>
-              <Button
-                fullWidth
-                variant="contained"
-                color="error"
-                onClick={handleLogout}
-              >
+              <Button fullWidth variant="contained" color="error" onClick={handleLogout}>
                 Se Déconnecter
               </Button>
             </Stack>
@@ -354,14 +378,20 @@ export default function UnifiedHeader() {
               <Button
                 fullWidth
                 variant="outlined"
-                onClick={() => { navigate('/login'); setMobileMenuOpen(false); }}
+                onClick={() => {
+                  navigate('/login');
+                  setMobileMenuOpen(false);
+                }}
               >
                 Connexion
               </Button>
               <Button
                 fullWidth
                 variant="contained"
-                onClick={() => { navigate('/register'); setMobileMenuOpen(false); }}
+                onClick={() => {
+                  navigate('/register');
+                  setMobileMenuOpen(false);
+                }}
               >
                 Inscription
               </Button>

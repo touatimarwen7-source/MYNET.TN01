@@ -5,13 +5,7 @@
 
 import { Alert, AlertTitle } from '@mui/material';
 
-export default function MuiAlert({
-  severity = 'success',
-  title,
-  message,
-  onClose,
-  ...props
-}) {
+export default function MuiAlert({ severity = 'success', title, message, onClose, ...props }) {
   return (
     <Alert
       severity={severity}
@@ -21,35 +15,35 @@ export default function MuiAlert({
           severity === 'success'
             ? '#d4edda'
             : severity === 'warning'
-            ? '#fff3cd'
-            : severity === 'error'
-            ? '#f8d7da'
-            : '#cfe2ff',
+              ? '#fff3cd'
+              : severity === 'error'
+                ? '#f8d7da'
+                : '#cfe2ff',
         color:
           severity === 'success'
             ? '#1e7e34'
             : severity === 'warning'
-            ? '#856404'
-            : severity === 'error'
-            ? '#c82333'
-            : '#0a58ca',
+              ? '#856404'
+              : severity === 'error'
+                ? '#c82333'
+                : '#0a58ca',
         border: `1px solid ${
           severity === 'success'
             ? '#28a745'
             : severity === 'warning'
-            ? '#ffc107'
-            : severity === 'error'
-            ? '#dc3545'
-            : '#0d6efd'
+              ? '#ffc107'
+              : severity === 'error'
+                ? '#dc3545'
+                : '#0d6efd'
         }`,
         borderLeft: `4px solid ${
           severity === 'success'
             ? '#28a745'
             : severity === 'warning'
-            ? '#ffc107'
-            : severity === 'error'
-            ? '#dc3545'
-            : '#0d6efd'
+              ? '#ffc107'
+              : severity === 'error'
+                ? '#dc3545'
+                : '#0d6efd'
         }`,
         fontSize: '14px',
         fontWeight: 500,

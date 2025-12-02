@@ -20,14 +20,17 @@ router.get('/plans', authMiddleware, async (req, res) => {
 router.get('/my-subscription', authMiddleware, async (req, res) => {
   try {
     const db = req.app.get('db');
-    const result = await db.query(`
+    const result = await db.query(
+      `
       SELECT us.*, sp.name, sp.features, sp.max_tenders, sp.max_offers
       FROM user_subscriptions us
       LEFT JOIN subscription_plans sp ON us.plan_id = sp.id
       WHERE us.user_id = $1 AND us.status = 'active'
       ORDER BY us.created_at DESC
       LIMIT 1
-    `, [req.user.id]);
+    `,
+      [req.user.id]
+    );
 
     res.json(result.rows[0] || null);
   } catch (error) {
@@ -39,27 +42,27 @@ router.get('/my-subscription', authMiddleware, async (req, res) => {
 router.post('/subscribe', authMiddleware, async (req, res) => {
   try {
     const { plan_id } = req.body;
-    
+
     if (!plan_id) {
       return res.status(400).json({ error: 'plan_id is required' });
     }
-    
+
     const db = req.app.get('db');
 
     // ISSUE FIX #2: Check plan exists
-    const planCheck = await db.query(
-      'SELECT * FROM subscription_plans WHERE id = $1',
-      [plan_id]
-    );
+    const planCheck = await db.query('SELECT * FROM subscription_plans WHERE id = $1', [plan_id]);
     if (planCheck.rows.length === 0) {
       return res.status(404).json({ error: 'Plan not found' });
     }
 
-    const result = await db.query(`
+    const result = await db.query(
+      `
       INSERT INTO user_subscriptions (user_id, plan_id, status, start_date, end_date)
       VALUES ($1, $2, $3, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + INTERVAL '1 month')
       RETURNING *
-    `, [req.user.id, plan_id, 'active']);
+    `,
+      [req.user.id, plan_id, 'active']
+    );
 
     res.status(201).json({ success: true, data: result.rows[0] });
   } catch (error) {
@@ -71,12 +74,15 @@ router.post('/subscribe', authMiddleware, async (req, res) => {
 router.put('/cancel', authMiddleware, async (req, res) => {
   try {
     const db = req.app.get('db');
-    const result = await db.query(`
+    const result = await db.query(
+      `
       UPDATE user_subscriptions 
       SET status = 'cancelled'
       WHERE user_id = $1 AND status = 'active'
       RETURNING *
-    `, [req.user.id]);
+    `,
+      [req.user.id]
+    );
 
     res.json({ success: true, data: result.rows[0] || null });
   } catch (error) {

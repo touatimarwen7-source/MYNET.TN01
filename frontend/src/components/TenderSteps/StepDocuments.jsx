@@ -1,13 +1,5 @@
 import { useState } from 'react';
-import {
-  Box,
-  Typography,
-  Button,
-  Stack,
-  Paper,
-  Alert,
-  IconButton,
-} from '@mui/material';
+import { Box, Typography, Button, Stack, Paper, Alert, IconButton } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
@@ -63,7 +55,9 @@ export default function StepDocuments({ formData, setFormData, loading }) {
         }}
       >
         <UploadFileIcon sx={{ fontSize: 48, color: THEME_COLORS.primary, mb: 2 }} />
-        <Typography sx={{ fontSize: '14px', fontWeight: 600, color: THEME_COLORS.textPrimary, mb: 1 }}>
+        <Typography
+          sx={{ fontSize: '14px', fontWeight: 600, color: THEME_COLORS.textPrimary, mb: 1 }}
+        >
           Glissez-déposez vos fichiers ici
         </Typography>
         <Typography sx={{ fontSize: '12px', color: THEME_COLORS.textDisabled }}>
@@ -97,7 +91,9 @@ export default function StepDocuments({ formData, setFormData, loading }) {
       {/* Files List */}
       {docs.length > 0 && (
         <Box>
-          <Typography sx={{ fontSize: '13px', fontWeight: 600, color: THEME_COLORS.textPrimary, mb: '12px' }}>
+          <Typography
+            sx={{ fontSize: '13px', fontWeight: 600, color: THEME_COLORS.textPrimary, mb: '12px' }}
+          >
             Fichiers uploadés ({docs.length})
           </Typography>
           <Stack spacing={1}>
@@ -116,7 +112,9 @@ export default function StepDocuments({ formData, setFormData, loading }) {
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: '12px', flex: 1 }}>
                   <FileDownloadIcon sx={{ color: THEME_COLORS.primary }} />
                   <Box>
-                    <Typography sx={{ fontSize: '13px', fontWeight: 600, color: THEME_COLORS.textPrimary }}>
+                    <Typography
+                      sx={{ fontSize: '13px', fontWeight: 600, color: THEME_COLORS.textPrimary }}
+                    >
                       {file.name || 'Fichier'}
                     </Typography>
                     <Typography sx={{ fontSize: '12px', color: THEME_COLORS.textDisabled }}>
@@ -124,11 +122,7 @@ export default function StepDocuments({ formData, setFormData, loading }) {
                     </Typography>
                   </Box>
                 </Box>
-                <IconButton
-                  size="small"
-                  onClick={() => handleRemoveFile(index)}
-                  disabled={loading}
-                >
+                <IconButton size="small" onClick={() => handleRemoveFile(index)} disabled={loading}>
                   <DeleteIcon sx={{ fontSize: '18px', color: THEME_COLORS.errorLight }} />
                 </IconButton>
               </Paper>

@@ -30,8 +30,13 @@ class ArchiveService {
         [archiveId, docType, docId, encryptedData, retention_years, expirationDate, 'active']
       );
 
-      await AuditLogService.log(null, 'document_archived', docId, 'archive', 
-        `${docType} archived for ${retention_years} years`);
+      await AuditLogService.log(
+        null,
+        'document_archived',
+        docId,
+        'archive',
+        `${docType} archived for ${retention_years} years`
+      );
 
       return result.rows[0];
     } catch (error) {
@@ -101,14 +106,18 @@ class ArchiveService {
    */
   static encryptArchiveData(data) {
     const algorithm = 'aes-256-gcm';
-    const key = crypto.scryptSync(process.env.ARCHIVE_KEY || 'default-archive-key-2025', 'salt', 32);
+    const key = crypto.scryptSync(
+      process.env.ARCHIVE_KEY || 'default-archive-key-2025',
+      'salt',
+      32
+    );
     const iv = crypto.randomBytes(16);
     const cipher = crypto.createCipheriv(algorithm, key, iv);
 
     let encrypted = cipher.update(data, 'utf8', 'hex');
     encrypted += cipher.final('hex');
     const authTag = cipher.getAuthTag();
-    
+
     return JSON.stringify({
       iv: iv.toString('hex'),
       authTag: authTag.toString('hex'),
@@ -125,7 +134,11 @@ class ArchiveService {
    */
   static decryptArchiveData(encryptedData) {
     const algorithm = 'aes-256-gcm';
-    const key = crypto.scryptSync(process.env.ARCHIVE_KEY || 'default-archive-key-2025', 'salt', 32);
+    const key = crypto.scryptSync(
+      process.env.ARCHIVE_KEY || 'default-archive-key-2025',
+      'salt',
+      32
+    );
     const parsed = JSON.parse(encryptedData);
 
     const iv = Buffer.from(parsed.iv, 'hex');

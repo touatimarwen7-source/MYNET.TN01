@@ -1,5 +1,23 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Card, CardContent, TextField, Button, Table, TableBody, TableCell, TableHead, TableRow, Typography, CircularProgress, Alert, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
+import {
+  Box,
+  Card,
+  CardContent,
+  TextField,
+  Button,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  Typography,
+  CircularProgress,
+  Alert,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+} from '@mui/material';
 import axios from '../api/axiosConfig';
 import institutionalTheme from '../theme/theme';
 
@@ -41,10 +59,14 @@ export default function OfferEvaluation({ tenderId }) {
         setError('يرجى إدخال الدرجة');
         return;
       }
-      const endpoint = evaluationType === 'technical'
-        ? `/api/evaluation/technical/${selectedOffer.id}`
-        : `/api/evaluation/financial/${selectedOffer.id}`;
-      await axios.post(endpoint, { [`${evaluationType}_score`]: parseFloat(scores[evaluationType]), comments: scores.comments });
+      const endpoint =
+        evaluationType === 'technical'
+          ? `/api/evaluation/technical/${selectedOffer.id}`
+          : `/api/evaluation/financial/${selectedOffer.id}`;
+      await axios.post(endpoint, {
+        [`${evaluationType}_score`]: parseFloat(scores[evaluationType]),
+        comments: scores.comments,
+      });
       setScores({ technical: '', financial: '', comments: '' });
       setDialogOpen(false);
       fetchOffers();
@@ -68,10 +90,17 @@ export default function OfferEvaluation({ tenderId }) {
 
   return (
     <Box sx={{ p: 3, direction: 'rtl' }}>
-      <Typography variant="h5" sx={{ mb: 3, color: institutionalTheme.palette.primary.main, fontWeight: 'bold' }}>
+      <Typography
+        variant="h5"
+        sx={{ mb: 3, color: institutionalTheme.palette.primary.main, fontWeight: 'bold' }}
+      >
         📊 تقييم العروض
       </Typography>
-      {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
+      {error && (
+        <Alert severity="error" sx={{ mb: 2 }}>
+          {error}
+        </Alert>
+      )}
       {loading ? (
         <Box sx={{ display: 'flex', justifyContent: 'center', py: 4 }}>
           <CircularProgress />
@@ -100,14 +129,26 @@ export default function OfferEvaluation({ tenderId }) {
                       <TableCell>{offer.offer_number}</TableCell>
                       <TableCell>{offer.company_name || offer.username}</TableCell>
                       <TableCell>{offer.total_amount}</TableCell>
-                      <TableCell>{offer.technical_score ? `${offer.technical_score}/100` : 'قيد الانتظار'}</TableCell>
-                      <TableCell>{offer.financial_score ? `${offer.financial_score}/100` : 'قيد الانتظار'}</TableCell>
+                      <TableCell>
+                        {offer.technical_score ? `${offer.technical_score}/100` : 'قيد الانتظار'}
+                      </TableCell>
+                      <TableCell>
+                        {offer.financial_score ? `${offer.financial_score}/100` : 'قيد الانتظار'}
+                      </TableCell>
                       <TableCell>
                         <Box sx={{ display: 'flex', gap: 1 }}>
-                          <Button size="small" onClick={() => handleOpenDialog(offer, 'technical')} sx={{ color: institutionalTheme.palette.primary.main }}>
+                          <Button
+                            size="small"
+                            onClick={() => handleOpenDialog(offer, 'technical')}
+                            sx={{ color: institutionalTheme.palette.primary.main }}
+                          >
                             فني
                           </Button>
-                          <Button size="small" onClick={() => handleOpenDialog(offer, 'financial')} sx={{ color: institutionalTheme.palette.primary.main }}>
+                          <Button
+                            size="small"
+                            onClick={() => handleOpenDialog(offer, 'financial')}
+                            sx={{ color: institutionalTheme.palette.primary.main }}
+                          >
                             مالي
                           </Button>
                         </Box>
@@ -116,7 +157,11 @@ export default function OfferEvaluation({ tenderId }) {
                   ))}
                 </TableBody>
               </Table>
-              <Button variant="contained" onClick={calculateFinalScores} sx={{ mt: 2, backgroundColor: institutionalTheme.palette.primary.main }}>
+              <Button
+                variant="contained"
+                onClick={calculateFinalScores}
+                sx={{ mt: 2, backgroundColor: institutionalTheme.palette.primary.main }}
+              >
                 حساب النتائج النهائية
               </Button>
             </CardContent>
@@ -144,7 +189,12 @@ export default function OfferEvaluation({ tenderId }) {
                         <TableCell>{item.offer_number}</TableCell>
                         <TableCell>{item.technical_score}</TableCell>
                         <TableCell>{item.financial_score}</TableCell>
-                        <TableCell sx={{ fontWeight: 'bold', color: institutionalTheme.palette.primary.main }}>
+                        <TableCell
+                          sx={{
+                            fontWeight: 'bold',
+                            color: institutionalTheme.palette.primary.main,
+                          }}
+                        >
                           {item.final_score}
                         </TableCell>
                       </TableRow>
@@ -164,12 +214,32 @@ export default function OfferEvaluation({ tenderId }) {
           {evaluationType === 'technical' ? 'التقييم الفني' : 'التقييم المالي'}
         </DialogTitle>
         <DialogContent sx={{ pt: 2 }}>
-          <TextField fullWidth label="الدرجة (0-100)" type="number" inputProps={{ min: 0, max: 100 }} value={scores[evaluationType]} onChange={(e) => setScores({ ...scores, [evaluationType]: e.target.value })} margin="normal" />
-          <TextField fullWidth label="التعليقات والملاحظات" value={scores.comments} onChange={(e) => setScores({ ...scores, comments: e.target.value })} multiline rows={4} margin="normal" />
+          <TextField
+            fullWidth
+            label="الدرجة (0-100)"
+            type="number"
+            inputProps={{ min: 0, max: 100 }}
+            value={scores[evaluationType]}
+            onChange={(e) => setScores({ ...scores, [evaluationType]: e.target.value })}
+            margin="normal"
+          />
+          <TextField
+            fullWidth
+            label="التعليقات والملاحظات"
+            value={scores.comments}
+            onChange={(e) => setScores({ ...scores, comments: e.target.value })}
+            multiline
+            rows={4}
+            margin="normal"
+          />
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setDialogOpen(false)}>إغلاق</Button>
-          <Button onClick={handleSubmitEvaluation} variant="contained" sx={{ backgroundColor: institutionalTheme.palette.primary.main }}>
+          <Button
+            onClick={handleSubmitEvaluation}
+            variant="contained"
+            sx={{ backgroundColor: institutionalTheme.palette.primary.main }}
+          >
             حفظ التقييم
           </Button>
         </DialogActions>

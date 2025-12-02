@@ -35,7 +35,7 @@ class CacheHelper {
             return undefined;
           }
           return Math.min(options.attempt * 100, 3000);
-        }
+        },
       });
 
       this.client.on('connect', () => {
@@ -49,8 +49,7 @@ class CacheHelper {
       this.client.on('reconnecting', () => {
         this.isConnected = false;
       });
-    } catch (error) {
-    }
+    } catch (error) {}
   }
 
   /**

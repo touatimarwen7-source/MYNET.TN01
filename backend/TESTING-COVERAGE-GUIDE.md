@@ -1,6 +1,7 @@
 # 🧪 Test Coverage Improvement Guide
 
 ## Current State
+
 - **Coverage:** 0.17% (Critical)
 - **Tests Passing:** 60/60 (100%)
 - **Target:** 50%+ coverage
@@ -8,6 +9,7 @@
 ## Strategy
 
 ### Phase 1: Unit Tests (Controllers & Services)
+
 ```bash
 # Priority: HIGH
 Files needed:
@@ -19,6 +21,7 @@ Estimated tests: 50+ tests
 ```
 
 ### Phase 2: Integration Tests
+
 ```bash
 # Priority: MEDIUM
 - API endpoint tests (GET, POST, PUT, DELETE)
@@ -30,6 +33,7 @@ Estimated tests: 30+ tests
 ```
 
 ### Phase 3: Security Tests
+
 ```bash
 # Priority: HIGH
 - CSRF protection
@@ -49,19 +53,15 @@ const app = require('../server');
 
 describe('Feature Name', () => {
   test('should do something', async () => {
-    const response = await request(app)
-      .get('/api/endpoint')
-      .expect(200);
-    
+    const response = await request(app).get('/api/endpoint').expect(200);
+
     expect(response.body.success).toBe(true);
     expect(response.body.data).toBeDefined();
   });
 
   test('should handle errors', async () => {
-    const response = await request(app)
-      .get('/api/endpoint/invalid')
-      .expect(404);
-    
+    const response = await request(app).get('/api/endpoint/invalid').expect(404);
+
     expect(response.body.success).toBe(false);
     expect(response.body.code).toBe('NOT_FOUND');
   });
@@ -97,4 +97,3 @@ npm test -- --coverage
 # Specific file
 npm test -- path/to/test.js
 ```
-

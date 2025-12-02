@@ -21,7 +21,7 @@ class TenderInquiryService {
    */
   static async submitInquiry(tenderId, supplierId, subject, inquiryText, attachments = []) {
     const pool = getPool();
-    
+
     try {
       const result = await pool.query(
         `INSERT INTO tender_inquiries (tender_id, supplier_id, subject, inquiry_text, attachments, status)
@@ -30,7 +30,13 @@ class TenderInquiryService {
         [tenderId, supplierId, subject, inquiryText, JSON.stringify(attachments), 'pending']
       );
 
-      await AuditLogService.log(supplierId, 'inquiry', result.rows[0].id, 'submit', `Inquiry submitted for tender ${tenderId}`);
+      await AuditLogService.log(
+        supplierId,
+        'inquiry',
+        result.rows[0].id,
+        'submit',
+        `Inquiry submitted for tender ${tenderId}`
+      );
       return result.rows[0];
     } catch (error) {
       throw new Error(`Failed to submit inquiry: ${error.message}`);
@@ -83,10 +89,9 @@ class TenderInquiryService {
 
     try {
       // Get the inquiry first
-      const inquiry = await pool.query(
-        'SELECT tender_id FROM tender_inquiries WHERE id = $1',
-        [inquiryId]
-      );
+      const inquiry = await pool.query('SELECT tender_id FROM tender_inquiries WHERE id = $1', [
+        inquiryId,
+      ]);
 
       if (inquiry.rows.length === 0) {
         throw new Error('Inquiry not found');
@@ -103,12 +108,18 @@ class TenderInquiryService {
       );
 
       // Update inquiry status
-      await pool.query(
-        'UPDATE tender_inquiries SET status = $1 WHERE id = $2',
-        ['answered', inquiryId]
-      );
+      await pool.query('UPDATE tender_inquiries SET status = $1 WHERE id = $2', [
+        'answered',
+        inquiryId,
+      ]);
 
-      await AuditLogService.log(userId, 'inquiry_response', result.rows[0].id, 'create', `Response provided for inquiry`);
+      await AuditLogService.log(
+        userId,
+        'inquiry_response',
+        result.rows[0].id,
+        'create',
+        `Response provided for inquiry`
+      );
       return result.rows[0];
     } catch (error) {
       throw new Error(`Failed to respond to inquiry: ${error.message}`);

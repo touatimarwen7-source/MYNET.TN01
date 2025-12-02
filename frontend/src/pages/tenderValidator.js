@@ -25,7 +25,10 @@ export function validateTender(formData, totalCriteria) {
     return { isValid: false, error: 'La date de clôture doit être dans le futur' };
   }
   if (totalCriteria !== 100) {
-    return { isValid: false, error: `Les critères d'évaluation doivent totaliser 100% (actuellement: ${totalCriteria}%)` };
+    return {
+      isValid: false,
+      error: `Les critères d'évaluation doivent totaliser 100% (actuellement: ${totalCriteria}%)`,
+    };
   }
 
   return { isValid: true, error: null };

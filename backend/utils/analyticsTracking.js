@@ -30,7 +30,7 @@ class AnalyticsTracker {
     };
 
     this.bufferEvent(event);
-    
+
     // Track in Sentry for debugging
     Sentry?.captureMessage(`User Action: ${action}`, 'info');
   }
@@ -79,11 +79,8 @@ class AnalyticsTracker {
     };
 
     this.bufferEvent(event);
-    
-    Sentry?.captureMessage(
-      `Offer submitted: ${offerId} for tender ${tenderId}`,
-      'info'
-    );
+
+    Sentry?.captureMessage(`Offer submitted: ${offerId} for tender ${tenderId}`, 'info');
   }
 
   /**
@@ -128,11 +125,8 @@ class AnalyticsTracker {
     };
 
     this.bufferEvent(event);
-    
-    Sentry?.captureMessage(
-      `Error tracked: ${errorType} - ${errorMessage}`,
-      'error'
-    );
+
+    Sentry?.captureMessage(`Error tracked: ${errorType} - ${errorMessage}`, 'error');
   }
 
   /**
@@ -178,7 +172,7 @@ class AnalyticsTracker {
 
     try {
       const pool = getPool();
-      
+
       // Insert events in batch
       const eventsToFlush = [...this.events];
       this.events = [];
@@ -188,12 +182,7 @@ class AnalyticsTracker {
           `INSERT INTO analytics_events 
            (type, user_id, event_data, created_at) 
            VALUES ($1, $2, $3, $4)`,
-          [
-            event.type,
-            event.userId || null,
-            JSON.stringify(event),
-            event.timestamp,
-          ]
+          [event.type, event.userId || null, JSON.stringify(event), event.timestamp]
         );
       }
     } catch (error) {
@@ -211,7 +200,7 @@ class AnalyticsTracker {
       eventsByType: {},
     };
 
-    this.events.forEach(event => {
+    this.events.forEach((event) => {
       stats.eventsByType[event.type] = (stats.eventsByType[event.type] || 0) + 1;
     });
 

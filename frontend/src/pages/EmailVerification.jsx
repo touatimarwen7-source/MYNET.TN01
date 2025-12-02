@@ -56,13 +56,21 @@ export default function EmailVerification() {
   }, [searchParams, navigate, addToast]);
 
   return (
-    <Box sx={{ backgroundColor: institutionalTheme.palette.background.default, minHeight: '100vh', paddingY: '60px' }}>
+    <Box
+      sx={{
+        backgroundColor: institutionalTheme.palette.background.default,
+        minHeight: '100vh',
+        paddingY: '60px',
+      }}
+    >
       <Container maxWidth="sm">
         <Card sx={{ borderRadius: '8px', textAlign: 'center' }}>
           <CardContent sx={{ padding: '48px 40px' }}>
             {status === 'verifying' && (
               <>
-                <CircularProgress sx={{ color: institutionalTheme.palette.primary.main, marginBottom: '24px' }} />
+                <CircularProgress
+                  sx={{ color: institutionalTheme.palette.primary.main, marginBottom: '24px' }}
+                />
                 <Typography variant="h6">{message}</Typography>
               </>
             )}
@@ -79,7 +87,10 @@ export default function EmailVerification() {
                 <Typography variant="h5" sx={{ color: '#4CAF50', marginBottom: '16px' }}>
                   {message}
                 </Typography>
-                <Typography variant="body2" sx={{ color: institutionalTheme.palette.text.secondary, marginBottom: '24px' }}>
+                <Typography
+                  variant="body2"
+                  sx={{ color: institutionalTheme.palette.text.secondary, marginBottom: '24px' }}
+                >
                   Vous allez être redirigé vers la connexion...
                 </Typography>
               </>

@@ -5,9 +5,28 @@
 
 import { useState } from 'react';
 import {
-  Container, Box, Grid, Card, CardContent, CardHeader, Typography, Button, Stack,
-  Chip, Table, TableHead, TableBody, TableRow, TableCell, Alert, LinearProgress,
-  Dialog, DialogTitle, DialogContent, DialogActions, TextField
+  Container,
+  Box,
+  Grid,
+  Card,
+  CardContent,
+  CardHeader,
+  Typography,
+  Button,
+  Stack,
+  Chip,
+  Table,
+  TableHead,
+  TableBody,
+  TableRow,
+  TableCell,
+  Alert,
+  LinearProgress,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  TextField,
 } from '@mui/material';
 import { CloudDownload, Restore, Schedule, CheckCircle, Warning, Info } from '@mui/icons-material';
 import institutionalTheme from '../../theme/theme';
@@ -43,10 +62,18 @@ export default function BackupRestore() {
           {/* إجراءات سريعة */}
           <Grid xs={12} spacing={2} container>
             <Grid xs={12} lg={6} lg={3}>
-              <Card sx={{ backgroundColor: '#FFFFFF', border: '1px solid #e0e0e0', borderRadius: '8px' }}>
+              <Card
+                sx={{
+                  backgroundColor: '#FFFFFF',
+                  border: '1px solid #e0e0e0',
+                  borderRadius: '8px',
+                }}
+              >
                 <CardContent>
                   <Stack spacing={2}>
-                    <Typography variant="body2" sx={{ fontWeight: 600 }}>إنشاء نسخة احتياطية الآن</Typography>
+                    <Typography variant="body2" sx={{ fontWeight: 600 }}>
+                      إنشاء نسخة احتياطية الآن
+                    </Typography>
                     <Button fullWidth variant="contained" startIcon={<CloudDownload />}>
                       ابدأ الآن
                     </Button>
@@ -55,10 +82,18 @@ export default function BackupRestore() {
               </Card>
             </Grid>
             <Grid xs={12} lg={6} lg={3}>
-              <Card sx={{ backgroundColor: '#FFFFFF', border: '1px solid #e0e0e0', borderRadius: '8px' }}>
+              <Card
+                sx={{
+                  backgroundColor: '#FFFFFF',
+                  border: '1px solid #e0e0e0',
+                  borderRadius: '8px',
+                }}
+              >
                 <CardContent>
                   <Stack spacing={2}>
-                    <Typography variant="body2" sx={{ fontWeight: 600 }}>استعادة من نسخة</Typography>
+                    <Typography variant="body2" sx={{ fontWeight: 600 }}>
+                      استعادة من نسخة
+                    </Typography>
                     <Button fullWidth variant="outlined" startIcon={<Restore />}>
                       اختر نسخة
                     </Button>
@@ -67,11 +102,22 @@ export default function BackupRestore() {
               </Card>
             </Grid>
             <Grid xs={12} lg={6} lg={3}>
-              <Card sx={{ backgroundColor: '#FFFFFF', border: '1px solid #e0e0e0', borderRadius: '8px' }}>
+              <Card
+                sx={{
+                  backgroundColor: '#FFFFFF',
+                  border: '1px solid #e0e0e0',
+                  borderRadius: '8px',
+                }}
+              >
                 <CardContent>
                   <Stack spacing={2}>
-                    <Typography variant="body2" sx={{ fontWeight: 600 }}>حجم البيانات</Typography>
-                    <Typography variant="h6" sx={{ fontWeight: 700, color: THEME.palette.primary.main }}>
+                    <Typography variant="body2" sx={{ fontWeight: 600 }}>
+                      حجم البيانات
+                    </Typography>
+                    <Typography
+                      variant="h6"
+                      sx={{ fontWeight: 700, color: THEME.palette.primary.main }}
+                    >
                       125 GB
                     </Typography>
                   </Stack>
@@ -79,10 +125,18 @@ export default function BackupRestore() {
               </Card>
             </Grid>
             <Grid xs={12} lg={6} lg={3}>
-              <Card sx={{ backgroundColor: '#FFFFFF', border: '1px solid #e0e0e0', borderRadius: '8px' }}>
+              <Card
+                sx={{
+                  backgroundColor: '#FFFFFF',
+                  border: '1px solid #e0e0e0',
+                  borderRadius: '8px',
+                }}
+              >
                 <CardContent>
                   <Stack spacing={2}>
-                    <Typography variant="body2" sx={{ fontWeight: 600 }}>التخزين المتاح</Typography>
+                    <Typography variant="body2" sx={{ fontWeight: 600 }}>
+                      التخزين المتاح
+                    </Typography>
                     <LinearProgress variant="determinate" value={68} />
                     <Typography variant="caption">68% من 500 GB</Typography>
                   </Stack>
@@ -92,7 +146,9 @@ export default function BackupRestore() {
           </Grid>
 
           {/* سجل النسخ الاحتياطية */}
-          <Card sx={{ backgroundColor: '#FFFFFF', border: '1px solid #e0e0e0', borderRadius: '8px' }}>
+          <Card
+            sx={{ backgroundColor: '#FFFFFF', border: '1px solid #e0e0e0', borderRadius: '8px' }}
+          >
             <CardHeader title="سجل النسخ الاحتياطية" />
             <CardContent>
               <Box sx={{ overflowX: 'auto' }}>
@@ -111,7 +167,9 @@ export default function BackupRestore() {
                       <TableRow key={backup.id} sx={{ '&:hover': { backgroundColor: '#f9f9f9' } }}>
                         <TableCell>{backup.date}</TableCell>
                         <TableCell>{backup.size}</TableCell>
-                        <TableCell><Chip label={backup.type} size="small" variant="outlined" /></TableCell>
+                        <TableCell>
+                          <Chip label={backup.type} size="small" variant="outlined" />
+                        </TableCell>
                         <TableCell>
                           <Chip
                             label={backup.status}
@@ -124,7 +182,9 @@ export default function BackupRestore() {
                         <TableCell>
                           <Stack direction="row" spacing={1}>
                             <Button size="small">تحميل</Button>
-                            <Button size="small" color="warning">استعادة</Button>
+                            <Button size="small" color="warning">
+                              استعادة
+                            </Button>
                           </Stack>
                         </TableCell>
                       </TableRow>
@@ -136,11 +196,15 @@ export default function BackupRestore() {
           </Card>
 
           {/* الإعدادات */}
-          <Card sx={{ backgroundColor: '#FFFFFF', border: '1px solid #e0e0e0', borderRadius: '8px' }}>
+          <Card
+            sx={{ backgroundColor: '#FFFFFF', border: '1px solid #e0e0e0', borderRadius: '8px' }}
+          >
             <CardHeader title="إعدادات النسخ الاحتياطية" />
             <CardContent>
               <Stack spacing={2}>
-                <Typography variant="body2" sx={{ fontWeight: 600 }}>جدول النسخ الاحتياطية</Typography>
+                <Typography variant="body2" sx={{ fontWeight: 600 }}>
+                  جدول النسخ الاحتياطية
+                </Typography>
                 <Stack direction="row" spacing={1}>
                   <Chip label="يومي ✓" color="success" variant="filled" size="small" />
                   <Chip label="أسبوعي ✓" color="success" variant="filled" size="small" />

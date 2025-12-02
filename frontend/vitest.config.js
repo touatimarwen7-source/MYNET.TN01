@@ -11,18 +11,12 @@ export default defineConfig({
     coverage: {
       provider: 'v8',
       reporter: ['text', 'json', 'html'],
-      exclude: [
-        'node_modules/',
-        'dist/',
-        'src/**/*.stories.js',
-        '**/*.test.js',
-        '**/*.spec.js'
-      ]
-    }
+      exclude: ['node_modules/', 'dist/', 'src/**/*.stories.js', '**/*.test.js', '**/*.spec.js'],
+    },
   },
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, './src')
-    }
-  }
+      '@': path.resolve(__dirname, './src'),
+    },
+  },
 });

@@ -63,10 +63,10 @@ class BackupService {
 
       // Use pg_dump to create backup
       const dumpCommand = `pg_dump "${process.env.DATABASE_URL}" > "${filepath}"`;
-      
+
       await execAsync(dumpCommand, {
         timeout: 300000, // 5 minute timeout
-        maxBuffer: 10 * 1024 * 1024 // 10MB buffer
+        maxBuffer: 10 * 1024 * 1024, // 10MB buffer
       });
 
       // Get file stats
@@ -82,13 +82,13 @@ class BackupService {
         filepath,
         size: backupSize,
         timestamp: new Date().toISOString(),
-        sizeBytes: stats.size
+        sizeBytes: stats.size,
       };
     } catch (error) {
       return {
         success: false,
         error: error.message,
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       };
     }
   }
@@ -110,12 +110,13 @@ class BackupService {
    */
   listBackups() {
     try {
-      const files = fs.readdirSync(BACKUP_DIR)
-        .filter(f => f.startsWith(BACKUP_PREFIX))
+      const files = fs
+        .readdirSync(BACKUP_DIR)
+        .filter((f) => f.startsWith(BACKUP_PREFIX))
         .sort()
         .reverse();
 
-      const backups = files.map(filename => {
+      const backups = files.map((filename) => {
         const filepath = path.join(BACKUP_DIR, filename);
         const stats = fs.statSync(filepath);
         const timestamp = this.extractTimestampFromFilename(filename);
@@ -126,7 +127,7 @@ class BackupService {
           sizeBytes: stats.size,
           timestamp,
           created: stats.birthtime,
-          modified: stats.mtime
+          modified: stats.mtime,
         };
       });
 
@@ -135,14 +136,14 @@ class BackupService {
         count: backups.length,
         backups,
         maxRetained: MAX_BACKUPS,
-        backupDir: BACKUP_DIR
+        backupDir: BACKUP_DIR,
       };
     } catch (error) {
       return {
         success: false,
         error: error.message,
         count: 0,
-        backups: []
+        backups: [],
       };
     }
   }
@@ -156,7 +157,7 @@ class BackupService {
    */
   getBackupPath(filename) {
     const filepath = path.join(BACKUP_DIR, filename);
-    
+
     // Security: Prevent directory traversal
     if (!filepath.startsWith(BACKUP_DIR)) {
       throw new Error('Invalid backup filename');
@@ -187,12 +188,12 @@ class BackupService {
         success: true,
         filename,
         content,
-        size: Buffer.byteLength(content, 'utf8')
+        size: Buffer.byteLength(content, 'utf8'),
       };
     } catch (error) {
       return {
         success: false,
-        error: error.message
+        error: error.message,
       };
     }
   }
@@ -218,20 +219,20 @@ class BackupService {
 
       await execAsync(restoreCommand, {
         timeout: 600000, // 10 minute timeout
-        maxBuffer: 10 * 1024 * 1024
+        maxBuffer: 10 * 1024 * 1024,
       });
 
       return {
         success: true,
         filename,
         timestamp: new Date().toISOString(),
-        message: 'Database restored successfully'
+        message: 'Database restored successfully',
       };
     } catch (error) {
       return {
         success: false,
         error: error.message,
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       };
     }
   }
@@ -244,8 +245,9 @@ class BackupService {
    */
   async cleanOldBackups() {
     try {
-      const files = fs.readdirSync(BACKUP_DIR)
-        .filter(f => f.startsWith(BACKUP_PREFIX))
+      const files = fs
+        .readdirSync(BACKUP_DIR)
+        .filter((f) => f.startsWith(BACKUP_PREFIX))
         .sort()
         .reverse();
 
@@ -286,7 +288,8 @@ class BackupService {
       }
 
       const totalSize = result.backups.reduce((sum, b) => sum + b.sizeBytes, 0);
-      const oldestBackup = result.backups.length > 0 ? result.backups[result.backups.length - 1] : null;
+      const oldestBackup =
+        result.backups.length > 0 ? result.backups[result.backups.length - 1] : null;
       const newestBackup = result.backups.length > 0 ? result.backups[0] : null;
 
       return {
@@ -298,13 +301,13 @@ class BackupService {
           oldestBackup,
           newestBackup,
           maxBackupsRetained: MAX_BACKUPS,
-          backupDirectory: BACKUP_DIR
-        }
+          backupDirectory: BACKUP_DIR,
+        },
       };
     } catch (error) {
       return {
         success: false,
-        error: error.message
+        error: error.message,
       };
     }
   }
@@ -353,7 +356,7 @@ class BackupService {
         return {
           success: false,
           integrity: 'invalid',
-          error: 'Backup file does not contain CREATE TABLE statements'
+          error: 'Backup file does not contain CREATE TABLE statements',
         };
       }
 
@@ -364,13 +367,13 @@ class BackupService {
         size: Buffer.byteLength(content, 'utf8'),
         hasStructure: hasCreateTable,
         hasTransaction: hasBegin && hasCommit,
-        message: 'Backup file is valid'
+        message: 'Backup file is valid',
       };
     } catch (error) {
       return {
         success: false,
         integrity: 'unknown',
-        error: error.message
+        error: error.message,
       };
     }
   }

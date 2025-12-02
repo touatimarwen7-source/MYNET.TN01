@@ -1,14 +1,6 @@
 import { useEffect } from 'react';
 import institutionalTheme from '../theme/theme';
-import {
-  Container,
-  Box,
-  Card,
-  CardContent,
-  Typography,
-  Stack,
-  Button,
-} from '@mui/material';
+import { Container, Box, Card, CardContent, Typography, Stack, Button } from '@mui/material';
 import SecurityIcon from '@mui/icons-material/Security';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import BalanceIcon from '@mui/icons-material/Balance';
@@ -108,10 +100,9 @@ export default function AboutPage() {
                     lineHeight: 1.6,
                   }}
                 >
-                  En Tunisie, les processus d'approvisionnement B2B étaient
-                  freinés par manque de transparence, absence de normes uniformes
-                  et risques élevés de fraude. Les processus manuels ralentissaient
-                  les décisions et réduisaient l'efficacité.
+                  En Tunisie, les processus d'approvisionnement B2B étaient freinés par manque de
+                  transparence, absence de normes uniformes et risques élevés de fraude. Les
+                  processus manuels ralentissaient les décisions et réduisaient l'efficacité.
                 </Typography>
               </CardContent>
             </Card>
@@ -147,10 +138,9 @@ export default function AboutPage() {
                     lineHeight: 1.6,
                   }}
                 >
-                  Une plateforme numérique sécurisée, transparente et conforme
-                  aux standards internationaux. Utilisant l'IA, la blockchain
-                  et les technologies modernes pour automatiser et améliorer les
-                  processus.
+                  Une plateforme numérique sécurisée, transparente et conforme aux standards
+                  internationaux. Utilisant l'IA, la blockchain et les technologies modernes pour
+                  automatiser et améliorer les processus.
                 </Typography>
               </CardContent>
             </Card>
@@ -186,9 +176,9 @@ export default function AboutPage() {
                     lineHeight: 1.6,
                   }}
                 >
-                  Être la plateforme de référence pour l'approvisionnement B2B en
-                  Afrique du Nord où chaque entreprise a accès aux mêmes
-                  opportunités commerciales et où la transparence prime.
+                  Être la plateforme de référence pour l'approvisionnement B2B en Afrique du Nord où
+                  chaque entreprise a accès aux mêmes opportunités commerciales et où la
+                  transparence prime.
                 </Typography>
               </CardContent>
             </Card>
@@ -210,29 +200,41 @@ export default function AboutPage() {
             Nos Valeurs Fondamentales
           </Typography>
 
-          <Stack
-            direction={{ xs: 'column', sm: 'row' }}
-            spacing={3}
-            sx={{ flexWrap: 'wrap' }}
-          >
+          <Stack direction={{ xs: 'column', sm: 'row' }} spacing={3} sx={{ flexWrap: 'wrap' }}>
             {[
               {
-                icon: <SecurityIcon sx={{ fontSize: 40, color: institutionalTheme.palette.primary.main }} />,
+                icon: (
+                  <SecurityIcon
+                    sx={{ fontSize: 40, color: institutionalTheme.palette.primary.main }}
+                  />
+                ),
                 title: 'Sécurité',
                 desc: 'La confiance est notre priorité absolue avec chiffrement AES-256 et authentification 2FA',
               },
               {
-                icon: <VisibilityIcon sx={{ fontSize: 40, color: institutionalTheme.palette.primary.main }} />,
+                icon: (
+                  <VisibilityIcon
+                    sx={{ fontSize: 40, color: institutionalTheme.palette.primary.main }}
+                  />
+                ),
                 title: 'Transparence',
                 desc: 'Zéro compromis sur la clarté des processus avec audit complet et historique complet',
               },
               {
-                icon: <BalanceIcon sx={{ fontSize: 40, color: institutionalTheme.palette.primary.main }} />,
+                icon: (
+                  <BalanceIcon
+                    sx={{ fontSize: 40, color: institutionalTheme.palette.primary.main }}
+                  />
+                ),
                 title: 'Équité',
                 desc: 'Égalité des chances pour tous les participants dans un environnement juste',
               },
               {
-                icon: <LightbulbIcon sx={{ fontSize: 40, color: institutionalTheme.palette.primary.main }} />,
+                icon: (
+                  <LightbulbIcon
+                    sx={{ fontSize: 40, color: institutionalTheme.palette.primary.main }}
+                  />
+                ),
                 title: 'Innovation',
                 desc: 'Technologie de pointe pour un avenir meilleur et des processus plus efficaces',
               },
@@ -302,7 +304,7 @@ export default function AboutPage() {
               {
                 name: 'Mohamed Dhaoui',
                 role: 'Fondateur & Directeur Général',
-                bio: 'Entrepreneur tunisien avec 15 ans d\'expérience en technologie et innovation digitale',
+                bio: "Entrepreneur tunisien avec 15 ans d'expérience en technologie et innovation digitale",
               },
               {
                 name: 'Fatima Belgacem',
@@ -312,12 +314,12 @@ export default function AboutPage() {
               {
                 name: 'Karim Mansouri',
                 role: 'Directeur Juridique',
-                bio: 'Spécialiste du droit commercial B2B, conformité réglementaire et contrats d\'approvisionnement',
+                bio: "Spécialiste du droit commercial B2B, conformité réglementaire et contrats d'approvisionnement",
               },
               {
                 name: 'Leila Saibi',
                 role: 'Directrice du Développement',
-                bio: 'Experte en partenariats B2B, relations d\'affaires et développement stratégique commercial',
+                bio: "Experte en partenariats B2B, relations d'affaires et développement stratégique commercial",
               },
             ].map((member, idx) => (
               <Box key={idx} sx={{ flex: 1 }}>
@@ -409,14 +411,10 @@ export default function AboutPage() {
               lineHeight: 1.6,
             }}
           >
-            Rejoignez des centaines d'organisations qui font confiance à MyNet.tn
-            pour transformer leurs processus d'approvisionnement
+            Rejoignez des centaines d'organisations qui font confiance à MyNet.tn pour transformer
+            leurs processus d'approvisionnement
           </Typography>
-          <Stack
-            direction={{ xs: 'column', sm: 'row' }}
-            spacing={2}
-            justifyContent="center"
-          >
+          <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} justifyContent="center">
             <Button
               variant="contained"
               sx={{

@@ -8,7 +8,7 @@ const router = express.Router();
 router.post('/send-test', authMiddleware, async (req, res) => {
   try {
     const { email } = req.body;
-    
+
     if (!email) {
       return res.status(400).json({ error: 'Email address required' });
     }
@@ -34,7 +34,7 @@ router.post('/notify-offer', authMiddleware, async (req, res) => {
   try {
     const { buyerEmail, tenderId, supplierName, price } = req.body;
     const template = emailTemplates.newOffer(tenderId, supplierName, price);
-    
+
     const success = await sendEmail(buyerEmail, template.subject, template.html);
 
     if (success) {
@@ -52,7 +52,7 @@ router.post('/notify-tender-update', authMiddleware, async (req, res) => {
   try {
     const { buyerEmail, tenderId, status } = req.body;
     const template = emailTemplates.tenderUpdate(tenderId, status);
-    
+
     const success = await sendEmail(buyerEmail, template.subject, template.html);
 
     if (success) {

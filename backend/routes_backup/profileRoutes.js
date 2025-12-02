@@ -4,12 +4,12 @@ const authMiddleware = require('../middleware/authMiddleware');
 
 const router = express.Router();
 
-router.put('/supplier/preferences', authMiddleware, (req, res) => 
-    ProfileController.updateSupplierPreferences(req, res)
+router.put('/supplier/preferences', authMiddleware, (req, res) =>
+  ProfileController.updateSupplierPreferences(req, res)
 );
 
-router.get('/supplier/preferences', authMiddleware, (req, res) => 
-    ProfileController.getSupplierPreferences(req, res)
+router.get('/supplier/preferences', authMiddleware, (req, res) =>
+  ProfileController.getSupplierPreferences(req, res)
 );
 
 module.exports = router;

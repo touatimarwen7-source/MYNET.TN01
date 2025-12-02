@@ -1,11 +1,13 @@
 # Accessibility (A11Y) Guidelines - MyNet.tn
 
 ## Overview
+
 This document provides accessibility best practices for the MyNet.tn platform to ensure WCAG 2.1 compliance and inclusive user experience.
 
 ## Core Principles
 
 ### 1. Semantic HTML
+
 - Use semantic elements: `<button>`, `<nav>`, `<header>`, `<main>`, `<footer>`, `<form>`
 - Avoid generic `<div>` wrappers for interactive elements
 - Use proper heading hierarchy: h1 → h2 → h3 (no skipping levels)
@@ -13,6 +15,7 @@ This document provides accessibility best practices for the MyNet.tn platform to
 ### 2. ARIA Attributes
 
 #### Common ARIA Labels
+
 ```jsx
 // Form inputs
 <TextField inputProps={{ 'aria-label': 'Rechercher appels d\'offres' }} />
@@ -27,6 +30,7 @@ This document provides accessibility best practices for the MyNet.tn platform to
 ```
 
 #### Descriptions
+
 ```jsx
 <TextField
   id="budget"
@@ -38,6 +42,7 @@ This document provides accessibility best practices for the MyNet.tn platform to
 ```
 
 ### 3. Keyboard Navigation
+
 - All interactive elements must be keyboard accessible
 - Use Tab to navigate, Enter/Space to activate
 - Provide skip links for main content
@@ -45,12 +50,14 @@ This document provides accessibility best practices for the MyNet.tn platform to
 - Never trap focus in components
 
 ### 4. Color & Contrast
+
 - Maintain 4.5:1 contrast ratio for normal text
 - #0056B3 (primary) and #212121 (text) = sufficient contrast
 - Don't rely on color alone - use icons, text, patterns
 - Test with WCAG Contrast Checker
 
 ### 5. Images & Icons
+
 - Add `alt` text to all images
 - Icons must have aria-labels or be inside labeled elements
 - Decorative icons can use `aria-hidden="true"`
@@ -63,21 +70,18 @@ This document provides accessibility best practices for the MyNet.tn platform to
 ```
 
 ### 6. Forms
+
 - Label every input with `<label>` or aria-label
 - Group related inputs with `<fieldset>` and `<legend>`
 - Provide clear error messages
 - Indicate required fields
 
 ```jsx
-<TextField
-  label="Email"
-  type="email"
-  required
-  inputProps={{ 'aria-required': 'true' }}
-/>
+<TextField label="Email" type="email" required inputProps={{ 'aria-required': 'true' }} />
 ```
 
 ### 7. Data Tables
+
 - Add table headers (`<th>` scope="col"|"row")
 - Caption for table purpose
 - Use `aria-sort` for sortable columns
@@ -94,6 +98,7 @@ This document provides accessibility best practices for the MyNet.tn platform to
 ```
 
 ### 8. Links
+
 - Link text must be descriptive
 - Avoid "Cliquez ici", use "Voir les détails de l'offre"
 - Links should open in same tab unless specified
@@ -105,12 +110,14 @@ This document provides accessibility best practices for the MyNet.tn platform to
 ```
 
 ### 9. Modals & Dialogs
+
 - Use proper `<Dialog>` component with role="dialog"
 - Focus management: move to dialog, return on close
 - Escape key closes dialog
 - Modal shouldn't scroll main content
 
 ### 10. Loading States
+
 - Use skeleton loaders instead of spinners only
 - Announce loading with aria-live region
 - Show progress percentage if possible

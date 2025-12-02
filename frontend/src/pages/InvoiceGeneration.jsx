@@ -23,7 +23,7 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
-  TextField
+  TextField,
 } from '@mui/material';
 import DownloadIcon from '@mui/icons-material/Download';
 import VisibilityIcon from '@mui/icons-material/Visibility';
@@ -50,11 +50,11 @@ export default function InvoiceGeneration() {
     try {
       setLoading(true);
       setError('');
-      
+
       // Get buyer's purchase orders and invoices from them
       const [posRes, invoicesRes] = await Promise.all([
         procurementAPI.getPurchaseOrders(),
-        procurementAPI.getInvoices()
+        procurementAPI.getInvoices(),
       ]);
 
       setPurchaseOrders(posRes.data || []);
@@ -87,48 +87,50 @@ export default function InvoiceGeneration() {
       setOpenApprovalDialog(false);
       fetchData();
     } catch (err) {
-      setError('Erreur lors de l\'approbation');
+      setError("Erreur lors de l'approbation");
     }
   };
 
   const getStatusColor = (status) => {
     const colors = {
-      'draft': 'default',
-      'sent': 'info',
-      'approved': 'success',
-      'paid': 'success',
-      'overdue': 'error',
-      'pending': 'warning'
+      draft: 'default',
+      sent: 'info',
+      approved: 'success',
+      paid: 'success',
+      overdue: 'error',
+      pending: 'warning',
     };
     return colors[status] || 'default';
   };
 
   const getStatusLabel = (status) => {
     const labels = {
-      'draft': 'Brouillon',
-      'sent': 'Envoyée',
-      'approved': 'Approuvée',
-      'paid': 'Payée',
-      'overdue': 'En retard',
-      'pending': 'En attente'
+      draft: 'Brouillon',
+      sent: 'Envoyée',
+      approved: 'Approuvée',
+      paid: 'Payée',
+      overdue: 'En retard',
+      pending: 'En attente',
     };
     return labels[status] || status;
   };
 
   const getPoStatusLabel = (status) => {
     const labels = {
-      'pending': 'En attente',
-      'approved': 'Approuvée',
-      'in_progress': 'En cours',
-      'completed': 'Complétée',
-      'cancelled': 'Annulée'
+      pending: 'En attente',
+      approved: 'Approuvée',
+      in_progress: 'En cours',
+      completed: 'Complétée',
+      cancelled: 'Annulée',
     };
     return labels[status] || status;
   };
 
   if (loading) {
     return (
-      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '80vh' }}>
+      <Box
+        sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '80vh' }}
+      >
         <CircularProgress />
       </Box>
     );
@@ -145,7 +147,7 @@ export default function InvoiceGeneration() {
               fontSize: '32px',
               fontWeight: 600,
               color: institutionalTheme.palette.primary.main,
-              marginBottom: '8px'
+              marginBottom: '8px',
             }}
           >
             💰 Gestion des Factures - Acheteur
@@ -169,7 +171,13 @@ export default function InvoiceGeneration() {
                 <Typography sx={{ color: '#999', fontSize: '12px', fontWeight: 600 }}>
                   COMMANDES TOTALES
                 </Typography>
-                <Typography sx={{ fontSize: '24px', fontWeight: 700, color: institutionalTheme.palette.primary.main }}>
+                <Typography
+                  sx={{
+                    fontSize: '24px',
+                    fontWeight: 700,
+                    color: institutionalTheme.palette.primary.main,
+                  }}
+                >
                   {purchaseOrders.length}
                 </Typography>
               </CardContent>
@@ -181,7 +189,13 @@ export default function InvoiceGeneration() {
                 <Typography sx={{ color: '#999', fontSize: '12px', fontWeight: 600 }}>
                   FACTURES TOTALES
                 </Typography>
-                <Typography sx={{ fontSize: '24px', fontWeight: 700, color: institutionalTheme.palette.primary.main }}>
+                <Typography
+                  sx={{
+                    fontSize: '24px',
+                    fontWeight: 700,
+                    color: institutionalTheme.palette.primary.main,
+                  }}
+                >
                   {invoices.length}
                 </Typography>
               </CardContent>
@@ -194,7 +208,7 @@ export default function InvoiceGeneration() {
                   EN ATTENTE D'APPROBATION
                 </Typography>
                 <Typography sx={{ fontSize: '24px', fontWeight: 700, color: '#f57c00' }}>
-                  {invoices.filter(i => i.status === 'sent').length}
+                  {invoices.filter((i) => i.status === 'sent').length}
                 </Typography>
               </CardContent>
             </Card>
@@ -206,7 +220,7 @@ export default function InvoiceGeneration() {
                   FACTURES PAYÉES
                 </Typography>
                 <Typography sx={{ fontSize: '24px', fontWeight: 700, color: '#2e7d32' }}>
-                  {invoices.filter(i => i.status === 'paid').length}
+                  {invoices.filter((i) => i.status === 'paid').length}
                 </Typography>
               </CardContent>
             </Card>
@@ -216,7 +230,15 @@ export default function InvoiceGeneration() {
         {/* Section: Purchase Orders */}
         <Card sx={{ border: '1px solid #e0e0e0', marginBottom: '40px' }}>
           <CardContent sx={{ padding: '24px' }}>
-            <Typography variant="h5" sx={{ fontSize: '20px', fontWeight: 600, color: institutionalTheme.palette.text.primary, marginBottom: '20px' }}>
+            <Typography
+              variant="h5"
+              sx={{
+                fontSize: '20px',
+                fontWeight: 600,
+                color: institutionalTheme.palette.text.primary,
+                marginBottom: '20px',
+              }}
+            >
               📦 Vos Commandes (Demandes de Fourniture)
             </Typography>
 
@@ -227,21 +249,43 @@ export default function InvoiceGeneration() {
                 <Table size="small">
                   <TableHead sx={{ backgroundColor: '#F5F5F5' }}>
                     <TableRow>
-                      <TableCell sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main }}>N° Commande</TableCell>
-                      <TableCell sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main }}>Fournisseur</TableCell>
-                      <TableCell sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main }}>Montant</TableCell>
-                      <TableCell sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main }}>Statut</TableCell>
-                      <TableCell sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main }}>Facture(s)</TableCell>
+                      <TableCell
+                        sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main }}
+                      >
+                        N° Commande
+                      </TableCell>
+                      <TableCell
+                        sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main }}
+                      >
+                        Fournisseur
+                      </TableCell>
+                      <TableCell
+                        sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main }}
+                      >
+                        Montant
+                      </TableCell>
+                      <TableCell
+                        sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main }}
+                      >
+                        Statut
+                      </TableCell>
+                      <TableCell
+                        sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main }}
+                      >
+                        Facture(s)
+                      </TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
                     {purchaseOrders.map((po) => {
-                      const poInvoices = invoices.filter(inv => inv.purchase_order_id === po.id);
+                      const poInvoices = invoices.filter((inv) => inv.purchase_order_id === po.id);
                       return (
                         <TableRow key={po.id} sx={{ '&:hover': { backgroundColor: '#fafafa' } }}>
                           <TableCell sx={{ fontWeight: 500 }}>{po.po_number}</TableCell>
                           <TableCell>{po.supplier_name || 'N/A'}</TableCell>
-                          <TableCell>{po.total_amount?.toLocaleString('fr-TN')} {po.currency}</TableCell>
+                          <TableCell>
+                            {po.total_amount?.toLocaleString('fr-TN')} {po.currency}
+                          </TableCell>
                           <TableCell>
                             <Chip
                               label={getPoStatusLabel(po.status)}
@@ -258,7 +302,9 @@ export default function InvoiceGeneration() {
                                 icon={<CheckCircleIcon />}
                               />
                             ) : (
-                              <Typography sx={{ fontSize: '12px', color: '#999' }}>Aucune</Typography>
+                              <Typography sx={{ fontSize: '12px', color: '#999' }}>
+                                Aucune
+                              </Typography>
                             )}
                           </TableCell>
                         </TableRow>
@@ -274,8 +320,22 @@ export default function InvoiceGeneration() {
         {/* Section: Invoices */}
         <Card sx={{ border: '1px solid #e0e0e0' }}>
           <CardContent sx={{ padding: '24px' }}>
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-              <Typography variant="h5" sx={{ fontSize: '20px', fontWeight: 600, color: institutionalTheme.palette.text.primary }}>
+            <Box
+              sx={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                marginBottom: '20px',
+              }}
+            >
+              <Typography
+                variant="h5"
+                sx={{
+                  fontSize: '20px',
+                  fontWeight: 600,
+                  color: institutionalTheme.palette.text.primary,
+                }}
+              >
                 📄 Factures des Fournisseurs
               </Typography>
               <Typography sx={{ fontSize: '12px', color: '#999' }}>
@@ -290,12 +350,37 @@ export default function InvoiceGeneration() {
                 <Table size="small">
                   <TableHead sx={{ backgroundColor: '#F5F5F5' }}>
                     <TableRow>
-                      <TableCell sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main }}>N° Facture</TableCell>
-                      <TableCell sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main }}>Fournisseur</TableCell>
-                      <TableCell sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main }}>Montant</TableCell>
-                      <TableCell sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main }}>Échéance</TableCell>
-                      <TableCell sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main }}>Statut</TableCell>
-                      <TableCell sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main }} align="center">Actions</TableCell>
+                      <TableCell
+                        sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main }}
+                      >
+                        N° Facture
+                      </TableCell>
+                      <TableCell
+                        sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main }}
+                      >
+                        Fournisseur
+                      </TableCell>
+                      <TableCell
+                        sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main }}
+                      >
+                        Montant
+                      </TableCell>
+                      <TableCell
+                        sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main }}
+                      >
+                        Échéance
+                      </TableCell>
+                      <TableCell
+                        sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main }}
+                      >
+                        Statut
+                      </TableCell>
+                      <TableCell
+                        sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main }}
+                        align="center"
+                      >
+                        Actions
+                      </TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
@@ -307,7 +392,9 @@ export default function InvoiceGeneration() {
                           {invoice.total?.toLocaleString('fr-TN')} TND
                         </TableCell>
                         <TableCell>
-                          {invoice.due_date ? new Date(invoice.due_date).toLocaleDateString('fr-TN') : 'N/A'}
+                          {invoice.due_date
+                            ? new Date(invoice.due_date).toLocaleDateString('fr-TN')
+                            : 'N/A'}
                         </TableCell>
                         <TableCell>
                           <Chip
@@ -350,7 +437,12 @@ export default function InvoiceGeneration() {
       </Container>
 
       {/* Approval Dialog */}
-      <Dialog open={openApprovalDialog} onClose={() => setOpenApprovalDialog(false)} maxWidth="sm" fullWidth>
+      <Dialog
+        open={openApprovalDialog}
+        onClose={() => setOpenApprovalDialog(false)}
+        maxWidth="sm"
+        fullWidth
+      >
         <DialogTitle>Approuver la Facture</DialogTitle>
         <DialogContent sx={{ pt: 2 }}>
           <Typography sx={{ mb: 2 }}>
@@ -368,7 +460,11 @@ export default function InvoiceGeneration() {
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setOpenApprovalDialog(false)}>Annuler</Button>
-          <Button onClick={approveInvoice} variant="contained" sx={{ backgroundColor: institutionalTheme.palette.primary.main }}>
+          <Button
+            onClick={approveInvoice}
+            variant="contained"
+            sx={{ backgroundColor: institutionalTheme.palette.primary.main }}
+          >
             Approuver
           </Button>
         </DialogActions>

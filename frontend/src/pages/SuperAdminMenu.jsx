@@ -98,7 +98,7 @@ export default function SuperAdminMenu() {
     {
       id: 'audit',
       title: 'Audit Logs',
-      description: 'Consulter l\'historique complet des activités et modifications',
+      description: "Consulter l'historique complet des activités et modifications",
       icon: AuditIcon,
       color: '#d32f2f',
       route: '/super-admin/audit-logs',
@@ -127,7 +127,7 @@ export default function SuperAdminMenu() {
     },
     {
       id: 'subscriptions',
-      title: 'Plans d\'Abonnement',
+      title: "Plans d'Abonnement",
       description: 'Gérer les tiers et les abonnements utilisateurs',
       icon: CreditCardIcon,
       color: '#f57f17',
@@ -167,14 +167,15 @@ export default function SuperAdminMenu() {
     },
   ];
 
-  const filteredFunctions = adminFunctions.filter(func =>
-    func.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    func.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    func.features.some(f => f.toLowerCase().includes(searchTerm.toLowerCase()))
+  const filteredFunctions = adminFunctions.filter(
+    (func) =>
+      func.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      func.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      func.features.some((f) => f.toLowerCase().includes(searchTerm.toLowerCase()))
   );
 
   const groupedFunctions = {};
-  filteredFunctions.forEach(func => {
+  filteredFunctions.forEach((func) => {
     if (!groupedFunctions[func.category]) {
       groupedFunctions[func.category] = [];
     }
@@ -189,10 +190,10 @@ export default function SuperAdminMenu() {
         {/* Header */}
         <Box sx={{ marginBottom: '40px' }}>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
-        <DashboardIcon sx={{ fontSize: '32px', color: theme.palette.primary.main }} />
-        <Typography variant="h3" sx={{ fontWeight: 700, color: theme.palette.text.primary }}>
-          Menu des Fonctions Super Admin
-        </Typography>
+            <DashboardIcon sx={{ fontSize: '32px', color: theme.palette.primary.main }} />
+            <Typography variant="h3" sx={{ fontWeight: 700, color: theme.palette.text.primary }}>
+              Menu des Fonctions Super Admin
+            </Typography>
           </Box>
           <Typography sx={{ fontSize: '16px', color: '#666', marginBottom: '24px' }}>
             جميع أدوات وظائف إدارة النظام الشاملة • All System Management Functions
@@ -201,7 +202,7 @@ export default function SuperAdminMenu() {
           {/* Search Bar */}
           <TextField
             fullWidth
-        placeholder="Rechercher une fonction... / Search function..."
+            placeholder="Rechercher une fonction... / Search function..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             variant="outlined"
@@ -216,7 +217,7 @@ export default function SuperAdminMenu() {
               backgroundColor: '#fff',
               '& .MuiOutlinedInput-root': {
                 borderRadius: '8px',
-              }
+              },
             }}
           />
         </Box>
@@ -232,14 +233,18 @@ export default function SuperAdminMenu() {
           categories.map((category) => (
             <Box key={category} sx={{ marginBottom: '48px' }}>
               {/* Category Header */}
-              <Box sx={{
-                padding: '12px 16px',
-                backgroundColor: '#e3f2fd',
-                borderLeft: '4px solid #0056B3',
-                marginBottom: '16px',
-                borderRadius: '4px',
-              }}>
-                <Typography sx={{ fontWeight: 700, color: theme.palette.primary.main, fontSize: '14px' }}>
+              <Box
+                sx={{
+                  padding: '12px 16px',
+                  backgroundColor: '#e3f2fd',
+                  borderLeft: '4px solid #0056B3',
+                  marginBottom: '16px',
+                  borderRadius: '4px',
+                }}
+              >
+                <Typography
+                  sx={{ fontWeight: 700, color: theme.palette.primary.main, fontSize: '14px' }}
+                >
                   {category}
                 </Typography>
               </Box>
@@ -261,39 +266,73 @@ export default function SuperAdminMenu() {
                             boxShadow: '0 8px 16px rgba(0,0,0,0.12)',
                             transform: 'translateY(-4px)',
                             borderColor: func.color,
-                          }
+                          },
                         }}
                       >
                         <CardActionArea onClick={() => navigate(func.route)} sx={{ flex: 1 }}>
-                          <CardContent sx={{ height: '100%', display: 'flex', flexDirection: 'column', padding: '20px' }}>
+                          <CardContent
+                            sx={{
+                              height: '100%',
+                              display: 'flex',
+                              flexDirection: 'column',
+                              padding: '20px',
+                            }}
+                          >
                             {/* Icon and Title */}
-                            <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: '12px', marginBottom: '16px' }}>
-                              <Box sx={{
-                                padding: '10px',
-                                backgroundColor: `${func.color}15`,
-                                borderRadius: '8px',
+                            <Box
+                              sx={{
                                 display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                minWidth: '44px',
-                                height: '44px',
-                              }}>
+                                alignItems: 'flex-start',
+                                gap: '12px',
+                                marginBottom: '16px',
+                              }}
+                            >
+                              <Box
+                                sx={{
+                                  padding: '10px',
+                                  backgroundColor: `${func.color}15`,
+                                  borderRadius: '8px',
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  justifyContent: 'center',
+                                  minWidth: '44px',
+                                  height: '44px',
+                                }}
+                              >
                                 <IconComponent sx={{ color: func.color, fontSize: '22px' }} />
                               </Box>
                               <Box sx={{ flex: 1 }}>
-                                <Typography sx={{ fontWeight: 700, color: theme.palette.text.primary, fontSize: '15px' }}>
+                                <Typography
+                                  sx={{
+                                    fontWeight: 700,
+                                    color: theme.palette.text.primary,
+                                    fontSize: '15px',
+                                  }}
+                                >
                                   {func.title}
                                 </Typography>
                               </Box>
                             </Box>
 
                             {/* Description */}
-                            <Typography sx={{ fontSize: '13px', color: '#666', marginBottom: '16px', lineHeight: '1.5', flex: 1 }}>
+                            <Typography
+                              sx={{
+                                fontSize: '13px',
+                                color: '#666',
+                                marginBottom: '16px',
+                                lineHeight: '1.5',
+                                flex: 1,
+                              }}
+                            >
                               {func.description}
                             </Typography>
 
                             {/* Features Chips */}
-                            <Stack direction="row" spacing={1} sx={{ flexWrap: 'wrap', gap: '6px', marginBottom: '16px' }}>
+                            <Stack
+                              direction="row"
+                              spacing={1}
+                              sx={{ flexWrap: 'wrap', gap: '6px', marginBottom: '16px' }}
+                            >
                               {func.features.slice(0, 2).map((feature, i) => (
                                 <Chip
                                   key={i}
@@ -335,8 +374,8 @@ export default function SuperAdminMenu() {
                                 justifyContent: 'flex-end',
                                 textTransform: 'none',
                               }}
-                        >
-                          Accéder
+                            >
+                              Accéder
                             </Button>
                           </CardContent>
                         </CardActionArea>
@@ -355,11 +394,13 @@ export default function SuperAdminMenu() {
             <Grid xs={12} md={4}>
               <Card sx={{ border: '1px solid #e0e0e0', textAlign: 'center' }}>
                 <CardContent>
-                  <Typography sx={{ fontSize: '32px', fontWeight: 700, color: theme.palette.primary.main }}>
-                {adminFunctions.length}
+                  <Typography
+                    sx={{ fontSize: '32px', fontWeight: 700, color: theme.palette.primary.main }}
+                  >
+                    {adminFunctions.length}
                   </Typography>
                   <Typography sx={{ fontSize: '12px', color: '#666', marginTop: '8px' }}>
-                Total des Fonctions
+                    Total des Fonctions
                   </Typography>
                 </CardContent>
               </Card>
@@ -368,10 +409,10 @@ export default function SuperAdminMenu() {
               <Card sx={{ border: '1px solid #e0e0e0', textAlign: 'center' }}>
                 <CardContent>
                   <Typography sx={{ fontSize: '32px', fontWeight: 700, color: '#2e7d32' }}>
-                {categories.length}
+                    {categories.length}
                   </Typography>
                   <Typography sx={{ fontSize: '12px', color: '#666', marginTop: '8px' }}>
-                Catégories Organisées
+                    Catégories Organisées
                   </Typography>
                 </CardContent>
               </Card>
@@ -380,10 +421,10 @@ export default function SuperAdminMenu() {
               <Card sx={{ border: '1px solid #e0e0e0', textAlign: 'center' }}>
                 <CardContent>
                   <Typography sx={{ fontSize: '32px', fontWeight: 700, color: '#f57c00' }}>
-                ✓
+                    ✓
                   </Typography>
                   <Typography sx={{ fontSize: '12px', color: '#666', marginTop: '8px' }}>
-                Prêt pour la Production
+                    Prêt pour la Production
                   </Typography>
                 </CardContent>
               </Card>

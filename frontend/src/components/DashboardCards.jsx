@@ -9,7 +9,7 @@ export default function DashboardCards({ cards }) {
       active: 'success',
       pending: 'warning',
       warning: 'warning',
-      error: 'error'
+      error: 'error',
     };
     return statusMap[status] || 'default';
   };
@@ -19,7 +19,7 @@ export default function DashboardCards({ cards }) {
       active: 'Actif',
       pending: 'En attente',
       warning: 'Attention',
-      error: 'Critique'
+      error: 'Critique',
     };
     return statusMap[status] || status;
   };
@@ -29,27 +29,30 @@ export default function DashboardCards({ cards }) {
       sx={{
         display: 'grid',
         gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr', md: 'repeat(4, 1fr)' },
-        gap: '16px'
+        gap: '16px',
       }}
     >
       {cards.map((card, idx) => (
         <Card key={idx} sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
           <CardContent>
             <Stack spacing={2} sx={{ height: '100%' }}>
-              <Typography variant="subtitle2" sx={{ fontWeight: 500, color: THEME_COLORS.textSecondary }}>
+              <Typography
+                variant="subtitle2"
+                sx={{ fontWeight: 500, color: THEME_COLORS.textSecondary }}
+              >
                 {card.label}
               </Typography>
-              
+
               <Typography variant="h4" sx={{ fontWeight: 600, color: theme.palette.primary.main }}>
                 {card.value}
               </Typography>
-              
+
               {card.subtitle && (
                 <Typography variant="caption" sx={{ color: THEME_COLORS.textDisabled }}>
                   {card.subtitle}
                 </Typography>
               )}
-              
+
               {card.status && (
                 <Chip
                   label={getStatusLabel(card.status)}
@@ -59,14 +62,21 @@ export default function DashboardCards({ cards }) {
                   sx={{ width: 'fit-content' }}
                 />
               )}
-              
+
               {card.progress !== undefined && (
                 <Box>
-                  <Stack direction="row" justifyContent="space-between" sx={{ marginBottom: '8px' }}>
+                  <Stack
+                    direction="row"
+                    justifyContent="space-between"
+                    sx={{ marginBottom: '8px' }}
+                  >
                     <Typography variant="caption" sx={{ fontWeight: 500 }}>
                       Progress
                     </Typography>
-                    <Typography variant="caption" sx={{ fontWeight: 600, color: theme.palette.primary.main }}>
+                    <Typography
+                      variant="caption"
+                      sx={{ fontWeight: 600, color: theme.palette.primary.main }}
+                    >
                       {card.progress}%
                     </Typography>
                   </Stack>
@@ -75,7 +85,7 @@ export default function DashboardCards({ cards }) {
                     value={card.progress}
                     sx={{
                       height: '8px',
-                      borderRadius: '4px'
+                      borderRadius: '4px',
                     }}
                   />
                 </Box>

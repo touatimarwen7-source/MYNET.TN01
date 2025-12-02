@@ -7,29 +7,29 @@ export const EVALUATION_CRITERIA = {
   // Score ranges
   SCORE_MIN: 0,
   SCORE_MAX: 100,
-  
+
   // Quality tiers
-  SCORE_EXCELLENT: 85,    // ⭐⭐⭐⭐⭐
-  SCORE_GOOD: 70,         // ⭐⭐⭐⭐
-  SCORE_FAIR: 50,         // ⭐⭐⭐
-  SCORE_POOR: 30,         // ⭐⭐
-  SCORE_FAILING: 0,       // ⭐
-  
+  SCORE_EXCELLENT: 85, // ⭐⭐⭐⭐⭐
+  SCORE_GOOD: 70, // ⭐⭐⭐⭐
+  SCORE_FAIR: 50, // ⭐⭐⭐
+  SCORE_POOR: 30, // ⭐⭐
+  SCORE_FAILING: 0, // ⭐
+
   // Weight distribution
   WEIGHTS: {
-    price: 0.40,           // 40% - Price competitiveness
-    quality: 0.30,         // 30% - Quality/specifications
-    delivery: 0.20,        // 20% - Delivery time
-    compliance: 0.10       // 10% - Regulatory compliance
+    price: 0.4, // 40% - Price competitiveness
+    quality: 0.3, // 30% - Quality/specifications
+    delivery: 0.2, // 20% - Delivery time
+    compliance: 0.1, // 10% - Regulatory compliance
   },
-  
+
   // Categories
   CATEGORIES: [
-    { key: 'price', label: 'Prix (40%)', weight: 0.40, icon: '💰' },
-    { key: 'quality', label: 'Qualité (30%)', weight: 0.30, icon: '⭐' },
-    { key: 'delivery', label: 'Livraison (20%)', weight: 0.20, icon: '🚚' },
-    { key: 'compliance', label: 'Conformité (10%)', weight: 0.10, icon: '✅' }
-  ]
+    { key: 'price', label: 'Prix (40%)', weight: 0.4, icon: '💰' },
+    { key: 'quality', label: 'Qualité (30%)', weight: 0.3, icon: '⭐' },
+    { key: 'delivery', label: 'Livraison (20%)', weight: 0.2, icon: '🚚' },
+    { key: 'compliance', label: 'Conformité (10%)', weight: 0.1, icon: '✅' },
+  ],
 };
 
 /**
@@ -38,21 +38,15 @@ export const EVALUATION_CRITERIA = {
  * @returns {number} Weighted total score (0-100)
  */
 export const calculateWeightedScore = (scores = {}) => {
-  const {
-    price = 0,
-    quality = 0,
-    delivery = 0,
-    compliance = 0
-  } = scores;
-  
+  const { price = 0, quality = 0, delivery = 0, compliance = 0 } = scores;
+
   const weights = EVALUATION_CRITERIA.WEIGHTS;
-  const total = (
+  const total =
     (price || 0) * weights.price +
     (quality || 0) * weights.quality +
     (delivery || 0) * weights.delivery +
-    (compliance || 0) * weights.compliance
-  );
-  
+    (compliance || 0) * weights.compliance;
+
   return Math.round(total * 100) / 100; // Round to 2 decimals
 };
 
@@ -63,7 +57,7 @@ export const calculateWeightedScore = (scores = {}) => {
  */
 export const getScoreTier = (score = 0) => {
   const normalized = Math.min(100, Math.max(0, score));
-  
+
   if (normalized >= EVALUATION_CRITERIA.SCORE_EXCELLENT) {
     return { tier: 'excellent', color: '#4caf50', label: 'Excellent', icon: '⭐⭐⭐⭐⭐' };
   }
@@ -86,7 +80,9 @@ export const getScoreTier = (score = 0) => {
  */
 export const isValidScore = (score) => {
   const num = parseFloat(score);
-  return !isNaN(num) && num >= EVALUATION_CRITERIA.SCORE_MIN && num <= EVALUATION_CRITERIA.SCORE_MAX;
+  return (
+    !isNaN(num) && num >= EVALUATION_CRITERIA.SCORE_MIN && num <= EVALUATION_CRITERIA.SCORE_MAX
+  );
 };
 
 /**

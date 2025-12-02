@@ -96,14 +96,14 @@ export const formatBackendErrors = (error) => {
  * Check if form has errors
  */
 export const hasFormErrors = (errors) => {
-  return Object.values(errors).some(error => error !== null && error !== '');
+  return Object.values(errors).some((error) => error !== null && error !== '');
 };
 
 /**
  * Get first error message from form errors
  */
 export const getFirstError = (errors) => {
-  const errorArray = Object.values(errors).filter(e => e);
+  const errorArray = Object.values(errors).filter((e) => e);
   return errorArray.length > 0 ? errorArray[0] : null;
 };
 
@@ -118,7 +118,7 @@ export const getFieldProps = (name, values, errors, touched, onChange, onBlur) =
     onBlur,
     error: touched?.[name] && !!errors?.[name],
     helperText: touched?.[name] ? errors?.[name] : '',
-    fullWidth: true
+    fullWidth: true,
   };
 };
 
@@ -161,7 +161,7 @@ export const normalizeFormData = (formData, schema) => {
 export const checkRequiredFields = (values, requiredFields) => {
   const missing = [];
 
-  requiredFields.forEach(field => {
+  requiredFields.forEach((field) => {
     if (!values[field] || values[field].toString().trim() === '') {
       missing.push(field);
     }
@@ -184,5 +184,5 @@ export default {
   getFieldProps,
   sanitizeInput,
   normalizeFormData,
-  checkRequiredFields
+  checkRequiredFields,
 };

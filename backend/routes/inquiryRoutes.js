@@ -16,7 +16,9 @@ router.post('/tenders/:tenderId/inquiries', async (req, res) => {
     }
 
     if (!subject || !inquiry_text) {
-      return res.status(400).json({ success: false, message: 'Subject and inquiry text are required' });
+      return res
+        .status(400)
+        .json({ success: false, message: 'Subject and inquiry text are required' });
     }
 
     const inquiry = await TenderInquiryService.submitInquiry(
@@ -154,11 +156,7 @@ router.get('/tenders/:tenderId/addenda', async (req, res) => {
     const page = parseInt(req.query.page, 10) || 1;
     const limit = parseInt(req.query.limit, 10) || 10;
 
-    const addenda = await AddendumService.getAddendaByTender(
-      parseInt(tenderId, 10),
-      page,
-      limit
-    );
+    const addenda = await AddendumService.getAddendaByTender(parseInt(tenderId, 10), page, limit);
 
     res.status(200).json({ success: true, count: addenda.length, addenda });
   } catch (error) {

@@ -1,7 +1,7 @@
 /**
  * Caching Management Routes
  * API endpoints for cache control and monitoring
- * 
+ *
  * @module cachingRoutes
  */
 
@@ -21,7 +21,7 @@ router.get('/stats', authMiddleware, (req, res) => {
     const stats = queryCacheManager.getStats();
     res.json({
       success: true,
-      data: stats
+      data: stats,
     });
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });
@@ -43,7 +43,7 @@ router.delete('/clear', authMiddleware, (req, res) => {
 
     res.json({
       success: true,
-      message: 'Cache cleared successfully'
+      message: 'Cache cleared successfully',
     });
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });
@@ -69,7 +69,7 @@ router.post('/invalidate', authMiddleware, (req, res) => {
 
     res.json({
       success: true,
-      message: `Invalidated ${invalidated} cache entries matching '${pattern}'`
+      message: `Invalidated ${invalidated} cache entries matching '${pattern}'`,
     });
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });
@@ -83,11 +83,11 @@ app.get('/api/cache/stats', (req, res) => {
   try {
     const cacheManager = require('../utils/redisCache').getCacheManager();
     const stats = cacheManager.getStats();
-    
+
     res.status(200).json({
       cache: stats,
       timestamp: new Date().toISOString(),
-      uptime: process.uptime()
+      uptime: process.uptime(),
     });
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -99,10 +99,10 @@ app.delete('/api/cache/clear', (req, res) => {
   try {
     const cacheManager = require('../utils/redisCache').getCacheManager();
     cacheManager.clear();
-    
+
     res.status(200).json({
       message: 'Cache cleared successfully',
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
   } catch (error) {
     res.status(500).json({ error: error.message });

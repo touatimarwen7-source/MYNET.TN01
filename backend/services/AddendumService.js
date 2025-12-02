@@ -41,7 +41,13 @@ class AddendumService {
         [tenderId, addendumNumber, title, content, JSON.stringify(inquiryResponses), userId, 1]
       );
 
-      await AuditLogService.log(userId, 'addendum', result.rows[0].id, 'create', `Addendum ${addendumNumber} published`);
+      await AuditLogService.log(
+        userId,
+        'addendum',
+        result.rows[0].id,
+        'create',
+        `Addendum ${addendumNumber} published`
+      );
       return result.rows[0];
     } catch (error) {
       throw new Error(`Failed to create addendum: ${error.message}`);
@@ -93,13 +99,10 @@ class AddendumService {
 
     try {
       const notifications = [];
-      
+
       for (const email of supplierEmails) {
         // Get user by email
-        const userResult = await pool.query(
-          'SELECT id FROM users WHERE email = $1',
-          [email]
-        );
+        const userResult = await pool.query('SELECT id FROM users WHERE email = $1', [email]);
 
         if (userResult.rows.length > 0) {
           const notifyResult = await pool.query(
@@ -113,7 +116,13 @@ class AddendumService {
         }
       }
 
-      await AuditLogService.log(userId, 'addendum_notification', addendumId, 'create', `Notifications sent to ${supplierEmails.length} suppliers`);
+      await AuditLogService.log(
+        userId,
+        'addendum_notification',
+        addendumId,
+        'create',
+        `Notifications sent to ${supplierEmails.length} suppliers`
+      );
       return notifications;
     } catch (error) {
       throw new Error(`Failed to notify suppliers: ${error.message}`);
@@ -163,10 +172,9 @@ class AddendumService {
     const pool = getPool();
 
     try {
-      await pool.query(
-        'UPDATE addendum_notifications SET read_at = NOW() WHERE id = $1',
-        [notificationId]
-      );
+      await pool.query('UPDATE addendum_notifications SET read_at = NOW() WHERE id = $1', [
+        notificationId,
+      ]);
 
       return true;
     } catch (error) {

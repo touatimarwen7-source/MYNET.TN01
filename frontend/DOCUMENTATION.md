@@ -17,6 +17,7 @@
 The application uses a comprehensive error handling system with centralized error codes and messages in **French**.
 
 **Key Features:**
+
 - ✅ Centralized error codes (A001, V001, N001, etc.)
 - ✅ User-friendly French error messages
 - ✅ Error severity levels (error, warning, info)
@@ -54,17 +55,15 @@ const formatted = errorHandler.formatValidationErrors(validationErrors);
 try {
   await errorHandler.retry(
     () => fetch('/api/data'),
-    3,        // max retries
-    1000      // initial delay (ms)
+    3, // max retries
+    1000 // initial delay (ms)
   );
 } catch (error) {
   console.error('Failed after retries:', error);
 }
 
 // Safe error handling (Go-style)
-const [error, data] = await errorHandler.handle(
-  fetch('/api/data')
-);
+const [error, data] = await errorHandler.handle(fetch('/api/data'));
 if (error) {
   console.error(error.code, error.message);
 } else {
@@ -78,65 +77,65 @@ if (error) {
 
 ### Authentication Errors (A001-A099)
 
-| Code | Message | Severity |
-|------|---------|----------|
-| A001 | Identifiants incorrects. Veuillez vérifier votre email et votre mot de passe. | error |
-| A002 | Votre compte est verrouillé. Veuillez réessayer plus tard. | error |
-| A003 | Le jeton est invalide ou expiré. | error |
-| A004 | Votre session a expiré. Veuillez vous reconnecter. | warning |
-| A005 | Vous n'êtes pas autorisé à accéder à cette ressource. | error |
-| A006 | Votre session a expiré. Vous serez redirigé vers la page de connexion. | warning |
+| Code | Message                                                                       | Severity |
+| ---- | ----------------------------------------------------------------------------- | -------- |
+| A001 | Identifiants incorrects. Veuillez vérifier votre email et votre mot de passe. | error    |
+| A002 | Votre compte est verrouillé. Veuillez réessayer plus tard.                    | error    |
+| A003 | Le jeton est invalide ou expiré.                                              | error    |
+| A004 | Votre session a expiré. Veuillez vous reconnecter.                            | warning  |
+| A005 | Vous n'êtes pas autorisé à accéder à cette ressource.                         | error    |
+| A006 | Votre session a expiré. Vous serez redirigé vers la page de connexion.        | warning  |
 
 ### Validation Errors (V001-V099)
 
-| Code | Message | Severity |
-|------|---------|----------|
-| V001 | Le format de l'email est invalide. | error |
-| V002 | Le mot de passe doit contenir au moins 8 caractères. | error |
-| V003 | Le mot de passe est faible. Utilisez des majuscules, des chiffres et des caractères spéciaux. | warning |
-| V004 | Ce champ est obligatoire. | error |
-| V005 | Le format est invalide. | error |
-| V006 | Cet élément existe déjà. | error |
+| Code | Message                                                                                       | Severity |
+| ---- | --------------------------------------------------------------------------------------------- | -------- |
+| V001 | Le format de l'email est invalide.                                                            | error    |
+| V002 | Le mot de passe doit contenir au moins 8 caractères.                                          | error    |
+| V003 | Le mot de passe est faible. Utilisez des majuscules, des chiffres et des caractères spéciaux. | warning  |
+| V004 | Ce champ est obligatoire.                                                                     | error    |
+| V005 | Le format est invalide.                                                                       | error    |
+| V006 | Cet élément existe déjà.                                                                      | error    |
 
 ### Network Errors (N001-N099)
 
-| Code | Message | Severity |
-|------|---------|----------|
-| N001 | La connexion a été perdue. Veuillez réessayer. | warning |
-| N002 | Vous n'avez pas de connexion Internet. | error |
-| N003 | Le serveur Web n'est pas disponible. Veuillez réessayer plus tard. | error |
-| N004 | Le service n'est pas disponible pour le moment. | warning |
-| N005 | Vous avez dépassé la limite de requêtes. Veuillez réessayer plus tard. | warning |
-| N006 | La requête a échoué. Veuillez réessayer. | error |
+| Code | Message                                                                | Severity |
+| ---- | ---------------------------------------------------------------------- | -------- |
+| N001 | La connexion a été perdue. Veuillez réessayer.                         | warning  |
+| N002 | Vous n'avez pas de connexion Internet.                                 | error    |
+| N003 | Le serveur Web n'est pas disponible. Veuillez réessayer plus tard.     | error    |
+| N004 | Le service n'est pas disponible pour le moment.                        | warning  |
+| N005 | Vous avez dépassé la limite de requêtes. Veuillez réessayer plus tard. | warning  |
+| N006 | La requête a échoué. Veuillez réessayer.                               | error    |
 
 ### Business Logic Errors (B001-B099)
 
-| Code | Message | Severity |
-|------|---------|----------|
-| B001 | L'appel d'offres n'a pas été trouvé. | error |
-| B002 | L'offre n'a pas été trouvée. | error |
-| B003 | Le budget est insuffisant. | error |
-| B004 | Vous avez déjà soumis une offre pour cet appel d'offres. | warning |
-| B005 | La date limite de cet appel d'offres est dépassée. | error |
-| B006 | Vous n'avez pas les permissions suffisantes pour effectuer cette action. | error |
+| Code | Message                                                                  | Severity |
+| ---- | ------------------------------------------------------------------------ | -------- |
+| B001 | L'appel d'offres n'a pas été trouvé.                                     | error    |
+| B002 | L'offre n'a pas été trouvée.                                             | error    |
+| B003 | Le budget est insuffisant.                                               | error    |
+| B004 | Vous avez déjà soumis une offre pour cet appel d'offres.                 | warning  |
+| B005 | La date limite de cet appel d'offres est dépassée.                       | error    |
+| B006 | Vous n'avez pas les permissions suffisantes pour effectuer cette action. | error    |
 
 ### File Errors (F001-F099)
 
-| Code | Message | Severity |
-|------|---------|----------|
-| F001 | La taille du fichier est trop grande. La limite maximale est de 10 Mo. | error |
-| F002 | Le type de fichier n'est pas supporté. | error |
-| F003 | Le téléchargement du fichier a échoué. Veuillez réessayer. | error |
-| F004 | Le téléchargement du fichier a échoué. | error |
+| Code | Message                                                                | Severity |
+| ---- | ---------------------------------------------------------------------- | -------- |
+| F001 | La taille du fichier est trop grande. La limite maximale est de 10 Mo. | error    |
+| F002 | Le type de fichier n'est pas supporté.                                 | error    |
+| F003 | Le téléchargement du fichier a échoué. Veuillez réessayer.             | error    |
+| F004 | Le téléchargement du fichier a échoué.                                 | error    |
 
 ### System Errors (S001-S099)
 
-| Code | Message | Severity |
-|------|---------|----------|
-| S001 | Une erreur système s'est produite. Veuillez réessayer plus tard. | error |
-| S002 | Erreur de base de données. | error |
-| S003 | Erreur de cache. | warning |
-| S004 | Erreur de configuration. | error |
+| Code | Message                                                          | Severity |
+| ---- | ---------------------------------------------------------------- | -------- |
+| S001 | Une erreur système s'est produite. Veuillez réessayer plus tard. | error    |
+| S002 | Erreur de base de données.                                       | error    |
+| S003 | Erreur de cache.                                                 | warning  |
+| S004 | Erreur de configuration.                                         | error    |
 
 ---
 
@@ -149,11 +148,11 @@ All modules have JSDoc headers:
 ```javascript
 /**
  * Module Description
- * 
+ *
  * Features:
  * - Feature 1
  * - Feature 2
- * 
+ *
  * @module moduleName
  * @requires dependency1 - Description
  * @requires dependency2 - Description
@@ -167,11 +166,11 @@ All functions have complete JSDoc:
 ```javascript
 /**
  * Function description
- * 
+ *
  * @param {type} paramName - Parameter description
  * @param {type} [optionalParam='default'] - Optional parameter
  * @returns {type} Return value description
- * 
+ *
  * @example
  * const result = functionName('value');
  * console.log(result); // → output
@@ -184,6 +183,7 @@ function functionName(paramName, optionalParam = 'default') {
 ### Documentation Coverage
 
 **Files with Complete JSDoc:**
+
 - ✅ tokenManager.js - Token storage/retrieval
 - ✅ axiosConfig.js - HTTP client configuration
 - ✅ csrfProtection.js - CSRF token management
@@ -227,11 +227,11 @@ TokenManager.getUserFromToken() → object | null
 
 ```javascript
 // Get user-friendly error message
-errorHandler.getUserMessage(error, defaultMessage) 
+errorHandler.getUserMessage(error, defaultMessage)
   → { code, message, severity }
 
 // Get error from HTTP status
-errorHandler.getStatusError(statusCode) 
+errorHandler.getStatusError(statusCode)
   → { code, message, severity }
 
 // Check if error is auth-related
@@ -244,7 +244,7 @@ errorHandler.handleAuthError() → void
 errorHandler.isRetryable(error) → boolean
 
 // Format validation errors
-errorHandler.formatValidationErrors(errors) 
+errorHandler.formatValidationErrors(errors)
   → { fieldName: { code, message } }
 
 // Safe promise handler (Go-style)
@@ -352,17 +352,17 @@ CSRFProtection.clearToken() → void
 HTTP status codes are automatically mapped to error codes:
 
 | Status | Error Code | Severity |
-|--------|-----------|----------|
-| 400 | A001 | error |
-| 401 | A005 | error |
-| 403 | B006 | error |
-| 404 | B001 | error |
-| 408 | N001 | warning |
-| 429 | N005 | warning |
-| 500 | S001 | error |
-| 502 | N003 | error |
-| 503 | N004 | warning |
-| 504 | N001 | warning |
+| ------ | ---------- | -------- |
+| 400    | A001       | error    |
+| 401    | A005       | error    |
+| 403    | B006       | error    |
+| 404    | B001       | error    |
+| 408    | N001       | warning  |
+| 429    | N005       | warning  |
+| 500    | S001       | error    |
+| 502    | N003       | error    |
+| 503    | N004       | warning  |
+| 504    | N001       | warning  |
 
 ---
 

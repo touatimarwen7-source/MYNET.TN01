@@ -1,7 +1,7 @@
 /**
  * HTTP Response Caching Middleware
  * Caches GET request responses with Cache-Control headers
- * 
+ *
  * @module cacheMiddleware
  * @example
  * app.use(cacheMiddleware({ ttl: 300 }));
@@ -25,7 +25,7 @@ const cacheMiddleware = (options = {}) => {
     }
 
     // Skip excluded paths
-    if (excludePaths.some(path => req.path.includes(path))) {
+    if (excludePaths.some((path) => req.path.includes(path))) {
       return next();
     }
 
@@ -41,7 +41,7 @@ const cacheMiddleware = (options = {}) => {
 
     // Wrap res.json to cache response
     const originalJson = res.json.bind(res);
-    res.json = function(data) {
+    res.json = function (data) {
       // Only cache successful responses
       if (res.statusCode === 200) {
         queryCacheManager.set(cacheKey, data, ttl);

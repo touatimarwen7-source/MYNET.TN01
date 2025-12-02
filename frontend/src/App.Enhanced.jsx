@@ -15,8 +15,12 @@ import { initializePrefetch } from './utils/prefetchRoutes';
 import { LoadingFallback, TableLoadingFallback } from './components/OptimizedLoadingFallback';
 
 // Dynamic imports for heavy components
-const HeaderWrapper = lazy(() => import('./components/HeavyComponentsWrapper').then(m => ({ default: m.HeaderWrapper })));
-const SidebarWrapper = lazy(() => import('./components/HeavyComponentsWrapper').then(m => ({ default: m.SidebarWrapper })));
+const HeaderWrapper = lazy(() =>
+  import('./components/HeavyComponentsWrapper').then((m) => ({ default: m.HeaderWrapper }))
+);
+const SidebarWrapper = lazy(() =>
+  import('./components/HeavyComponentsWrapper').then((m) => ({ default: m.SidebarWrapper }))
+);
 
 // Core pages (eager load - critical for first paint)
 import HomePage from './pages/HomePage';
@@ -132,7 +136,7 @@ function AppContent() {
             <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
               <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
                 <AlertStrip />
-                
+
                 <Suspense fallback={<Box />}>
                   <HeaderWrapper />
                 </Suspense>
@@ -144,11 +148,22 @@ function AppContent() {
                     </Suspense>
                   )}
 
-                  <Box component="main" sx={{ flex: 1, overflowY: 'auto', paddingY: '20px', paddingX: { xs: '12px', sm: '20px' } }}>
+                  <Box
+                    component="main"
+                    sx={{
+                      flex: 1,
+                      overflowY: 'auto',
+                      paddingY: '20px',
+                      paddingX: { xs: '12px', sm: '20px' },
+                    }}
+                  >
                     <Suspense fallback={<LoadingFallback />}>
                       <Routes>
                         {/* Public Pages */}
-                        <Route path="/" element={!user ? <HomePage /> : <Navigate to="/tenders" />} />
+                        <Route
+                          path="/"
+                          element={!user ? <HomePage /> : <Navigate to="/tenders" />}
+                        />
                         <Route path="/about" element={<AboutPage />} />
                         <Route path="/features" element={<FeaturesPage />} />
                         <Route path="/pricing" element={<PricingPage />} />
@@ -163,19 +178,42 @@ function AppContent() {
                         <Route path="/verify-email" element={<EmailVerification />} />
 
                         {/* Tenders */}
-                        <Route path="/tenders" element={user ? <TenderList /> : <Navigate to="/login" />} />
+                        <Route
+                          path="/tenders"
+                          element={user ? <TenderList /> : <Navigate to="/login" />}
+                        />
                         <Route path="/tender/:id" element={<TenderDetail />} />
-                        <Route path="/tender/:id/bid" element={user?.role === 'supplier' ? <CreateBid /> : <Navigate to="/tenders" />} />
+                        <Route
+                          path="/tender/:id/bid"
+                          element={
+                            user?.role === 'supplier' ? <CreateBid /> : <Navigate to="/tenders" />
+                          }
+                        />
                         <Route path="/tender/:id/award" element={<PartialAward />} />
                         <Route path="/tender/:id/analysis" element={<OfferAnalysis />} />
                         <Route path="/tender/:id/audit-log" element={<AuditLog />} />
 
                         {/* Offers */}
-                        <Route path="/my-offers" element={user ? <MyOffers /> : <Navigate to="/login" />} />
-                        <Route path="/offer/:offerId/supply-request" element={user?.role === 'supplier' ? <CreateSupplyRequest /> : <Navigate to="/tenders" />} />
+                        <Route
+                          path="/my-offers"
+                          element={user ? <MyOffers /> : <Navigate to="/login" />}
+                        />
+                        <Route
+                          path="/offer/:offerId/supply-request"
+                          element={
+                            user?.role === 'supplier' ? (
+                              <CreateSupplyRequest />
+                            ) : (
+                              <Navigate to="/tenders" />
+                            )
+                          }
+                        />
 
                         {/* Invoices */}
-                        <Route path="/invoices" element={user ? <InvoiceManagement /> : <Navigate to="/login" />} />
+                        <Route
+                          path="/invoices"
+                          element={user ? <InvoiceManagement /> : <Navigate to="/login" />}
+                        />
 
                         {/* Additional routes... */}
                         <Route path="*" element={<Navigate to="/" />} />

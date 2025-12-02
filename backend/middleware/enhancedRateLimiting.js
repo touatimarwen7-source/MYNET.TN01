@@ -1,6 +1,6 @@
 /**
  * 🚀 Enhanced Rate Limiting Middleware
- * 
+ *
  * Features:
  * - IP-based rate limiting (automatic, no custom generator)
  * - Per-user rate limiting (for authenticated requests)
@@ -25,7 +25,7 @@ const general = rateLimit({
   max: 100,
   message: 'Too many requests, please try again later.',
   standardHeaders: true,
-  legacyHeaders: false
+  legacyHeaders: false,
 });
 
 // Strict login limits (IP-based)
@@ -35,7 +35,7 @@ const login = rateLimit({
   skipSuccessfulRequests: true,
   message: 'Too many login attempts, please try again later.',
   standardHeaders: true,
-  legacyHeaders: false
+  legacyHeaders: false,
 });
 
 // Registration limits (IP-based)
@@ -44,7 +44,7 @@ const register = rateLimit({
   max: 3,
   message: 'Too many registration attempts, please try again later.',
   standardHeaders: true,
-  legacyHeaders: false
+  legacyHeaders: false,
 });
 
 // Password reset limits (IP-based)
@@ -53,7 +53,7 @@ const passwordReset = rateLimit({
   max: 3,
   message: 'Too many password reset attempts, please try again later.',
   standardHeaders: true,
-  legacyHeaders: false
+  legacyHeaders: false,
 });
 
 // API endpoint limits (per-user or IP)
@@ -62,7 +62,7 @@ const apiEndpoint = rateLimit({
   max: 60,
   message: 'Too many requests to this API endpoint, please try again later.',
   standardHeaders: true,
-  legacyHeaders: false
+  legacyHeaders: false,
 });
 
 // Tender creation limits (per-user only)
@@ -75,7 +75,7 @@ const tenderCreation = rateLimit({
   skip: (req) => !req.user, // Don't rate limit unauthenticated
   keyGenerator: (req) => {
     return req.user && req.user.id ? `user:${req.user.id}` : 'anonymous';
-  }
+  },
 });
 
 // Offer submission limits (per-user only)
@@ -88,7 +88,7 @@ const offerSubmission = rateLimit({
   skip: (req) => !req.user,
   keyGenerator: (req) => {
     return req.user && req.user.id ? `user:${req.user.id}` : 'anonymous';
-  }
+  },
 });
 
 // Message sending limits (per-user only)
@@ -101,7 +101,7 @@ const messageSending = rateLimit({
   skip: (req) => !req.user,
   keyGenerator: (req) => {
     return req.user && req.user.id ? `user:${req.user.id}` : 'anonymous';
-  }
+  },
 });
 
 // Search limits
@@ -110,7 +110,7 @@ const search = rateLimit({
   max: 30,
   message: 'Too many search requests, please try again later.',
   standardHeaders: true,
-  legacyHeaders: false
+  legacyHeaders: false,
 });
 
 // Export limits
@@ -119,7 +119,7 @@ const exportLimiter = rateLimit({
   max: 5,
   message: 'Too many export requests, please try again later.',
   standardHeaders: true,
-  legacyHeaders: false
+  legacyHeaders: false,
 });
 
 /**
@@ -127,32 +127,32 @@ const exportLimiter = rateLimit({
  */
 const advancedRateLimitMiddleware = (req, res, next) => {
   // Track for metrics
-  const key = req.user ? `user:${req.user.id}` : (req.ip || 'unknown');
-  
+  const key = req.user ? `user:${req.user.id}` : req.ip || 'unknown';
+
   if (!userLimits.has(key)) {
     userLimits.set(key, {
       requests: 0,
       firstRequest: Date.now(),
-      blocked: 0
+      blocked: 0,
     });
   }
-  
+
   const stats = userLimits.get(key);
   stats.requests++;
-  
+
   // Add custom headers
   res.setHeader('X-RateLimit-Key', key);
   res.setHeader('X-RateLimit-Timestamp', new Date().toISOString());
-  
+
   // Add X-RateLimit-Remaining header
   const originalJson = res.json.bind(res);
-  res.json = function(data) {
+  res.json = function (data) {
     if (res.getHeader('RateLimit-Remaining')) {
       res.setHeader('X-RateLimit-Remaining', res.getHeader('RateLimit-Remaining'));
     }
     return originalJson(data);
   };
-  
+
   next();
 };
 
@@ -168,15 +168,15 @@ function getRateLimitStats() {
         userId: key.replace('user:', ''),
         requests: data.requests,
         blocked: data.blocked,
-        timeWindow: new Date(data.firstRequest).toISOString()
+        timeWindow: new Date(data.firstRequest).toISOString(),
       })),
     recentActivity: Array.from(userLimits.entries())
       .slice(-10)
       .map(([key, data]) => ({
         key,
         requests: data.requests,
-        blocked: data.blocked
-      }))
+        blocked: data.blocked,
+      })),
   };
   return stats;
 }
@@ -211,12 +211,12 @@ module.exports = {
   messageSending,
   search,
   export: exportLimiter,
-  
+
   // Middleware
   advancedRateLimitMiddleware,
-  
+
   // Utilities
   getRateLimitStats,
   resetLimits,
-  clearAllLimits
+  clearAllLimits,
 };

@@ -22,7 +22,7 @@ const API_ENDPOINT_TIMEOUTS = {
 const requestTimeout = (req, res, next) => {
   // Determine timeout based on endpoint
   let timeout = GLOBAL_TIMEOUT;
-  
+
   for (const [pattern, customTimeout] of Object.entries(API_ENDPOINT_TIMEOUTS)) {
     if (req.path.startsWith(pattern)) {
       timeout = customTimeout;
@@ -44,12 +44,12 @@ const requestTimeout = (req, res, next) => {
           details: {
             timeout: `${timeout}ms`,
             path: req.path,
-            timestamp: new Date().toISOString()
-          }
-        }
+            timestamp: new Date().toISOString(),
+          },
+        },
       });
     }
-    
+
     // Destroy socket to force close connection
     req.socket.destroy();
   }, timeout);
@@ -75,7 +75,7 @@ const withTimeout = (promise, timeoutMs) => {
     promise,
     new Promise((_, reject) =>
       setTimeout(() => reject(new Error(`Operation timeout after ${timeoutMs}ms`)), timeoutMs)
-    )
+    ),
   ]);
 };
 
@@ -83,5 +83,5 @@ module.exports = {
   requestTimeout,
   withTimeout,
   GLOBAL_TIMEOUT,
-  API_ENDPOINT_TIMEOUTS
+  API_ENDPOINT_TIMEOUTS,
 };

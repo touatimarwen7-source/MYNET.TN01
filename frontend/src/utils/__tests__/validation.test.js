@@ -94,7 +94,7 @@ describe('Validation Utilities', () => {
     it('should escape HTML characters', () => {
       const dangerous = '<script>alert("xss")</script>';
       const sanitized = validation.sanitizeString(dangerous);
-      
+
       expect(sanitized).not.toContain('<script>');
       expect(sanitized).toContain('&lt;');
       expect(sanitized).toContain('&gt;');
@@ -103,7 +103,7 @@ describe('Validation Utilities', () => {
     it('should handle quotes', () => {
       const withQuotes = 'He said "hello"';
       const sanitized = validation.sanitizeString(withQuotes);
-      
+
       expect(sanitized).toContain('&quot;');
     });
   });
@@ -113,9 +113,9 @@ describe('Validation Utilities', () => {
       it('should validate correct login credentials', () => {
         const validData = {
           email: 'user@example.com',
-          password: 'SecurePass123'
+          password: 'SecurePass123',
         };
-        
+
         const result = validateWithZod(LoginSchema, validData);
         expect(result.success).toBe(true);
       });
@@ -123,9 +123,9 @@ describe('Validation Utilities', () => {
       it('should reject invalid email', () => {
         const invalidData = {
           email: 'invalid-email',
-          password: 'SecurePass123'
+          password: 'SecurePass123',
         };
-        
+
         const result = validateWithZod(LoginSchema, invalidData);
         expect(result.success).toBe(false);
       });
@@ -133,9 +133,9 @@ describe('Validation Utilities', () => {
       it('should reject weak password', () => {
         const weakData = {
           email: 'user@example.com',
-          password: 'weak123'
+          password: 'weak123',
         };
-        
+
         const result = validateWithZod(LoginSchema, weakData);
         expect(result.success).toBe(false);
       });
@@ -148,9 +148,9 @@ describe('Validation Utilities', () => {
           password: 'SecurePass123',
           confirmPassword: 'SecurePass123',
           companyName: 'Test Company',
-          role: 'buyer'
+          role: 'buyer',
         };
-        
+
         const result = validateWithZod(RegisterSchema, validData);
         expect(result.success).toBe(true);
       });
@@ -161,9 +161,9 @@ describe('Validation Utilities', () => {
           password: 'SecurePass123',
           confirmPassword: 'DifferentPass456',
           companyName: 'Test Company',
-          role: 'buyer'
+          role: 'buyer',
         };
-        
+
         const result = validateWithZod(RegisterSchema, invalidData);
         expect(result.success).toBe(false);
       });

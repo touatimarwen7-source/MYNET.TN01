@@ -21,7 +21,8 @@ const DRAWER_WIDTH = 280;
 export default function Sidebar({ user, onLogout }) {
   const theme = institutionalTheme;
   const [sidebarOpen, setSidebarOpen] = useState(true);
-  const { checkFeatureAccess, handleLockedFeatureClick, closeUpgradeModal, upgradeModal } = useSubscriptionTier(user?.subscription);
+  const { checkFeatureAccess, handleLockedFeatureClick, closeUpgradeModal, upgradeModal } =
+    useSubscriptionTier(user?.subscription);
 
   const menu = getMenuForRole(user?.role);
 
@@ -93,7 +94,14 @@ export default function Sidebar({ user, onLogout }) {
       </Drawer>
 
       {/* Page Content Spacer - Desktop Only */}
-      <Box sx={{ width: DRAWER_WIDTH, display: { xs: 'none', md: 'block' }, transition: 'all 0.3s ease-in-out', flexShrink: 0 }} />
+      <Box
+        sx={{
+          width: DRAWER_WIDTH,
+          display: { xs: 'none', md: 'block' },
+          transition: 'all 0.3s ease-in-out',
+          flexShrink: 0,
+        }}
+      />
     </>
   );
 }

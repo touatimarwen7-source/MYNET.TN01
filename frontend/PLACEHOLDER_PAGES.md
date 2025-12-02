@@ -31,6 +31,7 @@ The following pages are minimal placeholders and can be consolidated or removed 
 **Production Pages**: 38 with actual content
 
 **Next Steps**:
+
 1. Focus on core pages (TenderList, Profile, Dashboard)
 2. Gradually implement placeholder pages with real features
 3. Or route placeholder pages to a coming soon page

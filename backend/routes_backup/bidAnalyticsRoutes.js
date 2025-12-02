@@ -24,7 +24,8 @@ router.get('/distribution/:tenderId', authMiddleware, async (req, res) => {
     const { tenderId } = req.params;
     const db = req.app.get('db');
 
-    const distribution = await db.query(`
+    const distribution = await db.query(
+      `
       SELECT
         CASE 
           WHEN price < 10000 THEN 'Under 10k'
@@ -37,7 +38,9 @@ router.get('/distribution/:tenderId', authMiddleware, async (req, res) => {
       WHERE tender_id = $1 AND is_deleted = false
       GROUP BY price_range
       ORDER BY price_range
-    `, [tenderId]);
+    `,
+      [tenderId]
+    );
 
     res.json(distribution.rows);
   } catch (error) {
@@ -51,7 +54,8 @@ router.get('/compare/:tenderId', authMiddleware, async (req, res) => {
     const { tenderId } = req.params;
     const db = req.app.get('db');
 
-    const comparison = await db.query(`
+    const comparison = await db.query(
+      `
       SELECT 
         o.id,
         o.price,
@@ -64,7 +68,9 @@ router.get('/compare/:tenderId', authMiddleware, async (req, res) => {
       LEFT JOIN users u ON o.supplier_id = u.id
       WHERE o.tender_id = $1 AND o.is_deleted = false
       ORDER BY o.price ASC
-    `, [tenderId]);
+    `,
+      [tenderId]
+    );
 
     res.json(comparison.rows);
   } catch (error) {

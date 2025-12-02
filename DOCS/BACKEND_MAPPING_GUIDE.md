@@ -9,6 +9,7 @@ Backend Mapping has been applied to **all major services** in MyNet.tn B2B Procu
 ## 📋 Services with Backend Mapping Applied
 
 ### Core Services (Create Operations):
+
 1. **TenderService** ✅ - `createTender()`
    - Maps: `publication_date` → `publish_date`
    - Filters: `consultation_number`, `quantity_required`, `unit`, `awardLevel`
@@ -59,6 +60,7 @@ Backend Mapping has been applied to **all major services** in MyNet.tn B2B Procu
 ## 🛡️ DataMapper Features
 
 ### 1. Field Mapping
+
 ```javascript
 // Maps frontend field names to database columns
 const mapped = DataMapper.mapTender(frontendData);
@@ -67,6 +69,7 @@ const mapped = DataMapper.mapTender(frontendData);
 ```
 
 ### 2. Field Filtering
+
 ```javascript
 // Only allowed fields pass through
 const mapped = DataMapper.mapUser(frontendData);
@@ -75,6 +78,7 @@ const mapped = DataMapper.mapUser(frontendData);
 ```
 
 ### 3. Sensitive Field Removal
+
 ```javascript
 // Remove sensitive data from API responses
 const clean = DataMapper.filterSensitiveFields(user);
@@ -82,18 +86,19 @@ const clean = DataMapper.filterSensitiveFields(user);
 ```
 
 ### 4. Type-Safe Mapping
+
 ```javascript
 // Each entity has its own mapping function
-DataMapper.mapTender()
-DataMapper.mapOffer()
-DataMapper.mapUser()
-DataMapper.mapInvoice()
-DataMapper.mapReview()
-DataMapper.mapAward()
-DataMapper.mapMessage()
-DataMapper.mapSubscription()
-DataMapper.mapAddendum()
-DataMapper.mapInquiry()
+DataMapper.mapTender();
+DataMapper.mapOffer();
+DataMapper.mapUser();
+DataMapper.mapInvoice();
+DataMapper.mapReview();
+DataMapper.mapAward();
+DataMapper.mapMessage();
+DataMapper.mapSubscription();
+DataMapper.mapAddendum();
+DataMapper.mapInquiry();
 ```
 
 ---
@@ -109,6 +114,7 @@ backend/helpers/DataMapper.js
 ## 🚀 Usage Pattern
 
 ### In Services:
+
 ```javascript
 // Step 1: Import DataMapper
 const DataMapper = require('../helpers/DataMapper');
@@ -129,27 +135,28 @@ async createOffer(offerData, userId) {
 ```
 
 ### In Controllers:
+
 ```javascript
 // Controllers automatically get clean data from services
 async (req, res) => {
-    const data = req.body; // Frontend sends any fields
-    const result = await TenderService.createTender(data, userId);
-    // Service handles mapping internally
-}
+  const data = req.body; // Frontend sends any fields
+  const result = await TenderService.createTender(data, userId);
+  // Service handles mapping internally
+};
 ```
 
 ---
 
 ## 🎯 Benefits
 
-| Benefit | Impact |
-|---------|--------|
-| **Security** | Unknown fields cannot reach database |
-| **Flexibility** | Frontend can send extra fields freely |
+| Benefit             | Impact                                   |
+| ------------------- | ---------------------------------------- |
+| **Security**        | Unknown fields cannot reach database     |
+| **Flexibility**     | Frontend can send extra fields freely    |
 | **Maintainability** | Single source of truth for field mapping |
-| **Consistency** | Same pattern across all services |
-| **Type Safety** | Typed field names prevent typos |
-| **Performance** | Filters unused fields early |
+| **Consistency**     | Same pattern across all services         |
+| **Type Safety**     | Typed field names prevent typos          |
+| **Performance**     | Filters unused fields early              |
 
 ---
 
@@ -181,6 +188,7 @@ Backend stores: {
 ## 📊 Covered Entities
 
 ### Direct Mapping (Complete):
+
 - ✅ Tender
 - ✅ User
 - ✅ Offer
@@ -195,6 +203,7 @@ Backend stores: {
 - ✅ Inquiry
 
 ### Partial Implementation (Ready for expansion):
+
 - ⚠️ OfferOpening
 - ⚠️ Archive
 - ⚠️ AwardNotification
@@ -205,33 +214,36 @@ Backend stores: {
 ## 🔮 Future Enhancements
 
 ### Add Custom Validators
+
 ```javascript
 mapTenderWithValidation(data) {
     const mapped = this.mapTender(data);
-    
+
     // Add validation
     if (mapped.budget_min > mapped.budget_max) {
         throw new Error('Invalid budget range');
     }
-    
+
     return mapped;
 }
 ```
 
 ### Add Auto-Sanitization
+
 ```javascript
 // Already included for input validation
 // backend/middleware/inputSanitization.js handles XSS, SQL injection, etc.
 ```
 
 ### Add Field Transformation
+
 ```javascript
 mapUser(userData) {
     const mapped = super.mapUser(userData);
-    
+
     // Transform fields
     mapped.full_name = mapped.full_name?.trim().toUpperCase();
-    
+
     return mapped;
 }
 ```
@@ -240,42 +252,45 @@ mapUser(userData) {
 
 ## ✨ Consistency Achieved
 
-| Metric | Status |
-|--------|--------|
-| Pattern Implementation | ✅ 100% |
-| Service Coverage | ✅ 11/11 services |
-| Security Filtering | ✅ Active |
-| Data Validation | ✅ Integrated |
-| Type Safety | ✅ Complete |
+| Metric                 | Status            |
+| ---------------------- | ----------------- |
+| Pattern Implementation | ✅ 100%           |
+| Service Coverage       | ✅ 11/11 services |
+| Security Filtering     | ✅ Active         |
+| Data Validation        | ✅ Integrated     |
+| Type Safety            | ✅ Complete       |
 
 ---
 
 ## 🎓 Best Practices
 
 1. **Always Map Incoming Data**
+
    ```javascript
    // ✅ Good
    const mapped = DataMapper.mapTender(req.body);
-   
+
    // ❌ Bad
    const tender = new Tender(req.body);
    ```
 
 2. **Use Appropriate Mapper**
+
    ```javascript
    // ✅ Good
    DataMapper.mapOffer(offerData);
-   
+
    // ❌ Bad
    DataMapper.mapTender(offerData); // Wrong entity type
    ```
 
 3. **Filter Sensitive Fields from Responses**
+
    ```javascript
    // ✅ Good
    const clean = DataMapper.filterSensitiveFields(user);
    res.json(clean);
-   
+
    // ❌ Bad
    res.json(user); // Exposes sensitive data
    ```
@@ -294,6 +309,7 @@ mapUser(userData) {
 ## 🚨 Error Handling
 
 All mappers are safe to call with any input:
+
 ```javascript
 // Safe - returns empty object
 DataMapper.mapTender(null);
@@ -301,7 +317,7 @@ DataMapper.mapTender(undefined);
 DataMapper.mapTender({});
 
 // Safe - filters unknown fields
-DataMapper.mapTender({unknown: 'field', title: 'test'});
+DataMapper.mapTender({ unknown: "field", title: "test" });
 // Result: {title: 'test'}
 ```
 
@@ -310,15 +326,17 @@ DataMapper.mapTender({unknown: 'field', title: 'test'});
 ## 🔍 Debugging
 
 To see what fields are being mapped:
+
 ```javascript
 // In any service
 const incoming = req.body;
 const mapped = DataMapper.mapTender(incoming);
 
-console.log('Incoming fields:', Object.keys(incoming));
-console.log('Mapped fields:', Object.keys(mapped));
-console.log('Filtered fields:', 
-    Object.keys(incoming).filter(k => !Object.keys(mapped).includes(k))
+console.log("Incoming fields:", Object.keys(incoming));
+console.log("Mapped fields:", Object.keys(mapped));
+console.log(
+  "Filtered fields:",
+  Object.keys(incoming).filter((k) => !Object.keys(mapped).includes(k)),
 );
 ```
 
@@ -327,6 +345,7 @@ console.log('Filtered fields:',
 ## 📞 Support
 
 For questions about:
+
 - **Field Mapping**: Check DataMapper.js for allowed fields
 - **Adding New Entities**: Add new `static map*()` method to DataMapper
 - **Extending Mapping**: Modify allowedFields array in relevant mapper
@@ -342,6 +361,6 @@ Backend Mapping is now **fully implemented across all services** and provides:
 ✅ **Consistency** - Same pattern in all services and entities  
 ✅ **Flexibility** - Frontend can send any fields, backend processes only valid ones  
 ✅ **Maintainability** - Single place to define field mappings  
-✅ **Type Safety** - Typed field names prevent errors  
+✅ **Type Safety** - Typed field names prevent errors
 
 The platform is now ready for production with **bulletproof data mapping** across all API endpoints!

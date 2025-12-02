@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { procurementAPI } from '../api/procurementAPI';
+import React, { useState, useEffect } from "react";
+import { procurementAPI } from "../api/procurementAPI";
 import {
   Box,
   Typography,
@@ -8,7 +8,7 @@ import {
   Paper,
   Stack,
   Chip,
-} from '@mui/material';
+} from "@mui/material";
 
 /**
  * A component that displays the audit log (history of events) for a tender.
@@ -27,7 +27,7 @@ const TenderAuditLog = ({ tenderId }) => {
         const response = await procurementAPI.getTenderHistory(tenderId);
         setHistory(response.data.history || []);
       } catch (err) {
-        setError('Erreur lors du chargement de l\'historique.');
+        setError("Erreur lors du chargement de l'historique.");
       } finally {
         setLoading(false);
       }
@@ -36,7 +36,11 @@ const TenderAuditLog = ({ tenderId }) => {
   }, [tenderId]);
 
   if (loading) {
-    return <Box sx={{ display: 'flex', justifyContent: 'center', my: 2 }}><CircularProgress /></Box>;
+    return (
+      <Box sx={{ display: "flex", justifyContent: "center", my: 2 }}>
+        <CircularProgress />
+      </Box>
+    );
   }
 
   if (error) {
@@ -49,14 +53,21 @@ const TenderAuditLog = ({ tenderId }) => {
         Historique des Événements
       </Typography>
       <Stack spacing={2}>
-        {history.length > 0 ? history.map((entry) => (
-          <Paper key={entry.id} variant="outlined" sx={{ p: 2 }}>
-            <Typography variant="body2" color="text.secondary">
-              {new Date(entry.timestamp).toLocaleString('fr-FR')} - {entry.user.name} ({entry.user.role})
-            </Typography>
-            <Typography variant="body1"><strong>{entry.action}</strong></Typography>
-          </Paper>
-        )) : <Typography>Aucun événement à afficher.</Typography>}
+        {history.length > 0 ? (
+          history.map((entry) => (
+            <Paper key={entry.id} variant="outlined" sx={{ p: 2 }}>
+              <Typography variant="body2" color="text.secondary">
+                {new Date(entry.timestamp).toLocaleString("fr-FR")} -{" "}
+                {entry.user.name} ({entry.user.role})
+              </Typography>
+              <Typography variant="body1">
+                <strong>{entry.action}</strong>
+              </Typography>
+            </Paper>
+          ))
+        ) : (
+          <Typography>Aucun événement à afficher.</Typography>
+        )}
       </Stack>
     </Box>
   );

@@ -4,32 +4,42 @@ const router = express.Router();
 const { validateIdMiddleware } = require('../middleware/validateIdMiddleware');
 
 // Get tender history - ISSUE FIX #1: Add authentication
-router.get('/tender/:tenderId', validateIdMiddleware('tenderId'), authMiddleware, async (req, res) => {
-  try {
-    const { tenderId } = req.params;
-    const db = req.app.get('db');
+router.get(
+  '/tender/:tenderId',
+  validateIdMiddleware('tenderId'),
+  authMiddleware,
+  async (req, res) => {
+    try {
+      const { tenderId } = req.params;
+      const db = req.app.get('db');
 
-    const result = await db.query(`
+      const result = await db.query(
+        `
       SELECT * FROM tender_history 
       WHERE tender_id = $1 
       ORDER BY changed_at DESC
-    `, [tenderId]);
+    `,
+        [tenderId]
+      );
 
-    res.json(result.rows);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
+      res.json(result.rows);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
   }
-});
+);
 
 // Log tender change (internal)
 const logTenderChange = async (db, tenderId, changeType, changedBy, details = {}) => {
   try {
-    await db.query(`
+    await db.query(
+      `
       INSERT INTO tender_history (tender_id, change_type, changed_by, details)
       VALUES ($1, $2, $3, $4)
-    `, [tenderId, changeType, changedBy, JSON.stringify(details)]);
-  } catch (error) {
-  }
+    `,
+      [tenderId, changeType, changedBy, JSON.stringify(details)]
+    );
+  } catch (error) {}
 };
 
 router.logTenderChange = logTenderChange;

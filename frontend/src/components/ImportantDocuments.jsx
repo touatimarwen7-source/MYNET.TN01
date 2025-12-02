@@ -6,8 +6,21 @@ export default function ImportantDocuments({ documents, title = 'Documents Impor
   const theme = institutionalTheme;
   if (!documents || documents.length === 0) {
     return (
-      <Box sx={{ padding: '24px', backgroundColor: theme.palette.background.default, borderRadius: '4px' }}>
-        <Typography sx={{ fontSize: '16px', fontWeight: 600, color: theme.palette.text.primary, marginBottom: '16px' }}>
+      <Box
+        sx={{
+          padding: '24px',
+          backgroundColor: theme.palette.background.default,
+          borderRadius: '4px',
+        }}
+      >
+        <Typography
+          sx={{
+            fontSize: '16px',
+            fontWeight: 600,
+            color: theme.palette.text.primary,
+            marginBottom: '16px',
+          }}
+        >
           {title}
         </Typography>
         <Typography sx={{ color: THEME_COLORS.textSecondary, fontSize: '14px' }}>
@@ -21,7 +34,7 @@ export default function ImportantDocuments({ documents, title = 'Documents Impor
     const colorMap = {
       high: 'THEME_COLORS.errorLight',
       medium: '#f57c00',
-      normal: '#2e7d32'
+      normal: '#2e7d32',
     };
     return colorMap[priority] || '#616161';
   };
@@ -30,26 +43,46 @@ export default function ImportantDocuments({ documents, title = 'Documents Impor
     const labelMap = {
       high: 'Urgent',
       medium: 'Important',
-      normal: 'Normal'
+      normal: 'Normal',
     };
     return labelMap[priority] || 'Normal';
   };
 
   return (
     <Box sx={{ padding: '24px' }}>
-      <Typography sx={{ fontSize: '16px', fontWeight: 600, color: theme.palette.text.primary, marginBottom: '20px' }}>
+      <Typography
+        sx={{
+          fontSize: '16px',
+          fontWeight: 600,
+          color: theme.palette.text.primary,
+          marginBottom: '20px',
+        }}
+      >
         {title}
       </Typography>
 
       <Stack spacing={2}>
         {documents.map((doc, idx) => (
-          <Card key={idx} sx={{ backgroundColor: THEME_COLORS.bgPaper, border: '1px solid #E0E0E0', borderRadius: '4px' }}>
+          <Card
+            key={idx}
+            sx={{
+              backgroundColor: THEME_COLORS.bgPaper,
+              border: '1px solid #E0E0E0',
+              borderRadius: '4px',
+            }}
+          >
             <CardContent sx={{ padding: '20px' }}>
-              <Stack direction={{ xs: 'column', md: 'row' }} justifyContent="space-between" sx={{ marginBottom: '12px' }}>
+              <Stack
+                direction={{ xs: 'column', md: 'row' }}
+                justifyContent="space-between"
+                sx={{ marginBottom: '12px' }}
+              >
                 <Box sx={{ display: 'flex', gap: '12px', flex: 1 }}>
                   <Typography sx={{ fontSize: '24px' }}>{doc.icon}</Typography>
                   <Box sx={{ flex: 1 }}>
-                    <Typography sx={{ fontWeight: 600, color: theme.palette.text.primary, fontSize: '14px' }}>
+                    <Typography
+                      sx={{ fontWeight: 600, color: theme.palette.text.primary, fontSize: '14px' }}
+                    >
                       {doc.title}
                     </Typography>
                     <Typography sx={{ fontSize: '12px', color: THEME_COLORS.textSecondary }}>
@@ -63,13 +96,20 @@ export default function ImportantDocuments({ documents, title = 'Documents Impor
                     backgroundColor: getPriorityColor(doc.priority),
                     color: '#FFFFFF',
                     height: '24px',
-                    alignSelf: 'flex-start'
+                    alignSelf: 'flex-start',
                   }}
                 />
               </Stack>
 
               {doc.details && (
-                <Typography sx={{ fontSize: '13px', color: THEME_COLORS.textSecondary, marginBottom: '12px', lineHeight: 1.6 }}>
+                <Typography
+                  sx={{
+                    fontSize: '13px',
+                    color: THEME_COLORS.textSecondary,
+                    marginBottom: '12px',
+                    lineHeight: 1.6,
+                  }}
+                >
                   {doc.details}
                 </Typography>
               )}
@@ -82,7 +122,7 @@ export default function ImportantDocuments({ documents, title = 'Documents Impor
                     color: theme.palette.primary.main,
                     textDecoration: 'none',
                     fontWeight: 500,
-                    '&:hover': { textDecoration: 'underline' }
+                    '&:hover': { textDecoration: 'underline' },
                   }}
                 >
                   {doc.action.label} →

@@ -21,11 +21,13 @@ function App() {
   return (
     <Router>
       <AuthProvider>
-        <WebSocketProvider> {/* 2. تغليف التطبيق بمزود WebSocket */}
+        <WebSocketProvider>
+          {' '}
+          {/* 2. تغليف التطبيق بمزود WebSocket */}
           {/* إضافة شريط التنقل هنا ليظهر في كل الصفحات */}
-          <Navbar /> 
+          <Navbar />
           {/* بقية محتوى التطبيق */}
-          <AppRoutes /> 
+          <AppRoutes />
         </WebSocketProvider>
       </AuthProvider>
     </Router>
@@ -39,42 +41,83 @@ const AppRoutes = () => {
     <AnimatePresence mode="wait">
       <Routes location={location} key={location.pathname}>
         {/* Public Routes */}
-        <Route path="/" element={<AnimatedPage><HomePage /></AnimatedPage>} />
-        <Route path="/login" element={<AnimatedPage><LoginPage /></AnimatedPage>} />
-        <Route path="/unauthorized" element={<AnimatedPage><UnauthorizedPage /></AnimatedPage>} />
-        <Route path="/upgrade-plan" element={<AnimatedPage><UpgradePlanPage /></AnimatedPage>} />
+        <Route
+          path="/"
+          element={
+            <AnimatedPage>
+              <HomePage />
+            </AnimatedPage>
+          }
+        />
+        <Route
+          path="/login"
+          element={
+            <AnimatedPage>
+              <LoginPage />
+            </AnimatedPage>
+          }
+        />
+        <Route
+          path="/unauthorized"
+          element={
+            <AnimatedPage>
+              <UnauthorizedPage />
+            </AnimatedPage>
+          }
+        />
+        <Route
+          path="/upgrade-plan"
+          element={
+            <AnimatedPage>
+              <UpgradePlanPage />
+            </AnimatedPage>
+          }
+        />
 
         {/* Protected Routes */}
-        <Route 
-          path="/admin" 
+        <Route
+          path="/admin"
           element={
             <ProtectedRoute allowedRoles={['admin', 'super_admin']}>
-              <AnimatedPage><AdminDashboard /></AnimatedPage>
+              <AnimatedPage>
+                <AdminDashboard />
+              </AnimatedPage>
             </ProtectedRoute>
-          } 
+          }
         />
 
         {/* مسار إنشاء المناقصة */}
-        <Route 
-          path="/create-tender" 
+        <Route
+          path="/create-tender"
           element={
             <ProtectedRoute allowedRoles={['buyer']}>
-              <AnimatedPage><CreateTenderWizard /></AnimatedPage>
+              <AnimatedPage>
+                <CreateTenderWizard />
+              </AnimatedPage>
             </ProtectedRoute>
-          } 
+          }
         />
 
         {/* ✅ مسار تقديم العروض الموحد */}
-        <Route 
-          path="/tender/:tenderId/create-offer" 
+        <Route
+          path="/tender/:tenderId/create-offer"
           element={
             <ProtectedRoute allowedRoles={['supplier']}>
-              <AnimatedPage><CreateOffer /></AnimatedPage>
+              <AnimatedPage>
+                <CreateOffer />
+              </AnimatedPage>
             </ProtectedRoute>
-          } 
+          }
         />
         {/* Catch-all Route for 404 Not Found */}
-        <Route path="*" element={<AnimatedPage><NotFoundPage /></AnimatedPage>} />
+        <Route
+          path="*"
+          element={
+            <AnimatedPage>
+              <NotFoundPage />
+            </AnimatedPage>
+          }
+        />
         {/* أضف باقي المسارات المحمية هنا */}
       </Routes>
     </AnimatePresence>

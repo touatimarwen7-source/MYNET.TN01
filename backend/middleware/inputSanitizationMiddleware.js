@@ -16,7 +16,7 @@ function sanitizeString(str) {
     stripLeakage: true,
     onTagAttr: (tag, name, value) => {
       return '';
-    }
+    },
   });
 }
 
@@ -25,13 +25,13 @@ function sanitizeString(str) {
  */
 function sanitizeObject(obj) {
   if (obj === null || obj === undefined) return obj;
-  
+
   if (typeof obj !== 'object') {
     return typeof obj === 'string' ? sanitizeString(obj) : obj;
   }
 
   if (Array.isArray(obj)) {
-    return obj.map(item => sanitizeObject(item));
+    return obj.map((item) => sanitizeObject(item));
   }
 
   const sanitized = {};
@@ -117,8 +117,8 @@ function inputSanitizationMiddleware(req, res, next) {
       success: false,
       error: {
         message: 'Invalid input format',
-        code: 'INVALID_INPUT'
-      }
+        code: 'INVALID_INPUT',
+      },
     });
   }
 }
@@ -127,5 +127,5 @@ module.exports = {
   sanitizeString,
   sanitizeObject,
   validateAndSanitize,
-  inputSanitizationMiddleware
+  inputSanitizationMiddleware,
 };

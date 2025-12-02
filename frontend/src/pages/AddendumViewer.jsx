@@ -77,7 +77,10 @@ export default function AddendumViewer({ tenderId }) {
   return (
     <Box sx={{ p: 3, direction: 'rtl' }}>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
-        <Typography variant="h5" sx={{ color: institutionalTheme.palette.primary.main, fontWeight: 'bold' }}>
+        <Typography
+          variant="h5"
+          sx={{ color: institutionalTheme.palette.primary.main, fontWeight: 'bold' }}
+        >
           📄 الملاحق (Addenda) والتوضيحات
         </Typography>
         <Button
@@ -105,7 +108,9 @@ export default function AddendumViewer({ tenderId }) {
             <Paper key={addendum.id} sx={{ mb: 2, p: 2 }}>
               <ListItem>
                 <Box sx={{ width: '100%' }}>
-                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <Box
+                    sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
+                  >
                     <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>
                       {addendum.title}
                     </Typography>
@@ -148,9 +153,7 @@ export default function AddendumViewer({ tenderId }) {
 
       {/* Create/View Addendum Dialog */}
       <Dialog open={openDialog} onClose={() => setOpenDialog(false)} maxWidth="md" fullWidth>
-        <DialogTitle>
-          {selectedAddendum ? 'عرض الملحق' : 'نشر ملحق جديد'}
-        </DialogTitle>
+        <DialogTitle>{selectedAddendum ? 'عرض الملحق' : 'نشر ملحق جديد'}</DialogTitle>
         <DialogContent>
           {selectedAddendum ? (
             <Box sx={{ mt: 2 }}>
@@ -160,9 +163,7 @@ export default function AddendumViewer({ tenderId }) {
               <Typography variant="body2" sx={{ color: '#666', mb: 2 }}>
                 {selectedAddendum.addendum_number} - النسخة {selectedAddendum.version}
               </Typography>
-              <Typography variant="body2">
-                {selectedAddendum.content}
-              </Typography>
+              <Typography variant="body2">{selectedAddendum.content}</Typography>
             </Box>
           ) : (
             <Box sx={{ mt: 2 }}>
@@ -188,14 +189,20 @@ export default function AddendumViewer({ tenderId }) {
           )}
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => {
-            setOpenDialog(false);
-            setSelectedAddendum(null);
-          }}>
+          <Button
+            onClick={() => {
+              setOpenDialog(false);
+              setSelectedAddendum(null);
+            }}
+          >
             إغلاق
           </Button>
           {!selectedAddendum && (
-            <Button onClick={publishAddendum} variant="contained" sx={{ backgroundColor: institutionalTheme.palette.primary.main }}>
+            <Button
+              onClick={publishAddendum}
+              variant="contained"
+              sx={{ backgroundColor: institutionalTheme.palette.primary.main }}
+            >
               نشر الملحق
             </Button>
           )}

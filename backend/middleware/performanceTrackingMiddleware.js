@@ -1,7 +1,7 @@
 /**
  * Performance Tracking Middleware
  * Automatically tracks all requests through the performance monitor
- * 
+ *
  * @module performanceTrackingMiddleware
  * @example
  * app.use(performanceTrackingMiddleware);
@@ -21,10 +21,10 @@ const performanceTrackingMiddleware = (req, res, next) => {
 
   // Wrap response.end to capture completion
   const originalEnd = res.end;
-  res.end = function(...args) {
+  res.end = function (...args) {
     endTracking({
       statusCode: res.statusCode,
-      method: req.method
+      method: req.method,
     });
     return originalEnd.apply(this, args);
   };

@@ -4,13 +4,13 @@ import { createTheme } from '@mui/material/styles';
  * ============================================================
  * THEME PROFESSIONNEL B2B - THÈME UNIFIÉ ET STANDARDISÉ
  * ============================================================
- * 
+ *
  * Système de Conception Institutionnel:
  * - Couleurs: Bleu professionnel #0056B3, Fond épuré #F9F9F9
  * - Typographie: Roboto 14px standard, poids 500-600 pour titres
  * - Espacement: Grille 8px (16px standard pour composants)
  * - Design: Plat (0 ombre), Border-radius 4px, Zéro dégradés
- * 
+ *
  * Règles Obligatoires:
  * ✓ Aucune ombre (box-shadow: none)
  * ✓ Couleurs d'entreprise seulement

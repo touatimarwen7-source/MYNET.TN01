@@ -61,20 +61,21 @@ MyNet.tn now features a complete, production-grade form validation system:
 ### 1. Import Hook and Schema
 
 ```javascript
-import { useFormValidation } from '../hooks/useFormValidation';
-import { authSchemas } from '../utils/validationSchemas';
+import { useFormValidation } from "../hooks/useFormValidation";
+import { authSchemas } from "../utils/validationSchemas";
 ```
 
 ### 2. Initialize Form
 
 ```javascript
 const form = useFormValidation(
-  { email: '', password: '' },           // Initial values
-  authSchemas.login,                     // Validation schema
-  async (values) => {                    // Submit handler
+  { email: "", password: "" }, // Initial values
+  authSchemas.login, // Validation schema
+  async (values) => {
+    // Submit handler
     const response = await api.login(values);
     // Handle response
-  }
+  },
 );
 ```
 
@@ -87,7 +88,7 @@ const form = useFormValidation(
   type="email"
 />
 
-<Button 
+<Button
   onClick={form.handleSubmit}
   disabled={form.isSubmitting || !form.isDirty}
 >
@@ -252,9 +253,9 @@ profileSchemas.userProfile: {
 
 ```javascript
 const form = useFormValidation(
-  initialValues,              // Object with field names and initial values
-  validationSchema,           // Object with field names and validation rules
-  onSubmit                    // Async function to handle form submission
+  initialValues, // Object with field names and initial values
+  validationSchema, // Object with field names and validation rules
+  onSubmit, // Async function to handle form submission
 );
 ```
 
@@ -288,37 +289,30 @@ const form = useFormValidation(
 ### Usage Example
 
 ```javascript
-import { useFormValidation } from '../hooks/useFormValidation';
-import { loginSchema } from '../utils/validationSchemas';
+import { useFormValidation } from "../hooks/useFormValidation";
+import { loginSchema } from "../utils/validationSchemas";
 
 function LoginForm() {
   const form = useFormValidation(
-    { email: '', password: '' },
+    { email: "", password: "" },
     loginSchema,
     async (values) => {
       const response = await api.login(values);
       if (response.ok) {
-        navigate('/dashboard');
+        navigate("/dashboard");
       }
-    }
+    },
   );
 
   return (
     <form onSubmit={form.handleSubmit}>
+      <TextField {...form.getFieldProps("email")} label="Email" type="email" />
       <TextField
-        {...form.getFieldProps('email')}
-        label="Email"
-        type="email"
-      />
-      <TextField
-        {...form.getFieldProps('password')}
+        {...form.getFieldProps("password")}
         label="Password"
         type="password"
       />
-      <Button 
-        type="submit" 
-        disabled={form.isSubmitting || !form.isValid}
-      >
+      <Button type="submit" disabled={form.isSubmitting || !form.isValid}>
         Login
       </Button>
     </form>
@@ -333,17 +327,21 @@ function LoginForm() {
 ### Validators
 
 ```javascript
-import { isValidEmail, isStrongPassword, isValidPhone } from '../utils/formValidation';
+import {
+  isValidEmail,
+  isStrongPassword,
+  isValidPhone,
+} from "../utils/formValidation";
 
-isValidEmail('user@example.com');        // true
-isStrongPassword('Weak123');              // false (needs special char)
-isValidPhone('+216 23 456 789');          // true
+isValidEmail("user@example.com"); // true
+isStrongPassword("Weak123"); // false (needs special char)
+isValidPhone("+216 23 456 789"); // true
 ```
 
 ### Error Formatting
 
 ```javascript
-import { formatBackendErrors } from '../utils/formValidation';
+import { formatBackendErrors } from "../utils/formValidation";
 
 try {
   await submitForm(data);
@@ -356,7 +354,7 @@ try {
 ### Sanitization
 
 ```javascript
-import { sanitizeInput } from '../utils/formValidation';
+import { sanitizeInput } from "../utils/formValidation";
 
 const cleaned = sanitizeInput(userInput);
 // Removes HTML/scripts, max 5000 chars
@@ -365,19 +363,19 @@ const cleaned = sanitizeInput(userInput);
 ### Field Props
 
 ```javascript
-import { getFieldProps } from '../utils/formValidation';
+import { getFieldProps } from "../utils/formValidation";
 
 const props = getFieldProps(
-  'email',                    // Field name
-  values,                     // Form values object
-  errors,                     // Errors object
-  touched,                    // Touched object
-  handleChange,               // Change handler
-  handleBlur                  // Blur handler
+  "email", // Field name
+  values, // Form values object
+  errors, // Errors object
+  touched, // Touched object
+  handleChange, // Change handler
+  handleBlur, // Blur handler
 );
 
 // Returns: { name, value, onChange, onBlur, error, helperText, fullWidth }
-<TextField {...props} label="Email" />
+<TextField {...props} label="Email" />;
 ```
 
 ---
@@ -407,21 +405,21 @@ Error disappears
 ```
 1. User types in password field
    ↓ onChange → values.password = 'abc'
-   
+
 2. onBlur fires (field is touched)
    ↓ touched.password = true
-   
+
 3. Validate: 'abc' < 6 chars
    ↓ errors.password = 'At least 6 characters'
-   
+
 4. Display error below field
-   
+
 5. User types more: 'abcdef'
    ↓ onChange → values.password = 'abcdef'
-   
+
 6. Validate: 'abcdef' >= 6 chars ✓
    ↓ errors.password = null
-   
+
 7. Error disappears
 ```
 
@@ -432,7 +430,7 @@ Error disappears
 Validation errors integrate with the error handling system:
 
 ```javascript
-import { useErrorHandler } from '../hooks/useErrorHandler';
+import { useErrorHandler } from "../hooks/useErrorHandler";
 
 function MyForm() {
   const form = useFormValidation(initialValues, schema, onSubmit);
@@ -440,7 +438,7 @@ function MyForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     // Validate form
     if (!form.isValid && form.isDirty) {
       handleValidationError(form.errors);
@@ -451,7 +449,7 @@ function MyForm() {
     try {
       await form.handleSubmit(e);
     } catch (error) {
-      handleError(error, 'FORM_SUBMISSION');
+      handleError(error, "FORM_SUBMISSION");
     }
   };
 
@@ -467,19 +465,25 @@ function MyForm() {
 
 ```javascript
 const form = useFormValidation(
-  { email: '', password: '' },
+  { email: "", password: "" },
   authSchemas.login,
   async (values) => {
     const response = await authAPI.login(values);
-    navigate('/dashboard');
-  }
+    navigate("/dashboard");
+  },
 );
 
 return (
   <Box component="form" onSubmit={form.handleSubmit}>
-    <TextField {...form.getFieldProps('email')} label="Email" />
-    <TextField {...form.getFieldProps('password')} label="Password" type="password" />
-    <Button type="submit" disabled={!form.isValid || form.isSubmitting}>Login</Button>
+    <TextField {...form.getFieldProps("email")} label="Email" />
+    <TextField
+      {...form.getFieldProps("password")}
+      label="Password"
+      type="password"
+    />
+    <Button type="submit" disabled={!form.isValid || form.isSubmitting}>
+      Login
+    </Button>
   </Box>
 );
 ```
@@ -492,14 +496,14 @@ const form = useFormValidation(
   fullSchema,
   async (values) => {
     await submitForm(values);
-  }
+  },
 );
 
 const [activeStep, setActiveStep] = useState(0);
 
 const handleNext = () => {
   // Validate current step only
-  if (form.validateSingleField('step1')) {
+  if (form.validateSingleField("step1")) {
     setActiveStep(1);
   }
 };
@@ -513,11 +517,11 @@ const form = useFormValidation(initialValues, schema, onSubmit);
 const handleDynamicChange = (e) => {
   const { name, value } = e.target;
   form.setFieldValue(name, value);
-  
+
   // Custom validation
-  if (name === 'confirmPassword') {
+  if (name === "confirmPassword") {
     if (value !== form.values.password) {
-      form.setFieldError(name, 'Passwords do not match');
+      form.setFieldError(name, "Passwords do not match");
     } else {
       form.setFieldError(name, null);
     }
@@ -552,7 +556,7 @@ const form = useFormValidation(initialValues, schema, async (values) => {
 <TextField {...form.getFieldProps('email')} />
 
 // ✗ Bad
-<TextField 
+<TextField
   value={form.values.email}
   onChange={form.handleChange}
   onBlur={form.handleBlur}

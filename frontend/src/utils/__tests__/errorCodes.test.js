@@ -1,14 +1,14 @@
 import { describe, it, expect } from 'vitest';
-import { 
-  AUTH_ERRORS, 
-  VALIDATION_ERRORS, 
-  NETWORK_ERRORS, 
+import {
+  AUTH_ERRORS,
+  VALIDATION_ERRORS,
+  NETWORK_ERRORS,
   BUSINESS_ERRORS,
   FILE_ERRORS,
   SYSTEM_ERRORS,
   getErrorByCode,
   getErrorFromStatusCode,
-  formatError
+  formatError,
 } from '../errorCodes';
 
 describe('Error Codes', () => {
@@ -56,7 +56,7 @@ describe('Error Codes', () => {
   describe('getErrorByCode', () => {
     it('should retrieve error by code', () => {
       const error = getErrorByCode('A001');
-      
+
       expect(error).toBeDefined();
       expect(error.code).toBe('A001');
       expect(error.message).toBeDefined();
@@ -64,7 +64,7 @@ describe('Error Codes', () => {
 
     it('should return null for invalid code', () => {
       const error = getErrorByCode('INVALID');
-      
+
       expect(error).toBeNull();
     });
 
@@ -89,7 +89,7 @@ describe('Error Codes', () => {
 
     it('should return default error for unmapped status', () => {
       const error = getErrorFromStatusCode(999);
-      
+
       expect(error.code).toBe('S001');
     });
   });
@@ -98,7 +98,7 @@ describe('Error Codes', () => {
     it('should format error object', () => {
       const error = new Error('Test error');
       const formatted = formatError(error);
-      
+
       expect(formatted).toHaveProperty('code');
       expect(formatted).toHaveProperty('message');
       expect(formatted).toHaveProperty('severity');
@@ -107,19 +107,19 @@ describe('Error Codes', () => {
     it('should handle HTTP error response', () => {
       const error = { response: { status: 401 } };
       const formatted = formatError(error);
-      
+
       expect(formatted.code).toBe('A005');
     });
 
     it('should handle string errors', () => {
       const formatted = formatError('Simple error message');
-      
+
       expect(formatted.message).toBe('Simple error message');
     });
 
     it('should handle null/undefined errors', () => {
       const formatted = formatError(null);
-      
+
       expect(formatted.message).toBeDefined();
       expect(formatted.severity).toBe('error');
     });
@@ -133,22 +133,19 @@ describe('Error Codes', () => {
         ...Object.values(NETWORK_ERRORS),
         ...Object.values(BUSINESS_ERRORS),
         ...Object.values(FILE_ERRORS),
-        ...Object.values(SYSTEM_ERRORS)
+        ...Object.values(SYSTEM_ERRORS),
       ];
 
-      allErrors.forEach(error => {
+      allErrors.forEach((error) => {
         expect(error.message).toBeDefined();
         expect(error.message.length).toBeGreaterThan(0);
       });
     });
 
     it('should not have Arabic characters', () => {
-      const allErrors = [
-        ...Object.values(AUTH_ERRORS),
-        ...Object.values(VALIDATION_ERRORS)
-      ];
+      const allErrors = [...Object.values(AUTH_ERRORS), ...Object.values(VALIDATION_ERRORS)];
 
-      allErrors.forEach(error => {
+      allErrors.forEach((error) => {
         expect(error.message).not.toMatch(/[\u0600-\u06FF]/);
       });
     });

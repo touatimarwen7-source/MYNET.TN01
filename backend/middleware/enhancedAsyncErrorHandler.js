@@ -19,10 +19,7 @@ const enhancedAsyncHandler = (operationName, timeoutMs = 30000) => {
 
       try {
         // Wrap with timeout
-        const result = await withTimeout(
-          fn(req, res, next),
-          timeoutMs
-        );
+        const result = await withTimeout(fn(req, res, next), timeoutMs);
 
         const duration = Date.now() - startTime;
         // Tracking removed`);
@@ -41,7 +38,7 @@ const enhancedAsyncHandler = (operationName, timeoutMs = 30000) => {
           path: req.path,
           userId: req.user?.id || 'anonymous',
           error: error.message,
-          statusCode: error.statusCode || 500
+          statusCode: error.statusCode || 500,
         };
 
         // Error trackedLog);
@@ -72,7 +69,7 @@ class OperationTracker {
       duration,
       success,
       error: error ? error.message : null,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
 
     // Keep last 1000 operations
@@ -83,18 +80,17 @@ class OperationTracker {
 
   getStats() {
     const total = this.operations.length;
-    const successful = this.operations.filter(o => o.success).length;
+    const successful = this.operations.filter((o) => o.success).length;
     const failed = total - successful;
-    const avgDuration = total > 0
-      ? Math.round(this.operations.reduce((sum, o) => sum + o.duration, 0) / total)
-      : 0;
+    const avgDuration =
+      total > 0 ? Math.round(this.operations.reduce((sum, o) => sum + o.duration, 0) / total) : 0;
 
     return {
       total,
       successful,
       failed,
       successRate: total > 0 ? ((successful / total) * 100).toFixed(2) + '%' : 'N/A',
-      averageDuration: avgDuration + 'ms'
+      averageDuration: avgDuration + 'ms',
     };
   }
 
@@ -107,5 +103,5 @@ const operationTracker = new OperationTracker();
 
 module.exports = {
   enhancedAsyncHandler,
-  operationTracker
+  operationTracker,
 };

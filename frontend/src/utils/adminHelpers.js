@@ -9,7 +9,7 @@ export const EMPTY_STATES = {
   files: 'Aucun fichier uploadé',
   users: 'Aucun utilisateur trouvé',
   documents: 'Aucun document créé',
-  plans: 'Aucun plan d\'abonnement',
+  plans: "Aucun plan d'abonnement",
   notifications: 'Aucune notification',
 };
 
@@ -52,9 +52,7 @@ export function searchItems(items, query, searchFields = []) {
 
   const lowerQuery = query.toLowerCase();
   return items.filter((item) =>
-    searchFields.some((field) =>
-      String(item[field]).toLowerCase().includes(lowerQuery)
-    )
+    searchFields.some((field) => String(item[field]).toLowerCase().includes(lowerQuery))
   );
 }
 
@@ -88,9 +86,7 @@ export function bulkDelete(items, ids) {
 }
 
 export function bulkUpdate(items, ids, updates) {
-  return items.map((item) =>
-    ids.includes(item.id) ? { ...item, ...updates } : item
-  );
+  return items.map((item) => (ids.includes(item.id) ? { ...item, ...updates } : item));
 }
 
 /**
@@ -155,7 +151,8 @@ export function importFromCSV(file) {
         const lines = csv.split('\n');
         const headers = lines[0].split(',').map((h) => h.trim());
 
-        const data = lines.slice(1)
+        const data = lines
+          .slice(1)
           .filter((line) => line.trim())
           .map((line) => {
             const values = line.split(',').map((v) => v.trim());
@@ -242,10 +239,7 @@ export function withTimeout(promise, timeoutMs, operation = 'Operation') {
   return Promise.race([
     promise,
     new Promise((_, reject) =>
-      setTimeout(
-        () => reject(new Error(`${operation} timeout after ${timeoutMs}ms`)),
-        timeoutMs
-      )
+      setTimeout(() => reject(new Error(`${operation} timeout after ${timeoutMs}ms`)), timeoutMs)
     ),
   ]);
 }

@@ -4,7 +4,7 @@ export default function EncryptionBadge({ size = 'md', level = 'AES-256' }) {
   const sizeMap = {
     sm: 16,
     md: 20,
-    lg: 24
+    lg: 24,
   };
 
   return (
@@ -15,7 +15,7 @@ export default function EncryptionBadge({ size = 'md', level = 'AES-256' }) {
           alignItems: 'center',
           justifyContent: 'center',
           fontSize: sizeMap[size],
-          cursor: 'default'
+          cursor: 'default',
         }}
       >
         🔒

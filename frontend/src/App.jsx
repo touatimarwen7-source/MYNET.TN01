@@ -113,7 +113,10 @@ const OpeningReport = lazy(() => import('./pages/OpeningReport'));
 const DraftsPage = lazy(() => import('./pages/DraftsPage'));
 
 const LoadingFallback = () => (
-  <Container maxWidth="lg" sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '60vh' }}>
+  <Container
+    maxWidth="lg"
+    sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '60vh' }}
+  >
     <CircularProgress sx={{ color: institutionalTheme.palette.primary.main }} />
   </Container>
 );
@@ -133,443 +136,789 @@ function AppContent() {
         <DarkModeProvider>
           <SuperAdminProvider>
             <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
-            <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
-            <AlertStrip />
-            <UnifiedHeader />
-            <AppToastContainer />
-          
-          <Box sx={{ display: 'flex', flex: 1, overflow: 'hidden' }}>
-            {/* Sidebar Navigation - Show for authenticated users */}
-            {user && <Sidebar user={user} onLogout={logout} />}
+              <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+                <AlertStrip />
+                <UnifiedHeader />
+                <AppToastContainer />
 
-            <Box component="main" sx={{ flex: 1, overflowY: 'auto', paddingY: '20px', paddingX: { xs: '12px', sm: '20px' }, transition: 'all 0.3s ease-in-out' }}>
-            <Suspense fallback={<LoadingFallback />}>
-              <Routes>
-              {/* Pages Publiques */}
-              <Route path="/" element={!user ? <HomePage /> : <Navigate to="/tenders" />} />
-              <Route path="/about" element={<AboutPage />} />
-              <Route path="/features" element={<FeaturesPage />} />
-              <Route path="/pricing" element={<PricingPage />} />
-              <Route path="/contact" element={<ContactPage />} />
-              <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-              <Route path="/terms-of-service" element={<TermsOfService />} />
+                <Box sx={{ display: 'flex', flex: 1, overflow: 'hidden' }}>
+                  {/* Sidebar Navigation - Show for authenticated users */}
+                  {user && <Sidebar user={user} onLogout={logout} />}
 
-              {/* Authentification */}
-              <Route path="/login" element={<Login />} />
-              <Route path="/register" element={<Register />} />
-              <Route path="/password-reset" element={<PasswordReset />} />
-              <Route path="/verify-email" element={<EmailVerification />} />
+                  <Box
+                    component="main"
+                    sx={{
+                      flex: 1,
+                      overflowY: 'auto',
+                      paddingY: '20px',
+                      paddingX: { xs: '12px', sm: '20px' },
+                      transition: 'all 0.3s ease-in-out',
+                    }}
+                  >
+                    <Suspense fallback={<LoadingFallback />}>
+                      <Routes>
+                        {/* Pages Publiques */}
+                        <Route
+                          path="/"
+                          element={!user ? <HomePage /> : <Navigate to="/tenders" />}
+                        />
+                        <Route path="/about" element={<AboutPage />} />
+                        <Route path="/features" element={<FeaturesPage />} />
+                        <Route path="/pricing" element={<PricingPage />} />
+                        <Route path="/contact" element={<ContactPage />} />
+                        <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+                        <Route path="/terms-of-service" element={<TermsOfService />} />
 
-              {/* Appels d'offres */}
-              <Route path="/tenders" element={user ? <TenderList /> : <Navigate to="/login" />} />
-              <Route path="/tender/security" element={<TenderSecuritySettings />} />
-              <Route path="/tender/preferences" element={<TenderPreferencesSettings />} />
-              <Route path="/tender/:id" element={<TenderDetail />} />
-              <Route path="/tender/:id/audit-log" element={<AuditLog />} />
-              <Route path="/tender/:id/award" element={<PartialAward />} />
-              <Route path="/tender/:id/analysis" element={<OfferAnalysis />} />
-              <Route 
-                path="/tender/:tenderId/bid" 
-                element={user?.role === 'supplier' ? <CreateBid /> : <Navigate to="/tenders" />} 
-              />
-              <Route 
-                path="/tender/:tenderId/opening-report" 
-                element={user?.role === 'buyer' ? <OpeningReport /> : <Navigate to="/tenders" />} 
-              />
-              <Route 
-                path="/offer/:offerId/supply-request" 
-                element={user?.role === 'supplier' ? <CreateSupplyRequest /> : <Navigate to="/tenders" />} 
-              />
-              <Route 
-                path="/supply-request/:supplyRequestId/invoice" 
-                element={user?.role === 'supplier' ? <CreateInvoice /> : <Navigate to="/tenders" />} 
-              />
+                        {/* Authentification */}
+                        <Route path="/login" element={<Login />} />
+                        <Route path="/register" element={<Register />} />
+                        <Route path="/password-reset" element={<PasswordReset />} />
+                        <Route path="/verify-email" element={<EmailVerification />} />
 
-              {/* Interface Acheteur */}
-              <Route 
-              path="/buyer-dashboard" 
-              element={user?.role === 'buyer' ? <BuyerDashboard /> : <Navigate to="/tenders" />} 
-            />
-              <Route 
-              path="/buyer-active-tenders" 
-              element={user?.role === 'buyer' ? <BuyerActiveTenders /> : <Navigate to="/tenders" />} 
-            />
-              <Route 
-              path="/bid-comparison/:tenderId" 
-              element={user?.role === 'buyer' ? <BidComparison /> : <Navigate to="/tenders" />} 
-            />
-              <Route 
-              path="/create-tender" 
-              element={user?.role === 'buyer' ? <CreateTender /> : <Navigate to="/tenders" />} 
-            />
-              <Route 
-              path="/tender/:id/chat" 
-              element={user ? <TenderChat /> : <Navigate to="/login" />} 
-            />
-              <Route 
-              path="/team-management" 
-              element={user?.role === 'buyer' ? <TeamManagement /> : <Navigate to="/tenders" />} 
-            />
-              <Route 
-              path="/invoices" 
-              element={user?.role === 'buyer' ? <InvoiceManagement /> : <Navigate to="/tenders" />} 
-            />
-              <Route 
-              path="/budgets" 
-              element={user?.role === 'buyer' ? <BudgetManagement /> : <Navigate to="/tenders" />} 
-            />
-              <Route 
-              path="/financial-reports" 
-              element={user?.role === 'buyer' ? <FinancialReports /> : <Navigate to="/tenders" />} 
-            />
-              <Route 
-              path="/security" 
-              element={user ? <Profile /> : <Navigate to="/login" />} 
-            />
-              <Route 
-              path="/preferences" 
-              element={user ? <Profile /> : <Navigate to="/login" />} 
-            />
-              <Route 
-              path="/team-permissions" 
-              element={user?.role === 'buyer' ? <TeamPermissions /> : <Navigate to="/tenders" />} 
-            />
-              <Route 
-              path="/tender-evaluation" 
-              element={user?.role === 'buyer' ? <TenderEvaluation /> : <Navigate to="/tenders" />} 
-            />
-              <Route 
-              path="/tender-awarding" 
-              element={user?.role === 'buyer' ? <TenderAwarding /> : <Navigate to="/tenders" />} 
-            />
-              <Route 
-              path="/supplier-products" 
-              element={user?.role === 'supplier' ? <SupplierProductsManagement /> : <Navigate to="/tenders" />} 
-            />
-              <Route 
-              path="/supplier-services" 
-              element={user?.role === 'supplier' ? <SupplierServicesManagement /> : <Navigate to="/tenders" />} 
-            />
-              <Route 
-              path="/supplier-reports" 
-              element={user?.role === 'supplier' ? <SupplierDashboard /> : <Navigate to="/tenders" />} 
-            />
-              <Route 
-              path="/bid-submission/:tenderId" 
-              element={user?.role === 'supplier' ? <BidSubmission /> : <Navigate to="/tenders" />} 
-            />
-              <Route 
-              path="/contracts" 
-              element={user?.role === 'buyer' ? <ContractManagement /> : <Navigate to="/tenders" />} 
-            />
-              <Route 
-              path="/deliveries" 
-              element={user?.role === 'buyer' ? <DeliveryManagement /> : <Navigate to="/tenders" />} 
-            />
-              <Route 
-              path="/award-notifications" 
-              element={user?.role === 'buyer' ? <AwardNotifications /> : <Navigate to="/tenders" />} 
-            />
-              <Route 
-              path="/performance" 
-              element={user?.role === 'buyer' ? <PerformanceMonitoring /> : <Navigate to="/tenders" />} 
-            />
-              <Route 
-              path="/disputes" 
-              element={user?.role === 'buyer' ? <DisputeManagement /> : <Navigate to="/tenders" />} 
-            />
-              <Route 
-              path="/invoice-generation" 
-              element={user?.role === 'buyer' ? <InvoiceGeneration /> : <Navigate to="/tenders" />} 
-            />
-              <Route 
-              path="/monitoring-submissions" 
-              element={user?.role === 'buyer' ? <MonitoringSubmissions /> : <Navigate to="/tenders" />} 
-            />
-              <Route 
-              path="/testing-checklist" 
-              element={<TestingChecklist />} 
-            />
-              <Route 
-              path="/supplier-payments" 
-              element={user?.role === 'supplier' ? <SupplierInvoices /> : <Navigate to="/tenders" />} 
-            />
+                        {/* Appels d'offres */}
+                        <Route
+                          path="/tenders"
+                          element={user ? <TenderList /> : <Navigate to="/login" />}
+                        />
+                        <Route path="/tender/security" element={<TenderSecuritySettings />} />
+                        <Route path="/tender/preferences" element={<TenderPreferencesSettings />} />
+                        <Route path="/tender/:id" element={<TenderDetail />} />
+                        <Route path="/tender/:id/audit-log" element={<AuditLog />} />
+                        <Route path="/tender/:id/award" element={<PartialAward />} />
+                        <Route path="/tender/:id/analysis" element={<OfferAnalysis />} />
+                        <Route
+                          path="/tender/:tenderId/bid"
+                          element={
+                            user?.role === 'supplier' ? <CreateBid /> : <Navigate to="/tenders" />
+                          }
+                        />
+                        <Route
+                          path="/tender/:tenderId/opening-report"
+                          element={
+                            user?.role === 'buyer' ? <OpeningReport /> : <Navigate to="/tenders" />
+                          }
+                        />
+                        <Route
+                          path="/offer/:offerId/supply-request"
+                          element={
+                            user?.role === 'supplier' ? (
+                              <CreateSupplyRequest />
+                            ) : (
+                              <Navigate to="/tenders" />
+                            )
+                          }
+                        />
+                        <Route
+                          path="/supply-request/:supplyRequestId/invoice"
+                          element={
+                            user?.role === 'supplier' ? (
+                              <CreateInvoice />
+                            ) : (
+                              <Navigate to="/tenders" />
+                            )
+                          }
+                        />
 
-              {/* Interface Fournisseur */}
-              <Route 
-              path="/supplier-search" 
-              element={user?.role === 'supplier' ? <SupplierSearch /> : <Navigate to="/tenders" />} 
-            />
-              <Route 
-              path="/tender/:id/bid" 
-              element={user?.role === 'supplier' ? <SubmitBid /> : <Navigate to="/tenders" />} 
-            />
-              <Route 
-              path="/notifications" 
-              element={user ? <NotificationCenter /> : <Navigate to="/login" />} 
-            />
-              <Route 
-              path="/supplier-catalog" 
-              element={user?.role === 'supplier' ? <SupplierCatalog /> : <Navigate to="/tenders" />} 
-            />
-              <Route 
-              path="/supplier-invoices" 
-              element={user?.role === 'supplier' ? <SupplierInvoices /> : <Navigate to="/tenders" />} 
-            />
-              <Route 
-              path="/my-offers" 
-              element={user?.role === 'supplier' ? <MyOffers /> : <Navigate to="/tenders" />} 
-            />
-              <Route 
-              path="/create-offer/:tenderId" 
-              element={user?.role === 'supplier' ? <CreateOffer /> : <Navigate to="/tenders" />} 
-            />
+                        {/* Interface Acheteur */}
+                        <Route
+                          path="/buyer-dashboard"
+                          element={
+                            user?.role === 'buyer' ? <BuyerDashboard /> : <Navigate to="/tenders" />
+                          }
+                        />
+                        <Route
+                          path="/buyer-active-tenders"
+                          element={
+                            user?.role === 'buyer' ? (
+                              <BuyerActiveTenders />
+                            ) : (
+                              <Navigate to="/tenders" />
+                            )
+                          }
+                        />
+                        <Route
+                          path="/bid-comparison/:tenderId"
+                          element={
+                            user?.role === 'buyer' ? <BidComparison /> : <Navigate to="/tenders" />
+                          }
+                        />
+                        <Route
+                          path="/create-tender"
+                          element={
+                            user?.role === 'buyer' ? <CreateTender /> : <Navigate to="/tenders" />
+                          }
+                        />
+                        <Route
+                          path="/tender/:id/chat"
+                          element={user ? <TenderChat /> : <Navigate to="/login" />}
+                        />
+                        <Route
+                          path="/team-management"
+                          element={
+                            user?.role === 'buyer' ? <TeamManagement /> : <Navigate to="/tenders" />
+                          }
+                        />
+                        <Route
+                          path="/invoices"
+                          element={
+                            user?.role === 'buyer' ? (
+                              <InvoiceManagement />
+                            ) : (
+                              <Navigate to="/tenders" />
+                            )
+                          }
+                        />
+                        <Route
+                          path="/budgets"
+                          element={
+                            user?.role === 'buyer' ? (
+                              <BudgetManagement />
+                            ) : (
+                              <Navigate to="/tenders" />
+                            )
+                          }
+                        />
+                        <Route
+                          path="/financial-reports"
+                          element={
+                            user?.role === 'buyer' ? (
+                              <FinancialReports />
+                            ) : (
+                              <Navigate to="/tenders" />
+                            )
+                          }
+                        />
+                        <Route
+                          path="/security"
+                          element={user ? <Profile /> : <Navigate to="/login" />}
+                        />
+                        <Route
+                          path="/preferences"
+                          element={user ? <Profile /> : <Navigate to="/login" />}
+                        />
+                        <Route
+                          path="/team-permissions"
+                          element={
+                            user?.role === 'buyer' ? (
+                              <TeamPermissions />
+                            ) : (
+                              <Navigate to="/tenders" />
+                            )
+                          }
+                        />
+                        <Route
+                          path="/tender-evaluation"
+                          element={
+                            user?.role === 'buyer' ? (
+                              <TenderEvaluation />
+                            ) : (
+                              <Navigate to="/tenders" />
+                            )
+                          }
+                        />
+                        <Route
+                          path="/tender-awarding"
+                          element={
+                            user?.role === 'buyer' ? <TenderAwarding /> : <Navigate to="/tenders" />
+                          }
+                        />
+                        <Route
+                          path="/supplier-products"
+                          element={
+                            user?.role === 'supplier' ? (
+                              <SupplierProductsManagement />
+                            ) : (
+                              <Navigate to="/tenders" />
+                            )
+                          }
+                        />
+                        <Route
+                          path="/supplier-services"
+                          element={
+                            user?.role === 'supplier' ? (
+                              <SupplierServicesManagement />
+                            ) : (
+                              <Navigate to="/tenders" />
+                            )
+                          }
+                        />
+                        <Route
+                          path="/supplier-reports"
+                          element={
+                            user?.role === 'supplier' ? (
+                              <SupplierDashboard />
+                            ) : (
+                              <Navigate to="/tenders" />
+                            )
+                          }
+                        />
+                        <Route
+                          path="/bid-submission/:tenderId"
+                          element={
+                            user?.role === 'supplier' ? (
+                              <BidSubmission />
+                            ) : (
+                              <Navigate to="/tenders" />
+                            )
+                          }
+                        />
+                        <Route
+                          path="/contracts"
+                          element={
+                            user?.role === 'buyer' ? (
+                              <ContractManagement />
+                            ) : (
+                              <Navigate to="/tenders" />
+                            )
+                          }
+                        />
+                        <Route
+                          path="/deliveries"
+                          element={
+                            user?.role === 'buyer' ? (
+                              <DeliveryManagement />
+                            ) : (
+                              <Navigate to="/tenders" />
+                            )
+                          }
+                        />
+                        <Route
+                          path="/award-notifications"
+                          element={
+                            user?.role === 'buyer' ? (
+                              <AwardNotifications />
+                            ) : (
+                              <Navigate to="/tenders" />
+                            )
+                          }
+                        />
+                        <Route
+                          path="/performance"
+                          element={
+                            user?.role === 'buyer' ? (
+                              <PerformanceMonitoring />
+                            ) : (
+                              <Navigate to="/tenders" />
+                            )
+                          }
+                        />
+                        <Route
+                          path="/disputes"
+                          element={
+                            user?.role === 'buyer' ? (
+                              <DisputeManagement />
+                            ) : (
+                              <Navigate to="/tenders" />
+                            )
+                          }
+                        />
+                        <Route
+                          path="/invoice-generation"
+                          element={
+                            user?.role === 'buyer' ? (
+                              <InvoiceGeneration />
+                            ) : (
+                              <Navigate to="/tenders" />
+                            )
+                          }
+                        />
+                        <Route
+                          path="/monitoring-submissions"
+                          element={
+                            user?.role === 'buyer' ? (
+                              <MonitoringSubmissions />
+                            ) : (
+                              <Navigate to="/tenders" />
+                            )
+                          }
+                        />
+                        <Route path="/testing-checklist" element={<TestingChecklist />} />
+                        <Route
+                          path="/supplier-payments"
+                          element={
+                            user?.role === 'supplier' ? (
+                              <SupplierInvoices />
+                            ) : (
+                              <Navigate to="/tenders" />
+                            )
+                          }
+                        />
 
-              {/* Bons de Commande - Purchase Orders */}
-              <Route 
-              path="/po-management" 
-              element={user?.role === 'buyer' ? <POManagement /> : <Navigate to="/tenders" />} 
-            />
-              <Route 
-              path="/po-detail/:id" 
-              element={user?.role === 'buyer' ? <PODetail /> : <Navigate to="/tenders" />} 
-            />
+                        {/* Interface Fournisseur */}
+                        <Route
+                          path="/supplier-search"
+                          element={
+                            user?.role === 'supplier' ? (
+                              <SupplierSearch />
+                            ) : (
+                              <Navigate to="/tenders" />
+                            )
+                          }
+                        />
+                        <Route
+                          path="/tender/:id/bid"
+                          element={
+                            user?.role === 'supplier' ? <SubmitBid /> : <Navigate to="/tenders" />
+                          }
+                        />
+                        <Route
+                          path="/notifications"
+                          element={user ? <NotificationCenter /> : <Navigate to="/login" />}
+                        />
+                        <Route
+                          path="/supplier-catalog"
+                          element={
+                            user?.role === 'supplier' ? (
+                              <SupplierCatalog />
+                            ) : (
+                              <Navigate to="/tenders" />
+                            )
+                          }
+                        />
+                        <Route
+                          path="/supplier-invoices"
+                          element={
+                            user?.role === 'supplier' ? (
+                              <SupplierInvoices />
+                            ) : (
+                              <Navigate to="/tenders" />
+                            )
+                          }
+                        />
+                        <Route
+                          path="/my-offers"
+                          element={
+                            user?.role === 'supplier' ? <MyOffers /> : <Navigate to="/tenders" />
+                          }
+                        />
+                        <Route
+                          path="/create-offer/:tenderId"
+                          element={
+                            user?.role === 'supplier' ? <CreateOffer /> : <Navigate to="/tenders" />
+                          }
+                        />
 
-              {/* Avis et Évaluations - Reviews & Ratings */}
-              <Route 
-              path="/reviews" 
-              element={user ? <ReviewsList /> : <Navigate to="/login" />} 
-            />
+                        {/* Bons de Commande - Purchase Orders */}
+                        <Route
+                          path="/po-management"
+                          element={
+                            user?.role === 'buyer' ? <POManagement /> : <Navigate to="/tenders" />
+                          }
+                        />
+                        <Route
+                          path="/po-detail/:id"
+                          element={
+                            user?.role === 'buyer' ? <PODetail /> : <Navigate to="/tenders" />
+                          }
+                        />
 
-              {/* Messaging System - Communication */}
-              <Route 
-              path="/inbox" 
-              element={user ? <Inbox /> : <Navigate to="/login" />} 
-            />
-              <Route 
-              path="/compose" 
-              element={user ? <Compose /> : <Navigate to="/login" />} 
-            />
-              <Route 
-              path="/message/:messageId" 
-              element={user ? <MessageDetail /> : <Navigate to="/login" />} 
-            />
+                        {/* Avis et Évaluations - Reviews & Ratings */}
+                        <Route
+                          path="/reviews"
+                          element={user ? <ReviewsList /> : <Navigate to="/login" />}
+                        />
 
-              {/* Supply Requests & Invoices */}
-              <Route 
-              path="/my-supply-requests" 
-              element={user?.role === 'buyer' ? <MySupplyRequests /> : <Navigate to="/tenders" />} 
-            />
-              <Route 
-              path="/supplier-requests" 
-              element={user?.role === 'supplier' ? <SupplierRequests /> : <Navigate to="/tenders" />} 
-            />
+                        {/* Messaging System - Communication */}
+                        <Route
+                          path="/inbox"
+                          element={user ? <Inbox /> : <Navigate to="/login" />}
+                        />
+                        <Route
+                          path="/compose"
+                          element={user ? <Compose /> : <Navigate to="/login" />}
+                        />
+                        <Route
+                          path="/message/:messageId"
+                          element={user ? <MessageDetail /> : <Navigate to="/login" />}
+                        />
 
-              {/* Analytics - Priority 3 */}
-              <Route 
-              path="/buyer-analytics" 
-              element={user?.role === 'buyer' ? <BuyerAnalytics /> : <Navigate to="/tenders" />} 
-            />
-              <Route 
-              path="/supplier-analytics" 
-              element={user?.role === 'supplier' ? <SupplierAnalytics /> : <Navigate to="/tenders" />} 
-            />
-              <Route 
-              path="/performance-tracking" 
-              element={user?.role === 'buyer' ? <SupplierPerformanceTracking /> : <Navigate to="/tenders" />} 
-            />
-              <Route 
-              path="/subscription-plans" 
-              element={user ? <SubscriptionPlans /> : <Navigate to="/login" />} 
-            />
+                        {/* Supply Requests & Invoices */}
+                        <Route
+                          path="/my-supply-requests"
+                          element={
+                            user?.role === 'buyer' ? (
+                              <MySupplyRequests />
+                            ) : (
+                              <Navigate to="/tenders" />
+                            )
+                          }
+                        />
+                        <Route
+                          path="/supplier-requests"
+                          element={
+                            user?.role === 'supplier' ? (
+                              <SupplierRequests />
+                            ) : (
+                              <Navigate to="/tenders" />
+                            )
+                          }
+                        />
 
-              {/* Administration */}
-              {/* Admin Portal - Main Interface */}
-              {/* Admin Portal Routes */}
-              <Route 
-              path="/admin-portal" 
-              element={user?.role === 'super_admin' ? <AdminPortal /> : <Navigate to="/tenders" />} 
-            />
-              <Route 
-              path="/admin-portal/subscriptions" 
-              element={user?.role === 'super_admin' ? <SubscriptionManagement /> : <Navigate to="/tenders" />} 
-            />
-              <Route 
-              path="/admin-portal/notifications" 
-              element={user?.role === 'super_admin' ? <EmailNotificationCenter /> : <Navigate to="/tenders" />} 
-            />
-              <Route 
-              path="/admin-portal/backup-restore" 
-              element={user?.role === 'super_admin' ? <BackupRestore /> : <Navigate to="/tenders" />} 
-            />
-              <Route 
-              path="/admin-portal/assistants" 
-              element={user?.role === 'super_admin' ? <AdminAssistantManagement /> : <Navigate to="/tenders" />} 
-            />
-              {/* Super Admin - Main Dashboard */}
-              <Route 
-              path="/super-admin/dashboard" 
-              element={user?.role === 'super_admin' ? <SuperAdminDashboard /> : <Navigate to="/tenders" />} 
-            />
-              {/* Super Admin - Menu & CRUD */}
-              <Route 
-              path="/super-admin-menu" 
-              element={user?.role === 'super_admin' ? <SuperAdminMenu /> : <Navigate to="/tenders" />} 
-            />
-              <Route 
-              path="/super-admin" 
-              element={user?.role === 'super_admin' ? <SuperAdminCRUD /> : <Navigate to="/tenders" />} 
-            />
-              {/* Admin - Limited Permissions */}
-              <Route 
-              path="/admin" 
-              element={user?.role === 'admin' ? <AdminDashboard /> : <Navigate to="/tenders" />} 
-            />
-              {/* Page Editor */}
-              <Route 
-              path="/super-admin/page-editor" 
-              element={user?.role === 'super_admin' ? <PageEditor /> : <Navigate to="/tenders" />} 
-            />
-              <Route 
-              path="/super-admin/page-editor/:pageId" 
-              element={user?.role === 'super_admin' ? <PageEditor /> : <Navigate to="/tenders" />} 
-            />
+                        {/* Analytics - Priority 3 */}
+                        <Route
+                          path="/buyer-analytics"
+                          element={
+                            user?.role === 'buyer' ? <BuyerAnalytics /> : <Navigate to="/tenders" />
+                          }
+                        />
+                        <Route
+                          path="/supplier-analytics"
+                          element={
+                            user?.role === 'supplier' ? (
+                              <SupplierAnalytics />
+                            ) : (
+                              <Navigate to="/tenders" />
+                            )
+                          }
+                        />
+                        <Route
+                          path="/performance-tracking"
+                          element={
+                            user?.role === 'buyer' ? (
+                              <SupplierPerformanceTracking />
+                            ) : (
+                              <Navigate to="/tenders" />
+                            )
+                          }
+                        />
+                        <Route
+                          path="/subscription-plans"
+                          element={user ? <SubscriptionPlans /> : <Navigate to="/login" />}
+                        />
 
-              {/* Super Admin Only Routes */}
-              <Route 
-              path="/super-admin/audit-logs" 
-              element={user?.role === 'super_admin' ? <AuditLogViewer /> : <Navigate to="/tenders" />} 
-            />
-              <Route 
-              path="/super-admin/health" 
-              element={user?.role === 'super_admin' ? <HealthMonitoring /> : <Navigate to="/tenders" />} 
-            />
-              <Route 
-              path="/super-admin/archive" 
-              element={user?.role === 'super_admin' ? <ArchiveManagement /> : <Navigate to="/tenders" />} 
-            />
-              <Route 
-              path="/super-admin/tiers" 
-              element={user?.role === 'super_admin' ? <SubscriptionTiers /> : <Navigate to="/tenders" />} 
-            />
-              <Route 
-              path="/super-admin/features" 
-              element={user?.role === 'super_admin' ? <FeatureControl /> : <Navigate to="/tenders" />} 
-            />
-              <Route 
-              path="/super-admin/users" 
-              element={user?.role === 'super_admin' ? <UserManagement /> : <Navigate to="/tenders" />} 
-            />
-              <Route 
-              path="/super-admin/files" 
-              element={user?.role === 'super_admin' ? <FileManagement /> : <Navigate to="/tenders" />} 
-            />
-              
-              {/* Admin Routes (Redirect to Super Admin) */}
-              <Route 
-              path="/admin" 
-              element={<Navigate to="/super-admin/dashboard" />} 
-            />
-              <Route 
-              path="/admin/audit-logs" 
-              element={<Navigate to="/super-admin/audit-logs" />} 
-            />
-              <Route 
-              path="/admin/health" 
-              element={<Navigate to="/super-admin/health" />} 
-            />
-              <Route 
-              path="/admin/archive" 
-              element={<Navigate to="/super-admin/archive" />} 
-            />
-              <Route 
-              path="/admin/users" 
-              element={<Navigate to="/super-admin/users" />} 
-            />
-              <Route 
-              path="/user-management" 
-              element={user?.role === 'super_admin' ? <UserManagement /> : <Navigate to="/tenders" />} 
-            />
+                        {/* Administration */}
+                        {/* Admin Portal - Main Interface */}
+                        {/* Admin Portal Routes */}
+                        <Route
+                          path="/admin-portal"
+                          element={
+                            user?.role === 'super_admin' ? (
+                              <AdminPortal />
+                            ) : (
+                              <Navigate to="/tenders" />
+                            )
+                          }
+                        />
+                        <Route
+                          path="/admin-portal/subscriptions"
+                          element={
+                            user?.role === 'super_admin' ? (
+                              <SubscriptionManagement />
+                            ) : (
+                              <Navigate to="/tenders" />
+                            )
+                          }
+                        />
+                        <Route
+                          path="/admin-portal/notifications"
+                          element={
+                            user?.role === 'super_admin' ? (
+                              <EmailNotificationCenter />
+                            ) : (
+                              <Navigate to="/tenders" />
+                            )
+                          }
+                        />
+                        <Route
+                          path="/admin-portal/backup-restore"
+                          element={
+                            user?.role === 'super_admin' ? (
+                              <BackupRestore />
+                            ) : (
+                              <Navigate to="/tenders" />
+                            )
+                          }
+                        />
+                        <Route
+                          path="/admin-portal/assistants"
+                          element={
+                            user?.role === 'super_admin' ? (
+                              <AdminAssistantManagement />
+                            ) : (
+                              <Navigate to="/tenders" />
+                            )
+                          }
+                        />
+                        {/* Super Admin - Main Dashboard */}
+                        <Route
+                          path="/super-admin/dashboard"
+                          element={
+                            user?.role === 'super_admin' ? (
+                              <SuperAdminDashboard />
+                            ) : (
+                              <Navigate to="/tenders" />
+                            )
+                          }
+                        />
+                        {/* Super Admin - Menu & CRUD */}
+                        <Route
+                          path="/super-admin-menu"
+                          element={
+                            user?.role === 'super_admin' ? (
+                              <SuperAdminMenu />
+                            ) : (
+                              <Navigate to="/tenders" />
+                            )
+                          }
+                        />
+                        <Route
+                          path="/super-admin"
+                          element={
+                            user?.role === 'super_admin' ? (
+                              <SuperAdminCRUD />
+                            ) : (
+                              <Navigate to="/tenders" />
+                            )
+                          }
+                        />
+                        {/* Admin - Limited Permissions */}
+                        <Route
+                          path="/admin"
+                          element={
+                            user?.role === 'admin' ? <AdminDashboard /> : <Navigate to="/tenders" />
+                          }
+                        />
+                        {/* Page Editor */}
+                        <Route
+                          path="/super-admin/page-editor"
+                          element={
+                            user?.role === 'super_admin' ? (
+                              <PageEditor />
+                            ) : (
+                              <Navigate to="/tenders" />
+                            )
+                          }
+                        />
+                        <Route
+                          path="/super-admin/page-editor/:pageId"
+                          element={
+                            user?.role === 'super_admin' ? (
+                              <PageEditor />
+                            ) : (
+                              <Navigate to="/tenders" />
+                            )
+                          }
+                        />
 
-              {/* Email Notifications */}
-              <Route 
-              path="/email-notifications" 
-              element={user?.role === 'super_admin' ? <EmailNotifications /> : <Navigate to="/tenders" />} 
-            />
+                        {/* Super Admin Only Routes */}
+                        <Route
+                          path="/super-admin/audit-logs"
+                          element={
+                            user?.role === 'super_admin' ? (
+                              <AuditLogViewer />
+                            ) : (
+                              <Navigate to="/tenders" />
+                            )
+                          }
+                        />
+                        <Route
+                          path="/super-admin/health"
+                          element={
+                            user?.role === 'super_admin' ? (
+                              <HealthMonitoring />
+                            ) : (
+                              <Navigate to="/tenders" />
+                            )
+                          }
+                        />
+                        <Route
+                          path="/super-admin/archive"
+                          element={
+                            user?.role === 'super_admin' ? (
+                              <ArchiveManagement />
+                            ) : (
+                              <Navigate to="/tenders" />
+                            )
+                          }
+                        />
+                        <Route
+                          path="/super-admin/tiers"
+                          element={
+                            user?.role === 'super_admin' ? (
+                              <SubscriptionTiers />
+                            ) : (
+                              <Navigate to="/tenders" />
+                            )
+                          }
+                        />
+                        <Route
+                          path="/super-admin/features"
+                          element={
+                            user?.role === 'super_admin' ? (
+                              <FeatureControl />
+                            ) : (
+                              <Navigate to="/tenders" />
+                            )
+                          }
+                        />
+                        <Route
+                          path="/super-admin/users"
+                          element={
+                            user?.role === 'super_admin' ? (
+                              <UserManagement />
+                            ) : (
+                              <Navigate to="/tenders" />
+                            )
+                          }
+                        />
+                        <Route
+                          path="/super-admin/files"
+                          element={
+                            user?.role === 'super_admin' ? (
+                              <FileManagement />
+                            ) : (
+                              <Navigate to="/tenders" />
+                            )
+                          }
+                        />
 
-              {/* Profil et Sécurité */}
-              <Route 
-              path="/profile" 
-              element={user ? <Profile user={user} /> : <Navigate to="/login" />} 
-            />
-              <Route 
-              path="/company-profile" 
-              element={user ? <CompanyProfile /> : <Navigate to="/login" />} 
-            />
-              <Route 
-              path="/company-profile/admin" 
-              element={user?.role === 'supplier' || user?.role === 'buyer' || user?.role === 'admin' ? <CompanyProfileAdmin /> : <Navigate to="/tenders" />} 
-            />
-              <Route 
-              path="/direct-supply-request" 
-              element={user?.role === 'buyer' ? <DirectSupplyRequest /> : <Navigate to="/tenders" />} 
-            />
-              <Route 
-              path="/my-supply-requests" 
-              element={user?.role === 'buyer' ? <MySupplyRequests /> : <Navigate to="/tenders" />} 
-            />
-              <Route 
-              path="/supplier-requests" 
-              element={user?.role === 'supplier' ? <SupplierRequests /> : <Navigate to="/tenders" />} 
-            />
-              <Route 
-              path="/supplier-reviews/:supplierId" 
-              element={user ? <SupplierReviews /> : <Navigate to="/login" />} 
-            />
-              <Route 
-              path="/inbox" 
-              element={user ? <Inbox /> : <Navigate to="/login" />} 
-            />
-              <Route 
-              path="/compose" 
-              element={user ? <Compose /> : <Navigate to="/login" />} 
-            />
-              <Route 
-              path="/message/:messageId" 
-              element={user ? <MessageDetail /> : <Navigate to="/login" />} 
-            />
-              <Route 
-              path="/purchase-orders" 
-              element={user ? <PurchaseOrders /> : <Navigate to="/login" />} 
-            />
-              <Route 
-              path="/mfa-setup" 
-              element={user ? <MFASetup /> : <Navigate to="/login" />} 
-            />
+                        {/* Admin Routes (Redirect to Super Admin) */}
+                        <Route path="/admin" element={<Navigate to="/super-admin/dashboard" />} />
+                        <Route
+                          path="/admin/audit-logs"
+                          element={<Navigate to="/super-admin/audit-logs" />}
+                        />
+                        <Route
+                          path="/admin/health"
+                          element={<Navigate to="/super-admin/health" />}
+                        />
+                        <Route
+                          path="/admin/archive"
+                          element={<Navigate to="/super-admin/archive" />}
+                        />
+                        <Route path="/admin/users" element={<Navigate to="/super-admin/users" />} />
+                        <Route
+                          path="/user-management"
+                          element={
+                            user?.role === 'super_admin' ? (
+                              <UserManagement />
+                            ) : (
+                              <Navigate to="/tenders" />
+                            )
+                          }
+                        />
 
-              {/* Par défaut */}
-              <Route path="*" element={<Navigate to="/tenders" />} />
-            </Routes>
-          </Suspense>
-            </Box>
-          </Box>
+                        {/* Email Notifications */}
+                        <Route
+                          path="/email-notifications"
+                          element={
+                            user?.role === 'super_admin' ? (
+                              <EmailNotifications />
+                            ) : (
+                              <Navigate to="/tenders" />
+                            )
+                          }
+                        />
 
-        <Box component="footer" sx={{ backgroundColor: '#F9F9F9', borderTop: '1px solid #E0E0E0', padding: '20px', textAlign: 'center', fontSize: '13px', color: '#616161' }}>
-          &copy; 2025 MyNet.tn - Système de Gestion des Appels d'Offres et des Achats
-        </Box>
-            </Box>
-          </Router>
-            </SuperAdminProvider>
-          </DarkModeProvider>
-        </ThemeProvider>
-      </ErrorBoundary>
-    );
-  }
+                        {/* Profil et Sécurité */}
+                        <Route
+                          path="/profile"
+                          element={user ? <Profile user={user} /> : <Navigate to="/login" />}
+                        />
+                        <Route
+                          path="/company-profile"
+                          element={user ? <CompanyProfile /> : <Navigate to="/login" />}
+                        />
+                        <Route
+                          path="/company-profile/admin"
+                          element={
+                            user?.role === 'supplier' ||
+                            user?.role === 'buyer' ||
+                            user?.role === 'admin' ? (
+                              <CompanyProfileAdmin />
+                            ) : (
+                              <Navigate to="/tenders" />
+                            )
+                          }
+                        />
+                        <Route
+                          path="/direct-supply-request"
+                          element={
+                            user?.role === 'buyer' ? (
+                              <DirectSupplyRequest />
+                            ) : (
+                              <Navigate to="/tenders" />
+                            )
+                          }
+                        />
+                        <Route
+                          path="/my-supply-requests"
+                          element={
+                            user?.role === 'buyer' ? (
+                              <MySupplyRequests />
+                            ) : (
+                              <Navigate to="/tenders" />
+                            )
+                          }
+                        />
+                        <Route
+                          path="/supplier-requests"
+                          element={
+                            user?.role === 'supplier' ? (
+                              <SupplierRequests />
+                            ) : (
+                              <Navigate to="/tenders" />
+                            )
+                          }
+                        />
+                        <Route
+                          path="/supplier-reviews/:supplierId"
+                          element={user ? <SupplierReviews /> : <Navigate to="/login" />}
+                        />
+                        <Route
+                          path="/inbox"
+                          element={user ? <Inbox /> : <Navigate to="/login" />}
+                        />
+                        <Route
+                          path="/compose"
+                          element={user ? <Compose /> : <Navigate to="/login" />}
+                        />
+                        <Route
+                          path="/message/:messageId"
+                          element={user ? <MessageDetail /> : <Navigate to="/login" />}
+                        />
+                        <Route
+                          path="/purchase-orders"
+                          element={user ? <PurchaseOrders /> : <Navigate to="/login" />}
+                        />
+                        <Route
+                          path="/mfa-setup"
+                          element={user ? <MFASetup /> : <Navigate to="/login" />}
+                        />
+
+                        {/* Par défaut */}
+                        <Route path="*" element={<Navigate to="/tenders" />} />
+                      </Routes>
+                    </Suspense>
+                  </Box>
+                </Box>
+
+                <Box
+                  component="footer"
+                  sx={{
+                    backgroundColor: '#F9F9F9',
+                    borderTop: '1px solid #E0E0E0',
+                    padding: '20px',
+                    textAlign: 'center',
+                    fontSize: '13px',
+                    color: '#616161',
+                  }}
+                >
+                  &copy; 2025 MyNet.tn - Système de Gestion des Appels d'Offres et des Achats
+                </Box>
+              </Box>
+            </Router>
+          </SuperAdminProvider>
+        </DarkModeProvider>
+      </ThemeProvider>
+    </ErrorBoundary>
+  );
+}
 
 // Toast Container Component using AppContext
 function AppToastContainer() {
   const { toasts, removeToast } = useApp();
-  
+
   return <ToastContainer toasts={toasts} removeToast={removeToast} />;
 }
 
@@ -599,9 +948,9 @@ const globalBoxStyles = {
   '& .MuiBox-root': {
     '&[style*="display: flex"]': {
       // تطبيق default spacing
-      gap: 'inherit'
-    }
-  }
+      gap: 'inherit',
+    },
+  },
 };
 
 // Initialize logging and analytics

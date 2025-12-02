@@ -28,7 +28,7 @@ const AdminTableComposed = ({
   loading = false,
   onEdit,
   onDelete,
-  title = 'Data Table'
+  title = 'Data Table',
 }) => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -37,10 +37,8 @@ const AdminTableComposed = ({
   // Filter rows based on search
   const filteredRows = useMemo(() => {
     if (!searchTerm) return rows;
-    return rows.filter(row =>
-      Object.values(row).some(val =>
-        String(val).toLowerCase().includes(searchTerm.toLowerCase())
-      )
+    return rows.filter((row) =>
+      Object.values(row).some((val) => String(val).toLowerCase().includes(searchTerm.toLowerCase()))
     );
   }, [rows, searchTerm]);
 
@@ -71,7 +69,7 @@ const AdminTableComposed = ({
   return (
     <Box sx={{ width: '100%', mb: 2 }}>
       <AdminTableSearch value={searchTerm} onChange={handleSearch} />
-      
+
       <TableContainer component={Paper} sx={{ mt: 2, borderRadius: 1 }}>
         <Table stickyHeader>
           <AdminTableHeader columns={columns} />

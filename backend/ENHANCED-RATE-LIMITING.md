@@ -3,7 +3,7 @@
 **Date:** November 23, 2025  
 **Status:** ✅ PRODUCTION READY  
 **Coverage:** All endpoint types  
-**Strategy:** IP + Per-user + Sliding window  
+**Strategy:** IP + Per-user + Sliding window
 
 ---
 
@@ -12,21 +12,25 @@
 ### Rate Limiting Strategies
 
 **1. IP-Based Limiting**
+
 - Track requests by IP address
 - Prevent abuse from single IPs
 - Apply to unauthenticated requests
 
 **2. Per-User Limiting**
+
 - Track authenticated users
 - Different limits per user role
 - Prevents resource exhaustion by single users
 
 **3. Endpoint-Specific Limits**
+
 - Different limits for different operations
 - Stricter for sensitive operations (login, reset)
 - Relaxed for read operations
 
 **4. Sliding Window Algorithm**
+
 - Current request-count based
 - Automatic cleanup of old windows
 - Accurate rate tracking
@@ -38,17 +42,20 @@
 ### Authentication Endpoints
 
 **Login (Strict)**
+
 - Limit: 5 requests per 15 minutes
 - Key: IP address
 - Skip: Successful requests don't count
 - Purpose: Prevent brute force attacks
 
 **Register (Strict)**
+
 - Limit: 3 requests per 1 hour
 - Key: IP address
 - Purpose: Prevent spam registrations
 
 **Password Reset (Strict)**
+
 - Limit: 3 requests per 1 hour
 - Key: IP address
 - Purpose: Prevent password reset abuse
@@ -56,16 +63,19 @@
 ### Procurement Endpoints
 
 **Tender Creation (Per-User)**
+
 - Limit: 10 per hour
 - Key: User ID (authenticated only)
 - Purpose: Prevent spam tenders
 
 **Offer Submission (Per-User)**
+
 - Limit: 20 per hour
 - Key: User ID (authenticated only)
 - Purpose: Prevent offer spam
 
 **Message Sending (Per-User)**
+
 - Limit: 10 per minute
 - Key: User ID (authenticated only)
 - Purpose: Prevent message flooding
@@ -73,11 +83,13 @@
 ### Search & Export
 
 **Search Endpoints**
+
 - Limit: 30 per minute
 - Key: User ID (or IP)
 - Purpose: Prevent search abuse
 
 **Export Endpoints**
+
 - Limit: 5 per hour
 - Key: User ID (or IP)
 - Purpose: Prevent resource exhaustion
@@ -85,11 +97,13 @@
 ### General API
 
 **General Endpoints**
+
 - Limit: 100 per 15 minutes
 - Key: IP address
 - Purpose: Standard rate limiting
 
 **API Endpoints**
+
 - Limit: 60 per minute (per user/IP)
 - Key: User ID or IP
 - Purpose: Prevent general abuse
@@ -143,6 +157,7 @@ GET /api/admin/rate-limit-stats
 ```
 
 Response:
+
 ```json
 {
   "totalTrackedKeys": 245,
@@ -184,21 +199,25 @@ DELETE /api/admin/rate-limit-clear
 ## ✨ Features
 
 ✅ **Flexible Configuration**
+
 - Easy to add new limits
 - Per-endpoint customization
 - Dynamic window sizes
 
 ✅ **Accurate Tracking**
+
 - Per-user tracking
 - Per-IP tracking
 - Combined metrics
 
 ✅ **Production Ready**
+
 - Memory efficient
 - Automatic cleanup
 - No external dependencies
 
 ✅ **Transparent**
+
 - Clear rate limit headers
 - Informative error messages
 - User-friendly responses
@@ -208,6 +227,7 @@ DELETE /api/admin/rate-limit-clear
 ## 🔐 Security Benefits
 
 **Prevents:**
+
 - ✅ Brute force login attacks
 - ✅ DDoS attacks
 - ✅ Spam submissions
@@ -216,6 +236,7 @@ DELETE /api/admin/rate-limit-clear
 - ✅ API abuse
 
 **Protects:**
+
 - ✅ Database from overload
 - ✅ Server resources
 - ✅ Legitimate users
@@ -245,12 +266,14 @@ When rate limit exceeded:
 ## 🎯 Best Practices
 
 ### For API Users
+
 - Implement exponential backoff
 - Respect rate limit headers
 - Cache responses when possible
 - Use webhooks instead of polling
 
 ### For Administrators
+
 - Monitor rate limit metrics
 - Adjust limits based on usage
 - Whitelist trusted services
@@ -270,15 +293,18 @@ When rate limit exceeded:
 ## 🚀 Deployment Considerations
 
 ### Development
+
 - Looser limits for testing
 - Easy debugging with headers
 
 ### Production
+
 - Stricter limits for protection
 - Monitor abuse patterns
 - Adjust based on real usage
 
 ### Scaling
+
 - Limits scale with user count
 - Memory efficient
 - Works with load balancers
@@ -288,4 +314,3 @@ When rate limit exceeded:
 **Status:** 🟢 **ENHANCED RATE LIMITING READY FOR PRODUCTION**
 
 All endpoints now have intelligent rate limiting with per-user tracking, multiple time windows, and comprehensive metrics.
-

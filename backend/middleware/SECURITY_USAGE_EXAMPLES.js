@@ -12,17 +12,18 @@ const { sanitizationMiddleware } = require('./inputSanitization');
 const { tokenIntegrityMiddleware, blacklistToken } = require('./tokenIntegrityMiddleware');
 
 // Login endpoint - rate limited + sanitized
-router.post('/api/auth/login',
+router.post(
+  '/api/auth/login',
   authLimiter,
   sanitizationMiddleware({
     email: { type: 'email' },
-    password: { type: 'string' }
+    password: { type: 'string' },
   }),
   async (req, res) => {
     try {
       // Input is already sanitized
       const { email, password } = req.body;
-      
+
       // Authenticate user
       const token = await authenticateUser(email, password);
       res.json({ success: true, token });
@@ -33,30 +34,28 @@ router.post('/api/auth/login',
 );
 
 // Logout endpoint - revoke token
-router.post('/api/auth/logout',
-  tokenIntegrityMiddleware(),
-  (req, res) => {
-    const token = req.headers.authorization?.substring(7);
-    if (token) {
-      blacklistToken(token);  // Revoke the token
-    }
-    res.json({ success: true, message: 'Logged out' });
+router.post('/api/auth/logout', tokenIntegrityMiddleware(), (req, res) => {
+  const token = req.headers.authorization?.substring(7);
+  if (token) {
+    blacklistToken(token); // Revoke the token
   }
-);
+  res.json({ success: true, message: 'Logged out' });
+});
 
 // ============================================================================
 // EXAMPLE 2: Create Tender - Protected Route with Full Security
 // ============================================================================
 
-router.post('/api/procurement/tenders',
-  tokenIntegrityMiddleware(['create_tender']),  // Require authentication + permission
+router.post(
+  '/api/procurement/tenders',
+  tokenIntegrityMiddleware(['create_tender']), // Require authentication + permission
   sanitizationMiddleware({
     title: { type: 'string' },
     description: { type: 'string' },
     budget: { type: 'number', min: 0 },
     closingDate: { type: 'string' },
     category: { type: 'string' },
-    attachments: { type: 'array', itemType: 'string' }
+    attachments: { type: 'array', itemType: 'string' },
   }),
   async (req, res) => {
     try {
@@ -65,10 +64,10 @@ router.post('/api/procurement/tenders',
       // 2. Authenticated (token validated)
       // 3. Authorized (has create_tender permission)
       // 4. Sanitized (all fields validated and cleaned)
-      
+
       const tenderData = req.body;
       const userId = req.user.id;
-      
+
       const tender = await createTender(userId, tenderData);
       res.json({ success: true, tender });
     } catch (error) {
@@ -81,13 +80,14 @@ router.post('/api/procurement/tenders',
 // EXAMPLE 3: Admin Routes with Role Verification
 // ============================================================================
 
-router.get('/api/admin/users',
-  tokenIntegrityMiddleware(['admin_view_users']),  // Require admin permission
+router.get(
+  '/api/admin/users',
+  tokenIntegrityMiddleware(['admin_view_users']), // Require admin permission
   async (req, res) => {
     try {
       // User must have admin_view_users permission
       // Token is validated and user account is confirmed active
-      
+
       const users = await getAdminUsers();
       res.json({ success: true, users });
     } catch (error) {
@@ -97,18 +97,19 @@ router.get('/api/admin/users',
 );
 
 // Edit user - requires multiple permissions
-router.put('/api/admin/users/:userId',
+router.put(
+  '/api/admin/users/:userId',
   tokenIntegrityMiddleware(['admin_edit_users', 'admin_view_users']),
   sanitizationMiddleware({
     email: { type: 'email' },
     role: { type: 'string' },
-    status: { type: 'string' }
+    status: { type: 'string' },
   }),
   async (req, res) => {
     try {
       const { userId } = req.params;
       const userData = req.body;
-      
+
       // User must have both permissions
       const updated = await updateUser(userId, userData);
       res.json({ success: true, user: updated });
@@ -124,29 +125,30 @@ router.put('/api/admin/users/:userId',
 
 const { searchExportLimiter } = require('./rateLimitingConfig');
 
-router.post('/api/search/tenders',
+router.post(
+  '/api/search/tenders',
   tokenIntegrityMiddleware(),
-  searchExportLimiter,  // More restrictive rate limit
+  searchExportLimiter, // More restrictive rate limit
   sanitizationMiddleware({
     query: { type: 'string' },
     category: { type: 'string' },
     minBudget: { type: 'number', min: 0 },
     maxBudget: { type: 'number' },
-    page: { type: 'number', min: 1 }
+    page: { type: 'number', min: 1 },
   }),
   async (req, res) => {
     try {
       const { query, category, minBudget, maxBudget, page } = req.body;
-      
+
       // Input is sanitized and rate limited
       const results = await searchTenders({
         query,
         category,
         minBudget,
         maxBudget,
-        page
+        page,
       });
-      
+
       res.json({ success: true, results });
     } catch (error) {
       res.status(500).json({ success: false, error: error.message });
@@ -160,12 +162,13 @@ router.post('/api/search/tenders',
 
 const { uploadLimiter } = require('./rateLimitingConfig');
 
-router.post('/api/upload',
+router.post(
+  '/api/upload',
   tokenIntegrityMiddleware(),
-  uploadLimiter,  // 5 uploads per 10 minutes
+  uploadLimiter, // 5 uploads per 10 minutes
   sanitizationMiddleware({
     filename: { type: 'string' },
-    mimeType: { type: 'string' }
+    mimeType: { type: 'string' },
   }),
   async (req, res) => {
     try {
@@ -184,13 +187,14 @@ router.post('/api/upload',
 
 const { paymentLimiter } = require('./rateLimitingConfig');
 
-router.post('/api/payment/process',
+router.post(
+  '/api/payment/process',
   tokenIntegrityMiddleware(),
-  paymentLimiter,  // 5 attempts per hour
+  paymentLimiter, // 5 attempts per hour
   sanitizationMiddleware({
     amount: { type: 'number', min: 0.01 },
     currency: { type: 'string' },
-    orderId: { type: 'string' }
+    orderId: { type: 'string' },
   }),
   async (req, res) => {
     try {
@@ -244,34 +248,34 @@ app.use((err, req, res, next) => {
       success: false,
       error: 'Too many requests',
       code: 'RATE_LIMIT_EXCEEDED',
-      retryAfter: err.rateLimit?.resetTime
+      retryAfter: err.rateLimit?.resetTime,
     });
   }
-  
+
   if (err.code === 'INVALID_INPUT') {
     // Input validation failed
     return res.status(400).json({
       success: false,
       error: err.message,
-      code: 'INVALID_INPUT'
+      code: 'INVALID_INPUT',
     });
   }
-  
+
   if (err.code === 'PERMISSION_DENIED') {
     // User lacks required permissions
     return res.status(403).json({
       success: false,
       error: 'Insufficient permissions',
       code: 'PERMISSION_DENIED',
-      required: err.missing
+      required: err.missing,
     });
   }
-  
+
   // Generic error
   res.status(500).json({
     success: false,
     error: 'Internal server error',
-    code: 'INTERNAL_ERROR'
+    code: 'INTERNAL_ERROR',
   });
 });
 

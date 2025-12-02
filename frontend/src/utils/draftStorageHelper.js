@@ -19,13 +19,13 @@ export const autosaveDraft = (draftKey, data) => {
 
     const storageKey = `${DRAFT_STORAGE_KEY}${draftKey}`;
     const timestampKey = `${DRAFT_TIMESTAMP_KEY}${draftKey}`;
-    
+
     const serialized = JSON.stringify(data);
     const sizeKB = (new Blob([serialized]).size / 1024).toFixed(2);
-    
+
     localStorage.setItem(storageKey, serialized);
     localStorage.setItem(timestampKey, new Date().toISOString());
-    
+
     console.log(`✅ Draft saved: ${draftKey} (${sizeKB}KB)`);
     return true;
   } catch (err) {
@@ -53,30 +53,30 @@ export const recoverDraft = (draftKey) => {
 
     const storageKey = `${DRAFT_STORAGE_KEY}${draftKey}`;
     const timestampKey = `${DRAFT_TIMESTAMP_KEY}${draftKey}`;
-    
+
     const savedData = localStorage.getItem(storageKey);
     const savedTimestamp = localStorage.getItem(timestampKey);
-    
+
     if (!savedData) {
       console.log(`ℹ️ No draft found: ${draftKey}`);
       return null;
     }
-    
+
     // Check if draft is expired
     if (savedTimestamp) {
       const savedDate = new Date(savedTimestamp);
       const expiryDate = new Date(savedDate.getTime() + DRAFT_EXPIRY_DAYS * 24 * 60 * 60 * 1000);
-      
+
       if (new Date() > expiryDate) {
         console.warn(`⏰ Draft expired: ${draftKey} (${savedDate.toLocaleString()})`);
         clearDraft(draftKey);
         return null;
       }
-      
+
       const daysSaved = Math.floor((Date.now() - savedDate) / (24 * 60 * 60 * 1000));
       console.log(`✅ Draft recovered: ${draftKey} (saved ${daysSaved} day(s) ago)`);
     }
-    
+
     const parsed = JSON.parse(savedData);
     return parsed;
   } catch (err) {
@@ -95,7 +95,7 @@ export const clearDraft = (draftKey) => {
     if (!draftKey) return;
     const storageKey = `${DRAFT_STORAGE_KEY}${draftKey}`;
     const timestampKey = `${DRAFT_TIMESTAMP_KEY}${draftKey}`;
-    
+
     localStorage.removeItem(storageKey);
     localStorage.removeItem(timestampKey);
     console.log(`🗑️ Draft cleared: ${draftKey}`);
@@ -114,7 +114,7 @@ const clearOldestDrafts = () => {
       // Sort by timestamp and remove oldest
       const sorted = drafts.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
       const toRemove = Math.ceil(drafts.length / 3); // Remove 33% oldest
-      
+
       for (let i = 0; i < toRemove && i < sorted.length; i++) {
         clearDraft(sorted[i].key);
       }
@@ -136,7 +136,7 @@ export const useAutoSave = (draftKey, data, intervalMs = 30000) => {
     const timer = setInterval(() => {
       autosaveDraft(draftKey, data);
     }, intervalMs);
-    
+
     return () => clearInterval(timer);
   }, [draftKey, data]);
 };
@@ -155,11 +155,11 @@ export const getAllDrafts = () => {
         const timestampKey = `${DRAFT_TIMESTAMP_KEY}${draftKey}`;
         const timestamp = localStorage.getItem(timestampKey);
         const data = localStorage.getItem(key);
-        
+
         drafts.push({
           key: draftKey,
           timestamp: timestamp ? new Date(timestamp) : null,
-          size: data ? data.length : 0
+          size: data ? data.length : 0,
         });
       }
     }
@@ -174,5 +174,5 @@ export default {
   recoverDraft,
   clearDraft,
   useAutoSave,
-  getAllDrafts
+  getAllDrafts,
 };

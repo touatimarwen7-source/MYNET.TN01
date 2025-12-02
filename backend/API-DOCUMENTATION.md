@@ -3,18 +3,20 @@
 **Date:** November 23, 2025  
 **Status:** ✅ PRODUCTION READY  
 **Coverage:** 95+ Endpoints  
-**Format:** OpenAPI 3.0  
+**Format:** OpenAPI 3.0
 
 ---
 
 ## 🌐 Access API Documentation
 
 ### Interactive Swagger UI
+
 ```
 http://localhost:3000/api-docs
 ```
 
 ### OpenAPI Specification (JSON)
+
 ```
 http://localhost:3000/api-spec.json
 ```
@@ -24,6 +26,7 @@ http://localhost:3000/api-spec.json
 ## 🎯 What's Documented
 
 ### Authentication (6 endpoints)
+
 - ✅ POST /api/auth/login
 - ✅ POST /api/auth/register
 - ✅ POST /api/auth/logout
@@ -32,6 +35,7 @@ http://localhost:3000/api-spec.json
 - ✅ POST /api/auth/mfa/verify
 
 ### Procurement (25+ endpoints)
+
 - ✅ GET /api/tenders
 - ✅ POST /api/tenders
 - ✅ GET /api/tenders/:id
@@ -42,24 +46,28 @@ http://localhost:3000/api-spec.json
 - ✅ POST /api/purchase-orders
 
 ### Analytics (8+ endpoints)
+
 - ✅ GET /api/analytics/dashboard
 - ✅ GET /api/analytics/trends
 - ✅ GET /api/stats/users
 - ✅ GET /api/stats/tenders
 
 ### Admin Operations (15+ endpoints)
+
 - ✅ GET /api/admin/users
 - ✅ GET /api/admin/statistics
 - ✅ GET /api/admin/audit-logs
 - ✅ POST /api/admin/settings
 
 ### Messaging (10+ endpoints)
+
 - ✅ GET /api/messages
 - ✅ POST /api/messages
 - ✅ PUT /api/messages/:id/read
 - ✅ GET /api/notifications
 
 ### More Endpoints (30+ more)
+
 - Reviews & Ratings
 - Company Profiles
 - Advanced Search
@@ -72,12 +80,14 @@ http://localhost:3000/api-spec.json
 ## 🔑 Authentication
 
 ### Using Bearer Token
+
 1. Click **"Authorize"** button in Swagger UI
 2. Enter JWT token: `Bearer <your-token>`
 3. Click **"Authorize"**
 4. All requests automatically include token
 
 ### Getting a Token
+
 ```bash
 POST /api/auth/login
 {
@@ -97,6 +107,7 @@ Response:
 ## 📝 Common Endpoints
 
 ### 1. Login
+
 ```bash
 POST /api/auth/login
 Content-Type: application/json
@@ -108,6 +119,7 @@ Content-Type: application/json
 ```
 
 **Response:**
+
 ```json
 {
   "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9...",
@@ -121,6 +133,7 @@ Content-Type: application/json
 ```
 
 ### 2. Create Tender
+
 ```bash
 POST /api/tenders
 Authorization: Bearer <token>
@@ -136,6 +149,7 @@ Content-Type: application/json
 ```
 
 **Response:**
+
 ```json
 {
   "id": 123,
@@ -147,12 +161,14 @@ Content-Type: application/json
 ```
 
 ### 3. List Tenders
+
 ```bash
 GET /api/tenders?status=open&limit=20&offset=0
 Authorization: Bearer <token>
 ```
 
 **Response:**
+
 ```json
 {
   "data": [
@@ -173,6 +189,7 @@ Authorization: Bearer <token>
 ```
 
 ### 4. Submit Offer
+
 ```bash
 POST /api/offers
 Authorization: Bearer <token>
@@ -187,12 +204,14 @@ Content-Type: application/json
 ```
 
 ### 5. Get Analytics
+
 ```bash
 GET /api/analytics/dashboard?period=month
 Authorization: Bearer <token>
 ```
 
 **Response:**
+
 ```json
 {
   "period": "month",
@@ -215,16 +234,19 @@ Authorization: Bearer <token>
 ## 🔍 API Features
 
 ### Smart Caching
+
 - All GET endpoints cached automatically
 - See `X-Cache: HIT/MISS` header
 - Configurable TTL per endpoint
 
 ### Rate Limiting
+
 - General: 100 requests per 15 minutes
 - Login: 5 requests per 15 minutes
 - Per-user rate limits enforced
 
 ### Response Headers
+
 ```
 X-Cache: HIT/MISS/MISS           # Cache status
 X-Cache-TTL: 600                 # Time to live
@@ -234,6 +256,7 @@ X-Request-ID: uuid               # Request tracking
 ```
 
 ### Error Responses
+
 ```json
 {
   "status": 400,
@@ -252,12 +275,14 @@ X-Request-ID: uuid               # Request tracking
 ## 📊 Performance Metrics
 
 ### Response Times
+
 - **Cached (Redis):** 15-25ms
 - **Cached (Memory):** 5-10ms
 - **Database:** 200-300ms
 - **Average:** 20-30ms
 
 ### System Capacity
+
 - **Concurrent Users:** 1000+
 - **Throughput:** 10000+ req/s
 - **Cache Hit Rate:** 85%+
@@ -268,6 +293,7 @@ X-Request-ID: uuid               # Request tracking
 ## 🛠️ Tools & Testing
 
 ### Using Curl
+
 ```bash
 # Login
 curl -X POST http://localhost:3000/api/auth/login \
@@ -282,17 +308,19 @@ curl -X POST http://localhost:3000/api/tenders \
 ```
 
 ### Using Postman
+
 1. Import OpenAPI spec: `/api-spec.json`
 2. Set up Bearer token authentication
 3. Start testing endpoints
 
 ### Using API Client (JavaScript)
+
 ```javascript
 const response = await fetch('http://localhost:3000/api/tenders', {
   headers: {
-    'Authorization': 'Bearer ' + token,
-    'Content-Type': 'application/json'
-  }
+    Authorization: 'Bearer ' + token,
+    'Content-Type': 'application/json',
+  },
 });
 const data = await response.json();
 ```
@@ -302,6 +330,7 @@ const data = await response.json();
 ## 📚 Schema Definitions
 
 ### User Schema
+
 ```json
 {
   "id": 1,
@@ -317,6 +346,7 @@ const data = await response.json();
 ```
 
 ### Tender Schema
+
 ```json
 {
   "id": 1,
@@ -334,6 +364,7 @@ const data = await response.json();
 ```
 
 ### Offer Schema
+
 ```json
 {
   "id": 1,
@@ -352,11 +383,13 @@ const data = await response.json();
 ## 🔐 Security
 
 ### Authentication Methods
+
 - JWT tokens (Bearer)
 - HTTP-only cookies
 - MFA support (SMS, TOTP)
 
 ### Security Headers
+
 - CORS enabled
 - CSRF protection
 - XSS prevention
@@ -364,6 +397,7 @@ const data = await response.json();
 - SQL injection prevention
 
 ### Rate Limiting
+
 - IP-based rate limiting
 - Per-user rate limiting
 - Dynamic rate adjustment
@@ -373,16 +407,19 @@ const data = await response.json();
 ## 📞 Support
 
 ### API Documentation
+
 - Swagger UI: http://localhost:3000/api-docs
 - OpenAPI Spec: http://localhost:3000/api-spec.json
 - This guide: /API-DOCUMENTATION.md
 
 ### Health Check
+
 ```bash
 curl http://localhost:3000/health
 ```
 
 ### Cache Statistics
+
 ```bash
 curl http://localhost:3000/api/cache/stats
 ```
@@ -392,4 +429,3 @@ curl http://localhost:3000/api/cache/stats
 **Status:** 🟢 **API DOCUMENTATION READY FOR PRODUCTION**
 
 All 95+ endpoints are fully documented and accessible via Swagger UI.
-

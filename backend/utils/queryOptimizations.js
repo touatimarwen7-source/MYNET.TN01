@@ -1,6 +1,6 @@
 /**
  * Query Optimization Guide - Prevent N+1 Queries
- * 
+ *
  * Pattern Examples:
  */
 

@@ -196,7 +196,7 @@ export const Icons = {
 // Composant wrapper pour les icônes
 export const Icon = ({ name, size = 24, className = '' }) => {
   const IconComponent = Icons[name];
-  
+
   if (!IconComponent) {
     return null;
   }

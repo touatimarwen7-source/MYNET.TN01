@@ -18,7 +18,14 @@ import StepSeven from '../components/TenderSteps/StepSeven';
  * @param {number} props.totalCriteria - The total of evaluation criteria.
  * @returns {JSX.Element | null}
  */
-const TenderStepRenderer = ({ currentStep, formData, setFormData, handleChange, loading, totalCriteria }) => {
+const TenderStepRenderer = ({
+  currentStep,
+  formData,
+  setFormData,
+  handleChange,
+  loading,
+  totalCriteria,
+}) => {
   switch (currentStep) {
     case 0:
       return <StepOne formData={formData} handleChange={handleChange} loading={loading} />;
@@ -29,7 +36,14 @@ const TenderStepRenderer = ({ currentStep, formData, setFormData, handleChange, 
     case 3:
       return <StepFour formData={formData} setFormData={setFormData} loading={loading} />;
     case 4:
-      return <StepFive formData={formData} handleChange={handleChange} totalCriteria={totalCriteria} loading={loading} />;
+      return (
+        <StepFive
+          formData={formData}
+          handleChange={handleChange}
+          totalCriteria={totalCriteria}
+          loading={loading}
+        />
+      );
     case 5:
       return <StepDocuments formData={formData} setFormData={setFormData} loading={loading} />;
     case 6:

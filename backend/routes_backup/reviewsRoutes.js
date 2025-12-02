@@ -46,27 +46,33 @@ router.post('/', authMiddleware, async (req, res) => {
     }
 
     // Insert review
-    const result = await db.query(`
+    const result = await db.query(
+      `
       INSERT INTO reviews (
         reviewer_id, reviewed_user_id, tender_id, rating, comment
       )
       VALUES ($1, $2, $3, $4, $5)
       RETURNING *
-    `, [reviewer_id, reviewed_user_id, tender_id, rating, comment]);
+    `,
+      [reviewer_id, reviewed_user_id, tender_id, rating, comment]
+    );
 
     // ISSUE FIX #8: Atomic transaction + exclude deleted reviews
-    await db.query(`
+    await db.query(
+      `
       UPDATE users 
       SET average_rating = (
         SELECT AVG(rating) FROM reviews WHERE reviewed_user_id = $1 AND is_deleted = false
       )
       WHERE id = $1
-    `, [reviewed_user_id]);
+    `,
+      [reviewed_user_id]
+    );
 
     res.status(201).json({
       success: true,
       message: 'Review created successfully',
-      data: result.rows[0]
+      data: result.rows[0],
     });
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -79,7 +85,8 @@ router.get('/user/:userId', authMiddleware, async (req, res) => {
     const { userId } = req.params;
     const db = req.app.get('db');
 
-    const result = await db.query(`
+    const result = await db.query(
+      `
       SELECT 
         r.*,
         u.company_name as reviewer_company,
@@ -89,7 +96,9 @@ router.get('/user/:userId', authMiddleware, async (req, res) => {
       WHERE r.reviewed_user_id = $1 AND r.is_deleted = false
       ORDER BY r.created_at DESC
       LIMIT 50
-    `, [userId]);
+    `,
+      [userId]
+    );
 
     res.json(result.rows);
   } catch (error) {
@@ -102,7 +111,8 @@ router.get('/my-reviews', authMiddleware, async (req, res) => {
   try {
     const db = req.app.get('db');
 
-    const result = await db.query(`
+    const result = await db.query(
+      `
       SELECT 
         r.*,
         u.company_name as reviewer_company,
@@ -111,7 +121,9 @@ router.get('/my-reviews', authMiddleware, async (req, res) => {
       LEFT JOIN users u ON r.reviewer_id = u.id
       WHERE r.reviewed_user_id = $1 AND r.is_deleted = false
       ORDER BY r.created_at DESC
-    `, [req.user.id]);
+    `,
+      [req.user.id]
+    );
 
     res.json(result.rows);
   } catch (error) {
@@ -124,7 +136,8 @@ router.get('/my-given', authMiddleware, async (req, res) => {
   try {
     const db = req.app.get('db');
 
-    const result = await db.query(`
+    const result = await db.query(
+      `
       SELECT 
         r.*,
         u.company_name as reviewed_company,
@@ -133,7 +146,9 @@ router.get('/my-given', authMiddleware, async (req, res) => {
       LEFT JOIN users u ON r.reviewed_user_id = u.id
       WHERE r.reviewer_id = $1
       ORDER BY r.created_at DESC
-    `, [req.user.id]);
+    `,
+      [req.user.id]
+    );
 
     res.json(result.rows);
   } catch (error) {
@@ -150,10 +165,7 @@ router.put('/:reviewId', authMiddleware, async (req, res) => {
     const db = req.app.get('db');
 
     // Check if review belongs to reviewer
-    const checkResult = await db.query(
-      'SELECT * FROM reviews WHERE id = $1',
-      [reviewId]
-    );
+    const checkResult = await db.query('SELECT * FROM reviews WHERE id = $1', [reviewId]);
 
     if (checkResult.rows.length === 0) {
       return res.status(404).json({ error: 'Review not found' });
@@ -164,26 +176,32 @@ router.put('/:reviewId', authMiddleware, async (req, res) => {
       return res.status(403).json({ error: 'Unauthorized' });
     }
 
-    const result = await db.query(`
+    const result = await db.query(
+      `
       UPDATE reviews 
       SET rating = $1, comment = $2, updated_at = CURRENT_TIMESTAMP
       WHERE id = $3
       RETURNING *
-    `, [rating, comment, reviewId]);
+    `,
+      [rating, comment, reviewId]
+    );
 
     // Update user average rating
-    await db.query(`
+    await db.query(
+      `
       UPDATE users 
       SET average_rating = (
         SELECT AVG(rating) FROM reviews WHERE reviewed_user_id = $1
       )
       WHERE id = $1
-    `, [review.reviewed_user_id]);
+    `,
+      [review.reviewed_user_id]
+    );
 
     res.json({
       success: true,
       message: 'Review updated successfully',
-      data: result.rows[0]
+      data: result.rows[0],
     });
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -196,10 +214,7 @@ router.delete('/:reviewId', authMiddleware, async (req, res) => {
     const { reviewId } = req.params;
     const db = req.app.get('db');
 
-    const checkResult = await db.query(
-      'SELECT * FROM reviews WHERE id = $1',
-      [reviewId]
-    );
+    const checkResult = await db.query('SELECT * FROM reviews WHERE id = $1', [reviewId]);
 
     if (checkResult.rows.length === 0) {
       return res.status(404).json({ error: 'Review not found' });
@@ -207,24 +222,30 @@ router.delete('/:reviewId', authMiddleware, async (req, res) => {
 
     const review = checkResult.rows[0];
     // ISSUE FIX #2: Add authorization check
-    if (review.reviewer_id !== req.user.id && req.user.role !== 'admin' && req.user.role !== 'super_admin') {
-      return res.status(403).json({ error: 'Unauthorized - only reviewer or admin or super_admin can delete' });
+    if (
+      review.reviewer_id !== req.user.id &&
+      req.user.role !== 'admin' &&
+      req.user.role !== 'super_admin'
+    ) {
+      return res
+        .status(403)
+        .json({ error: 'Unauthorized - only reviewer or admin or super_admin can delete' });
     }
 
     // ISSUE FIX #5: Soft delete instead of hard delete
-    await db.query(
-      'UPDATE reviews SET is_deleted = true WHERE id = $1',
-      [reviewId]
-    );
+    await db.query('UPDATE reviews SET is_deleted = true WHERE id = $1', [reviewId]);
 
     // Update user average rating (exclude deleted reviews)
-    await db.query(`
+    await db.query(
+      `
       UPDATE users 
       SET average_rating = (
         SELECT AVG(rating) FROM reviews WHERE reviewed_user_id = $1 AND is_deleted = false
       )
       WHERE id = $1
-    `, [review.reviewed_user_id]);
+    `,
+      [review.reviewed_user_id]
+    );
 
     res.json({ success: true, message: 'Review deleted' });
   } catch (error) {

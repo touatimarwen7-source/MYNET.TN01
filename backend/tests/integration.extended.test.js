@@ -4,7 +4,6 @@
  */
 
 describe('Extended Integration Tests - 20+ Tests', () => {
-
   describe('Complete Tender Workflow', () => {
     test('should create tender end-to-end', () => {
       const tender = { title: 'Test', budget: 5000 };
@@ -20,7 +19,7 @@ describe('Extended Integration Tests - 20+ Tests', () => {
       const offers = [
         { id: 1, score: 8 },
         { id: 2, score: 9 },
-        { id: 3, score: 7 }
+        { id: 3, score: 7 },
       ];
       expect(offers.length).toBe(3);
     });
@@ -115,5 +114,4 @@ describe('Extended Integration Tests - 20+ Tests', () => {
       expect(poolSize).toBeGreaterThan(0);
     });
   });
-
 });

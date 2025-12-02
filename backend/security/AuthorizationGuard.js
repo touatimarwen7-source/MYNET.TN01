@@ -2,67 +2,67 @@ const KeyManagementService = require('./KeyManagementService');
 const { hasPermission } = require('../config/Roles');
 
 class AuthorizationGuard {
-    authenticateToken(req, res, next) {
-        const authHeader = req.headers['authorization'];
-        const token = authHeader && authHeader.split(' ')[1];
+  authenticateToken(req, res, next) {
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1];
 
-        if (!token) {
-            return res.status(401).json({ 
-                error: 'Accès refusé. Aucun jeton fourni.' 
-            });
-        }
-
-        try {
-            const decoded = KeyManagementService.verifyAccessToken(token);
-            // Ensure userId is always available (handle both 'id' and 'userId' fields)
-            req.user = {
-                ...decoded,
-                id: decoded.id || decoded.userId,
-                userId: decoded.userId || decoded.id
-            };
-            next();
-        } catch (error) {
-            return res.status(403).json({ 
-                error: 'Jeton invalide ou expiré.' 
-            });
-        }
+    if (!token) {
+      return res.status(401).json({
+        error: 'Accès refusé. Aucun jeton fourni.',
+      });
     }
 
-    requirePermission(permission) {
-        return (req, res, next) => {
-            if (!req.user) {
-                return res.status(401).json({ 
-                    error: 'Authentification requise.' 
-                });
-            }
-
-            if (!hasPermission(req.user.role, permission)) {
-                return res.status(403).json({ 
-                    error: 'Vous n\'avez pas la permission d\'effectuer cette action.' 
-                });
-            }
-
-            next();
-        };
+    try {
+      const decoded = KeyManagementService.verifyAccessToken(token);
+      // Ensure userId is always available (handle both 'id' and 'userId' fields)
+      req.user = {
+        ...decoded,
+        id: decoded.id || decoded.userId,
+        userId: decoded.userId || decoded.id,
+      };
+      next();
+    } catch (error) {
+      return res.status(403).json({
+        error: 'Jeton invalide ou expiré.',
+      });
     }
+  }
 
-    requireRole(allowedRoles) {
-        return (req, res, next) => {
-            if (!req.user) {
-                return res.status(401).json({ 
-                    error: 'Authentification requise.' 
-                });
-            }
+  requirePermission(permission) {
+    return (req, res, next) => {
+      if (!req.user) {
+        return res.status(401).json({
+          error: 'Authentification requise.',
+        });
+      }
 
-            if (!allowedRoles.includes(req.user.role)) {
-                return res.status(403).json({ 
-                    error: 'Vous n\'avez pas accès à cette ressource.' 
-                });
-            }
+      if (!hasPermission(req.user.role, permission)) {
+        return res.status(403).json({
+          error: "Vous n'avez pas la permission d'effectuer cette action.",
+        });
+      }
 
-            next();
-        };
-    }
+      next();
+    };
+  }
+
+  requireRole(allowedRoles) {
+    return (req, res, next) => {
+      if (!req.user) {
+        return res.status(401).json({
+          error: 'Authentification requise.',
+        });
+      }
+
+      if (!allowedRoles.includes(req.user.role)) {
+        return res.status(403).json({
+          error: "Vous n'avez pas accès à cette ressource.",
+        });
+      }
+
+      next();
+    };
+  }
 }
 
 module.exports = new AuthorizationGuard();

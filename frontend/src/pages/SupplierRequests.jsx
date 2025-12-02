@@ -111,12 +111,15 @@ export default function SupplierRequests() {
   };
 
   const filteredRequests = filterStatus
-    ? requests.filter(r => r.status === filterStatus)
+    ? requests.filter((r) => r.status === filterStatus)
     : requests;
 
   if (loading) {
     return (
-      <Container maxWidth="lg" sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '60vh' }}>
+      <Container
+        maxWidth="lg"
+        sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '60vh' }}
+      >
         <CircularProgress sx={{ color: theme.palette.primary.main }} />
       </Container>
     );
@@ -125,11 +128,18 @@ export default function SupplierRequests() {
   return (
     <Box sx={{ backgroundColor: '#f9f9f9', paddingY: '40px', minHeight: '100vh' }}>
       <Container maxWidth="lg">
-        <Typography variant="h4" sx={{ fontWeight: 600, color: theme.palette.primary.main, marginBottom: '30px' }}>
+        <Typography
+          variant="h4"
+          sx={{ fontWeight: 600, color: theme.palette.primary.main, marginBottom: '30px' }}
+        >
           Demandes Reçues
         </Typography>
 
-        {error && <Alert severity="error" sx={{ marginBottom: '20px' }}>{error}</Alert>}
+        {error && (
+          <Alert severity="error" sx={{ marginBottom: '20px' }}>
+            {error}
+          </Alert>
+        )}
 
         <Card sx={{ marginBottom: '20px' }}>
           <CardContent>
@@ -182,7 +192,9 @@ export default function SupplierRequests() {
                   <TableRow key={request.id} sx={{ '&:hover': { backgroundColor: '#f5f5f5' } }}>
                     <TableCell sx={{ fontWeight: 500 }}>{request.buyer_company}</TableCell>
                     <TableCell>{request.title}</TableCell>
-                    <TableCell>{request.quantity} {request.unit}</TableCell>
+                    <TableCell>
+                      {request.quantity} {request.unit}
+                    </TableCell>
                     <TableCell sx={{ fontWeight: 600, color: theme.palette.primary.main }}>
                       {parseFloat(request.budget).toFixed(3)}
                     </TableCell>
@@ -233,9 +245,7 @@ export default function SupplierRequests() {
         )}
 
         <Dialog open={openDialog} onClose={handleCloseDialog} maxWidth="sm" fullWidth>
-          <DialogTitle>
-            {dialogAction === 'accepted' ? 'قبول الطلب' : 'رفض الطلب'}
-          </DialogTitle>
+          <DialogTitle>{dialogAction === 'accepted' ? 'قبول الطلب' : 'رفض الطلب'}</DialogTitle>
           <DialogContent sx={{ paddingY: '20px' }}>
             {selectedRequest && (
               <Box>
@@ -263,7 +273,7 @@ export default function SupplierRequests() {
               onClick={handleUpdateStatus}
               variant="contained"
               sx={{
-                backgroundColor: dialogAction === 'accepted' ? '#4caf50' : '#f44336'
+                backgroundColor: dialogAction === 'accepted' ? '#4caf50' : '#f44336',
               }}
             >
               {dialogAction === 'accepted' ? 'قبول' : 'رفض'}

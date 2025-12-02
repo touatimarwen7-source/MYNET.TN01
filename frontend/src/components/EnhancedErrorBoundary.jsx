@@ -15,7 +15,7 @@ class EnhancedErrorBoundary extends React.Component {
       hasError: false,
       error: null,
       errorInfo: null,
-      errorCount: 0
+      errorCount: 0,
     };
   }
 
@@ -24,10 +24,10 @@ class EnhancedErrorBoundary extends React.Component {
   }
 
   componentDidCatch(error, errorInfo) {
-    this.setState(prevState => ({
+    this.setState((prevState) => ({
       error,
       errorInfo,
-      errorCount: prevState.errorCount + 1
+      errorCount: prevState.errorCount + 1,
     }));
 
     // Log to backend
@@ -38,7 +38,7 @@ class EnhancedErrorBoundary extends React.Component {
     try {
       await fetch('/api/admin/error-stats', {
         method: 'GET',
-        headers: { 'Content-Type': 'application/json' }
+        headers: { 'Content-Type': 'application/json' },
       });
 
       // Debug: removed;
@@ -51,36 +51,47 @@ class EnhancedErrorBoundary extends React.Component {
     this.setState({
       hasError: false,
       error: null,
-      errorInfo: null
+      errorInfo: null,
     });
   };
 
   render() {
     if (this.state.hasError) {
       return (
-        <Box sx={{ p: 3, minHeight: '100vh', backgroundColor: institutionalTheme.palette.background.default }}>
+        <Box
+          sx={{
+            p: 3,
+            minHeight: '100vh',
+            backgroundColor: institutionalTheme.palette.background.default,
+          }}
+        >
           <Card sx={{ maxWidth: 600, margin: '0 auto', marginTop: 5 }}>
             <CardContent>
               <Alert severity="error" sx={{ mb: 2 }}>
                 ❌ Oups! Une erreur s'est produite
               </Alert>
 
-              <Typography variant="h6" sx={{ mb: 2, color: institutionalTheme.palette.text.primary }}>
+              <Typography
+                variant="h6"
+                sx={{ mb: 2, color: institutionalTheme.palette.text.primary }}
+              >
                 Détails de l'erreur:
               </Typography>
 
-              <Box sx={{
-                backgroundColor: institutionalTheme.palette.background.default,
-                p: 2,
-                borderRadius: 1,
-                mb: 2,
-                maxHeight: 200,
-                overflow: 'auto',
-                fontFamily: 'monospace',
-                fontSize: '12px',
-                color: institutionalTheme.palette.error.main,
-                border: `1px solid ${institutionalTheme.palette.divider}`
-              }}>
+              <Box
+                sx={{
+                  backgroundColor: institutionalTheme.palette.background.default,
+                  p: 2,
+                  borderRadius: 1,
+                  mb: 2,
+                  maxHeight: 200,
+                  overflow: 'auto',
+                  fontFamily: 'monospace',
+                  fontSize: '12px',
+                  color: institutionalTheme.palette.error.main,
+                  border: `1px solid ${institutionalTheme.palette.divider}`,
+                }}
+              >
                 <div>{this.state.error && this.state.error.toString()}</div>
                 {this.state.errorInfo && (
                   <details style={{ cursor: 'pointer', marginTop: 10 }}>
@@ -92,8 +103,11 @@ class EnhancedErrorBoundary extends React.Component {
                 )}
               </Box>
 
-              <Typography sx={{ mb: 3, color: institutionalTheme.palette.text.secondary, fontSize: '14px' }}>
-                Erreur #{this.state.errorCount} | Cette erreur a été enregistrée automatiquement pour diagnostic.
+              <Typography
+                sx={{ mb: 3, color: institutionalTheme.palette.text.secondary, fontSize: '14px' }}
+              >
+                Erreur #{this.state.errorCount} | Cette erreur a été enregistrée automatiquement
+                pour diagnostic.
               </Typography>
 
               <Box sx={{ display: 'flex', gap: 2 }}>
@@ -104,10 +118,7 @@ class EnhancedErrorBoundary extends React.Component {
                 >
                   🔄 Réessayer
                 </Button>
-                <Button
-                  variant="outlined"
-                  onClick={() => window.location.href = '/'}
-                >
+                <Button variant="outlined" onClick={() => (window.location.href = '/')}>
                   🏠 Accueil
                 </Button>
               </Box>

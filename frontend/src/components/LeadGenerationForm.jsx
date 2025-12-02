@@ -1,6 +1,17 @@
 import { THEME_COLORS } from './themeHelpers';
 import { useState } from 'react';
-import { Box, Container, Typography, TextField, Button, Stack, FormControlLabel, Radio, RadioGroup, Alert } from '@mui/material';
+import {
+  Box,
+  Container,
+  Typography,
+  TextField,
+  Button,
+  Stack,
+  FormControlLabel,
+  Radio,
+  RadioGroup,
+  Alert,
+} from '@mui/material';
 import institutionalTheme from '../theme/theme';
 
 export default function LeadGenerationForm() {
@@ -10,7 +21,7 @@ export default function LeadGenerationForm() {
     email: '',
     company: '',
     phone: '',
-    formType: 'demo'
+    formType: 'demo',
   });
 
   const [submitted, setSubmitted] = useState(false);
@@ -18,14 +29,14 @@ export default function LeadGenerationForm() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     try {
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      await new Promise((resolve) => setTimeout(resolve, 1500));
       setSubmitted(true);
       setFormData({ name: '', email: '', company: '', phone: '', formType: 'demo' });
       setTimeout(() => setSubmitted(false), 5000);
@@ -36,14 +47,25 @@ export default function LeadGenerationForm() {
   };
 
   return (
-    <Box sx={{ backgroundColor: THEME_COLORS.bgPaper, paddingY: '60px', borderTop: '1px solid #E0E0E0', borderBottom: '1px solid #E0E0E0' }}>
+    <Box
+      sx={{
+        backgroundColor: THEME_COLORS.bgPaper,
+        paddingY: '60px',
+        borderTop: '1px solid #E0E0E0',
+        borderBottom: '1px solid #E0E0E0',
+      }}
+    >
       <Container maxWidth="sm">
         <Box sx={{ textAlign: 'center', marginBottom: '32px' }}>
-          <Typography variant="h4" sx={{ fontWeight: 600, color: theme.palette.text.primary, marginBottom: '12px' }}>
+          <Typography
+            variant="h4"
+            sx={{ fontWeight: 600, color: theme.palette.text.primary, marginBottom: '12px' }}
+          >
             Restez Connecté avec MyNet.tn
           </Typography>
           <Typography sx={{ fontSize: '14px', color: THEME_COLORS.textSecondary }}>
-            Recevez les dernières mises à jour, conseils exclusifs et offres spéciales directement dans votre boîte mail
+            Recevez les dernières mises à jour, conseils exclusifs et offres spéciales directement
+            dans votre boîte mail
           </Typography>
         </Box>
 
@@ -56,11 +78,7 @@ export default function LeadGenerationForm() {
 
           <Stack spacing={2} sx={{ marginBottom: '24px' }}>
             <RadioGroup row value={formData.formType} onChange={handleChange} name="formType">
-              <FormControlLabel
-                value="demo"
-                control={<Radio />}
-                label="Demander une Démo"
-              />
+              <FormControlLabel value="demo" control={<Radio />} label="Demander une Démo" />
               <FormControlLabel
                 value="newsletter"
                 control={<Radio />}
@@ -109,17 +127,21 @@ export default function LeadGenerationForm() {
             />
           </Stack>
 
-          <Button
-            type="submit"
-            variant="contained"
-            fullWidth
-            disabled={loading}
-          >
+          <Button type="submit" variant="contained" fullWidth disabled={loading}>
             {loading ? 'Envoi en cours...' : 'Envoyer ma Demande'}
           </Button>
 
-          <Typography sx={{ fontSize: '12px', color: THEME_COLORS.textSecondary, textAlign: 'center', marginTop: '16px', lineHeight: 1.6 }}>
-            Nous respectons votre confidentialité. Aucun spam. Vous pouvez vous désabonner à tout moment.
+          <Typography
+            sx={{
+              fontSize: '12px',
+              color: THEME_COLORS.textSecondary,
+              textAlign: 'center',
+              marginTop: '16px',
+              lineHeight: 1.6,
+            }}
+          >
+            Nous respectons votre confidentialité. Aucun spam. Vous pouvez vous désabonner à tout
+            moment.
           </Typography>
         </Box>
       </Container>

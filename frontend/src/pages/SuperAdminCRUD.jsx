@@ -50,7 +50,7 @@ export default function SuperAdminCRUD() {
   const theme = institutionalTheme;
   const navigate = useNavigate();
   const context = useContext(SuperAdminContext);
-  
+
   if (!context) {
     return (
       <Container>
@@ -92,7 +92,12 @@ export default function SuperAdminCRUD() {
   const [selectedItem, setSelectedItem] = useState(null);
   const [message, setMessage] = useState('');
   const [messageType, setMessageType] = useState('');
-  const [formData, setFormData] = useState({ title: '', slug: '', description: '', status: 'brouillon' });
+  const [formData, setFormData] = useState({
+    title: '',
+    slug: '',
+    description: '',
+    status: 'brouillon',
+  });
 
   // Load data on mount
   useEffect(() => {
@@ -212,7 +217,7 @@ export default function SuperAdminCRUD() {
       setMessageType('error');
       return;
     }
-    
+
     await uploadFile({
       name: formData.title,
       size_bytes: 0,
@@ -236,7 +241,7 @@ export default function SuperAdminCRUD() {
       setMessageType('error');
       return;
     }
-    
+
     await createDocument({
       name: formData.title,
       description: formData.description || '',
@@ -313,7 +318,9 @@ export default function SuperAdminCRUD() {
                   <TableCell sx={{ fontWeight: 600 }}>Slug</TableCell>
                   <TableCell sx={{ fontWeight: 600 }}>Statut</TableCell>
                   <TableCell sx={{ fontWeight: 600 }}>Modifiée le</TableCell>
-                  <TableCell sx={{ fontWeight: 600 }} align="right">Actions</TableCell>
+                  <TableCell sx={{ fontWeight: 600 }} align="right">
+                    Actions
+                  </TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -322,26 +329,41 @@ export default function SuperAdminCRUD() {
                     <TableCell>{page.title}</TableCell>
                     <TableCell>{page.slug}</TableCell>
                     <TableCell>
-                      <Box sx={{
-                        display: 'inline-block',
-                        padding: '4px 8px',
-                        borderRadius: '4px',
-                        backgroundColor: page.status === 'publié' ? '#e8f5e9' : '#fff3e0',
-                        color: page.status === 'publié' ? '#2e7d32' : '#e65100',
-                        fontSize: '12px',
-                      }}>
+                      <Box
+                        sx={{
+                          display: 'inline-block',
+                          padding: '4px 8px',
+                          borderRadius: '4px',
+                          backgroundColor: page.status === 'publié' ? '#e8f5e9' : '#fff3e0',
+                          color: page.status === 'publié' ? '#2e7d32' : '#e65100',
+                          fontSize: '12px',
+                        }}
+                      >
                         {page.status}
                       </Box>
                     </TableCell>
                     <TableCell>{page.updated_at || page.updatedAt}</TableCell>
                     <TableCell align="right">
-                      <Button size="small" onClick={() => handleViewPage(page)} startIcon={<VisibilityIcon />}>
+                      <Button
+                        size="small"
+                        onClick={() => handleViewPage(page)}
+                        startIcon={<VisibilityIcon />}
+                      >
                         Voir
                       </Button>
-                      <Button size="small" onClick={() => handleEditPage(page)} startIcon={<EditIcon />}>
+                      <Button
+                        size="small"
+                        onClick={() => handleEditPage(page)}
+                        startIcon={<EditIcon />}
+                      >
                         Éditer
                       </Button>
-                      <Button size="small" color="error" onClick={() => handleDeletePage(page)} startIcon={<DeleteIcon />}>
+                      <Button
+                        size="small"
+                        color="error"
+                        onClick={() => handleDeletePage(page)}
+                        startIcon={<DeleteIcon />}
+                      >
                         Supprimer
                       </Button>
                     </TableCell>
@@ -373,7 +395,9 @@ export default function SuperAdminCRUD() {
                   <TableCell sx={{ fontWeight: 600 }}>Type</TableCell>
                   <TableCell sx={{ fontWeight: 600 }}>Taille</TableCell>
                   <TableCell sx={{ fontWeight: 600 }}>Téléchargé le</TableCell>
-                  <TableCell sx={{ fontWeight: 600 }} align="right">Actions</TableCell>
+                  <TableCell sx={{ fontWeight: 600 }} align="right">
+                    Actions
+                  </TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -384,10 +408,19 @@ export default function SuperAdminCRUD() {
                     <TableCell>{file.size_bytes || file.size}</TableCell>
                     <TableCell>{file.created_at || file.uploadedAt}</TableCell>
                     <TableCell align="right">
-                      <Button size="small" onClick={() => handleViewFile(file)} startIcon={<VisibilityIcon />}>
+                      <Button
+                        size="small"
+                        onClick={() => handleViewFile(file)}
+                        startIcon={<VisibilityIcon />}
+                      >
                         Voir
                       </Button>
-                      <Button size="small" color="error" onClick={() => handleDeleteFile(file)} startIcon={<DeleteIcon />}>
+                      <Button
+                        size="small"
+                        color="error"
+                        onClick={() => handleDeleteFile(file)}
+                        startIcon={<DeleteIcon />}
+                      >
                         Supprimer
                       </Button>
                     </TableCell>
@@ -419,7 +452,9 @@ export default function SuperAdminCRUD() {
                   <TableCell sx={{ fontWeight: 600 }}>Versions</TableCell>
                   <TableCell sx={{ fontWeight: 600 }}>Modifiée le</TableCell>
                   <TableCell sx={{ fontWeight: 600 }}>Statut</TableCell>
-                  <TableCell sx={{ fontWeight: 600 }} align="right">Actions</TableCell>
+                  <TableCell sx={{ fontWeight: 600 }} align="right">
+                    Actions
+                  </TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -429,19 +464,26 @@ export default function SuperAdminCRUD() {
                     <TableCell>{doc.versions || 1}</TableCell>
                     <TableCell>{doc.last_updated || doc.lastUpdated}</TableCell>
                     <TableCell>
-                      <Box sx={{
-                        display: 'inline-block',
-                        padding: '4px 8px',
-                        borderRadius: '4px',
-                        backgroundColor: doc.status === 'actif' ? '#e8f5e9' : '#ffebee',
-                        color: doc.status === 'actif' ? '#2e7d32' : '#c62828',
-                        fontSize: '12px',
-                      }}>
+                      <Box
+                        sx={{
+                          display: 'inline-block',
+                          padding: '4px 8px',
+                          borderRadius: '4px',
+                          backgroundColor: doc.status === 'actif' ? '#e8f5e9' : '#ffebee',
+                          color: doc.status === 'actif' ? '#2e7d32' : '#c62828',
+                          fontSize: '12px',
+                        }}
+                      >
                         {doc.status}
                       </Box>
                     </TableCell>
                     <TableCell align="right">
-                      <Button size="small" color="error" onClick={() => handleDeleteDocument(doc)} startIcon={<DeleteIcon />}>
+                      <Button
+                        size="small"
+                        color="error"
+                        onClick={() => handleDeleteDocument(doc)}
+                        startIcon={<DeleteIcon />}
+                      >
                         Supprimer
                       </Button>
                     </TableCell>
@@ -463,7 +505,9 @@ export default function SuperAdminCRUD() {
                 <TableCell sx={{ fontWeight: 600 }}>Nom</TableCell>
                 <TableCell sx={{ fontWeight: 600 }}>Rôle</TableCell>
                 <TableCell sx={{ fontWeight: 600 }}>Statut</TableCell>
-                <TableCell sx={{ fontWeight: 600 }} align="right">Actions</TableCell>
+                <TableCell sx={{ fontWeight: 600 }} align="right">
+                  Actions
+                </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -485,14 +529,16 @@ export default function SuperAdminCRUD() {
                     </FormControl>
                   </TableCell>
                   <TableCell>
-                    <Box sx={{
-                      display: 'inline-block',
-                      padding: '4px 8px',
-                      borderRadius: '4px',
-                      backgroundColor: user.is_active ? '#e8f5e9' : '#ffebee',
-                      color: user.is_active ? '#2e7d32' : '#c62828',
-                      fontSize: '12px',
-                    }}>
+                    <Box
+                      sx={{
+                        display: 'inline-block',
+                        padding: '4px 8px',
+                        borderRadius: '4px',
+                        backgroundColor: user.is_active ? '#e8f5e9' : '#ffebee',
+                        color: user.is_active ? '#2e7d32' : '#c62828',
+                        fontSize: '12px',
+                      }}
+                    >
                       {user.is_active ? 'Actif' : 'Bloqué'}
                     </Box>
                   </TableCell>
@@ -502,7 +548,11 @@ export default function SuperAdminCRUD() {
                         Bloquer
                       </Button>
                     ) : (
-                      <Button size="small" color="success" onClick={() => handleUnblockUser(user.id)}>
+                      <Button
+                        size="small"
+                        color="success"
+                        onClick={() => handleUnblockUser(user.id)}
+                      >
                         Débloquer
                       </Button>
                     )}
@@ -515,7 +565,11 @@ export default function SuperAdminCRUD() {
       </TabPanel>
 
       {/* CREATE/EDIT PAGE DIALOG */}
-      <Dialog open={openDialog && (dialogType === 'createPage' || dialogType === 'editPage')} maxWidth="sm" fullWidth>
+      <Dialog
+        open={openDialog && (dialogType === 'createPage' || dialogType === 'editPage')}
+        maxWidth="sm"
+        fullWidth
+      >
         <DialogTitle sx={{ fontWeight: 600, color: theme.palette.primary.main }}>
           {dialogType === 'createPage' ? 'Créer une Page' : 'Éditer la Page'}
         </DialogTitle>

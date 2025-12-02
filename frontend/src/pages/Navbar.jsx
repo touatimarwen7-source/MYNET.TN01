@@ -1,14 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import {
-  AppBar,
-  Toolbar,
-  Typography,
-  IconButton,
-  Badge,
-  Popover,
-  Box,
-} from '@mui/material';
+import { AppBar, Toolbar, Typography, IconButton, Badge, Popover, Box } from '@mui/material';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import axios from '../api/axiosConfig'; // ✅ استخدام النسخة المُعدّة
 import { useWebSocket } from '../contexts/WebSocketContext'; // 1. استيراد hook الـ WebSocket
@@ -33,7 +25,7 @@ const Navbar = () => {
         setUnreadCount(response.data.unreadCount || 0);
       } catch (error) {
         // يمكنك التعامل مع الخطأ هنا، مثلاً طباعته في الكونسول
-        console.error("Failed to fetch unread notifications count:", error);
+        console.error('Failed to fetch unread notifications count:', error);
       }
     };
 
@@ -68,9 +60,9 @@ const Navbar = () => {
       const fetchedNotifications = response.data.notifications || [];
       setNotifications(fetchedNotifications);
       // تحديث العدد غير المقروء من البيانات الجديدة
-      setUnreadCount(fetchedNotifications.filter(n => !n.read_at).length);
+      setUnreadCount(fetchedNotifications.filter((n) => !n.read_at).length);
     } catch (error) {
-      console.error("Failed to fetch notifications:", error);
+      console.error('Failed to fetch notifications:', error);
     } finally {
       setLoadingNotifications(false);
     }
@@ -87,9 +79,9 @@ const Navbar = () => {
     <>
       <AppBar position="static" sx={{ backgroundColor: institutionalTheme.palette.primary.main }}>
         <Toolbar>
-          <Typography 
-            variant="h6" 
-            component="div" 
+          <Typography
+            variant="h6"
+            component="div"
             sx={{ flexGrow: 1, cursor: 'pointer' }}
             onClick={() => navigate('/')}
           >
@@ -126,8 +118,8 @@ const Navbar = () => {
         }}
       >
         <Box sx={{ width: '400px', maxHeight: '500px' }}>
-          <NotificationCenter 
-            notifications={notifications} 
+          <NotificationCenter
+            notifications={notifications}
             loading={loadingNotifications}
             unreadCount={unreadCount}
             fetchNotifications={fetchLatestNotifications}

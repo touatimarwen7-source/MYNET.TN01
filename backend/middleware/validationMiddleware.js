@@ -70,7 +70,14 @@ const validators = {
 
   // Boolean validation
   isValidBoolean: (value) => {
-    return value === true || value === false || value === 'true' || value === 'false' || value === '1' || value === '0';
+    return (
+      value === true ||
+      value === false ||
+      value === 'true' ||
+      value === 'false' ||
+      value === '1' ||
+      value === '0'
+    );
   },
 
   // URL validation
@@ -139,7 +146,7 @@ const sanitizers = {
       "'": '&#x27;',
       '/': '&#x2F;',
     };
-    return str.replace(/[&<>"'/]/g, char => map[char]);
+    return str.replace(/[&<>"'/]/g, (char) => map[char]);
   },
 
   // Trim and truncate string
@@ -161,7 +168,7 @@ const sanitizers = {
       /sp_/i,
     ];
     let sanitized = str;
-    dangerousPatterns.forEach(pattern => {
+    dangerousPatterns.forEach((pattern) => {
       sanitized = sanitized.replace(pattern, '');
     });
     return sanitized;
@@ -247,7 +254,7 @@ function sanitizeObject(obj, depth = 0) {
   if (typeof obj !== 'object' || obj === null) return obj;
 
   if (Array.isArray(obj)) {
-    return obj.map(item => sanitizeObject(item, depth + 1));
+    return obj.map((item) => sanitizeObject(item, depth + 1));
   }
 
   const sanitized = {};
@@ -274,7 +281,7 @@ function containsSuspiciousPatterns(input) {
     /xp_|sp_/i,
     /<script|javascript:|onerror=|onload=/i,
   ];
-  return suspiciousPatterns.some(pattern => pattern.test(input));
+  return suspiciousPatterns.some((pattern) => pattern.test(input));
 }
 
 /**

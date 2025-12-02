@@ -26,7 +26,7 @@ import {
   CircularProgress,
   Chip,
   Switch,
-  FormControlLabel
+  FormControlLabel,
 } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -38,17 +38,68 @@ import { errorHandler } from '../../utils/errorHandler';
 
 // Fallback data for features
 const FALLBACK_FEATURES = [
-  { id: 1, feature_name: 'ERP Integration', feature_key: 'erp_integration', category: 'advanced', is_enabled: false },
-  { id: 2, feature_name: 'Payment Processing', feature_key: 'payment_processing', category: 'payment', is_enabled: true },
-  { id: 3, feature_name: 'WebSocket Notifications', feature_key: 'websocket_notifications', category: 'realtime', is_enabled: true },
-  { id: 4, feature_name: 'AI Bid Analysis', feature_key: 'ai_bid_analysis', category: 'advanced', is_enabled: false },
-  { id: 5, feature_name: 'Advanced Analytics', feature_key: 'advanced_analytics', category: 'analytics', is_enabled: true }
+  {
+    id: 1,
+    feature_name: 'ERP Integration',
+    feature_key: 'erp_integration',
+    category: 'advanced',
+    is_enabled: false,
+  },
+  {
+    id: 2,
+    feature_name: 'Payment Processing',
+    feature_key: 'payment_processing',
+    category: 'payment',
+    is_enabled: true,
+  },
+  {
+    id: 3,
+    feature_name: 'WebSocket Notifications',
+    feature_key: 'websocket_notifications',
+    category: 'realtime',
+    is_enabled: true,
+  },
+  {
+    id: 4,
+    feature_name: 'AI Bid Analysis',
+    feature_key: 'ai_bid_analysis',
+    category: 'advanced',
+    is_enabled: false,
+  },
+  {
+    id: 5,
+    feature_name: 'Advanced Analytics',
+    feature_key: 'advanced_analytics',
+    category: 'analytics',
+    is_enabled: true,
+  },
 ];
 
 const FALLBACK_PLANS = [
-  { id: 1, name: 'Plan de Base', description: 'Pour commencer', price: 0, duration_days: 30, is_active: true },
-  { id: 2, name: 'Plan Argent', description: 'Pour la croissance', price: 99, duration_days: 30, is_active: true },
-  { id: 3, name: 'Plan Or', description: 'Pour les entreprises', price: 299, duration_days: 30, is_active: true }
+  {
+    id: 1,
+    name: 'Plan de Base',
+    description: 'Pour commencer',
+    price: 0,
+    duration_days: 30,
+    is_active: true,
+  },
+  {
+    id: 2,
+    name: 'Plan Argent',
+    description: 'Pour la croissance',
+    price: 99,
+    duration_days: 30,
+    is_active: true,
+  },
+  {
+    id: 3,
+    name: 'Plan Or',
+    description: 'Pour les entreprises',
+    price: 299,
+    duration_days: 30,
+    is_active: true,
+  },
 ];
 
 export default function ServicesManager() {
@@ -68,7 +119,7 @@ export default function ServicesManager() {
     feature_name: '',
     feature_key: '',
     category: 'advanced',
-    description: ''
+    description: '',
   });
 
   // Plan dialogs
@@ -78,7 +129,7 @@ export default function ServicesManager() {
     name: '',
     description: '',
     price: 0,
-    duration_days: 30
+    duration_days: 30,
   });
 
   useEffect(() => {
@@ -91,7 +142,7 @@ export default function ServicesManager() {
       setErrorMsg('');
       const [featuresRes, plansRes] = await Promise.all([
         adminAPI.features.getAll(),
-        adminAPI.subscriptions.getPlans()
+        adminAPI.subscriptions.getPlans(),
       ]);
       setFeatures(featuresRes.features || featuresRes);
       setPlans(plansRes || []);
@@ -110,13 +161,13 @@ export default function ServicesManager() {
       setSaving(true);
       setErrorMsg('');
       const action = currentStatus ? 'disable' : 'enable';
-      const featureKey = features.find(f => f.id === featureId)?.feature_key;
-      
+      const featureKey = features.find((f) => f.id === featureId)?.feature_key;
+
       await adminAPI.features[action](featureKey);
 
-      setFeatures(features.map(f =>
-        f.id === featureId ? { ...f, is_enabled: !currentStatus } : f
-      ));
+      setFeatures(
+        features.map((f) => (f.id === featureId ? { ...f, is_enabled: !currentStatus } : f))
+      );
       setSuccessMsg(`Service "${featureName}" ${!currentStatus ? 'activé' : 'désactivé'}`);
       setTimeout(() => setSuccessMsg(''), 3000);
     } catch (error) {
@@ -131,8 +182,12 @@ export default function ServicesManager() {
     <Box>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
         <Box>
-          <Typography variant="h6" sx={{ fontWeight: 600 }}>Services Généraux</Typography>
-          <Typography variant="caption" sx={{ color: '#616161' }}>{features.length} service(s)</Typography>
+          <Typography variant="h6" sx={{ fontWeight: 600 }}>
+            Services Généraux
+          </Typography>
+          <Typography variant="caption" sx={{ color: '#616161' }}>
+            {features.length} service(s)
+          </Typography>
         </Box>
       </Box>
 
@@ -140,11 +195,19 @@ export default function ServicesManager() {
         <Table>
           <TableHead sx={{ backgroundColor: '#F5F5F5' }}>
             <TableRow>
-              <TableCell sx={{ fontWeight: 600, color: theme.palette.text.primary }}>Service</TableCell>
+              <TableCell sx={{ fontWeight: 600, color: theme.palette.text.primary }}>
+                Service
+              </TableCell>
               <TableCell sx={{ fontWeight: 600, color: theme.palette.text.primary }}>Clé</TableCell>
-              <TableCell sx={{ fontWeight: 600, color: theme.palette.text.primary }}>Catégorie</TableCell>
-              <TableCell sx={{ fontWeight: 600, color: theme.palette.text.primary }}>État</TableCell>
-              <TableCell align="right" sx={{ fontWeight: 600, color: theme.palette.text.primary }}>Actions</TableCell>
+              <TableCell sx={{ fontWeight: 600, color: theme.palette.text.primary }}>
+                Catégorie
+              </TableCell>
+              <TableCell sx={{ fontWeight: 600, color: theme.palette.text.primary }}>
+                État
+              </TableCell>
+              <TableCell align="right" sx={{ fontWeight: 600, color: theme.palette.text.primary }}>
+                Actions
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -155,13 +218,20 @@ export default function ServicesManager() {
                 </TableCell>
               </TableRow>
             ) : (
-              features.map(feature => (
-                <TableRow key={feature.id} sx={{ '&:hover': { backgroundColor: theme.palette.background.default } }}>
+              features.map((feature) => (
+                <TableRow
+                  key={feature.id}
+                  sx={{ '&:hover': { backgroundColor: theme.palette.background.default } }}
+                >
                   <TableCell>
-                    <Typography sx={{ fontWeight: 500, fontSize: '14px' }}>{feature.feature_name}</Typography>
+                    <Typography sx={{ fontWeight: 500, fontSize: '14px' }}>
+                      {feature.feature_name}
+                    </Typography>
                   </TableCell>
                   <TableCell>
-                    <Typography sx={{ fontSize: '13px', color: '#616161', fontFamily: 'monospace' }}>
+                    <Typography
+                      sx={{ fontSize: '13px', color: '#616161', fontFamily: 'monospace' }}
+                    >
                       {feature.feature_key}
                     </Typography>
                   </TableCell>
@@ -174,14 +244,16 @@ export default function ServicesManager() {
                       size="small"
                       sx={{
                         backgroundColor: feature.is_enabled ? '#E8F5E9' : '#FFEBEE',
-                        color: feature.is_enabled ? '#2E7D32' : '#C62828'
+                        color: feature.is_enabled ? '#2E7D32' : '#C62828',
                       }}
                     />
                   </TableCell>
                   <TableCell align="right">
                     <IconButton
                       size="small"
-                      onClick={() => handleToggleFeature(feature.id, feature.is_enabled, feature.feature_name)}
+                      onClick={() =>
+                        handleToggleFeature(feature.id, feature.is_enabled, feature.feature_name)
+                      }
                       disabled={saving}
                       sx={{ color: feature.is_enabled ? '#2E7D32' : '#F57C00' }}
                     >
@@ -201,8 +273,12 @@ export default function ServicesManager() {
     <Box>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
         <Box>
-          <Typography variant="h6" sx={{ fontWeight: 600 }}>Plans d\'Abonnement</Typography>
-          <Typography variant="caption" sx={{ color: '#616161' }}>{plans.length} plan(s)</Typography>
+          <Typography variant="h6" sx={{ fontWeight: 600 }}>
+            Plans d\'Abonnement
+          </Typography>
+          <Typography variant="caption" sx={{ color: '#616161' }}>
+            {plans.length} plan(s)
+          </Typography>
         </Box>
         <Button
           variant="contained"
@@ -220,11 +296,14 @@ export default function ServicesManager() {
       </Box>
 
       <Grid container spacing={2}>
-        {plans.map(plan => (
+        {plans.map((plan) => (
           <Grid xs={12} sm={6} md={4} key={plan.id}>
             <Card sx={{ border: '1px solid #E0E0E0', boxShadow: 'none', height: '100%' }}>
               <CardContent>
-                <Typography variant="h6" sx={{ fontWeight: 600, mb: 1, color: theme.palette.primary.main }}>
+                <Typography
+                  variant="h6"
+                  sx={{ fontWeight: 600, mb: 1, color: theme.palette.primary.main }}
+                >
                   {plan.name}
                 </Typography>
                 <Typography variant="caption" sx={{ color: '#616161', display: 'block', mb: 2 }}>
@@ -245,14 +324,14 @@ export default function ServicesManager() {
                   sx={{
                     backgroundColor: plan.is_active ? '#E8F5E9' : '#FFEBEE',
                     color: plan.is_active ? '#2E7D32' : '#C62828',
-                    mb: 2
+                    mb: 2,
                   }}
                 />
                 <Box sx={{ display: 'flex', gap: 1 }}>
-                  <Button 
-                    size="small" 
-                    startIcon={<EditIcon />} 
-                    variant="outlined" 
+                  <Button
+                    size="small"
+                    startIcon={<EditIcon />}
+                    variant="outlined"
                     sx={{ flex: 1 }}
                     onClick={() => {
                       setEditingPlan(plan);
@@ -260,7 +339,7 @@ export default function ServicesManager() {
                         name: plan.name,
                         description: plan.description || '',
                         price: plan.price || 0,
-                        duration_days: plan.duration_days || 30
+                        duration_days: plan.duration_days || 30,
                       });
                       setOpenPlanDialog(true);
                     }}
@@ -268,14 +347,16 @@ export default function ServicesManager() {
                   >
                     Modifier
                   </Button>
-                  <Button 
-                    size="small" 
-                    startIcon={<DeleteIcon />} 
-                    variant="outlined" 
+                  <Button
+                    size="small"
+                    startIcon={<DeleteIcon />}
+                    variant="outlined"
                     sx={{ flex: 1, color: '#C62828', borderColor: '#C62828' }}
                     onClick={() => {
-                      if (window.confirm(`Êtes-vous sûr de vouloir supprimer le plan "${plan.name}"?`)) {
-                        setPlans(plans.filter(p => p.id !== plan.id));
+                      if (
+                        window.confirm(`Êtes-vous sûr de vouloir supprimer le plan "${plan.name}"?`)
+                      ) {
+                        setPlans(plans.filter((p) => p.id !== plan.id));
                         setSuccessMsg('Plan supprimé');
                         setTimeout(() => setSuccessMsg(''), 3000);
                       }
@@ -294,13 +375,25 @@ export default function ServicesManager() {
   );
 
   if (loading) {
-    return <Box sx={{ display: 'flex', justifyContent: 'center', py: 4 }}><CircularProgress /></Box>;
+    return (
+      <Box sx={{ display: 'flex', justifyContent: 'center', py: 4 }}>
+        <CircularProgress />
+      </Box>
+    );
   }
 
   return (
     <Box>
-      {successMsg && <Alert severity="success" sx={{ mb: 2 }}>{successMsg}</Alert>}
-      {errorMsg && <Alert severity="error" sx={{ mb: 2 }}>{errorMsg}</Alert>}
+      {successMsg && (
+        <Alert severity="success" sx={{ mb: 2 }}>
+          {successMsg}
+        </Alert>
+      )}
+      {errorMsg && (
+        <Alert severity="error" sx={{ mb: 2 }}>
+          {errorMsg}
+        </Alert>
+      )}
 
       <Box sx={{ backgroundColor: '#FFFFFF', borderRadius: '8px', border: '1px solid #E0E0E0' }}>
         <Tabs
@@ -316,9 +409,9 @@ export default function ServicesManager() {
               padding: '12px 16px',
               '&.Mui-selected': {
                 color: theme.palette.primary.main,
-                backgroundColor: '#F0F4FF'
-              }
-            }
+                backgroundColor: '#F0F4FF',
+              },
+            },
           }}
         >
           <Tab label="Services Généraux" sx={{ minWidth: 'auto' }} />

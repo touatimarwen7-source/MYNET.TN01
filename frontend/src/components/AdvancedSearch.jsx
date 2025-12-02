@@ -61,31 +61,11 @@ export default function AdvancedSearch() {
             Catégorie
           </Typography>
           <FormControl component="fieldset">
-            <RadioGroup
-              row
-              value={category}
-              onChange={(e) => setCategory(e.target.value)}
-            >
-              <FormControlLabel
-                value="tous"
-                control={<Radio />}
-                label="Tous"
-              />
-              <FormControlLabel
-                value="travaux"
-                control={<Radio />}
-                label="Travaux"
-              />
-              <FormControlLabel
-                value="services"
-                control={<Radio />}
-                label="Services"
-              />
-              <FormControlLabel
-                value="fournitures"
-                control={<Radio />}
-                label="Fournitures"
-              />
+            <RadioGroup row value={category} onChange={(e) => setCategory(e.target.value)}>
+              <FormControlLabel value="tous" control={<Radio />} label="Tous" />
+              <FormControlLabel value="travaux" control={<Radio />} label="Travaux" />
+              <FormControlLabel value="services" control={<Radio />} label="Services" />
+              <FormControlLabel value="fournitures" control={<Radio />} label="Fournitures" />
             </RadioGroup>
           </FormControl>
         </Box>
@@ -100,7 +80,9 @@ export default function AdvancedSearch() {
               onChange={(e) => setKeywords(e.target.value)}
               variant="outlined"
               InputProps={{
-                endAdornment: <SearchIcon sx={{ color: theme.palette.primary.main, marginRight: '8px' }} />,
+                endAdornment: (
+                  <SearchIcon sx={{ color: theme.palette.primary.main, marginRight: '8px' }} />
+                ),
               }}
             />
           </Grid>

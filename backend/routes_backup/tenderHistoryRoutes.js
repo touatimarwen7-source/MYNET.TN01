@@ -8,11 +8,14 @@ router.get('/tender/:tenderId', authMiddleware, async (req, res) => {
     const { tenderId } = req.params;
     const db = req.app.get('db');
 
-    const result = await db.query(`
+    const result = await db.query(
+      `
       SELECT * FROM tender_history 
       WHERE tender_id = $1 
       ORDER BY changed_at DESC
-    `, [tenderId]);
+    `,
+      [tenderId]
+    );
 
     res.json(result.rows);
   } catch (error) {
@@ -23,12 +26,14 @@ router.get('/tender/:tenderId', authMiddleware, async (req, res) => {
 // Log tender change (internal)
 const logTenderChange = async (db, tenderId, changeType, changedBy, details = {}) => {
   try {
-    await db.query(`
+    await db.query(
+      `
       INSERT INTO tender_history (tender_id, change_type, changed_by, details)
       VALUES ($1, $2, $3, $4)
-    `, [tenderId, changeType, changedBy, JSON.stringify(details)]);
-  } catch (error) {
-  }
+    `,
+      [tenderId, changeType, changedBy, JSON.stringify(details)]
+    );
+  } catch (error) {}
 };
 
 router.logTenderChange = logTenderChange;

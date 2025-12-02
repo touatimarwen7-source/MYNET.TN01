@@ -15,9 +15,9 @@ export function escapeHtml(text) {
     '<': '&lt;',
     '>': '&gt;',
     '"': '&quot;',
-    "'": '&#039;'
+    "'": '&#039;',
   };
-  return text.replace(/[&<>"']/g, m => map[m]);
+  return text.replace(/[&<>"']/g, (m) => map[m]);
 }
 
 // Vérification des permissions de l'utilisateur
@@ -27,7 +27,7 @@ export function hasPermission(userRole, requiredRole) {
     buyer: ['buyer', 'supplier'],
     supplier: ['supplier'],
     accountant: ['accountant'],
-    viewer: ['viewer']
+    viewer: ['viewer'],
   };
   return permissions[userRole]?.includes(requiredRole) || false;
 }
@@ -36,7 +36,7 @@ export function hasPermission(userRole, requiredRole) {
 // Timeout: 3 heures (10800000ms) - Basé sur les meilleures pratiques de sécurité pour les applications B2B
 export function setupInactivityTimer(timeout = 3 * 60 * 60 * 1000) {
   let inactivityTimer;
-  
+
   const resetTimer = () => {
     clearTimeout(inactivityTimer);
     inactivityTimer = setTimeout(() => {
@@ -48,9 +48,9 @@ export function setupInactivityTimer(timeout = 3 * 60 * 60 * 1000) {
   document.addEventListener('mousemove', resetTimer);
   document.addEventListener('keypress', resetTimer);
   document.addEventListener('click', resetTimer);
-  
+
   resetTimer();
-  
+
   return () => {
     document.removeEventListener('mousemove', resetTimer);
     document.removeEventListener('keypress', resetTimer);

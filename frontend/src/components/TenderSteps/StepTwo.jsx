@@ -6,9 +6,7 @@ export default function StepTwo({ formData, handleChange, loading }) {
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
       {/* Publication Date */}
       <Box>
-        <Typography sx={THEME_STYLES.label}>
-          Date de Publication *
-        </Typography>
+        <Typography sx={THEME_STYLES.label}>Date de Publication *</Typography>
         <TextField
           fullWidth
           type="datetime-local"
@@ -22,9 +20,7 @@ export default function StepTwo({ formData, handleChange, loading }) {
 
       {/* Deadline */}
       <Box>
-        <Typography sx={THEME_STYLES.label}>
-          Date de Clôture *
-        </Typography>
+        <Typography sx={THEME_STYLES.label}>Date de Clôture *</Typography>
         <TextField
           fullWidth
           type="datetime-local"
@@ -38,9 +34,7 @@ export default function StepTwo({ formData, handleChange, loading }) {
 
       {/* Opening Date */}
       <Box>
-        <Typography sx={THEME_STYLES.label}>
-          Date d'Ouverture
-        </Typography>
+        <Typography sx={THEME_STYLES.label}>Date d'Ouverture</Typography>
         <TextField
           fullWidth
           type="datetime-local"

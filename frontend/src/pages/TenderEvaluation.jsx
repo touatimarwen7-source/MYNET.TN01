@@ -129,7 +129,9 @@ export default function TenderEvaluation() {
 
   if (loading) {
     return (
-      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '60vh' }}>
+      <Box
+        sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '60vh' }}
+      >
         <CircularProgress sx={{ color: theme.palette.primary.main }} />
       </Box>
     );
@@ -149,7 +151,10 @@ export default function TenderEvaluation() {
           >
             Retour
           </Button>
-          <Typography variant="h2" sx={{ fontSize: '32px', fontWeight: 500, color: theme.palette.primary.main, mb: '8px' }}>
+          <Typography
+            variant="h2"
+            sx={{ fontSize: '32px', fontWeight: 500, color: theme.palette.primary.main, mb: '8px' }}
+          >
             📊 Évaluation des Offres
           </Typography>
           {tender && (
@@ -159,7 +164,12 @@ export default function TenderEvaluation() {
               </Typography>
               {tender.awardLevel && (
                 <Typography sx={{ fontSize: '12px', color: '#0056B3', fontWeight: 600 }}>
-                  🎯 Niveau de ترسية: {tender.awardLevel === 'lot' ? 'Par Lot' : tender.awardLevel === 'article' ? 'Par Article' : 'Global'}
+                  🎯 Niveau de ترسية:{' '}
+                  {tender.awardLevel === 'lot'
+                    ? 'Par Lot'
+                    : tender.awardLevel === 'article'
+                      ? 'Par Article'
+                      : 'Global'}
                 </Typography>
               )}
               {tender.lots && tender.lots.length > 0 && (
@@ -171,7 +181,11 @@ export default function TenderEvaluation() {
           )}
         </Box>
 
-        {error && <Alert severity="error" sx={{ mb: '24px' }}>{error}</Alert>}
+        {error && (
+          <Alert severity="error" sx={{ mb: '24px' }}>
+            {error}
+          </Alert>
+        )}
 
         {/* Criteria Weights */}
         <Card sx={{ border: '1px solid #E0E0E0', mb: '32px' }}>
@@ -215,7 +229,14 @@ export default function TenderEvaluation() {
                 {offers.map((offer) => (
                   <Paper key={offer.id} sx={{ p: '16px', border: '1px solid #E0E0E0' }}>
                     <Box sx={{ mb: '16px' }}>
-                      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', mb: '12px' }}>
+                      <Box
+                        sx={{
+                          display: 'flex',
+                          justifyContent: 'space-between',
+                          alignItems: 'start',
+                          mb: '12px',
+                        }}
+                      >
                         <Box>
                           <Typography sx={{ fontSize: '14px', fontWeight: 600, color: '#212121' }}>
                             {offer.supplier_name || 'N/A'}
@@ -245,11 +266,17 @@ export default function TenderEvaluation() {
                       <Stack spacing={2}>
                         {Object.entries(criteria).map(([key, criterion]) => (
                           <Box key={key}>
-                            <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: '8px' }}>
-                              <Typography sx={{ fontSize: '12px', fontWeight: 600, color: '#212121' }}>
+                            <Box
+                              sx={{ display: 'flex', justifyContent: 'space-between', mb: '8px' }}
+                            >
+                              <Typography
+                                sx={{ fontSize: '12px', fontWeight: 600, color: '#212121' }}
+                              >
                                 {criterion.label}
                               </Typography>
-                              <Typography sx={{ fontSize: '12px', color: '#0056B3', fontWeight: 600 }}>
+                              <Typography
+                                sx={{ fontSize: '12px', color: '#0056B3', fontWeight: 600 }}
+                              >
                                 {scores[offer.id]?.[key] || 0}/100
                               </Typography>
                             </Box>
@@ -312,15 +339,34 @@ export default function TenderEvaluation() {
                   <TableRow>
                     <TableCell sx={{ fontSize: '12px', fontWeight: 600 }}>Rang</TableCell>
                     <TableCell sx={{ fontSize: '12px', fontWeight: 600 }}>Fournisseur</TableCell>
-                    <TableCell align="right" sx={{ fontSize: '12px', fontWeight: 600 }}>Montant</TableCell>
-                    <TableCell align="right" sx={{ fontSize: '12px', fontWeight: 600 }}>Score</TableCell>
+                    <TableCell align="right" sx={{ fontSize: '12px', fontWeight: 600 }}>
+                      Montant
+                    </TableCell>
+                    <TableCell align="right" sx={{ fontSize: '12px', fontWeight: 600 }}>
+                      Score
+                    </TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
                   {ranking.map((offer, index) => (
-                    <TableRow key={offer.id} sx={{ backgroundColor: index === 0 ? '#E8F5E9' : 'inherit' }}>
-                      <TableCell sx={{ fontSize: '13px', fontWeight: 600, color: index === 0 ? '#2E7D32' : '#212121' }}>
-                        {index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : `${index + 1}.`}
+                    <TableRow
+                      key={offer.id}
+                      sx={{ backgroundColor: index === 0 ? '#E8F5E9' : 'inherit' }}
+                    >
+                      <TableCell
+                        sx={{
+                          fontSize: '13px',
+                          fontWeight: 600,
+                          color: index === 0 ? '#2E7D32' : '#212121',
+                        }}
+                      >
+                        {index === 0
+                          ? '🥇'
+                          : index === 1
+                            ? '🥈'
+                            : index === 2
+                              ? '🥉'
+                              : `${index + 1}.`}
                       </TableCell>
                       <TableCell sx={{ fontSize: '13px', color: '#212121' }}>
                         {offer.supplier_name || 'N/A'}
@@ -328,7 +374,10 @@ export default function TenderEvaluation() {
                       <TableCell align="right" sx={{ fontSize: '13px', color: '#212121' }}>
                         {parseFloat(offer.total_amount || 0).toFixed(2)} TND
                       </TableCell>
-                      <TableCell align="right" sx={{ fontSize: '13px', fontWeight: 600, color: '#0056B3' }}>
+                      <TableCell
+                        align="right"
+                        sx={{ fontSize: '13px', fontWeight: 600, color: '#0056B3' }}
+                      >
                         {offer.score}/100
                       </TableCell>
                     </TableRow>
@@ -341,7 +390,12 @@ export default function TenderEvaluation() {
       </Container>
 
       {/* Feedback Dialog */}
-      <Dialog open={feedbackDialog} onClose={() => setFeedbackDialog(false)} maxWidth="sm" fullWidth>
+      <Dialog
+        open={feedbackDialog}
+        onClose={() => setFeedbackDialog(false)}
+        maxWidth="sm"
+        fullWidth
+      >
         <DialogTitle sx={{ color: theme.palette.primary.main, fontWeight: 600 }}>
           Commentaires pour {selectedOffer?.supplier_name}
         </DialogTitle>

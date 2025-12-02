@@ -1,6 +1,6 @@
 /**
  * 🚀 Distributed Cache Middleware
- * 
+ *
  * Uses Redis for distributed caching with in-memory fallback
  */
 
@@ -20,11 +20,8 @@ function getTTLForRoute(path, method) {
   for (const [type, config] of Object.entries(CACHE_STRATEGY)) {
     if (config.Routes && Array.isArray(config.Routes)) {
       for (const route of config.Routes) {
-        const pattern = route
-          .replace(/:\w+/g, '[^/]+')
-          .replace(/\//g, '\\/')
-          .replace(/\*/g, '.*');
-        
+        const pattern = route.replace(/:\w+/g, '[^/]+').replace(/\//g, '\\/').replace(/\*/g, '.*');
+
         if (new RegExp(`^${pattern}$`).test(path)) {
           return config.TTL;
         }
@@ -98,7 +95,7 @@ const distributedCacheMiddleware = (req, res, next) => {
 
       // Cache miss - wrap response
       const originalJson = res.json.bind(res);
-      res.json = function(data) {
+      res.json = function (data) {
         if (res.statusCode === 200) {
           cacheManager.set(cacheKey, data, ttl);
           res.set('X-Cache', 'MISS');

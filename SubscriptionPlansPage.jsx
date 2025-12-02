@@ -33,13 +33,13 @@ const SubscriptionPlansPage = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    setPageTitle('Baqat Alaishtirak');
+    setPageTitle("Forfaits d'Abonnement");
     const fetchPlans = async () => {
       try {
         const response = await procurementAPI.getSubscriptionPlans();
         setPlans(response.data.plans || []);
       } catch (err) {
-        setError('Erreur lors du chargement des baqat.');
+        setError('Erreur lors du chargement des forfaits.');
         addToast('Erreur de chargement.', 'error');
       } finally {
         setLoading(false);
@@ -78,7 +78,7 @@ const SubscriptionPlansPage = () => {
     <Box sx={{ backgroundColor: '#F9F9F9', py: 8 }}>
       <Container maxWidth="lg">
         <Typography variant="h3" align="center" sx={{ mb: 2, fontWeight: 'bold' }}>
-          Choisissez Votre Baqa
+          Choisissez Votre Forfait
         </Typography>
         <Typography variant="h6" align="center" color="text.secondary" sx={{ mb: 6 }}>
           Des outils puissants pour développer votre activité.
@@ -119,7 +119,7 @@ const SubscriptionPlansPage = () => {
                     onClick={() => handleSubscribe(plan.id)}
                     disabled={submitting === plan.id}
                   >
-                    {submitting === plan.id ? <CircularProgress size={24} /> : 'Choisir cette baqa'}
+                    {submitting === plan.id ? <CircularProgress size={24} /> : 'Choisir ce forfait'}
                   </Button>
                 </Box>
               </Card>

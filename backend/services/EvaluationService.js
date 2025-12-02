@@ -116,7 +116,7 @@ class EvaluationService {
       );
 
       // Calculate final scores
-      const scoredOffers = offersResult.rows.map(offer => {
+      const scoredOffers = offersResult.rows.map((offer) => {
         const finalScore = (offer.technical_score + offer.financial_score) / 2;
         return {
           id: offer.id,

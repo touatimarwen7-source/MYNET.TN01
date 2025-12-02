@@ -12,7 +12,7 @@ import {
   Alert,
   Grid,
   TextField,
-  CircularProgress
+  CircularProgress,
 } from '@mui/material';
 import CachedIcon from '@mui/icons-material/Cached';
 import WarningIcon from '@mui/icons-material/Warning';
@@ -27,7 +27,7 @@ export default function SystemConfig() {
     autoBackup: true,
     twoFactorAuth: false,
     cacheEnabled: true,
-    apiRateLimit: 1000
+    apiRateLimit: 1000,
   });
   const [loading, setLoading] = useState(true);
   const [updating, setUpdating] = useState(false);
@@ -57,7 +57,7 @@ export default function SystemConfig() {
     try {
       setUpdating(true);
       setErrorMsg('');
-      
+
       if (key === 'maintenanceMode') {
         await adminAPI.config.toggleMaintenance(newValue);
       } else {
@@ -131,13 +131,25 @@ export default function SystemConfig() {
   };
 
   if (loading) {
-    return <Box sx={{ display: 'flex', justifyContent: 'center', py: 4 }}><CircularProgress /></Box>;
+    return (
+      <Box sx={{ display: 'flex', justifyContent: 'center', py: 4 }}>
+        <CircularProgress />
+      </Box>
+    );
   }
 
   return (
     <Box>
-      {successMsg && <Alert severity="success" sx={{ mb: 2 }}>{successMsg}</Alert>}
-      {errorMsg && <Alert severity="error" sx={{ mb: 2 }}>{errorMsg}</Alert>}
+      {successMsg && (
+        <Alert severity="success" sx={{ mb: 2 }}>
+          {successMsg}
+        </Alert>
+      )}
+      {errorMsg && (
+        <Alert severity="error" sx={{ mb: 2 }}>
+          {errorMsg}
+        </Alert>
+      )}
 
       {config.maintenanceMode && (
         <Alert severity="warning" icon={<WarningIcon />} sx={{ mb: 2 }}>
@@ -274,25 +286,33 @@ export default function SystemConfig() {
               <Grid container spacing={2}>
                 <Grid xs={6} sm={3}>
                   <Box>
-                    <Typography variant="caption" sx={{ color: '#616161' }}>Version</Typography>
+                    <Typography variant="caption" sx={{ color: '#616161' }}>
+                      Version
+                    </Typography>
                     <Typography sx={{ fontWeight: 600 }}>1.2.0</Typography>
                   </Box>
                 </Grid>
                 <Grid xs={6} sm={3}>
                   <Box>
-                    <Typography variant="caption" sx={{ color: '#616161' }}>Santé du Système</Typography>
+                    <Typography variant="caption" sx={{ color: '#616161' }}>
+                      Santé du Système
+                    </Typography>
                     <Typography sx={{ fontWeight: 600, color: '#2E7D32' }}>99.9%</Typography>
                   </Box>
                 </Grid>
                 <Grid xs={6} sm={3}>
                   <Box>
-                    <Typography variant="caption" sx={{ color: '#616161' }}>Utilisateurs Actifs</Typography>
+                    <Typography variant="caption" sx={{ color: '#616161' }}>
+                      Utilisateurs Actifs
+                    </Typography>
                     <Typography sx={{ fontWeight: 600 }}>1,254</Typography>
                   </Box>
                 </Grid>
                 <Grid xs={6} sm={3}>
                   <Box>
-                    <Typography variant="caption" sx={{ color: '#616161' }}>Dernière Sauvegarde</Typography>
+                    <Typography variant="caption" sx={{ color: '#616161' }}>
+                      Dernière Sauvegarde
+                    </Typography>
                     <Typography sx={{ fontWeight: 600 }}>Aujourd'hui 02:30</Typography>
                   </Box>
                 </Grid>

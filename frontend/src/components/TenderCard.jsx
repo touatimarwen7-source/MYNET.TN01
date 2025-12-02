@@ -19,7 +19,7 @@ export default function TenderCard({ tender, onView }) {
   };
 
   return (
-    <Card 
+    <Card
       sx={{
         mb: 2,
         p: 2,
@@ -45,17 +45,19 @@ export default function TenderCard({ tender, onView }) {
             color={tender.status === 'active' ? 'primary' : 'default'}
           />
         </Box>
-        
+
         <Typography variant="body2" color="textSecondary" sx={{ mb: 1 }}>
           {tender.description?.substring(0, 100) || 'Pas de description'}...
         </Typography>
 
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mt: 2 }}>
           <Typography variant="caption" color="textSecondary">
-            {tender.deadline ? `Deadline: ${new Date(tender.deadline).toLocaleDateString('fr-FR')}` : 'Pas de deadline'}
+            {tender.deadline
+              ? `Deadline: ${new Date(tender.deadline).toLocaleDateString('fr-FR')}`
+              : 'Pas de deadline'}
           </Typography>
-          <Button 
-            size="small" 
+          <Button
+            size="small"
             onClick={(e) => {
               e.stopPropagation();
               handleViewClick();

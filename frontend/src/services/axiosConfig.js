@@ -1,6 +1,6 @@
 /**
  * Axios Configuration with Security & Caching Features
- * 
+ *
  * Handles:
  * - Automatic Bearer token injection
  * - Automatic CSRF token headers
@@ -10,7 +10,7 @@
  * - 401/403 handling with redirect
  * - Request timeout (30s)
  * - httpOnly cookie support
- * 
+ *
  * @module axiosConfig
  * @requires axios - HTTP client
  * @requires TokenManager - Token storage/retrieval
@@ -56,7 +56,7 @@ const setCachedResponse = (config, response) => {
   const key = getCacheKey(config);
   responseCache.set(key, {
     data: response,
-    timestamp: Date.now()
+    timestamp: Date.now(),
   });
 };
 
@@ -64,10 +64,10 @@ const setCachedResponse = (config, response) => {
 const axiosInstance = axios.create({
   baseURL: API_BASE_URL,
   headers: {
-    'Content-Type': 'application/json'
+    'Content-Type': 'application/json',
   },
   withCredentials: true, // Enable cookies
-  timeout: 30000 // 30 second timeout
+  timeout: 30000, // 30 second timeout
 });
 
 // Track if refresh is in progress to avoid multiple refresh calls
@@ -125,15 +125,14 @@ axiosInstance.interceptors.request.use(
       console.log('🔐 Login Request:', {
         url: config.url,
         method: config.method,
-        hasData: !!config.data
+        hasData: !!config.data,
       });
     }
 
     // Check if token should be refreshed proactively (only if we have a token)
     if (token && TokenManager.shouldRefreshToken() && !isRefreshing) {
       // Silently refresh in background
-      refreshAccessToken().catch((err) => {
-      });
+      refreshAccessToken().catch((err) => {});
     }
 
     return config;
@@ -159,18 +158,19 @@ axiosInstance.interceptors.response.use(
   },
   async (error) => {
     const originalRequest = error.config;
-    
+
     // Normalize error response to always have a string error message
     if (error.response?.data) {
       if (typeof error.response.data !== 'object' || error.response.data === null) {
         error.response.data = { error: String(error.response.data) };
       } else if (!error.response.data.error || typeof error.response.data.error !== 'string') {
-        error.response.data.error = error.response.data.message || 
-                                     error.response.data.msg || 
-                                     'Une erreur serveur s\'est produite';
+        error.response.data.error =
+          error.response.data.message ||
+          error.response.data.msg ||
+          "Une erreur serveur s'est produite";
       }
     }
-    
+
     // Try to use cache on network error for GET requests
     if (!error.response && originalRequest?.method === 'get') {
       const cached = getCachedResponse(originalRequest);
@@ -187,12 +187,14 @@ axiosInstance.interceptors.response.use(
         // Already refreshing, queue this request
         return new Promise((resolve, reject) => {
           failedQueue.push({ resolve, reject });
-        }).then((token) => {
-          originalRequest.headers.Authorization = `Bearer ${token}`;
-          return axiosInstance(originalRequest);
-        }).catch((err) => {
-          return Promise.reject(err);
-        });
+        })
+          .then((token) => {
+            originalRequest.headers.Authorization = `Bearer ${token}`;
+            return axiosInstance(originalRequest);
+          })
+          .catch((err) => {
+            return Promise.reject(err);
+          });
       }
 
       isRefreshing = true;
@@ -227,7 +229,7 @@ axiosInstance.interceptors.response.use(
  * Refresh access token
  * Uses httpOnly cookie (sent automatically by browser)
  * Backend sends new access token in response
- * 
+ *
  * @returns {Promise<string>} New access token
  */
 async function refreshAccessToken() {
@@ -238,7 +240,7 @@ async function refreshAccessToken() {
       {}, // Empty body - refresh token is in cookie
       {
         withCredentials: true,
-        timeout: 10000
+        timeout: 10000,
       }
     );
 

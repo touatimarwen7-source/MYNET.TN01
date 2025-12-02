@@ -54,72 +54,81 @@ export default function Register() {
     product_range: '',
     subcategory: '',
     year_founded: new Date().getFullYear().toString(),
-    num_employees: ''
+    num_employees: '',
   });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
   const handleRoleSelection = (selectedRole) => {
-    setFormData(prev => ({ ...prev, role: selectedRole }));
+    setFormData((prev) => ({ ...prev, role: selectedRole }));
     setRoleSelected(true);
   };
 
   // Company data
   const companyTypes = ['Négociant', 'Fabricant', 'Distributeur', 'Prestataire', 'Autre'];
   const productRanges = {
-    'Négociant': ['Électronique', 'Fournitures de Bureau', 'Matériaux de Construction', 'Alimentaire'],
-    'Fabricant': ['Électronique', 'Mécanique', 'Chimie', 'Textile', 'Agroalimentaire'],
-    'Distributeur': ['Électronique', 'Électroménager', 'Quincaillerie', 'Logistique'],
-    'Prestataire': ['Informatique', 'Consulting', 'Maintenance', 'Transport', 'Nettoyage'],
-    'Autre': ['Autre']
+    Négociant: [
+      'Électronique',
+      'Fournitures de Bureau',
+      'Matériaux de Construction',
+      'Alimentaire',
+    ],
+    Fabricant: ['Électronique', 'Mécanique', 'Chimie', 'Textile', 'Agroalimentaire'],
+    Distributeur: ['Électronique', 'Électroménager', 'Quincaillerie', 'Logistique'],
+    Prestataire: ['Informatique', 'Consulting', 'Maintenance', 'Transport', 'Nettoyage'],
+    Autre: ['Autre'],
   };
   const subcategories = {
-    'Électronique': ['Composants', 'Équipements', 'Accessoires'],
+    Électronique: ['Composants', 'Équipements', 'Accessoires'],
     'Fournitures de Bureau': ['Papeterie', 'Mobilier', 'Équipements'],
     'Matériaux de Construction': ['Matériaux Bruts', 'Produits Finis', 'Outillage'],
-    'Alimentaire': ['Produits Frais', 'Produits Secs', 'Boissons'],
-    'Mécanique': ['Pièces', 'Assemblages', 'Usinage'],
-    'Chimie': ['Produits Chimiques', 'Produits Pharmaceutiques'],
-    'Textile': ['Tissus', 'Vêtements', 'Accessoires'],
-    'Agroalimentaire': ['Fruits', 'Légumes', 'Produits Transformés'],
-    'Électroménager': ['Petit Électroménager', 'Gros Électroménager'],
-    'Quincaillerie': ['Outils', 'Quincaillerie Fine', 'Accessoires'],
-    'Informatique': ['Développement', 'Infrastructure', 'Support'],
-    'Consulting': ['Conseil Stratégique', 'Audit', 'Formation'],
-    'Maintenance': ['Maintenance Préventive', 'Maintenance Corrective'],
-    'Transport': ['Transport Routier', 'Transport Maritime', 'Logistique'],
-    'Nettoyage': ['Nettoyage Général', 'Nettoyage Spécialisé'],
-    'Autre': ['Autre']
+    Alimentaire: ['Produits Frais', 'Produits Secs', 'Boissons'],
+    Mécanique: ['Pièces', 'Assemblages', 'Usinage'],
+    Chimie: ['Produits Chimiques', 'Produits Pharmaceutiques'],
+    Textile: ['Tissus', 'Vêtements', 'Accessoires'],
+    Agroalimentaire: ['Fruits', 'Légumes', 'Produits Transformés'],
+    Électroménager: ['Petit Électroménager', 'Gros Électroménager'],
+    Quincaillerie: ['Outils', 'Quincaillerie Fine', 'Accessoires'],
+    Informatique: ['Développement', 'Infrastructure', 'Support'],
+    Consulting: ['Conseil Stratégique', 'Audit', 'Formation'],
+    Maintenance: ['Maintenance Préventive', 'Maintenance Corrective'],
+    Transport: ['Transport Routier', 'Transport Maritime', 'Logistique'],
+    Nettoyage: ['Nettoyage Général', 'Nettoyage Spécialisé'],
+    Autre: ['Autre'],
   };
 
-  const steps = ['Informations Générales', 'Informations de l\'Entreprise', 'Informations de l\'Activité'];
+  const steps = [
+    'Informations Générales',
+    "Informations de l'Entreprise",
+    "Informations de l'Activité",
+  ];
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     const updatedData = { ...formData, [name]: value };
-    
+
     if (name === 'company_type') {
       updatedData.product_range = '';
       updatedData.subcategory = '';
     }
-    
+
     if (name === 'product_range') {
       updatedData.subcategory = '';
     }
-    
+
     setFormData(updatedData);
   };
 
   const validateStep = () => {
     setError('');
-    
+
     if (currentStep === 0) {
       if (!formData.username.trim()) {
-        setError('Le nom d\'utilisateur est requis');
+        setError("Le nom d'utilisateur est requis");
         return false;
       }
       if (!formData.email.trim()) {
-        setError('L\'e-mail est requis');
+        setError("L'e-mail est requis");
         return false;
       }
       if (!formData.password.trim()) {
@@ -135,25 +144,25 @@ export default function Register() {
         return false;
       }
     }
-    
+
     if (currentStep === 1) {
       if (!formData.company_name.trim()) {
-        setError('Le nom de l\'entreprise est requis');
+        setError("Le nom de l'entreprise est requis");
         return false;
       }
       if (!formData.company_registration.trim()) {
-        setError('Le numéro d\'enregistrement est requis');
+        setError("Le numéro d'enregistrement est requis");
         return false;
       }
     }
-    
+
     if (currentStep === 2) {
       if (!formData.company_type) {
-        setError('Le type d\'entreprise est requis');
+        setError("Le type d'entreprise est requis");
         return false;
       }
       if (!formData.product_range) {
-        setError('Le secteur d\'activité est requis');
+        setError("Le secteur d'activité est requis");
         return false;
       }
       if (!formData.subcategory) {
@@ -161,33 +170,33 @@ export default function Register() {
         return false;
       }
       if (!formData.year_founded) {
-        setError('L\'année de fondation est requise');
+        setError("L'année de fondation est requise");
         return false;
       }
       if (!formData.num_employees) {
-        setError('Le nombre d\'employés est requis');
+        setError("Le nombre d'employés est requis");
         return false;
       }
     }
-    
+
     return true;
   };
 
   const handleNext = () => {
     if (validateStep()) {
-      setCurrentStep(prev => prev + 1);
+      setCurrentStep((prev) => prev + 1);
     }
   };
 
   const handleBack = () => {
-    setCurrentStep(prev => prev - 1);
+    setCurrentStep((prev) => prev - 1);
     setError('');
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validateStep()) return;
-    
+
     setError('');
     setLoading(true);
 
@@ -195,7 +204,7 @@ export default function Register() {
       await authAPI.register(formData);
       navigate('/login');
     } catch (err) {
-      setError(err.response?.data?.error || 'Erreur lors de l\'inscription');
+      setError(err.response?.data?.error || "Erreur lors de l'inscription");
     } finally {
       setLoading(false);
     }
@@ -206,13 +215,13 @@ export default function Register() {
       return {
         icon: '🏢',
         title: 'Créer un Compte Acheteur',
-        subtitle: 'Publiez vos appels d\'offres et trouvez les meilleurs fournisseurs',
+        subtitle: "Publiez vos appels d'offres et trouvez les meilleurs fournisseurs",
         benefits: [
-          'Créer et gérer des appels d\'offres',
+          "Créer et gérer des appels d'offres",
           'Recevoir et analyser les offres',
-          'Utiliser l\'analyse IA pour décider',
-          'Gestion complète de l\'équipe d\'achat'
-        ]
+          "Utiliser l'analyse IA pour décider",
+          "Gestion complète de l'équipe d'achat",
+        ],
       };
     } else {
       return {
@@ -220,11 +229,11 @@ export default function Register() {
         title: 'Créer un Compte Fournisseur',
         subtitle: 'Découvrez les opportunités et remportez des marchés',
         benefits: [
-          'Parcourir les appels d\'offres',
+          "Parcourir les appels d'offres",
           'Soumettre vos offres sécurisées',
           'Gérer votre catalogue de produits',
-          'Suivre votre performance et revenus'
-        ]
+          'Suivre votre performance et revenus',
+        ],
       };
     }
   };
@@ -290,8 +299,15 @@ export default function Register() {
                         Publiez vos appels d'offres et trouvez les meilleurs fournisseurs
                       </Typography>
                       <List sx={{ padding: 0 }}>
-                        {['Créer et gérer des appels d\'offres', 'Recevoir et analyser les offres', 'Gestion complète de l\'équipe d\'achat'].map((benefit, idx) => (
-                          <ListItem key={idx} sx={{ paddingLeft: 0, paddingTop: '4px', paddingBottom: '4px' }}>
+                        {[
+                          "Créer et gérer des appels d'offres",
+                          'Recevoir et analyser les offres',
+                          "Gestion complète de l'équipe d'achat",
+                        ].map((benefit, idx) => (
+                          <ListItem
+                            key={idx}
+                            sx={{ paddingLeft: 0, paddingTop: '4px', paddingBottom: '4px' }}
+                          >
                             <ListItemIcon sx={{ minWidth: 24, color: '#2e7d32' }}>
                               <CheckCircleIcon sx={{ fontSize: 16 }} />
                             </ListItemIcon>
@@ -343,8 +359,15 @@ export default function Register() {
                         Découvrez les opportunités et remportez des marchés
                       </Typography>
                       <List sx={{ padding: 0 }}>
-                        {['Parcourir les appels d\'offres', 'Soumettre vos offres sécurisées', 'Gérer votre catalogue de produits'].map((benefit, idx) => (
-                          <ListItem key={idx} sx={{ paddingLeft: 0, paddingTop: '4px', paddingBottom: '4px' }}>
+                        {[
+                          "Parcourir les appels d'offres",
+                          'Soumettre vos offres sécurisées',
+                          'Gérer votre catalogue de produits',
+                        ].map((benefit, idx) => (
+                          <ListItem
+                            key={idx}
+                            sx={{ paddingLeft: 0, paddingTop: '4px', paddingBottom: '4px' }}
+                          >
                             <ListItemIcon sx={{ minWidth: 24, color: '#2e7d32' }}>
                               <CheckCircleIcon sx={{ fontSize: 16 }} />
                             </ListItemIcon>
@@ -414,10 +437,20 @@ export default function Register() {
             </Box>
 
             {/* Benefits */}
-            <Box sx={{ marginBottom: '32px', backgroundColor: '#f5f5f5', padding: '16px', borderRadius: '4px' }}>
+            <Box
+              sx={{
+                marginBottom: '32px',
+                backgroundColor: '#f5f5f5',
+                padding: '16px',
+                borderRadius: '4px',
+              }}
+            >
               <List sx={{ padding: 0 }}>
                 {roleContent.benefits.map((benefit, idx) => (
-                  <ListItem key={idx} sx={{ paddingLeft: 0, paddingTop: '8px', paddingBottom: '8px' }}>
+                  <ListItem
+                    key={idx}
+                    sx={{ paddingLeft: 0, paddingTop: '8px', paddingBottom: '8px' }}
+                  >
                     <ListItemIcon sx={{ minWidth: 32, color: '#2e7d32' }}>
                       <CheckCircleIcon sx={{ fontSize: 18 }} />
                     </ListItemIcon>
@@ -454,13 +487,24 @@ export default function Register() {
             )}
 
             {/* Form */}
-            <Box component="form" onSubmit={handleSubmit} sx={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-              
+            <Box
+              component="form"
+              onSubmit={handleSubmit}
+              sx={{ display: 'flex', flexDirection: 'column', gap: '16px' }}
+            >
               {/* Step 0: Informations Générales */}
               {currentStep === 0 && (
                 <>
                   <Box sx={{ mb: 2 }}>
-                    <Typography variant="h6" sx={{ fontSize: '14px', fontWeight: 600, color: theme.palette.text.primary, mb: 2 }}>
+                    <Typography
+                      variant="h6"
+                      sx={{
+                        fontSize: '14px',
+                        fontWeight: 600,
+                        color: theme.palette.text.primary,
+                        mb: 2,
+                      }}
+                    >
                       Informations Générales
                     </Typography>
                     <Divider sx={{ mb: 2 }} />
@@ -527,7 +571,15 @@ export default function Register() {
               {currentStep === 1 && (
                 <>
                   <Box sx={{ mb: 2 }}>
-                    <Typography variant="h6" sx={{ fontSize: '14px', fontWeight: 600, color: theme.palette.text.primary, mb: 2 }}>
+                    <Typography
+                      variant="h6"
+                      sx={{
+                        fontSize: '14px',
+                        fontWeight: 600,
+                        color: theme.palette.text.primary,
+                        mb: 2,
+                      }}
+                    >
                       Informations de l'Entreprise
                     </Typography>
                     <Divider sx={{ mb: 2 }} />
@@ -559,7 +611,15 @@ export default function Register() {
               {currentStep === 2 && (
                 <>
                   <Box sx={{ mb: 2 }}>
-                    <Typography variant="h6" sx={{ fontSize: '14px', fontWeight: 600, color: theme.palette.text.primary, mb: 2 }}>
+                    <Typography
+                      variant="h6"
+                      sx={{
+                        fontSize: '14px',
+                        fontWeight: 600,
+                        color: theme.palette.text.primary,
+                        mb: 2,
+                      }}
+                    >
                       Informations de l'Activité
                     </Typography>
                     <Divider sx={{ mb: 2 }} />
@@ -575,8 +635,10 @@ export default function Register() {
                       disabled={loading}
                     >
                       <MenuItem value="">Sélectionner un type</MenuItem>
-                      {companyTypes.map(type => (
-                        <MenuItem key={type} value={type}>{type}</MenuItem>
+                      {companyTypes.map((type) => (
+                        <MenuItem key={type} value={type}>
+                          {type}
+                        </MenuItem>
                       ))}
                     </Select>
                   </FormControl>
@@ -592,8 +654,10 @@ export default function Register() {
                         disabled={loading}
                       >
                         <MenuItem value="">Sélectionner un secteur</MenuItem>
-                        {productRanges[formData.company_type]?.map(range => (
-                          <MenuItem key={range} value={range}>{range}</MenuItem>
+                        {productRanges[formData.company_type]?.map((range) => (
+                          <MenuItem key={range} value={range}>
+                            {range}
+                          </MenuItem>
                         ))}
                       </Select>
                     </FormControl>
@@ -610,8 +674,10 @@ export default function Register() {
                         disabled={loading}
                       >
                         <MenuItem value="">Sélectionner une sous-catégorie</MenuItem>
-                        {subcategories[formData.product_range]?.map(sub => (
-                          <MenuItem key={sub} value={sub}>{sub}</MenuItem>
+                        {subcategories[formData.product_range]?.map((sub) => (
+                          <MenuItem key={sub} value={sub}>
+                            {sub}
+                          </MenuItem>
                         ))}
                       </Select>
                     </FormControl>
@@ -656,9 +722,9 @@ export default function Register() {
                     fontSize: '16px',
                     color: theme.palette.primary.main,
                     borderColor: '#0056B3',
-                    '&:hover': { 
+                    '&:hover': {
                       backgroundColor: '#f0f7ff',
-                      borderColor: '#0056B3'
+                      borderColor: '#0056B3',
                     },
                   }}
                 >
@@ -703,7 +769,7 @@ export default function Register() {
                         Inscription en cours...
                       </Box>
                     ) : (
-                      'S\'inscrire'
+                      "S'inscrire"
                     )}
                   </Button>
                 )}

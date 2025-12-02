@@ -9,11 +9,14 @@ router.get('/supplier/:supplierId', authMiddleware, async (req, res) => {
     const { supplierId } = req.params;
     const db = req.app.get('db');
 
-    const result = await db.query(`
+    const result = await db.query(
+      `
       SELECT * FROM supplier_features 
       WHERE supplier_id = $1 AND is_active = true
       ORDER BY created_at DESC
-    `, [supplierId]);
+    `,
+      [supplierId]
+    );
 
     res.json(result.rows);
   } catch (error) {
@@ -25,7 +28,7 @@ router.get('/supplier/:supplierId', authMiddleware, async (req, res) => {
 router.post('/', authMiddleware, async (req, res) => {
   try {
     const { supplier_id, feature_name, description } = req.body;
-    
+
     // ISSUE FIX #3: Validation
     if (!supplier_id || !feature_name) {
       return res.status(400).json({ error: 'supplier_id and feature_name are required' });
@@ -36,14 +39,17 @@ router.post('/', authMiddleware, async (req, res) => {
     if (description && description.length > 1000) {
       return res.status(400).json({ error: 'description too long (max 1000 chars)' });
     }
-    
+
     const db = req.app.get('db');
 
-    const result = await db.query(`
+    const result = await db.query(
+      `
       INSERT INTO supplier_features (supplier_id, feature_name, description)
       VALUES ($1, $2, $3)
       RETURNING *
-    `, [supplier_id, feature_name, description]);
+    `,
+      [supplier_id, feature_name, description]
+    );
 
     res.status(201).json({ success: true, data: result.rows[0] });
   } catch (error) {
@@ -57,10 +63,7 @@ router.delete('/:featureId', authMiddleware, async (req, res) => {
     const { featureId } = req.params;
     const db = req.app.get('db');
 
-    await db.query(
-      'UPDATE supplier_features SET is_active = false WHERE id = $1',
-      [featureId]
-    );
+    await db.query('UPDATE supplier_features SET is_active = false WHERE id = $1', [featureId]);
 
     res.json({ success: true });
   } catch (error) {

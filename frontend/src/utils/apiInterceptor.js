@@ -1,5 +1,3 @@
-
-
 /**
  * 💾 RESPONSE CACHING INTERCEPTOR
  * Automatically caches GET requests for performance
@@ -24,20 +22,18 @@ export const setupCachingInterceptor = (axiosInstance) => {
   );
 
   // Request interceptor for checking cache
-  axiosInstance.interceptors.request.use(
-    (config) => {
-      // Check cache for GET requests
-      if (config.method === 'get' && config.useCache !== false) {
-        const cacheKey = `${config.url}_${JSON.stringify(config.params)}`;
-        const cached = getCachedResponse(cacheKey);
-        
-        if (cached) {
-          return Promise.resolve(cached);
-        }
+  axiosInstance.interceptors.request.use((config) => {
+    // Check cache for GET requests
+    if (config.method === 'get' && config.useCache !== false) {
+      const cacheKey = `${config.url}_${JSON.stringify(config.params)}`;
+      const cached = getCachedResponse(cacheKey);
+
+      if (cached) {
+        return Promise.resolve(cached);
       }
-      return config;
     }
-  );
+    return config;
+  });
 };
 
 export default setupCachingInterceptor;

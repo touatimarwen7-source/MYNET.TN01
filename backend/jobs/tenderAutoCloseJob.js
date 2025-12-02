@@ -9,7 +9,7 @@ const OpeningReportService = require('../services/OpeningReportService');
 class TenderAutoCloseJob {
   static async runAutoCloseJob() {
     const startTime = Date.now();
-    
+
     let closedCount = 0;
     let errorCount = 0;
 
@@ -29,7 +29,6 @@ class TenderAutoCloseJob {
         return;
       }
 
-
       for (const tender of result.rows) {
         if (!tender || !tender.id) {
           continue;
@@ -47,11 +46,7 @@ class TenderAutoCloseJob {
 
           const offers = (offersResult && offersResult.rows) || [];
 
-          await OpeningReportService.createOpeningReport(
-            tender.id,
-            offers,
-            tender.buyer_id
-          );
+          await OpeningReportService.createOpeningReport(tender.id, offers, tender.buyer_id);
 
           await pool.query(
             `UPDATE tenders 
@@ -67,8 +62,7 @@ class TenderAutoCloseJob {
       }
 
       const duration = ((Date.now() - startTime) / 1000).toFixed(2);
-    } catch (error) {
-    }
+    } catch (error) {}
   }
 
   /**
@@ -76,12 +70,11 @@ class TenderAutoCloseJob {
    * @returns {Object} Scheduled job object
    */
   static scheduleJob() {
-    
     try {
       const job = schedule.scheduleJob('*/1 * * * *', async () => {
         await this.runAutoCloseJob();
       });
-      
+
       return job;
     } catch (error) {
       throw error;

@@ -3,7 +3,17 @@
  * مجموعة من المكونات القابلة لإعادة الاستخدام بمواصفات عالمية
  */
 
-import { Avatar, Box, Card, CardContent, Stack, Tooltip, Typography, Chip, Skeleton } from '@mui/material';
+import {
+  Avatar,
+  Box,
+  Card,
+  CardContent,
+  Stack,
+  Tooltip,
+  Typography,
+  Chip,
+  Skeleton,
+} from '@mui/material';
 import { CheckCircle, Warning, Info } from '@mui/icons-material';
 import institutionalTheme from '../theme/theme';
 
@@ -12,20 +22,28 @@ const THEME = institutionalTheme;
 /**
  * مكون بطاقة معلومات محترفة
  */
-export function InfoCard({ icon: Icon, title, value, subtitle, color = THEME.palette.primary.main }) {
+export function InfoCard({
+  icon: Icon,
+  title,
+  value,
+  subtitle,
+  color = THEME.palette.primary.main,
+}) {
   return (
-    <Card sx={{
-      backgroundColor: '#FFFFFF',
-      border: `2px solid ${color}20`,
-      borderRadius: '12px',
-      overflow: 'hidden',
-      transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-      '&:hover': {
-        borderColor: color,
-        boxShadow: `0 8px 24px ${color}15`,
-        transform: 'translateY(-2px)'
-      }
-    }}>
+    <Card
+      sx={{
+        backgroundColor: '#FFFFFF',
+        border: `2px solid ${color}20`,
+        borderRadius: '12px',
+        overflow: 'hidden',
+        transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+        '&:hover': {
+          borderColor: color,
+          boxShadow: `0 8px 24px ${color}15`,
+          transform: 'translateY(-2px)',
+        },
+      }}
+    >
       <CardContent>
         <Stack spacing={2}>
           <Stack direction="row" justifyContent="space-between" alignItems="start">
@@ -42,10 +60,13 @@ export function InfoCard({ icon: Icon, title, value, subtitle, color = THEME.pal
                 </Typography>
               )}
             </Stack>
-            <Avatar sx={{
-              backgroundColor: `${color}15`,
-              width: 48, height: 48
-            }}>
+            <Avatar
+              sx={{
+                backgroundColor: `${color}15`,
+                width: 48,
+                height: 48,
+              }}
+            >
               <Icon sx={{ color, fontSize: 24 }} />
             </Avatar>
           </Stack>
@@ -65,26 +86,26 @@ export function ProfessionalAlert({ type = 'info', title, message, icon: IconCom
         backgroundColor: '#2e7d3215',
         borderColor: '#2e7d32',
         textColor: '#1b5e20',
-        icon: CheckCircle
+        icon: CheckCircle,
       },
       warning: {
         backgroundColor: '#f5760015',
         borderColor: '#f57c00',
         textColor: '#e65100',
-        icon: Warning
+        icon: Warning,
       },
       info: {
         backgroundColor: '#0288d115',
         borderColor: '#0288d1',
         textColor: '#01579b',
-        icon: Info
+        icon: Info,
       },
       error: {
         backgroundColor: '#c6282815',
         borderColor: '#c62828',
         textColor: '#b71c1c',
-        icon: Warning
-      }
+        icon: Warning,
+      },
     };
     return config[type] || config.info;
   };
@@ -93,15 +114,17 @@ export function ProfessionalAlert({ type = 'info', title, message, icon: IconCom
   const Icon = IconComponent || config.icon;
 
   return (
-    <Box sx={{
-      backgroundColor: config.backgroundColor,
-      border: `1px solid ${config.borderColor}`,
-      borderRadius: '8px',
-      padding: '16px',
-      display: 'flex',
-      gap: '12px',
-      alignItems: 'flex-start'
-    }}>
+    <Box
+      sx={{
+        backgroundColor: config.backgroundColor,
+        border: `1px solid ${config.borderColor}`,
+        borderRadius: '8px',
+        padding: '16px',
+        display: 'flex',
+        gap: '12px',
+        alignItems: 'flex-start',
+      }}
+    >
       <Icon sx={{ color: config.textColor, mt: 0.5 }} />
       <Stack flex={1}>
         {title && (
@@ -120,7 +143,12 @@ export function ProfessionalAlert({ type = 'info', title, message, icon: IconCom
 /**
  * مكون تقدم احترافي
  */
-export function ProfessionalProgress({ label, value, color = THEME.palette.primary.main, showPercentage = true }) {
+export function ProfessionalProgress({
+  label,
+  value,
+  color = THEME.palette.primary.main,
+  showPercentage = true,
+}) {
   return (
     <Stack spacing={1}>
       <Stack direction="row" justifyContent="space-between" alignItems="center">
@@ -135,19 +163,23 @@ export function ProfessionalProgress({ label, value, color = THEME.palette.prima
           />
         )}
       </Stack>
-      <Box sx={{
-        height: '8px',
-        borderRadius: '4px',
-        backgroundColor: '#e0e0e0',
-        overflow: 'hidden'
-      }}>
-        <Box sx={{
-          height: '100%',
-          width: `${value}%`,
-          backgroundColor: color,
+      <Box
+        sx={{
+          height: '8px',
           borderRadius: '4px',
-          transition: 'width 0.3s ease'
-        }} />
+          backgroundColor: '#e0e0e0',
+          overflow: 'hidden',
+        }}
+      >
+        <Box
+          sx={{
+            height: '100%',
+            width: `${value}%`,
+            backgroundColor: color,
+            borderRadius: '4px',
+            transition: 'width 0.3s ease',
+          }}
+        />
       </Box>
     </Stack>
   );
@@ -187,19 +219,24 @@ export function ProfessionalSkeleton({ variant = 'card', count = 1 }) {
 export function InfoChip({ label, value, icon: Icon, color = THEME.palette.primary.main }) {
   return (
     <Tooltip title={label}>
-      <Stack direction="row" alignItems="center" spacing={1} sx={{
-        px: 2,
-        py: 1,
-        backgroundColor: `${color}15`,
-        borderRadius: '8px',
-        border: `1px solid ${color}30`,
-        cursor: 'pointer',
-        transition: 'all 0.2s ease',
-        '&:hover': {
-          backgroundColor: `${color}25`,
-          borderColor: color
-        }
-      }}>
+      <Stack
+        direction="row"
+        alignItems="center"
+        spacing={1}
+        sx={{
+          px: 2,
+          py: 1,
+          backgroundColor: `${color}15`,
+          borderRadius: '8px',
+          border: `1px solid ${color}30`,
+          cursor: 'pointer',
+          transition: 'all 0.2s ease',
+          '&:hover': {
+            backgroundColor: `${color}25`,
+            borderColor: color,
+          },
+        }}
+      >
         {Icon && <Icon sx={{ color, fontSize: 18 }} />}
         <Stack direction="row" alignItems="baseline" spacing={0.5}>
           <Typography variant="caption" sx={{ fontWeight: 600, color }}>

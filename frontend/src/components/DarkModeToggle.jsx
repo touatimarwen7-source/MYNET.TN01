@@ -15,8 +15,8 @@ export default function DarkModeToggle() {
       sx={{
         color: theme.palette.primary.main,
         '&:hover': {
-          backgroundColor: 'THEME_COLORS.bgDefault'
-        }
+          backgroundColor: 'THEME_COLORS.bgDefault',
+        },
       }}
     >
       {isDarkMode ? '☀️' : '🌙'}

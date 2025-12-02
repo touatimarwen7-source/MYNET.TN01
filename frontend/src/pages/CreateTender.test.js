@@ -41,8 +41,12 @@ describe('CreateTender Component', () => {
 
   test('should navigate to the next step on valid input', () => {
     renderComponent();
-    fireEvent.change(screen.getByLabelText(/Titre de l'appel d'offres/i), { target: { value: 'Valid Tender Title' } });
-    fireEvent.change(screen.getByLabelText(/Description détaillée/i), { target: { value: 'This is a sufficiently long and valid description for the tender.' } });
+    fireEvent.change(screen.getByLabelText(/Titre de l'appel d'offres/i), {
+      target: { value: 'Valid Tender Title' },
+    });
+    fireEvent.change(screen.getByLabelText(/Description détaillée/i), {
+      target: { value: 'This is a sufficiently long and valid description for the tender.' },
+    });
     fireEvent.click(screen.getByText(/Suivant/i));
     expect(screen.getByText(/Étape 2 sur 6/i)).toBeInTheDocument();
     expect(screen.getByText(/Lots/i)).toBeInTheDocument();
@@ -54,8 +58,12 @@ describe('CreateTender Component', () => {
 
     // --- Simulate filling the entire form ---
     // Step 1
-    fireEvent.change(screen.getByLabelText(/Titre de l'appel d'offres/i), { target: { value: 'Final Test Tender' } });
-    fireEvent.change(screen.getByLabelText(/Description détaillée/i), { target: { value: 'A complete description for the final test tender.' } });
+    fireEvent.change(screen.getByLabelText(/Titre de l'appel d'offres/i), {
+      target: { value: 'Final Test Tender' },
+    });
+    fireEvent.change(screen.getByLabelText(/Description détaillée/i), {
+      target: { value: 'A complete description for the final test tender.' },
+    });
     fireEvent.click(screen.getByText(/Suivant/i));
 
     // Step 2
@@ -63,7 +71,7 @@ describe('CreateTender Component', () => {
 
     // Step 3 (Lots) - Assume it's valid for now
     fireEvent.click(screen.getByText(/Suivant/i));
-    
+
     // Step 4 (Requirements)
     fireEvent.click(screen.getByText(/Suivant/i));
 
@@ -88,5 +96,4 @@ describe('CreateTender Component', () => {
       })
     );
   });
-
 });

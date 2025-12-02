@@ -12,10 +12,10 @@
 
 ### Identifiants par Défaut:
 
-| Rôle | Email | Statut |
-|------|-------|--------|
-| Administrateur | `admin@mynet.tn` | Rôle: `admin` |
-| Acheteur Test | `buyer@mynet.tn` | Rôle: `buyer` |
+| Rôle             | Email               | Statut           |
+| ---------------- | ------------------- | ---------------- |
+| Administrateur   | `admin@mynet.tn`    | Rôle: `admin`    |
+| Acheteur Test    | `buyer@mynet.tn`    | Rôle: `buyer`    |
 | Fournisseur Test | `supplier@mynet.tn` | Rôle: `supplier` |
 
 ### Une Fois Connecté:

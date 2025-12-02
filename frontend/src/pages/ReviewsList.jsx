@@ -40,7 +40,7 @@ export default function ReviewsList() {
   const fetchReviews = async () => {
     try {
       setLoading(true);
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      await new Promise((resolve) => setTimeout(resolve, 1000));
       const mockReviews = [
         {
           id: 1,
@@ -58,7 +58,7 @@ export default function ReviewsList() {
           supplier: 'Supply Inc',
           reviewer: 'Fatima El Kharroubi',
           rating: 3,
-          title: 'Satisfaisant mais peut s\'améliorer',
+          title: "Satisfaisant mais peut s'améliorer",
           comment: 'Produits de bonne qualité mais délai de livraison long',
           date: '2025-01-10',
           verified: true,
@@ -82,10 +82,11 @@ export default function ReviewsList() {
     }
   };
 
-  const filteredReviews = reviews.filter(review =>
-    review.supplier.toLowerCase().includes(filter.toLowerCase()) ||
-    review.reviewer.toLowerCase().includes(filter.toLowerCase()) ||
-    review.title.toLowerCase().includes(filter.toLowerCase())
+  const filteredReviews = reviews.filter(
+    (review) =>
+      review.supplier.toLowerCase().includes(filter.toLowerCase()) ||
+      review.reviewer.toLowerCase().includes(filter.toLowerCase()) ||
+      review.title.toLowerCase().includes(filter.toLowerCase())
   );
 
   const totalPages = Math.ceil(filteredReviews.length / ITEMS_PER_PAGE);
@@ -96,7 +97,9 @@ export default function ReviewsList() {
     return (
       <Box sx={{ backgroundColor: '#fafafa', paddingY: '40px' }}>
         <Container maxWidth="lg">
-          <Typography sx={{ marginBottom: '24px', fontWeight: 600, color: theme.palette.primary.main }}>
+          <Typography
+            sx={{ marginBottom: '24px', fontWeight: 600, color: theme.palette.primary.main }}
+          >
             Avis et Évaluations
           </Typography>
           <TableSkeleton rows={5} columns={6} />
@@ -108,7 +111,11 @@ export default function ReviewsList() {
   return (
     <Box sx={{ backgroundColor: '#fafafa', paddingY: '40px' }}>
       <Container maxWidth="lg">
-        <Stack direction={{ xs: 'column', md: 'row' }} spacing={2} sx={{ marginBottom: '32px', justifyContent: 'space-between', alignItems: 'center' }}>
+        <Stack
+          direction={{ xs: 'column', md: 'row' }}
+          spacing={2}
+          sx={{ marginBottom: '32px', justifyContent: 'space-between', alignItems: 'center' }}
+        >
           <Typography variant="h4" sx={{ fontWeight: 600, color: theme.palette.text.primary }}>
             Avis et Évaluations
           </Typography>
@@ -139,12 +146,27 @@ export default function ReviewsList() {
             <Card key={review.id} sx={{ border: '1px solid #e0e0e0' }}>
               <CardContent sx={{ padding: '24px' }}>
                 <Stack spacing={2}>
-                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start' }}>
+                  <Box
+                    sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start' }}
+                  >
                     <Box>
-                      <Typography sx={{ fontWeight: 600, color: theme.palette.primary.main, marginBottom: '8px' }}>
+                      <Typography
+                        sx={{
+                          fontWeight: 600,
+                          color: theme.palette.primary.main,
+                          marginBottom: '8px',
+                        }}
+                      >
                         {review.supplier}
                       </Typography>
-                      <Box sx={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '8px' }}>
+                      <Box
+                        sx={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '12px',
+                          marginBottom: '8px',
+                        }}
+                      >
                         <Rating value={review.rating} readOnly size="small" />
                         <Typography sx={{ fontSize: '14px', color: '#666' }}>
                           {review.rating}/5
@@ -152,7 +174,11 @@ export default function ReviewsList() {
                       </Box>
                     </Box>
                     <Stack direction="row" spacing={1}>
-                      <Button size="small" startIcon={<EditIcon />} sx={{ color: theme.palette.primary.main }}>
+                      <Button
+                        size="small"
+                        startIcon={<EditIcon />}
+                        sx={{ color: theme.palette.primary.main }}
+                      >
                         Modifier
                       </Button>
                       <Button size="small" startIcon={<DeleteIcon />} sx={{ color: '#c62828' }}>
@@ -177,12 +203,19 @@ export default function ReviewsList() {
                     {review.verified && (
                       <>
                         <Typography>•</Typography>
-                        <Chip label="Acheteur Vérifié" size="small" variant="outlined" sx={{ height: '20px' }} />
+                        <Chip
+                          label="Acheteur Vérifié"
+                          size="small"
+                          variant="outlined"
+                          sx={{ height: '20px' }}
+                        />
                       </>
                     )}
                   </Stack>
 
-                  <Typography sx={{ fontSize: '12px', color: theme.palette.primary.main, cursor: 'pointer' }}>
+                  <Typography
+                    sx={{ fontSize: '12px', color: theme.palette.primary.main, cursor: 'pointer' }}
+                  >
                     👍 Utile ({review.helpful})
                   </Typography>
                 </Stack>
@@ -193,9 +226,7 @@ export default function ReviewsList() {
 
         {paginatedReviews.length === 0 && (
           <Box sx={{ textAlign: 'center', paddingY: '40px' }}>
-            <Typography sx={{ color: '#666' }}>
-              Aucun avis trouvé
-            </Typography>
+            <Typography sx={{ color: '#666' }}>Aucun avis trouvé</Typography>
           </Box>
         )}
 

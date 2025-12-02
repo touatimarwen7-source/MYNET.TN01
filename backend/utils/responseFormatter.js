@@ -13,7 +13,7 @@ class ResponseFormatter {
       success: true,
       message,
       data,
-      ...(meta && { meta })
+      ...(meta && { meta }),
     };
   }
 
@@ -26,9 +26,9 @@ class ResponseFormatter {
       error: {
         message,
         code,
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       },
-      statusCode
+      statusCode,
     };
   }
 
@@ -44,8 +44,8 @@ class ResponseFormatter {
         limit: parseInt(limit),
         total,
         pages: Math.ceil(total / limit),
-        hasMore: page * limit < total
-      }
+        hasMore: page * limit < total,
+      },
     };
   }
 
@@ -56,7 +56,7 @@ class ResponseFormatter {
     if (!obj || typeof obj !== 'object') return obj;
 
     if (Array.isArray(obj)) {
-      return obj.map(item => this.clean(item));
+      return obj.map((item) => this.clean(item));
     }
 
     const cleaned = {};

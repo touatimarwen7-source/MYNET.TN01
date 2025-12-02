@@ -1,5 +1,5 @@
 const schemaQueries = [
-    `CREATE TABLE IF NOT EXISTS users (
+  `CREATE TABLE IF NOT EXISTS users (
         id SERIAL PRIMARY KEY,
         username VARCHAR(50) UNIQUE NOT NULL,
         email VARCHAR(100) UNIQUE NOT NULL,
@@ -27,7 +27,7 @@ const schemaQueries = [
         is_deleted BOOLEAN DEFAULT FALSE
     );`,
 
-    `CREATE TABLE IF NOT EXISTS tenders (
+  `CREATE TABLE IF NOT EXISTS tenders (
         id SERIAL PRIMARY KEY,
         tender_number VARCHAR(50) UNIQUE NOT NULL,
         title VARCHAR(255) NOT NULL,
@@ -57,7 +57,7 @@ const schemaQueries = [
         is_deleted BOOLEAN DEFAULT FALSE
     );`,
 
-    `CREATE TABLE IF NOT EXISTS offers (
+  `CREATE TABLE IF NOT EXISTS offers (
         id SERIAL PRIMARY KEY,
         tender_id INTEGER REFERENCES tenders(id),
         supplier_id INTEGER REFERENCES users(id),
@@ -86,7 +86,7 @@ const schemaQueries = [
         is_deleted BOOLEAN DEFAULT FALSE
     );`,
 
-    `CREATE TABLE IF NOT EXISTS purchase_orders (
+  `CREATE TABLE IF NOT EXISTS purchase_orders (
         id SERIAL PRIMARY KEY,
         po_number VARCHAR(50) UNIQUE NOT NULL,
         tender_id INTEGER REFERENCES tenders(id),
@@ -112,7 +112,7 @@ const schemaQueries = [
         is_deleted BOOLEAN DEFAULT FALSE
     );`,
 
-    `CREATE TABLE IF NOT EXISTS invoices (
+  `CREATE TABLE IF NOT EXISTS invoices (
         id SERIAL PRIMARY KEY,
         invoice_number VARCHAR(50) UNIQUE NOT NULL,
         po_id INTEGER REFERENCES purchase_orders(id),
@@ -137,7 +137,7 @@ const schemaQueries = [
         is_deleted BOOLEAN DEFAULT FALSE
     );`,
 
-    `CREATE TABLE IF NOT EXISTS user_profiles (
+  `CREATE TABLE IF NOT EXISTS user_profiles (
         id SERIAL PRIMARY KEY,
         user_id INTEGER UNIQUE REFERENCES users(id),
         bio TEXT,
@@ -154,7 +154,7 @@ const schemaQueries = [
         updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
     );`,
 
-    `CREATE TABLE IF NOT EXISTS notifications (
+  `CREATE TABLE IF NOT EXISTS notifications (
         id SERIAL PRIMARY KEY,
         user_id INTEGER REFERENCES users(id),
         type VARCHAR(50),
@@ -166,7 +166,7 @@ const schemaQueries = [
         created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
     );`,
 
-    `CREATE TABLE IF NOT EXISTS messages (
+  `CREATE TABLE IF NOT EXISTS messages (
         id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
         sender_id INTEGER REFERENCES users(id),
         receiver_id INTEGER REFERENCES users(id),
@@ -180,7 +180,7 @@ const schemaQueries = [
         updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
     );`,
 
-    `CREATE TABLE IF NOT EXISTS archive_policies (
+  `CREATE TABLE IF NOT EXISTS archive_policies (
         id SERIAL PRIMARY KEY,
         entity_type VARCHAR(50) UNIQUE NOT NULL,
         retention_days INTEGER NOT NULL DEFAULT 2555,
@@ -190,7 +190,7 @@ const schemaQueries = [
         updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
     );`,
 
-    `CREATE TABLE IF NOT EXISTS reviews (
+  `CREATE TABLE IF NOT EXISTS reviews (
         id SERIAL PRIMARY KEY,
         reviewer_id INTEGER REFERENCES users(id),
         reviewed_user_id INTEGER REFERENCES users(id),
@@ -201,7 +201,7 @@ const schemaQueries = [
         updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
     );`,
 
-    `CREATE TABLE IF NOT EXISTS audit_logs (
+  `CREATE TABLE IF NOT EXISTS audit_logs (
         id SERIAL PRIMARY KEY,
         user_id INTEGER REFERENCES users(id),
         action VARCHAR(100) NOT NULL,
@@ -213,7 +213,7 @@ const schemaQueries = [
         created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
     );`,
 
-    `CREATE TABLE IF NOT EXISTS subscription_plans (
+  `CREATE TABLE IF NOT EXISTS subscription_plans (
         id SERIAL PRIMARY KEY,
         name VARCHAR(100) NOT NULL,
         description TEXT,
@@ -230,7 +230,7 @@ const schemaQueries = [
         updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
     );`,
 
-    `CREATE TABLE IF NOT EXISTS user_subscriptions (
+  `CREATE TABLE IF NOT EXISTS user_subscriptions (
         id SERIAL PRIMARY KEY,
         user_id INTEGER REFERENCES users(id),
         plan_id INTEGER REFERENCES subscription_plans(id),
@@ -244,7 +244,7 @@ const schemaQueries = [
         updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
     );`,
 
-    `CREATE TABLE IF NOT EXISTS supplier_features (
+  `CREATE TABLE IF NOT EXISTS supplier_features (
         id SERIAL PRIMARY KEY,
         supplier_id INTEGER REFERENCES users(id) NOT NULL,
         feature_key VARCHAR(100) NOT NULL,
@@ -260,11 +260,11 @@ const schemaQueries = [
         UNIQUE(supplier_id, feature_key)
     );`,
 
-    `CREATE INDEX IF NOT EXISTS idx_supplier_features_supplier ON supplier_features(supplier_id);`,
-    `CREATE INDEX IF NOT EXISTS idx_supplier_features_enabled ON supplier_features(is_enabled);`,
-    `CREATE INDEX IF NOT EXISTS idx_supplier_features_expires ON supplier_features(expires_at);`,
+  `CREATE INDEX IF NOT EXISTS idx_supplier_features_supplier ON supplier_features(supplier_id);`,
+  `CREATE INDEX IF NOT EXISTS idx_supplier_features_enabled ON supplier_features(is_enabled);`,
+  `CREATE INDEX IF NOT EXISTS idx_supplier_features_expires ON supplier_features(expires_at);`,
 
-    `CREATE TABLE IF NOT EXISTS tender_history (
+  `CREATE TABLE IF NOT EXISTS tender_history (
         id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
         tender_id INTEGER REFERENCES tenders(id),
         user_id INTEGER REFERENCES users(id),
@@ -277,7 +277,7 @@ const schemaQueries = [
         created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
     );`,
 
-    `CREATE TABLE IF NOT EXISTS purchase_requests (
+  `CREATE TABLE IF NOT EXISTS purchase_requests (
         id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
         buyer_id INTEGER REFERENCES users(id),
         supplier_id INTEGER REFERENCES users(id),
@@ -293,7 +293,7 @@ const schemaQueries = [
         updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
     );`,
 
-    `CREATE TABLE IF NOT EXISTS tender_award_line_items (
+  `CREATE TABLE IF NOT EXISTS tender_award_line_items (
         id SERIAL PRIMARY KEY,
         tender_id INTEGER REFERENCES tenders(id) ON DELETE CASCADE,
         line_item_id VARCHAR(50) NOT NULL,
@@ -310,7 +310,7 @@ const schemaQueries = [
         UNIQUE(tender_id, line_item_id)
     );`,
 
-    `CREATE TABLE IF NOT EXISTS mfa_codes (
+  `CREATE TABLE IF NOT EXISTS mfa_codes (
         id SERIAL PRIMARY KEY,
         user_id INTEGER REFERENCES users(id),
         code VARCHAR(6) NOT NULL,
@@ -321,7 +321,7 @@ const schemaQueries = [
         UNIQUE(user_id, purpose, is_used)
     );`,
 
-    `CREATE TABLE IF NOT EXISTS supplier_verifications (
+  `CREATE TABLE IF NOT EXISTS supplier_verifications (
         id SERIAL PRIMARY KEY,
         user_id INTEGER UNIQUE REFERENCES users(id),
         company_registration VARCHAR(100) NOT NULL,
@@ -335,7 +335,7 @@ const schemaQueries = [
         updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
     );`,
 
-    `CREATE TABLE IF NOT EXISTS encryption_keys (
+  `CREATE TABLE IF NOT EXISTS encryption_keys (
         id SERIAL PRIMARY KEY,
         key_id VARCHAR(255) UNIQUE NOT NULL,
         encrypted_key TEXT NOT NULL,
@@ -346,7 +346,7 @@ const schemaQueries = [
         is_active BOOLEAN DEFAULT TRUE
     );`,
 
-    `CREATE TABLE IF NOT EXISTS feature_flags (
+  `CREATE TABLE IF NOT EXISTS feature_flags (
         id SERIAL PRIMARY KEY,
         feature_name VARCHAR(100) UNIQUE NOT NULL,
         feature_key VARCHAR(100) UNIQUE NOT NULL,
@@ -364,7 +364,7 @@ const schemaQueries = [
         updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
     );`,
 
-    `CREATE TABLE IF NOT EXISTS feature_flag_audits (
+  `CREATE TABLE IF NOT EXISTS feature_flag_audits (
         id SERIAL PRIMARY KEY,
         feature_id INTEGER REFERENCES feature_flags(id),
         admin_id INTEGER REFERENCES users(id),
@@ -375,7 +375,7 @@ const schemaQueries = [
         created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
     );`,
 
-    `CREATE TABLE IF NOT EXISTS opening_reports (
+  `CREATE TABLE IF NOT EXISTS opening_reports (
         id SERIAL PRIMARY KEY,
         tender_id INTEGER NOT NULL REFERENCES tenders(id) ON DELETE CASCADE,
         opened_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
@@ -390,71 +390,71 @@ const schemaQueries = [
         updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
     );`,
 
-    `CREATE INDEX IF NOT EXISTS idx_feature_flags_enabled ON feature_flags(is_enabled);`,
-    `CREATE INDEX IF NOT EXISTS idx_feature_flags_category ON feature_flags(category);`,
-    `CREATE INDEX IF NOT EXISTS idx_feature_flag_audits_feature ON feature_flag_audits(feature_id);`,
-    `CREATE INDEX IF NOT EXISTS idx_tenders_status ON tenders(status);`,
-    `CREATE INDEX IF NOT EXISTS idx_tenders_buyer ON tenders(buyer_id);`,
-    `CREATE INDEX IF NOT EXISTS idx_offers_tender ON offers(tender_id);`,
-    `CREATE INDEX IF NOT EXISTS idx_offers_supplier ON offers(supplier_id);`,
-    `CREATE INDEX IF NOT EXISTS idx_po_tender ON purchase_orders(tender_id);`,
-    `CREATE INDEX IF NOT EXISTS idx_notifications_user ON notifications(user_id);`,
-    `CREATE INDEX IF NOT EXISTS idx_messages_receiver ON messages(receiver_id);`,
-    `CREATE INDEX IF NOT EXISTS idx_audit_user ON audit_logs(user_id);`,
-    `CREATE INDEX IF NOT EXISTS idx_audit_entity ON audit_logs(entity_type, entity_id);`,
-    `CREATE INDEX IF NOT EXISTS idx_subscriptions_user ON user_subscriptions(user_id);`,
-    `CREATE INDEX IF NOT EXISTS idx_tender_history_tender ON tender_history(tender_id);`,
-    `CREATE INDEX IF NOT EXISTS idx_purchase_requests_buyer ON purchase_requests(buyer_id);`,
-    `CREATE INDEX IF NOT EXISTS idx_purchase_requests_supplier ON purchase_requests(supplier_id);`,
-    `CREATE INDEX IF NOT EXISTS idx_mfa_codes_user ON mfa_codes(user_id);`,
-    `CREATE INDEX IF NOT EXISTS idx_supplier_verifications_user ON supplier_verifications(user_id);`,
-    `CREATE INDEX IF NOT EXISTS idx_supplier_verifications_status ON supplier_verifications(verification_status);`,
-    `CREATE INDEX IF NOT EXISTS idx_encryption_keys_active ON encryption_keys(is_active);`,
-    `CREATE INDEX IF NOT EXISTS idx_tender_award_items_tender ON tender_award_line_items(tender_id);`,
-    `CREATE INDEX IF NOT EXISTS idx_tender_award_items_status ON tender_award_line_items(status);`,
-    `CREATE INDEX IF NOT EXISTS idx_messages_sender ON messages(sender_id);`,
-    `CREATE INDEX IF NOT EXISTS idx_messages_receiver ON messages(receiver_id);`,
-    `CREATE INDEX IF NOT EXISTS idx_messages_entity ON messages(related_entity_type, related_entity_id);`,
-    
-    // Indexes for company profile search and performance
-    `CREATE INDEX IF NOT EXISTS idx_user_profiles_user ON user_profiles(user_id);`,
-    `CREATE INDEX IF NOT EXISTS idx_user_profiles_city ON user_profiles(city);`,
-    `CREATE INDEX IF NOT EXISTS idx_user_profiles_country ON user_profiles(country);`,
-    `CREATE INDEX IF NOT EXISTS idx_user_profiles_rating ON user_profiles(rating DESC);`,
-    `CREATE INDEX IF NOT EXISTS idx_users_role ON users(role);`,
-    `CREATE INDEX IF NOT EXISTS idx_users_average_rating ON users(average_rating DESC);`,
-    `CREATE INDEX IF NOT EXISTS idx_users_is_active ON users(is_active);`,
-    `CREATE INDEX IF NOT EXISTS idx_users_is_verified ON users(is_verified);`,
-    
-    // Full text search support for company profiles
-    `CREATE INDEX IF NOT EXISTS idx_users_company_name ON users USING GIN(to_tsvector('french', company_name));`,
-    `CREATE INDEX IF NOT EXISTS idx_user_profiles_bio ON user_profiles USING GIN(to_tsvector('french', bio));`,
-    
-    // JSONB indexes for categories and service locations
-    `CREATE INDEX IF NOT EXISTS idx_users_preferred_categories ON users USING GIN(preferred_categories);`,
-    `CREATE INDEX IF NOT EXISTS idx_users_service_locations ON users USING GIN(service_locations);`,
-    
-    // Add is_archived column if it doesn't exist (for existing tables)
-    `ALTER TABLE IF EXISTS tenders ADD COLUMN IF NOT EXISTS is_archived BOOLEAN DEFAULT FALSE;`,
-    `ALTER TABLE IF EXISTS offers ADD COLUMN IF NOT EXISTS is_archived BOOLEAN DEFAULT FALSE;`,
-    `ALTER TABLE IF EXISTS purchase_orders ADD COLUMN IF NOT EXISTS is_archived BOOLEAN DEFAULT FALSE;`,
-    `ALTER TABLE IF EXISTS invoices ADD COLUMN IF NOT EXISTS is_archived BOOLEAN DEFAULT FALSE;`,
-    `ALTER TABLE IF EXISTS tenders ADD COLUMN IF NOT EXISTS archived_at TIMESTAMP WITH TIME ZONE;`,
-    `ALTER TABLE IF EXISTS offers ADD COLUMN IF NOT EXISTS archived_at TIMESTAMP WITH TIME ZONE;`,
-    `ALTER TABLE IF EXISTS purchase_orders ADD COLUMN IF NOT EXISTS archived_at TIMESTAMP WITH TIME ZONE;`,
-    `ALTER TABLE IF EXISTS invoices ADD COLUMN IF NOT EXISTS archived_at TIMESTAMP WITH TIME ZONE;`,
-    
-    // Create indexes after columns exist
-    `CREATE INDEX IF NOT EXISTS idx_tenders_archived ON tenders(is_archived);`,
-    `CREATE INDEX IF NOT EXISTS idx_offers_archived ON offers(is_archived);`,
-    `CREATE INDEX IF NOT EXISTS idx_po_archived ON purchase_orders(is_archived);`,
-    `CREATE INDEX IF NOT EXISTS idx_invoices_archived ON invoices(is_archived);`,
-    `CREATE INDEX IF NOT EXISTS idx_opening_reports_tender ON opening_reports(tender_id);`,
-    `CREATE INDEX IF NOT EXISTS idx_opening_reports_opened_at ON opening_reports(opened_at DESC);`,
-    `CREATE INDEX IF NOT EXISTS idx_opening_reports_status ON opening_reports(status);`,
+  `CREATE INDEX IF NOT EXISTS idx_feature_flags_enabled ON feature_flags(is_enabled);`,
+  `CREATE INDEX IF NOT EXISTS idx_feature_flags_category ON feature_flags(category);`,
+  `CREATE INDEX IF NOT EXISTS idx_feature_flag_audits_feature ON feature_flag_audits(feature_id);`,
+  `CREATE INDEX IF NOT EXISTS idx_tenders_status ON tenders(status);`,
+  `CREATE INDEX IF NOT EXISTS idx_tenders_buyer ON tenders(buyer_id);`,
+  `CREATE INDEX IF NOT EXISTS idx_offers_tender ON offers(tender_id);`,
+  `CREATE INDEX IF NOT EXISTS idx_offers_supplier ON offers(supplier_id);`,
+  `CREATE INDEX IF NOT EXISTS idx_po_tender ON purchase_orders(tender_id);`,
+  `CREATE INDEX IF NOT EXISTS idx_notifications_user ON notifications(user_id);`,
+  `CREATE INDEX IF NOT EXISTS idx_messages_receiver ON messages(receiver_id);`,
+  `CREATE INDEX IF NOT EXISTS idx_audit_user ON audit_logs(user_id);`,
+  `CREATE INDEX IF NOT EXISTS idx_audit_entity ON audit_logs(entity_type, entity_id);`,
+  `CREATE INDEX IF NOT EXISTS idx_subscriptions_user ON user_subscriptions(user_id);`,
+  `CREATE INDEX IF NOT EXISTS idx_tender_history_tender ON tender_history(tender_id);`,
+  `CREATE INDEX IF NOT EXISTS idx_purchase_requests_buyer ON purchase_requests(buyer_id);`,
+  `CREATE INDEX IF NOT EXISTS idx_purchase_requests_supplier ON purchase_requests(supplier_id);`,
+  `CREATE INDEX IF NOT EXISTS idx_mfa_codes_user ON mfa_codes(user_id);`,
+  `CREATE INDEX IF NOT EXISTS idx_supplier_verifications_user ON supplier_verifications(user_id);`,
+  `CREATE INDEX IF NOT EXISTS idx_supplier_verifications_status ON supplier_verifications(verification_status);`,
+  `CREATE INDEX IF NOT EXISTS idx_encryption_keys_active ON encryption_keys(is_active);`,
+  `CREATE INDEX IF NOT EXISTS idx_tender_award_items_tender ON tender_award_line_items(tender_id);`,
+  `CREATE INDEX IF NOT EXISTS idx_tender_award_items_status ON tender_award_line_items(status);`,
+  `CREATE INDEX IF NOT EXISTS idx_messages_sender ON messages(sender_id);`,
+  `CREATE INDEX IF NOT EXISTS idx_messages_receiver ON messages(receiver_id);`,
+  `CREATE INDEX IF NOT EXISTS idx_messages_entity ON messages(related_entity_type, related_entity_id);`,
 
-    // Tender Inquiries Table
-    `CREATE TABLE IF NOT EXISTS tender_inquiries (
+  // Indexes for company profile search and performance
+  `CREATE INDEX IF NOT EXISTS idx_user_profiles_user ON user_profiles(user_id);`,
+  `CREATE INDEX IF NOT EXISTS idx_user_profiles_city ON user_profiles(city);`,
+  `CREATE INDEX IF NOT EXISTS idx_user_profiles_country ON user_profiles(country);`,
+  `CREATE INDEX IF NOT EXISTS idx_user_profiles_rating ON user_profiles(rating DESC);`,
+  `CREATE INDEX IF NOT EXISTS idx_users_role ON users(role);`,
+  `CREATE INDEX IF NOT EXISTS idx_users_average_rating ON users(average_rating DESC);`,
+  `CREATE INDEX IF NOT EXISTS idx_users_is_active ON users(is_active);`,
+  `CREATE INDEX IF NOT EXISTS idx_users_is_verified ON users(is_verified);`,
+
+  // Full text search support for company profiles
+  `CREATE INDEX IF NOT EXISTS idx_users_company_name ON users USING GIN(to_tsvector('french', company_name));`,
+  `CREATE INDEX IF NOT EXISTS idx_user_profiles_bio ON user_profiles USING GIN(to_tsvector('french', bio));`,
+
+  // JSONB indexes for categories and service locations
+  `CREATE INDEX IF NOT EXISTS idx_users_preferred_categories ON users USING GIN(preferred_categories);`,
+  `CREATE INDEX IF NOT EXISTS idx_users_service_locations ON users USING GIN(service_locations);`,
+
+  // Add is_archived column if it doesn't exist (for existing tables)
+  `ALTER TABLE IF EXISTS tenders ADD COLUMN IF NOT EXISTS is_archived BOOLEAN DEFAULT FALSE;`,
+  `ALTER TABLE IF EXISTS offers ADD COLUMN IF NOT EXISTS is_archived BOOLEAN DEFAULT FALSE;`,
+  `ALTER TABLE IF EXISTS purchase_orders ADD COLUMN IF NOT EXISTS is_archived BOOLEAN DEFAULT FALSE;`,
+  `ALTER TABLE IF EXISTS invoices ADD COLUMN IF NOT EXISTS is_archived BOOLEAN DEFAULT FALSE;`,
+  `ALTER TABLE IF EXISTS tenders ADD COLUMN IF NOT EXISTS archived_at TIMESTAMP WITH TIME ZONE;`,
+  `ALTER TABLE IF EXISTS offers ADD COLUMN IF NOT EXISTS archived_at TIMESTAMP WITH TIME ZONE;`,
+  `ALTER TABLE IF EXISTS purchase_orders ADD COLUMN IF NOT EXISTS archived_at TIMESTAMP WITH TIME ZONE;`,
+  `ALTER TABLE IF EXISTS invoices ADD COLUMN IF NOT EXISTS archived_at TIMESTAMP WITH TIME ZONE;`,
+
+  // Create indexes after columns exist
+  `CREATE INDEX IF NOT EXISTS idx_tenders_archived ON tenders(is_archived);`,
+  `CREATE INDEX IF NOT EXISTS idx_offers_archived ON offers(is_archived);`,
+  `CREATE INDEX IF NOT EXISTS idx_po_archived ON purchase_orders(is_archived);`,
+  `CREATE INDEX IF NOT EXISTS idx_invoices_archived ON invoices(is_archived);`,
+  `CREATE INDEX IF NOT EXISTS idx_opening_reports_tender ON opening_reports(tender_id);`,
+  `CREATE INDEX IF NOT EXISTS idx_opening_reports_opened_at ON opening_reports(opened_at DESC);`,
+  `CREATE INDEX IF NOT EXISTS idx_opening_reports_status ON opening_reports(status);`,
+
+  // Tender Inquiries Table
+  `CREATE TABLE IF NOT EXISTS tender_inquiries (
         id SERIAL PRIMARY KEY,
         tender_id INTEGER NOT NULL REFERENCES tenders(id) ON DELETE CASCADE,
         supplier_id INTEGER NOT NULL REFERENCES users(id),
@@ -468,8 +468,8 @@ const schemaQueries = [
         is_deleted BOOLEAN DEFAULT FALSE
     );`,
 
-    // Inquiry Responses Table
-    `CREATE TABLE IF NOT EXISTS inquiry_responses (
+  // Inquiry Responses Table
+  `CREATE TABLE IF NOT EXISTS inquiry_responses (
         id SERIAL PRIMARY KEY,
         inquiry_id INTEGER NOT NULL REFERENCES tender_inquiries(id) ON DELETE CASCADE,
         tender_id INTEGER NOT NULL REFERENCES tenders(id) ON DELETE CASCADE,
@@ -483,8 +483,8 @@ const schemaQueries = [
         is_deleted BOOLEAN DEFAULT FALSE
     );`,
 
-    // Addenda Table (ملحق)
-    `CREATE TABLE IF NOT EXISTS addenda (
+  // Addenda Table (ملحق)
+  `CREATE TABLE IF NOT EXISTS addenda (
         id SERIAL PRIMARY KEY,
         tender_id INTEGER NOT NULL REFERENCES tenders(id) ON DELETE CASCADE,
         addendum_number VARCHAR(50) UNIQUE NOT NULL,
@@ -500,8 +500,8 @@ const schemaQueries = [
         is_deleted BOOLEAN DEFAULT FALSE
     );`,
 
-    // Addendum Notifications Table
-    `CREATE TABLE IF NOT EXISTS addendum_notifications (
+  // Addendum Notifications Table
+  `CREATE TABLE IF NOT EXISTS addendum_notifications (
         id SERIAL PRIMARY KEY,
         addendum_id INTEGER NOT NULL REFERENCES addenda(id) ON DELETE CASCADE,
         user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
@@ -511,30 +511,29 @@ const schemaQueries = [
         created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
     );`,
 
-    // Indexes for inquiry and addenda tables
-    `CREATE INDEX IF NOT EXISTS idx_tender_inquiries_tender ON tender_inquiries(tender_id);`,
-    `CREATE INDEX IF NOT EXISTS idx_tender_inquiries_supplier ON tender_inquiries(supplier_id);`,
-    `CREATE INDEX IF NOT EXISTS idx_tender_inquiries_status ON tender_inquiries(status);`,
-    `CREATE INDEX IF NOT EXISTS idx_inquiry_responses_inquiry ON inquiry_responses(inquiry_id);`,
-    `CREATE INDEX IF NOT EXISTS idx_inquiry_responses_tender ON inquiry_responses(tender_id);`,
-    `CREATE INDEX IF NOT EXISTS idx_addenda_tender ON addenda(tender_id);`,
-    `CREATE INDEX IF NOT EXISTS idx_addenda_number ON addenda(addendum_number);`,
-    `CREATE INDEX IF NOT EXISTS idx_addendum_notifications_addendum ON addendum_notifications(addendum_id);`,
-    `CREATE INDEX IF NOT EXISTS idx_addendum_notifications_user ON addendum_notifications(user_id);`,
-
+  // Indexes for inquiry and addenda tables
+  `CREATE INDEX IF NOT EXISTS idx_tender_inquiries_tender ON tender_inquiries(tender_id);`,
+  `CREATE INDEX IF NOT EXISTS idx_tender_inquiries_supplier ON tender_inquiries(supplier_id);`,
+  `CREATE INDEX IF NOT EXISTS idx_tender_inquiries_status ON tender_inquiries(status);`,
+  `CREATE INDEX IF NOT EXISTS idx_inquiry_responses_inquiry ON inquiry_responses(inquiry_id);`,
+  `CREATE INDEX IF NOT EXISTS idx_inquiry_responses_tender ON inquiry_responses(tender_id);`,
+  `CREATE INDEX IF NOT EXISTS idx_addenda_tender ON addenda(tender_id);`,
+  `CREATE INDEX IF NOT EXISTS idx_addenda_number ON addenda(addendum_number);`,
+  `CREATE INDEX IF NOT EXISTS idx_addendum_notifications_addendum ON addendum_notifications(addendum_id);`,
+  `CREATE INDEX IF NOT EXISTS idx_addendum_notifications_user ON addendum_notifications(user_id);`,
 ];
 
 async function initializeSchema(pool) {
-    try {
-        for (const query of schemaQueries) {
-            await pool.query(query);
-        }
-        return true;
-    } catch (error) {
-        return false;
+  try {
+    for (const query of schemaQueries) {
+      await pool.query(query);
     }
+    return true;
+  } catch (error) {
+    return false;
+  }
 }
 
 module.exports = {
-    initializeSchema
+  initializeSchema,
 };

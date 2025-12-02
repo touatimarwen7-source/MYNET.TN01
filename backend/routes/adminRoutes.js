@@ -19,7 +19,11 @@ router.get('/users/:id', validateIdMiddleware('id'), adminController.getUserDeta
 router.put('/users/:id/role', validateIdMiddleware('id'), adminController.updateUserRole);
 router.post('/users/:id/block', validateIdMiddleware('id'), adminController.blockUser);
 router.post('/users/:id/unblock', validateIdMiddleware('id'), adminController.unblockUser);
-router.post('/users/:id/reset-password', validateIdMiddleware('id'), adminController.resetUserPassword);
+router.post(
+  '/users/:id/reset-password',
+  validateIdMiddleware('id'),
+  adminController.resetUserPassword
+);
 
 // ===== إدارة المحتوى الثابت والصفحات والملفات =====
 // الصفحات الثابتة (تحرير كامل)

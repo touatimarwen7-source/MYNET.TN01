@@ -1,4 +1,3 @@
-
 const { getPool } = require('../config/db');
 
 class QueueService {
@@ -32,7 +31,7 @@ class QueueService {
         tenderHistoryData.new_state,
         JSON.stringify(tenderHistoryData.metadata || {}),
         tenderHistoryData.ip_address,
-        tenderHistoryData.user_agent
+        tenderHistoryData.user_agent,
       ]
     );
   }

@@ -18,7 +18,7 @@ describe('Admin Table Integration', () => {
 
     // Simulate AdminTable with search
     const searchTerm = 'Page 1';
-    const filtered = mockData.filter(item => 
+    const filtered = mockData.filter((item) =>
       item.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
@@ -47,9 +47,7 @@ describe('Admin Table Integration', () => {
       { id: 3, name: 'Mango', price: 150 },
     ];
 
-    const sorted = [...mockData].sort((a, b) => 
-      a.name.localeCompare(b.name)
-    );
+    const sorted = [...mockData].sort((a, b) => a.name.localeCompare(b.name));
 
     expect(sorted[0].name).toBe('Apple');
     expect(sorted[1].name).toBe('Mango');
@@ -122,7 +120,7 @@ describe('API Error Handling', () => {
     };
 
     const formErrors = {};
-    apiError.errors.forEach(err => {
+    apiError.errors.forEach((err) => {
       formErrors[err.field] = err.message;
     });
 
@@ -173,7 +171,7 @@ describe('Complete User Workflow', () => {
     expect(items[0].name).toBe('Updated Item');
 
     // Delete
-    items = items.filter(item => item.id !== 1);
+    items = items.filter((item) => item.id !== 1);
     expect(items).toHaveLength(0);
   });
 
@@ -185,7 +183,7 @@ describe('Complete User Workflow', () => {
     ];
 
     // Bulk update status
-    const updated = items.map(item =>
+    const updated = items.map((item) =>
       [1, 2].includes(item.id) ? { ...item, status: 'archived' } : item
     );
 
@@ -224,8 +222,8 @@ describe('Data Export/Import Workflow', () => {
     const csv = 'id,name\n1,Item1\n2,Item2';
     const lines = csv.split('\n');
     const headers = lines[0].split(',');
-    
-    const items = lines.slice(1).map(line => {
+
+    const items = lines.slice(1).map((line) => {
       const values = line.split(',');
       return {
         id: values[0],

@@ -1,7 +1,13 @@
 import { useState, useEffect } from 'react';
 import { Alert, Box, LinearProgress } from '@mui/material';
 
-export default function ToastNotification({ id, message, type = 'info', duration = 4000, onClose }) {
+export default function ToastNotification({
+  id,
+  message,
+  type = 'info',
+  duration = 4000,
+  onClose,
+}) {
   const [progress, setProgress] = useState(100);
 
   useEffect(() => {
@@ -10,7 +16,7 @@ export default function ToastNotification({ id, message, type = 'info', duration
     }, duration);
 
     const interval = setInterval(() => {
-      setProgress((prev) => Math.max(prev - (100 / (duration / 100)), 0));
+      setProgress((prev) => Math.max(prev - 100 / (duration / 100), 0));
     }, duration / 100);
 
     return () => {
@@ -23,7 +29,7 @@ export default function ToastNotification({ id, message, type = 'info', duration
     success: 'success',
     error: 'error',
     warning: 'warning',
-    info: 'info'
+    info: 'info',
   };
 
   return (
@@ -33,20 +39,20 @@ export default function ToastNotification({ id, message, type = 'info', duration
         '@keyframes slideIn': {
           from: {
             transform: 'translateX(400px)',
-            opacity: 0
+            opacity: 0,
           },
           to: {
             transform: 'translateX(0)',
-            opacity: 1
-          }
-        }
+            opacity: 1,
+          },
+        },
       }}
     >
       <Alert
         severity={severityMap[type] || 'info'}
         sx={{
           minWidth: '300px',
-          boxShadow: 'none'
+          boxShadow: 'none',
         }}
       >
         {message}
@@ -55,7 +61,7 @@ export default function ToastNotification({ id, message, type = 'info', duration
           value={progress}
           sx={{
             marginTop: '8px',
-            height: '2px'
+            height: '2px',
           }}
         />
       </Alert>

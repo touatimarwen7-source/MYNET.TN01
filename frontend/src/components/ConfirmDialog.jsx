@@ -4,27 +4,27 @@ import {
   DialogContent,
   DialogActions,
   Button,
-  Typography
+  Typography,
 } from '@mui/material';
 import { THEME_COLORS } from './themeHelpers';
 import institutionalTheme from '../theme/theme';
 
-export default function ConfirmDialog({ 
-  open, 
-  title, 
-  message, 
-  confirmText = 'Confirmer', 
+export default function ConfirmDialog({
+  open,
+  title,
+  message,
+  confirmText = 'Confirmer',
   cancelText = 'Annuler',
-  onConfirm, 
+  onConfirm,
   onCancel,
   severity = 'warning',
-  loading = false 
+  loading = false,
 }) {
   const theme = institutionalTheme;
   const severityColors = {
     warning: { title: 'THEME_COLORS.error', button: 'THEME_COLORS.error' },
     info: { title: theme.palette.primary.main, button: theme.palette.primary.main },
-    success: { title: '#2e7d32', button: '#2e7d32' }
+    success: { title: '#2e7d32', button: '#2e7d32' },
   };
 
   return (

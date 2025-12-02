@@ -74,13 +74,16 @@ export const useFormValidation = (initialValues = {}, validationSchema = {}, onS
   /**
    * Validate single field
    */
-  const validateSingleField = useCallback((name, value) => {
-    const rules = validationSchema[name];
-    if (!rules) return null;
+  const validateSingleField = useCallback(
+    (name, value) => {
+      const rules = validationSchema[name];
+      if (!rules) return null;
 
-    const error = validateField(value, rules, values);
-    return error;
-  }, [validationSchema, values]);
+      const error = validateField(value, rules, values);
+      return error;
+    },
+    [validationSchema, values]
+  );
 
   /**
    * Validate all fields
@@ -89,7 +92,7 @@ export const useFormValidation = (initialValues = {}, validationSchema = {}, onS
     const newErrors = {};
     let hasErrors = false;
 
-    Object.keys(validationSchema).forEach(fieldName => {
+    Object.keys(validationSchema).forEach((fieldName) => {
       const error = validateField(values[fieldName], validationSchema[fieldName], values);
       if (error) {
         newErrors[fieldName] = error;
@@ -104,79 +107,88 @@ export const useFormValidation = (initialValues = {}, validationSchema = {}, onS
   /**
    * Handle field change
    */
-  const handleChange = useCallback((e) => {
-    const { name, value, type, checked } = e.target;
-    const fieldValue = type === 'checkbox' ? checked : value;
+  const handleChange = useCallback(
+    (e) => {
+      const { name, value, type, checked } = e.target;
+      const fieldValue = type === 'checkbox' ? checked : value;
 
-    setValues(prev => ({
-      ...prev,
-      [name]: fieldValue
-    }));
-
-    setIsDirty(true);
-
-    // Validate on change if field has been touched
-    if (touched[name]) {
-      const error = validateSingleField(name, fieldValue);
-      setErrors(prev => ({
+      setValues((prev) => ({
         ...prev,
-        [name]: error
+        [name]: fieldValue,
       }));
-    }
-  }, [touched, validateSingleField]);
+
+      setIsDirty(true);
+
+      // Validate on change if field has been touched
+      if (touched[name]) {
+        const error = validateSingleField(name, fieldValue);
+        setErrors((prev) => ({
+          ...prev,
+          [name]: error,
+        }));
+      }
+    },
+    [touched, validateSingleField]
+  );
 
   /**
    * Handle field blur
    */
-  const handleBlur = useCallback((e) => {
-    const { name, value } = e.target;
+  const handleBlur = useCallback(
+    (e) => {
+      const { name, value } = e.target;
 
-    setTouched(prev => ({
-      ...prev,
-      [name]: true
-    }));
+      setTouched((prev) => ({
+        ...prev,
+        [name]: true,
+      }));
 
-    // Validate on blur
-    const error = validateSingleField(name, value);
-    setErrors(prev => ({
-      ...prev,
-      [name]: error
-    }));
-  }, [validateSingleField]);
+      // Validate on blur
+      const error = validateSingleField(name, value);
+      setErrors((prev) => ({
+        ...prev,
+        [name]: error,
+      }));
+    },
+    [validateSingleField]
+  );
 
   /**
    * Handle form submit
    */
-  const handleSubmit = useCallback(async (e) => {
-    if (e) {
-      e.preventDefault();
-    }
-
-    // Validate all fields
-    const isValid = validateAllFields();
-
-    if (!isValid) {
-      // Mark all fields as touched
-      const allTouched = {};
-      Object.keys(validationSchema).forEach(fieldName => {
-        allTouched[fieldName] = true;
-      });
-      setTouched(allTouched);
-      return;
-    }
-
-    // All valid, submit
-    if (onSubmit) {
-      setIsSubmitting(true);
-      try {
-        await onSubmit(values);
-      } catch (err) {
-        // Error tracked;
-      } finally {
-        setIsSubmitting(false);
+  const handleSubmit = useCallback(
+    async (e) => {
+      if (e) {
+        e.preventDefault();
       }
-    }
-  }, [validateAllFields, validationSchema, values, onSubmit]);
+
+      // Validate all fields
+      const isValid = validateAllFields();
+
+      if (!isValid) {
+        // Mark all fields as touched
+        const allTouched = {};
+        Object.keys(validationSchema).forEach((fieldName) => {
+          allTouched[fieldName] = true;
+        });
+        setTouched(allTouched);
+        return;
+      }
+
+      // All valid, submit
+      if (onSubmit) {
+        setIsSubmitting(true);
+        try {
+          await onSubmit(values);
+        } catch (err) {
+          // Error tracked;
+        } finally {
+          setIsSubmitting(false);
+        }
+      }
+    },
+    [validateAllFields, validationSchema, values, onSubmit]
+  );
 
   /**
    * Reset form
@@ -193,9 +205,9 @@ export const useFormValidation = (initialValues = {}, validationSchema = {}, onS
    * Set field value programmatically
    */
   const setFieldValue = useCallback((name, value) => {
-    setValues(prev => ({
+    setValues((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
   }, []);
 
@@ -203,9 +215,9 @@ export const useFormValidation = (initialValues = {}, validationSchema = {}, onS
    * Set field error programmatically
    */
   const setFieldError = useCallback((name, error) => {
-    setErrors(prev => ({
+    setErrors((prev) => ({
       ...prev,
-      [name]: error
+      [name]: error,
     }));
   }, []);
 
@@ -240,8 +252,8 @@ export const useFormValidation = (initialValues = {}, validationSchema = {}, onS
       onChange: handleChange,
       onBlur: handleBlur,
       error: touched[name] && !!errors[name],
-      helperText: touched[name] ? errors[name] : ''
-    })
+      helperText: touched[name] ? errors[name] : '',
+    }),
   };
 };
 

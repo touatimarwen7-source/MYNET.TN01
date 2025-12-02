@@ -8,10 +8,12 @@
 ## 🎯 الإجراءات الفورية (Critical - يجب الآن)
 
 ### 1. حذف ملفات PATCH المؤقتة ✅
+
 ```bash
 ❌ backend/services/TenderService-PATCH.js - DELETED
 ❌ backend/services/OfferService-PATCH.js - DELETED
 ```
+
 **الحالة:** ✅ مكتمل
 
 ---
@@ -19,19 +21,21 @@
 ### 2. تنظيف Console.log
 
 #### الملفات المتأثرة:
+
 ```javascript
-backend/config/schema.js
-backend/config/emailService.js
-backend/config/db.js
-backend/config/websocket.js
-backend/middleware/errorHandler.js
-backend/middleware/loggingMiddleware.js
-frontend/src/services/axiosInterceptor.js
-frontend/src/pages/SupplierInvoices.jsx
-frontend/src/pages/InvoiceGeneration.jsx
+backend / config / schema.js;
+backend / config / emailService.js;
+backend / config / db.js;
+backend / config / websocket.js;
+backend / middleware / errorHandler.js;
+backend / middleware / loggingMiddleware.js;
+frontend / src / services / axiosInterceptor.js;
+frontend / src / pages / SupplierInvoices.jsx;
+frontend / src / pages / InvoiceGeneration.jsx;
 ```
 
 **الخطوات:**
+
 1. استبدال `console.log` بـ `logger.info`
 2. استبدال `console.error` بـ `logger.error`
 3. استبدال `console.warn` بـ `logger.warn`
@@ -43,6 +47,7 @@ frontend/src/pages/InvoiceGeneration.jsx
 ### 3. معالجة الأخطاء الموحدة
 
 **المشكلة:**
+
 ```javascript
 // بعض الـ routes بدون معالجة أخطاء
 router.get('/data', (req, res) => {
@@ -52,12 +57,16 @@ router.get('/data', (req, res) => {
 ```
 
 **الحل:**
+
 ```javascript
 // استخدام asyncHandler
-router.get('/data', asyncHandler(async (req, res) => {
-  const data = await someFunction();
-  res.json(ResponseFormatter.success(data));
-}));
+router.get(
+  '/data',
+  asyncHandler(async (req, res) => {
+    const data = await someFunction();
+    res.json(ResponseFormatter.success(data));
+  })
+);
 ```
 
 ---
@@ -69,6 +78,7 @@ router.get('/data', asyncHandler(async (req, res) => {
 ### المستهدفة: 80%+ ✅
 
 #### الملفات التي تحتاج اختبارات:
+
 ```
 Controllers:
   - ✅ AdminController
@@ -94,6 +104,7 @@ Services:
 ## 🔒 تحسينات الأمان
 
 ### WebSocket Security
+
 ```javascript
 // أضف error handling
 socket.on('connect_error', (error) => {
@@ -108,6 +119,7 @@ setInterval(() => {
 ```
 
 ### CSRF Testing
+
 ```javascript
 // اختبر CSRF tokens فعلياً
 test('should reject requests without CSRF token', () => {
@@ -120,6 +132,7 @@ test('should reject requests without CSRF token', () => {
 ## 📝 TODOs المتبقية
 
 ### Frontend
+
 ```
 1. TODO: Integrate with error tracking service
    Location: frontend/src/utils/errorHandler.js
@@ -127,6 +140,7 @@ test('should reject requests without CSRF token', () => {
 ```
 
 ### Backend
+
 ```
 1. TODO: Upgrade session storage for CSRF tokens
    Location: backend/utils/csrfProtection.js
@@ -142,18 +156,21 @@ test('should reject requests without CSRF token', () => {
 ## 🚀 أولويات التحسن
 
 ### Phase 1 (هذا الأسبوع)
+
 - [ ] حذف PATCH files - ✅ DONE
 - [ ] تنظيف console.log
 - [ ] إصلاح معالجة الأخطاء
 - [ ] إضافة 20+ اختبار
 
 ### Phase 2 (الأسبوع المقبل)
+
 - [ ] اختبارات Controllers (10+)
 - [ ] اختبارات Services (15+)
 - [ ] WebSocket security
 - [ ] CSRF testing
 
 ### Phase 3 (الشهر)
+
 - [ ] API documentation
 - [ ] Pagination fixes
 - [ ] Key management
@@ -164,6 +181,7 @@ test('should reject requests without CSRF token', () => {
 ## 📋 قائمة المراجعة
 
 ### قبل النشر
+
 - [ ] تنظيف console.log
 - [ ] إصلاح معالجة الأخطاء
 - [ ] تشغيل جميع الاختبارات
@@ -171,6 +189,7 @@ test('should reject requests without CSRF token', () => {
 - [ ] توثيق التغييرات
 
 ### بعد النشر
+
 - [ ] مراقبة الأخطاء
 - [ ] قياس الأداء
 - [ ] جمع feedback
@@ -180,13 +199,13 @@ test('should reject requests without CSRF token', () => {
 
 ## 📊 المقاييس
 
-| المقياس | الحالي | المستهدف | الحالة |
-|--------|--------|----------|--------|
-| Test Coverage | 0.17% | 80% | 🔴 |
-| Console.log | 15+ | 0 | 🔴 |
-| Error Handling | 70% | 100% | 🟠 |
-| WebSocket Security | 60% | 100% | 🟠 |
-| Documentation | 50% | 100% | 🟡 |
+| المقياس            | الحالي | المستهدف | الحالة |
+| ------------------ | ------ | -------- | ------ |
+| Test Coverage      | 0.17%  | 80%      | 🔴     |
+| Console.log        | 15+    | 0        | 🔴     |
+| Error Handling     | 70%    | 100%     | 🟠     |
+| WebSocket Security | 60%    | 100%     | 🟠     |
+| Documentation      | 50%    | 100%     | 🟡     |
 
 ---
 

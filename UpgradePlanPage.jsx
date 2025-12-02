@@ -8,7 +8,7 @@ const UpgradePlanPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
   
-  const message = location.state?.message || "الوصول إلى هذه الميزة يتطلب باقة اشتراك أعلى.";
+  const message = location.state?.message || "L'accès à cette fonctionnalité nécessite un forfait d'abonnement supérieur.";
 
   return (
     <Container component="main" maxWidth="sm">
@@ -27,7 +27,7 @@ const UpgradePlanPage = () => {
       >
         <StarIcon sx={{ fontSize: 60, color: institutionalTheme.palette.primary.main, mb: 2 }} />
         <Typography component="h1" variant="h4" sx={{ mb: 2, fontWeight: 'bold' }}>
-          ميزة حصرية
+          Fonctionnalité Exclusive
         </Typography>
         
         <Alert severity="info" sx={{ width: '100%', justifyContent: 'center', mb: 3 }}>
@@ -35,11 +35,11 @@ const UpgradePlanPage = () => {
         </Alert>
 
         <Typography variant="body1" sx={{ mb: 4 }}>
-          يرجى ترقية باقة اشتراكك للاستفادة من هذه الميزة والميزات المتقدمة الأخرى.
+          Veuillez mettre à niveau votre forfait pour bénéficier de cette fonctionnalité et d'autres avantages avancés.
         </Typography>
 
         <Button variant="contained" onClick={() => navigate('/subscriptions')}>
-          عرض باقات الاشتراك
+          Voir les Forfaits d'Abonnement
         </Button>
       </Box>
     </Container>

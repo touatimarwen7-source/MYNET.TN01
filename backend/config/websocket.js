@@ -15,9 +15,9 @@ const initializeWebSocket = (server) => {
   io = socketIO(server, {
     cors: {
       origin: frontendUrl,
-      credentials: true
+      credentials: true,
     },
-    transports: ['websocket', 'polling']
+    transports: ['websocket', 'polling'],
   });
 
   // Initialize Events Manager
@@ -36,7 +36,7 @@ const initializeWebSocket = (server) => {
         socket.join(`user-${userId}`);
         eventsManager.registerUserConnection(userId, socket.id);
         // User connection tracked by eventsManager
-        
+
         // Emit user online status
         eventsManager.emitUserOnline(userId);
       }
@@ -83,7 +83,7 @@ const initializeWebSocket = (server) => {
           type: 'offer-status-updated',
           offerId: data.offerId,
           status: data.status,
-          timestamp: new Date()
+          timestamp: new Date(),
         });
       }
     });
@@ -127,7 +127,7 @@ const initializeWebSocket = (server) => {
         io.to(`user-${data.recipientId}`).emit('user-typing', {
           type: 'user-typing',
           userId: data.userId,
-          timestamp: new Date()
+          timestamp: new Date(),
         });
       }
     });
@@ -140,7 +140,7 @@ const initializeWebSocket = (server) => {
         io.to(`user-${data.recipientId}`).emit('user-stop-typing', {
           type: 'user-stop-typing',
           userId: data.userId,
-          timestamp: new Date()
+          timestamp: new Date(),
         });
       }
     });
@@ -166,7 +166,7 @@ const initializeWebSocket = (server) => {
           reviewer: data.reviewer,
           title: data.title,
           content: data.content,
-          timestamp: new Date()
+          timestamp: new Date(),
         });
       }
     });
@@ -268,5 +268,5 @@ const getEventsManager = () => {
 module.exports = {
   initializeWebSocket,
   getIO,
-  getEventsManager
+  getEventsManager,
 };

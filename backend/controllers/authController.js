@@ -5,251 +5,260 @@ const SimpleAuthService = require('../services/SimpleAuthService');
 /**
  * Authentication Controller
  * Handles user registration, login, token refresh, and profile management
- * 
+ *
  * @class AuthController
  * @example
  * const controller = new AuthController();
  * await controller.register(req, res);
  */
 class AuthController {
-    /**
-     * Register a new user
-     * @async
-     * @param {Object} req - Express request object
-     * @param {Object} req.body - Request body
-     * @param {string} req.body.username - Username (required)
-     * @param {string} req.body.email - Email address (required)
-     * @param {string} req.body.password - Password (required)
-     * @param {string} req.body.full_name - Full name
-     * @param {string} req.body.phone - Phone number
-     * @param {string} req.body.role - User role (buyer|supplier|viewer)
-     * @param {string} req.body.company_name - Company name
-     * @param {string} req.body.company_registration - Company registration number
-     * @param {Object} res - Express response object
-     * @returns {void}
-     * @throws {400} If required fields are missing
-     * @throws {400} If user creation fails
-     * @example
-     * POST /auth/register
-     * {
-     *   "username": "john_doe",
-     *   "email": "john@example.com",
-     *   "password": "SecurePass123!",
-     *   "role": "supplier"
-     * }
-     */
-    async register(req, res) {
-        try {
-            const { username, email, password, full_name, phone, role, company_name, company_registration } = req.body;
+  /**
+   * Register a new user
+   * @async
+   * @param {Object} req - Express request object
+   * @param {Object} req.body - Request body
+   * @param {string} req.body.username - Username (required)
+   * @param {string} req.body.email - Email address (required)
+   * @param {string} req.body.password - Password (required)
+   * @param {string} req.body.full_name - Full name
+   * @param {string} req.body.phone - Phone number
+   * @param {string} req.body.role - User role (buyer|supplier|viewer)
+   * @param {string} req.body.company_name - Company name
+   * @param {string} req.body.company_registration - Company registration number
+   * @param {Object} res - Express response object
+   * @returns {void}
+   * @throws {400} If required fields are missing
+   * @throws {400} If user creation fails
+   * @example
+   * POST /auth/register
+   * {
+   *   "username": "john_doe",
+   *   "email": "john@example.com",
+   *   "password": "SecurePass123!",
+   *   "role": "supplier"
+   * }
+   */
+  async register(req, res) {
+    try {
+      const {
+        username,
+        email,
+        password,
+        full_name,
+        phone,
+        role,
+        company_name,
+        company_registration,
+      } = req.body;
 
-            if (!username || !email || !password) {
-                return res.status(400).json({ 
-                    error: 'Username, email, and password are required' 
-                });
-            }
+      if (!username || !email || !password) {
+        return res.status(400).json({
+          error: 'Username, email, and password are required',
+        });
+      }
 
-            const user = await UserService.createUser({
-                username,
-                email,
-                password,
-                full_name,
-                phone,
-                role: role || 'viewer',
-                company_name,
-                company_registration
-            });
+      const user = await UserService.createUser({
+        username,
+        email,
+        password,
+        full_name,
+        phone,
+        role: role || 'viewer',
+        company_name,
+        company_registration,
+      });
 
-            res.status(201).json({
-                success: true,
-                message: 'User registered successfully',
-                user
-            });
-        } catch (error) {
-            res.status(400).json({ 
-                error: error.message 
-            });
-        }
+      res.status(201).json({
+        success: true,
+        message: 'User registered successfully',
+        user,
+      });
+    } catch (error) {
+      res.status(400).json({
+        error: error.message,
+      });
     }
+  }
 
-    /**
-     * Authenticate user with email and password
-     * @async
-     * @param {Object} req - Express request object
-     * @param {Object} req.body - Request body
-     * @param {string} req.body.email - User email (required)
-     * @param {string} req.body.password - User password (required)
-     * @param {Object} res - Express response object
-     * @returns {void} Returns access token and user data
-     * @throws {400} If email or password is missing
-     * @throws {401} If authentication fails
-     * @example
-     * POST /auth/login
-     * {
-     *   "email": "john@example.com",
-     *   "password": "SecurePass123!"
-     * }
-     * Response: { success: true, accessToken: "...", user: {...} }
-     */
-    async login(req, res) {
-        try {
-            const { email, password } = req.body;
+  /**
+   * Authenticate user with email and password
+   * @async
+   * @param {Object} req - Express request object
+   * @param {Object} req.body - Request body
+   * @param {string} req.body.email - User email (required)
+   * @param {string} req.body.password - User password (required)
+   * @param {Object} res - Express response object
+   * @returns {void} Returns access token and user data
+   * @throws {400} If email or password is missing
+   * @throws {401} If authentication fails
+   * @example
+   * POST /auth/login
+   * {
+   *   "email": "john@example.com",
+   *   "password": "SecurePass123!"
+   * }
+   * Response: { success: true, accessToken: "...", user: {...} }
+   */
+  async login(req, res) {
+    try {
+      const { email, password } = req.body;
 
-            if (!email || !password) {
-                return res.status(400).json({ 
-                    error: 'Email and password are required' 
-                });
-            }
+      if (!email || !password) {
+        return res.status(400).json({
+          error: 'Email and password are required',
+        });
+      }
 
-            let authData;
-            try {
-                // Try database authentication first
-                authData = await UserService.authenticateUser(email, password);
-            } catch (dbError) {
-                // Fallback to simple auth service
-                authData = await SimpleAuthService.authenticate(email, password);
-            }
+      let authData;
+      try {
+        // Try database authentication first
+        authData = await UserService.authenticateUser(email, password);
+      } catch (dbError) {
+        // Fallback to simple auth service
+        authData = await SimpleAuthService.authenticate(email, password);
+      }
 
-            res.status(200).json({
-                success: true,
-                message: 'Login successful',
-                accessToken: authData.accessToken,
-                refreshToken: authData.refreshToken,
-                refreshTokenId: authData.refreshToken,
-                expiresIn: authData.expiresIn || 900,
-                user: authData.user,
-                data: authData.user
-            });
-        } catch (error) {
-            res.status(401).json({ 
-                error: error.message 
-            });
-        }
+      res.status(200).json({
+        success: true,
+        message: 'Login successful',
+        accessToken: authData.accessToken,
+        refreshToken: authData.refreshToken,
+        refreshTokenId: authData.refreshToken,
+        expiresIn: authData.expiresIn || 900,
+        user: authData.user,
+        data: authData.user,
+      });
+    } catch (error) {
+      res.status(401).json({
+        error: error.message,
+      });
     }
+  }
 
-    /**
-     * Refresh access token using refresh token
-     * @async
-     * @param {Object} req - Express request object
-     * @param {Object} req.body - Request body
-     * @param {string} req.body.refreshToken - Refresh token (required)
-     * @param {Object} res - Express response object
-     * @returns {void} Returns new access token
-     * @throws {400} If refresh token is missing
-     * @throws {404} If user not found
-     * @throws {403} If refresh token is invalid
-     * @example
-     * POST /auth/refresh-token
-     * { "refreshToken": "..." }
-     * Response: { success: true, accessToken: "..." }
-     */
-    async refreshToken(req, res) {
-        try {
-            const { refreshToken } = req.body;
+  /**
+   * Refresh access token using refresh token
+   * @async
+   * @param {Object} req - Express request object
+   * @param {Object} req.body - Request body
+   * @param {string} req.body.refreshToken - Refresh token (required)
+   * @param {Object} res - Express response object
+   * @returns {void} Returns new access token
+   * @throws {400} If refresh token is missing
+   * @throws {404} If user not found
+   * @throws {403} If refresh token is invalid
+   * @example
+   * POST /auth/refresh-token
+   * { "refreshToken": "..." }
+   * Response: { success: true, accessToken: "..." }
+   */
+  async refreshToken(req, res) {
+    try {
+      const { refreshToken } = req.body;
 
-            if (!refreshToken) {
-                return res.status(400).json({ 
-                    error: 'Refresh token is required' 
-                });
-            }
+      if (!refreshToken) {
+        return res.status(400).json({
+          error: 'Refresh token is required',
+        });
+      }
 
-            const decoded = KeyManagementService.verifyRefreshToken(refreshToken);
-            
-            const user = await UserService.getUserById(decoded.userId);
-            
-            if (!user) {
-                return res.status(404).json({ 
-                    error: 'User not found' 
-                });
-            }
+      const decoded = KeyManagementService.verifyRefreshToken(refreshToken);
 
-            const newAccessToken = KeyManagementService.generateAccessToken({
-                userId: user.id,
-                username: user.username,
-                email: user.email,
-                role: user.role
-            });
+      const user = await UserService.getUserById(decoded.userId);
 
-            res.status(200).json({
-                success: true,
-                accessToken: newAccessToken
-            });
-        } catch (error) {
-            res.status(403).json({ 
-                error: 'Invalid refresh token' 
-            });
-        }
+      if (!user) {
+        return res.status(404).json({
+          error: 'User not found',
+        });
+      }
+
+      const newAccessToken = KeyManagementService.generateAccessToken({
+        userId: user.id,
+        username: user.username,
+        email: user.email,
+        role: user.role,
+      });
+
+      res.status(200).json({
+        success: true,
+        accessToken: newAccessToken,
+      });
+    } catch (error) {
+      res.status(403).json({
+        error: 'Invalid refresh token',
+      });
     }
+  }
 
-    /**
-     * Get authenticated user's profile
-     * @async
-     * @param {Object} req - Express request object
-     * @param {Object} req.user - Authenticated user from middleware
-     * @param {number} req.user.id - User ID from JWT token
-     * @param {Object} res - Express response object
-     * @returns {void} Returns user profile data
-     * @throws {404} If user not found
-     * @throws {500} If database error occurs
-     * @example
-     * GET /auth/profile
-     * Headers: { Authorization: "Bearer <token>" }
-     * Response: { success: true, user: {...} }
-     */
-    async getProfile(req, res) {
-        try {
-            const user = await UserService.getUserById(req.user.id);
-            
-            if (!user) {
-                return res.status(404).json({ 
-                    error: 'User not found' 
-                });
-            }
+  /**
+   * Get authenticated user's profile
+   * @async
+   * @param {Object} req - Express request object
+   * @param {Object} req.user - Authenticated user from middleware
+   * @param {number} req.user.id - User ID from JWT token
+   * @param {Object} res - Express response object
+   * @returns {void} Returns user profile data
+   * @throws {404} If user not found
+   * @throws {500} If database error occurs
+   * @example
+   * GET /auth/profile
+   * Headers: { Authorization: "Bearer <token>" }
+   * Response: { success: true, user: {...} }
+   */
+  async getProfile(req, res) {
+    try {
+      const user = await UserService.getUserById(req.user.id);
 
-            res.status(200).json({
-                success: true,
-                user
-            });
-        } catch (error) {
-            res.status(500).json({ 
-                error: error.message 
-            });
-        }
+      if (!user) {
+        return res.status(404).json({
+          error: 'User not found',
+        });
+      }
+
+      res.status(200).json({
+        success: true,
+        user,
+      });
+    } catch (error) {
+      res.status(500).json({
+        error: error.message,
+      });
     }
+  }
 
-    /**
-     * Update authenticated user's profile
-     * @async
-     * @param {Object} req - Express request object
-     * @param {Object} req.user - Authenticated user from middleware
-     * @param {number} req.user.id - User ID from JWT token
-     * @param {Object} req.body - Fields to update (full_name, phone, company_name, etc.)
-     * @param {Object} res - Express response object
-     * @returns {void} Returns updated user profile
-     * @throws {400} If update validation fails
-     * @throws {500} If database error occurs
-     * @example
-     * PUT /auth/profile
-     * Headers: { Authorization: "Bearer <token>" }
-     * Body: { "full_name": "John Doe", "phone": "1234567890" }
-     * Response: { success: true, user: {...} }
-     */
-    async updateProfile(req, res) {
-        try {
-            const updateData = req.body;
-            
-            const user = await UserService.updateUser(req.user.id, updateData);
+  /**
+   * Update authenticated user's profile
+   * @async
+   * @param {Object} req - Express request object
+   * @param {Object} req.user - Authenticated user from middleware
+   * @param {number} req.user.id - User ID from JWT token
+   * @param {Object} req.body - Fields to update (full_name, phone, company_name, etc.)
+   * @param {Object} res - Express response object
+   * @returns {void} Returns updated user profile
+   * @throws {400} If update validation fails
+   * @throws {500} If database error occurs
+   * @example
+   * PUT /auth/profile
+   * Headers: { Authorization: "Bearer <token>" }
+   * Body: { "full_name": "John Doe", "phone": "1234567890" }
+   * Response: { success: true, user: {...} }
+   */
+  async updateProfile(req, res) {
+    try {
+      const updateData = req.body;
 
-            res.status(200).json({
-                success: true,
-                message: 'Profile updated successfully',
-                user
-            });
-        } catch (error) {
-            res.status(400).json({ 
-                error: error.message 
-            });
-        }
+      const user = await UserService.updateUser(req.user.id, updateData);
+
+      res.status(200).json({
+        success: true,
+        message: 'Profile updated successfully',
+        user,
+      });
+    } catch (error) {
+      res.status(400).json({
+        error: error.message,
+      });
     }
+  }
 }
 
 module.exports = new AuthController();

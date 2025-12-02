@@ -83,8 +83,16 @@ export default function Dashboard() {
           </Button>
         </Box>
 
-        {loading && <Box sx={{ display: 'flex', justifyContent: 'center', my: 4 }}><CircularProgress /></Box>}
-        {error && <Alert severity="error" sx={{ my: 2 }}>{error}</Alert>}
+        {loading && (
+          <Box sx={{ display: 'flex', justifyContent: 'center', my: 4 }}>
+            <CircularProgress />
+          </Box>
+        )}
+        {error && (
+          <Alert severity="error" sx={{ my: 2 }}>
+            {error}
+          </Alert>
+        )}
 
         {!loading && !error && (
           <Paper sx={{ boxShadow: '0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)' }}>
@@ -100,11 +108,28 @@ export default function Dashboard() {
                 </TableHead>
                 <TableBody>
                   {paginatedTenders.map((tender) => (
-                    <TableRow key={tender.id} hover sx={{ cursor: 'pointer' }} onClick={() => handleRowClick(tender.id)}>
+                    <TableRow
+                      key={tender.id}
+                      hover
+                      sx={{ cursor: 'pointer' }}
+                      onClick={() => handleRowClick(tender.id)}
+                    >
                       <TableCell sx={{ fontWeight: 500 }}>{tender.title}</TableCell>
-                      <TableCell>{format(new Date(tender.submission_deadline), 'd MMMM yyyy, HH:mm', { locale: fr })}</TableCell>
-                      <TableCell>{tender.award_level === 'lot' ? 'Par Lot' : tender.award_level === 'article' ? 'Par Article' : 'Global'}</TableCell>
-                      <TableCell><TenderStatusChip status={tender.status} /></TableCell>
+                      <TableCell>
+                        {format(new Date(tender.submission_deadline), 'd MMMM yyyy, HH:mm', {
+                          locale: fr,
+                        })}
+                      </TableCell>
+                      <TableCell>
+                        {tender.award_level === 'lot'
+                          ? 'Par Lot'
+                          : tender.award_level === 'article'
+                            ? 'Par Article'
+                            : 'Global'}
+                      </TableCell>
+                      <TableCell>
+                        <TenderStatusChip status={tender.status} />
+                      </TableCell>
                     </TableRow>
                   ))}
                 </TableBody>

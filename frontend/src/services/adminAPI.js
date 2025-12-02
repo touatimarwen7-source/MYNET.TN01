@@ -22,7 +22,7 @@ export const adminAPI = {
     getAll: async (page = 1, limit = 10, search = '') => {
       try {
         const response = await api.get('/admin/users', {
-          params: { page, limit, search }
+          params: { page, limit, search },
         });
         return response.data;
       } catch (error) {
@@ -91,7 +91,7 @@ export const adminAPI = {
         const formatted = errorHandler.getUserMessage(error);
         throw formatted;
       }
-    }
+    },
   },
 
   // Content Management
@@ -136,7 +136,7 @@ export const adminAPI = {
         const formData = new FormData();
         formData.append('file', file);
         const response = await api.post('/admin/content/upload', formData, {
-          headers: { 'Content-Type': 'multipart/form-data' }
+          headers: { 'Content-Type': 'multipart/form-data' },
         });
         return response.data;
       } catch (error) {
@@ -172,7 +172,7 @@ export const adminAPI = {
         const formatted = errorHandler.getUserMessage(error);
         throw formatted;
       }
-    }
+    },
   },
 
   // System Configuration
@@ -247,7 +247,7 @@ export const adminAPI = {
         const formatted = errorHandler.getUserMessage(error);
         throw formatted;
       }
-    }
+    },
   },
 
   // Analytics
@@ -288,7 +288,7 @@ export const adminAPI = {
     getActivities: async (limit = 10) => {
       try {
         const response = await api.get('/admin/analytics/activities', {
-          params: { limit }
+          params: { limit },
         });
         return response.data;
       } catch (error) {
@@ -309,7 +309,7 @@ export const adminAPI = {
         const formatted = errorHandler.getUserMessage(error);
         throw formatted;
       }
-    }
+    },
   },
 
   // Feature Flags Management
@@ -372,7 +372,7 @@ export const adminAPI = {
         const formatted = errorHandler.getUserMessage(error);
         throw formatted;
       }
-    }
+    },
   },
 
   // Subscription Plans Management
@@ -435,8 +435,8 @@ export const adminAPI = {
         const formatted = errorHandler.getUserMessage(error);
         throw formatted;
       }
-    }
-  }
+    },
+  },
 };
 
 export default adminAPI;

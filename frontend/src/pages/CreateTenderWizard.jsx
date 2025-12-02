@@ -3,7 +3,12 @@ import { useNavigate } from 'react-router-dom';
 import TenderFormLayout from './TenderFormLayout';
 import TenderStepRenderer from './TenderStepRenderer';
 import { procurementAPI } from '../api';
-import { recoverDraft, clearDraft, autosaveDraft, AUTOSAVE_INTERVAL } from '../utils/draftStorageHelper';
+import {
+  recoverDraft,
+  clearDraft,
+  autosaveDraft,
+  AUTOSAVE_INTERVAL,
+} from '../utils/draftStorageHelper';
 
 const DRAFT_KEY = 'tender_draft';
 const TOTAL_STEPS = 5; // ✅ الصحيح: 6 خطوات من 0 إلى 5
@@ -44,7 +49,7 @@ const CreateTenderWizard = () => {
 
   const handleChange = useCallback((e) => {
     const { name, value, type, checked } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       [name]: type === 'checkbox' ? checked : value,
     }));
@@ -53,13 +58,13 @@ const CreateTenderWizard = () => {
   const handleNext = () => {
     // يمكنك إضافة منطق التحقق من صحة الخطوة هنا
     if (currentStep < TOTAL_STEPS) {
-      setCurrentStep(prev => prev + 1);
+      setCurrentStep((prev) => prev + 1);
     }
   };
 
   const handlePrevious = () => {
     if (currentStep > 0) {
-      setCurrentStep(prev => prev - 1);
+      setCurrentStep((prev) => prev - 1);
     }
   };
 
@@ -69,10 +74,10 @@ const CreateTenderWizard = () => {
     try {
       // إرسال البيانات إلى الواجهة الخلفية
       await procurementAPI.createTender(formData);
-      
+
       // مسح المسودة بعد الإرسال الناجح
       clearDraft(DRAFT_KEY);
-      
+
       // إعادة التوجيه إلى صفحة النجاح أو لوحة التحكم
       navigate('/tenders', { state: { message: 'تم إنشاء المناقصة بنجاح!' } });
     } catch (err) {

@@ -3,6 +3,7 @@
 ## How to Use New Optimization Utilities
 
 ### 1. Query Optimizer
+
 ```javascript
 const QueryOptimizer = require('./utils/queryOptimizer');
 
@@ -11,6 +12,7 @@ const result = await QueryOptimizer.getBuyerAnalytics(pool, userId);
 ```
 
 ### 2. Audit Batch Logger
+
 ```javascript
 const auditBatcher = require('./utils/auditBatcher');
 
@@ -19,6 +21,7 @@ auditBatcher.log(userId, 'action', 'entity', entityId, { details: 'here' });
 ```
 
 ### 3. Cache Middleware
+
 ```javascript
 const { cacheMiddleware } = require('./middleware/cacheMiddleware');
 
@@ -27,6 +30,7 @@ router.get('/endpoint', cacheMiddleware(600), handler);
 ```
 
 ### 4. Response Formatter
+
 ```javascript
 const ResponseFormatter = require('./utils/responseFormatter');
 
@@ -35,6 +39,7 @@ res.json(ResponseFormatter.success(data, 'Data fetched'));
 ```
 
 ### 5. Parameter Validator
+
 ```javascript
 const ParamValidator = require('./utils/parameterValidator');
 
@@ -44,6 +49,7 @@ if (errors) return res.status(400).json({ errors });
 ```
 
 ### 6. Performance Metrics
+
 ```javascript
 const metrics = require('./utils/performanceMetrics');
 
@@ -54,6 +60,7 @@ console.log(metrics.getSummary());
 ## Configuration
 
 Edit `backend/config/optimizations.js` to adjust:
+
 - Cache TTL values
 - Query thresholds
 - Batch sizes
@@ -62,6 +69,7 @@ Edit `backend/config/optimizations.js` to adjust:
 ## Monitoring
 
 Check performance stats:
+
 ```bash
 GET /api/admin/error-stats     # Error tracking
 GET /api/admin/cache-stats     # Cache statistics
@@ -79,10 +87,12 @@ GET /api/admin/performance     # Performance metrics
 ## Performance Improvements
 
 Expected improvements after integration:
+
 - Query time: 85-90% faster
 - Database load: 50-70% reduction
 - Cache hit rate: ~70%
 - Error responses: Standardized format
 
 ---
+
 See PERFORMANCE-CHECKLIST.md for detailed implementation status.

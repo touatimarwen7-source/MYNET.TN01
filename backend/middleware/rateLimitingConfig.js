@@ -18,13 +18,12 @@ let redisClient;
 try {
   redisClient = redis.createClient({
     host: process.env.REDIS_HOST || '127.0.0.1',
-    port: process.env.REDIS_PORT || 6379
+    port: process.env.REDIS_PORT || 6379,
   });
   redisClient.connect().catch(() => {
     redisClient = null;
   });
-} catch (e) {
-}
+} catch (e) {}
 
 /**
  * Global rate limiter - 100 requests per 15 minutes
@@ -42,7 +41,7 @@ const globalLimiter = rateLimit({
   keyGenerator: (req) => {
     // Use IP address as key
     return req.ip || req.connection.remoteAddress;
-  }
+  },
 });
 
 /**
@@ -59,7 +58,7 @@ const perUserLimiter = rateLimit({
   keyGenerator: (req) => {
     // Use user ID as key
     return req.user?.id || req.ip;
-  }
+  },
 });
 
 /**
@@ -73,7 +72,7 @@ const authLimiter = rateLimit({
   keyGenerator: (req) => {
     // Use email + IP for better tracking
     return `${req.body?.email || 'unknown'}_${req.ip}`;
-  }
+  },
 });
 
 /**
@@ -86,7 +85,7 @@ const apiLimiter = rateLimit({
   keyGenerator: (req) => {
     // Use IP address as key
     return req.ip || req.connection.remoteAddress;
-  }
+  },
 });
 
 /**
@@ -99,7 +98,7 @@ const searchExportLimiter = rateLimit({
   keyGenerator: (req) => {
     // Use user ID if authenticated, otherwise IP
     return req.user?.id || req.ip;
-  }
+  },
 });
 
 /**
@@ -112,7 +111,7 @@ const uploadLimiter = rateLimit({
   keyGenerator: (req) => {
     // Use user ID as key
     return req.user?.id || req.ip;
-  }
+  },
 });
 
 /**
@@ -126,7 +125,7 @@ const paymentLimiter = rateLimit({
   keyGenerator: (req) => {
     // Use user ID as key
     return req.user?.id || req.ip;
-  }
+  },
 });
 
 /**
@@ -139,7 +138,7 @@ const emailLimiter = rateLimit({
   keyGenerator: (req) => {
     // Use recipient email as key
     return req.body?.email || req.user?.email || req.ip;
-  }
+  },
 });
 
 /**
@@ -147,7 +146,7 @@ const emailLimiter = rateLimit({
  */
 const adaptiveRateLimiter = (req, res, next) => {
   const path = req.path.toLowerCase();
-  
+
   // Determine which limiter to apply based on path
   if (path.includes('/auth/login') || path.includes('/auth/register')) {
     return authLimiter(req, res, next);
@@ -177,7 +176,7 @@ const rateLimitErrorHandler = (err, req, res, next) => {
       code: 'RATE_LIMIT_EXCEEDED',
       retryAfter: req.rateLimit?.resetTime,
       limit: req.rateLimit?.limit,
-      current: req.rateLimit?.current
+      current: req.rateLimit?.current,
     });
   }
   next(err);
@@ -193,5 +192,5 @@ module.exports = {
   paymentLimiter,
   emailLimiter,
   adaptiveRateLimiter,
-  rateLimitErrorHandler
+  rateLimitErrorHandler,
 };

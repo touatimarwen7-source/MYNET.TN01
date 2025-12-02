@@ -22,7 +22,7 @@ let authTokens = {};
 let tenderData = {};
 
 // Utilities
-const log = (step, message) => console.log(`\n[${'='*40}]\n📝 ${step}: ${message}`);
+const log = (step, message) => console.log(`\n[${'=' * 40}]\n📝 ${step}: ${message}`);
 const success = (msg) => console.log(`✅ SUCCESS: ${msg}`);
 const error = (msg) => console.log(`❌ ERROR: ${msg}`);
 
@@ -31,7 +31,7 @@ const error = (msg) => console.log(`❌ ERROR: ${msg}`);
  */
 async function testSendInquiry() {
   log('SCENARIO 1', 'Supplier Sends Inquiry');
-  
+
   try {
     // Get latest tender from database
     const tenderResponse = await axios.get(`${BASE_URL}/procurement/tenders?limit=1`);
@@ -39,11 +39,11 @@ async function testSendInquiry() {
       error('No tenders found in database');
       return false;
     }
-    
+
     const tender = tenderResponse.data.tenders[0];
     tenderData.id = tender.id;
     tenderData.number = tender.tender_number;
-    
+
     console.log(`   Using Tender: ${tender.tender_number}`);
 
     // Submit inquiry
@@ -81,7 +81,7 @@ async function testSendInquiry() {
  */
 async function testRespondToInquiry() {
   log('SCENARIO 2', 'Buyer Responds to Inquiry');
-  
+
   try {
     if (!tenderData.inquiryId) {
       error('No inquiry found from previous step');
@@ -89,7 +89,8 @@ async function testRespondToInquiry() {
     }
 
     const responseData = {
-      response_text: 'شكراً على الاستفسار. شروط الدفع هي 50% عند التوقيع و50% عند التسليم. يمكن النقاش في خطط تقسيط خاصة حسب الكمية المطلوبة.',
+      response_text:
+        'شكراً على الاستفسار. شروط الدفع هي 50% عند التوقيع و50% عند التسليم. يمكن النقاش في خطط تقسيط خاصة حسب الكمية المطلوبة.',
       attachments: [],
     };
 
@@ -104,18 +105,17 @@ async function testRespondToInquiry() {
       success(`Response submitted to inquiry`);
       console.log(`   Response ID: ${tenderData.responseId}`);
       console.log(`   Response: "${responseData.response_text.substring(0, 50)}..."`);
-      
+
       // Verify inquiry status changed to 'answered'
-      const inquiriesResponse = await axios.get(
-        `${BASE_URL}/tenders/${tenderData.id}/inquiries`,
-        { headers: { Authorization: `Bearer ${authTokens.buyer}` } }
-      );
-      
-      const inquiry = inquiriesResponse.data.inquiries?.find(i => i.id === tenderData.inquiryId);
+      const inquiriesResponse = await axios.get(`${BASE_URL}/tenders/${tenderData.id}/inquiries`, {
+        headers: { Authorization: `Bearer ${authTokens.buyer}` },
+      });
+
+      const inquiry = inquiriesResponse.data.inquiries?.find((i) => i.id === tenderData.inquiryId);
       if (inquiry && inquiry.status === 'answered') {
         console.log(`   ✓ Inquiry status updated to: ${inquiry.status}`);
       }
-      
+
       return true;
     } else {
       error('Failed to respond to inquiry');
@@ -132,7 +132,7 @@ async function testRespondToInquiry() {
  */
 async function testPublishAddendum() {
   log('SCENARIO 3', 'Buyer Publishes Addendum');
-  
+
   try {
     if (!tenderData.id) {
       error('No tender found');
@@ -140,10 +140,9 @@ async function testPublishAddendum() {
     }
 
     // Get all inquiry responses first
-    const inquiriesResponse = await axios.get(
-      `${BASE_URL}/tenders/${tenderData.id}/inquiries`,
-      { headers: { Authorization: `Bearer ${authTokens.buyer}` } }
-    );
+    const inquiriesResponse = await axios.get(`${BASE_URL}/tenders/${tenderData.id}/inquiries`, {
+      headers: { Authorization: `Bearer ${authTokens.buyer}` },
+    });
 
     const addendumContent = `
 ملحق المناقصة: ${tenderData.number}
@@ -184,7 +183,9 @@ async function testPublishAddendum() {
       console.log(`   Addendum ID: ${tenderData.addendumId}`);
       console.log(`   Addendum Number: ${tenderData.addendumNumber}`);
       console.log(`   Version: ${addendumResponse.data.addendum.version}`);
-      console.log(`   Published At: ${new Date(addendumResponse.data.addendum.published_at).toLocaleString('ar-TN')}`);
+      console.log(
+        `   Published At: ${new Date(addendumResponse.data.addendum.published_at).toLocaleString('ar-TN')}`
+      );
       return true;
     } else {
       error('Failed to publish addendum');
@@ -202,7 +203,7 @@ async function testPublishAddendum() {
  */
 async function testNotificationsSent() {
   log('SCENARIO 4', 'Verify Automatic Notifications Sent');
-  
+
   try {
     if (!tenderData.addendumId) {
       error('No addendum found from previous step');
@@ -210,15 +211,17 @@ async function testNotificationsSent() {
     }
 
     // Check supplier's notifications
-    const notificationsResponse = await axios.get(
-      `${BASE_URL}/my-notifications?page=1&limit=10`,
-      { headers: { Authorization: `Bearer ${authTokens.supplier}` } }
-    );
+    const notificationsResponse = await axios.get(`${BASE_URL}/my-notifications?page=1&limit=10`, {
+      headers: { Authorization: `Bearer ${authTokens.supplier}` },
+    });
 
-    if (notificationsResponse.data.notifications && notificationsResponse.data.notifications.length > 0) {
+    if (
+      notificationsResponse.data.notifications &&
+      notificationsResponse.data.notifications.length > 0
+    ) {
       success(`Notifications received by supplier`);
       console.log(`   Total Notifications: ${notificationsResponse.data.count}`);
-      
+
       notificationsResponse.data.notifications.forEach((notif, idx) => {
         console.log(`\n   📬 Notification ${idx + 1}:`);
         console.log(`      Title: ${notif.title || `Addendum ${notif.addendum_number}`}`);
@@ -236,7 +239,7 @@ async function testNotificationsSent() {
             {},
             { headers: { Authorization: `Bearer ${authTokens.supplier}` } }
           );
-          
+
           if (readResponse.data.success) {
             console.log(`\n   ✓ Notification marked as read`);
           }
@@ -318,10 +321,10 @@ Scenario 2 - Respond to Inquiry:     ${results.respondToInquiry ? '✅ PASS' : '
 Scenario 3 - Publish Addendum:       ${results.publishAddendum ? '✅ PASS' : '❌ FAIL'}
 Scenario 4 - Verify Notifications:   ${results.verifiyNotifications ? '✅ PASS' : '❌ FAIL'}
 
-Overall Status: ${Object.values(results).every(r => r) ? '✅ ALL TESTS PASSED' : '⚠️  SOME TESTS FAILED'}
+Overall Status: ${Object.values(results).every((r) => r) ? '✅ ALL TESTS PASSED' : '⚠️  SOME TESTS FAILED'}
   `);
 
-  process.exit(Object.values(results).every(r => r) ? 0 : 1);
+  process.exit(Object.values(results).every((r) => r) ? 0 : 1);
 }
 
 // Run tests

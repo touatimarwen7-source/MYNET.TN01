@@ -16,8 +16,8 @@ export default function SkipLink() {
         padding: '8px 16px',
         zIndex: 1000,
         '&:focus': {
-          top: 0
-        }
+          top: 0,
+        },
       }}
     >
       Aller au contenu principal

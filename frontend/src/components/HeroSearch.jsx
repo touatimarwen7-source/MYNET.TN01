@@ -25,21 +25,21 @@ export default function HeroSearch() {
     category: 'tous',
     keywords: '',
     region: 'all',
-    type: 'tenders'
+    type: 'tenders',
   });
 
   const searchTabs = [
     { id: 'markets', label: '🏪 Nouveaux Marchés' },
-    { id: 'tenders', label: '🏷️ Appels d\'Offres' },
+    { id: 'tenders', label: "🏷️ Appels d'Offres" },
     { id: 'awards', label: '✅ Attributions Gagnées' },
-    { id: 'data', label: '📊 Données & Statistiques' }
+    { id: 'data', label: '📊 Données & Statistiques' },
   ];
 
   const categories = [
     { value: 'tous', label: 'Tous' },
     { value: 'travaux', label: 'Travaux' },
     { value: 'services', label: 'Services' },
-    { value: 'fournitures', label: 'Fournitures' }
+    { value: 'fournitures', label: 'Fournitures' },
   ];
 
   const regions = [
@@ -67,15 +67,15 @@ export default function HeroSearch() {
     { value: 'beja', label: 'Béja' },
     { value: 'kef', label: 'Le Kef' },
     { value: 'siliana', label: 'Siliana' },
-    { value: 'zaghouan', label: 'Zaghouan' }
+    { value: 'zaghouan', label: 'Zaghouan' },
   ];
 
   const getButtonText = () => {
-    switch(activeTab) {
+    switch (activeTab) {
       case 'markets':
         return 'Effectuer la Recherche - Nouveaux Marchés';
       case 'tenders':
-        return 'Effectuer la Recherche - Appels d\'Offres';
+        return "Effectuer la Recherche - Appels d'Offres";
       case 'awards':
         return 'Effectuer la Recherche - Attributions';
       case 'data':
@@ -87,20 +87,20 @@ export default function HeroSearch() {
 
   const handleSearch = (e) => {
     e.preventDefault();
-    
+
     const params = new URLSearchParams();
     if (searchData.keywords) params.append('q', searchData.keywords);
     if (searchData.category !== 'tous') params.append('category', searchData.category);
     if (searchData.region !== 'all') params.append('region', searchData.region);
     params.append('type', activeTab);
-    
+
     const routeMap = {
       tenders: '/tenders',
       awards: '/awards',
       markets: '/markets',
-      data: '/data'
+      data: '/data',
     };
-    
+
     navigate(`${routeMap[activeTab]}?${params.toString()}`);
   };
 
@@ -122,10 +122,18 @@ export default function HeroSearch() {
   };
 
   return (
-    <Paper elevation={0} sx={{ padding: '24px', backgroundColor: THEME_COLORS.bgPaper, border: '1px solid #E0E0E0', borderRadius: '4px' }}>
+    <Paper
+      elevation={0}
+      sx={{
+        padding: '24px',
+        backgroundColor: THEME_COLORS.bgPaper,
+        border: '1px solid #E0E0E0',
+        borderRadius: '4px',
+      }}
+    >
       <Stack spacing={2}>
         <Stack direction="row" spacing={1}>
-          {searchTabs.map(tab => (
+          {searchTabs.map((tab) => (
             <Button
               key={tab.id}
               variant={activeTab === tab.id ? 'contained' : 'outlined'}
@@ -140,12 +148,8 @@ export default function HeroSearch() {
           <Stack spacing={2}>
             <FormControl component="fieldset">
               <FormLabel component="legend">Catégorie</FormLabel>
-              <RadioGroup
-                row
-                value={searchData.category}
-                onChange={handleCategoryChange}
-              >
-                {categories.map(cat => (
+              <RadioGroup row value={searchData.category} onChange={handleCategoryChange}>
+                {categories.map((cat) => (
                   <FormControlLabel
                     key={cat.value}
                     value={cat.value}
@@ -169,12 +173,8 @@ export default function HeroSearch() {
                 }}
               />
 
-              <Select
-                value={searchData.region}
-                onChange={handleRegionChange}
-                displayEmpty
-              >
-                {regions.map(region => (
+              <Select value={searchData.region} onChange={handleRegionChange} displayEmpty>
+                {regions.map((region) => (
                   <MenuItem key={region.value} value={region.value}>
                     {region.label}
                   </MenuItem>
@@ -182,12 +182,7 @@ export default function HeroSearch() {
               </Select>
             </Stack>
 
-            <Button
-              type="submit"
-              variant="contained"
-              fullWidth
-              startIcon={<SearchIcon />}
-            >
+            <Button type="submit" variant="contained" fullWidth startIcon={<SearchIcon />}>
               {getButtonText()}
             </Button>
           </Stack>

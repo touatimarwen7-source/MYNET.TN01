@@ -37,7 +37,7 @@ export default function TenderList() {
   const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
-    setPageTitle('Appels d\'Offres');
+    setPageTitle("Appels d'Offres");
   }, []);
 
   useEffect(() => {
@@ -80,9 +80,10 @@ export default function TenderList() {
     performSearch(term);
   };
 
-  const filteredTenders = tenders.filter(t =>
-    t.title?.toLowerCase().includes(filter.toLowerCase()) ||
-    (t.description && t.description.toLowerCase().includes(filter.toLowerCase()))
+  const filteredTenders = tenders.filter(
+    (t) =>
+      t.title?.toLowerCase().includes(filter.toLowerCase()) ||
+      (t.description && t.description.toLowerCase().includes(filter.toLowerCase()))
   );
 
   // Pagination logic
@@ -100,7 +101,9 @@ export default function TenderList() {
     return (
       <Box sx={{ backgroundColor: '#fafafa', paddingY: '40px' }}>
         <Container maxWidth="lg">
-          <Typography sx={{ marginBottom: '24px', fontWeight: 600, color: theme.palette.primary.main }}>
+          <Typography
+            sx={{ marginBottom: '24px', fontWeight: 600, color: theme.palette.primary.main }}
+          >
             Appels d'Offres
           </Typography>
           <TableSkeleton rows={5} columns={5} />
@@ -132,7 +135,7 @@ export default function TenderList() {
               value={filter}
               onChange={handleFilterChange}
               variant="outlined"
-              inputProps={{ 'aria-label': 'Filtrer les appels d\'offres' }}
+              inputProps={{ 'aria-label': "Filtrer les appels d'offres" }}
               sx={{
                 '& .MuiOutlinedInput-root': {
                   backgroundColor: '#ffffff',
@@ -152,7 +155,9 @@ export default function TenderList() {
               borderRadius: '4px',
             }}
           >
-            {filter ? 'Aucun appel d\'offres ne correspond à votre recherche' : 'Aucun appel d\'offres disponible'}
+            {filter
+              ? "Aucun appel d'offres ne correspond à votre recherche"
+              : "Aucun appel d'offres disponible"}
           </Alert>
         ) : (
           <>
@@ -160,22 +165,66 @@ export default function TenderList() {
               <Table>
                 <TableHead sx={{ backgroundColor: '#f5f5f5' }}>
                   <TableRow sx={{ height: '56px' }}>
-                    <TableCell sx={{ fontWeight: 600, color: theme.palette.primary.main, textTransform: 'uppercase', fontSize: '12px' }}>
+                    <TableCell
+                      sx={{
+                        fontWeight: 600,
+                        color: theme.palette.primary.main,
+                        textTransform: 'uppercase',
+                        fontSize: '12px',
+                      }}
+                    >
                       Titre
                     </TableCell>
-                    <TableCell sx={{ fontWeight: 600, color: theme.palette.primary.main, textTransform: 'uppercase', fontSize: '12px' }}>
+                    <TableCell
+                      sx={{
+                        fontWeight: 600,
+                        color: theme.palette.primary.main,
+                        textTransform: 'uppercase',
+                        fontSize: '12px',
+                      }}
+                    >
                       Entreprise
                     </TableCell>
-                    <TableCell sx={{ fontWeight: 600, color: theme.palette.primary.main, textTransform: 'uppercase', fontSize: '12px' }} align="right">
+                    <TableCell
+                      sx={{
+                        fontWeight: 600,
+                        color: theme.palette.primary.main,
+                        textTransform: 'uppercase',
+                        fontSize: '12px',
+                      }}
+                      align="right"
+                    >
                       Catégorie
                     </TableCell>
-                    <TableCell sx={{ fontWeight: 600, color: theme.palette.primary.main, textTransform: 'uppercase', fontSize: '12px' }}>
+                    <TableCell
+                      sx={{
+                        fontWeight: 600,
+                        color: theme.palette.primary.main,
+                        textTransform: 'uppercase',
+                        fontSize: '12px',
+                      }}
+                    >
                       Date limite
                     </TableCell>
-                    <TableCell sx={{ fontWeight: 600, color: theme.palette.primary.main, textTransform: 'uppercase', fontSize: '12px' }}>
+                    <TableCell
+                      sx={{
+                        fontWeight: 600,
+                        color: theme.palette.primary.main,
+                        textTransform: 'uppercase',
+                        fontSize: '12px',
+                      }}
+                    >
                       Statut
                     </TableCell>
-                    <TableCell sx={{ fontWeight: 600, color: theme.palette.primary.main, textTransform: 'uppercase', fontSize: '12px' }} align="center">
+                    <TableCell
+                      sx={{
+                        fontWeight: 600,
+                        color: theme.palette.primary.main,
+                        textTransform: 'uppercase',
+                        fontSize: '12px',
+                      }}
+                      align="center"
+                    >
                       Actions
                     </TableCell>
                   </TableRow>
@@ -190,13 +239,26 @@ export default function TenderList() {
                         height: '56px',
                       }}
                     >
-                      <TableCell sx={{ color: theme.palette.text.primary, fontSize: '14px', fontWeight: 500 }}>
+                      <TableCell
+                        sx={{
+                          color: theme.palette.text.primary,
+                          fontSize: '14px',
+                          fontWeight: 500,
+                        }}
+                      >
                         {tender.title}
                       </TableCell>
                       <TableCell sx={{ color: '#616161', fontSize: '14px' }}>
                         {tender.buyer_name || 'N/A'}
                       </TableCell>
-                      <TableCell sx={{ color: theme.palette.text.primary, fontSize: '14px', fontWeight: 500 }} align="right">
+                      <TableCell
+                        sx={{
+                          color: theme.palette.text.primary,
+                          fontSize: '14px',
+                          fontWeight: 500,
+                        }}
+                        align="right"
+                      >
                         {tender.category || 'N/A'}
                       </TableCell>
                       <TableCell sx={{ color: '#616161', fontSize: '14px' }}>
@@ -209,16 +271,26 @@ export default function TenderList() {
                             padding: '6px 12px',
                             borderRadius: '4px',
                             backgroundColor:
-                              tender.status === 'active' ? '#e8f5e9' :
-                              tender.status === 'closed' ? '#ffebee' : '#e3f2fd',
+                              tender.status === 'active'
+                                ? '#e8f5e9'
+                                : tender.status === 'closed'
+                                  ? '#ffebee'
+                                  : '#e3f2fd',
                             color:
-                              tender.status === 'active' ? '#1b5e20' :
-                              tender.status === 'closed' ? '#c62828' : '#0d47a1',
+                              tender.status === 'active'
+                                ? '#1b5e20'
+                                : tender.status === 'closed'
+                                  ? '#c62828'
+                                  : '#0d47a1',
                             fontSize: '12px',
                             fontWeight: 500,
                           }}
                         >
-                          {tender.status === 'active' ? 'Actif' : tender.status === 'closed' ? 'Clôturé' : 'Brouillon'}
+                          {tender.status === 'active'
+                            ? 'Actif'
+                            : tender.status === 'closed'
+                              ? 'Clôturé'
+                              : 'Brouillon'}
                         </Box>
                       </TableCell>
                       <TableCell align="center">

@@ -11,13 +11,13 @@ const BidSubmissionHeader = ({ tender, onBack, sx, theme }) => (
     >
       {FRENCH_LABELS.retour}
     </Button>
-    <Typography 
-      variant="h4" 
-      sx={{ 
-        fontSize: '32px', 
-        fontWeight: 600, 
+    <Typography
+      variant="h4"
+      sx={{
+        fontSize: '32px',
+        fontWeight: 600,
         color: theme.palette.primary.main,
-        mb: '8px'
+        mb: '8px',
       }}
     >
       📝 {FRENCH_LABELS.soumettre_offre}
@@ -30,9 +30,7 @@ const BidSubmissionHeader = ({ tender, onBack, sx, theme }) => (
         <Typography sx={{ fontSize: '13px', color: '#666666', mb: '4px' }}>
           <strong>N° Consultation:</strong> {tender.consultation_number}
         </Typography>
-        <Typography sx={{ fontSize: '14px', color: '#666666' }}>
-          {tender.title}
-        </Typography>
+        <Typography sx={{ fontSize: '14px', color: '#666666' }}>{tender.title}</Typography>
       </Box>
     )}
   </Box>

@@ -19,7 +19,7 @@ export const WebSocketProvider = ({ children }) => {
       // من الأفضل وضعه في متغيرات البيئة (environment variables)
       const newSocket = io(process.env.REACT_APP_WEBSOCKET_URL || 'http://localhost:3001', {
         // إرسال التوكن للتحقق من هوية المستخدم في الخادم
-        query: { token: localStorage.getItem('token') } 
+        query: { token: localStorage.getItem('token') },
       });
 
       setSocket(newSocket);
@@ -37,9 +37,5 @@ export const WebSocketProvider = ({ children }) => {
     }
   }, [isAuthenticated]); // يعتمد على حالة تسجيل الدخول
 
-  return (
-    <WebSocketContext.Provider value={socket}>
-      {children}
-    </WebSocketContext.Provider>
-  );
+  return <WebSocketContext.Provider value={socket}>{children}</WebSocketContext.Provider>;
 };

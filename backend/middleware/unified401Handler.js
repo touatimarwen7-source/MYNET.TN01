@@ -15,7 +15,7 @@ const unified401Handler = (req, res, next) => {
       error: 'Unauthorized',
       message: details.message || 'Authentication required or token invalid',
       timestamp: new Date().toISOString(),
-      requestId: req.id || 'unknown'
+      requestId: req.id || 'unknown',
     };
 
     // Add contextual information
@@ -37,7 +37,7 @@ const unified401Handler = (req, res, next) => {
       method: req.method,
       userId: req.user?.id || 'anonymous',
       reason: details.reason || 'unknown',
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
 
     return res.status(401).json(response);

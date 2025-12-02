@@ -18,12 +18,12 @@ router.get('/:tenderId/award-settings', async (req, res) => {
   try {
     const { tenderId } = req.params;
     const settings = await validatePartialAwardSettings(parseInt(tenderId));
-    res.status(200).json({ 
-      success: true, 
+    res.status(200).json({
+      success: true,
       settings,
-      description: settings.allowPartialAward 
+      description: settings.allowPartialAward
         ? `ترسية جزئية - حد أقصى: ${settings.maxWinners} فائزين`
-        : 'ترسية كاملة - فائز واحد'
+        : 'ترسية كاملة - فائز واحد',
     });
   } catch (error) {
     res.status(400).json({ success: false, error: error.message });

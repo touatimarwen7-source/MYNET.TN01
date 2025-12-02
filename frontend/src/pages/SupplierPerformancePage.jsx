@@ -1,7 +1,19 @@
 // Supplier Performance Tracking - TURN 3 ENHANCEMENT
 import React, { useState, useEffect } from 'react';
 import institutionalTheme from '../theme/theme';
-import { Box, Card, Grid, Typography, LinearProgress, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
+import {
+  Box,
+  Card,
+  Grid,
+  Typography,
+  LinearProgress,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+} from '@mui/material';
 import axios from '../api/axiosConfig';
 
 const SupplierPerformancePage = () => {
@@ -17,7 +29,7 @@ const SupplierPerformancePage = () => {
     try {
       const token = localStorage.getItem('token');
       const res = await axios.get('/api/performance-tracking/top-suppliers', {
-        headers: { Authorization: `Bearer ${token}` }
+        headers: { Authorization: `Bearer ${token}` },
       });
       setTopSuppliers(res.data);
     } catch (error) {
@@ -28,7 +40,9 @@ const SupplierPerformancePage = () => {
 
   return (
     <Box sx={{ p: 3 }}>
-      <Typography variant="h4" sx={{ mb: 3 }}>⭐ Supplier Performance Tracking</Typography>
+      <Typography variant="h4" sx={{ mb: 3 }}>
+        ⭐ Supplier Performance Tracking
+      </Typography>
 
       <TableContainer component={Card}>
         <Table>
@@ -51,9 +65,9 @@ const SupplierPerformancePage = () => {
                 <TableCell>{supplier.review_count}</TableCell>
                 <TableCell>{supplier.verified ? '✅' : '❌'}</TableCell>
                 <TableCell>
-                  <LinearProgress 
-                    variant="determinate" 
-                    value={supplier.average_rating * 20} 
+                  <LinearProgress
+                    variant="determinate"
+                    value={supplier.average_rating * 20}
                     sx={{ width: '100px' }}
                   />
                 </TableCell>

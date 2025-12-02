@@ -28,7 +28,7 @@ export default function AccountSettings() {
     email_notifications: true,
     sms_notifications: false,
     marketing_emails: false,
-    theme: 'light'
+    theme: 'light',
   });
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -41,9 +41,7 @@ export default function AccountSettings() {
 
   const fetchSettings = async () => {
     try {
-      const response = await axiosInstance.get('/api/user/settings', {
-        
-      });
+      const response = await axiosInstance.get('/api/user/settings', {});
       setSettings(response.data.settings || settings);
     } catch (error) {
     } finally {
@@ -67,7 +65,9 @@ export default function AccountSettings() {
 
   if (loading) {
     return (
-      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '60vh' }}>
+      <Box
+        sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '60vh' }}
+      >
         <CircularProgress sx={{ color: institutionalTheme.palette.primary.main }} />
       </Box>
     );
@@ -76,7 +76,15 @@ export default function AccountSettings() {
   return (
     <Box sx={{ backgroundColor: '#fafafa', paddingY: '40px' }}>
       <Container maxWidth="md">
-        <Typography variant="h2" sx={{ fontSize: '32px', fontWeight: 500, color: institutionalTheme.palette.text.primary, marginBottom: '8px' }}>
+        <Typography
+          variant="h2"
+          sx={{
+            fontSize: '32px',
+            fontWeight: 500,
+            color: institutionalTheme.palette.text.primary,
+            marginBottom: '8px',
+          }}
+        >
           Paramètres du Compte
         </Typography>
         <Typography sx={{ color: '#616161', marginBottom: '32px' }}>
@@ -92,21 +100,38 @@ export default function AccountSettings() {
         {/* Notifications Section */}
         <Card sx={{ marginBottom: '24px', border: '1px solid #e0e0e0' }}>
           <CardContent sx={{ padding: '24px' }}>
-            <Typography variant="h4" sx={{ fontSize: '18px', fontWeight: 600, color: institutionalTheme.palette.text.primary, marginBottom: '24px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <Typography
+              variant="h4"
+              sx={{
+                fontSize: '18px',
+                fontWeight: 600,
+                color: institutionalTheme.palette.text.primary,
+                marginBottom: '24px',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+              }}
+            >
               📬 Notifications
             </Typography>
 
             <Stack spacing={2}>
               <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <Box>
-                  <Typography sx={{ fontWeight: 600, color: institutionalTheme.palette.text.primary }}>Notifications par Email</Typography>
+                  <Typography
+                    sx={{ fontWeight: 600, color: institutionalTheme.palette.text.primary }}
+                  >
+                    Notifications par Email
+                  </Typography>
                   <Typography sx={{ fontSize: '12px', color: '#616161', marginTop: '4px' }}>
                     Recevoir les mises à jour importantes par email
                   </Typography>
                 </Box>
                 <Switch
                   checked={settings.email_notifications}
-                  onChange={(e) => setSettings({...settings, email_notifications: e.target.checked})}
+                  onChange={(e) =>
+                    setSettings({ ...settings, email_notifications: e.target.checked })
+                  }
                 />
               </Box>
 
@@ -114,14 +139,20 @@ export default function AccountSettings() {
 
               <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <Box>
-                  <Typography sx={{ fontWeight: 600, color: institutionalTheme.palette.text.primary }}>Notifications par SMS</Typography>
+                  <Typography
+                    sx={{ fontWeight: 600, color: institutionalTheme.palette.text.primary }}
+                  >
+                    Notifications par SMS
+                  </Typography>
                   <Typography sx={{ fontSize: '12px', color: '#616161', marginTop: '4px' }}>
                     Recevoir les alertes critiques par SMS
                   </Typography>
                 </Box>
                 <Switch
                   checked={settings.sms_notifications}
-                  onChange={(e) => setSettings({...settings, sms_notifications: e.target.checked})}
+                  onChange={(e) =>
+                    setSettings({ ...settings, sms_notifications: e.target.checked })
+                  }
                 />
               </Box>
 
@@ -129,14 +160,18 @@ export default function AccountSettings() {
 
               <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <Box>
-                  <Typography sx={{ fontWeight: 600, color: institutionalTheme.palette.text.primary }}>Emails Marketing</Typography>
+                  <Typography
+                    sx={{ fontWeight: 600, color: institutionalTheme.palette.text.primary }}
+                  >
+                    Emails Marketing
+                  </Typography>
                   <Typography sx={{ fontSize: '12px', color: '#616161', marginTop: '4px' }}>
                     Recevoir les offres spéciales et promotions
                   </Typography>
                 </Box>
                 <Switch
                   checked={settings.marketing_emails}
-                  onChange={(e) => setSettings({...settings, marketing_emails: e.target.checked})}
+                  onChange={(e) => setSettings({ ...settings, marketing_emails: e.target.checked })}
                 />
               </Box>
             </Stack>
@@ -146,7 +181,18 @@ export default function AccountSettings() {
         {/* Appearance Section */}
         <Card sx={{ marginBottom: '24px', border: '1px solid #e0e0e0' }}>
           <CardContent sx={{ padding: '24px' }}>
-            <Typography variant="h4" sx={{ fontSize: '18px', fontWeight: 600, color: institutionalTheme.palette.text.primary, marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <Typography
+              variant="h4"
+              sx={{
+                fontSize: '18px',
+                fontWeight: 600,
+                color: institutionalTheme.palette.text.primary,
+                marginBottom: '16px',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+              }}
+            >
               🎨 Apparence
             </Typography>
 
@@ -154,7 +200,7 @@ export default function AccountSettings() {
               <InputLabel>Thème</InputLabel>
               <Select
                 value={settings.theme}
-                onChange={(e) => setSettings({...settings, theme: e.target.value})}
+                onChange={(e) => setSettings({ ...settings, theme: e.target.value })}
                 label="Thème"
               >
                 <MenuItem value="light">Clair</MenuItem>

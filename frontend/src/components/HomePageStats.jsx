@@ -5,21 +5,59 @@ import institutionalTheme from '../theme/theme';
 export default function HomePageStats() {
   const theme = institutionalTheme;
   const stats = [
-    { number: '250M+', label: 'Dinars', description: 'Volumes de transactions annuels traités en toute sécurité' },
-    { number: '2,500+', label: 'Organisations', description: 'Acheteurs, fournisseurs et entreprises partenaires actifs' },
-    { number: '45,000+', label: 'Appels d\'Offres', description: 'Gérés avec transparence et conformité réglementaire' },
-    { number: '99.9%', label: 'Disponibilité', description: 'Infrastructure cloud sécurisée et certifiée ISO' },
+    {
+      number: '250M+',
+      label: 'Dinars',
+      description: 'Volumes de transactions annuels traités en toute sécurité',
+    },
+    {
+      number: '2,500+',
+      label: 'Organisations',
+      description: 'Acheteurs, fournisseurs et entreprises partenaires actifs',
+    },
+    {
+      number: '45,000+',
+      label: "Appels d'Offres",
+      description: 'Gérés avec transparence et conformité réglementaire',
+    },
+    {
+      number: '99.9%',
+      label: 'Disponibilité',
+      description: 'Infrastructure cloud sécurisée et certifiée ISO',
+    },
   ];
 
   return (
     <Grid container spacing={2}>
       {stats.map((stat, idx) => (
         <Grid size={{ xs: 12, sm: 6, md: 3 }} key={idx}>
-          <Paper sx={{ padding: '32px 24px', textAlign: 'center', backgroundColor: 'THEME_COLORS.bgDefault', border: '1px solid #e0e0e0', borderRadius: '8px' }}>
-            <Typography sx={{ fontSize: '32px', fontWeight: 600, color: theme.palette.primary.main, marginBottom: '8px' }}>
+          <Paper
+            sx={{
+              padding: '32px 24px',
+              textAlign: 'center',
+              backgroundColor: 'THEME_COLORS.bgDefault',
+              border: '1px solid #e0e0e0',
+              borderRadius: '8px',
+            }}
+          >
+            <Typography
+              sx={{
+                fontSize: '32px',
+                fontWeight: 600,
+                color: theme.palette.primary.main,
+                marginBottom: '8px',
+              }}
+            >
               {stat.number}
             </Typography>
-            <Typography sx={{ fontSize: '14px', fontWeight: 600, color: theme.palette.text.primary, marginBottom: '4px' }}>
+            <Typography
+              sx={{
+                fontSize: '14px',
+                fontWeight: 600,
+                color: theme.palette.text.primary,
+                marginBottom: '4px',
+              }}
+            >
               {stat.label}
             </Typography>
             <Typography sx={{ fontSize: '12px', color: THEME_COLORS.textSecondary }}>

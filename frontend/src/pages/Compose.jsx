@@ -64,7 +64,7 @@ export default function Compose() {
         subject: formData.subject,
         content: formData.content,
       });
-      setSuccess("تم إرسال الرسالة بنجاح");
+      setSuccess('تم إرسال الرسالة بنجاح');
       setTimeout(() => navigate('/inbox'), 2000);
     } catch (err) {
       setError("Erreur lors de l'envoi du message");
@@ -75,7 +75,9 @@ export default function Compose() {
 
   if (loading) {
     return (
-      <Container sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '60vh' }}>
+      <Container
+        sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '60vh' }}
+      >
         <CircularProgress sx={{ color: institutionalTheme.palette.primary.main }} />
       </Container>
     );
@@ -86,27 +88,46 @@ export default function Compose() {
       <Container maxWidth="md">
         <Card>
           <CardContent sx={{ padding: '40px' }}>
-            <Typography variant="h4" sx={{ fontWeight: 600, color: institutionalTheme.palette.primary.main, marginBottom: '30px' }}>
+            <Typography
+              variant="h4"
+              sx={{
+                fontWeight: 600,
+                color: institutionalTheme.palette.primary.main,
+                marginBottom: '30px',
+              }}
+            >
               كتابة رسالة جديدة
             </Typography>
 
-            {error && <Alert severity="error" sx={{ marginBottom: '20px' }}>{error}</Alert>}
-            {success && <Alert severity="success" sx={{ marginBottom: '20px' }}>{success}</Alert>}
+            {error && (
+              <Alert severity="error" sx={{ marginBottom: '20px' }}>
+                {error}
+              </Alert>
+            )}
+            {success && (
+              <Alert severity="success" sx={{ marginBottom: '20px' }}>
+                {success}
+              </Alert>
+            )}
 
             <form onSubmit={handleSubmit}>
               <Box sx={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
                 <Autocomplete
                   options={receivers}
                   getOptionLabel={(option) => `${option.company_name} (${option.full_name})`}
-                  value={receivers.find(r => r.id === formData.receiver_id) || null}
-                  onChange={(e, value) => setFormData({ ...formData, receiver_id: value?.id || null })}
+                  value={receivers.find((r) => r.id === formData.receiver_id) || null}
+                  onChange={(e, value) =>
+                    setFormData({ ...formData, receiver_id: value?.id || null })
+                  }
                   renderInput={(params) => (
                     <TextField
                       {...params}
                       label="المستقبل"
                       placeholder="ابحث عن المستقبل..."
                       error={!formData.receiver_id && formData.content !== ''}
-                      helperText={!formData.receiver_id && formData.content !== '' ? 'يرجى اختيار مستقبل' : ''}
+                      helperText={
+                        !formData.receiver_id && formData.content !== '' ? 'يرجى اختيار مستقبل' : ''
+                      }
                     />
                   )}
                 />
@@ -128,15 +149,13 @@ export default function Compose() {
                   onChange={(e) => setFormData({ ...formData, content: e.target.value })}
                   placeholder="اكتب رسالتك هنا..."
                   error={!formData.content && formData.receiver_id}
-                  helperText={!formData.content && formData.receiver_id ? 'يرجى إدخال محتوى الرسالة' : ''}
+                  helperText={
+                    !formData.content && formData.receiver_id ? 'يرجى إدخال محتوى الرسالة' : ''
+                  }
                 />
 
                 <Box sx={{ display: 'flex', gap: '12px', justifyContent: 'flex-end' }}>
-                  <Button
-                    variant="outlined"
-                    onClick={() => navigate('/inbox')}
-                    disabled={sending}
-                  >
+                  <Button variant="outlined" onClick={() => navigate('/inbox')} disabled={sending}>
                     إلغاء
                   </Button>
                   <Button

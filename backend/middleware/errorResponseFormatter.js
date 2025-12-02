@@ -15,8 +15,8 @@ const errorResponseFormatter = (err, req, res, next) => {
       message: errorMessage,
       code: errorCode,
       requestId: req.id || 'unknown',
-      timestamp: new Date().toISOString()
-    }
+      timestamp: new Date().toISOString(),
+    },
   };
 
   // Include stack trace only in development

@@ -7,7 +7,7 @@ const router = express.Router();
 router.get('/suppliers', authMiddleware, async (req, res) => {
   try {
     const db = req.app.get('db');
-    
+
     const result = await db.query(`
       SELECT 
         u.id,
@@ -24,7 +24,7 @@ router.get('/suppliers', authMiddleware, async (req, res) => {
       ORDER BY u.average_rating DESC
       LIMIT 100
     `);
-    
+
     res.json(result.rows);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -41,7 +41,7 @@ router.post('/create-request', authMiddleware, async (req, res) => {
 
     const { supplier_id, title, description, category, quantity, unit, budget, notes } = req.body;
     const buyer_id = req.user.id;
-    
+
     // ISSUE FIX #3: Comprehensive validation
     if (!supplier_id || !title || !category || !budget) {
       return res.status(400).json({ error: 'Missing required fields' });
@@ -65,40 +65,56 @@ router.post('/create-request', authMiddleware, async (req, res) => {
     const db = req.app.get('db');
 
     // Check if supplier exists and is verified
-    const supplierCheck = await db.query(`
+    const supplierCheck = await db.query(
+      `
       SELECT id FROM users WHERE id = $1 AND role = 'supplier' AND is_active = true
-    `, [supplier_id]);
+    `,
+      [supplier_id]
+    );
 
     if (supplierCheck.rows.length === 0) {
       return res.status(404).json({ error: 'Supplier not found' });
     }
 
     // Create supply request
-    const result = await db.query(`
+    const result = await db.query(
+      `
       INSERT INTO purchase_requests (
         buyer_id, supplier_id, title, description, category, 
         quantity, unit, budget, notes, status
       )
       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, 'pending')
       RETURNING *
-    `, [
-      buyer_id, supplier_id, title, description, category,
-      quantity || 1, unit || 'pièce', budget, notes
-    ]);
+    `,
+      [
+        buyer_id,
+        supplier_id,
+        title,
+        description,
+        category,
+        quantity || 1,
+        unit || 'pièce',
+        budget,
+        notes,
+      ]
+    );
 
     // Create notification for supplier
-    await db.query(`
+    await db.query(
+      `
       INSERT INTO notifications (
         user_id, type, title, message, related_entity_type, related_entity_id
       )
       VALUES ($1, 'supply_request', 'Nouvelle demande de fourniture', 
               $2, 'supply_request', $3)
-    `, [supplier_id, `Une demande de fourniture directe a été reçue: ${title}`, result.rows[0].id]);
+    `,
+      [supplier_id, `Une demande de fourniture directe a été reçue: ${title}`, result.rows[0].id]
+    );
 
     res.status(201).json({
       success: true,
       message: 'Supply request created successfully',
-      data: result.rows[0]
+      data: result.rows[0],
     });
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -109,8 +125,9 @@ router.post('/create-request', authMiddleware, async (req, res) => {
 router.get('/my-requests', authMiddleware, async (req, res) => {
   try {
     const db = req.app.get('db');
-    
-    const result = await db.query(`
+
+    const result = await db.query(
+      `
       SELECT 
         pr.*,
         u.company_name as supplier_name,
@@ -120,8 +137,10 @@ router.get('/my-requests', authMiddleware, async (req, res) => {
       LEFT JOIN users u ON pr.supplier_id = u.id
       WHERE pr.buyer_id = $1
       ORDER BY pr.created_at DESC
-    `, [req.user.id]);
-    
+    `,
+      [req.user.id]
+    );
+
     res.json(result.rows);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -132,8 +151,9 @@ router.get('/my-requests', authMiddleware, async (req, res) => {
 router.get('/received-requests', authMiddleware, async (req, res) => {
   try {
     const db = req.app.get('db');
-    
-    const result = await db.query(`
+
+    const result = await db.query(
+      `
       SELECT 
         pr.*,
         u.company_name as buyer_company,
@@ -143,8 +163,10 @@ router.get('/received-requests', authMiddleware, async (req, res) => {
       LEFT JOIN users u ON pr.buyer_id = u.id
       WHERE pr.supplier_id = $1
       ORDER BY pr.created_at DESC
-    `, [req.user.id]);
-    
+    `,
+      [req.user.id]
+    );
+
     res.json(result.rows);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -166,9 +188,12 @@ router.put('/:requestId/status', authMiddleware, async (req, res) => {
     const db = req.app.get('db');
 
     // Check if request exists and belongs to supplier
-    const checkResult = await db.query(`
+    const checkResult = await db.query(
+      `
       SELECT * FROM purchase_requests WHERE id = $1
-    `, [requestId]);
+    `,
+      [requestId]
+    );
 
     if (checkResult.rows.length === 0) {
       return res.status(404).json({ error: 'Request not found' });
@@ -180,17 +205,20 @@ router.put('/:requestId/status', authMiddleware, async (req, res) => {
     }
 
     // Update status
-    const result = await db.query(`
+    const result = await db.query(
+      `
       UPDATE purchase_requests 
       SET status = $1, updated_at = CURRENT_TIMESTAMP
       WHERE id = $2
       RETURNING *
-    `, [status, requestId]);
+    `,
+      [status, requestId]
+    );
 
     res.json({
       success: true,
       message: 'Status updated successfully',
-      data: result.rows[0]
+      data: result.rows[0],
     });
   } catch (error) {
     res.status(500).json({ error: error.message });

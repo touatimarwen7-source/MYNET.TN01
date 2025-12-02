@@ -3,22 +3,26 @@
 ## Quick Start
 
 ### Run All Tests
+
 ```bash
 cd backend
 npm test
 ```
 
 ### Run Tests with Coverage
+
 ```bash
 npm test -- --coverage
 ```
 
 ### Run Specific Test
+
 ```bash
 npm test -- integration.test.js
 ```
 
 ### Watch Mode
+
 ```bash
 npm test -- --watch
 ```
@@ -50,6 +54,7 @@ npm test -- --watch
 ## Key Test Files
 
 ### `backend/tests/integration.test.js`
+
 Main integration test file with 48 comprehensive tests
 
 ---
@@ -57,15 +62,17 @@ Main integration test file with 48 comprehensive tests
 ## Testing Best Practices
 
 ### 1. Write Clear Test Names
+
 ```javascript
 // ✅ Good
-test('should reject email without @ symbol')
+test('should reject email without @ symbol');
 
 // ❌ Bad
-test('email validation')
+test('email validation');
 ```
 
 ### 2. Use Describe Blocks
+
 ```javascript
 describe('Authentication', () => {
   test('should...', () => {
@@ -75,6 +82,7 @@ describe('Authentication', () => {
 ```
 
 ### 3. Test Edge Cases
+
 ```javascript
 test('should handle empty strings', () => {
   expect('').toBe('');
@@ -82,6 +90,7 @@ test('should handle empty strings', () => {
 ```
 
 ### 4. Use Proper Assertions
+
 ```javascript
 // ✅ Good
 expect(value).toBe(expected);
@@ -96,20 +105,21 @@ expect(true).toBe(true); // Too simple
 
 ## Coverage Goals
 
-| Component | Target | Current |
-|-----------|--------|---------|
-| Authentication | 100% | ✅ 100% |
-| Validation | 100% | ✅ 100% |
-| Security | 100% | ✅ 100% |
-| Caching | 100% | ✅ 100% |
-| Error Handling | 100% | ✅ 100% |
-| Performance | 90%+ | ✅ 90%+ |
+| Component      | Target | Current |
+| -------------- | ------ | ------- |
+| Authentication | 100%   | ✅ 100% |
+| Validation     | 100%   | ✅ 100% |
+| Security       | 100%   | ✅ 100% |
+| Caching        | 100%   | ✅ 100% |
+| Error Handling | 100%   | ✅ 100% |
+| Performance    | 90%+   | ✅ 90%+ |
 
 ---
 
 ## Running Tests in CI/CD
 
 ### GitHub Actions Example
+
 ```yaml
 - name: Run Tests
   run: |
@@ -118,6 +128,7 @@ expect(true).toBe(true); // Too simple
 ```
 
 ### Before Deployment
+
 ```bash
 npm test -- --coverage --passWithNoTests
 ```
@@ -127,16 +138,19 @@ npm test -- --coverage --passWithNoTests
 ## Debugging Tests
 
 ### Verbose Output
+
 ```bash
 npm test -- --verbose
 ```
 
 ### Debug Single Test
+
 ```bash
 npm test -- --testNamePattern="should validate email"
 ```
 
 ### With Debugger
+
 ```bash
 node --inspect-brk node_modules/.bin/jest --runInBand
 ```
@@ -146,6 +160,7 @@ node --inspect-brk node_modules/.bin/jest --runInBand
 ## Common Test Patterns
 
 ### Testing Async Operations
+
 ```javascript
 test('should handle async operations', async () => {
   const result = await asyncFunction();
@@ -154,6 +169,7 @@ test('should handle async operations', async () => {
 ```
 
 ### Testing Error Cases
+
 ```javascript
 test('should throw error', () => {
   expect(() => {
@@ -163,6 +179,7 @@ test('should throw error', () => {
 ```
 
 ### Testing Timeouts
+
 ```javascript
 test('should expire after timeout', (done) => {
   setTimeout(() => {
@@ -177,12 +194,14 @@ test('should expire after timeout', (done) => {
 ## Maintenance
 
 ### Adding New Tests
+
 1. Identify component to test
 2. Add test case to appropriate describe block
 3. Run `npm test` to verify
 4. Update test count in documentation
 
 ### Updating Existing Tests
+
 1. Modify test code
 2. Run `npm test -- --testNamePattern="test name"`
 3. Verify no regressions

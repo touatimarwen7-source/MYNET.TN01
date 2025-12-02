@@ -16,28 +16,27 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
 import institutionalTheme from '../../../theme/theme';
 
-// قوائم محددة مسبقًا لتحسين تجربة المستخدم
 const PREDEFINED_CRITERIA = [
-  { name: 'الامتثال الفني', weight: 40 },
-  { name: 'السعر', weight: 30 },
-  { name: 'مدة التسليم', weight: 15 },
-  { name: 'الضمان والدعم', weight: 15 },
+  { name: 'Conformité technique', weight: 40 },
+  { name: 'Prix', weight: 30 },
+  { name: 'Délai de livraison', weight: 15 },
+  { name: 'Garantie et support', weight: 15 },
 ];
 
 const PREDEFINED_DOCUMENTS = [
-  'السجل التجاري',
-  'شهادة التعريف البنكي (RIB)',
-  'شهادة الوضع الضريبي',
-  'شهادة ISO 9001',
-  'خطاب ضمان بنكي',
+  'Registre de Commerce',
+  'Relevé d\'Identité Bancaire (RIB)',
+  'Attestation de Situation Fiscale',
+  'Certificat ISO 9001',
+  'Lettre de Garantie Bancaire',
 ];
 
 /**
- * الخطوة الخامسة: متطلبات التقييم والوثائق
+ * Étape 5 : Exigences d'Évaluation et Documents
  * @param {object} props
- * @param {object} props.formData - بيانات النموذج الحالية
- * @param {function} props.setFormData - دالة لتحديث بيانات النموذج
- * @param {boolean} props.loading - حالة التحميل
+ * @param {object} props.formData - Données actuelles du formulaire
+ * @param {function} props.setFormData - Fonction pour mettre à jour les données du formulaire
+ * @param {boolean} props.loading - État de chargement
  */
 const StepFive = ({ formData, setFormData, loading }) => {
   const evaluationCriteria = formData.evaluationCriteria || [];
@@ -45,10 +44,8 @@ const StepFive = ({ formData, setFormData, loading }) => {
 
   const [newCriterionName, setNewCriterionName] = useState('');
 
-  // حساب المجموع الكلي للأوزان
   const totalWeight = evaluationCriteria.reduce((sum, item) => sum + (Number(item.weight) || 0), 0);
 
-  // تهيئة المعايير بقيم محددة مسبقًا إذا كانت فارغة
   useEffect(() => {
     if (!formData.evaluationCriteria) {
       setFormData(prev => ({ ...prev, evaluationCriteria: PREDEFINED_CRITERIA }));
@@ -83,19 +80,19 @@ const StepFive = ({ formData, setFormData, loading }) => {
       {/* قسم معايير التقييم */}
       <Paper sx={{ p: 3, borderLeft: `4px solid ${institutionalTheme.palette.primary.main}` }}>
         <Typography variant="h6" sx={{ mb: 2, fontWeight: 'bold', color: institutionalTheme.palette.primary.main }}>
-          نظام ترجيح التقييم (Weighting System)
+          Système de Pondération de l'Évaluation
         </Typography>
         <Alert severity="info" sx={{ mb: 3 }}>
-          حدد الأوزان النسبية لكل معيار تقييم. يجب أن يكون المجموع 100%.
+          Définissez les poids relatifs pour chaque critère d'évaluation. Le total doit être de 100%.
         </Alert>
 
         {evaluationCriteria.map((criterion, index) => (
           <Grid container spacing={2} key={index} sx={{ mb: 2, alignItems: 'center' }}>
             <Grid item xs={7}>
-              <TextField value={criterion.name} onChange={(e) => handleCriterionChange(index, 'name', e.target.value)} variant="outlined" size="small" fullWidth label="معيار التقييم" disabled={loading} />
+              <TextField value={criterion.name} onChange={(e) => handleCriterionChange(index, 'name', e.target.value)} variant="outlined" size="small" fullWidth label="Critère d'évaluation" disabled={loading} />
             </Grid>
             <Grid item xs={3}>
-              <TextField value={criterion.weight} onChange={(e) => handleCriterionChange(index, 'weight', e.target.value)} variant="outlined" size="small" type="number" label="الوزن (%)" InputProps={{ inputProps: { min: 0, max: 100 } }} disabled={loading} />
+              <TextField value={criterion.weight} onChange={(e) => handleCriterionChange(index, 'weight', e.target.value)} variant="outlined" size="small" type="number" label="Poids (%)" InputProps={{ inputProps: { min: 0, max: 100 } }} disabled={loading} />
             </Grid>
             <Grid item xs={2}>
               <IconButton onClick={() => deleteCriterion(index)} color="error" disabled={loading}>
@@ -107,23 +104,23 @@ const StepFive = ({ formData, setFormData, loading }) => {
 
         <Grid container spacing={2} sx={{ mt: 1, alignItems: 'center' }}>
           <Grid item xs={7}>
-            <TextField value={newCriterionName} onChange={(e) => setNewCriterionName(e.target.value)} variant="outlined" size="small" fullWidth label="إضافة معيار جديد" disabled={loading} />
+            <TextField value={newCriterionName} onChange={(e) => setNewCriterionName(e.target.value)} variant="outlined" size="small" fullWidth label="Ajouter un nouveau critère" disabled={loading} />
           </Grid>
           <Grid item xs={5}>
             <Button startIcon={<AddIcon />} onClick={addCriterion} variant="outlined" disabled={loading || !newCriterionName.trim()}>
-              إضافة
+              Ajouter
             </Button>
           </Grid>
         </Grid>
 
         <Box sx={{ mt: 3 }}>
           <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>
-            المجموع: {totalWeight}%
+            Total : {totalWeight}%
           </Typography>
           <LinearProgress variant="determinate" value={totalWeight > 100 ? 100 : totalWeight} color={totalWeight === 100 ? 'success' : 'warning'} sx={{ height: 10, borderRadius: 5 }} />
           {totalWeight !== 100 && (
             <Alert severity="warning" sx={{ mt: 2 }}>
-              تحذير: يجب أن يكون مجموع الأوزان 100%. المجموع الحالي هو {totalWeight}%.
+              Avertissement : Le total des poids doit être de 100%. Le total actuel est de {totalWeight}%.
             </Alert>
           )}
         </Box>
@@ -132,7 +129,7 @@ const StepFive = ({ formData, setFormData, loading }) => {
       {/* قسم الوثائق المطلوبة */}
       <Paper sx={{ p: 3, borderLeft: `4px solid ${institutionalTheme.palette.secondary.main}` }}>
         <Typography variant="h6" sx={{ mb: 2, fontWeight: 'bold', color: institutionalTheme.palette.secondary.main }}>
-          الوثائق المطلوبة من الموردين
+          Documents Requis des Fournisseurs
         </Typography>
         <Autocomplete
           multiple
@@ -146,12 +143,12 @@ const StepFive = ({ formData, setFormData, loading }) => {
             ))
           }
           renderInput={(params) => (
-            <TextField {...params} variant="outlined" label="الوثائق الإلزامية" placeholder="اختر أو أضف وثيقة جديدة" />
+            <TextField {...params} variant="outlined" label="Documents obligatoires" placeholder="Sélectionnez ou ajoutez un nouveau document" />
           )}
           disabled={loading}
         />
         <Alert severity="info" sx={{ mt: 2 }}>
-          حدد الوثائق الإلزامية التي يجب على الموردين إرفاقها مع عروضهم.
+          Spécifiez les documents obligatoires que les fournisseurs doivent joindre à leurs offres.
         </Alert>
       </Paper>
     </Box>

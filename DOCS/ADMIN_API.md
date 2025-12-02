@@ -1,6 +1,7 @@
 # MyNet.tn Super Admin API Documentation
 
 ## Overview
+
 Complete API reference for MyNet.tn Super Admin management system. All endpoints are protected with JWT authentication and require `super_admin` role.
 
 **Base URL:** `http://localhost:3000/api/super-admin`
@@ -10,6 +11,7 @@ Complete API reference for MyNet.tn Super Admin management system. All endpoints
 ---
 
 ## Table of Contents
+
 1. [Static Pages](#1-static-pages)
 2. [File Management](#2-file-management)
 3. [Document Management](#3-document-management)
@@ -26,16 +28,19 @@ Complete API reference for MyNet.tn Super Admin management system. All endpoints
 ## 1. Static Pages
 
 ### List All Pages
+
 ```
 GET /pages
 ```
 
 **Query Parameters:**
+
 ```javascript
 page=1&limit=10&search=services
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -61,16 +66,19 @@ page=1&limit=10&search=services
 ---
 
 ### Get Single Page
+
 ```
 GET /pages/:id
 ```
 
 **Example:**
+
 ```
 GET /pages/1
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -88,12 +96,14 @@ GET /pages/1
 ---
 
 ### Create New Page
+
 ```
 POST /pages
 Content-Type: application/json
 ```
 
 **Request Body:**
+
 ```json
 {
   "title": "Services",
@@ -105,6 +115,7 @@ Content-Type: application/json
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -121,12 +132,14 @@ Content-Type: application/json
 ---
 
 ### Update Page
+
 ```
 PUT /pages/:id
 Content-Type: application/json
 ```
 
 **Request Body:**
+
 ```json
 {
   "title": "Services Updated",
@@ -136,6 +149,7 @@ Content-Type: application/json
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -147,11 +161,13 @@ Content-Type: application/json
 ---
 
 ### Delete Page
+
 ```
 DELETE /pages/:id
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -164,16 +180,19 @@ DELETE /pages/:id
 ## 2. File Management
 
 ### List All Files
+
 ```
 GET /files
 ```
 
 **Query Parameters:**
+
 ```
 page=1&limit=10&type=pdf
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -200,21 +219,25 @@ page=1&limit=10&type=pdf
 ---
 
 ### Upload File
+
 ```
 POST /files
 Content-Type: multipart/form-data
 ```
 
 **Form Data:**
+
 ```
 file: [binary file content]
 ```
 
 **Constraints:**
+
 - Max file size: 50MB
 - Supported types: pdf, doc, docx, xls, xlsx, jpg, png, gif, zip, rar
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -233,11 +256,13 @@ file: [binary file content]
 ---
 
 ### Delete File
+
 ```
 DELETE /files/:id
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -250,16 +275,19 @@ DELETE /files/:id
 ## 3. Document Management
 
 ### List All Documents
+
 ```
 GET /documents
 ```
 
 **Query Parameters:**
+
 ```
 page=1&limit=10&search=contract
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -280,12 +308,14 @@ page=1&limit=10&search=contract
 ---
 
 ### Create Document
+
 ```
 POST /documents
 Content-Type: application/json
 ```
 
 **Request Body:**
+
 ```json
 {
   "name": "Privacy Policy",
@@ -295,6 +325,7 @@ Content-Type: application/json
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -311,11 +342,13 @@ Content-Type: application/json
 ---
 
 ### Delete Document
+
 ```
 DELETE /documents/:id
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -328,16 +361,19 @@ DELETE /documents/:id
 ## 4. Email Notifications
 
 ### List Sent Emails
+
 ```
 GET /emails
 ```
 
 **Query Parameters:**
+
 ```
 page=1&limit=10&status=sent
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -357,12 +393,14 @@ page=1&limit=10&status=sent
 ---
 
 ### Send Email
+
 ```
 POST /emails/send
 Content-Type: application/json
 ```
 
 **Request Body:**
+
 ```json
 {
   "recipient": "user@example.tn",
@@ -374,6 +412,7 @@ Content-Type: application/json
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -392,16 +431,19 @@ Content-Type: application/json
 ## 5. User Management
 
 ### List All Users
+
 ```
 GET /users
 ```
 
 **Query Parameters:**
+
 ```
 page=1&limit=10&role=supplier&status=active
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -426,12 +468,14 @@ page=1&limit=10&role=supplier&status=active
 ---
 
 ### Update User Role
+
 ```
 PUT /users/:id/role
 Content-Type: application/json
 ```
 
 **Request Body:**
+
 ```json
 {
   "role": "admin"
@@ -439,12 +483,14 @@ Content-Type: application/json
 ```
 
 **Available Roles:**
+
 - `buyer` - Buyer account
 - `supplier` - Supplier account
 - `admin` - Admin account
 - `super_admin` - Super admin account
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -460,11 +506,13 @@ Content-Type: application/json
 ---
 
 ### Block User
+
 ```
 POST /users/:id/block
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -475,11 +523,13 @@ POST /users/:id/block
 ---
 
 ### Unblock User
+
 ```
 POST /users/:id/unblock
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -492,16 +542,19 @@ POST /users/:id/unblock
 ## 6. Audit Logs
 
 ### Get Audit Logs
+
 ```
 GET /audit-logs
 ```
 
 **Query Parameters:**
+
 ```
 page=1&limit=10&action=CREATE_PAGE&user_id=1
 ```
 
 **Available Actions:**
+
 ```
 CREATE_PAGE, UPDATE_PAGE, DELETE_PAGE
 UPLOAD_FILE, DELETE_FILE
@@ -514,6 +567,7 @@ ENABLE_FEATURE, DISABLE_FEATURE
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -541,11 +595,13 @@ ENABLE_FEATURE, DISABLE_FEATURE
 ## 7. Health Monitoring
 
 ### Get System Health
+
 ```
 GET /health
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -572,11 +628,13 @@ GET /health
 ## 8. Backup & Restore
 
 ### List Backups
+
 ```
 GET /backups
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -595,11 +653,13 @@ GET /backups
 ---
 
 ### Create Backup
+
 ```
 POST /backups/create
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -617,11 +677,13 @@ POST /backups/create
 ---
 
 ### Restore Backup
+
 ```
 POST /backups/:id/restore
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -636,11 +698,13 @@ POST /backups/:id/restore
 ## 9. Subscription Plans
 
 ### List Subscription Plans
+
 ```
 GET /subscription-plans
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -662,12 +726,14 @@ GET /subscription-plans
 ---
 
 ### Create Subscription Plan
+
 ```
 POST /subscription-plans
 Content-Type: application/json
 ```
 
 **Request Body:**
+
 ```json
 {
   "name": "Premium",
@@ -680,6 +746,7 @@ Content-Type: application/json
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -695,12 +762,14 @@ Content-Type: application/json
 ---
 
 ### Update Subscription Plan
+
 ```
 PUT /subscription-plans/:id
 Content-Type: application/json
 ```
 
 **Request Body:**
+
 ```json
 {
   "price": 89.99,
@@ -709,6 +778,7 @@ Content-Type: application/json
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -720,11 +790,13 @@ Content-Type: application/json
 ---
 
 ### Delete Subscription Plan
+
 ```
 DELETE /subscription-plans/:id
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -737,11 +809,13 @@ DELETE /subscription-plans/:id
 ## 10. Feature Control
 
 ### List Features
+
 ```
 GET /features
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -760,12 +834,14 @@ GET /features
 ---
 
 ### Toggle Feature
+
 ```
 PUT /features/:id/toggle
 Content-Type: application/json
 ```
 
 **Request Body:**
+
 ```json
 {
   "enabled": false
@@ -773,6 +849,7 @@ Content-Type: application/json
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -792,6 +869,7 @@ Content-Type: application/json
 All endpoints return consistent error responses:
 
 ### 400 Bad Request
+
 ```json
 {
   "success": false,
@@ -800,6 +878,7 @@ All endpoints return consistent error responses:
 ```
 
 ### 401 Unauthorized
+
 ```json
 {
   "success": false,
@@ -808,6 +887,7 @@ All endpoints return consistent error responses:
 ```
 
 ### 403 Forbidden
+
 ```json
 {
   "success": false,
@@ -816,6 +896,7 @@ All endpoints return consistent error responses:
 ```
 
 ### 404 Not Found
+
 ```json
 {
   "success": false,
@@ -824,6 +905,7 @@ All endpoints return consistent error responses:
 ```
 
 ### 500 Server Error
+
 ```json
 {
   "success": false,
@@ -836,6 +918,7 @@ All endpoints return consistent error responses:
 ## cURL Examples
 
 ### Authenticate
+
 ```bash
 curl -X POST http://localhost:3000/api/auth/login \
   -H "Content-Type: application/json" \
@@ -846,12 +929,14 @@ curl -X POST http://localhost:3000/api/auth/login \
 ```
 
 ### List Pages
+
 ```bash
 curl -X GET "http://localhost:3000/api/super-admin/pages?page=1&limit=10" \
   -H "Authorization: Bearer YOUR_JWT_TOKEN"
 ```
 
 ### Create Page
+
 ```bash
 curl -X POST http://localhost:3000/api/super-admin/pages \
   -H "Authorization: Bearer YOUR_JWT_TOKEN" \
@@ -865,6 +950,7 @@ curl -X POST http://localhost:3000/api/super-admin/pages \
 ```
 
 ### Upload File
+
 ```bash
 curl -X POST http://localhost:3000/api/super-admin/files \
   -H "Authorization: Bearer YOUR_JWT_TOKEN" \
@@ -872,12 +958,14 @@ curl -X POST http://localhost:3000/api/super-admin/files \
 ```
 
 ### Get Audit Logs
+
 ```bash
 curl -X GET "http://localhost:3000/api/super-admin/audit-logs?page=1&limit=10" \
   -H "Authorization: Bearer YOUR_JWT_TOKEN"
 ```
 
 ### Send Email
+
 ```bash
 curl -X POST http://localhost:3000/api/super-admin/emails/send \
   -H "Authorization: Bearer YOUR_JWT_TOKEN" \
@@ -893,36 +981,36 @@ curl -X POST http://localhost:3000/api/super-admin/emails/send \
 
 ## Endpoint Summary
 
-| # | Category | Method | Endpoint | Purpose |
-|---|----------|--------|----------|---------|
-| 1 | Pages | GET | `/pages` | List all pages |
-| 2 | Pages | GET | `/pages/:id` | Get single page |
-| 3 | Pages | POST | `/pages` | Create page |
-| 4 | Pages | PUT | `/pages/:id` | Update page |
-| 5 | Pages | DELETE | `/pages/:id` | Delete page |
-| 6 | Files | GET | `/files` | List files |
-| 7 | Files | POST | `/files` | Upload file |
-| 8 | Files | DELETE | `/files/:id` | Delete file |
-| 9 | Documents | GET | `/documents` | List documents |
-| 10 | Documents | POST | `/documents` | Create document |
-| 11 | Documents | DELETE | `/documents/:id` | Delete document |
-| 12 | Emails | GET | `/emails` | List emails |
-| 13 | Emails | POST | `/emails/send` | Send email |
-| 14 | Users | GET | `/users` | List users |
-| 15 | Users | PUT | `/users/:id/role` | Change role |
-| 16 | Users | POST | `/users/:id/block` | Block user |
-| 17 | Users | POST | `/users/:id/unblock` | Unblock user |
-| 18 | Audit | GET | `/audit-logs` | Get audit logs |
-| 19 | Health | GET | `/health` | System health |
-| 20 | Backups | GET | `/backups` | List backups |
-| 21 | Backups | POST | `/backups/create` | Create backup |
-| 22 | Backups | POST | `/backups/:id/restore` | Restore backup |
-| 23 | Plans | GET | `/subscription-plans` | List plans |
-| 24 | Plans | POST | `/subscription-plans` | Create plan |
-| 25 | Plans | PUT | `/subscription-plans/:id` | Update plan |
-| 26 | Plans | DELETE | `/subscription-plans/:id` | Delete plan |
-| 27 | Features | GET | `/features` | List features |
-| 28 | Features | PUT | `/features/:id/toggle` | Toggle feature |
+| #   | Category  | Method | Endpoint                  | Purpose         |
+| --- | --------- | ------ | ------------------------- | --------------- |
+| 1   | Pages     | GET    | `/pages`                  | List all pages  |
+| 2   | Pages     | GET    | `/pages/:id`              | Get single page |
+| 3   | Pages     | POST   | `/pages`                  | Create page     |
+| 4   | Pages     | PUT    | `/pages/:id`              | Update page     |
+| 5   | Pages     | DELETE | `/pages/:id`              | Delete page     |
+| 6   | Files     | GET    | `/files`                  | List files      |
+| 7   | Files     | POST   | `/files`                  | Upload file     |
+| 8   | Files     | DELETE | `/files/:id`              | Delete file     |
+| 9   | Documents | GET    | `/documents`              | List documents  |
+| 10  | Documents | POST   | `/documents`              | Create document |
+| 11  | Documents | DELETE | `/documents/:id`          | Delete document |
+| 12  | Emails    | GET    | `/emails`                 | List emails     |
+| 13  | Emails    | POST   | `/emails/send`            | Send email      |
+| 14  | Users     | GET    | `/users`                  | List users      |
+| 15  | Users     | PUT    | `/users/:id/role`         | Change role     |
+| 16  | Users     | POST   | `/users/:id/block`        | Block user      |
+| 17  | Users     | POST   | `/users/:id/unblock`      | Unblock user    |
+| 18  | Audit     | GET    | `/audit-logs`             | Get audit logs  |
+| 19  | Health    | GET    | `/health`                 | System health   |
+| 20  | Backups   | GET    | `/backups`                | List backups    |
+| 21  | Backups   | POST   | `/backups/create`         | Create backup   |
+| 22  | Backups   | POST   | `/backups/:id/restore`    | Restore backup  |
+| 23  | Plans     | GET    | `/subscription-plans`     | List plans      |
+| 24  | Plans     | POST   | `/subscription-plans`     | Create plan     |
+| 25  | Plans     | PUT    | `/subscription-plans/:id` | Update plan     |
+| 26  | Plans     | DELETE | `/subscription-plans/:id` | Delete plan     |
+| 27  | Features  | GET    | `/features`               | List features   |
+| 28  | Features  | PUT    | `/features/:id/toggle`    | Toggle feature  |
 
 **Total: 30 API Endpoints**
 
@@ -937,6 +1025,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 ```
 
 ### Getting a Token
+
 1. Call `POST /api/auth/login` with email and password
 2. Response includes `accessToken` (valid for 15 minutes)
 3. Use token in all Super Admin API requests
@@ -954,6 +1043,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 ## Support
 
 For API issues or questions:
+
 - Check the Audit Logs endpoint (`/audit-logs`) to see successful operations
 - Review error messages in response bodies
 - Ensure authentication token is valid

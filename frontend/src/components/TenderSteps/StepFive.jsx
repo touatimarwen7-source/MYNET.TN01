@@ -19,14 +19,19 @@ export default function StepFive({ formData, handleChange, totalCriteria, loadin
         {criteria.map((c) => (
           <Box key={c.key}>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: '8px' }}>
-              <Typography sx={{ fontSize: '13px', fontWeight: 600, color: THEME_COLORS.textPrimary }}>
+              <Typography
+                sx={{ fontSize: '13px', fontWeight: 600, color: THEME_COLORS.textPrimary }}
+              >
                 {c.label}
               </Typography>
               <Typography
                 sx={{
                   fontSize: '13px',
                   fontWeight: 600,
-                  color: formData.evaluation_criteria[c.key] > 0 ? THEME_COLORS.primary : THEME_COLORS.textDisabled,
+                  color:
+                    formData.evaluation_criteria[c.key] > 0
+                      ? THEME_COLORS.primary
+                      : THEME_COLORS.textDisabled,
                 }}
               >
                 {formData.evaluation_criteria[c.key]}%

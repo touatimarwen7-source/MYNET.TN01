@@ -70,8 +70,7 @@ const FileManagement = () => {
       try {
         await deleteFile(fileId);
         await fetchFiles();
-      } catch (error) {
-      }
+      } catch (error) {}
     }
   };
 
@@ -94,8 +93,18 @@ const FileManagement = () => {
 
   return (
     <Box sx={{ padding: '20px' }}>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-        <Typography variant="h5" sx={{ fontWeight: 'bold', color: institutionalTheme.palette.text.primary }}>
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          marginBottom: '20px',
+        }}
+      >
+        <Typography
+          variant="h5"
+          sx={{ fontWeight: 'bold', color: institutionalTheme.palette.text.primary }}
+        >
           إدارة الملفات
         </Typography>
         <Button
@@ -129,18 +138,45 @@ const FileManagement = () => {
           <Table>
             <TableHead sx={{ backgroundColor: institutionalTheme.palette.background.default }}>
               <TableRow>
-                <TableCell sx={{ fontWeight: 'bold', color: institutionalTheme.palette.primary.main }}>اسم الملف</TableCell>
-                <TableCell sx={{ fontWeight: 'bold', color: institutionalTheme.palette.primary.main }}>نوع الملف</TableCell>
-                <TableCell sx={{ fontWeight: 'bold', color: institutionalTheme.palette.primary.main }}>الحجم</TableCell>
-                <TableCell sx={{ fontWeight: 'bold', color: institutionalTheme.palette.primary.main }}>تاريخ الإنشاء</TableCell>
-                <TableCell sx={{ fontWeight: 'bold', color: institutionalTheme.palette.primary.main }}>الإجراءات</TableCell>
+                <TableCell
+                  sx={{ fontWeight: 'bold', color: institutionalTheme.palette.primary.main }}
+                >
+                  اسم الملف
+                </TableCell>
+                <TableCell
+                  sx={{ fontWeight: 'bold', color: institutionalTheme.palette.primary.main }}
+                >
+                  نوع الملف
+                </TableCell>
+                <TableCell
+                  sx={{ fontWeight: 'bold', color: institutionalTheme.palette.primary.main }}
+                >
+                  الحجم
+                </TableCell>
+                <TableCell
+                  sx={{ fontWeight: 'bold', color: institutionalTheme.palette.primary.main }}
+                >
+                  تاريخ الإنشاء
+                </TableCell>
+                <TableCell
+                  sx={{ fontWeight: 'bold', color: institutionalTheme.palette.primary.main }}
+                >
+                  الإجراءات
+                </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {files && files.length > 0 ? (
                 files.map((file) => (
-                  <TableRow key={file.id} sx={{ '&:hover': { backgroundColor: institutionalTheme.palette.background.default } }}>
-                    <TableCell sx={{ color: institutionalTheme.palette.text.primary }}>{file.name || file.file_name}</TableCell>
+                  <TableRow
+                    key={file.id}
+                    sx={{
+                      '&:hover': { backgroundColor: institutionalTheme.palette.background.default },
+                    }}
+                  >
+                    <TableCell sx={{ color: institutionalTheme.palette.text.primary }}>
+                      {file.name || file.file_name}
+                    </TableCell>
                     <TableCell>
                       <Chip
                         label={file.file_type || 'ملف'}
@@ -149,9 +185,13 @@ const FileManagement = () => {
                         variant="outlined"
                       />
                     </TableCell>
-                    <TableCell sx={{ color: '#616161' }}>{formatFileSize(file.size_bytes)}</TableCell>
                     <TableCell sx={{ color: '#616161' }}>
-                      {file.created_at ? new Date(file.created_at).toLocaleDateString('ar-TN') : '-'}
+                      {formatFileSize(file.size_bytes)}
+                    </TableCell>
+                    <TableCell sx={{ color: '#616161' }}>
+                      {file.created_at
+                        ? new Date(file.created_at).toLocaleDateString('ar-TN')
+                        : '-'}
                     </TableCell>
                     <TableCell>
                       <Box sx={{ display: 'flex', gap: '8px' }}>
@@ -195,7 +235,13 @@ const FileManagement = () => {
 
       {/* Upload Dialog */}
       <Dialog open={openDialog} onClose={() => !uploading && setOpenDialog(false)}>
-        <DialogTitle sx={{ backgroundColor: institutionalTheme.palette.primary.main, color: 'white', fontWeight: 'bold' }}>
+        <DialogTitle
+          sx={{
+            backgroundColor: institutionalTheme.palette.primary.main,
+            color: 'white',
+            fontWeight: 'bold',
+          }}
+        >
           رفع ملف جديد
         </DialogTitle>
         <DialogContent sx={{ padding: '20px', minWidth: '400px' }}>
@@ -238,7 +284,11 @@ const FileManagement = () => {
           </Box>
         </DialogContent>
         <DialogActions sx={{ padding: '20px', gap: '10px' }}>
-          <Button onClick={() => setOpenDialog(false)} disabled={uploading} sx={{ color: '#616161' }}>
+          <Button
+            onClick={() => setOpenDialog(false)}
+            disabled={uploading}
+            sx={{ color: '#616161' }}
+          >
             إلغاء
           </Button>
           <Button

@@ -72,8 +72,7 @@ export default function TenderInquiry({ tenderId }) {
     try {
       const response = await axios.get(`/api/inquiries/${inquiry.id}/responses`);
       setResponses(response.data.responses || []);
-    } catch (err) {
-    }
+    } catch (err) {}
     setOpenDialog(true);
   };
 
@@ -116,7 +115,10 @@ export default function TenderInquiry({ tenderId }) {
 
   return (
     <Box sx={{ p: 3, direction: 'rtl' }}>
-      <Typography variant="h5" sx={{ mb: 3, color: theme.palette.primary.main, fontWeight: 'bold' }}>
+      <Typography
+        variant="h5"
+        sx={{ mb: 3, color: theme.palette.primary.main, fontWeight: 'bold' }}
+      >
         📋 الاستفسارات والتوضيحات
       </Typography>
 
@@ -172,7 +174,9 @@ export default function TenderInquiry({ tenderId }) {
             <Paper key={inquiry.id} sx={{ mb: 2, p: 2 }}>
               <ListItemText
                 primary={
-                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <Box
+                    sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
+                  >
                     <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>
                       {inquiry.subject}
                     </Typography>
@@ -258,7 +262,11 @@ export default function TenderInquiry({ tenderId }) {
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setOpenDialog(false)}>إغلاق</Button>
-          <Button onClick={submitResponse} variant="contained" sx={{ backgroundColor: theme.palette.primary.main }}>
+          <Button
+            onClick={submitResponse}
+            variant="contained"
+            sx={{ backgroundColor: theme.palette.primary.main }}
+          >
             إرسال الرد
           </Button>
         </DialogActions>

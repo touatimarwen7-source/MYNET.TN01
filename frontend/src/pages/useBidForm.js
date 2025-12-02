@@ -62,7 +62,8 @@ export const useBidForm = (tenderId) => {
   );
 
   useEffect(() => {
-    if (tender) { // Only save if tender has loaded
+    if (tender) {
+      // Only save if tender has loaded
       debouncedSave(formData);
     }
   }, [formData, tender, debouncedSave]);
@@ -71,24 +72,32 @@ export const useBidForm = (tenderId) => {
   const validateStep = () => {
     const newErrors = {};
     switch (currentStep) {
-      case 0: { // Informations
-        if (!formData.supplier_name.trim()) newErrors.supplier_name = 'Le nom de l\'entreprise est requis.';
-        if (!formData.supplier_email.trim()) newErrors.supplier_email = 'L\'email est requis.';
-        else if (!validateEmail(formData.supplier_email).valid) newErrors.supplier_email = 'Format d\'email invalide.';
+      case 0: {
+        // Informations
+        if (!formData.supplier_name.trim())
+          newErrors.supplier_name = "Le nom de l'entreprise est requis.";
+        if (!formData.supplier_email.trim()) newErrors.supplier_email = "L'email est requis.";
+        else if (!validateEmail(formData.supplier_email).valid)
+          newErrors.supplier_email = "Format d'email invalide.";
         if (!formData.supplier_phone.trim()) newErrors.supplier_phone = 'Le téléphone est requis.';
-        else if (!validatePhone(formData.supplier_phone).valid) newErrors.supplier_phone = 'Format de téléphone invalide.';
+        else if (!validatePhone(formData.supplier_phone).valid)
+          newErrors.supplier_phone = 'Format de téléphone invalide.';
         break;
       }
-      case 1: { // Éléments
+      case 1: {
+        // Éléments
         if (!formData.line_items || formData.line_items.length === 0) {
           newErrors.line_items = 'Vous devez ajouter au moins un article à votre offre.';
         }
         break;
       }
-      case 2: { // Conformité
+      case 2: {
+        // Conformité
         if (!formData.delivery_time) newErrors.delivery_time = 'Le délai de livraison est requis.';
-        if (!formData.payment_terms) newErrors.payment_terms = 'Les conditions de paiement sont requises.';
-        if (!formData.compliance_statement) newErrors.compliance_statement = 'Vous devez confirmer votre conformité.';
+        if (!formData.payment_terms)
+          newErrors.payment_terms = 'Les conditions de paiement sont requises.';
+        if (!formData.compliance_statement)
+          newErrors.compliance_statement = 'Vous devez confirmer votre conformité.';
         break;
       }
       default:
@@ -112,7 +121,10 @@ export const useBidForm = (tenderId) => {
 
   const handleSubmit = async () => {
     if (!validateStep()) {
-      setFormErrors(prev => ({ ...prev, general: 'Veuillez corriger les erreurs avant de soumettre.' }));
+      setFormErrors((prev) => ({
+        ...prev,
+        general: 'Veuillez corriger les erreurs avant de soumettre.',
+      }));
       return;
     }
 
@@ -125,7 +137,7 @@ export const useBidForm = (tenderId) => {
         if (key === 'line_items') {
           submitData.append(key, JSON.stringify(value));
         } else if (key === 'attachments') {
-          value.forEach(file => submitData.append('attachments', file));
+          value.forEach((file) => submitData.append('attachments', file));
         } else {
           submitData.append(key, value);
         }

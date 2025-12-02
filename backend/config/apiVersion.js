@@ -11,5 +11,5 @@ const versionMiddleware = (req, res, next) => {
 module.exports = {
   API_VERSION,
   API_BUILD_DATE,
-  versionMiddleware
+  versionMiddleware,
 };

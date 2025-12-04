@@ -586,5 +586,6 @@ export default function CreateBid() {
           </Typography>
         </DialogContent>
       </Dialog>
+    </>
   );
 }

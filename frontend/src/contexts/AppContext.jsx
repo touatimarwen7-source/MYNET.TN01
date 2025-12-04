@@ -293,3 +293,9 @@ export const useAuth = () => {
     updateUser,
   };
 };
+
+/**
+ * 🪝 useToast Hook
+ * Re-export useToastContext for backward compatibility
+ */
+export { useToastContext as useToast } from './ToastContext';

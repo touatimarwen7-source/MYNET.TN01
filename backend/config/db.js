@@ -39,6 +39,11 @@ class SafeClient {
 
 async function initializeDb() {
   try {
+    if (process.env.SKIP_DB_INIT === 'true') {
+      console.log('⚠️  Database initialization skipped (SKIP_DB_INIT=true)');
+      return false;
+    }
+
     if (!pool) {
       pool = new Pool({
         connectionString: KeyManagementHelper.getRequiredEnv('DATABASE_URL'),
@@ -49,7 +54,7 @@ async function initializeDb() {
         max: 15, // Reduced from 20 to prevent exhaustion
         min: 3, // Reduced from 5
         idleTimeoutMillis: 30000, // 30s idle timeout
-        connectionTimeoutMillis: 10000,
+        connectionTimeoutMillis: 5000,
         application_name: 'mynet-backend',
         maxUses: 7500, // Recycle connections to prevent memory leaks
         statement_timeout: 30000, // 30s query timeout
@@ -98,18 +103,33 @@ async function initializeDb() {
         }
       });
 
-      // Test connection with timeout
-      const client = await pool.connect();
-      try {
-        const result = await client.query('SELECT NOW()');
-        // Connection successful - logged via server startup sequence only
-      } finally {
-        client.release();
-      }
+      // Test connection with manual timeout wrapper
+      const connectionTimeout = new Promise((_, reject) =>
+        setTimeout(() => reject(new Error('Database connection timeout')), 5000)
+      );
+
+      const testConnection = async () => {
+        const client = await pool.connect();
+        try {
+          await client.query('SELECT NOW()');
+          return true;
+        } finally {
+          client.release();
+        }
+      };
+
+      await Promise.race([testConnection(), connectionTimeout]);
     }
     return true;
   } catch (error) {
     // Database initialization error - logged via metrics
+    console.log('⚠️  Database connection failed:', error.message);
+    if (pool) {
+      try {
+        await pool.end();
+      } catch (e) {}
+      pool = null;
+    }
     return false;
   }
 }

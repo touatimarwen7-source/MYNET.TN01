@@ -97,7 +97,7 @@ export default function TenderAwarding() {
       // عرض رسالة النجاح
       // In a real app, a toast notification would be better.
       alert('✅ Le gagnant a été annoncé avec succès !');
-    } catch (err) => {
+    } catch (err) {
       setError("Erreur lors de l'annonce du gagnant : " + err.message);
     } finally {
       setSubmitting(false);

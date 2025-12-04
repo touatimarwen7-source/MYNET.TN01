@@ -302,7 +302,7 @@ export default function BidSubmission() {
         `Impossible de charger les détails de l'appel d'offres. ` +
         `Veuillez vérifier votre connexion ou contacter le support si le problème persiste. ` +
         `Détail: ${errorMessage}`
-      );
+      });
     } finally {
       setLoading(false);
     }

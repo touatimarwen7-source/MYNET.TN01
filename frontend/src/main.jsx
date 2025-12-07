@@ -27,13 +27,19 @@ try {
   console.error('Failed to initialize CSRF protection:', error);
 }
 
-// Clean up expired tokens on app start
+// ✅ Initialize token management on app load
 try {
-  if (!TokenManager.isTokenValid()) {
+  const token = localStorage.getItem('auth_token');
+  const userData = localStorage.getItem('user_data');
+
+  if (token && userData) {
+    TokenManager.manageTokens(token, null, JSON.parse(userData));
+  } else {
     TokenManager.clearTokens();
   }
 } catch (error) {
   console.error('Failed to manage tokens:', error);
+  TokenManager.clearTokens();
 }
 
 // Initialize analytics

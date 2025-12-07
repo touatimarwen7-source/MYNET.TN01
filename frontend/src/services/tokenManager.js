@@ -97,6 +97,27 @@ class TokenManager {
       this.clearToken();
     }
   }
+
+  /**
+   * Check if token is valid (exists)
+   */
+  isTokenValid() {
+    return !!this.getToken();
+  }
+
+  /**
+   * Get user info from stored user data
+   */
+  getUserFromToken() {
+    return this.getUser();
+  }
+
+  /**
+   * Clear all tokens (alias for clearToken)
+   */
+  clearTokens() {
+    this.clearToken();
+  }
 }
 
 // Create singleton instance

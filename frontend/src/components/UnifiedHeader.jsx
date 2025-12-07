@@ -36,23 +36,19 @@ export default function UnifiedHeader() {
   const navigate = useNavigate();
   const theme = institutionalTheme;
 
-  // Create an instance of TokenManager or use it directly if it's a singleton
-  // Assuming TokenManager is exported as a default or named export
-  const tokenManager = TokenManager;
-
   useEffect(() => {
-    const checkAuth = useCallback(() => {
-      const token = tokenManager.getAccessToken(); // Corrected method call
-      const userData = tokenManager.getUserFromToken(); // Corrected method call
+    const checkAuth = () => {
+      const token = TokenManager.getAccessToken();
+      const userData = TokenManager.getUserFromToken();
       setIsAuthenticated(!!token);
       setUserRole(userData?.role || null);
       setUserName(userData?.username || userData?.email || 'Utilisateur');
-    }, []); // Removed dependencies as it's set once and updated via event listener
+    };
 
     checkAuth();
     window.addEventListener('authChanged', checkAuth);
     return () => window.removeEventListener('authChanged', checkAuth);
-  }, [tokenManager]); // Added tokenManager to dependency array if it can change
+  }, []);
 
   const isPublicPage = ['/', '/about', '/features', '/pricing', '/contact'].includes(
     location.pathname
@@ -80,12 +76,12 @@ export default function UnifiedHeader() {
     }
   };
 
-  const handleLogout = useCallback(() => { // Made useCallback for consistency
-    tokenManager.clearTokens(); // Corrected method call
-    window.dispatchEvent(new Event('authChanged')); // Re-dispatch event for global updates
+  const handleLogout = () => {
+    TokenManager.clearTokens();
+    window.dispatchEvent(new Event('authChanged'));
     navigate('/login');
     setAnchorEl(null);
-  }, [navigate, tokenManager]); // Added dependencies
+  };
 
   const handleProfileMenuOpen = (e) => {
     setAnchorEl(e.currentTarget);

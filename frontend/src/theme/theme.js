@@ -1225,5 +1225,8 @@ const institutionalTheme = createTheme({
   },
 });
 
+// Default export
 export default institutionalTheme;
-export { institutionalTheme };
+
+// Named exports for flexibility
+export { institutionalTheme, institutionalTheme as theme };

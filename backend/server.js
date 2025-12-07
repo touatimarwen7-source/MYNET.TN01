@@ -39,10 +39,10 @@ async function startServer() {
     app.use('/api/reviews', reviewsRoutes);
     app.use('/api/direct-supply', directSupplyRoutes);
     app.use('/api/company-profile', companyProfileRoutes);
-    app.use('/api/procurement', clarificationRoutes);
+    app.use('/api/procurement/clarifications', clarificationRoutes);
     app.use('/api/auth/password-reset', passwordResetRoutes);
 
-    // Start server immediately without database
+    // Start server
     const httpServer = http.createServer(app);
     httpServer.listen(PORT, HOST, () => {
       console.log(`✅ Server running on http://${HOST}:${PORT}`);
@@ -64,109 +64,22 @@ async function startServer() {
         process.exit(1);
       }
     });
-
-    return;
-
-    // Initialize monitoring and error tracking
-    try {
-      initializeSentry(app);
-      logger.info('✅ Error tracking initialized');
-    } catch (sentryError) {
-      logger.warn('⚠️ Error tracking initialization failed:', sentryError.message);
-    }
-
-    let dbConnected = false;
-    if (initializeDb) {
-      dbConnected = await initializeDb();
-    }
-
-    if (dbConnected && getPool && initializeSchema) {
-      try {
-        const pool = getPool();
-        await initializeSchema(pool);
-        logger.info('✅ Database initialized successfully');
-
-        // 🔄 Initialize backup scheduler
-        try {
-          BackupScheduler.start();
-          logger.info('✅ Backup scheduler initialized');
-        } catch (backupError) {
-          logger.warn('⚠️ Backup scheduler initialization failed:', backupError.message);
-        }
-      } catch (schemaError) {
-        logger.error('❌ Schema initialization failed:', schemaError.message);
-        throw schemaError;
-      }
-    } else {
-      logger.warn('⚠️  Server starting without database connection');
-    }
-
-    // ✨ Create HTTP server for WebSocket support
-    const server = http.createServer(app);
-
-    // 🔌 Initialize WebSocket
-    const io = initializeWebSocket(server);
-    logger.info('✅ WebSocket initialized');
-
-    // Register routes
-    app.use('/api/auth', authRoutes);
-    app.use('/api/procurement', procurementRoutes);
-    app.use('/api/admin', adminRoutes);
-    app.use('/api/super-admin', superAdminRoutes);
-    app.use('/api/search', searchRoutes);
-    app.use('/api/notifications', notificationRoutes);
-    app.use('/api/messages', messagesRoutes);
-    app.use('/api/reviews', reviewsRoutes);
-    app.use('/api/direct-supply', directSupplyRoutes);
-    app.use('/api/company-profile', companyProfileRoutes);
-    app.use('/api/procurement', clarificationRoutes);
-    app.use('/api/auth/password-reset', passwordResetRoutes);
-
-
-    server.listen(PORT, HOST, () => {
-      logger.info('========================================');
-      logger.info(`🚀 Server running on port ${PORT}`);
-      logger.info(`📍 Access API at: http://localhost:${PORT}`);
-      logger.info(`🔌 WebSocket available at: ws://localhost:${PORT}`);
-      logger.info('========================================');
-      logger.info('Available endpoints:');
-      logger.info('  - POST /api/auth/register');
-      logger.info('  - POST /api/auth/login');
-      logger.info('  - GET  /api/procurement/tenders');
-      logger.info('  - POST /api/procurement/tenders');
-      logger.info('  - POST /api/procurement/offers');
-      logger.info('  - GET  /api/admin/statistics');
-      logger.info('  - GET  /api/search/tenders');
-      logger.info('========================================');
-    });
   } catch (error) {
     logger.error('❌ Failed to start server:', { message: error.message });
-    errorTracker.trackError(error, {
-      severity: 'critical',
-      context: 'server_startup',
-    });
     process.exit(1);
   }
 }
 
-// 🔍 Global error handlers for uncaught exceptions
+// Global error handlers
 process.on('uncaughtException', (error) => {
   logger.error('💥 Uncaught Exception:', { error: error.message });
-  errorTracker.trackError(error, {
-    severity: 'critical',
-    context: 'uncaught_exception',
-  });
-  process.exit(1); // Exit the process if an uncaught exception occurs
+  process.exit(1);
 });
 
 process.on('unhandledRejection', (reason, promise) => {
   logger.error('💥 Unhandled Rejection:', { reason: String(reason) });
-  errorTracker.trackError(new Error(String(reason)), {
-    severity: 'critical',
-    context: 'unhandled_rejection',
-  });
-  process.exit(1); // Exit the process if an unhandled rejection occurs
+  process.exit(1);
 });
 
-// 🚀 Start the server
+// Start the server
 startServer();

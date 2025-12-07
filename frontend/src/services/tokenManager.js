@@ -2,11 +2,6 @@
  * Token Manager Service
  * Gestion centralisée des tokens JWT
  */
-
-/**
- * Token Manager Service
- * Gestion centralisée des tokens JWT
- */
 class TokenManager {
   constructor() {
     this.ACCESS_TOKEN_KEY = 'auth_token';
@@ -81,15 +76,6 @@ class TokenManager {
     }
   }
 }
-
-// Create singleton instance
-const tokenManagerInstance = new TokenManager();
-
-// Export instance as default
-export default tokenManagerInstance;
-
-// Export class for testing purposes only
-export { TokenManager };
 
 // Create singleton instance
 const tokenManagerInstance = new TokenManager();

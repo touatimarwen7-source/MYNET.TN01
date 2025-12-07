@@ -62,8 +62,6 @@ export const companyProfileAPI = {
   updateProfile: (data) => axiosInstance.put('/profile/company', data)
 };
 
-// Export axios instance
+// Export axios instance as default and named
 export const apiClient = axiosInstance;
-
-// Default export
 export default axiosInstance;

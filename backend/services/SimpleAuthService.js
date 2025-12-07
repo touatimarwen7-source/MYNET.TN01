@@ -1,89 +1,139 @@
+
 const fs = require('fs');
 const path = require('path');
-const jwt = require('jsonwebtoken');
+const KeyManagementService = require('../security/KeyManagementService');
 
 class SimpleAuthService {
   constructor() {
-    this.usersFile = path.join(__dirname, '../data/users.json');
-    this.credentialsMap = {
-      'admin@mynet.tn': 'admin123',
-      'buyer@mynet.tn': 'buyer123',
-      'supplier@mynet.tn': 'supplier123',
-    };
+    this.usersFilePath = path.join(__dirname, '../data/users.json');
+    this.users = this.loadUsers();
   }
 
-  /**
-   * Load users from local JSON file
-   * @private
-   * @returns {Array} Array of user objects from file or empty array
-   */
   loadUsers() {
     try {
-      if (fs.existsSync(this.usersFile)) {
-        const data = fs.readFileSync(this.usersFile, 'utf-8');
-        return JSON.parse(data);
+      if (!fs.existsSync(this.usersFilePath)) {
+        // Create default users
+        const defaultUsers = [
+          {
+            id: '1',
+            username: 'buyer',
+            email: 'buyer@mynet.tn',
+            password: 'buyer123',
+            full_name: 'Acheteur Test',
+            role: 'buyer',
+            is_active: true,
+            is_verified: true,
+          },
+          {
+            id: '2',
+            username: 'supplier',
+            email: 'supplier@mynet.tn',
+            password: 'supplier123',
+            full_name: 'Fournisseur Test',
+            role: 'supplier',
+            is_active: true,
+            is_verified: true,
+          },
+          {
+            id: '3',
+            username: 'admin',
+            email: 'admin@mynet.tn',
+            password: 'admin123',
+            full_name: 'Administrateur',
+            role: 'admin',
+            is_active: true,
+            is_verified: true,
+          },
+        ];
+        
+        fs.writeFileSync(this.usersFilePath, JSON.stringify(defaultUsers, null, 2));
+        return defaultUsers;
       }
-    } catch (error) {}
-    return [];
+
+      const data = fs.readFileSync(this.usersFilePath, 'utf8');
+      return JSON.parse(data);
+    } catch (error) {
+      console.error('Error loading users:', error);
+      return [];
+    }
   }
 
-  /**
-   * Authenticate user with email and password
-   * Generates JWT access and refresh tokens
-   * @async
-   * @param {string} email - User email address
-   * @param {string} password - User password
-   * @returns {Promise<Object>} User object and access/refresh tokens
-   * @throws {Error} When credentials are invalid
-   */
+  saveUsers() {
+    try {
+      fs.writeFileSync(this.usersFilePath, JSON.stringify(this.users, null, 2));
+    } catch (error) {
+      console.error('Error saving users:', error);
+    }
+  }
+
   async authenticate(email, password) {
     try {
-      console.log('🔐 Authentication attempt:', { email, password });
-
-      // Check if credentials match the simple map
-      const expectedPassword = this.credentialsMap[email];
-      console.log('Expected password:', expectedPassword);
-
-      if (!expectedPassword || expectedPassword !== password) {
-        console.log('❌ Password mismatch');
-        return null;
-      }
-
-      // Load users from file
-      const users = await this.loadUsers();
-      const user = users.find((u) => u.email === email);
-
+      const user = this.users.find(u => u.email === email && u.is_active);
+      
       if (!user) {
-        console.log('❌ User not found');
         return null;
       }
 
-      console.log('✅ Authentication successful');
-      return {
-        id: user.id,
-        email: user.email,
-        role: user.role,
-        full_name: user.full_name,
-      };
+      // Simple password comparison (in production, use hashing)
+      if (user.password !== password) {
+        return null;
+      }
+
+      // Return user without password
+      const { password: _, ...userWithoutPassword } = user;
+      return userWithoutPassword;
     } catch (error) {
-      console.error('❌ Authentication error:', error);
+      console.error('Authentication error:', error);
       return null;
     }
   }
 
-  /**
-   * Get user by ID without password hash
-   * @param {string} userId - ID of user to retrieve
-   * @returns {Object|null} User object without password or null if not found
-   */
-  getUserById(userId) {
-    const users = this.loadUsers();
-    const user = users.find((u) => u.id === userId);
-    if (user) {
-      const { password_hash, ...userWithoutPassword } = user;
+  async register(userData) {
+    try {
+      // Check if email already exists
+      if (this.users.find(u => u.email === userData.email)) {
+        throw new Error('Email already exists');
+      }
+
+      // Check if username already exists
+      if (this.users.find(u => u.username === userData.username)) {
+        throw new Error('Username already exists');
+      }
+
+      // Create new user
+      const newUser = {
+        id: String(this.users.length + 1),
+        username: userData.username,
+        email: userData.email,
+        password: userData.password,
+        full_name: userData.full_name || '',
+        phone: userData.phone || '',
+        role: userData.role || 'supplier',
+        company_name: userData.company_name || '',
+        company_registration: userData.company_registration || '',
+        is_active: true,
+        is_verified: false,
+        created_at: new Date().toISOString(),
+      };
+
+      this.users.push(newUser);
+      this.saveUsers();
+
+      // Return user without password
+      const { password: _, ...userWithoutPassword } = newUser;
       return userWithoutPassword;
+    } catch (error) {
+      console.error('Registration error:', error);
+      throw error;
     }
-    return null;
+  }
+
+  async getUserById(userId) {
+    const user = this.users.find(u => u.id === userId);
+    if (!user) return null;
+    
+    const { password: _, ...userWithoutPassword } = user;
+    return userWithoutPassword;
   }
 }
 

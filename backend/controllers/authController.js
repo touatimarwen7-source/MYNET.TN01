@@ -57,13 +57,13 @@ class AuthController {
         });
       }
 
-      const user = await UserService.createUser({
+      const user = await SimpleAuthService.register({
         username,
         email,
         password,
         full_name,
         phone,
-        role: role || 'viewer',
+        role: role || 'supplier',
         company_name,
         company_registration,
       });

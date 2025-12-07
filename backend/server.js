@@ -5,28 +5,7 @@ const app = require('./app');
 const PORT = process.env.PORT || 5000;
 const HOST = process.env.HOST || '0.0.0.0';
 
-let logger;
-try {
-  logger = require('./utils/logger');
-} catch (error) {
-  console.error('Logger initialization failed:', error);
-  logger = console;
-}
-
-let initializeDb, getPool, initializeSchema, BackupScheduler, initializeWebSocket, errorTracker, initializeSentry;
-
-try {
-  const db = require('./config/db');
-  initializeDb = db.initializeDb;
-  getPool = db.getPool;
-  initializeSchema = require('./config/schema').initializeSchema;
-  BackupScheduler = require('./services/backup/BackupScheduler');
-  initializeWebSocket = require('./config/websocket').initializeWebSocket;
-  errorTracker = require('./services/ErrorTrackingService').errorTracker;
-  initializeSentry = require('./config/sentry').initializeSentry;
-} catch (error) {
-  logger.error('Failed to load dependencies:', error.message);
-}
+const logger = console;
 
 // Import routes
 const authRoutes = require('./routes/authRoutes');
@@ -45,9 +24,23 @@ const passwordResetRoutes = require('./routes/passwordResetRoutes');
 
 async function startServer() {
   try {
-    logger.info('========================================');
-    logger.info('MyNet.tn Backend Server Starting...');
-    logger.info('========================================');
+    console.log('========================================');
+    console.log('MyNet.tn Backend Server Starting...');
+    console.log('========================================');
+
+    // Start server immediately without database
+    const server = http.createServer(app);
+    server.listen(PORT, HOST, () => {
+      console.log(`✅ Server running on http://${HOST}:${PORT}`);
+      console.log('✅ Using SimpleAuthService for authentication');
+    });
+
+    server.on('error', (error) => {
+      console.error('Server error:', error);
+      process.exit(1);
+    });
+
+    return;
 
     // Initialize monitoring and error tracking
     try {

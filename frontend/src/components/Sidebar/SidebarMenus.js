@@ -93,6 +93,7 @@ function buildAdminMenu(permissions) {
 export const buyerMenu = getMenuByRole('buyer');
 export const supplierMenu = getMenuByRole('supplier');
 export const superAdminMenu = getMenuByRole('super_admin');
+export const adminMenu = buildAdminMenu(null);
 
 export const getMenuForRole = (role) => {
   switch (role) {

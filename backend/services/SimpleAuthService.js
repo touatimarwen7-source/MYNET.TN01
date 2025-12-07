@@ -6,9 +6,9 @@ class SimpleAuthService {
   constructor() {
     this.usersFile = path.join(__dirname, '../data/users.json');
     this.credentialsMap = {
-      'admin@mynet.tn': 'Admin@MyNet.2025',
-      'buyer@mynet.tn': 'Buyer@Test.2025',
-      'supplier@mynet.tn': 'Supplier@Test.2025',
+      'admin@mynet.tn': 'admin123',
+      'buyer@mynet.tn': 'buyer123',
+      'supplier@mynet.tn': 'supplier123',
     };
   }
 

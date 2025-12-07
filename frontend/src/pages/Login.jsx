@@ -54,17 +54,8 @@ export default function Login() {
       addToast('Connexion réussie', 'success', 2000);
       window.dispatchEvent(new CustomEvent('authChanged', { detail: userData }));
 
-      // Navigate based on role
-      let redirectPath = '/tenders';
-      if (userData.role === 'admin' || userData.role === 'super_admin') {
-        redirectPath = '/admin';
-      } else if (userData.role === 'buyer') {
-        redirectPath = '/buyer-dashboard';
-      } else if (userData.role === 'supplier') {
-        redirectPath = '/supplier-search';
-      }
-
-      navigate(redirectPath, { replace: true });
+      // إعادة التوجيه للوحة التحكم الموحدة لجميع المستخدمين
+      navigate('/dashboard');
     } catch (err) {
       const errorMsg = String(
         err.response?.data?.error || 'Erreur de connexion. Vérifiez vos identifiants.'

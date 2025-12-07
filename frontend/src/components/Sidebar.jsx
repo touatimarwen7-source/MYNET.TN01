@@ -10,7 +10,7 @@ import { useSubscriptionTier } from '../hooks/useSubscriptionTier';
 import SidebarHeader from './Sidebar/SidebarHeader';
 import SidebarMenuList from './Sidebar/SidebarMenuList';
 import SidebarFooter from './Sidebar/SidebarFooter';
-import { getMenuForRole } from './Sidebar/SidebarMenus';
+import { getMenuByRole } from './Sidebar/SidebarMenus';
 
 const DRAWER_WIDTH = 280;
 
@@ -24,12 +24,12 @@ export default function Sidebar({ user, onLogout }) {
   const { checkFeatureAccess, handleLockedFeatureClick, closeUpgradeModal, upgradeModal } =
     useSubscriptionTier(user?.subscription);
 
-  const menu = getMenuForRole(user?.role);
+  const menuItems = user?.role ? getMenuByRole(user.role, user.permissions) : [];
 
   const drawerContent = (
     <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
       <SidebarHeader user={user} />
-      <SidebarMenuList menu={menu} />
+      <SidebarMenuList menu={menuItems} />
       <SidebarFooter onLogout={onLogout} />
       {upgradeModal && <UpgradeModal {...upgradeModal} onClose={closeUpgradeModal} />}
     </Box>

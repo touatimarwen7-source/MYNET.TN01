@@ -3,264 +3,97 @@
  * Organized by role: buyer, supplier, admin, super_admin
  */
 
-export const buyerMenu = [
-  {
-    id: 'dashboard',
-    label: 'Tableau de Bord',
-    path: '/buyer-dashboard',
-    featureKey: 'dashboard',
-    subItems: [],
-  },
-  {
-    id: 'tenders',
-    label: "Appels d'Offres",
-    subItems: [
-      { label: 'Actifs', path: '/buyer-active-tenders', featureKey: 'browsetenders' },
-      { label: 'Créer un Appel', path: '/create-tender', featureKey: 'createtender' },
-      { label: 'Soumissions', path: '/monitoring-submissions', featureKey: 'browsetenders' },
-      { label: 'Évaluation', path: '/tender-evaluation', featureKey: 'analytics' },
-      { label: 'Attribution', path: '/tender-awarding', featureKey: 'analytics' },
-      { label: 'Notifications', path: '/award-notifications', featureKey: 'analytics' },
-      { label: 'المسودات', path: '/drafts', featureKey: 'drafts' },
-    ],
-  },
-  {
-    id: 'finances',
-    label: 'Finances',
-    subItems: [
-      { label: 'Factures', path: '/invoices', featureKey: 'invoices' },
-      { label: 'Génération', path: '/invoice-generation', featureKey: 'invoices' },
-      { label: 'Budgets', path: '/budgets', featureKey: 'budgets' },
-      { label: 'Rapports Financiers', path: '/financial-reports', featureKey: 'customreports' },
-    ],
-  },
-  {
-    id: 'operations',
-    label: 'Opérations',
-    subItems: [
-      { label: 'Contrats', path: '/contracts', featureKey: 'operations' },
-      { label: 'Livraisons', path: '/deliveries', featureKey: 'operations' },
-      { label: 'Performance', path: '/performance', featureKey: 'operations' },
-      { label: 'Litiges', path: '/disputes', featureKey: 'operations' },
-    ],
-  },
-  {
-    id: 'team',
-    label: 'Équipe',
-    subItems: [
-      { label: "Gestion d'équipe", path: '/team-management', featureKey: 'teammanagement' },
-      { label: 'Permissions', path: '/team-permissions', featureKey: 'teammanagement' },
-      { label: 'Rôles', path: '/team-roles', featureKey: 'teammanagement' },
-    ],
-  },
-  {
-    id: 'notifications',
-    label: 'Notifications',
-    path: '/notifications',
-    featureKey: 'notifications',
-    subItems: [],
-  },
-  {
-    id: 'profile',
-    label: 'Profil',
-    featureKey: 'profile',
-    subItems: [
-      { label: 'Paramètres', path: '/profile', featureKey: 'profile' },
-      { label: 'Sécurité', path: '/security', featureKey: 'profile' },
-      { label: 'Préférences', path: '/preferences', featureKey: 'profile' },
-    ],
-  },
-];
+import DashboardIcon from '@mui/icons-material/Dashboard';
+import GavelIcon from '@mui/icons-material/Gavel';
+import LocalOfferIcon from '@mui/icons-material/LocalOffer';
+import PeopleIcon from '@mui/icons-material/People';
+import AssessmentIcon from '@mui/icons-material/Assessment';
+import SettingsIcon from '@mui/icons-material/Settings';
+import PersonIcon from '@mui/icons-material/Person';
+import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import SecurityIcon from '@mui/icons-material/Security';
+import BarChartIcon from '@mui/icons-material/BarChart';
+import FolderIcon from '@mui/icons-material/Folder';
+import NotificationsIcon from '@mui/icons-material/Notifications';
+import ArticleIcon from '@mui/icons-material/Article';
+import CodeIcon from '@mui/icons-material/Code';
+import SupervisedUserCircleIcon from '@mui/icons-material/SupervisedUserCircle';
 
-// قائمة المساعد الإداري (Admin)
-export const adminMenu = [
-  {
-    id: 'dashboard',
-    label: 'لوحة التحكم',
-    path: '/admin',
-    featureKey: 'dashboard',
-    subItems: [],
-  },
-  {
-    id: 'users',
-    label: 'إدارة المستخدمين',
-    path: '/admin/users',
-    featureKey: 'manage_users',
-    subItems: [],
-  },
-  {
-    id: 'content',
-    label: 'إدارة المحتوى',
-    path: '/admin/content',
-    featureKey: 'manage_content',
-    subItems: [],
-  },
-  {
-    id: 'reports',
-    label: 'التقارير',
-    path: '/admin/reports',
-    featureKey: 'view_reports',
-    subItems: [],
-  },
-  {
-    id: 'settings',
-    label: 'الإعدادات',
-    path: '/admin/settings',
-    featureKey: 'manage_settings',
-    subItems: [],
-  },
-];
+// النظام الموحد - القوائم الديناميكية حسب الدور
+export const getMenuByRole = (role, permissions = null) => {
+  const menus = {
+    buyer: [
+      { text: 'لوحة التحكم', icon: DashboardIcon, path: '/dashboard' },
+      { text: 'المناقصات', icon: GavelIcon, path: '/tenders' },
+      { text: 'إنشاء مناقصة', icon: GavelIcon, path: '/tenders/create' },
+      { text: 'العروض', icon: LocalOfferIcon, path: '/buyer-offers' },
+      { text: 'التقارير', icon: AssessmentIcon, path: '/reports' },
+      { text: 'الملف الشخصي', icon: PersonIcon, path: '/profile' },
+      { text: 'الإعدادات', icon: SettingsIcon, path: '/settings' },
+    ],
+    supplier: [
+      { text: 'لوحة التحكم', icon: DashboardIcon, path: '/dashboard' },
+      { text: 'المناقصات المتاحة', icon: GavelIcon, path: '/tenders' },
+      { text: 'عروضي', icon: LocalOfferIcon, path: '/my-offers' },
+      { text: 'الطلبات', icon: ShoppingCartIcon, path: '/orders' },
+      { text: 'الملف الشخصي', icon: PersonIcon, path: '/profile' },
+      { text: 'الإعدادات', icon: SettingsIcon, path: '/settings' },
+    ],
+    admin: buildAdminMenu(permissions),
+    super_admin: [
+      { text: 'لوحة التحكم', icon: DashboardIcon, path: '/dashboard' },
+      { text: 'مركز التحكم الكامل', icon: AdminPanelSettingsIcon, path: '/super-admin' },
+      { text: 'إدارة المستخدمين', icon: PeopleIcon, path: '/super-admin/users' },
+      { text: 'الأدوار والصلاحيات', icon: SecurityIcon, path: '/super-admin/roles' },
+      { text: 'المساعدون الإداريون', icon: SupervisedUserCircleIcon, path: '/super-admin/assistants' },
+      { text: 'التحليلات المتقدمة', icon: BarChartIcon, path: '/super-admin/analytics' },
+      { text: 'إدارة الملفات', icon: FolderIcon, path: '/super-admin/files' },
+      { text: 'الإشعارات', icon: NotificationsIcon, path: '/super-admin/notifications' },
+      { text: 'إدارة المحتوى', icon: ArticleIcon, path: '/super-admin/content' },
+      { text: 'محرر الصفحات', icon: CodeIcon, path: '/super-admin/page-editor' },
+      { text: 'التحكم بالميزات', icon: SettingsIcon, path: '/super-admin/features' },
+    ],
+  };
 
-export const supplierMenu = [
-  {
-    id: 'dashboard',
-    label: 'Tableau de Bord',
-    path: '/supplier-search',
-    featureKey: 'dashboard',
-    subItems: [],
-  },
-  {
-    id: 'tenders',
-    label: "Appels d'Offres",
-    subItems: [
-      { label: 'Parcourir', path: '/tenders', featureKey: 'browsetenders' },
-      { label: 'Mes Offres', path: '/my-offers', featureKey: 'myoffers' },
-      { label: 'Soumises', path: '/my-offers?status=submitted', featureKey: 'myoffers' },
-      { label: 'Évaluées', path: '/my-offers?status=evaluated', featureKey: 'myoffers' },
-    ],
-  },
-  {
-    id: 'catalog',
-    label: 'Catalogue',
-    subItems: [
-      { label: 'Gestion Produits', path: '/supplier-products', featureKey: 'catalog' },
-      { label: 'Gestion Services', path: '/supplier-services', featureKey: 'catalog' },
-      { label: 'Visibilité', path: '/supplier-catalog', featureKey: 'catalog' },
-    ],
-  },
-  {
-    id: 'finances',
-    label: 'Finances',
-    subItems: [
-      { label: 'Factures', path: '/supplier-invoices', featureKey: 'invoices' },
-      { label: 'Paiements', path: '/supplier-payments', featureKey: 'invoices' },
-      { label: 'Rapports', path: '/supplier-reports', featureKey: 'customreports' },
-    ],
-  },
-  {
-    id: 'notifications',
-    label: 'Notifications',
-    path: '/notifications',
-    featureKey: 'notifications',
-    subItems: [],
-  },
-  {
-    id: 'profile',
-    label: 'Profil',
-    featureKey: 'profile',
-    subItems: [
-      { label: 'Paramètres', path: '/profile', featureKey: 'profile' },
-      { label: 'Sécurité', path: '/security', featureKey: 'profile' },
-      { label: 'Entreprise', path: '/company-info', featureKey: 'profile' },
-    ],
-  },
-];
+  return menus[role] || menus.buyer;
+};
 
-export const adminMenu = [
-  {
-    id: 'dashboard',
-    label: 'Tableau de Bord',
-    path: '/admin',
-    subItems: [],
-  },
-  {
-    id: 'users',
-    label: '👥 Gestion des Utilisateurs et Sécurité',
-    subItems: [{ label: 'Gestion des Utilisateurs', path: '/admin/users' }],
-  },
-  {
-    id: 'analytics',
-    label: '📊 Statistiques',
-    subItems: [{ label: 'Afficher les Statistiques', path: '/admin/health' }],
-  },
-  {
-    id: 'profile',
-    label: 'Profil',
-    subItems: [
-      { label: 'Paramètres', path: '/profile' },
-      { label: 'Sécurité', path: '/security' },
-    ],
-  },
-];
+// بناء قائمة المساعد الإداري حسب صلاحياته
+function buildAdminMenu(permissions) {
+  const baseMenu = [{ text: 'لوحة التحكم', icon: DashboardIcon, path: '/dashboard' }];
 
-export const superAdminMenu = [
-  {
-    id: 'admin-portal',
-    label: '🏛️ واجهة الإدارة الرسمية',
-    subItems: [
-      { label: 'لوحة المعلومات', path: '/admin-portal' },
-      { label: 'إدارة الخطط', path: '/admin-portal/subscriptions' },
-      { label: 'الإخطارات البريدية', path: '/admin-portal/notifications' },
-      { label: 'النسخ الاحتياطية', path: '/admin-portal/backup-restore' },
-      { label: '👥 المساعدون الإداريون', path: '/admin-portal/assistants' },
-    ],
-  },
-  {
-    id: 'dashboard',
-    label: '📊 Centre de Contrôle',
-    path: '/super-admin/dashboard',
-    subItems: [],
-  },
-  {
-    id: 'users-mgmt',
-    label: '👥 Gestion des Utilisateurs',
-    subItems: [
-      { label: 'Utilisateurs', path: '/super-admin/users' },
-      { label: 'Gestion des Rôles', path: '/user-management' },
-    ],
-  },
-  {
-    id: 'content',
-    label: '📄 Gestion du Contenu',
-    subItems: [
-      { label: 'Pages Statiques', path: '/super-admin' },
-      { label: 'Éditeur de Pages', path: '/super-admin/page-editor' },
-      { label: 'Gestion des Fichiers', path: '/super-admin/files' },
-    ],
-  },
-  {
-    id: 'system',
-    label: '⚙️ Configuration Système',
-    subItems: [
-      { label: 'Paramètres', path: '/super-admin/features' },
-      { label: "Plans d'Abonnement", path: '/super-admin/tiers' },
-      { label: 'Sauvegarde & Restauration', path: '/super-admin/archive' },
-    ],
-  },
-  {
-    id: 'monitoring',
-    label: '📊 Surveillance & Audit',
-    subItems: [
-      { label: 'Santé du Système', path: '/super-admin/health' },
-      { label: "Journaux d'Audit", path: '/super-admin/audit-logs' },
-      { label: 'Notifications Email', path: '/email-notifications' },
-    ],
-  },
-  {
-    id: 'functions',
-    label: '🛠️ Toutes les Fonctions',
-    path: '/super-admin-menu',
-    subItems: [],
-  },
-  {
-    id: 'profile',
-    label: 'Profil',
-    subItems: [
-      { label: 'Paramètres', path: '/profile' },
-      { label: 'Sécurité', path: '/security' },
-    ],
-  },
-];
+  const permissionMap = {
+    manage_users: { text: 'إدارة المستخدمين', icon: PeopleIcon, path: '/admin/users' },
+    view_users: { text: 'عرض المستخدمين', icon: PeopleIcon, path: '/admin/users' },
+    manage_tenders: { text: 'إدارة المناقصات', icon: GavelIcon, path: '/admin/tenders' },
+    view_reports: { text: 'التقارير', icon: AssessmentIcon, path: '/admin/reports' },
+    manage_settings: { text: 'الإعدادات', icon: SettingsIcon, path: '/admin/settings' },
+  };
+
+  if (permissions && Array.isArray(permissions)) {
+    permissions.forEach((perm) => {
+      if (permissionMap[perm] && !baseMenu.find((m) => m.path === permissionMap[perm].path)) {
+        baseMenu.push(permissionMap[perm]);
+      }
+    });
+  } else {
+    // الصلاحيات الافتراضية للمساعد الإداري
+    baseMenu.push(
+      { text: 'إدارة المستخدمين', icon: PeopleIcon, path: '/admin/users' },
+      { text: 'التقارير', icon: AssessmentIcon, path: '/admin/reports' },
+      { text: 'الإعدادات', icon: SettingsIcon, path: '/admin/settings' }
+    );
+  }
+
+  return baseMenu;
+}
+
+// للتوافق مع الكود القديم
+export const buyerMenu = getMenuByRole('buyer');
+export const supplierMenu = getMenuByRole('supplier');
+export const adminMenu = getMenuByRole('admin');
+export const superAdminMenu = getMenuByRole('super_admin');
 
 export const getMenuForRole = (role) => {
   switch (role) {

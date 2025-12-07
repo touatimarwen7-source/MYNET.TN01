@@ -111,6 +111,7 @@ const PageEditor = lazy(() => import('./pages/PageEditor'));
 const SuperAdminMenu = lazy(() => import('./pages/SuperAdminMenu'));
 const OpeningReport = lazy(() => import('./pages/OpeningReport'));
 const DraftsPage = lazy(() => import('./pages/DraftsPage'));
+const UnifiedDashboard = lazy(() => import('./pages/UnifiedDashboard'));
 
 const LoadingFallback = () => (
   <Container
@@ -219,13 +220,25 @@ function AppContent() {
                           }
                         />
 
-                        {/* Interface Acheteur */}
+                        {/* Unified Dashboard for All Roles */}
                         <Route
-                          path="/buyer-dashboard"
+                          path="/dashboard"
                           element={
-                            user?.role === 'buyer' ? <BuyerDashboard /> : <Navigate to="/tenders" />
+                            user ? <UnifiedDashboard /> : <Navigate to="/login" />
                           }
                         />
+
+                        {/* Legacy Buyer Dashboard - Redirect to Unified */}
+                        <Route
+                          path="/buyer-dashboard"
+                          element={<Navigate to="/dashboard" replace />}
+                        />
+                        <Route
+                          path="/supplier-dashboard"
+                          element={<Navigate to="/dashboard" replace />}
+                        />
+
+                        {/* Buyer Routes */}
                         <Route
                           path="/buyer-active-tenders"
                           element={

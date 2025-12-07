@@ -50,19 +50,26 @@ async function initializeDb() {
         ssl: {
           rejectUnauthorized: false,
         },
-        // 🚀 STABLE CONNECTION POOL - Optimized for Neon/Replit
-        max: 15, // Reduced from 20 to prevent exhaustion
-        min: 3, // Reduced from 5
+        // 🚀 ADVANCED CONNECTION POOL - Enterprise-grade configuration
+        max: 20, // Maximum connections
+        min: 5, // Minimum connections
         idleTimeoutMillis: 30000, // 30s idle timeout
         connectionTimeoutMillis: 5000,
-        application_name: 'mynet-backend',
+        application_name: 'mynet-backend-pro',
         maxUses: 7500, // Recycle connections to prevent memory leaks
-        statement_timeout: 30000, // 30s query timeout
-        query_timeout: 30000, // Query timeout
+        statement_timeout: 60000, // 60s query timeout for complex queries
+        query_timeout: 60000,
         idle_in_transaction_session_timeout: 30000,
-        keepAlives: true, // Enable keep-alive to prevent idle disconnects
-        keepalivesIdle: 30, // Send keep-alive every 30s
-        keepalivesInterval: 10, // Interval between keep-alives
+        keepAlives: true,
+        keepalivesIdle: 30,
+        keepalivesInterval: 10,
+        // Advanced settings
+        allowExitOnIdle: false,
+        log: (msg) => {
+          if (process.env.NODE_ENV === 'development') {
+            console.log('🔵 Pool:', msg);
+          }
+        },
       });
 
       // ✅ POOL EVENT HANDLERS - Better error handling

@@ -101,25 +101,25 @@ export const errorHandler = {
       }
     }
 
-    // خطأ في الطلب
+    // Erreur de requête
     if (error.request) {
       return {
         title: 'Erreur de connexion',
-        message: 'تعذر الاتصال بالخادم. يرجى التحقق من اتصال الإنترنت',
+        message: 'Impossible de se connecter au serveur. Veuillez vérifier votre connexion Internet.',
         code: ERROR_CODES.NETWORK_ERROR
       };
     }
 
-    // خطأ آخر
+    // Autre erreur
     return {
       title: 'Erreur',
-      message: error.message || 'حدث خطأ غير متوقع',
+      message: error.message || 'Une erreur inattendue s\'est produite',
       code: ERROR_CODES.UNKNOWN_ERROR
     };
   },
 
   /**
-   * تسجيل الخطأ (للتطوير)
+   * Enregistrer l'erreur (développement)
    */
   logError(error, context = {}) {
     if (process.env.NODE_ENV === 'development') {
@@ -131,13 +131,13 @@ export const errorHandler = {
   },
 
   /**
-   * معالجة خطأ API
+   * Traiter une erreur d'API
    */
   handleApiError(error, showToast = null) {
     const formatted = this.getUserMessage(error);
     this.logError(error, formatted);
 
-    // عرض Toast إذا كان متاحاً
+    // Afficher le toast si disponible
     if (showToast && typeof showToast === 'function') {
       showToast(formatted.message, 'error');
     }

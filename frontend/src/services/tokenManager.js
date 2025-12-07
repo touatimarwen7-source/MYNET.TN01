@@ -1,16 +1,17 @@
+
 /**
  * Token Manager Service
- * Handles JWT token storage and retrieval
+ * Gestion centralisée des tokens JWT
  */
 
 class TokenManager {
   constructor() {
-    this.ACCESS_TOKEN_KEY = 'access_token';
+    this.ACCESS_TOKEN_KEY = 'auth_token';
     this.REFRESH_TOKEN_KEY = 'refresh_token';
-    this.USER_KEY = 'user';
+    this.USER_KEY = 'user_data';
   }
 
-  // Access Token
+  // Gestion du token d'accès
   setAccessToken(token) {
     if (token) {
       localStorage.setItem(this.ACCESS_TOKEN_KEY, token);
@@ -21,7 +22,7 @@ class TokenManager {
     return localStorage.getItem(this.ACCESS_TOKEN_KEY);
   }
 
-  // Refresh Token
+  // Gestion du token de rafraîchissement
   setRefreshToken(token) {
     if (token) {
       localStorage.setItem(this.REFRESH_TOKEN_KEY, token);
@@ -32,7 +33,7 @@ class TokenManager {
     return localStorage.getItem(this.REFRESH_TOKEN_KEY);
   }
 
-  // User Data
+  // Gestion des données utilisateur
   setUser(user) {
     if (user) {
       localStorage.setItem(this.USER_KEY, JSON.stringify(user));
@@ -44,20 +45,41 @@ class TokenManager {
     return user ? JSON.parse(user) : null;
   }
 
-  // Clear All
+  // Gestion complète des tokens
+  manageTokens(accessToken, refreshToken, userData) {
+    if (accessToken) this.setAccessToken(accessToken);
+    if (refreshToken) this.setRefreshToken(refreshToken);
+    if (userData) this.setUser(userData);
+  }
+
+  // Nettoyage complet
   clearTokens() {
     localStorage.removeItem(this.ACCESS_TOKEN_KEY);
     localStorage.removeItem(this.REFRESH_TOKEN_KEY);
     localStorage.removeItem(this.USER_KEY);
   }
 
-  // Check if authenticated
+  // Vérification d'authentification
   isAuthenticated() {
     return !!this.getAccessToken();
   }
+
+  // Extraire les données du token JWT
+  getUserFromToken(token) {
+    if (!token) return null;
+    
+    try {
+      const payload = token.split('.')[1];
+      const decoded = JSON.parse(atob(payload));
+      return decoded;
+    } catch (error) {
+      console.error('Erreur lors du décodage du token:', error);
+      return null;
+    }
+  }
 }
 
-// Create and export singleton instance
+// Export de l'instance singleton par défaut
 const tokenManager = new TokenManager();
 
 export default tokenManager;

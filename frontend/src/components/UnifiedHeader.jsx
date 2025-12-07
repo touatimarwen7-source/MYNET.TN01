@@ -21,7 +21,7 @@ import {
 import MenuIcon from '@mui/icons-material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
 import LogoutIcon from '@mui/icons-material/Logout';
-import TokenManager from '../services/tokenManager'; // Assuming this is the correct import path
+import tokenManager from '../services/tokenManager';
 import NotificationCenter from './NotificationCenter';
 import institutionalTheme from '../theme/theme';
 
@@ -36,30 +36,14 @@ export default function UnifiedHeader() {
   const navigate = useNavigate();
   const theme = institutionalTheme;
 
-  // Initialize TokenManager
-  const tokenManager = new TokenManager();
-
   useEffect(() => {
     const checkAuth = () => {
-      const token = localStorage.getItem('auth_token');
-      if (!token) {
-        setIsAuthenticated(false);
-        setUserRole(null);
-        setUserName('Utilisateur');
-        return;
-      }
-
-      try {
-        const userData = JSON.parse(localStorage.getItem('user_data') || '{}');
-        setIsAuthenticated(true);
-        setUserRole(userData?.role || null);
-        setUserName(userData?.username || userData?.email || 'Utilisateur');
-      } catch (error) {
-        console.error("Erreur lors de la vérification de l'authentification:", error);
-        setIsAuthenticated(false);
-        setUserRole(null);
-        setUserName('Utilisateur');
-      }
+      const token = tokenManager.getAccessToken();
+      const userData = tokenManager.getUser();
+      
+      setIsAuthenticated(!!token);
+      setUserRole(userData?.role || null);
+      setUserName(userData?.username || userData?.email || 'Utilisateur');
     };
 
     checkAuth();
@@ -94,8 +78,7 @@ export default function UnifiedHeader() {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('auth_token');
-    localStorage.removeItem('user_data');
+    tokenManager.clearTokens();
     window.dispatchEvent(new Event('authChanged'));
     navigate('/login');
     setAnchorEl(null);

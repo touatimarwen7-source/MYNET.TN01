@@ -202,38 +202,85 @@ function AdminDashboardContent() {
             </Grid>
           </Grid>
 
-          {/* System Status & Recent Activity */}
+          {/* Enhanced System Status & Analytics */}
           <Grid container spacing={3}>
             <Grid item xs={12} md={6}>
               <Paper sx={{ p: 3, borderRadius: '12px', border: '1px solid #e0e0e0' }}>
                 <Typography variant="h6" sx={{ fontWeight: 600, mb: 2 }}>
-                  حالة النظام
+                  حالة النظام المتقدمة
                 </Typography>
                 <Divider sx={{ mb: 2 }} />
                 <SystemStatusItem title="قاعدة البيانات" status="good" />
                 <SystemStatusItem title="خادم الويب" status="good" />
                 <SystemStatusItem title="البريد الإلكتروني" status="good" />
                 <SystemStatusItem title="خدمات الأمان" status="good" />
+                <Box sx={{ mt: 2, p: 2, backgroundColor: '#f5f5f5', borderRadius: '8px' }}>
+                  <Typography variant="caption" sx={{ color: '#666', display: 'block', mb: 1 }}>
+                    Temps de réponse moyen
+                  </Typography>
+                  <Typography variant="h6" sx={{ fontWeight: 600, color: '#2e7d32' }}>
+                    127ms
+                  </Typography>
+                </Box>
               </Paper>
             </Grid>
 
             <Grid item xs={12} md={6}>
               <Paper sx={{ p: 3, borderRadius: '12px', border: '1px solid #e0e0e0' }}>
                 <Typography variant="h6" sx={{ fontWeight: 600, mb: 2 }}>
-                  النشاط الأخير
+                  النشاط والتحليلات
                 </Typography>
                 <Divider sx={{ mb: 2 }} />
                 <Stack spacing={2}>
-                  <Alert severity="info" sx={{ mb: 0 }}>
-                    10 مستخدمين جدد أمس
+                  <Alert severity="info" sx={{ mb: 0, borderRadius: '8px' }}>
+                    📊 10 مستخدمين جدد اليوم (+15%)
                   </Alert>
-                  <Alert severity="success" sx={{ mb: 0 }}>
-                    5 مناقصات نشطة جديدة
+                  <Alert severity="success" sx={{ mb: 0, borderRadius: '8px' }}>
+                    ✅ 5 مناقصات نشطة جديدة
                   </Alert>
-                  <Alert severity="warning" sx={{ mb: 0 }}>
-                    20 عرض قيد المراجعة
+                  <Alert severity="warning" sx={{ mb: 0, borderRadius: '8px' }}>
+                    ⏳ 20 عرض قيد المراجعة
+                  </Alert>
+                  <Alert severity="info" sx={{ mb: 0, borderRadius: '8px' }}>
+                    💰 Revenu total: TND 45,780
                   </Alert>
                 </Stack>
+              </Paper>
+            </Grid>
+
+            {/* Advanced Analytics Dashboard */}
+            <Grid item xs={12}>
+              <Paper sx={{ p: 3, borderRadius: '12px', border: '1px solid #e0e0e0' }}>
+                <Typography variant="h6" sx={{ fontWeight: 600, mb: 2 }}>
+                  Tableau de bord analytique
+                </Typography>
+                <Divider sx={{ mb: 2 }} />
+                <Grid container spacing={2}>
+                  <Grid item xs={12} sm={6} md={3}>
+                    <Box sx={{ p: 2, backgroundColor: '#e3f2fd', borderRadius: '8px' }}>
+                      <Typography variant="caption" sx={{ color: '#1976d2' }}>Taux d'activité</Typography>
+                      <Typography variant="h5" sx={{ fontWeight: 700, color: '#1976d2' }}>87%</Typography>
+                    </Box>
+                  </Grid>
+                  <Grid item xs={12} sm={6} md={3}>
+                    <Box sx={{ p: 2, backgroundColor: '#e8f5e9', borderRadius: '8px' }}>
+                      <Typography variant="caption" sx={{ color: '#2e7d32' }}>Satisfaction</Typography>
+                      <Typography variant="h5" sx={{ fontWeight: 700, color: '#2e7d32' }}>4.6/5</Typography>
+                    </Box>
+                  </Grid>
+                  <Grid item xs={12} sm={6} md={3}>
+                    <Box sx={{ p: 2, backgroundColor: '#fff3e0', borderRadius: '8px' }}>
+                      <Typography variant="caption" sx={{ color: '#f57c00' }}>Délai moyen</Typography>
+                      <Typography variant="h5" sx={{ fontWeight: 700, color: '#f57c00' }}>3.2j</Typography>
+                    </Box>
+                  </Grid>
+                  <Grid item xs={12} sm={6} md={3}>
+                    <Box sx={{ p: 2, backgroundColor: '#f3e5f5', borderRadius: '8px' }}>
+                      <Typography variant="caption" sx={{ color: '#7b1fa2' }}>ROI</Typography>
+                      <Typography variant="h5" sx={{ fontWeight: 700, color: '#7b1fa2' }}>+24%</Typography>
+                    </Box>
+                  </Grid>
+                </Grid>
               </Paper>
             </Grid>
           </Grid>

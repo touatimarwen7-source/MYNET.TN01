@@ -166,6 +166,7 @@ function BuyerDashboardContent() {
           </Box>
 
           {/* Stats Grid */}
+          {/* Enhanced Stats Grid with Tooltips */}
           <Grid container spacing={3} sx={{ mb: 4 }}>
             <Grid item xs={12} sm={6} md={3}>
               <StatCard
@@ -202,6 +203,58 @@ function BuyerDashboardContent() {
                 icon={CheckCircle}
                 color="#0288d1"
               />
+            </Grid>
+          </Grid>
+
+          {/* Performance Metrics */}
+          <Grid container spacing={3} sx={{ mb: 4 }}>
+            <Grid item xs={12} md={6}>
+              <Paper sx={{ p: 3, borderRadius: '12px', border: '1px solid #e0e0e0' }}>
+                <Typography variant="h6" sx={{ fontWeight: 600, mb: 2 }}>
+                  Performance Mensuelle
+                </Typography>
+                <Stack spacing={2}>
+                  <Box>
+                    <Stack direction="row" justifyContent="space-between" sx={{ mb: 1 }}>
+                      <Typography variant="body2">Délai moyen d'attribution</Typography>
+                      <Typography variant="body2" sx={{ fontWeight: 600 }}>3.2 jours</Typography>
+                    </Stack>
+                    <LinearProgress variant="determinate" value={85} sx={{ height: 8, borderRadius: 4 }} />
+                  </Box>
+                  <Box>
+                    <Stack direction="row" justifyContent="space-between" sx={{ mb: 1 }}>
+                      <Typography variant="body2">Satisfaction fournisseurs</Typography>
+                      <Typography variant="body2" sx={{ fontWeight: 600 }}>4.7/5</Typography>
+                    </Stack>
+                    <LinearProgress variant="determinate" value={94} sx={{ height: 8, borderRadius: 4 }} />
+                  </Box>
+                  <Box>
+                    <Stack direction="row" justifyContent="space-between" sx={{ mb: 1 }}>
+                      <Typography variant="body2">Conformité budgétaire</Typography>
+                      <Typography variant="body2" sx={{ fontWeight: 600 }}>97%</Typography>
+                    </Stack>
+                    <LinearProgress variant="determinate" value={97} sx={{ height: 8, borderRadius: 4 }} />
+                  </Box>
+                </Stack>
+              </Paper>
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <Paper sx={{ p: 3, borderRadius: '12px', border: '1px solid #e0e0e0' }}>
+                <Typography variant="h6" sx={{ fontWeight: 600, mb: 2 }}>
+                  Alertes et Notifications
+                </Typography>
+                <Stack spacing={1.5}>
+                  <Alert severity="info" sx={{ borderRadius: '8px' }}>
+                    5 nouvelles offres reçues aujourd'hui
+                  </Alert>
+                  <Alert severity="warning" sx={{ borderRadius: '8px' }}>
+                    2 appels d'offres arrivent à échéance dans 48h
+                  </Alert>
+                  <Alert severity="success" sx={{ borderRadius: '8px' }}>
+                    3 contrats signés cette semaine
+                  </Alert>
+                </Stack>
+              </Paper>
             </Grid>
           </Grid>
 

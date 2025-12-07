@@ -1,6 +1,7 @@
+
 /**
- * لوحة تحكم المزود - Supplier Dashboard
- * واجهة احترافية عالمية للموردين
+ * لوحة تحكم المورد - Supplier Dashboard
+ * واجهة احترافية عالمية للموردين مع أفضل الممارسات
  */
 
 import { useState, useEffect } from 'react';
@@ -24,29 +25,29 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
-  Divider,
   Drawer,
   Avatar,
+  LinearProgress,
   Card,
   CardContent,
-  Badge,
 } from '@mui/material';
 import {
   Dashboard,
   Assignment,
-  Inventory2,
-  Money,
-  Send,
-  Star,
+  LocalOffer,
+  TrendingUp,
+  AttachMoney,
   Notifications,
   Person,
   Settings,
   Security,
   Visibility,
-  TrendingUp,
+  Star,
   CheckCircle,
+  Schedule,
   ArrowUpward,
   ArrowDownward,
+  Refresh,
 } from '@mui/icons-material';
 import { procurementAPI } from '../api';
 import { logger } from '../utils/logger';
@@ -61,37 +62,50 @@ function SupplierDashboardContent() {
   const [loading, setLoading] = useState(true);
   const [tenders, setTenders] = useState([]);
   const [myOffers, setMyOffers] = useState([]);
+  const [stats, setStats] = useState({
+    activeBids: 0,
+    wonContracts: 0,
+    revenue: 0,
+    rating: 4.5,
+  });
 
   useEffect(() => {
-    fetchSupplierData();
+    fetchDashboardData();
   }, []);
 
-  const fetchSupplierData = async () => {
+  const fetchDashboardData = async () => {
     try {
       setLoading(true);
       const [tendersRes, offersRes] = await Promise.all([
-        procurementAPI.getTenders({ limit: 50 }),
+        procurementAPI.getTenders({ limit: 10 }),
         procurementAPI.getMyOffers(),
       ]);
       setTenders(tendersRes?.data?.tenders || []);
       setMyOffers(offersRes?.data?.offers || []);
+      
+      setStats({
+        activeBids: offersRes?.data?.offers?.filter(o => o.status === 'submitted').length || 0,
+        wonContracts: offersRes?.data?.offers?.filter(o => o.status === 'accepted').length || 0,
+        revenue: 125000,
+        rating: 4.5,
+      });
     } catch (err) {
-      logger.error('Failed to load supplier data:', err);
+      logger.error('Failed to load supplier dashboard data:', err);
     } finally {
       setLoading(false);
     }
   };
 
   const menuItems = [
-    { id: 'dashboard', label: 'لوحة التحكم', icon: Dashboard },
-    { id: 'browse-tenders', label: 'استعراض الأجل', icon: Assignment },
-    { id: 'my-offers', label: 'عروضي', icon: Send },
-    { id: 'catalog', label: 'إدارة المنتجات والخدمات', icon: Inventory2 },
-    { id: 'finances', label: 'الفواتير والمدفوعات', icon: Money },
-    { id: 'reviews', label: 'التقييمات والآراء', icon: Star },
-    { id: 'notifications', label: 'الإخطارات', icon: Notifications },
-    { id: 'profile', label: 'الملف الشخصي', icon: Person },
-    { id: 'security', label: 'الأمان والخصوصية', icon: Security },
+    { id: 'dashboard', label: 'Tableau de bord', icon: Dashboard },
+    { id: 'opportunities', label: 'Opportunités Disponibles', icon: Assignment },
+    { id: 'my-bids', label: 'Mes Offres', icon: LocalOffer },
+    { id: 'contracts', label: 'Contrats Gagnés', icon: CheckCircle },
+    { id: 'revenue', label: 'Revenus et Facturation', icon: AttachMoney },
+    { id: 'performance', label: 'Performance et Évaluation', icon: Star },
+    { id: 'notifications', label: 'Notifications', icon: Notifications },
+    { id: 'profile', label: 'Mon Profil', icon: Person },
+    { id: 'security', label: 'Sécurité', icon: Security },
   ];
 
   const StatCard = ({ title, value, change, icon: Icon, color }) => (
@@ -123,23 +137,25 @@ function SupplierDashboardContent() {
           <Icon />
         </Avatar>
       </Box>
-      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-        {change > 0 ? (
-          <ArrowUpward sx={{ color: '#2e7d32', fontSize: 18 }} />
-        ) : (
-          <ArrowDownward sx={{ color: '#D32F2F', fontSize: 18 }} />
-        )}
-        <Typography
-          variant="caption"
-          sx={{ color: change > 0 ? '#2e7d32' : '#D32F2F', fontWeight: 600 }}
-        >
-          {change > 0 ? '+' : ''}
-          {change}%
-        </Typography>
-        <Typography variant="caption" sx={{ color: '#999' }}>
-          من الشهر الماضي
-        </Typography>
-      </Box>
+      {change !== undefined && (
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+          {change > 0 ? (
+            <ArrowUpward sx={{ color: '#2e7d32', fontSize: 18 }} />
+          ) : (
+            <ArrowDownward sx={{ color: '#D32F2F', fontSize: 18 }} />
+          )}
+          <Typography
+            variant="caption"
+            sx={{ color: change > 0 ? '#2e7d32' : '#D32F2F', fontWeight: 600 }}
+          >
+            {change > 0 ? '+' : ''}
+            {change}%
+          </Typography>
+          <Typography variant="caption" sx={{ color: '#999' }}>
+            depuis le mois dernier
+          </Typography>
+        </Box>
+      )}
     </Card>
   );
 
@@ -148,52 +164,68 @@ function SupplierDashboardContent() {
       return (
         <Box>
           {/* Header */}
-          <Box sx={{ mb: 4 }}>
-            <Typography variant="h4" sx={{ fontWeight: 700, color: '#000', mb: 1 }}>
-              لوحة التحكم
-            </Typography>
-            <Typography variant="body2" sx={{ color: '#666' }}>
-              استكشف فرص المناقصات المربحة
-            </Typography>
+          <Box sx={{ mb: 4, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <Box>
+              <Typography variant="h4" sx={{ fontWeight: 700, color: '#000', mb: 1 }}>
+                Tableau de bord Fournisseur
+              </Typography>
+              <Typography variant="body2" sx={{ color: '#666' }}>
+                Gérez vos opportunités et suivez vos performances
+              </Typography>
+            </Box>
+            <Button
+              variant="outlined"
+              startIcon={<Refresh />}
+              onClick={fetchDashboardData}
+              sx={{ borderRadius: '8px' }}
+            >
+              Actualiser
+            </Button>
           </Box>
 
           {/* Stats Grid */}
           <Grid container spacing={3} sx={{ mb: 4 }}>
             <Grid item xs={12} sm={6} md={3}>
               <StatCard
-                title="الأجل المتاحة"
-                value={tenders.length}
-                change={24}
-                icon={Assignment}
-                color="#2e7d32"
-              />
-            </Grid>
-            <Grid item xs={12} sm={6} md={3}>
-              <StatCard
-                title="العروض المرسلة"
-                value={myOffers.length}
-                change={18}
-                icon={Send}
+                title="Offres Actives"
+                value={stats.activeBids}
+                change={15}
+                icon={LocalOffer}
                 color="#0056B3"
               />
             </Grid>
             <Grid item xs={12} sm={6} md={3}>
               <StatCard
-                title="معدل الفوز"
-                value={myOffers.filter((o) => o.status === 'accepted').length || 0}
-                change={12}
-                icon={TrendingUp}
+                title="Contrats Gagnés"
+                value={stats.wonContracts}
+                change={8}
+                icon={CheckCircle}
+                color="#2e7d32"
+              />
+            </Grid>
+            <Grid item xs={12} sm={6} md={3}>
+              <StatCard
+                title="Revenu Total"
+                value={`TND ${stats.revenue.toLocaleString()}`}
+                change={22}
+                icon={AttachMoney}
                 color="#f57c00"
               />
             </Grid>
             <Grid item xs={12} sm={6} md={3}>
-              <StatCard title="التقييم" value="4.8 / 5" change={5} icon={Star} color="#0288d1" />
+              <StatCard
+                title="Note Moyenne"
+                value={`${stats.rating} ⭐`}
+                change={5}
+                icon={Star}
+                color="#7b1fa2"
+              />
             </Grid>
           </Grid>
 
-          {/* Main Content */}
+          {/* Main Content Grid */}
           <Grid container spacing={3} sx={{ mb: 4 }}>
-            <Grid item xs={12} md={8}>
+            <Grid item xs={12} lg={8}>
               <Paper sx={{ p: 3, borderRadius: '12px', border: '1px solid #e0e0e0' }}>
                 <Box
                   sx={{
@@ -204,37 +236,38 @@ function SupplierDashboardContent() {
                   }}
                 >
                   <Typography variant="h6" sx={{ fontWeight: 600 }}>
-                    الأجل المتاحة الحديثة
+                    Opportunités Récentes
                   </Typography>
                   <Button
                     size="small"
-                    onClick={() => navigate('/tenders')}
+                    onClick={() => navigate('/available-tenders')}
                     sx={{ textTransform: 'none' }}
                   >
-                    عرض الكل →
+                    Voir tout →
                   </Button>
                 </Box>
                 <Box sx={{ overflowX: 'auto' }}>
                   <Table size="small">
                     <TableHead>
                       <TableRow sx={{ backgroundColor: '#f5f5f5' }}>
-                        <TableCell sx={{ fontWeight: 600 }}>المشروع</TableCell>
-                        <TableCell sx={{ fontWeight: 600 }}>الميزانية</TableCell>
-                        <TableCell sx={{ fontWeight: 600 }}>الموعد</TableCell>
-                        <TableCell sx={{ fontWeight: 600 }}>الحالة</TableCell>
+                        <TableCell sx={{ fontWeight: 600 }}>Appel d'offres</TableCell>
+                        <TableCell sx={{ fontWeight: 600 }}>Budget</TableCell>
+                        <TableCell sx={{ fontWeight: 600 }}>Date limite</TableCell>
+                        <TableCell sx={{ fontWeight: 600 }}>Statut</TableCell>
+                        <TableCell sx={{ fontWeight: 600 }} align="right">Actions</TableCell>
                       </TableRow>
                     </TableHead>
                     <TableBody>
                       {loading ? (
                         <TableRow>
-                          <TableCell colSpan={4} sx={{ textAlign: 'center', py: 3 }}>
+                          <TableCell colSpan={5} sx={{ textAlign: 'center', py: 3 }}>
                             <CircularProgress size={30} />
                           </TableCell>
                         </TableRow>
                       ) : tenders.length === 0 ? (
                         <TableRow>
-                          <TableCell colSpan={4} sx={{ textAlign: 'center', py: 3, color: '#999' }}>
-                            لا توجد أجل متاحة
+                          <TableCell colSpan={5} sx={{ textAlign: 'center', py: 3, color: '#999' }}>
+                            Aucune opportunité disponible
                           </TableCell>
                         </TableRow>
                       ) : (
@@ -246,19 +279,35 @@ function SupplierDashboardContent() {
                             onClick={() => navigate(`/tender/${tender.id}`)}
                           >
                             <TableCell sx={{ fontWeight: 500 }}>
-                              {tender.title || 'مناقصة'}
+                              {tender.title || "Appel d'offres"}
                             </TableCell>
-                            <TableCell>د.ت {tender.budget_max || 0}</TableCell>
+                            <TableCell>TND {tender.budget_max || 0}</TableCell>
                             <TableCell>
-                              {new Date(tender.created_at).toLocaleDateString('ar-TN')}
+                              {new Date(tender.submission_deadline).toLocaleDateString('fr-FR')}
                             </TableCell>
                             <TableCell>
                               <Chip
-                                label={tender.status === 'open' ? 'متاحة' : 'مغلقة'}
+                                label={tender.status === 'open' ? 'Ouvert' : 'Fermé'}
                                 size="small"
                                 color={tender.status === 'open' ? 'success' : 'default'}
                                 variant="outlined"
                               />
+                            </TableCell>
+                            <TableCell align="right">
+                              <Button
+                                size="small"
+                                variant="contained"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  navigate(`/submit-bid/${tender.id}`);
+                                }}
+                                sx={{
+                                  backgroundColor: '#0056B3',
+                                  '&:hover': { backgroundColor: '#003d82' },
+                                }}
+                              >
+                                Soumissionner
+                              </Button>
                             </TableCell>
                           </TableRow>
                         ))
@@ -269,7 +318,7 @@ function SupplierDashboardContent() {
               </Paper>
             </Grid>
 
-            <Grid item xs={12} md={4}>
+            <Grid item xs={12} lg={4}>
               <Stack spacing={2}>
                 <Paper
                   sx={{
@@ -281,51 +330,60 @@ function SupplierDashboardContent() {
                   }}
                 >
                   <Typography variant="h6" sx={{ fontWeight: 600, mb: 1 }}>
-                    قدم عرضك الآن
+                    Performance ce mois-ci
                   </Typography>
+                  <Box sx={{ my: 2 }}>
+                    <Typography variant="caption" sx={{ opacity: 0.9 }}>
+                      Taux de réussite
+                    </Typography>
+                    <LinearProgress
+                      variant="determinate"
+                      value={75}
+                      sx={{
+                        height: 8,
+                        borderRadius: 4,
+                        mt: 1,
+                        backgroundColor: 'rgba(255,255,255,0.3)',
+                        '& .MuiLinearProgress-bar': { backgroundColor: 'white' },
+                      }}
+                    />
+                    <Typography variant="h4" sx={{ fontWeight: 700, mt: 1 }}>
+                      75%
+                    </Typography>
+                  </Box>
                   <Typography variant="caption" sx={{ opacity: 0.9 }}>
-                    ابدأ رحلتك نحو العقود المربحة
+                    +12% par rapport au mois dernier
                   </Typography>
-                  <Button
-                    fullWidth
-                    variant="contained"
-                    sx={{
-                      mt: 2,
-                      backgroundColor: 'rgba(255,255,255,0.2)',
-                      color: 'white',
-                      '&:hover': { backgroundColor: 'rgba(255,255,255,0.3)' },
-                    }}
-                    onClick={() => navigate('/my-offers')}
-                  >
-                    + عرضي
-                  </Button>
                 </Paper>
 
                 <Paper sx={{ p: 3, borderRadius: '12px', border: '1px solid #e0e0e0' }}>
                   <Typography variant="h6" sx={{ fontWeight: 600, mb: 2 }}>
-                    إجراءات سريعة
+                    Actions rapides
                   </Typography>
                   <Stack spacing={1}>
                     <Button
                       fullWidth
                       variant="text"
                       sx={{ justifyContent: 'flex-start', textTransform: 'none' }}
+                      onClick={() => navigate('/available-tenders')}
                     >
-                      <Visibility sx={{ mr: 1 }} /> عرض عروضي
+                      <Visibility sx={{ mr: 1 }} /> Parcourir les opportunités
                     </Button>
                     <Button
                       fullWidth
                       variant="text"
                       sx={{ justifyContent: 'flex-start', textTransform: 'none' }}
+                      onClick={() => navigate('/my-offers')}
                     >
-                      <Inventory2 sx={{ mr: 1 }} /> إدارة المنتجات
+                      <LocalOffer sx={{ mr: 1 }} /> Mes offres soumises
                     </Button>
                     <Button
                       fullWidth
                       variant="text"
                       sx={{ justifyContent: 'flex-start', textTransform: 'none' }}
+                      onClick={() => navigate('/supplier-analytics')}
                     >
-                      <Money sx={{ mr: 1 }} /> الفواتير
+                      <TrendingUp sx={{ mr: 1 }} /> Mes statistiques
                     </Button>
                   </Stack>
                 </Paper>
@@ -341,7 +399,7 @@ function SupplierDashboardContent() {
         sx={{ p: 3, borderRadius: '12px', border: '1px solid #e0e0e0', textAlign: 'center', py: 6 }}
       >
         <Typography variant="body1" sx={{ color: '#999' }}>
-          اختر قسماً من القائمة الجانبية
+          Choisissez une section dans le menu latéral
         </Typography>
       </Paper>
     );
@@ -358,7 +416,7 @@ function SupplierDashboardContent() {
         }}
       >
         <Typography variant="h6" sx={{ fontWeight: 700 }}>
-          📊 منصتي
+          🎯 Mon Espace
         </Typography>
       </Box>
       <List sx={{ flex: 1, pt: 0 }}>
@@ -369,10 +427,10 @@ function SupplierDashboardContent() {
             onClick={() => setActiveSection(item.id)}
             sx={{
               borderRight: activeSection === item.id ? '4px solid #2e7d32' : 'none',
-              backgroundColor: activeSection === item.id ? '#f0fff0' : 'transparent',
+              backgroundColor: activeSection === item.id ? '#e8f5e9' : 'transparent',
               color: activeSection === item.id ? '#2e7d32' : 'inherit',
               fontWeight: activeSection === item.id ? 600 : 400,
-              '&:hover': { backgroundColor: '#f0fff0', color: '#2e7d32' },
+              '&:hover': { backgroundColor: '#e8f5e9', color: '#2e7d32' },
             }}
           >
             <ListItemIcon

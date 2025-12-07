@@ -7,7 +7,6 @@ import './i18n';
 import App from './App.jsx';
 import { AppProvider } from './contexts/AppContext';
 import { ToastProvider } from './contexts/ToastContext';
-
 import CSRFProtection from './utils/csrfProtection';
 import tokenManager from './services/tokenManager';
 import { initializeSentry } from './config/sentry';

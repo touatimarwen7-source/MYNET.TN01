@@ -40,7 +40,7 @@ export default function UnifiedHeader() {
     const checkAuth = () => {
       const token = tokenManager.getAccessToken();
       const userData = tokenManager.getUser();
-      
+
       setIsAuthenticated(!!token);
       setUserRole(userData?.role || null);
       setUserName(userData?.username || userData?.email || 'Utilisateur');

@@ -1,4 +1,3 @@
-
 /**
  * Token Manager Service
  * Gestion centralisée des tokens JWT
@@ -67,7 +66,7 @@ class TokenManager {
   // Extraire les données du token JWT
   getUserFromToken(token) {
     if (!token) return null;
-    
+
     try {
       const payload = token.split('.')[1];
       const decoded = JSON.parse(atob(payload));
@@ -79,8 +78,11 @@ class TokenManager {
   }
 }
 
-// Export de l'instance singleton par défaut
-const tokenManager = new TokenManager();
+// Create singleton instance
+const tokenManagerInstance = new TokenManager();
 
-export default tokenManager;
+// Export instance as default
+export default tokenManagerInstance;
+
+// Export class for testing purposes only
 export { TokenManager };

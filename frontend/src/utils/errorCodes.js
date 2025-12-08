@@ -158,7 +158,7 @@ export const ERROR_CODES = {
   ...VALIDATION_ERRORS,
   ...NETWORK_ERRORS,
   ...SYSTEM_ERRORS,
-  
+
   // Quick access
   VALIDATION_ERROR: 'VALIDATION_ERROR',
   UNAUTHORIZED: 'UNAUTHORIZED',
@@ -180,13 +180,13 @@ export const ERROR_CODES = {
  */
 export function getErrorByCode(code) {
   const allErrors = { ...AUTH_ERRORS, ...VALIDATION_ERRORS, ...NETWORK_ERRORS, ...SYSTEM_ERRORS };
-  
+
   for (const [key, value] of Object.entries(allErrors)) {
     if (value.code === code) {
       return value;
     }
   }
-  
+
   return SYSTEM_ERRORS.UNKNOWN_ERROR;
 }
 
@@ -197,7 +197,7 @@ export function formatError(error) {
   if (error.response) {
     const status = error.response.status;
     const data = error.response.data;
-    
+
     // Map HTTP status to error codes
     const statusMap = {
       400: VALIDATION_ERRORS.INVALID_FORMAT,
@@ -211,24 +211,23 @@ export function formatError(error) {
       503: NETWORK_ERRORS.SERVICE_UNAVAILABLE,
       504: NETWORK_ERRORS.REQUEST_TIMEOUT
     };
-    
+
     const errorInfo = statusMap[status] || SYSTEM_ERRORS.UNKNOWN_ERROR;
-    
+
     return {
       code: data?.code || errorInfo.code,
       message: data?.message || errorInfo.message,
       severity: errorInfo.severity
     };
   }
-  
+
   if (!error.response && error.request) {
     return NETWORK_ERRORS.CONNECTION_LOST;
   }
-  
+
   return SYSTEM_ERRORS.UNKNOWN_ERROR;
-},
-  },
-};
+}
+
 
 // ============================================
 // Validation Errors (V001 - V099)

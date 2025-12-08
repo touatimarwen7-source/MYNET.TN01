@@ -141,11 +141,15 @@ app.use(requestLoggingMiddleware);
 // 🚀 ENHANCED RATE LIMITING with per-user + IP tracking
 const enhancedRateLimiting = require('./middleware/enhancedRateLimiting');
 
-// Apply enhanced rate limiting
-app.use('/api/', enhancedRateLimiting.general);
+// Apply enhanced rate limiting (only if it exists and is a function)
+if (enhancedRateLimiting && typeof enhancedRateLimiting.general === 'function') {
+  app.use('/api/', enhancedRateLimiting.general);
+}
 
 // Advanced rate limit middleware for tracking
-app.use(enhancedRateLimiting.advancedRateLimitMiddleware);
+if (enhancedRateLimiting && typeof enhancedRateLimiting.advancedRateLimitMiddleware === 'function') {
+  app.use(enhancedRateLimiting.advancedRateLimitMiddleware);
+}
 
 // ⏱️ REQUEST TIMEOUT ENFORCEMENT (NEW)
 app.use(requestTimeout);
@@ -376,11 +380,19 @@ app.delete('/api/cache/clear', (req, res) => {
 // 📊 RATE LIMIT MONITORING ENDPOINTS
 app.get('/api/admin/rate-limit-stats', (req, res) => {
   try {
-    const stats = enhancedRateLimiting.getRateLimitStats();
-    res.status(200).json({
-      stats,
-      timestamp: new Date().toISOString(),
-    });
+    if (enhancedRateLimiting && typeof enhancedRateLimiting.getRateLimitStats === 'function') {
+      const stats = enhancedRateLimiting.getRateLimitStats();
+      res.status(200).json({
+        stats,
+        timestamp: new Date().toISOString(),
+      });
+    } else {
+      res.status(200).json({
+        stats: {},
+        message: 'Rate limiting stats not available',
+        timestamp: new Date().toISOString(),
+      });
+    }
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -393,14 +405,21 @@ app.post('/api/admin/rate-limit-reset', (req, res) => {
       return res.status(400).json({ error: 'userId is required' });
     }
 
-    const key = `user:${userId}`;
-    const reset = enhancedRateLimiting.resetLimits(key);
+    if (enhancedRateLimiting && typeof enhancedRateLimiting.resetLimits === 'function') {
+      const key = `user:${userId}`;
+      const reset = enhancedRateLimiting.resetLimits(key);
 
-    res.status(200).json({
-      message: reset ? 'Limits reset successfully' : 'User not found',
-      userId,
-      timestamp: new Date().toISOString(),
-    });
+      res.status(200).json({
+        message: reset ? 'Limits reset successfully' : 'User not found',
+        userId,
+        timestamp: new Date().toISOString(),
+      });
+    } else {
+      res.status(200).json({
+        message: 'Rate limiting reset not available',
+        timestamp: new Date().toISOString(),
+      });
+    }
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -408,11 +427,18 @@ app.post('/api/admin/rate-limit-reset', (req, res) => {
 
 app.delete('/api/admin/rate-limit-clear', (req, res) => {
   try {
-    enhancedRateLimiting.clearAllLimits();
-    res.status(200).json({
-      message: 'All rate limits cleared successfully',
-      timestamp: new Date().toISOString(),
-    });
+    if (enhancedRateLimiting && typeof enhancedRateLimiting.clearAllLimits === 'function') {
+      enhancedRateLimiting.clearAllLimits();
+      res.status(200).json({
+        message: 'All rate limits cleared successfully',
+        timestamp: new Date().toISOString(),
+      });
+    } else {
+      res.status(200).json({
+        message: 'Rate limiting clear not available',
+        timestamp: new Date().toISOString(),
+      });
+    }
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

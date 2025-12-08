@@ -205,7 +205,7 @@ try {
 
   // Advanced rate limit middleware for tracking
   if (enhancedRateLimiting && typeof enhancedRateLimiting.advancedRateLimitMiddleware === 'function') {
-    app.use(enhancedRateLimiting.advancedRateLimiting);
+    app.use(enhancedRateLimiting.advancedRateLimitMiddleware);
   }
 } catch (err) {
   logger.warn('Enhanced rate limiting not available');

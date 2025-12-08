@@ -194,28 +194,35 @@ app.use(securityHeadersMiddleware);
 app.use(requestLoggingMiddleware);
 
 // 🚀 ENHANCED RATE LIMITING with per-user + IP tracking
-let enhancedRateLimiting;
 try {
-  enhancedRateLimiting = require('./middleware/enhancedRateLimiting');
+  const enhancedRateLimiting = require('./middleware/enhancedRateLimiting');
   
-  // Verify module is properly loaded
-  if (enhancedRateLimiting && typeof enhancedRateLimiting === 'object') {
-    // Apply general rate limiting
-    if (typeof enhancedRateLimiting.general === 'function') {
-      app.use('/api/', enhancedRateLimiting.general);
-      logger.info('✅ General rate limiting enabled');
-    }
+  // Validate module structure
+  if (!enhancedRateLimiting || typeof enhancedRateLimiting !== 'object') {
+    throw new Error('Invalid module structure');
+  }
 
-    // Advanced rate limit middleware for tracking
-    if (typeof enhancedRateLimiting.advancedRateLimitMiddleware === 'function') {
-      app.use(enhancedRateLimiting.advancedRateLimitMiddleware);
-      logger.info('✅ Advanced rate limiting tracking enabled');
-    }
+  // Apply general rate limiting (IP-based)
+  if (enhancedRateLimiting.general && typeof enhancedRateLimiting.general === 'function') {
+    app.use('/api/', enhancedRateLimiting.general);
+    logger.info('✅ General rate limiting enabled');
   } else {
-    logger.warn('⚠️ Enhanced rate limiting module not properly exported');
+    logger.warn('⚠️ General rate limiter not available');
+  }
+
+  // Advanced rate limit middleware for tracking
+  if (enhancedRateLimiting.advancedRateLimitMiddleware && 
+      typeof enhancedRateLimiting.advancedRateLimitMiddleware === 'function') {
+    app.use(enhancedRateLimiting.advancedRateLimitMiddleware);
+    logger.info('✅ Advanced rate limiting tracking enabled');
+  } else {
+    logger.warn('⚠️ Advanced rate limit tracker not available');
   }
 } catch (err) {
-  logger.warn('⚠️ Enhanced rate limiting not available', { error: err.message });
+  logger.error('❌ Enhanced rate limiting initialization failed', { 
+    error: err.message,
+    stack: err.stack?.split('\n').slice(0, 3).join('\n')
+  });
 }
 
 // ⏱️ REQUEST TIMEOUT ENFORCEMENT (NEW)

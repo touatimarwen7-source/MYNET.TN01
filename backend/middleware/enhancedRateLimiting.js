@@ -125,7 +125,7 @@ const exportLimiter = rateLimit({
 /**
  * Custom rate limiting middleware with advanced tracking
  */
-const advancedRateLimitMiddleware = (req, res, next) => {
+function advancedRateLimitMiddleware(req, res, next) {
   try {
     // Track for metrics
     const key = req.user ? `user:${req.user.id}` : req.ip || 'unknown';
@@ -145,22 +145,13 @@ const advancedRateLimitMiddleware = (req, res, next) => {
     res.setHeader('X-RateLimit-Key', key);
     res.setHeader('X-RateLimit-Timestamp', new Date().toISOString());
 
-    // Add X-RateLimit-Remaining header
-    const originalJson = res.json.bind(res);
-    res.json = function (data) {
-      if (res.getHeader('RateLimit-Remaining')) {
-        res.setHeader('X-RateLimit-Remaining', res.getHeader('RateLimit-Remaining'));
-      }
-      return originalJson(data);
-    };
-
     next();
   } catch (error) {
     // Log error but don't block request
     console.error('Rate limit tracking error:', error);
     next();
   }
-};
+}
 
 /**
  * Get rate limit statistics

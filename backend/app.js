@@ -48,7 +48,6 @@ try {
 } catch (e) {
   initializeEmailService = () => logger.warn('Email service optional');
 }
-const loggingMiddleware = require('./middleware/loggingMiddleware');
 const {
   requestLoggingMiddleware,
   errorLoggingMiddleware,
@@ -299,6 +298,8 @@ app.use('/api/webhooks', stripeWebhookRoutes);
 app.use(notFoundHandler);
 app.use(globalErrorHandler);
 
+// ISSUE FIX #9: Add logging via requestLoggingMiddleware (already active above)
+
 module.exports = app;
 module.exports.asyncHandler = asyncHandler;
 
@@ -331,11 +332,12 @@ app.use('/api/evaluation', offerEvaluationRoutes);
 // 🏆 TENDER MANAGEMENT ROUTES (Awards, Archives, Cancellation)
 app.use('/api/tender-management', tenderManagementRoutes);
 
+// 🤖 AI RECOMMENDATIONS & ADVANCED ANALYTICS ROUTES
+const aiRecommendationsRoutes = require('./routes/aiRecommendationsRoutes');
+app.use('/api/ai/recommendations', aiRecommendationsRoutes);
+
 // Initialize email service
 initializeEmailService();
-
-// Logging middleware (#9)
-app.use(logger.requestMiddleware());
 
 // Log startup
 logger.info('MyNet.tn Backend Started', {

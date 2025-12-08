@@ -114,6 +114,9 @@ const OpeningReport = lazy(() => import('./pages/OpeningReport'));
 const DraftsPage = lazy(() => import('./pages/DraftsPage'));
 const UnifiedDashboard = lazy(() => import('./pages/UnifiedDashboard'));
 
+// Added for AI Recommendations
+const LazyAIRecommendations = lazy(() => import('./pages/AIRecommendations'));
+
 const LoadingFallback = () => (
   <Container
     maxWidth="lg"
@@ -480,6 +483,8 @@ function AppContent() {
                             <Route path="/super-admin/page-editor" element={<PageEditor />} />
                             <Route path="/super-admin/page-editor/:pageId" element={<PageEditor />} />
                             <Route path="/email-notifications" element={<EmailNotifications />} />
+                            {/* AI Recommendations Route */}
+                            <Route path="/ai-recommendations" element={<LazyAIRecommendations />} />
                           </>
                         ) : (
                           <Route path="/super-admin/*" element={<Navigate to="/dashboard" replace />} />

@@ -271,19 +271,17 @@ app.use('/api/opening-reports', openingReportRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/super-admin', superAdminRoutes);
 app.use('/api/admin/features', featureFlagRoutes);
-app.use('/api/admin/supplier-features', supplierFeatureRoutes);
 app.use('/api/company-profile', companyProfileRoutes);
-app.use('/api/user/profile', profileRoutes);
+app.use('/api/profile', profileRoutes);
 app.use('/api/direct-supply', directSupplyRoutes);
-app.use('/api/procurement/reviews', reviewsRoutes);
-app.use('/api/messaging', messagesRoutes);
-app.use('/api/procurement/purchase-orders', purchaseOrdersRoutes);
+app.use('/api/reviews', reviewsRoutes);
+app.use('/api/messages', messagesRoutes);
+app.use('/api/purchase-orders', purchaseOrdersRoutes);
 app.use('/api/audit-logs', auditLogsRoutes);
 app.use('/api/subscriptions', subscriptionRoutes);
 app.use('/api/tender-history', tenderHistoryRoutes);
-app.use('/api/supplier-features', supplierFeaturesRoutes);
 app.use('/api/search', searchRoutes);
-app.use('/api/documents/pdf', pdfRoutes);
+app.use('/api/pdf', pdfRoutes);
 app.use('/api/webhooks', stripeWebhookRoutes);
 
 // ISSUE FIX #9: Add comprehensive error handling middleware

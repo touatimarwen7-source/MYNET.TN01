@@ -471,16 +471,8 @@ function AppContent() {
 
                         {/* ========== Super Admin Dashboard ========== */}
                         <Route
-                          path="/super-admin/dashboard"
-                          element={user?.role === 'super_admin' ? <SuperAdminDashboard /> : <Navigate to="/dashboard" />}
-                        />
-                        <Route
                           path="/super-admin"
-                          element={user?.role === 'super_admin' ? <SuperAdminCRUD /> : <Navigate to="/dashboard" />}
-                        />
-                        <Route
-                          path="/super-admin-menu"
-                          element={user?.role === 'super_admin' ? <SuperAdminMenu /> : <Navigate to="/dashboard" />}
+                          element={user?.role === 'super_admin' ? <SuperAdminDashboard /> : <Navigate to="/dashboard" />}
                         />
 
                         {/* Super Admin - Management */}
@@ -523,17 +515,8 @@ function AppContent() {
                           element={user?.role === 'super_admin' ? <PageEditor /> : <Navigate to="/dashboard" />}
                         />
 
-                        {/* ========== Admin (Limited) ========== */}
-                        <Route
-                          path="/admin"
-                          element={user?.role === 'admin' ? <AdminDashboard /> : <Navigate to="/super-admin/dashboard" />}
-                        />
-
-                        {/* Admin redirects to Super Admin */}
-                        <Route path="/admin/audit-logs" element={<Navigate to="/super-admin/audit-logs" replace />} />
-                        <Route path="/admin/health" element={<Navigate to="/super-admin/health" replace />} />
-                        <Route path="/admin/archive" element={<Navigate to="/super-admin/archive" replace />} />
-                        <Route path="/admin/users" element={<Navigate to="/super-admin/users" replace />} />
+                        {/* ========== Admin - Redirect to Super Admin ========== */}
+                        <Route path="/admin/*" element={<Navigate to="/super-admin" replace />} />
 
                         {/* Email Notifications */}
                         <Route

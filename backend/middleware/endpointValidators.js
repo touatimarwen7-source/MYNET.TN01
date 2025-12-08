@@ -13,20 +13,39 @@ const authValidators = {
   register: (data) => {
     const errors = {};
 
-    if (!data.email || !validators.isValidEmail(data.email)) {
-      errors.email = 'Invalid email format';
+    // Email validation
+    if (!data.email) {
+      errors.email = 'البريد الإلكتروني مطلوب';
+    } else if (!validators.isValidEmail(data.email)) {
+      errors.email = 'صيغة البريد الإلكتروني غير صحيحة. يجب أن يحتوي على @';
     }
 
-    if (!data.password || data.password.length < 8) {
-      errors.password = 'Password must be at least 8 characters';
+    // Password validation
+    if (!data.password) {
+      errors.password = 'كلمة المرور مطلوبة';
+    } else if (data.password.length < 8) {
+      errors.password = 'كلمة المرور يجب أن تحتوي على 8 أحرف على الأقل';
+    } else if (!/[A-Z]/.test(data.password)) {
+      errors.password = 'كلمة المرور يجب أن تحتوي على حرف كبير واحد على الأقل';
+    } else if (!/[0-9]/.test(data.password)) {
+      errors.password = 'كلمة المرور يجب أن تحتوي على رقم واحد على الأقل';
     }
 
-    if (!data.name || !validators.isValidString(data.name, 2, 100)) {
-      errors.name = 'Name must be 2-100 characters';
+    // Name validation
+    if (!data.name) {
+      errors.name = 'الاسم مطلوب';
+    } else if (!validators.isValidString(data.name, 2, 100)) {
+      errors.name = 'الاسم يجب أن يكون بين 2 و 100 حرف';
     }
 
+    // Phone validation
     if (data.phone && !validators.isValidPhone(data.phone)) {
-      errors.phone = 'Invalid phone format';
+      errors.phone = 'رقم الهاتف يجب أن يحتوي على أرقام فقط';
+    }
+
+    // Company name validation
+    if (!data.company_name || data.company_name.trim().length === 0) {
+      errors.company_name = 'اسم الشركة مطلوب';
     }
 
     return Object.keys(errors).length === 0 ? null : errors;
@@ -72,24 +91,41 @@ const procurementValidators = {
   createTender: (data) => {
     const errors = {};
 
-    if (!data.title || !validators.isValidString(data.title, 5, 500)) {
-      errors.title = 'Title must be 5-500 characters';
+    // Title validation
+    if (!data.title) {
+      errors.title = 'العنوان مطلوب';
+    } else if (!validators.isValidString(data.title, 5, 500)) {
+      errors.title = 'العنوان يجب أن يكون بين 5 و 500 حرف';
     }
 
-    if (!data.description || !validators.isValidString(data.description, 10, 10000)) {
-      errors.description = 'Description must be 10-10000 characters';
+    // Description validation
+    if (!data.description) {
+      errors.description = 'الوصف مطلوب';
+    } else if (!validators.isValidString(data.description, 10, 10000)) {
+      errors.description = 'الوصف يجب أن يكون بين 10 و 10000 حرف';
     }
 
-    if (!data.budget || !validators.isValidDecimal(data.budget, 0, 999999999)) {
-      errors.budget = 'Invalid budget amount';
+    // Budget validation
+    if (!data.budget && data.budget !== 0) {
+      errors.budget = 'الميزانية مطلوبة';
+    } else if (!validators.isValidDecimal(data.budget, 0, 999999999)) {
+      errors.budget = 'الميزانية يجب أن تكون قيمة موجبة ولا تتجاوز 999,999,999';
+    } else if (data.budget < 0) {
+      errors.budget = 'الميزانية يجب أن تكون قيمة موجبة';
     }
 
-    if (!data.deadline || !validators.isValidDate(data.deadline)) {
-      errors.deadline = 'Invalid deadline date';
+    // Deadline validation
+    if (!data.deadline) {
+      errors.deadline = 'الموعد النهائي مطلوب';
+    } else if (!validators.isValidDate(data.deadline)) {
+      errors.deadline = 'صيغة الموعد النهائي غير صحيحة';
+    } else if (new Date(data.deadline) < new Date()) {
+      errors.deadline = 'الموعد النهائي يجب أن يكون في المستقبل';
     }
 
+    // Category validation
     if (data.category && !validators.isValidString(data.category, 2, 100)) {
-      errors.category = 'Invalid category';
+      errors.category = 'الفئة المحددة غير صالحة';
     }
 
     return Object.keys(errors).length === 0 ? null : errors;
@@ -98,20 +134,37 @@ const procurementValidators = {
   createOffer: (data) => {
     const errors = {};
 
-    if (!data.tender_id || !validators.isValidId(data.tender_id)) {
-      errors.tender_id = 'Invalid tender ID';
+    // Tender ID validation
+    if (!data.tender_id) {
+      errors.tender_id = 'معرّف العطاء مطلوب';
+    } else if (!validators.isValidId(data.tender_id)) {
+      errors.tender_id = 'معرّف العطاء غير صالح';
     }
 
-    if (!data.offer_price || !validators.isValidDecimal(data.offer_price, 0, 999999999)) {
-      errors.offer_price = 'Invalid offer price';
+    // Offer price validation
+    if (!data.offer_price && data.offer_price !== 0) {
+      errors.offer_price = 'سعر العرض مطلوب';
+    } else if (data.offer_price <= 0) {
+      errors.offer_price = 'سعر العرض يجب أن يكون أكبر من صفر';
+    } else if (!validators.isValidDecimal(data.offer_price, 0, 999999999)) {
+      errors.offer_price = 'سعر العرض غير صالح';
     }
 
-    if (!data.timeline || !validators.isValidString(data.timeline, 2, 1000)) {
-      errors.timeline = 'Invalid timeline';
+    // Timeline validation
+    if (!data.timeline) {
+      errors.timeline = 'مدة التسليم مطلوبة';
+    } else if (!validators.isValidString(data.timeline, 2, 1000)) {
+      errors.timeline = 'مدة التسليم يجب أن تكون بين 2 و 1000 حرف';
     }
 
-    if (!data.terms && data.terms && !validators.isValidString(data.terms, 0, 5000)) {
-      errors.terms = 'Terms too long (max 5000 characters)';
+    // Technical proposal validation
+    if (data.technical_proposal && data.technical_proposal.length < 50) {
+      errors.technical_proposal = 'الاقتراح الفني يجب أن يحتوي على 50 حرف على الأقل';
+    }
+
+    // Terms validation
+    if (data.terms && !validators.isValidString(data.terms, 0, 5000)) {
+      errors.terms = 'الشروط يجب ألا تتجاوز 5000 حرف';
     }
 
     return Object.keys(errors).length === 0 ? null : errors;
@@ -120,20 +173,39 @@ const procurementValidators = {
   createInvoice: (data) => {
     const errors = {};
 
-    if (!data.supply_request_id || !validators.isValidId(data.supply_request_id)) {
-      errors.supply_request_id = 'Invalid supply request ID';
+    // Supply request ID validation
+    if (!data.supply_request_id) {
+      errors.supply_request_id = 'معرّف طلب الشراء مطلوب';
+    } else if (!validators.isValidId(data.supply_request_id)) {
+      errors.supply_request_id = 'معرّف طلب الشراء غير صالح';
     }
 
-    if (!data.amount || !validators.isValidAmount(data.amount)) {
-      errors.amount = 'Invalid invoice amount';
+    // Amount validation
+    if (!data.amount && data.amount !== 0) {
+      errors.amount = 'المبلغ مطلوب';
+    } else if (typeof data.amount !== 'number' && isNaN(parseFloat(data.amount))) {
+      errors.amount = 'المبلغ يجب أن يكون رقماً';
+    } else if (!validators.isValidAmount(data.amount)) {
+      errors.amount = 'المبلغ يجب أن يكون أكبر من صفر';
     }
 
+    // Tax percentage validation
     if (data.tax_percentage && !validators.isValidPercentage(data.tax_percentage)) {
-      errors.tax_percentage = 'Tax must be 0-100%';
+      errors.tax_percentage = 'نسبة الضريبة يجب أن تكون بين 0% و 100%';
     }
 
-    if (!data.due_date || !validators.isValidDate(data.due_date)) {
-      errors.due_date = 'Invalid due date';
+    // Due date validation
+    if (!data.due_date) {
+      errors.due_date = 'تاريخ الاستحقاق مطلوب';
+    } else if (!validators.isValidDate(data.due_date)) {
+      errors.due_date = 'صيغة تاريخ الاستحقاق غير صحيحة';
+    } else if (data.issue_date && new Date(data.due_date) < new Date(data.issue_date)) {
+      errors.due_date = 'تاريخ الاستحقاق يجب أن يكون بعد تاريخ الإصدار';
+    }
+
+    // Invoice number validation (if exists, must be unique - checked in controller)
+    if (data.invoice_number && !validators.isValidString(data.invoice_number, 1, 50)) {
+      errors.invoice_number = 'رقم الفاتورة غير صالح';
     }
 
     return Object.keys(errors).length === 0 ? null : errors;
@@ -164,38 +236,67 @@ const reviewValidators = {
 };
 
 /**
- * Pagination/Query Validators
+ * Pagination/Query Validators with Arabic error messages
  */
 const queryValidators = {
   page: (page) => {
     const num = parseInt(page, 10);
-    return num && num > 0 && num <= 100000;
+    if (isNaN(num)) {
+      return { valid: false, error: 'رقم الصفحة يجب أن يكون رقماً' };
+    }
+    if (num < 1) {
+      return { valid: false, error: 'رقم الصفحة يجب أن يكون 1 على الأقل' };
+    }
+    if (num > 100000) {
+      return { valid: false, error: 'رقم الصفحة يجب ألا يتجاوز 100,000' };
+    }
+    return { valid: true };
   },
 
   limit: (limit) => {
     const num = parseInt(limit, 10);
-    // Prevent DoS - limit max records per request
-    return num && num > 0 && num <= 1000;
+    if (isNaN(num)) {
+      return { valid: false, error: 'عدد العناصر يجب أن يكون رقماً' };
+    }
+    if (num < 1) {
+      return { valid: false, error: 'عدد العناصر يجب أن يكون 1 على الأقل' };
+    }
+    if (num > 1000) {
+      return { valid: false, error: 'عدد العناصر يجب ألا يتجاوز 1000' };
+    }
+    return { valid: true };
   },
 
   search: (search) => {
-    return validators.isValidString(search, 1, 500);
+    if (!validators.isValidString(search, 1, 500)) {
+      return { valid: false, error: 'نص البحث يجب أن يكون بين 1 و 500 حرف' };
+    }
+    return { valid: true };
   },
 
   sortBy: (sortBy) => {
     const validFields = ['id', 'created_at', 'updated_at', 'name', 'price', 'rating', 'status'];
-    return validFields.includes(sortBy);
+    if (!validFields.includes(sortBy)) {
+      return { valid: false, error: 'حقل الترتيب غير صالح' };
+    }
+    return { valid: true };
   },
 
   sortOrder: (order) => {
-    return order === 'asc' || order === 'desc';
+    if (order !== 'asc' && order !== 'desc') {
+      return { valid: false, error: 'ترتيب الفرز يجب أن يكون asc أو desc' };
+    }
+    return { valid: true };
   },
 
   dateRange: (startDate, endDate) => {
     if (!validators.isValidDate(startDate) || !validators.isValidDate(endDate)) {
-      return false;
+      return { valid: false, error: 'صيغة التاريخ غير صحيحة' };
     }
-    return new Date(startDate) <= new Date(endDate);
+    if (new Date(startDate) > new Date(endDate)) {
+      return { valid: false, error: 'تاريخ البداية يجب أن يكون قبل تاريخ النهاية' };
+    }
+    return { valid: true };
   },
 };
 

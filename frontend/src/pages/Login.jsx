@@ -50,12 +50,11 @@ export default function Login() {
       }
 
       // Store tokens securely
-      const expiresIn = response.data.expiresIn || 900;
-      TokenManager.setAccessToken(response.data.accessToken, expiresIn);
+      TokenManager.setAccessToken(response.data.accessToken);
 
       const refreshToken = response.data.refreshToken || response.data.refreshTokenId;
       if (refreshToken) {
-        TokenManager.setRefreshTokenId(refreshToken);
+        TokenManager.setRefreshToken(refreshToken);
       }
 
       const userData = response.data.user;
@@ -64,7 +63,7 @@ export default function Login() {
         throw new Error('Données utilisateur manquantes');
       }
       
-      TokenManager.setUserData(userData);
+      TokenManager.setUser(userData);
       
       console.log('✅ Login successful, redirecting to dashboard');
       addToast('Connexion réussie', 'success', 2000);

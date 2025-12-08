@@ -154,12 +154,30 @@ class TenderController {
    */
   async getAllTenders(req, res) {
     try {
+      // Parse et valider les paramètres de pagination
+      let page = 1;
+      let limit = 50;
+
+      if (req.query.page) {
+        const parsedPage = parseInt(String(req.query.page), 10);
+        if (!isNaN(parsedPage) && parsedPage > 0) {
+          page = parsedPage;
+        }
+      }
+
+      if (req.query.limit) {
+        const parsedLimit = parseInt(String(req.query.limit), 10);
+        if (!isNaN(parsedLimit) && parsedLimit > 0) {
+          limit = Math.min(parsedLimit, 100); // Max 100
+        }
+      }
+
       const filters = {
         status: req.query.status,
         category: req.query.category,
         is_public: req.query.is_public,
-        limit: req.query.limit ? parseInt(req.query.limit) : 50,
-        page: req.query.page ? parseInt(req.query.page) : 1, // Added for pagination validation
+        limit,
+        page,
       };
 
       const tenders = await TenderService.getAllTenders(filters);

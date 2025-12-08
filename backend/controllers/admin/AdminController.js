@@ -1,6 +1,226 @@
 const UserService = require('../../services/UserService');
 const SearchService = require('../../services/SearchService');
 const AdvancedAdminService = require('../../services/AdvancedAdminService');
+const HealthMonitoringService = require('../../services/HealthMonitoringService');
+
+/**
+ * Admin Controller
+ */
+class AdminController {
+  /**
+   * Get health dashboard data
+   */
+  async getHealthDashboard(req, res) {
+    try {
+      const healthData = await HealthMonitoringService.getSystemHealth();
+      
+      res.status(200).json({
+        success: true,
+        data: healthData,
+        timestamp: new Date().toISOString(),
+      });
+    } catch (error) {
+      console.error('Health dashboard error:', error);
+      res.status(500).json({
+        success: false,
+        error: 'Failed to fetch health dashboard',
+        message: error.message,
+      });
+    }
+  }
+
+  /**
+   * Get admin dashboard statistics
+   */
+  async getDashboard(req, res) {
+    try {
+      const stats = await AdvancedAdminService.getDashboardStats();
+      
+      res.status(200).json({
+        success: true,
+        data: stats,
+      });
+    } catch (error) {
+      console.error('Dashboard error:', error);
+      res.status(500).json({
+        success: false,
+        error: 'Failed to fetch dashboard data',
+      });
+    }
+  }
+
+  /**
+   * Get analytics data
+   */
+  async getAnalytics(req, res) {
+    try {
+      const analytics = await AdvancedAdminService.getAnalytics();
+      
+      res.status(200).json({
+        success: true,
+        data: analytics,
+      });
+    } catch (error) {
+      console.error('Analytics error:', error);
+      res.status(500).json({
+        success: false,
+        error: 'Failed to fetch analytics',
+      });
+    }
+  }
+
+  /**
+   * Get user statistics
+   */
+  async getUserStatistics(req, res) {
+    try {
+      const userStats = await UserService.getUserStatistics();
+      
+      res.status(200).json({
+        success: true,
+        data: userStats,
+      });
+    } catch (error) {
+      console.error('User statistics error:', error);
+      res.status(500).json({
+        success: false,
+        error: 'Failed to fetch user statistics',
+      });
+    }
+  }
+
+  /**
+   * Get recent activities
+   */
+  async getRecentActivities(req, res) {
+    try {
+      const activities = await AdvancedAdminService.getRecentActivities();
+      
+      res.status(200).json({
+        success: true,
+        data: activities,
+      });
+    } catch (error) {
+      console.error('Recent activities error:', error);
+      res.status(500).json({
+        success: false,
+        error: 'Failed to fetch recent activities',
+      });
+    }
+  }
+
+  /**
+   * Export audit logs
+   */
+  async exportAuditLogs(req, res) {
+    try {
+      const logs = await AdvancedAdminService.exportAuditLogs(req.query);
+      
+      res.status(200).json({
+        success: true,
+        data: logs,
+      });
+    } catch (error) {
+      console.error('Export audit logs error:', error);
+      res.status(500).json({
+        success: false,
+        error: 'Failed to export audit logs',
+      });
+    }
+  }
+
+  /**
+   * Get all users
+   */
+  async getAllUsers(req, res) {
+    try {
+      const { page = 1, limit = 10, search = '' } = req.query;
+      
+      const users = await UserService.getAllUsers({
+        page: parseInt(page),
+        limit: parseInt(limit),
+        search,
+      });
+      
+      res.status(200).json({
+        success: true,
+        data: users,
+      });
+    } catch (error) {
+      console.error('Get all users error:', error);
+      res.status(500).json({
+        success: false,
+        error: 'Failed to fetch users',
+      });
+    }
+  }
+
+  /**
+   * Get admin performance metrics
+   */
+  async getAdminPerformance(req, res) {
+    try {
+      const performance = await AdvancedAdminService.getAdminPerformance();
+      
+      res.status(200).json({
+        success: true,
+        data: performance,
+      });
+    } catch (error) {
+      console.error('Admin performance error:', error);
+      res.status(500).json({
+        success: false,
+        error: 'Failed to fetch admin performance',
+      });
+    }
+  }
+
+  /**
+   * Get admin assistants statistics
+   */
+  async getAdminAssistantsStats(req, res) {
+    try {
+      const stats = await AdvancedAdminService.getAdminAssistantsStats();
+      
+      res.status(200).json({
+        success: true,
+        data: stats,
+      });
+    } catch (error) {
+      console.error('Admin assistants stats error:', error);
+      res.status(500).json({
+        success: false,
+        error: 'Failed to fetch admin assistants stats',
+      });
+    }
+  }
+
+  /**
+   * Toggle user status (block/unblock)
+   */
+  async toggleUserStatus(req, res) {
+    try {
+      const { id } = req.params;
+      const { status } = req.body;
+      
+      const user = await UserService.toggleUserStatus(id, status);
+      
+      res.status(200).json({
+        success: true,
+        data: user,
+        message: `User ${status === 'blocked' ? 'blocked' : 'unblocked'} successfully`,
+      });
+    } catch (error) {
+      console.error('Toggle user status error:', error);
+      res.status(500).json({
+        success: false,
+        error: 'Failed to toggle user status',
+      });
+    }
+  }
+}
+
+module.exports = new AdminController();
 const PlatformConfigService = require('../../services/PlatformConfigService');
 
 class AdminController {

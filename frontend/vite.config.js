@@ -35,7 +35,16 @@ export default defineConfig({
         target: 'http://0.0.0.0:3000',
         changeOrigin: true,
         secure: false,
+        ws: false,
         rewrite: (path) => path,
+        configure: (proxy, options) => {
+          proxy.on('error', (err, req, res) => {
+            console.log('⚠️ Proxy error:', err.message);
+          });
+          proxy.on('proxyReq', (proxyReq, req, res) => {
+            console.log('📤 Proxying:', req.method, req.url);
+          });
+        }
       },
       '/socket.io': {
         target: 'ws://0.0.0.0:3000',

@@ -108,3 +108,12 @@ backups/
 *_OLD.*
 *_BACKUP.*
 *.tmp
+# Production
+/build
+/dist
+
+# Duplicate and old files
+*.Optimized.jsx
+*-old.*
+*.backup
+*.tmp

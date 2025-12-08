@@ -1,10 +1,11 @@
 import React from 'react';
-import StepOne from '../components/TenderSteps/StepOne';
-import StepTwo from '../components/TenderSteps/StepTwo';
-import StepThree from '../components/TenderSteps/StepThree';
-import StepFour from '../components/TenderSteps/StepFour';
-import StepFive from '../components/TenderSteps/StepFive';
-import StepSix from '../components/TenderSteps/StepSix';
+import StepOne from './StepOne';
+import StepTwo from './StepTwo';
+import StepThree from './StepThree';
+import StepFour from './StepFour';
+import StepFive from './StepFive';
+import StepDocuments from './StepDocuments';
+import StepSeven from './StepSeven';
 
 /**
  * يعرض مكون الخطوة المناسب بناءً على الخطوة الحالية في المعالج.

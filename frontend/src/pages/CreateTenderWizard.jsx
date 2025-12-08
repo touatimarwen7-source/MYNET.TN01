@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import TenderFormLayout from './TenderFormLayout';
-import TenderStepRenderer from './TenderStepRenderer';
+import TenderFormLayout from '../components/TenderSteps/TenderFormLayout';
+import TenderStepRenderer from '../components/TenderSteps/TenderStepRenderer';
 import { procurementAPI } from '../api';
 import {
   recoverDraft,
@@ -11,12 +11,37 @@ import {
 } from '../utils/draftStorageHelper';
 
 const DRAFT_KEY = 'tender_draft';
-const TOTAL_STEPS = 5; // ✅ الصحيح: 6 خطوات من 0 إلى 5
+const TOTAL_STEPS = 6; // Étapes de 0 à 6 (7 étapes au total)
 
 const CreateTenderWizard = () => {
   const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState(0);
-  const [formData, setFormData] = useState({});
+  const [formData, setFormData] = useState({
+    consultation_number: '',
+    title: '',
+    description: '',
+    category: '',
+    is_public: true,
+    publication_date: '',
+    deadline: '',
+    opening_date: '',
+    budget_min: 0,
+    budget_max: 0,
+    currency: 'TND',
+    awardLevel: 'lot',
+    lots: [],
+    requirements: [],
+    evaluation_criteria: {
+      price: 0,
+      quality: 0,
+      delivery: 0,
+      experience: 0
+    },
+    specification_documents: [],
+    contact_person: '',
+    contact_email: '',
+    contact_phone: ''
+  });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
@@ -49,10 +74,23 @@ const CreateTenderWizard = () => {
 
   const handleChange = useCallback((e) => {
     const { name, value, type, checked } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: type === 'checkbox' ? checked : value,
-    }));
+    
+    // Gérer les champs imbriqués (ex: evaluation_criteria.price)
+    if (name.includes('.')) {
+      const [parent, child] = name.split('.');
+      setFormData((prev) => ({
+        ...prev,
+        [parent]: {
+          ...prev[parent],
+          [child]: type === 'checkbox' ? checked : value,
+        },
+      }));
+    } else {
+      setFormData((prev) => ({
+        ...prev,
+        [name]: type === 'checkbox' ? checked : value,
+      }));
+    }
   }, []);
 
   const handleNext = () => {
@@ -119,7 +157,12 @@ const CreateTenderWizard = () => {
         setFormData={setFormData}
         handleChange={handleChange}
         loading={loading}
-        totalCriteria={100} // قيمة وهمية حاليًا
+        totalCriteria={
+          Object.values(formData.evaluation_criteria || {}).reduce(
+            (sum, val) => sum + (Number(val) || 0),
+            0
+          )
+        }
       />
     </TenderFormLayout>
   );

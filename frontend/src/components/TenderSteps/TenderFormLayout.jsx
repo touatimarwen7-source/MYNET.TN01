@@ -1,20 +1,25 @@
 import React from 'react';
+import institutionalTheme from '../../theme/theme';
 import {
   Container,
   Box,
-  Paper,
-  Stepper,
-  Step,
-  StepLabel,
+  Card,
+  CardContent,
   Button,
-  CircularProgress,
-  Alert,
   Typography,
+  Alert,
+  CircularProgress,
+  Stack,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
 } from '@mui/material';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-import PublishIcon from '@mui/icons-material/Publish';
-import institutionalTheme from '../theme/theme';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import CancelIcon from '@mui/icons-material/Cancel';
+import SaveIcon from '@mui/icons-material/Save';
+import StepSeven from './StepSeven';
+import { autosaveDraft } from '../../utils/draftStorageHelper';
 
 // 1. تعريف أسماء الخطوات التي ستظهر في شريط التقدم
 const steps = [

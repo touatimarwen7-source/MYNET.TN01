@@ -55,25 +55,58 @@ class AdminController {
    */
   async getRecentActivities(req, res) {
     try {
+      // التحقق من الصلاحيات
+      if (!req.user || !['super_admin', 'admin'].includes(req.user.role)) {
+        return res.status(403).json({
+          success: false,
+          error: 'Unauthorized access'
+        });
+      }
+
+      // Validation des paramètres
+      const limit = Math.min(parseInt(req.query.limit) || 50, 100);
+      const offset = Math.max(parseInt(req.query.offset) || 0, 0);
+
       const filters = {
-        limit: parseInt(req.query.limit) || 50,
-        offset: parseInt(req.query.offset) || 0,
-        userId: req.query.userId,
+        limit,
+        offset,
+        userId: req.query.userId ? parseInt(req.query.userId) : undefined,
         actionType: req.query.actionType,
         startDate: req.query.startDate,
         endDate: req.query.endDate
       };
 
+      // التحقق من التواريخ
+      if (filters.startDate && !Date.parse(filters.startDate)) {
+        return res.status(400).json({
+          success: false,
+          error: 'Invalid startDate format'
+        });
+      }
+
+      if (filters.endDate && !Date.parse(filters.endDate)) {
+        return res.status(400).json({
+          success: false,
+          error: 'Invalid endDate format'
+        });
+      }
+
       const timeline = await AdvancedAdminService.getActivityTimeline(filters);
 
       res.status(200).json({
         success: true,
-        data: timeline
+        data: timeline,
+        meta: {
+          limit,
+          offset,
+          total: timeline.pagination?.total || 0
+        }
       });
     } catch (error) {
+      logger.error('Error fetching activities:', error);
       res.status(500).json({
         success: false,
-        error: error.message
+        error: 'Failed to fetch activities'
       });
     }
   }

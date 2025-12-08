@@ -22,14 +22,47 @@ router.get('/activities/recent', AdminController.getRecentActivities.bind(AdminC
 router.get('/audit-logs/export', AdminController.exportAuditLogs.bind(AdminController));
 
 // ===== Gestion des utilisateurs =====
-router.get('/users', validatePagination, AdminController.getAllUsers.bind(AdminController));
-router.get('/users/:id', validateIdMiddleware('id'), adminController.getUserDetails);
-router.put('/users/:id/role', validateIdMiddleware('id'), adminController.updateUserRole);
-router.post('/users/:id/block', validateIdMiddleware('id'), adminController.blockUser);
-router.post('/users/:id/unblock', validateIdMiddleware('id'), adminController.unblockUser);
+const AdminPermissionsMiddleware = require('../middleware/adminPermissionsMiddleware');
+
+router.get(
+  '/users', 
+  validatePagination,
+  AdminPermissionsMiddleware.checkPermission(AdminPermissionsMiddleware.PERMISSIONS.VIEW_USERS),
+  AdminController.getAllUsers.bind(AdminController)
+);
+
+router.get(
+  '/users/:id', 
+  validateIdMiddleware('id'),
+  AdminPermissionsMiddleware.checkPermission(AdminPermissionsMiddleware.PERMISSIONS.VIEW_USERS),
+  adminController.getUserDetails
+);
+
+router.put(
+  '/users/:id/role', 
+  validateIdMiddleware('id'),
+  AdminPermissionsMiddleware.checkPermission(AdminPermissionsMiddleware.PERMISSIONS.MANAGE_USERS),
+  adminController.updateUserRole
+);
+
+router.post(
+  '/users/:id/block', 
+  validateIdMiddleware('id'),
+  AdminPermissionsMiddleware.checkPermission(AdminPermissionsMiddleware.PERMISSIONS.BLOCK_USERS),
+  adminController.blockUser
+);
+
+router.post(
+  '/users/:id/unblock', 
+  validateIdMiddleware('id'),
+  AdminPermissionsMiddleware.checkPermission(AdminPermissionsMiddleware.PERMISSIONS.BLOCK_USERS),
+  adminController.unblockUser
+);
+
 router.post(
   '/users/:id/reset-password',
   validateIdMiddleware('id'),
+  AdminPermissionsMiddleware.checkPermission(AdminPermissionsMiddleware.PERMISSIONS.MANAGE_USERS),
   adminController.resetUserPassword
 );
 

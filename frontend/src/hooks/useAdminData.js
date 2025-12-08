@@ -73,22 +73,39 @@ export function useAdminData() {
 
   // Charger toutes les données au montage
   useEffect(() => {
+    let mounted = true;
+
     const loadAllData = async () => {
+      if (!mounted) return;
+      
       setLoading(true);
       setError(null);
       
-      await Promise.all([
-        fetchDashboard(),
-        fetchHealth(),
-        fetchActivities(),
-        fetchAssistants(),
-        fetchPerformance()
-      ]);
-      
-      setLoading(false);
+      try {
+        await Promise.allSettled([
+          fetchDashboard(),
+          fetchHealth(),
+          fetchActivities(),
+          fetchAssistants(),
+          fetchPerformance()
+        ]);
+      } catch (err) {
+        if (mounted) {
+          const formatted = errorHandler.getUserMessage(err);
+          setError(formatted.message);
+        }
+      } finally {
+        if (mounted) {
+          setLoading(false);
+        }
+      }
     };
 
     loadAllData();
+
+    return () => {
+      mounted = false;
+    };
   }, [fetchDashboard, fetchHealth, fetchActivities, fetchAssistants, fetchPerformance]);
 
   // Rafraîchir toutes les données

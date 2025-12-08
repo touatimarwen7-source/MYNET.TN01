@@ -202,21 +202,31 @@ class AdvancedAdminService {
           u.id,
           u.email,
           u.full_name,
+          u.is_active,
+          u.created_at,
           COUNT(DISTINCT ap.permission_key) as permissions_count,
-          COUNT(al.id) FILTER (WHERE al.created_at >= CURRENT_DATE - INTERVAL '30 days') as recent_actions,
+          COUNT(DISTINCT CASE WHEN al.created_at >= CURRENT_DATE - INTERVAL '30 days' THEN al.id END) as recent_actions,
+          COUNT(DISTINCT CASE WHEN al.created_at >= CURRENT_DATE - INTERVAL '7 days' THEN al.id END) as weekly_actions,
           MAX(al.created_at) as last_active
         FROM users u
-        LEFT JOIN admin_permissions ap ON u.id = ap.user_id
+        LEFT JOIN admin_permissions ap ON u.id = ap.user_id AND ap.is_active = TRUE
         LEFT JOIN audit_logs al ON u.id = al.user_id
-        WHERE u.role = 'admin'
-        GROUP BY u.id, u.email, u.full_name
-        ORDER BY recent_actions DESC
-      `);
+        WHERE u.role = $1 AND u.is_deleted = FALSE
+        GROUP BY u.id, u.email, u.full_name, u.is_active, u.created_at
+        ORDER BY recent_actions DESC, u.created_at DESC
+        LIMIT 100
+      `, ['admin']);
 
-      return result.rows;
+      return result.rows.map(row => ({
+        ...row,
+        permissions_count: parseInt(row.permissions_count) || 0,
+        recent_actions: parseInt(row.recent_actions) || 0,
+        weekly_actions: parseInt(row.weekly_actions) || 0,
+        last_active: row.last_active || null
+      }));
     } catch (error) {
       logger.error('Error fetching admin assistants stats:', error);
-      throw error;
+      throw new Error('Failed to fetch admin assistants statistics');
     }
   }
 

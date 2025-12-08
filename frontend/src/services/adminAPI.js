@@ -21,16 +21,80 @@ const adminAPI = {
 
   // Analytics
   analytics: {
-    getStats: () => axiosInstance.get('/admin/analytics'),
-    getActivities: (params = {}) => axiosInstance.get('/admin/activities/recent', { params }),
-    getUserStats: () => axiosInstance.get('/admin/analytics/users'),
-    exportLogs: (format = 'json', startDate, endDate) => 
-      axiosInstance.get('/admin/audit-logs/export', { 
-        params: { format, startDate, endDate },
-        responseType: format === 'csv' ? 'blob' : 'json'
-      }),
-    getAdminPerformance: () => axiosInstance.get('/admin/analytics/performance'),
-    getAdminAssistantsStats: () => axiosInstance.get('/admin/analytics/assistants'),
+    getStats: async () => {
+      try {
+        const response = await axiosInstance.get('/admin/analytics');
+        return response.data;
+      } catch (error) {
+        console.error('Failed to fetch analytics stats:', error);
+        throw error;
+      }
+    },
+    
+    getActivities: async (params = {}) => {
+      try {
+        // التحقق من المعاملات
+        const validParams = {
+          limit: Math.min(parseInt(params.limit) || 50, 100),
+          offset: Math.max(parseInt(params.offset) || 0, 0),
+          userId: params.userId,
+          actionType: params.actionType,
+          startDate: params.startDate,
+          endDate: params.endDate
+        };
+
+        const response = await axiosInstance.get('/admin/activities/recent', { 
+          params: validParams 
+        });
+        return response.data;
+      } catch (error) {
+        console.error('Failed to fetch activities:', error);
+        throw error;
+      }
+    },
+    
+    getUserStats: async () => {
+      try {
+        const response = await axiosInstance.get('/admin/analytics/users');
+        return response.data;
+      } catch (error) {
+        console.error('Failed to fetch user stats:', error);
+        throw error;
+      }
+    },
+    
+    exportLogs: async (format = 'json', startDate, endDate) => {
+      try {
+        const response = await axiosInstance.get('/admin/audit-logs/export', { 
+          params: { format, startDate, endDate },
+          responseType: format === 'csv' ? 'blob' : 'json'
+        });
+        return response.data;
+      } catch (error) {
+        console.error('Failed to export logs:', error);
+        throw error;
+      }
+    },
+    
+    getAdminPerformance: async () => {
+      try {
+        const response = await axiosInstance.get('/admin/analytics/performance');
+        return response.data;
+      } catch (error) {
+        console.error('Failed to fetch admin performance:', error);
+        throw error;
+      }
+    },
+    
+    getAdminAssistantsStats: async () => {
+      try {
+        const response = await axiosInstance.get('/admin/analytics/assistants');
+        return response.data;
+      } catch (error) {
+        console.error('Failed to fetch assistants stats:', error);
+        throw error;
+      }
+    },
   },
 
   // Content

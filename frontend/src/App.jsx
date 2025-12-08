@@ -15,6 +15,10 @@ import { SuperAdminProvider } from './contexts/SuperAdminContext';
 import { AppProvider, useApp } from './contexts/AppContext';
 import TokenManager from './services/tokenManager';
 
+// Import role-specific dashboards
+import BuyerDashboard from './pages/BuyerDashboard';
+import SupplierDashboard from './pages/SupplierDashboard';
+
 // Core pages (eager load)
 import HomePage from './pages/HomePage';
 import Login from './pages/Login';
@@ -263,10 +267,31 @@ function AppContent() {
                           element={user?.role === 'supplier' ? <CreateInvoice /> : <Navigate to="/tenders" />}
                         />
 
-                        {/* ========== Dashboard ========== */}
+                        {/* ========== Dashboard - Role-based routing ========== */}
                         <Route
                           path="/dashboard"
-                          element={user ? <UnifiedDashboard /> : <Navigate to="/login" />}
+                          element={
+                            user ? (
+                              user.role === 'buyer' ? <Navigate to="/buyer-dashboard" replace /> :
+                              user.role === 'supplier' ? <Navigate to="/supplier-dashboard" replace /> :
+                              user.role === 'super_admin' ? <Navigate to="/super-admin" replace /> :
+                              <Navigate to="/profile" replace />
+                            ) : (
+                              <Navigate to="/login" />
+                            )
+                          }
+                        />
+
+                        {/* Buyer Dashboard */}
+                        <Route
+                          path="/buyer-dashboard"
+                          element={user?.role === 'buyer' ? <BuyerDashboard /> : <Navigate to="/dashboard" />}
+                        />
+
+                        {/* Supplier Dashboard */}
+                        <Route
+                          path="/supplier-dashboard"
+                          element={user?.role === 'supplier' ? <SupplierDashboard /> : <Navigate to="/dashboard" />}
                         />
 
                         {/* ========== Buyer Routes ========== */}

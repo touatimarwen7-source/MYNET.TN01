@@ -86,8 +86,15 @@ async function startServer() {
     console.error('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
     console.error('Error Message:', error.message);
     console.error('Error Code:', error.code);
-    console.error('Stack Trace:');
+    console.error('Error File:', error.stack?.split('\n')[1]?.trim());
+    console.error('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+    console.error('Full Stack Trace:');
     console.error(error.stack);
+    console.error('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+    console.error('💡 Troubleshooting Tips:');
+    console.error('  1. Check if all required dependencies are installed');
+    console.error('  2. Verify database connection settings in .env');
+    console.error('  3. Ensure all controller exports are correct');
     console.error('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
     process.exit(1);
   }

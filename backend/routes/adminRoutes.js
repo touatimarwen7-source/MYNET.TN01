@@ -1,10 +1,13 @@
 const express = require('express');
 const router = express.Router();
-const adminController = require('../controllers/admin/AdminController');
+const AdminController = require('../controllers/admin/AdminController');
 const { adminAuth, isSuperAdmin } = require('../middleware/adminMiddleware');
 const { asyncHandler } = require('../middleware/errorHandlingMiddleware');
 const { validateObjectId } = require('../middleware/validateIdMiddleware');
 const { adminPermissions } = require('../middleware/adminPermissionsMiddleware');
+
+// Create AdminController instance
+const adminController = new AdminController();
 
 // ============================================================================
 // ADMIN ROUTES - Enhanced with Advanced Features

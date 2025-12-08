@@ -12,6 +12,7 @@ const { logger } = require('../utils/logger');
 const AuthModule = require('../modules/auth/AuthModule');
 const ProcurementModule = require('../modules/procurement/ProcurementModule');
 const NotificationModule = require('../modules/notifications/NotificationModule');
+const AdminModule = require('../modules/admin/AdminModule');
 
 /**
  * Bootstrap the application
@@ -63,8 +64,25 @@ async function bootstrap() {
       eventBus: c.resolve('eventBus'),
     }));
 
+    container.singleton('auditService', () => ({
+      log: async (params) => {
+        logger.info('Audit log', params);
+        return true;
+      },
+    }));
+
+    container.singleton('adminModule', (c) => new AdminModule({
+      db: c.resolve('db'),
+      eventBus: c.resolve('eventBus'),
+      auditService: c.resolve('auditService'),
+    }));
+
+    // Register AdminController
+    const AdminController = require('../controllers/admin/AdminController');
+    container.singleton('adminController', () => new AdminController());
+
     logger.info('✅ Application bootstrapped successfully');
-    logger.info('📦 Registered modules: Auth, Procurement, Notification');
+    logger.info('📦 Registered modules: Auth, Procurement, Notification, Admin');
     
     return container;
   } catch (error) {

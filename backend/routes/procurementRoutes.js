@@ -890,7 +890,7 @@ router.get(
             COALESCE(AVG(r.rating), 0) as avg_rating,
             COUNT(DISTINCT r.id) FILTER (WHERE r.rating >= 4) as positive_reviews
           FROM reviews r
-          LEFT JOIN offers o ON r.offer_id = o.id
+          INNER JOIN offers o ON r.id = o.review_id
           WHERE o.supplier_id = $1
         )
         SELECT * FROM offer_stats, revenue_stats, review_stats

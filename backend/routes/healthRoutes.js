@@ -3,6 +3,7 @@ const express = require('express');
 const router = express.Router();
 const { getPool, getPoolMetrics } = require('../config/db');
 const { getCacheManager } = require('../utils/redisCache');
+const { checkDatabaseHealth, performFullHealthCheck } = require('../utils/databaseHealthCheck');
 
 /**
  * 🏥 نقطة نهاية فحص الصحة الشامل
@@ -18,25 +19,32 @@ router.get('/', async (req, res) => {
   };
 
   try {
-    // فحص قاعدة البيانات
-    const pool = getPool();
-    const dbResult = await pool.query('SELECT NOW() as current_time');
+    // فحص قاعدة البيانات المتقدم
+    const dbHealth = await checkDatabaseHealth();
     const poolMetrics = getPoolMetrics();
     
     healthStatus.components.database = {
-      status: 'healthy',
-      responseTime: dbResult.duration || 'N/A',
+      status: dbHealth.status,
+      responseTime: dbHealth.responseTime,
+      serverTime: dbHealth.serverTime,
       poolMetrics: {
         total: poolMetrics.totalConnections,
         active: poolMetrics.activeConnections,
-        errors: poolMetrics.errors
+        errors: poolMetrics.errors,
+        idle: dbHealth.pool?.idle || 0,
+        waiting: dbHealth.pool?.waiting || 0
       }
     };
+    
+    if (dbHealth.status !== 'healthy') {
+      healthStatus.status = 'degraded';
+    }
   } catch (dbError) {
     healthStatus.status = 'degraded';
     healthStatus.components.database = {
       status: 'unhealthy',
-      error: dbError.message
+      error: dbError.message,
+      code: dbError.code
     };
   }
 
@@ -82,6 +90,24 @@ router.get('/ready', async (req, res) => {
  */
 router.get('/live', (req, res) => {
   res.status(200).json({ alive: true, uptime: process.uptime() });
+});
+
+/**
+ * 🔍 فحص شامل للنظام - للمسؤولين فقط
+ * GET /api/health/full
+ */
+router.get('/full', async (req, res) => {
+  try {
+    const fullCheck = await performFullHealthCheck();
+    const statusCode = fullCheck.overall === 'healthy' ? 200 : 503;
+    res.status(statusCode).json(fullCheck);
+  } catch (error) {
+    res.status(500).json({
+      error: 'Failed to perform health check',
+      message: error.message,
+      timestamp: new Date().toISOString()
+    });
+  }
 });
 
 module.exports = router;

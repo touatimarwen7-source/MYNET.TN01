@@ -13,12 +13,25 @@ async function startServer() {
 
     // Initialize database connection
     const { initializeDb } = require('./config/db');
+    const { checkDatabaseHealth } = require('./utils/databaseHealthCheck');
+    
     const dbInitialized = await initializeDb();
     
     if (!dbInitialized) {
       console.warn('⚠️ Database connection failed - running in limited mode');
+      console.warn('⚠️ Some features may not be available');
     } else {
       console.log('✅ Database connected successfully');
+      
+      // التحقق من صحة الاتصال
+      try {
+        const health = await checkDatabaseHealth();
+        console.log(`✅ Database health: ${health.status}`);
+        console.log(`✅ Response time: ${health.responseTime}`);
+        console.log(`✅ Pool connections: ${health.pool?.total || 0} total, ${health.pool?.idle || 0} idle`);
+      } catch (healthError) {
+        console.warn('⚠️ Database health check failed:', healthError.message);
+      }
     }
 
     // Import app after database initialization

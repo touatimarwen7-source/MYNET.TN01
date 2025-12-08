@@ -45,25 +45,30 @@ async function initializeDb() {
     }
 
     if (!pool) {
+      const databaseUrl = KeyManagementHelper.getRequiredEnv('DATABASE_URL');
+      
+      // استخدام connection pooler من Neon للاتصالات المجمعة
+      const pooledUrl = databaseUrl.includes('neon.tech') 
+        ? databaseUrl.replace('.us-east-2', '-pooler.us-east-2')
+        : databaseUrl;
+
       pool = new Pool({
-        connectionString: KeyManagementHelper.getRequiredEnv('DATABASE_URL'),
+        connectionString: pooledUrl,
         ssl: {
           rejectUnauthorized: false,
         },
-        // 🚀 ADVANCED CONNECTION POOL - Enterprise-grade configuration
-        max: 20, // Maximum connections
-        min: 5, // Minimum connections
-        idleTimeoutMillis: 30000, // 30s idle timeout
-        connectionTimeoutMillis: 5000,
+        // 🚀 تكوين محسّن لـ Neon PostgreSQL
+        max: 10, // تقليل الاتصالات للتوافق مع Neon
+        min: 2, // حد أدنى أقل لتوفير الموارد
+        idleTimeoutMillis: 60000, // 60s idle timeout
+        connectionTimeoutMillis: 10000, // 10s connection timeout
         application_name: 'mynet-backend-pro',
-        maxUses: 7500, // Recycle connections to prevent memory leaks
-        statement_timeout: 60000, // 60s query timeout for complex queries
-        query_timeout: 60000,
-        idle_in_transaction_session_timeout: 30000,
-        keepAlives: true,
-        keepalivesIdle: 30,
-        keepalivesInterval: 10,
-        // Advanced settings
+        maxUses: 7500,
+        statement_timeout: 30000, // 30s query timeout
+        query_timeout: 30000,
+        idle_in_transaction_session_timeout: 60000, // 60s for transactions
+        keepAlive: true,
+        keepAliveInitialDelayMillis: 10000,
         allowExitOnIdle: false,
         log: (msg) => {
           if (process.env.NODE_ENV === 'development') {
@@ -72,26 +77,37 @@ async function initializeDb() {
         },
       });
 
-      // ✅ POOL EVENT HANDLERS - Better error handling
+      // ✅ POOL EVENT HANDLERS - معالجة أخطاء محسّنة
       pool.on('error', (err, client) => {
         poolMetrics.errors++;
         console.error('🔴 Pool Error:', {
           message: err.message,
           code: err.code,
+          errno: err.errno,
           timestamp: new Date().toISOString()
         });
         
-        // لا تحاول تحرير العميل - دع المجموعة تتعامل معه
-        // Pool will automatically handle cleanup
+        // إعادة الاتصال التلقائية للأخطاء الشبكية
+        if (err.code === 'ECONNREFUSED' || err.code === 'ETIMEDOUT') {
+          console.log('🔄 Attempting to reconnect...');
+          setTimeout(() => {
+            if (pool && pool.totalCount < pool.options.max) {
+              pool.connect().catch(e => console.error('Reconnection failed:', e.message));
+            }
+          }, 5000);
+        }
       });
 
-      pool.on('connect', () => {
+      pool.on('connect', (client) => {
         poolMetrics.totalConnections++;
         poolMetrics.activeConnections++;
+        
+        // تعيين timeout افتراضي لكل اتصال
+        client.query('SET statement_timeout = 30000').catch(() => {});
       });
 
       pool.on('remove', () => {
-        poolMetrics.activeConnections--;
+        poolMetrics.activeConnections = Math.max(0, poolMetrics.activeConnections - 1);
       });
 
       // ✅ QUERY ERROR HANDLER - Catch idle transaction errors

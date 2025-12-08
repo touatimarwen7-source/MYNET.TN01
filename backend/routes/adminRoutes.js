@@ -8,6 +8,8 @@ const AdminController = require('../controllers/admin/AdminController');
 const authMiddleware = require('../middleware/authMiddleware');
 const adminMiddleware = require('../middleware/adminMiddleware');
 const { validatePagination } = require('../middleware/paginationValidator');
+const AuthorizationGuard = require('../security/AuthorizationGuard');
+const { Roles } = require('../config/Roles');
 
 // Toutes les routes d'administration sont protégées
 router.use(authMiddleware.verifyToken);
@@ -147,21 +149,5 @@ router.put('/users/:id/block', validateIdMiddleware('id'), (req, res, next) => {
   }
   return AdminController.toggleUserStatus.bind(AdminController)(req, res, next);
 });
-
-// Health monitoring dashboard
-router.get(
-  '/health-dashboard',
-  AuthorizationGuard.authenticateToken.bind(AuthorizationGuard),
-  AuthorizationGuard.requireRole([Roles.SUPER_ADMIN, Roles.ADMIN]),
-  AdminController.getHealthDashboard.bind(AdminController)
-);
-
-// System metrics
-router.get(
-  '/system-metrics',
-  AuthorizationGuard.authenticateToken.bind(AuthorizationGuard),
-  AuthorizationGuard.requireRole([Roles.SUPER_ADMIN, Roles.ADMIN]),
-  AdminController.getSystemMetrics.bind(AdminController)
-);
 
 module.exports = router;

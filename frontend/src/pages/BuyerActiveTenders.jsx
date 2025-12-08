@@ -58,11 +58,15 @@ export default function BuyerActiveTenders() {
   const fetchActiveTenders = async () => {
     try {
       setLoading(true);
-      const response = await procurementAPI.getMyTenders({ status: 'active' });
+      const response = await procurementAPI.getMyTenders();
       
       // التحقق من البيانات المستلمة
       if (response?.data?.tenders && Array.isArray(response.data.tenders)) {
-        setTenders(response.data.tenders);
+        // تصفية المناقصات النشطة فقط (open, published)
+        const activeTenders = response.data.tenders.filter(
+          tender => tender.status === 'open' || tender.status === 'published'
+        );
+        setTenders(activeTenders);
       } else {
         logger.warn('استجابة غير متوقعة من API:', response);
         setTenders([]);

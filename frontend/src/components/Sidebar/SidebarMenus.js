@@ -1,3 +1,4 @@
+
 /**
  * Sidebar menu definitions for all user roles
  * Organized by role: buyer, supplier, admin, super_admin
@@ -19,45 +20,6 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import ArticleIcon from '@mui/icons-material/Article';
 import CodeIcon from '@mui/icons-material/Code';
 import SupervisedUserCircleIcon from '@mui/icons-material/SupervisedUserCircle';
-
-// النظام الموحد - القوائم الديناميكية حسب الدور
-export const getMenuByRole = (role, permissions = null) => {
-  const menus = {
-    buyer: [
-      { text: 'لوحة التحكم', icon: DashboardIcon, path: '/buyer-dashboard' },
-      { text: 'المناقصات', icon: GavelIcon, path: '/tenders' },
-      { text: 'إنشاء مناقصة', icon: GavelIcon, path: '/create-tender' },
-      { text: 'العروض', icon: LocalOfferIcon, path: '/buyer-active-tenders' },
-      { text: 'التقارير', icon: AssessmentIcon, path: '/financial-reports' },
-      { text: 'الملف الشخصي', icon: PersonIcon, path: '/profile' },
-      { text: 'الإعدادات', icon: SettingsIcon, path: '/settings' },
-    ],
-    supplier: [
-      { text: 'لوحة التحكم', icon: DashboardIcon, path: '/supplier-dashboard' },
-      { text: 'المناقصات المتاحة', icon: GavelIcon, path: '/tenders' },
-      { text: 'عروضي', icon: LocalOfferIcon, path: '/my-offers' },
-      { text: 'الفواتير', icon: ShoppingCartIcon, path: '/supplier-invoices' },
-      { text: 'الملف الشخصي', icon: PersonIcon, path: '/profile' },
-      { text: 'الإعدادات', icon: SettingsIcon, path: '/settings' },
-    ],
-    admin: buildAdminMenu(permissions),
-    super_admin: [
-      { text: 'لوحة التحكم', icon: DashboardIcon, path: '/super-admin' },
-      { text: 'مركز التحكم الكامل', icon: AdminPanelSettingsIcon, path: '/super-admin' },
-      { text: 'إدارة المستخدمين', icon: PeopleIcon, path: '/super-admin/users' },
-      { text: 'الأدوار والصلاحيات', icon: SecurityIcon, path: '/super-admin/roles' },
-      { text: 'المساعدون الإداريون', icon: SupervisedUserCircleIcon, path: '/super-admin/assistants' },
-      { text: 'التحليلات المتقدمة', icon: BarChartIcon, path: '/super-admin/analytics' },
-      { text: 'إدارة الملفات', icon: FolderIcon, path: '/super-admin/files' },
-      { text: 'الإشعارات', icon: NotificationsIcon, path: '/super-admin/notifications' },
-      { text: 'إدارة المحتوى', icon: ArticleIcon, path: '/super-admin/content' },
-      { text: 'محرر الصفحات', icon: CodeIcon, path: '/super-admin/page-editor' },
-      { text: 'التحكم بالميزات', icon: SettingsIcon, path: '/super-admin/features' },
-    ],
-  };
-
-  return menus[role] || menus.buyer;
-};
 
 // بناء قائمة المساعد الإداري حسب صلاحياته
 function buildAdminMenu(permissions) {
@@ -89,18 +51,49 @@ function buildAdminMenu(permissions) {
   return baseMenu;
 }
 
-// للتوافق مع الكود القديم - تصدير القوائم
-export const buyerMenu = getMenuByRole('buyer');
-export const supplierMenu = getMenuByRole('supplier');
-export const superAdminMenu = getMenuByRole('super_admin');
-export const adminMenu = buildAdminMenu(null);
+// القوائم الثابتة لكل دور
+const buyerMenu = [
+  { text: 'لوحة التحكم', icon: DashboardIcon, path: '/buyer-dashboard' },
+  { text: 'المناقصات', icon: GavelIcon, path: '/tenders' },
+  { text: 'إنشاء مناقصة', icon: GavelIcon, path: '/create-tender' },
+  { text: 'العروض', icon: LocalOfferIcon, path: '/buyer-active-tenders' },
+  { text: 'التقارير', icon: AssessmentIcon, path: '/financial-reports' },
+  { text: 'الملف الشخصي', icon: PersonIcon, path: '/profile' },
+  { text: 'الإعدادات', icon: SettingsIcon, path: '/settings' },
+];
+
+const supplierMenu = [
+  { text: 'لوحة التحكم', icon: DashboardIcon, path: '/supplier-dashboard' },
+  { text: 'المناقصات المتاحة', icon: GavelIcon, path: '/tenders' },
+  { text: 'عروضي', icon: LocalOfferIcon, path: '/my-offers' },
+  { text: 'الفواتير', icon: ShoppingCartIcon, path: '/supplier-invoices' },
+  { text: 'الملف الشخصي', icon: PersonIcon, path: '/profile' },
+  { text: 'الإعدادات', icon: SettingsIcon, path: '/settings' },
+];
+
+const superAdminMenu = [
+  { text: 'لوحة التحكم', icon: DashboardIcon, path: '/super-admin' },
+  { text: 'مركز التحكم الكامل', icon: AdminPanelSettingsIcon, path: '/super-admin' },
+  { text: 'إدارة المستخدمين', icon: PeopleIcon, path: '/super-admin/users' },
+  { text: 'الأدوار والصلاحيات', icon: SecurityIcon, path: '/super-admin/roles' },
+  { text: 'المساعدون الإداريون', icon: SupervisedUserCircleIcon, path: '/super-admin/assistants' },
+  { text: 'التحليلات المتقدمة', icon: BarChartIcon, path: '/super-admin/analytics' },
+  { text: 'إدارة الملفات', icon: FolderIcon, path: '/super-admin/files' },
+  { text: 'الإشعارات', icon: NotificationsIcon, path: '/super-admin/notifications' },
+  { text: 'إدارة المحتوى', icon: ArticleIcon, path: '/super-admin/content' },
+  { text: 'محرر الصفحات', icon: CodeIcon, path: '/super-admin/page-editor' },
+  { text: 'التحكم بالميزات', icon: SettingsIcon, path: '/super-admin/features' },
+];
+
+const adminMenu = buildAdminMenu(null);
 
 /**
  * Get menu items based on user role
  * @param {string} role - User role (buyer, supplier, admin, super_admin)
+ * @param {Array} permissions - Optional admin permissions array
  * @returns {Array} Menu configuration for the role
  */
-export const getMenuByRole = (role) => {
+export const getMenuByRole = (role, permissions = null) => {
   if (!role || typeof role !== 'string') {
     console.warn('Invalid role provided to getMenuByRole:', role);
     return buyerMenu;
@@ -114,7 +107,7 @@ export const getMenuByRole = (role) => {
     case 'supplier':
       return supplierMenu;
     case 'admin':
-      return adminMenu;
+      return permissions ? buildAdminMenu(permissions) : adminMenu;
     case 'super_admin':
     case 'superadmin':
       return superAdminMenu;
@@ -123,3 +116,6 @@ export const getMenuByRole = (role) => {
       return buyerMenu;
   }
 };
+
+// للتوافق مع الكود القديم - تصدير القوائم
+export { buyerMenu, supplierMenu, superAdminMenu, adminMenu };

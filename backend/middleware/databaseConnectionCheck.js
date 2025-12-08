@@ -46,7 +46,7 @@ function checkPoolHealth(req, res, next) {
         success: false,
         error: 'Database connection pool exhausted',
         code: 'POOL_EXHAUSTED',
-        message: 'النظام مشغول حاليًا، يرجى المحاولة لاحقًا',
+        message: 'Le système est actuellement occupé, veuillez réessayer plus tard',
       });
     }
     

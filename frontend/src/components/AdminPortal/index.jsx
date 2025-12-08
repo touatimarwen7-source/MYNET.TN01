@@ -9,22 +9,22 @@ import GppGoodIcon from '@mui/icons-material/GppGood';
 import PaidIcon from '@mui/icons-material/Paid';
 import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
 import AddCardIcon from '@mui/icons-material/AddCard';
-importiendo from '../assets/images/Hand holding phone with money.png';
-import { THEME } from '../theme/theme';
+import theme from '../../theme/theme';
 
 const StyledBox = styled(Box)(({ theme }) => ({
-  background: `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.primary.dark} 100%)`,
-  borderRadius: '12px',
-  padding: '32px 24px',
-  marginBottom: '24px',
-  color: 'white',
+  background: theme.palette.primary.main,
+  borderRadius: theme.shape.borderRadius,
+  padding: theme.spacing(4, 3),
+  marginBottom: theme.spacing(3),
+  color: theme.palette.primary.contrastText,
   display: 'flex',
   justifyContent: 'space-between',
   alignItems: 'center',
+  boxShadow: theme.shadows[2],
   [theme.breakpoints.down('sm')]: {
     flexDirection: 'column',
     textAlign: 'center',
-    gap: '16px',
+    gap: theme.spacing(2),
   },
 }));
 
@@ -32,12 +32,16 @@ const FeatureBox = styled(Box)(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
-  gap: '8px',
-  padding: '16px',
-  borderRadius: '8px',
+  gap: theme.spacing(1),
+  padding: theme.spacing(2),
+  borderRadius: theme.shape.borderRadius,
   backgroundColor: theme.palette.background.paper,
   boxShadow: theme.shadows[1],
   height: '100%',
+  transition: 'box-shadow 0.3s ease',
+  '&:hover': {
+    boxShadow: theme.shadows[3],
+  },
 }));
 
 const IconWrapper = styled(Box)(({ theme }) => ({
@@ -46,31 +50,33 @@ const IconWrapper = styled(Box)(({ theme }) => ({
   alignItems: 'center',
   backgroundColor: theme.palette.primary.light,
   borderRadius: '50%',
-  padding: '12px',
-  color: theme.palette.primary.main,
-  marginBottom: '8px',
+  padding: theme.spacing(1.5),
+  color: theme.palette.primary.contrastText,
+  marginBottom: theme.spacing(1),
+  width: 56,
+  height: 56,
 }));
 
 const Homepage = () => {
   const features = [
-    { icon: <AppRegistrationIcon />, title: 'إنشاء حساب', description: 'قم بإنشاء حسابك الخاص الآن' },
-    { icon: <AccountBalanceIcon />, title: 'إدارة الحسابات', description: 'إدارة جميع حساباتك المصرفية بسهولة' },
-    { icon: <CreditCardIcon />, title: 'بطاقات ائتمان', description: 'احصل على بطاقات ائتمان تلبي احتياجاتك' },
-    { icon: <GppGoodIcon />, title: 'أمان عالي', description: 'نحن نضمن أمان بياناتك وأموالك' },
-    { icon: <PaidIcon />, title: 'استثمارات', description: 'استثمر أموالك بذكاء مع خياراتنا المتنوعة' },
-    { icon: <MonetizationOnIcon />, title: 'مدفوعات سريعة', description: 'قم بإجراء المدفوعات الخاصة بك بسرعة وأمان' },
-    { icon: <AddCardIcon />, title: 'قروض', description: 'احصل على قروض لتلبية احتياجاتك المالية' },
+    { icon: <AppRegistrationIcon />, title: 'Créer un compte', description: 'Créez votre compte personnel maintenant' },
+    { icon: <AccountBalanceIcon />, title: 'Gestion des comptes', description: 'Gérez tous vos comptes bancaires facilement' },
+    { icon: <CreditCardIcon />, title: 'Cartes de crédit', description: 'Obtenez des cartes de crédit adaptées à vos besoins' },
+    { icon: <GppGoodIcon />, title: 'Haute sécurité', description: 'Nous garantissons la sécurité de vos données et de votre argent' },
+    { icon: <PaidIcon />, title: 'Investissements', description: 'Investissez votre argent intelligemment avec nos options variées' },
+    { icon: <MonetizationOnIcon />, title: 'Paiements rapides', description: 'Effectuez vos paiements rapidement et en toute sécurité' },
+    { icon: <AddCardIcon />, title: 'Prêts', description: 'Obtenez des prêts pour répondre à vos besoins financiers' },
   ];
 
   return (
-    <Box sx={{ padding: '24px', backgroundColor: THEME.palette.background.default }}>
+    <Box sx={{ padding: '24px', backgroundColor: theme.palette.background.default }}>
       <StyledBox>
         <Box>
           <Typography variant="h4" component="h1" gutterBottom sx={{ fontWeight: 'bold' }}>
-            مرحباً بك في بوابتك المالية الشاملة
+            Bienvenue dans votre portail financier complet
           </Typography>
           <Typography variant="h6" component="p" gutterBottom>
-            نقدم لك حلولاً مالية متكاملة لإدارة أموالك بسهولة وأمان.
+            Nous vous proposons des solutions financières intégrées pour gérer votre argent facilement et en toute sécurité.
           </Typography>
           <Button
             variant="contained"
@@ -84,25 +90,13 @@ const Homepage = () => {
               textTransform: 'none',
             }}
           >
-            ابدأ الآن
+            Commencer maintenant
           </Button>
         </Box>
-        <Box
-          component="img"
-          src={iendo}
-          alt="Hand holding phone with money"
-          sx={{
-            width: '300px',
-            height: 'auto',
-            [THEME.breakpoints.down('sm')]: {
-              width: '200px',
-            },
-          }}
-        />
       </StyledBox>
 
       <Typography variant="h5" component="h2" gutterBottom align="center" sx={{ fontWeight: 'bold', mb: 4 }}>
-        لماذا تختارنا؟
+        Pourquoi nous choisir ?
       </Typography>
       <Grid container spacing={4}>
         {features.map((feature, index) => (

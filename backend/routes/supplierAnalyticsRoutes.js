@@ -5,6 +5,9 @@ const router = express.Router();
 const { validateIdMiddleware } = require('../middleware/validateIdMiddleware');
 const { validationMiddleware } = require('../middleware/validationMiddleware');
 
+// Apply validation middleware to all routes
+router.use(validationMiddleware);
+
 // Supplier dashboard overview
 router.get('/overview', authMiddleware, async (req, res) => {
   try {

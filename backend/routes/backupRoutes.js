@@ -28,8 +28,13 @@ router.get(
   verifyToken,
   verifySuperAdmin,
   asyncHandler(async (req, res) => {
-    const result = BackupService.listBackups();
-    res.status(result.success ? 200 : 400).json(result);
+    try {
+      const result = BackupService.listBackups();
+      res.status(result.success ? 200 : 400).json(result);
+    } catch (error) {
+      console.error('Error listing backups:', error);
+      return errorResponse(res, error.message, 500, 'LIST_BACKUPS_FAILED');
+    }
   })
 );
 
@@ -74,8 +79,13 @@ router.post(
   verifyToken,
   verifySuperAdmin,
   asyncHandler(async (req, res) => {
-    const result = await BackupService.createBackup();
-    res.status(result.success ? 200 : 400).json(result);
+    try {
+      const result = await BackupService.createBackup();
+      res.status(result.success ? 200 : 400).json(result);
+    } catch (error) {
+      console.error('Error creating backup:', error);
+      return errorResponse(res, error.message, 500, 'CREATE_BACKUP_FAILED');
+    }
   })
 );
 
@@ -137,8 +147,13 @@ router.post(
       });
     }
 
-    const result = await BackupService.restoreBackup(filename);
-    res.status(result.success ? 200 : 400).json(result);
+    try {
+      const result = await BackupService.restoreBackup(filename);
+      res.status(result.success ? 200 : 400).json(result);
+    } catch (error) {
+      console.error('Error restoring backup:', error);
+      return errorResponse(res, error.message, 500, 'RESTORE_BACKUP_FAILED');
+    }
   })
 );
 
@@ -176,7 +191,8 @@ router.delete(
         filename,
       });
     } catch (error) {
-      res.status(400).json({ error: error.message });
+      console.error('Error deleting backup:', error);
+      return errorResponse(res, error.message, 500, 'DELETE_BACKUP_FAILED');
     }
   })
 );

@@ -1,5 +1,23 @@
-// Centralized API Configuration
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+// ✅ Centralized API Configuration - Dynamic Base URL
+const getApiBaseUrl = () => {
+  if (import.meta.env.VITE_API_URL) {
+    return import.meta.env.VITE_API_URL;
+  }
+  
+  if (typeof window !== 'undefined') {
+    const isReplit = window.location.hostname.includes('replit.dev');
+    
+    if (isReplit) {
+      return `https://${window.location.hostname.split(':')[0]}:3000`;
+    }
+    
+    return 'http://localhost:3000';
+  }
+  
+  return 'http://localhost:3000';
+};
+
+const API_BASE_URL = getApiBaseUrl();
 const API_TIMEOUT = 30000;
 
 // Public endpoints that require no authentication

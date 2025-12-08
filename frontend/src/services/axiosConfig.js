@@ -40,19 +40,24 @@ const getCurrentHost = () => {
     : `${protocol}//${hostname}:3000`;
 };
 
-// ✅ استخدام الـ URL الصحيح لبيئة Replit
+// ✅ تحديد Base URL بشكل ديناميكي
 const getApiBaseUrl = () => {
+  // أولوية لمتغير البيئة
   if (import.meta.env.VITE_API_BASE_URL) {
     return import.meta.env.VITE_API_BASE_URL;
   }
   
-  // في بيئة Replit، استخدم البورت الخارجي 3000 مباشرة
   if (typeof window !== 'undefined') {
-    const protocol = window.location.protocol;
-    const hostname = window.location.hostname;
+    const isReplit = window.location.hostname.includes('replit.dev');
     
-    // في Replit، البورت 3000 متاح مباشرة
-    return `${protocol}//${hostname}:3000/api`;
+    if (isReplit) {
+      // في Replit: استخدم نفس الـ hostname مع port 3000
+      // مثال: https://abc123.replit.dev:3000/api
+      return `https://${window.location.hostname.split(':')[0]}:3000/api`;
+    }
+    
+    // في التطوير المحلي
+    return 'http://localhost:3000/api';
   }
   
   return 'http://localhost:3000/api';
@@ -145,11 +150,6 @@ const processQueue = (error, token = null) => {
  */
 axiosInstance.interceptors.request.use(
   async (config) => {
-    // ✅ فحص صحة الخادم الخلفي قبل كل طلب
-    if (!await checkBackendHealth()) {
-      return Promise.reject(new Error('Backend is not healthy'));
-    }
-
     // Check if endpoint is public (uses centralized config)
     const isPublic = isPublicEndpoint(config.url);
 

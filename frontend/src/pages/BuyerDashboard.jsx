@@ -88,17 +88,7 @@ export default function BuyerDashboard() {
     setPageTitle('Tableau de Bord Acheteur');
     if (user?.id) {
       console.log('📊 Fetching dashboard data for user:', user.id);
-
-      // ✅ فحص صحة الخادم قبل جلب البيانات
-      import('../services/axiosConfig').then(({ checkBackendHealth }) => {
-        checkBackendHealth().then(isHealthy => {
-          if (isHealthy) {
-            fetchDashboardData();
-          } else {
-            setError('⚠️ الخادم الخلفي غير متاح. يرجى التحقق من تشغيله على Port 3000.');
-          }
-        });
-      });
+      fetchDashboardData();
     }
   }, [user?.id]); // Dependency array includes userId
 

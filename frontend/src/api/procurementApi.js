@@ -1,5 +1,35 @@
 import axiosInstance from '../services/axiosConfig';
 
+// Invoice APIs
+const createInvoice = async (invoiceData) => {
+  const response = await axiosInstance.post('/procurement/invoices', invoiceData);
+  return response.data;
+};
+
+const uploadInvoiceDocument = async (invoiceId, formData) => {
+  const response = await axiosInstance.post(
+    `/procurement/invoices/${invoiceId}/upload`,
+    formData,
+    {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    }
+  );
+  return response.data;
+};
+
+const getInvoices = async () => {
+  const response = await axiosInstance.get('/procurement/invoices');
+  return response.data;
+};
+
+const updateInvoiceStatus = async (invoiceId, status, paymentDate) => {
+  const response = await axiosInstance.put(`/procurement/invoices/${invoiceId}/status`, {
+    status,
+    payment_date: paymentDate,
+  });
+  return response.data;
+};
+
 export const procurementAPI = {
   getTenders: (filters) => axiosInstance.get('/procurement/tenders', { params: filters }),
   getTender: (id) => axiosInstance.get(`/procurement/tenders/${id}`),
@@ -49,17 +79,10 @@ export const procurementAPI = {
     axiosInstance.put(`/procurement/purchase-orders/${id}/status`, { status }),
 
   // Invoices (Supplier creates after delivery)
-  createInvoice: (data) => axiosInstance.post('/procurement/invoices', data),
+  createInvoice: createInvoice,
   getMyInvoices: () => axiosInstance.get('/procurement/my-invoices'),
   getReceivedInvoices: () => axiosInstance.get('/procurement/received-invoices'),
   getInvoice: (id) => axiosInstance.get(`/procurement/invoices/${id}`),
-  updateInvoiceStatus: (id, status, paymentDate) =>
-    axiosInstance.put(`/procurement/invoices/${id}/status`, { status, payment_date: paymentDate }),
-  uploadInvoiceDocument: (id, file) => {
-    const formData = new FormData();
-    formData.append('invoice', file);
-    return axiosInstance.post(`/procurement/invoices/${id}/upload`, formData, {
-      headers: { 'Content-Type': 'multipart/form-data' },
-    });
-  },
+  updateInvoiceStatus: updateInvoiceStatus,
+  uploadInvoiceDocument: uploadInvoiceDocument,
 };

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, lazy } from 'react';
 import institutionalTheme from '../theme/theme';
 import { useNavigate, useParams } from 'react-router-dom';
 import {
@@ -44,6 +44,9 @@ import UploadIcon from '@mui/icons-material/Upload';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { procurementAPI } from '../api';
 import { setPageTitle } from '../utils/pageTitle';
+
+const CreateInvoice = lazy(() => import('./pages/CreateInvoice'));
+const InvoiceManagement = lazy(() => import('./pages/InvoiceManagement'));
 
 const STEPS = [
   { label: 'Informations Facture', icon: '📄' },

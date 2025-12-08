@@ -3,10 +3,12 @@ const { getPool } = require('../config/db');
 const AuditLogService = require('./AuditLogService');
 const NotificationService = require('./NotificationService');
 const { v4: uuidv4 } = require('uuid');
+const path = require('path');
+const fs = require('fs').promises;
 
 /**
  * Invoice Service
- * Handles supplier invoice creation and management
+ * Handles supplier invoice creation and management with file attachments
  */
 class InvoiceService {
   /**
@@ -189,10 +191,23 @@ class InvoiceService {
   }
 
   /**
-   * Attach invoice document (PDF)
+   * Attach invoice document (PDF/Image)
    */
   async attachDocument(invoiceId, file, userId) {
     const pool = getPool();
+
+    // Validate file type
+    const allowedExtensions = ['.pdf', '.jpg', '.jpeg', '.png'];
+    const fileExtension = path.extname(file.originalname).toLowerCase();
+    
+    if (!allowedExtensions.includes(fileExtension)) {
+      throw new Error('Invalid file type. Only PDF and images are allowed');
+    }
+
+    // Validate file size (max 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      throw new Error('File size exceeds 5MB limit');
+    }
 
     const documentPath = `/uploads/invoices/${file.filename}`;
 
@@ -205,8 +220,60 @@ class InvoiceService {
     );
 
     if (result.rows.length === 0) {
-      throw new Error('Invoice not found or unauthorized');
+      throw new Error('Facture introuvable ou non autorisée');
     }
+
+    await AuditLogService.logAction(
+      userId,
+      'attach_invoice_document',
+      'invoice',
+      invoiceId,
+      { document_path: documentPath, file_size: file.size }
+    );
+
+    return result.rows[0];
+  }
+
+  /**
+   * Get invoice statistics for a supplier
+   */
+  async getSupplierInvoiceStats(supplierId) {
+    const pool = getPool();
+
+    const result = await pool.query(
+      `SELECT 
+        COUNT(*) as total_invoices,
+        COUNT(CASE WHEN status = 'submitted' THEN 1 END) as pending_invoices,
+        COUNT(CASE WHEN status = 'approved' THEN 1 END) as approved_invoices,
+        COUNT(CASE WHEN status = 'paid' THEN 1 END) as paid_invoices,
+        COALESCE(SUM(CASE WHEN status = 'paid' THEN total_amount ELSE 0 END), 0) as total_paid,
+        COALESCE(SUM(CASE WHEN status IN ('submitted', 'approved') THEN total_amount ELSE 0 END), 0) as total_pending
+       FROM invoices
+       WHERE supplier_id = $1`,
+      [supplierId]
+    );
+
+    return result.rows[0];
+  }
+
+  /**
+   * Get invoice statistics for a buyer
+   */
+  async getBuyerInvoiceStats(buyerId) {
+    const pool = getPool();
+
+    const result = await pool.query(
+      `SELECT 
+        COUNT(*) as total_invoices,
+        COUNT(CASE WHEN status = 'submitted' THEN 1 END) as pending_review,
+        COUNT(CASE WHEN status = 'approved' THEN 1 END) as approved_pending_payment,
+        COUNT(CASE WHEN status = 'paid' THEN 1 END) as paid_invoices,
+        COALESCE(SUM(CASE WHEN status = 'paid' THEN total_amount ELSE 0 END), 0) as total_paid,
+        COALESCE(SUM(CASE WHEN status IN ('submitted', 'approved') THEN total_amount ELSE 0 END), 0) as total_outstanding
+       FROM invoices
+       WHERE buyer_id = $1`,
+      [buyerId]
+    );
 
     return result.rows[0];
   }

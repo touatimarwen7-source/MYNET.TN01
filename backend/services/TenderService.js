@@ -106,6 +106,16 @@ class TenderService {
     const mappedData = this.mapFrontendToDatabaseFields(validatedData);
 
     try {
+      // التحقق من أن المستخدم هو مشتري
+      const userCheck = await pool.query(
+        'SELECT role FROM users WHERE id = $1 AND is_deleted = FALSE',
+        [userId]
+      );
+
+      if (!userCheck.rows[0] || userCheck.rows[0].role !== 'buyer') {
+        throw new Error('فقط المشترون يمكنهم إنشاء المناقصات');
+      }
+
       const tenderNumber = this.generateTenderNumber();
 
       // Prepare values directly without creating Tender model (to avoid inheritance issues)

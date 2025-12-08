@@ -5,6 +5,14 @@ const logger = require('../../utils/logger'); // Assuming logger is configured
 class TenderController {
   async createTender(req, res) {
     try {
+      // التحقق من أن المستخدم هو مشتري فقط
+      if (req.user.role !== 'buyer') {
+        return res.status(403).json({
+          success: false,
+          message: 'فقط المشترون يمكنهم إنشاء المناقصات',
+        });
+      }
+
       const tenderData = req.body;
       const tender = await TenderService.createTender(tenderData, req.user.id);
 

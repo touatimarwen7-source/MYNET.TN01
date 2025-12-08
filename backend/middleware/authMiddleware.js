@@ -1,11 +1,28 @@
+
 const AuthorizationGuard = require('../security/AuthorizationGuard');
 
-// Main middleware export
+// Main authentication middleware
 const authMiddleware = AuthorizationGuard.authenticateToken.bind(AuthorizationGuard);
 
-// Export as default and named
-module.exports = authMiddleware;
-module.exports.authMiddleware = authMiddleware;
-module.exports.verifyToken = AuthorizationGuard.authenticateToken.bind(AuthorizationGuard);
-module.exports.checkRole = (roles) => AuthorizationGuard.requireRole(roles);
-module.exports.checkPermission = (permission) => AuthorizationGuard.requirePermission(permission);
+// Role-based access control middleware
+const roleMiddleware = (allowedRoles) => {
+  return AuthorizationGuard.requireRole(allowedRoles);
+};
+
+// Permission-based access control middleware
+const permissionMiddleware = (requiredPermission) => {
+  return AuthorizationGuard.requirePermission(requiredPermission);
+};
+
+// Export all middleware functions
+module.exports = {
+  authMiddleware,
+  roleMiddleware,
+  permissionMiddleware,
+  verifyToken: AuthorizationGuard.authenticateToken.bind(AuthorizationGuard),
+  checkRole: roleMiddleware,
+  checkPermission: permissionMiddleware,
+};
+
+// Default export for backward compatibility
+module.exports.default = authMiddleware;

@@ -1,4 +1,3 @@
-
 # 📚 سجل شامل لمسارات API - MyNet.tn
 
 **آخر تحديث:** 2025-01-04  
@@ -173,6 +172,44 @@
 - **GET** `/tender/:id` - توضيحات عطاء
 - **POST** `/` - طلب توضيح
 - **POST** `/:id/respond` - الرد على توضيح
+
+## 📋 Clarification Endpoints
+
+### Create Clarification Request
+- **Endpoint**: `POST /api/clarifications/offers/:offerId/clarification`
+- **Role**: Buyer
+- **Middleware**: `authMiddleware`, `roleMiddleware(['buyer'])`, `validateSchema`
+- **Request Body**: 
+  ```json
+  {
+    "question": "string (required)"
+  }
+  ```
+- **Response**: Clarification object with status 201
+
+### Get Received Clarifications
+- **Endpoint**: `GET /api/clarifications/received`
+- **Role**: Supplier
+- **Middleware**: `authMiddleware`, `roleMiddleware(['supplier'])`
+- **Response**: Array of clarification requests
+
+### Get Clarification by ID
+- **Endpoint**: `GET /api/clarifications/:clarificationId`
+- **Role**: Authenticated (Buyer or Supplier)
+- **Middleware**: `authMiddleware`
+- **Response**: Single clarification object
+
+### Respond to Clarification
+- **Endpoint**: `POST /api/clarifications/:clarificationId/respond`
+- **Role**: Supplier
+- **Middleware**: `authMiddleware`, `roleMiddleware(['supplier'])`, `validateSchema`
+- **Request Body**:
+  ```json
+  {
+    "response": "string (required)"
+  }
+  ```
+- **Response**: Updated clarification object
 
 ---
 

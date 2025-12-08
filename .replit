@@ -254,7 +254,7 @@ mode = "parallel"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "cd backend && node server.js"
+args = "cd backend && npm install --silent && node server.js"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"

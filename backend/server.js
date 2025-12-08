@@ -45,6 +45,18 @@ async function startServer() {
     console.log('🚀 MyNet.tn Backend Starting...');
     console.log('========================================');
 
+    // Check if node_modules exists
+    const fs = require('fs');
+    const path = require('path');
+    const nodeModulesPath = path.join(__dirname, 'node_modules');
+    
+    if (!fs.existsSync(nodeModulesPath)) {
+      console.log('⚠️ Installing dependencies...');
+      const { execSync } = require('child_process');
+      execSync('npm install', { stdio: 'inherit', cwd: __dirname });
+      console.log('✅ Dependencies installed');
+    }
+
     // Bootstrap DI Container
     const { bootstrap } = require('./core/bootstrap');
     await bootstrap();

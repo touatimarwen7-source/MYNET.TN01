@@ -46,12 +46,34 @@ class SupplierTeamManagementService {
         return { success: false, error: 'Email already exists in team' };
       }
 
+      // Set default permissions based on role
+      const defaultPermissions = role === 'manager' 
+        ? {
+            view_dashboard: true,
+            view_tender: true,
+            submit_offer: true,
+            view_offer: true,
+            view_purchase_order: true,
+            view_reports: true,
+            export_data: true,
+            manage_team: true,
+            approve_offer: true
+          }
+        : {
+            view_dashboard: true,
+            view_tender: true,
+            view_offer: true,
+            view_purchase_order: true
+          };
+
+      const finalPermissions = permissions || defaultPermissions;
+
       const result = await pool.query(
         `INSERT INTO supplier_team_members 
          (supplier_id, email, full_name, role, permissions, department, position, is_active)
          VALUES ($1, $2, $3, $4, $5, $6, $7, true)
          RETURNING *`,
-        [supplierId, email, full_name, role, JSON.stringify(permissions || {}), department, position]
+        [supplierId, email, full_name, role, JSON.stringify(finalPermissions), department, position]
       );
 
       logger.info('Supplier team member added', { supplierId, email });

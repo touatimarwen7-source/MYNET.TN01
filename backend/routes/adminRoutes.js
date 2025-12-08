@@ -8,8 +8,6 @@ const AdminController = require('../controllers/admin/AdminController');
 const authMiddleware = require('../middleware/authMiddleware');
 const adminMiddleware = require('../middleware/adminMiddleware');
 const { validatePagination } = require('../middleware/paginationValidator');
-const AuthorizationGuard = require('../security/AuthorizationGuard');
-const { Roles } = require('../config/Roles');
 
 // Toutes les routes d'administration sont protégées
 router.use(authMiddleware.verifyToken);

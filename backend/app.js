@@ -15,7 +15,7 @@ const companyProfileRoutes = require('./routes/companyProfileRoutes');
 const directSupplyRoutes = require('./routes/directSupplyRoutes');
 const reviewsRoutes = require('./routes/reviewsRoutes');
 const messagesRoutes = require('./routes/messagesRoutes');
-const purchaseOrdersRoutes = require('./routes/purchaseOrdersRoutes');
+// Purchase orders gérés via procurement workflow
 const auditLogsRoutes = require('./routes/auditLogsRoutes');
 const subscriptionRoutes = require('./routes/subscriptionRoutes');
 const tenderHistoryRoutes = require('./routes/tenderHistoryRoutes');

@@ -295,10 +295,7 @@ function AppContent() {
                         />
 
                         {/* Buyer - Financial */}
-                        <Route
-                          path="/invoices"
-                          element={user?.role === 'buyer' ? <InvoiceManagement /> : <Navigate to="/dashboard" />}
-                        />
+                        {/* Invoices gérés via workflow direct */}
                         <Route
                           path="/budgets"
                           element={user?.role === 'buyer' ? <BudgetManagement /> : <Navigate to="/dashboard" />}
@@ -327,10 +324,7 @@ function AppContent() {
                           path="/disputes"
                           element={user?.role === 'buyer' ? <DisputeManagement /> : <Navigate to="/dashboard" />}
                         />
-                        <Route
-                          path="/invoice-generation"
-                          element={user?.role === 'buyer' ? <InvoiceGeneration /> : <Navigate to="/dashboard" />}
-                        />
+                        
                         <Route
                           path="/monitoring-submissions"
                           element={user?.role === 'buyer' ? <MonitoringSubmissions /> : <Navigate to="/dashboard" />}
@@ -393,19 +387,7 @@ function AppContent() {
                           element={user?.role === 'supplier' ? <SupplierAnalytics /> : <Navigate to="/dashboard" />}
                         />
 
-                        {/* ========== Purchase Orders ========== */}
-                        <Route
-                          path="/purchase-orders"
-                          element={user ? <PurchaseOrders /> : <Navigate to="/login" />}
-                        />
-                        <Route
-                          path="/po-management"
-                          element={user?.role === 'buyer' ? <POManagement /> : <Navigate to="/dashboard" />}
-                        />
-                        <Route
-                          path="/po-detail/:id"
-                          element={user?.role === 'buyer' ? <PODetail /> : <Navigate to="/dashboard" />}
-                        />
+                        {/* Purchase Orders gérés via workflow direct buyer-supplier */}
 
                         {/* ========== Reviews & Ratings ========== */}
                         <Route

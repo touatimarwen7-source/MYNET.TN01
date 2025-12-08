@@ -300,57 +300,7 @@ router.post(
   OfferController.rejectOffer.bind(OfferController)
 );
 
-// Invoices
-router.post(
-  '/invoices',
-  AuthorizationGuard.authenticateToken.bind(AuthorizationGuard),
-  AuthorizationGuard.requirePermission(Permissions.CREATE_INVOICE).bind(AuthorizationGuard),
-  InvoiceController.createInvoice.bind(InvoiceController)
-);
-
-router.get(
-  '/invoices',
-  AuthorizationGuard.authenticateToken.bind(AuthorizationGuard),
-  AuthorizationGuard.requirePermission(Permissions.VIEW_INVOICE).bind(AuthorizationGuard),
-  async (req, res) => {
-    try {
-      const { page, limit } = getPaginationParams(req);
-      const userId = req.user?.id;
-      const pool = getPool();
-
-      const totalResult = await pool.query(
-        `SELECT COUNT(*) FROM invoices WHERE (supplier_id = $1 OR buyer_id = $1) AND is_deleted = FALSE`,
-        [userId]
-      );
-      const total = parseInt(totalResult.rows[0].count);
-
-      const offset = (page - 1) * limit;
-      const result = await pool.query(
-        `SELECT id, invoice_number, po_id, amount, tax_amount, status, created_at
-           FROM invoices
-           WHERE (supplier_id = $1 OR buyer_id = $1) AND is_deleted = FALSE
-           ORDER BY created_at DESC LIMIT $2 OFFSET $3`,
-        [userId, limit, offset]
-      );
-
-      res.json({
-        invoices: result.rows,
-        pagination: { page, limit, total, pages: Math.ceil(total / limit) },
-      });
-    } catch (error) {
-      // Using the unified handleError which now uses errorResponse
-      handleError(res, error, 500);
-    }
-  }
-);
-
-router.patch(
-  '/invoices/:id/paid',
-  validateIdMiddleware('id'),
-  AuthorizationGuard.authenticateToken.bind(AuthorizationGuard),
-  AuthorizationGuard.requirePermission(Permissions.MARK_INVOICE_AS_PAID).bind(AuthorizationGuard),
-  InvoiceController.markAsPaid.bind(InvoiceController)
-);
+// Purchase Orders et Invoices sont gérés dans le workflow direct entre buyers et suppliers
 
 // Tender Award - Partial/Multi-Supplier Award
 router.post(

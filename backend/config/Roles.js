@@ -3,8 +3,6 @@ const Roles = {
   ADMIN: 'admin', // مساعد إداري - يُنشأ بواسطة super_admin بصلاحيات محددة
   BUYER: 'buyer', // المشتري - يُنشئ المناقصات
   SUPPLIER: 'supplier', // المزود - يقدم العروض
-  ACCOUNTANT: 'accountant', // المحاسب (دور إضافي)
-  VIEWER: 'viewer', // مراقب (دور إضافي)
 };
 
 const Permissions = {
@@ -36,7 +34,6 @@ const Permissions = {
   // Purchase Orders
   CREATE_PURCHASE_ORDER: 'create_purchase_order',
   VIEW_PURCHASE_ORDER: 'view_purchase_order',
-  MANAGE_INVOICES: 'manage_invoices',
 
   // Reports & Data
   VIEW_REPORTS: 'view_reports',
@@ -74,21 +71,6 @@ const RolePermissions = {
     Permissions.SUBMIT_OFFER,
     Permissions.VIEW_OFFER,
     Permissions.VIEW_PURCHASE_ORDER,
-  ],
-  [Roles.ACCOUNTANT]: [
-    Permissions.VIEW_DASHBOARD,
-    Permissions.VIEW_TENDER,
-    Permissions.VIEW_OFFER,
-    Permissions.VIEW_PURCHASE_ORDER,
-    Permissions.MANAGE_INVOICES,
-    Permissions.VIEW_REPORTS,
-  ],
-  [Roles.VIEWER]: [
-    Permissions.VIEW_DASHBOARD,
-    Permissions.VIEW_TENDER,
-    Permissions.VIEW_OFFER,
-    Permissions.VIEW_PURCHASE_ORDER,
-    Permissions.VIEW_REPORTS,
   ],
 };
 

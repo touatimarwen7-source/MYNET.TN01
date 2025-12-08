@@ -40,17 +40,5 @@ export const procurementAPI = {
   updateSupplyRequest: (id, data) => axiosInstance.put(`/procurement/supply-requests/${id}`, data),
   getMySupplyRequests: () => axiosInstance.get('/procurement/my-supply-requests'),
 
-  // Invoice endpoints
-  getInvoices: (filters) => axiosInstance.get('/procurement/invoices', { params: filters }),
-  getInvoice: (id) => axiosInstance.get(`/procurement/invoices/${id}`),
-  createInvoice: (data) => axiosInstance.post('/procurement/invoices', data),
-  updateInvoice: (id, data) => axiosInstance.put(`/procurement/invoices/${id}`, data),
-  getMyInvoices: () => axiosInstance.get('/procurement/my-invoices'),
-  approveInvoice: (id, data) => axiosInstance.post(`/procurement/invoices/${id}/approve`, data),
-
-  // Purchase Orders endpoints
-  getPurchaseOrders: (filters) =>
-    axiosInstance.get('/procurement/purchase-orders', { params: filters }),
-  getPurchaseOrder: (id) => axiosInstance.get(`/procurement/purchase-orders/${id}`),
-  getMyPurchaseOrders: () => axiosInstance.get('/procurement/my-purchase-orders'),
+  // Invoices et Purchase Orders gérés via workflow direct entre buyer et supplier
 };

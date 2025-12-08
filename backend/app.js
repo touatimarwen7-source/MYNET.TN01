@@ -351,7 +351,7 @@ app.use('/api/backups', backupRoutes);
 app.use('/api/auth/password-reset', passwordResetRoutes);
 
 // 📋 TENDER INQUIRIES & ADDENDA ROUTES
-app.use('/api', inquiryRoutes);
+app.use('/api/inquiries', inquiryRoutes);
 
 // 📊 OFFER OPENING & EVALUATION ROUTES
 app.use('/api/evaluation', offerEvaluationRoutes);
@@ -362,6 +362,22 @@ app.use('/api/tender-management', tenderManagementRoutes);
 // 🤖 AI RECOMMENDATIONS & ADVANCED ANALYTICS ROUTES
 const aiRecommendationsRoutes = require('./routes/aiRecommendationsRoutes');
 app.use('/api/ai/recommendations', aiRecommendationsRoutes);
+
+// 📋 CLARIFICATION ROUTES (مسارات الاستفسارات)
+const clarificationRoutes = require('./routes/clarificationRoutes');
+app.use('/api/clarifications', clarificationRoutes);
+
+// 🏅 PARTIAL AWARD ROUTES (مسارات الترسية الجزئية)
+const partialAwardRoutes = require('./routes/partialAwardRoutes');
+app.use('/api/partial-awards', partialAwardRoutes);
+
+// ⚡ PERFORMANCE MONITORING ROUTES (مراقبة الأداء)
+const performanceRoutes = require('./routes/performanceRoutes');
+app.use('/api/performance', performanceRoutes);
+
+// 💾 CACHE MANAGEMENT ROUTES (إدارة الذاكرة المؤقتة)
+const cachingRoutes = require('./routes/cachingRoutes');
+app.use('/api/cache', cachingRoutes);
 
 // Initialize email service
 initializeEmailService();

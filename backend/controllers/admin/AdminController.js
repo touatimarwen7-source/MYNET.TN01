@@ -510,6 +510,149 @@ class AdminController {
       });
     }
   }
+
+  /**
+   * Get user details
+   */
+  async getUserDetails(req, res) {
+    try {
+      const { userId } = req.params;
+      const pool = getPool();
+      
+      const result = await pool.query(
+        'SELECT id, email, role, is_verified, created_at FROM users WHERE id = $1 AND is_deleted = FALSE',
+        [userId]
+      );
+      
+      if (result.rows.length === 0) {
+        return res.status(404).json({
+          success: false,
+          error: 'User not found'
+        });
+      }
+      
+      res.json({
+        success: true,
+        data: result.rows[0]
+      });
+    } catch (error) {
+      logger.error('Get user details error:', error);
+      res.status(500).json({
+        success: false,
+        error: 'Failed to fetch user details'
+      });
+    }
+  }
+
+  /**
+   * Update user role
+   */
+  async updateUserRole(req, res) {
+    try {
+      const { userId } = req.params;
+      const { role } = req.body;
+      const pool = getPool();
+      
+      await pool.query(
+        'UPDATE users SET role = $1, updated_at = CURRENT_TIMESTAMP WHERE id = $2',
+        [role, userId]
+      );
+      
+      res.json({
+        success: true,
+        message: 'User role updated successfully'
+      });
+    } catch (error) {
+      logger.error('Update user role error:', error);
+      res.status(500).json({
+        success: false,
+        error: 'Failed to update user role'
+      });
+    }
+  }
+
+  /**
+   * Block user
+   */
+  async blockUser(req, res) {
+    try {
+      const { userId } = req.params;
+      const pool = getPool();
+      
+      await pool.query(
+        'UPDATE users SET is_active = FALSE, updated_at = CURRENT_TIMESTAMP WHERE id = $1',
+        [userId]
+      );
+      
+      res.json({
+        success: true,
+        message: 'User blocked successfully'
+      });
+    } catch (error) {
+      logger.error('Block user error:', error);
+      res.status(500).json({
+        success: false,
+        error: 'Failed to block user'
+      });
+    }
+  }
+
+  /**
+   * Unblock user
+   */
+  async unblockUser(req, res) {
+    try {
+      const { userId } = req.params;
+      const pool = getPool();
+      
+      await pool.query(
+        'UPDATE users SET is_active = TRUE, updated_at = CURRENT_TIMESTAMP WHERE id = $1',
+        [userId]
+      );
+      
+      res.json({
+        success: true,
+        message: 'User unblocked successfully'
+      });
+    } catch (error) {
+      logger.error('Unblock user error:', error);
+      res.status(500).json({
+        success: false,
+        error: 'Failed to unblock user'
+      });
+    }
+  }
+
+  /**
+   * Reset user password
+   */
+  async resetUserPassword(req, res) {
+    try {
+      const { userId } = req.params;
+      const bcrypt = require('bcryptjs');
+      const pool = getPool();
+      
+      const newPassword = Math.random().toString(36).slice(-8);
+      const hashedPassword = await bcrypt.hash(newPassword, 10);
+      
+      await pool.query(
+        'UPDATE users SET password = $1, updated_at = CURRENT_TIMESTAMP WHERE id = $2',
+        [hashedPassword, userId]
+      );
+      
+      res.json({
+        success: true,
+        message: 'Password reset successfully',
+        data: { temporaryPassword: newPassword }
+      });
+    } catch (error) {
+      logger.error('Reset password error:', error);
+      res.status(500).json({
+        success: false,
+        error: 'Failed to reset password'
+      });
+    }
+  }
 }
 
 module.exports = new AdminController();

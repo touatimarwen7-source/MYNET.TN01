@@ -1,3 +1,4 @@
+
 /**
  * 🛡️ SAFE QUERY MIDDLEWARE
  * Prevents connection leaks by wrapping pool queries
@@ -5,6 +6,7 @@
  */
 
 const { getPool } = require('../config/db');
+const { logger } = require('../utils/logger');
 
 /**
  * Wrapper for pool.query() that ensures safe connection handling
@@ -21,18 +23,19 @@ async function safeQuery(query, params = []) {
     const result = await client.query(query, params);
     return result;
   } catch (error) {
-    // Log error but don't crash
-    // Error tracking removed;
+    logger.error('SAFE_QUERY_ERROR', { 
+      error: error.message, 
+      query: query.substring(0, 100) 
+    });
     throw error;
   } finally {
     if (client) {
       try {
-        // Safe release - check if client is valid before releasing
         if (typeof client.release === 'function') {
           client.release();
         }
       } catch (releaseErr) {
-        // Silently ignore release errors
+        logger.error('CLIENT_RELEASE_ERROR', { error: releaseErr.message });
       }
     }
   }
@@ -43,16 +46,16 @@ async function safeQuery(query, params = []) {
  * @param {Pool} pool - PostgreSQL pool instance
  */
 function augmentPoolWithSafeMethods(pool) {
-  // Store original query method
   const originalQuery = pool.query.bind(pool);
 
-  // Override with safer version
   pool.query = async function (query, params) {
     try {
-      // Use pool's built-in query which doesn't require explicit connection
       return await originalQuery(query, params);
     } catch (error) {
-      // Error tracking removed;
+      logger.error('POOL_QUERY_ERROR', { 
+        error: error.message,
+        query: query?.substring?.(0, 100) || 'N/A'
+      });
       throw error;
     }
   };
@@ -75,14 +78,21 @@ function safeQueryMiddleware(req, res, next) {
       client = await pool.connect();
       const result = await client.query(query, params);
       return result;
+    } catch (error) {
+      logger.error('REQ_SAFE_QUERY_ERROR', { 
+        error: error.message,
+        path: req.path,
+        method: req.method
+      });
+      throw error;
     } finally {
       if (client) {
         try {
           if (typeof client.release === 'function') {
             client.release();
           }
-        } catch (err) {
-          // Ignore release errors
+        } catch (releaseErr) {
+          logger.error('REQ_CLIENT_RELEASE_ERROR', { error: releaseErr.message });
         }
       }
     }
@@ -91,8 +101,66 @@ function safeQueryMiddleware(req, res, next) {
   next();
 }
 
+/**
+ * Transaction wrapper with automatic retry
+ * @param {Function} callback - Transaction callback
+ * @param {number} maxRetries - Maximum retry attempts
+ */
+async function safeTransaction(callback, maxRetries = 2) {
+  const pool = getPool();
+  let lastError;
+
+  for (let attempt = 0; attempt <= maxRetries; attempt++) {
+    let client;
+    let isReleased = false;
+
+    try {
+      client = await pool.connect();
+      
+      await client.query('BEGIN ISOLATION LEVEL READ COMMITTED');
+      const result = await callback(client);
+      await client.query('COMMIT');
+      
+      return result;
+    } catch (error) {
+      lastError = error;
+      
+      if (client) {
+        try {
+          await client.query('ROLLBACK');
+        } catch (rollbackErr) {
+          logger.error('TRANSACTION_ROLLBACK_ERROR', { error: rollbackErr.message });
+        }
+      }
+
+      // Retry on deadlock or serialization failure
+      if (
+        attempt < maxRetries &&
+        (error.code === '40P01' || error.code === '40001')
+      ) {
+        await new Promise((resolve) => setTimeout(resolve, 100 * (attempt + 1)));
+        continue;
+      }
+
+      throw error;
+    } finally {
+      if (client && !isReleased) {
+        try {
+          isReleased = true;
+          client.release();
+        } catch (releaseErr) {
+          logger.error('TRANSACTION_CLIENT_RELEASE_ERROR', { error: releaseErr.message });
+        }
+      }
+    }
+  }
+
+  throw lastError;
+}
+
 module.exports = {
   safeQuery,
   augmentPoolWithSafeMethods,
   safeQueryMiddleware,
+  safeTransaction,
 };

@@ -21,12 +21,15 @@ const { getPool } = require('../config/db');
  */
 async function withTransaction(callback) {
   const pool = getPool();
-  const client = await pool.connect();
+  let client;
   let isReleased = false;
 
   try {
-    // Start transaction
-    await client.query('BEGIN');
+    // Get client from pool
+    client = await pool.connect();
+    
+    // Start transaction with isolation level
+    await client.query('BEGIN ISOLATION LEVEL READ COMMITTED');
 
     // Execute callback operations
     const result = await callback(client);
@@ -37,18 +40,24 @@ async function withTransaction(callback) {
     return result;
   } catch (error) {
     // Rollback on any error
-    try {
-      await client.query('ROLLBACK');
-    } catch (rollbackErr) {}
+    if (client) {
+      try {
+        await client.query('ROLLBACK');
+      } catch (rollbackErr) {
+        // Log rollback failure but continue
+        console.error('Rollback failed:', rollbackErr.message);
+      }
+    }
     throw error;
   } finally {
     // Always release client safely (only once)
-    if (!isReleased) {
+    if (client && !isReleased) {
       try {
         isReleased = true;
         client.release();
       } catch (releaseErr) {
-        // Continue anyway - connection will be garbage collected
+        // Log but don't throw - connection will be garbage collected
+        console.error('Client release failed:', releaseErr.message);
       }
     }
   }

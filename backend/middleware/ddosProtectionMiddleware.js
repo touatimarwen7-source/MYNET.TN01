@@ -1,11 +1,13 @@
+
 /**
  * DDoS Protection & Advanced Rate Limiting Middleware
- * Prevents distributed denial of service attacks
+ * Uses Redis for distributed state management
  */
 
 const rateLimit = require('express-rate-limit');
 const { REQUEST_SIZE_LIMIT } = require('../config/appConstants');
 const { logger } = require('../utils/logger');
+const { getCacheManager } = require('../utils/redisCache');
 
 /**
  * Strict rate limiter for sensitive endpoints
@@ -16,7 +18,7 @@ const sensitiveEndpointLimiter = rateLimit({
   message: 'Too many attempts, please try again later',
   standardHeaders: true,
   legacyHeaders: false,
-  skip: (req) => req.user?.isAdmin === true, // Skip for admins
+  skip: (req) => req.user?.isAdmin === true,
 });
 
 /**
@@ -54,45 +56,49 @@ const uploadLimiter = rateLimit({
 });
 
 /**
- * Global DDoS protection middleware
+ * Global DDoS protection middleware using Redis
  */
-function ddosProtectionMiddleware(req, res, next) {
-  // Track request rate by IP
+async function ddosProtectionMiddleware(req, res, next) {
   const ip = req.ip || req.connection.remoteAddress;
   const path = req.path;
+  const cacheManager = getCacheManager();
 
-  // Store request timestamp
-  if (!req.app.locals.requestTimestamps) {
-    req.app.locals.requestTimestamps = new Map();
+  try {
+    const key = `ddos:${ip}:${path}`;
+    const now = Date.now();
+    
+    // Get request timestamps from Redis
+    let timestamps = await cacheManager.get(key) || [];
+    
+    // Filter recent requests (last 60 seconds)
+    const recentRequests = timestamps.filter((t) => now - t < 60000);
+
+    // DDoS detection: More than 100 requests from same IP in 60s
+    if (recentRequests.length > 100) {
+      logger.warn('DDOS_ATTACK_DETECTED', { ip, path, requestCount: recentRequests.length });
+      return res.status(429).json({
+        success: false,
+        error: {
+          message: 'Too many requests. Access temporarily blocked.',
+          code: 'DDOS_PROTECTION_ACTIVE',
+        },
+      });
+    }
+
+    // Add current timestamp and save to Redis with 60s TTL
+    recentRequests.push(now);
+    await cacheManager.set(key, recentRequests, 60);
+
+    next();
+  } catch (error) {
+    // On Redis failure, fallback to allowing request but log error
+    logger.error('DDOS_PROTECTION_ERROR', { error: error.message, ip, path });
+    next();
   }
-
-  const key = `${ip}:${path}`;
-  const timestamps = req.app.locals.requestTimestamps.get(key) || [];
-
-  const now = Date.now();
-  const recentRequests = timestamps.filter((t) => now - t < 60000); // Last 60 seconds
-
-  // DDoS detection: More than 100 requests from same IP in 60s
-  if (recentRequests.length > 100) {
-    logger.warn('DDOS_ATTACK_DETECTED', { ip, path, requestCount: recentRequests.length });
-    return res.status(429).json({
-      success: false,
-      error: {
-        message: 'Too many requests. Access temporarily blocked.',
-        code: 'DDOS_PROTECTION_ACTIVE',
-      },
-    });
-  }
-
-  recentRequests.push(now);
-  req.app.locals.requestTimestamps.set(key, recentRequests);
-
-  next();
 }
 
 /**
- * Exponential backoff rate limiter
- * Increases wait time with each failed attempt
+ * Exponential backoff rate limiter using Redis
  */
 function exponentialBackoffLimiter(options = {}) {
   const {
@@ -102,36 +108,41 @@ function exponentialBackoffLimiter(options = {}) {
     maxAttempts = 10,
   } = options;
 
-  const attempts = new Map();
-
-  return (req, res, next) => {
-    const key = req.ip;
+  return async (req, res, next) => {
+    const key = `backoff:${req.ip}`;
     const now = Date.now();
+    const cacheManager = getCacheManager();
 
-    let attemptData = attempts.get(key);
-    if (!attemptData || now - attemptData.resetTime > windowMs) {
-      attemptData = { count: 0, resetTime: now };
+    try {
+      let attemptData = await cacheManager.get(key);
+      
+      if (!attemptData || now - attemptData.resetTime > windowMs) {
+        attemptData = { count: 0, resetTime: now };
+      }
+
+      attemptData.count++;
+
+      if (attemptData.count > maxAttempts) {
+        const delay = Math.min(baseDelay * Math.pow(2, attemptData.count - maxAttempts), maxDelay);
+
+        res.set('Retry-After', Math.ceil(delay / 1000));
+
+        return res.status(429).json({
+          success: false,
+          error: {
+            message: `Too many attempts. Please wait ${Math.ceil(delay / 1000)} seconds`,
+            code: 'RATE_LIMIT_EXCEEDED',
+            retryAfter: Math.ceil(delay / 1000),
+          },
+        });
+      }
+
+      await cacheManager.set(key, attemptData, Math.ceil(windowMs / 1000));
+      next();
+    } catch (error) {
+      logger.error('BACKOFF_LIMITER_ERROR', { error: error.message });
+      next();
     }
-
-    attemptData.count++;
-
-    if (attemptData.count > maxAttempts) {
-      const delay = Math.min(baseDelay * Math.pow(2, attemptData.count - maxAttempts), maxDelay);
-
-      res.set('Retry-After', Math.ceil(delay / 1000));
-
-      return res.status(429).json({
-        success: false,
-        error: {
-          message: `Too many attempts. Please wait ${Math.ceil(delay / 1000)} seconds`,
-          code: 'RATE_LIMIT_EXCEEDED',
-          retryAfter: Math.ceil(delay / 1000),
-        },
-      });
-    }
-
-    attempts.set(key, attemptData);
-    next();
   };
 }
 

@@ -1,35 +1,48 @@
-
 const express = require('express');
 const router = express.Router();
-const authMiddleware = require('../middleware/authMiddleware');
+const { verifyToken } = require('../middleware/authMiddleware'); // Changed middleware
 const { validateIdMiddleware } = require('../middleware/validateIdMiddleware');
 const cacheMiddleware = require('../middleware/cacheMiddleware');
 const AIRecommendationService = require('../services/AIRecommendationService');
 const AdvancedAnalyticsService = require('../services/AdvancedAnalyticsService');
+const { getPool } = require('../config/db'); // Added import for connection pooling
 
 // Get supplier recommendations for a tender
 router.get(
   '/suppliers/:tenderId',
-  authMiddleware,
+  verifyToken, // Changed middleware to verifyToken
   validateIdMiddleware('tenderId'),
   cacheMiddleware(300), // 5 minutes cache
   async (req, res) => {
+    const pool = getPool(); // Get the connection pool
+    let client; // Declare client variable
     try {
+      client = await pool.connect(); // Acquire a client from the pool
       const { tenderId } = req.params;
-      const db = req.app.get('db');
 
+      // Assuming AIRecommendationService.recommendSuppliersForTender can accept a client
+      // and that it will internally use pool.query() or similar, which the client handles.
       const recommendations = await AIRecommendationService.recommendSuppliersForTender(
-        db,
+        client, // Pass the client to the service
         tenderId
       );
 
       res.json(recommendations);
     } catch (error) {
       console.error('Supplier Recommendations Error:', error);
-      res.status(500).json({ 
+      res.status(500).json({
         error: 'Échec de la génération des recommandations',
-        message: error.message 
+        message: error.message
       });
+    } finally {
+      if (client) {
+        try {
+          client.release(); // Ensure the client is always released
+        } catch (releaseErr) {
+          // Silently handle release errors to avoid masking original error
+          console.error('Error releasing client:', releaseErr);
+        }
+      }
     }
   }
 );
@@ -37,25 +50,37 @@ router.get(
 // Get tender recommendations for a supplier
 router.get(
   '/tenders',
-  authMiddleware,
+  verifyToken, // Changed middleware to verifyToken for consistency
   cacheMiddleware(600), // 10 minutes cache
   async (req, res) => {
+    const pool = getPool(); // Get the connection pool
+    let client; // Declare client variable
     try {
+      client = await pool.connect(); // Acquire a client from the pool
       const supplierId = req.user.id;
-      const db = req.app.get('db');
 
+      // Assuming AIRecommendationService.recommendTendersForSupplier can accept a client
       const recommendations = await AIRecommendationService.recommendTendersForSupplier(
-        db,
+        client, // Pass the client
         supplierId
       );
 
       res.json(recommendations);
     } catch (error) {
       console.error('Tender Recommendations Error:', error);
-      res.status(500).json({ 
+      res.status(500).json({
         error: 'Échec de la génération des recommandations',
-        message: error.message 
+        message: error.message
       });
+    } finally {
+      if (client) {
+        try {
+          client.release(); // Ensure the client is always released
+        } catch (releaseErr) {
+          // Silently handle release errors
+          console.error('Error releasing client:', releaseErr);
+        }
+      }
     }
   }
 );
@@ -63,22 +88,33 @@ router.get(
 // Get market trends
 router.get(
   '/market/trends',
-  authMiddleware,
+  verifyToken, // Changed middleware to verifyToken
   cacheMiddleware(1800), // 30 minutes cache
   async (req, res) => {
+    const pool = getPool(); // Get the connection pool
+    let client; // Declare client variable
     try {
+      client = await pool.connect(); // Acquire a client from the pool
       const { period = '30 days' } = req.query;
-      const db = req.app.get('db');
 
-      const trends = await AdvancedAnalyticsService.getMarketTrends(db, period);
+      const trends = await AdvancedAnalyticsService.getMarketTrends(client, period); // Pass the client
 
       res.json(trends);
     } catch (error) {
       console.error('Market Trends Error:', error);
-      res.status(500).json({ 
+      res.status(500).json({
         error: 'Échec de l\'analyse des tendances',
-        message: error.message 
+        message: error.message
       });
+    } finally {
+      if (client) {
+        try {
+          client.release(); // Ensure the client is always released
+        } catch (releaseErr) {
+          // Silently handle release errors
+          console.error('Error releasing client:', releaseErr);
+        }
+      }
     }
   }
 );
@@ -86,17 +122,19 @@ router.get(
 // Get optimal bid prediction
 router.get(
   '/predict/bid/:tenderId',
-  authMiddleware,
+  verifyToken, // Changed middleware to verifyToken
   validateIdMiddleware('tenderId'),
   cacheMiddleware(300),
   async (req, res) => {
+    const pool = getPool(); // Get the connection pool
+    let client; // Declare client variable
     try {
+      client = await pool.connect(); // Acquire a client from the pool
       const { tenderId } = req.params;
       const supplierId = req.user.id;
-      const db = req.app.get('db');
 
       const prediction = await AdvancedAnalyticsService.predictOptimalBid(
-        db,
+        client, // Pass the client
         tenderId,
         supplierId
       );
@@ -104,10 +142,19 @@ router.get(
       res.json(prediction);
     } catch (error) {
       console.error('Bid Prediction Error:', error);
-      res.status(500).json({ 
+      res.status(500).json({
         error: 'Échec de la prédiction',
-        message: error.message 
+        message: error.message
       });
+    } finally {
+      if (client) {
+        try {
+          client.release(); // Ensure the client is always released
+        } catch (releaseErr) {
+          // Silently handle release errors
+          console.error('Error releasing client:', releaseErr);
+        }
+      }
     }
   }
 );
@@ -115,17 +162,19 @@ router.get(
 // Get similar tenders
 router.get(
   '/similar/:tenderId',
-  authMiddleware,
+  verifyToken, // Changed middleware to verifyToken
   validateIdMiddleware('tenderId'),
   cacheMiddleware(600),
   async (req, res) => {
+    const pool = getPool(); // Get the connection pool
+    let client; // Declare client variable
     try {
+      client = await pool.connect(); // Acquire a client from the pool
       const { tenderId } = req.params;
       const { limit = 5 } = req.query;
-      const db = req.app.get('db');
 
       const similar = await AIRecommendationService.getSimilarTenders(
-        db,
+        client, // Pass the client
         tenderId,
         parseInt(limit)
       );
@@ -133,10 +182,19 @@ router.get(
       res.json(similar);
     } catch (error) {
       console.error('Similar Tenders Error:', error);
-      res.status(500).json({ 
+      res.status(500).json({
         error: 'Échec de la récupération des appels d\'offres similaires',
-        message: error.message 
+        message: error.message
       });
+    } finally {
+      if (client) {
+        try {
+          client.release(); // Ensure the client is always released
+        } catch (releaseErr) {
+          // Silently handle release errors
+          console.error('Error releasing client:', releaseErr);
+        }
+      }
     }
   }
 );
@@ -144,15 +202,17 @@ router.get(
 // Get top suppliers
 router.get(
   '/top-suppliers',
-  authMiddleware,
+  verifyToken, // Changed middleware to verifyToken
   cacheMiddleware(1800),
   async (req, res) => {
+    const pool = getPool(); // Get the connection pool
+    let client; // Declare client variable
     try {
+      client = await pool.connect(); // Acquire a client from the pool
       const { category, limit = 10 } = req.query;
-      const db = req.app.get('db');
 
       const suppliers = await AIRecommendationService.getTopSuppliers(
-        db,
+        client, // Pass the client
         category,
         parseInt(limit)
       );
@@ -160,10 +220,19 @@ router.get(
       res.json(suppliers);
     } catch (error) {
       console.error('Top Suppliers Error:', error);
-      res.status(500).json({ 
+      res.status(500).json({
         error: 'Échec de la récupération des meilleurs fournisseurs',
-        message: error.message 
+        message: error.message
       });
+    } finally {
+      if (client) {
+        try {
+          client.release(); // Ensure the client is always released
+        } catch (releaseErr) {
+          // Silently handle release errors
+          console.error('Error releasing client:', releaseErr);
+        }
+      }
     }
   }
 );
@@ -171,17 +240,19 @@ router.get(
 // Get supplier performance
 router.get(
   '/supplier-performance/:supplierId',
-  authMiddleware,
+  verifyToken, // Changed middleware to verifyToken
   validateIdMiddleware('supplierId'),
   cacheMiddleware(900),
   async (req, res) => {
+    const pool = getPool(); // Get the connection pool
+    let client; // Declare client variable
     try {
+      client = await pool.connect(); // Acquire a client from the pool
       const { supplierId } = req.params;
       const { period = '6 months' } = req.query;
-      const db = req.app.get('db');
 
       const performance = await AdvancedAnalyticsService.getSupplierPerformance(
-        db,
+        client, // Pass the client
         supplierId,
         period
       );
@@ -189,10 +260,19 @@ router.get(
       res.json(performance);
     } catch (error) {
       console.error('Supplier Performance Error:', error);
-      res.status(500).json({ 
+      res.status(500).json({
         error: 'Échec de l\'analyse de performance',
-        message: error.message 
+        message: error.message
       });
+    } finally {
+      if (client) {
+        try {
+          client.release(); // Ensure the client is always released
+        } catch (releaseErr) {
+          // Silently handle release errors
+          console.error('Error releasing client:', releaseErr);
+        }
+      }
     }
   }
 );
@@ -200,21 +280,32 @@ router.get(
 // Get category statistics
 router.get(
   '/category-stats',
-  authMiddleware,
+  verifyToken, // Changed middleware to verifyToken
   cacheMiddleware(3600),
   async (req, res) => {
+    const pool = getPool(); // Get the connection pool
+    let client; // Declare client variable
     try {
-      const db = req.app.get('db');
+      client = await pool.connect(); // Acquire a client from the pool
 
-      const stats = await AdvancedAnalyticsService.getCategoryStats(db);
+      const stats = await AdvancedAnalyticsService.getCategoryStats(client); // Pass the client
 
       res.json(stats);
     } catch (error) {
       console.error('Category Stats Error:', error);
-      res.status(500).json({ 
+      res.status(500).json({
         error: 'Échec de l\'analyse des catégories',
-        message: error.message 
+        message: error.message
       });
+    } finally {
+      if (client) {
+        try {
+          client.release(); // Ensure the client is always released
+        } catch (releaseErr) {
+          // Silently handle release errors
+          console.error('Error releasing client:', releaseErr);
+        }
+      }
     }
   }
 );

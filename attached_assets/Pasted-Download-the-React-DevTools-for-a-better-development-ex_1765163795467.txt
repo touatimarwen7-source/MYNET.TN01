@@ -1,0 +1,102 @@
+Download the React DevTools for a better development experience: https://reactjs.org/link/react-devtools
+logger.js:96 [INFO] MyNet: MyNet Frontend Started {}
+analyticsTracking.js:11 ⚠️ Sentry not available for analytics
+(anonymous) @ analyticsTracking.js:11Understand this warning
+App.jsx:145 📥 Loading user from storage: {id: '1', email: 'buyer@mynet.tn', username: 'buyer', full_name: 'Acheteur Test', role: 'buyer', …}
+chunk-WRD5HZVH.js?v=8357e542:16670 Uncaught TypeError: setUser is not a function
+    at App.jsx:146:7
+    at commitHookEffectListMount (chunk-WRD5HZVH.js?v=8357e542:16915:34)
+    at commitPassiveMountOnFiber (chunk-WRD5HZVH.js?v=8357e542:18156:19)
+    at commitPassiveMountEffects_complete (chunk-WRD5HZVH.js?v=8357e542:18129:17)
+    at commitPassiveMountEffects_begin (chunk-WRD5HZVH.js?v=8357e542:18119:15)
+    at commitPassiveMountEffects (chunk-WRD5HZVH.js?v=8357e542:18109:11)
+    at flushPassiveEffectsImpl (chunk-WRD5HZVH.js?v=8357e542:19490:11)
+    at flushPassiveEffects (chunk-WRD5HZVH.js?v=8357e542:19447:22)
+    at chunk-WRD5HZVH.js?v=8357e542:19328:17
+    at workLoop (chunk-WRD5HZVH.js?v=8357e542:197:42)
+(anonymous) @ App.jsx:146
+commitHookEffectListMount @ chunk-WRD5HZVH.js?v=8357e542:16915
+commitPassiveMountOnFiber @ chunk-WRD5HZVH.js?v=8357e542:18156
+commitPassiveMountEffects_complete @ chunk-WRD5HZVH.js?v=8357e542:18129
+commitPassiveMountEffects_begin @ chunk-WRD5HZVH.js?v=8357e542:18119
+commitPassiveMountEffects @ chunk-WRD5HZVH.js?v=8357e542:18109
+flushPassiveEffectsImpl @ chunk-WRD5HZVH.js?v=8357e542:19490
+flushPassiveEffects @ chunk-WRD5HZVH.js?v=8357e542:19447
+(anonymous) @ chunk-WRD5HZVH.js?v=8357e542:19328
+workLoop @ chunk-WRD5HZVH.js?v=8357e542:197
+flushWork @ chunk-WRD5HZVH.js?v=8357e542:176
+performWorkUntilDeadline @ chunk-WRD5HZVH.js?v=8357e542:384Understand this error
+App.jsx:145 📥 Loading user from storage: {id: '1', email: 'buyer@mynet.tn', username: 'buyer', full_name: 'Acheteur Test', role: 'buyer', …}
+chunk-WRD5HZVH.js?v=8357e542:16670 Uncaught TypeError: setUser is not a function
+    at App.jsx:146:7
+    at commitHookEffectListMount (chunk-WRD5HZVH.js?v=8357e542:16915:34)
+    at invokePassiveEffectMountInDEV (chunk-WRD5HZVH.js?v=8357e542:18324:19)
+    at invokeEffectsInDev (chunk-WRD5HZVH.js?v=8357e542:19701:19)
+    at commitDoubleInvokeEffectsInDEV (chunk-WRD5HZVH.js?v=8357e542:19686:15)
+    at flushPassiveEffectsImpl (chunk-WRD5HZVH.js?v=8357e542:19503:13)
+    at flushPassiveEffects (chunk-WRD5HZVH.js?v=8357e542:19447:22)
+    at chunk-WRD5HZVH.js?v=8357e542:19328:17
+    at workLoop (chunk-WRD5HZVH.js?v=8357e542:197:42)
+    at flushWork (chunk-WRD5HZVH.js?v=8357e542:176:22)
+(anonymous) @ App.jsx:146
+commitHookEffectListMount @ chunk-WRD5HZVH.js?v=8357e542:16915
+invokePassiveEffectMountInDEV @ chunk-WRD5HZVH.js?v=8357e542:18324
+invokeEffectsInDev @ chunk-WRD5HZVH.js?v=8357e542:19701
+commitDoubleInvokeEffectsInDEV @ chunk-WRD5HZVH.js?v=8357e542:19686
+flushPassiveEffectsImpl @ chunk-WRD5HZVH.js?v=8357e542:19503
+flushPassiveEffects @ chunk-WRD5HZVH.js?v=8357e542:19447
+(anonymous) @ chunk-WRD5HZVH.js?v=8357e542:19328
+workLoop @ chunk-WRD5HZVH.js?v=8357e542:197
+flushWork @ chunk-WRD5HZVH.js?v=8357e542:176
+performWorkUntilDeadline @ chunk-WRD5HZVH.js?v=8357e542:384Understand this error
+2chunk-WRD5HZVH.js?v=8357e542:14032 The above error occurred in the <AppContent> component:
+
+    at AppContent (https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev/src/App.jsx:235:60)
+    at AppProvider (https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev/src/contexts/AppContext.jsx:28:31)
+    at App
+    at ToastProvider (https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev/src/contexts/ToastContext.jsx:20:33)
+    at AppProvider (https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev/src/contexts/AppContext.jsx:28:31)
+
+Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://reactjs.org/link/error-boundaries to learn more about error boundaries.
+logCapturedError @ chunk-WRD5HZVH.js?v=8357e542:14032
+update.callback @ chunk-WRD5HZVH.js?v=8357e542:14052
+callCallback @ chunk-WRD5HZVH.js?v=8357e542:11248
+commitUpdateQueue @ chunk-WRD5HZVH.js?v=8357e542:11265
+commitLayoutEffectOnFiber @ chunk-WRD5HZVH.js?v=8357e542:17093
+commitLayoutMountEffects_complete @ chunk-WRD5HZVH.js?v=8357e542:17980
+commitLayoutEffects_begin @ chunk-WRD5HZVH.js?v=8357e542:17969
+commitLayoutEffects @ chunk-WRD5HZVH.js?v=8357e542:17920
+commitRootImpl @ chunk-WRD5HZVH.js?v=8357e542:19353
+commitRoot @ chunk-WRD5HZVH.js?v=8357e542:19277
+performSyncWorkOnRoot @ chunk-WRD5HZVH.js?v=8357e542:18895
+flushSyncCallbacks @ chunk-WRD5HZVH.js?v=8357e542:9119
+flushPassiveEffectsImpl @ chunk-WRD5HZVH.js?v=8357e542:19506
+flushPassiveEffects @ chunk-WRD5HZVH.js?v=8357e542:19447
+(anonymous) @ chunk-WRD5HZVH.js?v=8357e542:19328
+workLoop @ chunk-WRD5HZVH.js?v=8357e542:197
+flushWork @ chunk-WRD5HZVH.js?v=8357e542:176
+performWorkUntilDeadline @ chunk-WRD5HZVH.js?v=8357e542:384Understand this error
+chunk-WRD5HZVH.js?v=8357e542:9129 Uncaught TypeError: setUser is not a function
+    at App.jsx:146:7
+    at commitHookEffectListMount (chunk-WRD5HZVH.js?v=8357e542:16915:34)
+    at commitPassiveMountOnFiber (chunk-WRD5HZVH.js?v=8357e542:18156:19)
+    at commitPassiveMountEffects_complete (chunk-WRD5HZVH.js?v=8357e542:18129:17)
+    at commitPassiveMountEffects_begin (chunk-WRD5HZVH.js?v=8357e542:18119:15)
+    at commitPassiveMountEffects (chunk-WRD5HZVH.js?v=8357e542:18109:11)
+    at flushPassiveEffectsImpl (chunk-WRD5HZVH.js?v=8357e542:19490:11)
+    at flushPassiveEffects (chunk-WRD5HZVH.js?v=8357e542:19447:22)
+    at chunk-WRD5HZVH.js?v=8357e542:19328:17
+    at workLoop (chunk-WRD5HZVH.js?v=8357e542:197:42)
+(anonymous) @ App.jsx:146
+commitHookEffectListMount @ chunk-WRD5HZVH.js?v=8357e542:16915
+commitPassiveMountOnFiber @ chunk-WRD5HZVH.js?v=8357e542:18156
+commitPassiveMountEffects_complete @ chunk-WRD5HZVH.js?v=8357e542:18129
+commitPassiveMountEffects_begin @ chunk-WRD5HZVH.js?v=8357e542:18119
+commitPassiveMountEffects @ chunk-WRD5HZVH.js?v=8357e542:18109
+flushPassiveEffectsImpl @ chunk-WRD5HZVH.js?v=8357e542:19490
+flushPassiveEffects @ chunk-WRD5HZVH.js?v=8357e542:19447
+(anonymous) @ chunk-WRD5HZVH.js?v=8357e542:19328
+workLoop @ chunk-WRD5HZVH.js?v=8357e542:197
+flushWork @ chunk-WRD5HZVH.js?v=8357e542:176
+performWorkUntilDeadline @ chunk-WRD5HZVH.js?v=8357e542:384Understand this error

@@ -300,25 +300,31 @@ export default function SupplierDashboard() {
                     <stat.icon sx={{ fontSize: 28, color: stat.color }} />
                   </Box>
                 </Box>
-                <Stack direction="row" alignItems="center" spacing={0.5}>
-                  {stat.trend === 'up' ? (
-                    <TrendingUp sx={{ fontSize: 16, color: theme.palette.success.main }} />
-                  ) : (
-                    <TrendingDown sx={{ fontSize: 16, color: theme.palette.error.main }} />
-                  )}
-                  <Typography 
-                    variant="body2" 
-                    sx={{ 
-                      color: stat.trend === 'up' ? theme.palette.success.main : theme.palette.error.main,
-                      fontWeight: 600
-                    }}
-                  >
-                    {Math.abs(stat.change)}%
-                  </Typography>
-                  <Typography variant="body2" color="textSecondary">
-                    vs mois dernier
-                  </Typography>
-                </Stack>
+                {stat.change !== undefined && (
+                  <Stack direction="row" alignItems="center" spacing={0.5}>
+                    {stat.trend === 'up' ? (
+                      <TrendingUp sx={{ fontSize: 16, color: theme.palette.success.main }} />
+                    ) : stat.trend === 'down' ? (
+                      <TrendingDown sx={{ fontSize: 16, color: theme.palette.error.main }} />
+                    ) : null}
+                    {stat.trend && (
+                      <>
+                        <Typography 
+                          variant="body2" 
+                          sx={{ 
+                            color: stat.trend === 'up' ? theme.palette.success.main : theme.palette.error.main,
+                            fontWeight: 600
+                          }}
+                        >
+                          {Math.abs(stat.change)}%
+                        </Typography>
+                        <Typography variant="body2" color="textSecondary">
+                          vs mois dernier
+                        </Typography>
+                      </>
+                    )}
+                  </Stack>
+                )}
               </CardContent>
             </Card>
           </Grid>

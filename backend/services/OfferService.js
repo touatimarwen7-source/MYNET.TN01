@@ -116,6 +116,12 @@ class OfferService {
     const offer = new Offer(mappedData);
 
     try {
+      logger.info('Creating offer - validation started', { 
+        tenderId: offer.tender_id, 
+        supplierId: userId,
+        amount: offer.total_amount 
+      });
+
       // Vérifier que le tender existe et est ouvert
       const tenderCheck = await pool.query(
         'SELECT status, deadline FROM tenders WHERE id = $1 AND is_deleted = FALSE',
@@ -123,20 +129,33 @@ class OfferService {
       );
 
       if (tenderCheck.rows.length === 0) {
+        logger.error('Tender not found', { tenderId: offer.tender_id });
         throw new Error('Tender not found or has been deleted');
       }
 
       const tender = tenderCheck.rows[0];
       if (tender.status !== 'published' && tender.status !== 'open') {
+        logger.warn('Tender not open for submissions', { 
+          tenderId: offer.tender_id, 
+          status: tender.status 
+        });
         throw new Error('Tender is not open for submissions');
       }
 
       if (new Date(tender.deadline) < new Date()) {
+        logger.warn('Tender deadline passed', { 
+          tenderId: offer.tender_id, 
+          deadline: tender.deadline 
+        });
         throw new Error('Tender deadline has passed');
       }
 
       const offerNumber = this.generateOfferNumber();
-      logger.info('Creating offer', { offerNumber, tenderId: offer.tender_id, userId });
+      logger.info('Creating offer - validation passed', { 
+        offerNumber, 
+        tenderId: offer.tender_id, 
+        userId 
+      });
 
       // تشفير البيانات المالية الحساسة
       const sensitiveData = JSON.stringify({

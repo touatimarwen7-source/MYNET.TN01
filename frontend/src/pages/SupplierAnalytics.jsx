@@ -35,13 +35,15 @@ export default function SupplierAnalytics() {
   const fetchAnalytics = async () => {
     try {
       setLoading(true);
-      const [analyticsRes, trendsRes] = await Promise.all([
+      const [analyticsRes, trendsRes, ordersRes] = await Promise.all([
         procurementAPI.getSupplierAnalytics(),
-        procurementAPI.getSupplierTrends('6 months')
+        procurementAPI.getSupplierTrends('6 months'),
+        procurementAPI.getSupplierRecentOrders(5)
       ]);
       
       const analyticsData = analyticsRes.data?.analytics || {};
       const trendsData = trendsRes.data?.trends || [];
+      const ordersData = ordersRes.data?.orders || [];
 
       setAnalytics({
         kpis: {
@@ -55,7 +57,14 @@ export default function SupplierAnalytics() {
           offers: t.offersSubmitted || 0,
           accepted: t.offersAccepted || 0
         })),
-        recentOrders: [] // À charger depuis l'API purchase orders si disponible
+        recentOrders: ordersData.map(order => ({
+          id: order.po_number,
+          buyer: order.buyer_name,
+          amount: parseFloat(order.total_amount),
+          status: order.status === 'confirmed' ? 'confirmée' : 
+                  order.status === 'delivered' ? 'livré' : 
+                  order.status === 'in_transit' ? 'en_route' : order.status
+        }))
       });
     } catch (error) {
       console.error('Erreur chargement analytics:', error);

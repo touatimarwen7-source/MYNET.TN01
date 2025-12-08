@@ -673,8 +673,11 @@ router.get(
       const pool = getPool();
 
       if (!supplierId) {
+        console.error('Supplier analytics: User not authenticated');
         return errorResponse(res, 'User not authenticated', 401);
       }
+
+      console.log('Fetching analytics for supplier:', supplierId);
 
       const analyticsQuery = `
         WITH offer_stats AS (
@@ -714,10 +717,10 @@ router.get(
       const analytics = result.rows[0];
 
       const winRate = analytics.total_offers > 0 
-        ? ((analytics.accepted_offers / analytics.total_offers) * 100).toFixed(2)
+        ? ((parseInt(analytics.accepted_offers) / parseInt(analytics.total_offers)) * 100).toFixed(2)
         : 0;
 
-      return res.json({
+      const response = {
         success: true,
         analytics: {
           totalOffers: parseInt(analytics.total_offers) || 0,
@@ -736,7 +739,10 @@ router.get(
           avgRating: parseFloat(analytics.avg_rating) || 0,
           positiveReviews: parseInt(analytics.positive_reviews) || 0
         }
-      });
+      };
+
+      console.log('Supplier analytics response:', response);
+      return res.json(response);
     } catch (error) {
       console.error('Supplier analytics error:', error);
       return handleError(res, error, 500);

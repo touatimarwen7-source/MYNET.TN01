@@ -27,7 +27,11 @@ router.get('/tenders/:tenderId/opening-report', asyncHandler(async (req, res) =>
     });
   }
 
-  res.status(200).json({ success: true, report });
+  res.status(200).json({ 
+    success: true, 
+    data: report,
+    timestamp: new Date().toISOString()
+  });
 }));
 
 /**
@@ -67,10 +71,13 @@ router.get('/my-opening-reports', asyncHandler(async (req, res) => {
 
   res.status(200).json({
     success: true,
-    count: reports.length,
-    page,
-    limit,
-    reports,
+    data: reports,
+    pagination: {
+      page,
+      limit,
+      count: reports.length
+    },
+    timestamp: new Date().toISOString()
   });
 }));
 
@@ -105,7 +112,11 @@ router.get('/:reportId/export', asyncHandler(async (req, res) => {
     `attachment; filename="opening-report-${reportId}-${Date.now()}.${format}"`
   );
 
-  res.status(200).json(result);
+  res.status(200).json({
+    success: true,
+    data: result,
+    timestamp: new Date().toISOString()
+  });
 }));
 
 module.exports = router;

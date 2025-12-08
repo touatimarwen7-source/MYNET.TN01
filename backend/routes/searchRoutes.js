@@ -1,94 +1,113 @@
+
 const express = require('express');
 const router = express.Router();
-const { validateIdMiddleware } = require('../middleware/validateIdMiddleware');
+const { asyncHandler } = require('../middleware/errorHandlingMiddleware');
+const { authMiddleware } = require('../middleware/authMiddleware');
 const SearchService = require('../services/SearchService');
-const authMiddleware = require('../middleware/authMiddleware');
-const { buildPaginationQuery } = require('../utils/paginationHelper');
 
-// ISSUE FIX #1: Add authentication
-router.get('/tenders', authMiddleware, async (req, res) => {
-  try {
-    const { limit, offset } = buildPaginationQuery(req.query.limit, req.query.offset);
-    const searchParams = {
-      keyword: req.query.keyword,
-      category: req.query.category,
-      status: req.query.status,
-      minBudget: req.query.minBudget ? parseFloat(req.query.minBudget) : null,
-      maxBudget: req.query.maxBudget ? parseFloat(req.query.maxBudget) : null,
-      limit,
-      offset,
-    };
+/**
+ * @route GET /api/search/tenders
+ * @desc Search tenders with filters
+ * @access Public
+ */
+router.get('/tenders', asyncHandler(async (req, res) => {
+  const {
+    keyword,
+    category,
+    status,
+    minBudget,
+    maxBudget,
+    closingDateFrom,
+    closingDateTo,
+    page = 1,
+    limit = 20
+  } = req.query;
 
-    const results = await SearchService.searchTenders(searchParams);
+  const filters = {
+    keyword,
+    category,
+    status,
+    minBudget: minBudget ? parseFloat(minBudget) : undefined,
+    maxBudget: maxBudget ? parseFloat(maxBudget) : undefined,
+    closingDateFrom,
+    closingDateTo
+  };
 
-    res.status(200).json({
-      success: true,
-      count: results.length,
-      results,
-    });
-  } catch (error) {
-    res.status(500).json({
-      error: error.message,
-    });
-  }
-});
+  const results = await SearchService.searchTenders(filters, {
+    page: parseInt(page),
+    limit: Math.min(parseInt(limit), 100)
+  });
 
-// ISSUE FIX #1: Add authentication
-router.get('/suppliers', authMiddleware, async (req, res) => {
-  try {
-    const searchParams = {
-      keyword: req.query.keyword,
-      verified: req.query.verified === 'true',
-    };
+  res.status(200).json({
+    success: true,
+    ...results
+  });
+}));
 
-    const results = await SearchService.searchSuppliers(searchParams);
+/**
+ * @route GET /api/search/suppliers
+ * @desc Search suppliers
+ * @access Public
+ */
+router.get('/suppliers', asyncHandler(async (req, res) => {
+  const {
+    keyword,
+    category,
+    verified,
+    rating,
+    page = 1,
+    limit = 20
+  } = req.query;
 
-    res.status(200).json({
-      success: true,
-      count: results.length,
-      results,
-    });
-  } catch (error) {
-    res.status(500).json({
-      error: error.message,
-    });
-  }
-});
+  const filters = {
+    keyword,
+    category,
+    verified: verified === 'true',
+    minRating: rating ? parseFloat(rating) : undefined
+  };
 
-router.get('/users', async (req, res) => {
-  try {
-    const db = req.app.get('db');
-    const { keyword = '' } = req.query;
-    const { limit, offset, sql } = buildPaginationQuery(50, 0);
+  const results = await SearchService.searchSuppliers(filters, {
+    page: parseInt(page),
+    limit: Math.min(parseInt(limit), 100)
+  });
 
-    const result = await db.query(
-      `
-            SELECT 
-                u.id,
-                u.full_name,
-                u.company_name,
-                u.role,
-                u.average_rating,
-                up.profile_picture
-            FROM users u
-            LEFT JOIN user_profiles up ON u.id = up.user_id
-            WHERE (u.company_name ILIKE $1 OR u.full_name ILIKE $1)
-            AND u.is_active = true
-            ${sql}
-        `,
-      [`%${keyword}%`, limit, offset]
-    );
+  res.status(200).json({
+    success: true,
+    ...results
+  });
+}));
 
-    res.status(200).json({
-      success: true,
-      count: result.rows.length,
-      results: result.rows,
-    });
-  } catch (error) {
-    res.status(500).json({
-      error: error.message,
-    });
-  }
-});
+/**
+ * @route GET /api/search/products
+ * @desc Search products/services
+ * @access Public
+ */
+router.get('/products', asyncHandler(async (req, res) => {
+  const {
+    keyword,
+    category,
+    minPrice,
+    maxPrice,
+    page = 1,
+    limit = 20
+  } = req.query;
+
+  const filters = {
+    keyword,
+    category,
+    minPrice: minPrice ? parseFloat(minPrice) : undefined,
+    maxPrice: maxPrice ? parseFloat(maxPrice) : undefined
+  };
+
+  const results = await SearchService.searchProducts(filters, {
+    page: parseInt(page),
+    limit: Math.min(parseInt(limit), 100)
+  });
+
+  res.status(200).json({
+    success: true,
+    ...results
+  });
+}));
 
 module.exports = router;

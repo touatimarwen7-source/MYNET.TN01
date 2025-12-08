@@ -9,31 +9,20 @@ import {
   Typography,
   Button,
   Stack,
-  Avatar,
   LinearProgress,
   Chip,
   Paper,
-  Rating,
 } from '@mui/material';
-import { procurementAPI } from '../api/procurementApi';
 import {
   LocalOffer as OfferIcon,
   Assessment as AnalyticsIcon,
   Inventory as ProductsIcon,
   Star as ReviewsIcon,
   TrendingUp,
-  TrendingDown,
-  Search as SearchIcon,
-  MonetizationOn as RevenueIcon,
-  Schedule as PendingIcon,
-  CheckCircle as WonIcon,
-  Cancel as LostIcon,
   ShoppingCart as ShoppingCartIcon,
 } from '@mui/icons-material';
-import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip as ChartTooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 import institutionalTheme from '../theme/theme';
 import { setPageTitle } from '../utils/pageTitle';
-import EnhancedTable from '../components/EnhancedTable';
 
 export default function SupplierDashboard() {
   const navigate = useNavigate();
@@ -43,455 +32,210 @@ export default function SupplierDashboard() {
     setPageTitle('Tableau de Bord Fournisseur - MyNet.tn');
   }, []);
 
-  const [dashboardStats, setDashboardStats] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [stats] = useState({
+    totalBids: 0,
+    activeBids: 0,
+    wonBids: 0,
+    revenue: 0,
+  });
 
-  useEffect(() => {
-    const fetchDashboardData = async () => {
-      try {
-        setLoading(true);
-        const { data } = await procurementAPI.supplier.getDashboardStats();
-        setDashboardStats(data);
-      } catch (error) {
-        console.error('Erreur lors du chargement des statistiques:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchDashboardData();
-  }, []);
-
-  const stats = dashboardStats ? [
-    { 
-      label: 'Offres Soumises', 
-      value: dashboardStats.totalOffers || 0, 
-      icon: OfferIcon, 
-      color: theme.palette.primary.main,
-      subtitle: `${dashboardStats.pendingOffers || 0} en attente`,
-      change: dashboardStats.offersChange || 0,
-      trend: dashboardStats.offersChange > 0 ? 'up' : dashboardStats.offersChange < 0 ? 'down' : null
-    },
-    { 
-      label: 'Taux de Victoire', 
-      value: dashboardStats.totalOffers > 0 
-        ? `${Math.round((dashboardStats.acceptedOffers / dashboardStats.totalOffers) * 100)}%`
-        : '0%', 
-      icon: WonIcon, 
-      color: theme.palette.success.main,
-      subtitle: `${dashboardStats.acceptedOffers || 0} sur ${dashboardStats.totalOffers || 0} offres`,
-      change: dashboardStats.winRateChange || 0,
-      trend: dashboardStats.winRateChange > 0 ? 'up' : dashboardStats.winRateChange < 0 ? 'down' : null
-    },
-    { 
-      label: 'Revenus Générés', 
-      value: dashboardStats.totalRevenue >= 1000000 
-        ? `${(dashboardStats.totalRevenue / 1000000).toFixed(1)}M TND`
-        : `${((dashboardStats.totalRevenue || 0) / 1000).toFixed(1)}K TND`, 
-      icon: RevenueIcon, 
-      color: theme.palette.info.main,
-      subtitle: 'Des offres gagnées',
-      change: dashboardStats.revenueChange || 0,
-      trend: dashboardStats.revenueChange > 0 ? 'up' : dashboardStats.revenueChange < 0 ? 'down' : null
-    },
-    { 
-      label: 'Appels Disponibles', 
-      value: dashboardStats.availableTenders || 0, 
-      icon: SearchIcon, 
-      color: theme.palette.warning.main,
-      subtitle: 'Opportunités actives',
-      change: dashboardStats.tendersChange || 0,
-      trend: dashboardStats.tendersChange > 0 ? 'up' : dashboardStats.tendersChange < 0 ? 'down' : null
-    },
-    { 
-      label: 'Offres en Attente', 
-      value: dashboardStats.pendingOffers || 0, 
-      icon: PendingIcon, 
-      color: theme.palette.warning.main,
-      subtitle: 'En cours d\'évaluation'
-    },
-    { 
-      label: 'Offres Rejetées', 
-      value: dashboardStats.rejectedOffers || 0, 
-      icon: LostIcon, 
-      color: theme.palette.error.main,
-      subtitle: 'Non retenues'
-    },
-    { 
-      label: 'Valeur Moyenne Offre', 
-      value: `${((dashboardStats.avgOfferValue || 0) / 1000).toFixed(1)}K TND`, 
-      icon: MonetizationOn, 
-      color: theme.palette.secondary.main,
-      subtitle: 'Par soumission'
-    },
-    { 
-      label: 'Commandes Actives', 
-      value: dashboardStats.activeOrders || 0, 
-      icon: ShoppingCartIcon, 
-      color: theme.palette.success.main,
-      subtitle: 'En cours de livraison'
-    },
-  ] : [];
-
-  const [offerStatusData, setOfferStatusData] = useState([]);
-  const [monthlyRevenue, setMonthlyRevenue] = useState([]);
-  const [recentOffers, setRecentOffers] = useState([]);
-
-  useEffect(() => {
-    const fetchChartData = async () => {
-      try {
-        // Charger données de statut des offres
-        if (dashboardStats) {
-          setOfferStatusData([
-            { name: 'Gagnant', value: dashboardStats.acceptedOffers || 0, color: theme.palette.success.main },
-            { name: 'En Attente', value: dashboardStats.pendingOffers || 0, color: theme.palette.warning.main },
-            { name: 'Total', value: dashboardStats.totalOffers || 0, color: theme.palette.primary.main },
-          ]);
-        }
-
-        // Charger tendances mensuelles
-        const { data: trendsData } = await procurementAPI.supplier.getTrends('6 months');
-        if (trendsData?.trends) {
-          setMonthlyRevenue(trendsData.trends.map(t => ({
-            month: new Date(t.month).toLocaleDateString('fr-FR', { month: 'short' }),
-            revenue: (t.revenueGenerated / 1000).toFixed(1),
-            offers: t.offersSubmitted
-          })));
-        }
-
-        // Charger offres récentes
-        const { data: offersData } = await procurementAPI.supplier.getMyOffers();
-        if (offersData?.offers) {
-          setRecentOffers(offersData.offers.slice(0, 5).map(o => ({
-            id: o.id,
-            tender: o.tender_title || `Offre #${o.offer_number}`,
-            amount: `${o.total_amount?.toLocaleString()} ${o.currency || 'TND'}`,
-            status: o.status === 'accepted' ? 'Gagnant' : 
-                    o.status === 'pending' ? 'En Évaluation' : 
-                    o.status === 'rejected' ? 'Rejeté' : 'En Attente',
-            date: new Date(o.submitted_at).toLocaleDateString('fr-FR'),
-            rating: o.evaluation_score || null
-          })));
-        }
-      } catch (error) {
-        console.error('Erreur chargement données graphiques:', error);
-      }
-    };
-
-    if (dashboardStats) {
-      fetchChartData();
-    }
-  }, [dashboardStats, theme]);
-
-  const tableColumns = [
-    { key: 'tender', label: 'Appel d\'Offre' },
-    { key: 'amount', label: 'Montant Offre' },
-    { 
-      key: 'status', 
-      label: 'Statut',
-      render: (val) => (
-        <Chip 
-          label={val} 
-          size="small"
-          color={
-            val === 'Gagnant' ? 'success' : 
-            val === 'En Évaluation' ? 'warning' : 
-            'error'
-          }
-          sx={{ fontWeight: 600 }}
-        />
-      )
-    },
-    { key: 'date', label: 'Date' },
-    {
-      key: 'rating',
-      label: 'Note',
-      render: (val) => val ? <Rating value={val} readOnly size="small" /> : <Typography variant="caption">-</Typography>
-    },
-  ];
+  const [loading] = useState(false);
 
   const quickActions = [
-    { 
-      label: 'Parcourir les Appels', 
-      path: '/tenders', 
-      color: 'primary',
-      icon: SearchIcon,
-      description: 'Découvrez de nouvelles opportunités'
+    {
+      title: 'Parcourir les Appels d\'Offres',
+      description: 'Rechercher de nouvelles opportunités',
+      icon: <ShoppingCartIcon />,
+      color: theme.palette.primary.main,
+      action: () => navigate('/tenders'),
     },
-    { 
-      label: 'Mes Offres', 
-      path: '/my-offers', 
-      color: 'secondary',
-      icon: OfferIcon,
-      description: 'Gérer les offres soumises'
+    {
+      title: 'Mes Offres',
+      description: 'Gérer mes soumissions',
+      icon: <OfferIcon />,
+      color: theme.palette.success.main,
+      action: () => navigate('/my-offers'),
     },
-    { 
-      label: 'Produits et Services', 
-      path: '/supplier-products', 
-      color: 'info',
-      icon: ProductsIcon,
-      description: 'Catalogue de produits'
+    {
+      title: 'Catalogue Produits',
+      description: 'Gérer mes produits/services',
+      icon: <ProductsIcon />,
+      color: theme.palette.info.main,
+      action: () => navigate('/supplier-catalog'),
     },
-    { 
-      label: 'Analyses', 
-      path: '/supplier-analytics', 
-      color: 'success',
-      icon: AnalyticsIcon,
-      description: 'Rapports de performance'
-    },
-    { 
-      label: 'Factures', 
-      path: '/supplier-invoices', 
-      color: 'warning',
-      icon: MonetizationOn,
-      description: 'Gestion des factures'
-    },
-    { 
-      label: 'Demandes d\'Achat', 
-      path: '/supplier-requests', 
-      color: 'error',
-      icon: ShoppingCartIcon,
-      description: 'Demandes des clients'
+    {
+      title: 'Statistiques',
+      description: 'Voir mes performances',
+      icon: <AnalyticsIcon />,
+      color: theme.palette.warning.main,
+      action: () => navigate('/supplier-analytics'),
     },
   ];
 
-  return (
-    <Container maxWidth="xl" sx={{ py: 4 }}>
-      {/* Header */}
-      <Box sx={{ mb: 4 }}>
-        <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 2 }}>
-          <Box>
-            <Typography 
-              variant="h4" 
-              sx={{ 
-                fontWeight: 700, 
-                color: theme.palette.primary.main,
-                mb: 1 
-              }}
-            >
-              Tableau de Bord Fournisseur
-            </Typography>
-            <Typography variant="body2" color="textSecondary">
-              Gestion professionnelle des offres et produits
-            </Typography>
-          </Box>
-          <Button
-            variant="contained"
-            color="primary"
-            startIcon={<SearchIcon />}
-            size="large"
-            onClick={() => navigate('/tenders')}
-            sx={{ 
-              px: 4,
-              py: 1.5,
-              borderRadius: 2,
-              textTransform: 'none',
-              fontWeight: 600
-            }}
-          >
-            Parcourir les Appels d'Offres
-          </Button>
-        </Stack>
-      </Box>
+  if (loading) {
+    return (
+      <Container maxWidth="lg" sx={{ py: 4 }}>
+        <LinearProgress />
+      </Container>
+    );
+  }
 
-      {/* KPI Cards */}
-      <Grid container spacing={3} sx={{ mb: 4 }}>
-        {stats.map((stat, idx) => (
-          <Grid item xs={12} sm={6} md={4} lg={3} key={idx}>
-            <Card 
-              sx={{ 
-                height: '100%',
-                border: '1px solid',
-                borderColor: theme.palette.divider,
-                boxShadow: 'none',
-                transition: 'all 0.3s ease',
-                '&:hover': {
-                  transform: 'translateY(-4px)',
-                  boxShadow: '0 8px 16px rgba(0,0,0,0.1)',
-                }
-              }}
-            >
-              <CardContent sx={{ p: 3 }}>
-                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 2 }}>
+  return (
+    <Box sx={{ backgroundColor: '#fafafa', minHeight: '100vh', py: 4 }}>
+      <Container maxWidth="lg">
+        {/* Header */}
+        <Box sx={{ mb: 4 }}>
+          <Typography variant="h4" sx={{ fontWeight: 600, mb: 1 }}>
+            Tableau de Bord Fournisseur
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
+            Gérez vos offres et opportunités
+          </Typography>
+        </Box>
+
+        {/* Stats Cards */}
+        <Grid container spacing={3} sx={{ mb: 4 }}>
+          <Grid item xs={12} sm={6} md={3}>
+            <Card>
+              <CardContent>
+                <Stack direction="row" justifyContent="space-between" alignItems="center">
                   <Box>
-                    <Typography variant="body2" color="textSecondary" sx={{ fontWeight: 500, mb: 1 }}>
-                      {stat.label}
+                    <Typography color="text.secondary" variant="body2">
+                      Total Offres
                     </Typography>
-                    <Typography variant="h4" sx={{ fontWeight: 700, color: stat.color, mb: 0.5 }}>
-                      {stat.value}
-                    </Typography>
-                    <Typography variant="caption" color="textSecondary">
-                      {stat.subtitle}
+                    <Typography variant="h4" sx={{ fontWeight: 600 }}>
+                      {stats.totalBids}
                     </Typography>
                   </Box>
-                  <Box
-                    sx={{
-                      backgroundColor: `${stat.color}15`,
-                      width: 56,
-                      height: 56,
-                      borderRadius: '50%',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                    }}
-                  >
-                    <stat.icon sx={{ fontSize: 28, color: stat.color }} />
-                  </Box>
-                </Box>
-                {stat.change !== undefined && (
-                  <Stack direction="row" alignItems="center" spacing={0.5}>
-                    {stat.trend === 'up' ? (
-                      <TrendingUp sx={{ fontSize: 16, color: theme.palette.success.main }} />
-                    ) : stat.trend === 'down' ? (
-                      <TrendingDown sx={{ fontSize: 16, color: theme.palette.error.main }} />
-                    ) : null}
-                    {stat.trend && (
-                      <>
-                        <Typography 
-                          variant="body2" 
-                          sx={{ 
-                            color: stat.trend === 'up' ? theme.palette.success.main : theme.palette.error.main,
-                            fontWeight: 600
-                          }}
-                        >
-                          {Math.abs(stat.change)}%
-                        </Typography>
-                        <Typography variant="body2" color="textSecondary">
-                          vs mois dernier
-                        </Typography>
-                      </>
-                    )}
-                  </Stack>
-                )}
+                  <OfferIcon sx={{ fontSize: 40, color: theme.palette.primary.main, opacity: 0.3 }} />
+                </Stack>
               </CardContent>
             </Card>
           </Grid>
-        ))}
-      </Grid>
 
-      {/* Charts Section */}
-      <Grid container spacing={3} sx={{ mb: 4 }}>
-        {/* Revenue Trends */}
-        <Grid item xs={12} lg={8}>
-          <Card sx={{ border: '1px solid', borderColor: theme.palette.divider, boxShadow: 'none' }}>
-            <CardContent sx={{ p: 3 }}>
-              <Typography variant="h6" sx={{ fontWeight: 600, mb: 3 }}>
-                Revenus et Offres Mensuels
-              </Typography>
-              <ResponsiveContainer width="100%" height={300}>
-                <BarChart data={monthlyRevenue}>
-                  <CartesianGrid strokeDasharray="3 3" stroke={theme.palette.divider} />
-                  <XAxis dataKey="month" stroke={theme.palette.text.secondary} />
-                  <YAxis stroke={theme.palette.text.secondary} />
-                  <ChartTooltip />
-                  <Legend />
-                  <Bar dataKey="revenue" fill={theme.palette.primary.main} name="Revenus (milliers)" />
-                  <Bar dataKey="offers" fill={theme.palette.success.main} name="Nombre d'offres" />
-                </BarChart>
-              </ResponsiveContainer>
-            </CardContent>
-          </Card>
-        </Grid>
-
-        {/* Offer Status Distribution */}
-        <Grid item xs={12} lg={4}>
-          <Card sx={{ border: '1px solid', borderColor: theme.palette.divider, boxShadow: 'none' }}>
-            <CardContent sx={{ p: 3 }}>
-              <Typography variant="h6" sx={{ fontWeight: 600, mb: 3 }}>
-                Statut des Offres
-              </Typography>
-              <ResponsiveContainer width="100%" height={300}>
-                <PieChart>
-                  <Pie
-                    data={offerStatusData}
-                    cx="50%"
-                    cy="50%"
-                    labelLine={false}
-                    label={(entry) => `${entry.name}: ${entry.value}`}
-                    outerRadius={80}
-                    fill="#8884d8"
-                    dataKey="value"
-                  >
-                    {offerStatusData.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={entry.color} />
-                    ))}
-                  </Pie>
-                  <ChartTooltip />
-                </PieChart>
-              </ResponsiveContainer>
-            </CardContent>
-          </Card>
-        </Grid>
-      </Grid>
-
-      {/* Quick Actions */}
-      <Card sx={{ border: '1px solid', borderColor: theme.palette.divider, boxShadow: 'none', mb: 4 }}>
-        <CardContent sx={{ p: 3 }}>
-          <Typography variant="h6" sx={{ fontWeight: 600, mb: 3 }}>
-            Actions Rapides
-          </Typography>
-          <Grid container spacing={2}>
-            {quickActions.map((action, idx) => (
-              <Grid item xs={12} sm={6} md={3} key={idx}>
-                <Paper
-                  elevation={0}
-                  sx={{
-                    p: 2,
-                    border: '1px solid',
-                    borderColor: theme.palette.divider,
-                    borderRadius: 2,
-                    cursor: 'pointer',
-                    transition: 'all 0.3s ease',
-                    '&:hover': {
-                      borderColor: theme.palette.primary.main,
-                      backgroundColor: `${theme.palette.primary.main}08`,
-                      transform: 'translateY(-2px)',
-                    }
-                  }}
-                  onClick={() => navigate(action.path)}
-                >
-                  <Stack spacing={1.5}>
-                    <Avatar sx={{ backgroundColor: `${theme.palette[action.color].main}15` }}>
-                      <action.icon sx={{ color: theme.palette[action.color].main }} />
-                    </Avatar>
-                    <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>
-                      {action.label}
+          <Grid item xs={12} sm={6} md={3}>
+            <Card>
+              <CardContent>
+                <Stack direction="row" justifyContent="space-between" alignItems="center">
+                  <Box>
+                    <Typography color="text.secondary" variant="body2">
+                      Offres Actives
                     </Typography>
-                    <Typography variant="caption" color="textSecondary">
+                    <Typography variant="h4" sx={{ fontWeight: 600, color: theme.palette.info.main }}>
+                      {stats.activeBids}
+                    </Typography>
+                  </Box>
+                  <TrendingUp sx={{ fontSize: 40, color: theme.palette.info.main, opacity: 0.3 }} />
+                </Stack>
+              </CardContent>
+            </Card>
+          </Grid>
+
+          <Grid item xs={12} sm={6} md={3}>
+            <Card>
+              <CardContent>
+                <Stack direction="row" justifyContent="space-between" alignItems="center">
+                  <Box>
+                    <Typography color="text.secondary" variant="body2">
+                      Offres Gagnées
+                    </Typography>
+                    <Typography variant="h4" sx={{ fontWeight: 600, color: theme.palette.success.main }}>
+                      {stats.wonBids}
+                    </Typography>
+                  </Box>
+                  <ReviewsIcon sx={{ fontSize: 40, color: theme.palette.success.main, opacity: 0.3 }} />
+                </Stack>
+              </CardContent>
+            </Card>
+          </Grid>
+
+          <Grid item xs={12} sm={6} md={3}>
+            <Card>
+              <CardContent>
+                <Stack direction="row" justifyContent="space-between" alignItems="center">
+                  <Box>
+                    <Typography color="text.secondary" variant="body2">
+                      Revenu Total
+                    </Typography>
+                    <Typography variant="h4" sx={{ fontWeight: 600 }}>
+                      {stats.revenue.toLocaleString()} DT
+                    </Typography>
+                  </Box>
+                  <AnalyticsIcon sx={{ fontSize: 40, color: theme.palette.warning.main, opacity: 0.3 }} />
+                </Stack>
+              </CardContent>
+            </Card>
+          </Grid>
+        </Grid>
+
+        {/* Quick Actions */}
+        <Typography variant="h6" sx={{ mb: 2, fontWeight: 600 }}>
+          Actions Rapides
+        </Typography>
+        <Grid container spacing={3} sx={{ mb: 4 }}>
+          {quickActions.map((action, index) => (
+            <Grid item xs={12} sm={6} md={3} key={index}>
+              <Card
+                sx={{
+                  cursor: 'pointer',
+                  transition: 'all 0.3s',
+                  '&:hover': {
+                    transform: 'translateY(-4px)',
+                    boxShadow: 4,
+                  },
+                }}
+                onClick={action.action}
+              >
+                <CardContent>
+                  <Stack spacing={2} alignItems="center" textAlign="center">
+                    <Box
+                      sx={{
+                        width: 60,
+                        height: 60,
+                        borderRadius: '50%',
+                        backgroundColor: `${action.color}15`,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        color: action.color,
+                      }}
+                    >
+                      {action.icon}
+                    </Box>
+                    <Typography variant="h6" sx={{ fontWeight: 600 }}>
+                      {action.title}
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
                       {action.description}
                     </Typography>
                   </Stack>
-                </Paper>
-              </Grid>
-            ))}
-          </Grid>
-        </CardContent>
-      </Card>
+                </CardContent>
+              </Card>
+            </Grid>
+          ))}
+        </Grid>
 
-      {/* Recent Offers Table */}
-      <Card sx={{ border: '1px solid', borderColor: theme.palette.divider, boxShadow: 'none' }}>
-        <CardContent sx={{ p: 3 }}>
-          <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 3 }}>
-            <Typography variant="h6" sx={{ fontWeight: 600 }}>
-              Offres Récentes
-            </Typography>
-            <Button
-              variant="outlined"
-              size="small"
-              onClick={() => navigate('/my-offers')}
-              sx={{ textTransform: 'none' }}
-            >
-              Voir Tout
-            </Button>
+        {/* Recent Activity */}
+        <Paper sx={{ p: 3 }}>
+          <Typography variant="h6" sx={{ mb: 3, fontWeight: 600 }}>
+            Activité Récente
+          </Typography>
+          <Stack spacing={2}>
+            <Box sx={{ textAlign: 'center', py: 4 }}>
+              <Typography color="text.secondary">
+                Aucune activité récente
+              </Typography>
+              <Button
+                variant="contained"
+                sx={{ mt: 2 }}
+                onClick={() => navigate('/tenders')}
+              >
+                Parcourir les Appels d'Offres
+              </Button>
+            </Box>
           </Stack>
-          <EnhancedTable
-            data={recentOffers}
-            columns={tableColumns}
-            onRowClick={(row) => navigate(`/tender/${row.id}`)}
-            striped
-          />
-        </CardContent>
-      </Card>
-    </Container>
+        </Paper>
+      </Container>
+    </Box>
   );
 }

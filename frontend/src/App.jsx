@@ -17,7 +17,7 @@ import TokenManager from './services/tokenManager';
 // Import role-specific dashboards
 import BuyerDashboard from './pages/BuyerDashboard';
 import SupplierDashboard from './pages/SupplierDashboard';
-import AdminDashboard from './pages/AdminDashboard'; // Import AdminDashboard
+import AdminDashboard from './pages/AdminDashboard';
 
 // Core pages (eager load)
 import HomePage from './pages/HomePage';

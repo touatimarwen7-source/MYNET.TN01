@@ -41,7 +41,6 @@ export default function OfferAnalysis() {
   const theme = institutionalTheme;
   const { tenderId } = useParams();
   const navigate = useNavigate();
-
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [offers, setOffers] = useState([]);
@@ -56,7 +55,7 @@ export default function OfferAnalysis() {
   const [detailsOpen, setDetailsOpen] = useState(false);
 
   useEffect(() => {
-    setPageTitle('تحليل العروض');
+    setPageTitle('Analyse des Offres');
     fetchOffers();
   }, [tenderId]);
 
@@ -65,7 +64,6 @@ export default function OfferAnalysis() {
       setLoading(true);
       setError('');
 
-      // Get tender and offers
       const tenderRes = await procurementAPI.getTender(tenderId);
       const response = await procurementAPI.getOffers(tenderId);
       const offersData = response.data.offers || [];
@@ -73,7 +71,6 @@ export default function OfferAnalysis() {
       setTender(tenderRes.data.tender);
       setOffers(offersData);
 
-      // Calculate analysis
       if (offersData.length > 0) {
         const prices = offersData
           .map((offer) => parseFloat(offer.total_amount) || 0)
@@ -85,649 +82,223 @@ export default function OfferAnalysis() {
           const maxPrice = Math.max(...prices).toFixed(2);
 
           setAnalysis({
-            avgPrice: parseFloat(avgPrice),
-            minPrice: parseFloat(minPrice),
-            maxPrice: parseFloat(maxPrice),
-            totalOffers: offersData.length,
-          });
-        } else {
-          setAnalysis({
-            avgPrice: 0,
-            minPrice: 0,
-            maxPrice: 0,
+            avgPrice,
+            minPrice,
+            maxPrice,
             totalOffers: offersData.length,
           });
         }
       }
     } catch (err) {
-      setError('فشل تحميل تحليل العروض: ' + err.message);
+      console.error('Erreur de chargement des offres:', err);
+      setError('Échec du chargement des offres');
     } finally {
       setLoading(false);
     }
   };
 
-  const getPriceTrend = (price) => {
-    if (analysis.avgPrice === 0) return 'stable';
-    if (price < analysis.avgPrice * 0.9) return 'down';
-    if (price > analysis.avgPrice * 1.1) return 'up';
-    return 'stable';
-  };
-
-  const exportToJSON = () => {
-    const data = {
-      tenderId,
-      analysis,
-      offers,
-      exportDate: new Date().toISOString(),
-    };
-    const element = document.createElement('a');
-    element.href = `data:text/json;charset=utf-8,${encodeURIComponent(JSON.stringify(data, null, 2))}`;
-    element.download = `offer-analysis-${tenderId}.json`;
-    document.body.appendChild(element);
-    element.click();
-    document.body.removeChild(element);
-  };
-
-  const exportToCSV = () => {
-    let csv = 'رقم المورد,اسم المورد,المبلغ (TND),مدة التسليم,شروط الدفع,حالة التقييم,التاريخ\n';
-
-    offers.forEach((offer) => {
-      csv += `${offer.id || 'N/A'},${offer.supplier_name || 'N/A'},${offer.total_amount || 0},${offer.delivery_time || 'N/A'},${offer.payment_terms || 'N/A'},${offer.evaluation_status || 'معلق'},${new Date(offer.created_at).toLocaleDateString('ar-TN')}\n`;
-    });
-
-    const element = document.createElement('a');
-    element.href = `data:text/csv;charset=utf-8,%EF%BB%BF${encodeURIComponent(csv)}`;
-    element.download = `offer-analysis-${tenderId}.csv`;
-    document.body.appendChild(element);
-    element.click();
-    document.body.removeChild(element);
+  const handleViewDetails = (offer) => {
+    setSelectedOffer(offer);
+    setDetailsOpen(true);
   };
 
   if (loading) {
     return (
-      <Box sx={{ backgroundColor: '#FAFAFA', paddingY: '40px', minHeight: '100vh' }}>
-        <Container maxWidth="lg">
-          <CardSkeleton />
-          <Box sx={{ mt: '24px' }}>
-            <TableSkeleton rows={5} columns={5} />
-          </Box>
-        </Container>
-      </Box>
+      <Container maxWidth="lg" sx={{ py: 4 }}>
+        <CardSkeleton count={3} />
+      </Container>
     );
   }
 
-  const analysisCards = [
-    {
-      title: 'السعر المتوسط',
-      value: `${analysis.avgPrice.toLocaleString('ar-TN')} TND`,
-      trend: 'neutral',
-      icon: 'avg',
-    },
-    {
-      title: 'السعر الأدنى',
-      value: `${analysis.minPrice.toLocaleString('ar-TN')} TND`,
-      trend: 'down',
-      icon: 'min',
-    },
-    {
-      title: 'السعر الأعلى',
-      value: `${analysis.maxPrice.toLocaleString('ar-TN')} TND`,
-      trend: 'up',
-      icon: 'max',
-    },
-    {
-      title: 'عدد العروض',
-      value: analysis.totalOffers.toString(),
-      trend: 'neutral',
-      icon: 'count',
-    },
-  ];
+  if (error) {
+    return (
+      <Container maxWidth="lg" sx={{ py: 4 }}>
+        <Alert severity="error">{error}</Alert>
+      </Container>
+    );
+  }
 
   return (
-    <Box sx={{ backgroundColor: '#FAFAFA', paddingY: '40px', minHeight: '100vh' }}>
-      <Container maxWidth="lg">
-        {/* Breadcrumb Navigation */}
-        <Breadcrumbs sx={{ mb: '24px' }}>
-          <Link
-            component="button"
-            onClick={() => navigate('/tenders')}
-            sx={{
-              cursor: 'pointer',
-              color: institutionalTheme.palette.primary.main,
-              textDecoration: 'none',
-              '&:hover': { textDecoration: 'underline' },
-            }}
-          >
-            المناقصات
-          </Link>
-          <Link
-            component="button"
-            onClick={() => navigate(`/tender/${tenderId}`)}
-            sx={{
-              cursor: 'pointer',
-              color: institutionalTheme.palette.primary.main,
-              textDecoration: 'none',
-              '&:hover': { textDecoration: 'underline' },
-            }}
-          >
-            المناقصة
-          </Link>
-          <Typography sx={{ color: institutionalTheme.palette.primary.main, fontWeight: 600 }}>
-            تحليل العروض
+    <Container maxWidth="lg" sx={{ py: 4 }}>
+      <Button
+        startIcon={<ArrowBackIcon />}
+        onClick={() => navigate(-1)}
+        sx={{ mb: 3, color: theme.palette.primary.main }}
+      >
+        Retour
+      </Button>
+
+      <Box sx={{ mb: 4 }}>
+        <Typography variant="h4" sx={{ fontWeight: 600, mb: 1, color: theme.palette.primary.main }}>
+          Analyse des Offres
+        </Typography>
+        {tender && (
+          <Typography variant="body1" color="textSecondary">
+            {tender.title}
           </Typography>
-        </Breadcrumbs>
-
-        {/* Header */}
-        <Box
-          sx={{
-            marginBottom: '32px',
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'flex-start',
-          }}
-        >
-          <Box>
-            <Typography
-              variant="h2"
-              sx={{
-                fontSize: '32px',
-                fontWeight: 600,
-                color: institutionalTheme.palette.primary.main,
-                mb: '8px',
-              }}
-            >
-              📊 تحليل العروض
-            </Typography>
-            <Typography sx={{ fontSize: '14px', color: '#666666' }}>
-              المناقصة رقم: {tenderId}
-            </Typography>
-          </Box>
-          <Stack direction="row" spacing={1}>
-            <Button
-              startIcon={<DownloadIcon />}
-              onClick={exportToCSV}
-              variant="outlined"
-              size="small"
-              sx={{
-                color: institutionalTheme.palette.primary.main,
-                borderColor: institutionalTheme.palette.primary.main,
-              }}
-            >
-              تصدير CSV
-            </Button>
-            <Button
-              startIcon={<DownloadIcon />}
-              onClick={exportToJSON}
-              variant="outlined"
-              size="small"
-              sx={{
-                color: institutionalTheme.palette.primary.main,
-                borderColor: institutionalTheme.palette.primary.main,
-              }}
-            >
-              تصدير JSON
-            </Button>
-          </Stack>
-        </Box>
-
-        {error && (
-          <Alert severity="error" sx={{ mb: '24px', backgroundColor: '#FFEBEE' }}>
-            {error}
-          </Alert>
         )}
+      </Box>
 
-        {/* Analysis Cards */}
-        <Grid container spacing={2} sx={{ mb: '32px' }}>
-          {analysisCards.map((item, idx) => (
-            <Grid xs={12} lg={3} key={idx}>
-              <Card
-                sx={{
-                  border: '1px solid #E0E0E0',
-                  '&:hover': { boxShadow: '0 4px 12px rgba(0, 86, 179, 0.1)' },
-                  transition: 'all 0.3s ease',
-                }}
-              >
-                <CardContent>
-                  <Typography
-                    sx={{ color: '#666666', fontSize: '12px', fontWeight: 600, mb: '8px' }}
-                  >
-                    {item.title}
-                  </Typography>
-                  <Box
-                    sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}
-                  >
-                    <Typography
-                      sx={{
-                        fontWeight: 600,
-                        fontSize: '18px',
-                        color: institutionalTheme.palette.primary.main,
-                      }}
-                    >
-                      {item.value}
-                    </Typography>
-                    {item.trend === 'up' && (
-                      <TrendingUpIcon sx={{ color: '#4CAF50', fontSize: 24 }} />
-                    )}
-                    {item.trend === 'down' && (
-                      <TrendingDownIcon sx={{ color: '#FF9800', fontSize: 24 }} />
-                    )}
-                    {item.trend === 'neutral' && (
-                      <CompareArrowsIcon sx={{ color: '#2196F3', fontSize: 24 }} />
-                    )}
-                  </Box>
-                </CardContent>
-              </Card>
-            </Grid>
-          ))}
-        </Grid>
-
-        {/* Analysis Summary */}
-        {offers.length > 0 ? (
-          <Stack spacing={3}>
-            {/* Price Range Info */}
-            <Paper sx={{ p: '20px', backgroundColor: '#E3F2FD', borderLeft: '4px solid #0056B3' }}>
-              <Stack spacing={1}>
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <InfoIcon sx={{ color: '#0056B3', fontSize: 20 }} />
-                  <Typography sx={{ fontSize: '14px', fontWeight: 600, color: '#0056B3' }}>
-                    📈 ملخص الأسعار
-                  </Typography>
-                </Box>
-                <Typography sx={{ fontSize: '13px', color: '#212121' }}>
-                  نطاق الأسعار المقترحة يتراوح بين{' '}
-                  <strong>{analysis.minPrice.toLocaleString('ar-TN')} TND</strong> و
-                  <strong> {analysis.maxPrice.toLocaleString('ar-TN')} TND</strong>، بمتوسط{' '}
-                  <strong>{analysis.avgPrice.toLocaleString('ar-TN')} TND</strong> من قبل{' '}
-                  <strong>{analysis.totalOffers} مورد</strong>.
-                </Typography>
-              </Stack>
-            </Paper>
-
-            {/* Offers Table */}
-            <Card sx={{ border: '1px solid #E0E0E0' }}>
-              <CardHeader
-                title="📋 قائمة العروض المفصلة"
-                action={
-                  <Box sx={{ display: 'flex', gap: '8px' }}>
-                    <Button
-                      size="small"
-                      startIcon={<DownloadIcon />}
-                      onClick={exportToJSON}
-                      sx={{
-                        color: institutionalTheme.palette.primary.main,
-                        textTransform: 'none',
-                        fontSize: '12px',
-                      }}
-                    >
-                      JSON
-                    </Button>
-                    <Button
-                      size="small"
-                      startIcon={<DownloadIcon />}
-                      onClick={exportToCSV}
-                      sx={{
-                        color: institutionalTheme.palette.primary.main,
-                        textTransform: 'none',
-                        fontSize: '12px',
-                      }}
-                    >
-                      CSV
-                    </Button>
-                  </Box>
-                }
-              />
-              <CardContent>
-                <Box sx={{ overflowX: 'auto' }}>
-                  <Table>
-                    <TableHead sx={{ backgroundColor: '#F5F5F5' }}>
-                      <TableRow>
-                        <TableCell
-                          sx={{
-                            fontWeight: 600,
-                            color: institutionalTheme.palette.primary.main,
-                            fontSize: '12px',
-                          }}
-                        >
-                          المورد
-                        </TableCell>
-                        <TableCell
-                          sx={{
-                            fontWeight: 600,
-                            color: institutionalTheme.palette.primary.main,
-                            fontSize: '12px',
-                            textAlign: 'center',
-                          }}
-                        >
-                          المبلغ (TND)
-                        </TableCell>
-                        <TableCell
-                          sx={{
-                            fontWeight: 600,
-                            color: institutionalTheme.palette.primary.main,
-                            fontSize: '12px',
-                            textAlign: 'center',
-                          }}
-                        >
-                          مقارنة
-                        </TableCell>
-                        <TableCell
-                          sx={{
-                            fontWeight: 600,
-                            color: institutionalTheme.palette.primary.main,
-                            fontSize: '12px',
-                            textAlign: 'center',
-                          }}
-                        >
-                          التسليم
-                        </TableCell>
-                        <TableCell
-                          sx={{
-                            fontWeight: 600,
-                            color: institutionalTheme.palette.primary.main,
-                            fontSize: '12px',
-                            textAlign: 'center',
-                          }}
-                        >
-                          الدفع
-                        </TableCell>
-                        <TableCell
-                          sx={{
-                            fontWeight: 600,
-                            color: institutionalTheme.palette.primary.main,
-                            fontSize: '12px',
-                            textAlign: 'center',
-                          }}
-                        >
-                          الحالة
-                        </TableCell>
-                        <TableCell
-                          sx={{
-                            fontWeight: 600,
-                            color: institutionalTheme.palette.primary.main,
-                            fontSize: '12px',
-                            textAlign: 'center',
-                          }}
-                        >
-                          الإجراء
-                        </TableCell>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {offers.map((offer, idx) => {
-                        const trend = getPriceTrend(offer.total_amount);
-                        return (
-                          <TableRow
-                            key={offer.id || idx}
-                            sx={{
-                              backgroundColor: idx % 2 === 0 ? '#fff' : '#F9F9F9',
-                              '&:hover': { backgroundColor: '#E3F2FD' },
-                            }}
-                          >
-                            <TableCell sx={{ fontSize: '12px', fontWeight: 600 }}>
-                              {offer.supplier_name || 'غير محدد'}
-                              <br />
-                              <span
-                                style={{ fontSize: '11px', color: '#666666', fontWeight: 'normal' }}
-                              >
-                                {offer.supplier_email || 'N/A'}
-                              </span>
-                            </TableCell>
-                            <TableCell
-                              sx={{
-                                fontSize: '12px',
-                                fontWeight: 600,
-                                color: '#0056B3',
-                                textAlign: 'center',
-                              }}
-                            >
-                              {typeof offer.total_amount === 'number'
-                                ? offer.total_amount.toLocaleString('ar-TN')
-                                : '0'}{' '}
-                              TND
-                            </TableCell>
-                            <TableCell sx={{ textAlign: 'center' }}>
-                              {trend === 'down' && (
-                                <Chip
-                                  label="أقل من المتوسط"
-                                  size="small"
-                                  icon={<TrendingDownIcon />}
-                                  sx={{
-                                    backgroundColor: '#E8F5E9',
-                                    color: '#2E7D32',
-                                    fontSize: '11px',
-                                  }}
-                                />
-                              )}
-                              {trend === 'up' && (
-                                <Chip
-                                  label="أعلى من المتوسط"
-                                  size="small"
-                                  icon={<TrendingUpIcon />}
-                                  sx={{
-                                    backgroundColor: '#FFF3E0',
-                                    color: '#E65100',
-                                    fontSize: '11px',
-                                  }}
-                                />
-                              )}
-                              {trend === 'stable' && (
-                                <Chip
-                                  label="قريب من المتوسط"
-                                  size="small"
-                                  icon={<CompareArrowsIcon />}
-                                  sx={{
-                                    backgroundColor: '#E3F2FD',
-                                    color: '#0056B3',
-                                    fontSize: '11px',
-                                  }}
-                                />
-                              )}
-                            </TableCell>
-                            <TableCell sx={{ fontSize: '12px', textAlign: 'center' }}>
-                              {offer.delivery_time || 'غير محدد'}
-                            </TableCell>
-                            <TableCell sx={{ fontSize: '12px', textAlign: 'center' }}>
-                              {offer.payment_terms || 'غير محدد'}
-                            </TableCell>
-                            <TableCell sx={{ fontSize: '12px', textAlign: 'center' }}>
-                              {offer.evaluation_status === 'accepted' && (
-                                <Chip
-                                  label="مقبول"
-                                  size="small"
-                                  sx={{ backgroundColor: '#E8F5E9', color: '#2E7D32' }}
-                                />
-                              )}
-                              {offer.evaluation_status === 'rejected' && (
-                                <Chip
-                                  label="مرفوض"
-                                  size="small"
-                                  sx={{ backgroundColor: '#FFEBEE', color: '#C62828' }}
-                                />
-                              )}
-                              {(!offer.evaluation_status ||
-                                offer.evaluation_status === 'pending') && (
-                                <Chip
-                                  label="معلق"
-                                  size="small"
-                                  sx={{ backgroundColor: '#FFF3E0', color: '#E65100' }}
-                                />
-                              )}
-                            </TableCell>
-                            <TableCell sx={{ textAlign: 'center' }}>
-                              <Button
-                                size="small"
-                                onClick={() => {
-                                  setSelectedOffer(offer);
-                                  setDetailsOpen(true);
-                                }}
-                                sx={{
-                                  color: institutionalTheme.palette.primary.main,
-                                  textTransform: 'none',
-                                  fontSize: '11px',
-                                }}
-                              >
-                                التفاصيل
-                              </Button>
-                            </TableCell>
-                          </TableRow>
-                        );
-                      })}
-                    </TableBody>
-                  </Table>
-                </Box>
-              </CardContent>
-            </Card>
-
-            {/* Statistics Summary */}
-            <Paper sx={{ p: '20px', backgroundColor: '#F5F5F5' }}>
-              <Typography sx={{ fontSize: '14px', fontWeight: 600, color: '#0056B3', mb: '12px' }}>
-                📊 إحصائيات مفيدة
+      <Grid container spacing={3} sx={{ mb: 4 }}>
+        <Grid item xs={12} md={3}>
+          <Card>
+            <CardContent>
+              <Typography variant="body2" color="textSecondary" gutterBottom>
+                Total des Offres
               </Typography>
-              <Grid container spacing={2}>
-                <Grid xs={12} lg={3}>
-                  <Box>
-                    <Typography sx={{ fontSize: '11px', color: '#666666', mb: '4px' }}>
-                      الفرق السعري
-                    </Typography>
-                    <Typography sx={{ fontSize: '14px', fontWeight: 600, color: '#0056B3' }}>
-                      {(analysis.maxPrice - analysis.minPrice).toLocaleString('ar-TN')} TND
-                    </Typography>
-                  </Box>
-                </Grid>
-                <Grid xs={12} lg={3}>
-                  <Box>
-                    <Typography sx={{ fontSize: '11px', color: '#666666', mb: '4px' }}>
-                      نسبة الفرق %
-                    </Typography>
-                    <Typography sx={{ fontSize: '14px', fontWeight: 600, color: '#0056B3' }}>
-                      {analysis.minPrice > 0
-                        ? (
-                            ((analysis.maxPrice - analysis.minPrice) / analysis.minPrice) *
-                            100
-                          ).toFixed(2)
-                        : '0'}
-                      %
-                    </Typography>
-                  </Box>
-                </Grid>
-                <Grid xs={12} lg={3}>
-                  <Box>
-                    <Typography sx={{ fontSize: '11px', color: '#666666', mb: '4px' }}>
-                      أعلى من المتوسط
-                    </Typography>
-                    <Typography sx={{ fontSize: '14px', fontWeight: 600, color: '#FF9800' }}>
-                      {offers.filter((o) => o.total_amount > analysis.avgPrice * 1.1).length} عرض
-                    </Typography>
-                  </Box>
-                </Grid>
-                <Grid xs={12} lg={3}>
-                  <Box>
-                    <Typography sx={{ fontSize: '11px', color: '#666666', mb: '4px' }}>
-                      أقل من المتوسط
-                    </Typography>
-                    <Typography sx={{ fontSize: '14px', fontWeight: 600, color: '#4CAF50' }}>
-                      {offers.filter((o) => o.total_amount < analysis.avgPrice * 0.9).length} عرض
-                    </Typography>
-                  </Box>
-                </Grid>
-              </Grid>
-            </Paper>
-          </Stack>
-        ) : (
-          <Alert severity="info">لا توجد عروض لهذه المناقصة حتى الآن</Alert>
-        )}
-      </Container>
+              <Typography variant="h4" sx={{ fontWeight: 600, color: theme.palette.primary.main }}>
+                {analysis.totalOffers}
+              </Typography>
+            </CardContent>
+          </Card>
+        </Grid>
+        <Grid item xs={12} md={3}>
+          <Card>
+            <CardContent>
+              <Typography variant="body2" color="textSecondary" gutterBottom>
+                Prix Moyen
+              </Typography>
+              <Typography variant="h4" sx={{ fontWeight: 600, color: theme.palette.info.main }}>
+                {analysis.avgPrice} TND
+              </Typography>
+            </CardContent>
+          </Card>
+        </Grid>
+        <Grid item xs={12} md={3}>
+          <Card>
+            <CardContent>
+              <Stack direction="row" alignItems="center" spacing={1}>
+                <TrendingDownIcon sx={{ color: theme.palette.success.main }} />
+                <Box>
+                  <Typography variant="body2" color="textSecondary" gutterBottom>
+                    Prix Minimum
+                  </Typography>
+                  <Typography variant="h4" sx={{ fontWeight: 600, color: theme.palette.success.main }}>
+                    {analysis.minPrice} TND
+                  </Typography>
+                </Box>
+              </Stack>
+            </CardContent>
+          </Card>
+        </Grid>
+        <Grid item xs={12} md={3}>
+          <Card>
+            <CardContent>
+              <Stack direction="row" alignItems="center" spacing={1}>
+                <TrendingUpIcon sx={{ color: theme.palette.error.main }} />
+                <Box>
+                  <Typography variant="body2" color="textSecondary" gutterBottom>
+                    Prix Maximum
+                  </Typography>
+                  <Typography variant="h4" sx={{ fontWeight: 600, color: theme.palette.error.main }}>
+                    {analysis.maxPrice} TND
+                  </Typography>
+                </Box>
+              </Stack>
+            </CardContent>
+          </Card>
+        </Grid>
+      </Grid>
 
-      {/* Offer Details Dialog */}
-      <Dialog open={detailsOpen} onClose={() => setDetailsOpen(false)} maxWidth="sm" fullWidth>
-        <DialogTitle
-          sx={{ fontSize: '16px', fontWeight: 600, color: institutionalTheme.palette.primary.main }}
-        >
-          تفاصيل العرض
-        </DialogTitle>
+      <Card>
+        <CardHeader title="Liste des Offres" />
+        <CardContent>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>Fournisseur</TableCell>
+                <TableCell>Montant</TableCell>
+                <TableCell>Délai de Livraison</TableCell>
+                <TableCell>Statut</TableCell>
+                <TableCell>Score</TableCell>
+                <TableCell>Actions</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {offers.map((offer) => (
+                <TableRow key={offer.id}>
+                  <TableCell>{offer.supplier_name || offer.company_name || 'N/A'}</TableCell>
+                  <TableCell>
+                    <Typography sx={{ fontWeight: 600 }}>
+                      {offer.total_amount?.toLocaleString()} {offer.currency || 'TND'}
+                    </Typography>
+                  </TableCell>
+                  <TableCell>{offer.delivery_time || 'N/A'}</TableCell>
+                  <TableCell>
+                    <Chip
+                      label={offer.status || 'submitted'}
+                      size="small"
+                      color={offer.status === 'accepted' ? 'success' : 'default'}
+                    />
+                  </TableCell>
+                  <TableCell>
+                    {offer.evaluation_score ? (
+                      <Chip
+                        label={formatScore(offer.evaluation_score)}
+                        size="small"
+                        color={getScoreTier(offer.evaluation_score).color}
+                      />
+                    ) : (
+                      'Non évalué'
+                    )}
+                  </TableCell>
+                  <TableCell>
+                    <Button
+                      size="small"
+                      startIcon={<InfoIcon />}
+                      onClick={() => handleViewDetails(offer)}
+                    >
+                      Détails
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </CardContent>
+      </Card>
+
+      <Dialog open={detailsOpen} onClose={() => setDetailsOpen(false)} maxWidth="md" fullWidth>
+        <DialogTitle>Détails de l'Offre</DialogTitle>
         <DialogContent>
           {selectedOffer && (
-            <Stack spacing={2} sx={{ pt: '16px' }}>
+            <Stack spacing={2} sx={{ mt: 2 }}>
               <Box>
-                <Typography sx={{ fontSize: '12px', color: '#666666', fontWeight: 600, mb: '4px' }}>
-                  المورد
+                <Typography variant="subtitle2" color="textSecondary">
+                  Fournisseur
                 </Typography>
-                <Typography sx={{ fontSize: '14px', color: '#212121' }}>
-                  {selectedOffer.supplier_name}
+                <Typography variant="body1">
+                  {selectedOffer.supplier_name || selectedOffer.company_name || 'N/A'}
                 </Typography>
               </Box>
               <Box>
-                <Typography sx={{ fontSize: '12px', color: '#666666', fontWeight: 600, mb: '4px' }}>
-                  البريد الإلكتروني
+                <Typography variant="subtitle2" color="textSecondary">
+                  Proposition Technique
                 </Typography>
-                <Typography sx={{ fontSize: '14px', color: '#212121' }}>
-                  {selectedOffer.supplier_email}
-                </Typography>
-              </Box>
-              <Box>
-                <Typography sx={{ fontSize: '12px', color: '#666666', fontWeight: 600, mb: '4px' }}>
-                  رقم الهاتف
-                </Typography>
-                <Typography sx={{ fontSize: '14px', color: '#212121' }}>
-                  {selectedOffer.supplier_phone || 'غير محدد'}
+                <Typography variant="body1">
+                  {selectedOffer.technical_proposal || 'Aucune proposition technique'}
                 </Typography>
               </Box>
               <Box>
-                <Typography sx={{ fontSize: '12px', color: '#666666', fontWeight: 600, mb: '4px' }}>
-                  المبلغ الإجمالي
+                <Typography variant="subtitle2" color="textSecondary">
+                  Proposition Financière
                 </Typography>
-                <Typography sx={{ fontSize: '16px', fontWeight: 600, color: '#0056B3' }}>
-                  {selectedOffer.total_amount?.toLocaleString('ar-TN') || '0'} TND
-                </Typography>
-              </Box>
-              <Box>
-                <Typography sx={{ fontSize: '12px', color: '#666666', fontWeight: 600, mb: '4px' }}>
-                  مدة التسليم
-                </Typography>
-                <Typography sx={{ fontSize: '14px', color: '#212121' }}>
-                  {selectedOffer.delivery_time}
+                <Typography variant="body1">
+                  {selectedOffer.financial_proposal || 'Aucune proposition financière'}
                 </Typography>
               </Box>
               <Box>
-                <Typography sx={{ fontSize: '12px', color: '#666666', fontWeight: 600, mb: '4px' }}>
-                  شروط الدفع
+                <Typography variant="subtitle2" color="textSecondary">
+                  Conditions de Paiement
                 </Typography>
-                <Typography sx={{ fontSize: '14px', color: '#212121' }}>
-                  {selectedOffer.payment_terms}
-                </Typography>
-              </Box>
-              {selectedOffer.quality_notes && (
-                <Box>
-                  <Typography
-                    sx={{ fontSize: '12px', color: '#666666', fontWeight: 600, mb: '4px' }}
-                  >
-                    ملاحظات الجودة
-                  </Typography>
-                  <Typography sx={{ fontSize: '13px', color: '#666666' }}>
-                    {selectedOffer.quality_notes}
-                  </Typography>
-                </Box>
-              )}
-              <Box>
-                <Typography sx={{ fontSize: '12px', color: '#666666', fontWeight: 600, mb: '4px' }}>
-                  تاريخ التقديم
-                </Typography>
-                <Typography sx={{ fontSize: '14px', color: '#212121' }}>
-                  {selectedOffer.created_at
-                    ? new Date(selectedOffer.created_at).toLocaleDateString('ar-TN', {
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric',
-                        hour: '2-digit',
-                        minute: '2-digit',
-                      })
-                    : 'غير محدد'}
+                <Typography variant="body1">
+                  {selectedOffer.payment_terms || 'Non spécifié'}
                 </Typography>
               </Box>
             </Stack>
           )}
         </DialogContent>
       </Dialog>
-    </Box>
+    </Container>
   );
 }

@@ -41,8 +41,7 @@ import {
 import institutionalTheme from '../theme/theme';
 import { setPageTitle } from '../utils/pageTitle';
 import { procurementAPI } from '../api/procurementApi';
-// Assuming useAuth is defined and imported from a context file
-import { useAuth } from '../context/AuthContext'; // Adjust the import path as needed
+import { useAuth } from '../contexts/AppContext';
 
 
 const DRAWER_WIDTH = 240;

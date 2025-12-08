@@ -1,4 +1,4 @@
-import { Suspense, lazy } from 'react';
+import { Suspense, lazy, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/ CssBaseline';
@@ -13,7 +13,7 @@ import { ToastContext } from './contexts/ToastContext';
 import { DarkModeProvider } from './contexts/DarkModeContext';
 import { SuperAdminProvider } from './contexts/SuperAdminContext';
 import { AppProvider, useApp } from './contexts/AppContext';
-import TokenManager from './utils/tokenManager'; // Assuming TokenManager is in './utils/tokenManager'
+import TokenManager from './services/tokenManager';
 
 // Core pages (eager load)
 import HomePage from './pages/HomePage';

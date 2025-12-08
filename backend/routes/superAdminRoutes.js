@@ -36,86 +36,92 @@ router.use(adminMiddleware.protectSensitiveData); // Sensitive data protection
 router.use(adminMiddleware.logAdminAction); // Audit logging
 router.use(adminMiddleware.concurrentRequestLimiter()); // Concurrent request limit
 
+// Note: Super Admin routes are now handled through adminController
+// These routes are placeholders for future implementation
+
 // ===== 1. STATIC PAGES =====
-router.get('/pages', superAdminController.listPages);
-router.get('/pages/:id', validateIdMiddleware('id'), superAdminController.getPage);
-router.post('/pages', superAdminController.createPage);
-router.put('/pages/:id', validateIdMiddleware('id'), superAdminController.updatePage);
-router.delete('/pages/:id', validateIdMiddleware('id'), superAdminController.deletePage);
+router.get('/pages', (req, res) => res.status(501).json({ message: 'Not implemented yet' }));
+router.get('/pages/:id', validateIdMiddleware('id'), (req, res) => res.status(501).json({ message: 'Not implemented yet' }));
+router.post('/pages', (req, res) => res.status(501).json({ message: 'Not implemented yet' }));
+router.put('/pages/:id', validateIdMiddleware('id'), (req, res) => res.status(501).json({ message: 'Not implemented yet' }));
+router.delete('/pages/:id', validateIdMiddleware('id'), (req, res) => res.status(501).json({ message: 'Not implemented yet' }));
 
 // ===== 2. FILE MANAGEMENT =====
-router.get('/files', superAdminController.listFiles);
+router.get('/files', (req, res) => res.status(501).json({ message: 'Not implemented yet' }));
 router.post(
   '/files',
   adminMiddleware.adminFileUploadLimiter,
   upload,
   adminMiddleware.validateFileUpload,
-  superAdminController.uploadFile
+  (req, res) => res.status(501).json({ message: 'Not implemented yet' })
 );
 router.delete(
   '/files/:id',
   validateIdMiddleware('id'),
   adminMiddleware.adminMutationLimiter,
-  superAdminController.deleteFile
+  (req, res) => res.status(501).json({ message: 'Not implemented yet' })
 );
 
 // ===== 3. DOCUMENT MANAGEMENT =====
-router.get('/documents', superAdminController.listDocuments);
-router.post('/documents', superAdminController.createDocument);
-router.delete('/documents/:id', validateIdMiddleware('id'), superAdminController.deleteDocument);
+router.get('/documents', (req, res) => res.status(501).json({ message: 'Not implemented yet' }));
+router.post('/documents', (req, res) => res.status(501).json({ message: 'Not implemented yet' }));
+router.delete('/documents/:id', validateIdMiddleware('id'), (req, res) => res.status(501).json({ message: 'Not implemented yet' }));
 
 // ===== 4. EMAIL NOTIFICATIONS =====
-router.get('/emails', superAdminController.listEmails);
-router.post('/emails/send', superAdminController.sendEmail);
+router.get('/emails', (req, res) => res.status(501).json({ message: 'Not implemented yet' }));
+router.post('/emails/send', (req, res) => res.status(501).json({ message: 'Not implemented yet' }));
 
 // ===== 5. USER MANAGEMENT =====
-router.get('/users', superAdminController.listUsers);
+// Use adminController for user management
+const adminController = require('../controllers/adminController');
+
+router.get('/users', adminController.getAllUsers);
 router.put(
   '/users/:id/role',
   validateIdMiddleware('id'),
   adminMiddleware.adminMutationLimiter,
-  superAdminController.updateUserRole
+  adminController.updateUserRole
 );
 router.post(
   '/users/:id/block',
   validateIdMiddleware('id'),
   adminMiddleware.adminMutationLimiter,
-  superAdminController.blockUser
+  adminController.blockUser
 );
 router.post(
   '/users/:id/unblock',
   validateIdMiddleware('id'),
   adminMiddleware.adminMutationLimiter,
-  superAdminController.unblockUser
+  adminController.unblockUser
 );
 
 // ===== 6. AUDIT LOGS =====
-router.get('/audit-logs', superAdminController.getAuditLogs);
+router.get('/audit-logs', (req, res) => res.status(501).json({ message: 'Not implemented yet' }));
 
 // ===== 7. HEALTH MONITORING =====
-router.get('/health', superAdminController.getSystemHealth);
+router.get('/health', adminController.getHealthDashboard);
 
 // ===== 8. BACKUP & RESTORE =====
-router.get('/backups', superAdminController.listBackups);
-router.post('/backups/create', superAdminController.createBackup);
-router.post('/backups/:id/restore', validateIdMiddleware('id'), superAdminController.restoreBackup);
+router.get('/backups', (req, res) => res.status(501).json({ message: 'Not implemented yet' }));
+router.post('/backups/create', (req, res) => res.status(501).json({ message: 'Not implemented yet' }));
+router.post('/backups/:id/restore', validateIdMiddleware('id'), (req, res) => res.status(501).json({ message: 'Not implemented yet' }));
 
 // ===== 9. SUBSCRIPTION PLANS =====
-router.get('/subscription-plans', superAdminController.listSubscriptionPlans);
-router.post('/subscription-plans', superAdminController.createSubscriptionPlan);
+router.get('/subscription-plans', (req, res) => res.status(501).json({ message: 'Not implemented yet' }));
+router.post('/subscription-plans', (req, res) => res.status(501).json({ message: 'Not implemented yet' }));
 router.put(
   '/subscription-plans/:id',
   validateIdMiddleware('id'),
-  superAdminController.updateSubscriptionPlan
+  (req, res) => res.status(501).json({ message: 'Not implemented yet' })
 );
 router.delete(
   '/subscription-plans/:id',
   validateIdMiddleware('id'),
-  superAdminController.deleteSubscriptionPlan
+  (req, res) => res.status(501).json({ message: 'Not implemented yet' })
 );
 
 // ===== 10. FEATURE CONTROL =====
-router.get('/features', superAdminController.listFeatures);
-router.put('/features/:id/toggle', validateIdMiddleware('id'), superAdminController.toggleFeature);
+router.get('/features', (req, res) => res.status(501).json({ message: 'Not implemented yet' }));
+router.put('/features/:id/toggle', validateIdMiddleware('id'), (req, res) => res.status(501).json({ message: 'Not implemented yet' }));
 
 module.exports = router;

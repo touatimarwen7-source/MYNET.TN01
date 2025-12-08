@@ -1,20 +1,20 @@
 
 /**
- * Middleware للتحقق من اتصال قاعدة البيانات قبل معالجة الطلبات
+ * Middleware to verify database connection before processing requests
  */
 
 const { getPool } = require('../config/db');
 
 /**
- * التحقق من أن قاعدة البيانات متصلة ومستجيبة
+ * Verify that the database is connected and responsive
  */
 async function ensureDatabaseConnection(req, res, next) {
   try {
     const pool = getPool();
     
-    // فحص سريع للاتصال
+    // Quick connection check
     if (pool.totalCount === 0) {
-      // لا توجد اتصالات - محاولة إنشاء واحد
+      // No connections - attempt to create one
       const client = await pool.connect();
       client.release();
     }
@@ -27,20 +27,20 @@ async function ensureDatabaseConnection(req, res, next) {
       success: false,
       error: 'Database temporarily unavailable',
       code: 'DB_CONNECTION_FAILED',
-      message: 'يرجى المحاولة مرة أخرى بعد قليل',
+      message: 'Veuillez réessayer dans quelques instants',
       timestamp: new Date().toISOString(),
     });
   }
 }
 
 /**
- * Middleware خفيف للتحقق من صحة Pool فقط
+ * Lightweight middleware to verify Pool health only
  */
 function checkPoolHealth(req, res, next) {
   try {
     const pool = getPool();
     
-    // التحقق من أن Pool موجود وليس ممتلئًا
+    // Verify that Pool exists and is not full
     if (pool.waitingCount > pool.options.max) {
       return res.status(503).json({
         success: false,

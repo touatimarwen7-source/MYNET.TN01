@@ -3,6 +3,7 @@ const express = require('express');
 const authMiddleware = require('../middleware/authMiddleware');
 const router = express.Router();
 const { validateIdMiddleware } = require('../middleware/validateIdMiddleware');
+const { validationMiddleware } = require('../middleware/validationMiddleware');
 
 // Supplier dashboard overview
 router.get('/overview', authMiddleware, async (req, res) => {
@@ -37,7 +38,7 @@ router.get('/acceptance-rate', authMiddleware, async (req, res) => {
     const rate = await db.query(
       `
       SELECT
-        (SELECT COUNT(*) FROM offers WHERE supplier_id = $1 AND status = 'accepted' AND is_deleted = false)::float / 
+        (SELECT COUNT(*) FROM offers WHERE supplier_id = $1 AND status = 'accepted' AND is_deleted = false)::float /
         NULLIF((SELECT COUNT(*) FROM offers WHERE supplier_id = $1 AND is_deleted = false), 0) * 100 as acceptance_rate
     `,
       [userId]
@@ -57,7 +58,7 @@ router.get('/revenue-by-month', authMiddleware, async (req, res) => {
 
     const revenue = await db.query(
       `
-      SELECT 
+      SELECT
         DATE_TRUNC('month', po.created_at) as month,
         SUM(po.total_amount) as revenue
       FROM purchase_orders po
@@ -83,7 +84,7 @@ router.get('/recent-reviews', authMiddleware, async (req, res) => {
 
     const reviews = await db.query(
       `
-      SELECT 
+      SELECT
         r.id,
         r.rating,
         r.comment,
@@ -103,5 +104,42 @@ router.get('/recent-reviews', authMiddleware, async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+
+// Add a new route for testing validation middleware
+// For example, a route to get a specific offer by ID
+router.get('/offers/:id', authMiddleware, validateIdMiddleware, async (req, res) => {
+  try {
+    const db = req.app.get('db');
+    const userId = req.user.id;
+    const offerId = req.params.id;
+
+    const offer = await db.query(
+      `
+      SELECT * FROM offers WHERE id = $1 AND supplier_id = $2 AND is_deleted = false
+    `,
+      [offerId, userId]
+    );
+
+    if (offer.rows.length === 0) {
+      return res.status(404).json({ error: 'Offer not found' });
+    }
+
+    res.json(offer.rows[0]);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+
+// Example of adding validation middleware to an existing route if it were to accept a body
+// router.post('/new-offer', authMiddleware, validationMiddleware, async (req, res) => {
+//   // ... implementation ...
+// });
+
+
+// Example of a route that might require validation for query parameters
+// router.get('/filtered-offers', authMiddleware, validationMiddleware, async (req, res) => {
+//   // ... implementation ...
+// });
 
 module.exports = router;

@@ -34,13 +34,10 @@ const logAction = async (db, userId, action, entityType, entityId, details = {})
  * @desc    Get all audit logs (admin only)
  * @access  Private/Admin
  */
-router.get(
-  '/',
-  authMiddleware, // authMiddleware is a function and does not need to be wrapped by asyncHandler
-  asyncHandler(async (req, res) => {
-    const { entity_type, user_id } = req.query;
-    const { limit, offset, sql } = buildPaginationQuery(req.query.limit, req.query.offset);
-    const db = req.app.get('db');
+router.get('/', authMiddleware, asyncHandler(async (req, res) => {
+  const { entity_type, user_id } = req.query;
+  const { limit, offset, sql } = buildPaginationQuery(req.query.limit, req.query.offset);
+  const db = req.app.get('db');
 
     // Check if super_admin only
     const userResult = await db.query('SELECT role FROM users WHERE id = $1', [req.user.id]);
@@ -75,11 +72,7 @@ router.get(
  * @param {string} userId - User ID to get activity for
  * @returns {Object[]} Array of audit log entries
  */
-router.get(
-  '/user/:userId',
-  validateIdMiddleware('userId'),
-  authMiddleware, // authMiddleware is a function and does not need to be wrapped by asyncHandler
-  asyncHandler(async (req, res) => {
+router.get('/user/:userId', validateIdMiddleware('userId'), authMiddleware, asyncHandler(async (req, res) => {
     const { userId } = req.params;
     const { limit, offset, sql } = buildPaginationQuery(req.query.limit, req.query.offset);
     const db = req.app.get('db');
@@ -99,11 +92,7 @@ router.get(
 );
 
 // Get specific audit log
-router.get(
-  '/:id',
-  validateIdMiddleware('id'),
-  authMiddleware, // authMiddleware is a function and does not need to be wrapped by asyncHandler
-  asyncHandler(async (req, res) => {
+router.get('/:id', validateIdMiddleware('id'), authMiddleware, asyncHandler(async (req, res) => {
     const { id } = req.params;
     const db = req.app.get('db');
 

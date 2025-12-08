@@ -23,6 +23,15 @@
     <!-- X-Frame-Options removed from meta and will be provided by the server as an HTTP header -->
     <meta http-equiv="X-XSS-Protection" content="1; mode=block" />
     <meta name="referrer" content="strict-origin-when-cross-origin" />
+    <meta http-equiv="Content-Security-Policy" content="
+      default-src 'self';
+      script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://*.replit.dev;
+      style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net;
+      font-src 'self' https://fonts.gstatic.com data:;
+      img-src 'self' data: https: blob:;
+      connect-src 'self' http://localhost:3000 http://localhost:5000 http://0.0.0.0:3000 http://0.0.0.0:5000 https://*.replit.dev:* https://*.replit.dev ws://localhost:* ws://0.0.0.0:* ws://*.replit.dev:* wss://*.replit.dev:* wss:;
+      frame-src 'self' https://*.replit.dev;
+    "></meta>
 
     <title>MyNet.tn - Système de Gestion des Appels d'Offres et des Achats</title>
   </head>

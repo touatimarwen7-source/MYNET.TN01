@@ -254,10 +254,14 @@ class TenderService {
     const params = [];
     let paramCount = 1;
 
+    // Filtres avec validation
     if (filters.status) {
-      query += ` AND status = $${paramCount}`;
-      params.push(filters.status);
-      paramCount++;
+      const validStatuses = ['draft', 'published', 'closed', 'awarded', 'cancelled'];
+      if (validStatuses.includes(filters.status)) {
+        query += ` AND status = $${paramCount}`;
+        params.push(filters.status);
+        paramCount++;
+      }
     }
 
     if (filters.category) {
@@ -266,7 +270,7 @@ class TenderService {
       paramCount++;
     }
 
-    if (filters.is_public !== undefined) {
+    if (filters.is_public !== undefined && filters.is_public !== null) {
       query += ` AND is_public = $${paramCount}`;
       params.push(filters.is_public);
       paramCount++;
@@ -274,7 +278,13 @@ class TenderService {
 
     query += ' ORDER BY created_at DESC';
 
-    if (filters.limit) {
+    // Pagination avec OFFSET
+    if (filters.limit && filters.page) {
+      const offset = (filters.page - 1) * filters.limit;
+      query += ` LIMIT $${paramCount} OFFSET $${paramCount + 1}`;
+      params.push(filters.limit, offset);
+      paramCount += 2;
+    } else if (filters.limit) {
       query += ` LIMIT $${paramCount}`;
       params.push(filters.limit);
       paramCount++;
@@ -283,19 +293,23 @@ class TenderService {
     try {
       const result = await pool.query(query, params);
 
-      // Log the audit trail for fetching all tenders
-      await AuditLogService.log(userId, 'tender', null, 'read', 'All tenders fetched with filters');
+      // Log audit seulement si userId existe
+      if (userId) {
+        await AuditLogService.log(userId, 'tender', null, 'read', 'All tenders fetched with filters');
+      }
 
       return result.rows;
     } catch (error) {
-      // Log the audit trail for failed fetching all tenders
-      await AuditLogService.log(
-        userId,
-        'tender',
-        null,
-        'read',
-        `Failed to get tenders: ${error.message}`
-      );
+      if (userId) {
+        await AuditLogService.log(
+          userId,
+          'tender',
+          null,
+          'read',
+          `Failed to get tenders: ${error.message}`
+        );
+      }
+      logger.error('Database error in getAllTenders:', error);
       throw new Error(`Failed to get tenders: ${error.message}`);
     }
   }

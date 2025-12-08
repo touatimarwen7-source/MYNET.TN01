@@ -8,10 +8,32 @@ const OfferController = require('../controllers/procurement/OfferController');
 // Tender routes
 router.post('/tenders', verifyToken, TenderController.createTender.bind(TenderController));
 router.get('/tenders', (req, res, next) => {
-  // Normaliser les paramètres de pagination
-  if (req.query.page) req.query.page = String(req.query.page);
-  if (req.query.limit) req.query.limit = String(req.query.limit);
-  next();
+  // Normaliser et valider les paramètres de pagination
+  try {
+    // Convertir en string pour parsing sécurisé
+    if (req.query.page !== undefined) {
+      req.query.page = String(req.query.page).trim();
+    }
+    if (req.query.limit !== undefined) {
+      req.query.limit = String(req.query.limit).trim();
+    }
+    // Normaliser is_public
+    if (req.query.is_public !== undefined) {
+      const val = String(req.query.is_public).toLowerCase().trim();
+      if (val === 'true' || val === '1') {
+        req.query.is_public = 'true';
+      } else if (val === 'false' || val === '0') {
+        req.query.is_public = 'false';
+      }
+    }
+    next();
+  } catch (err) {
+    return res.status(400).json({
+      success: false,
+      error: 'Paramètres de requête invalides',
+      code: 'INVALID_QUERY_PARAMS'
+    });
+  }
 }, TenderController.getAllTenders.bind(TenderController));
 router.get('/tenders/:id', TenderController.getTender.bind(TenderController));
 router.put('/tenders/:id', verifyToken, TenderController.updateTender.bind(TenderController));

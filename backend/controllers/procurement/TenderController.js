@@ -154,41 +154,75 @@ class TenderController {
    */
   async getAllTenders(req, res) {
     try {
-      // Parse et valider les paramètres de pagination
+      // Parse et valider les paramètres de pagination avec gestion d'erreurs
       let page = 1;
       let limit = 50;
 
-      if (req.query.page) {
+      // Validation stricte de page
+      if (req.query.page !== undefined) {
         const parsedPage = parseInt(String(req.query.page), 10);
-        if (!isNaN(parsedPage) && parsedPage > 0) {
-          page = parsedPage;
+        if (isNaN(parsedPage) || parsedPage < 1) {
+          return res.status(400).json({
+            success: false,
+            error: 'Page invalide. Doit être un nombre positif.',
+            code: 'INVALID_PAGE'
+          });
         }
+        page = parsedPage;
       }
 
-      if (req.query.limit) {
+      // Validation stricte de limit
+      if (req.query.limit !== undefined) {
         const parsedLimit = parseInt(String(req.query.limit), 10);
-        if (!isNaN(parsedLimit) && parsedLimit > 0) {
-          limit = Math.min(parsedLimit, 100); // Max 100
+        if (isNaN(parsedLimit) || parsedLimit < 1) {
+          return res.status(400).json({
+            success: false,
+            error: 'Limite invalide. Doit être un nombre positif.',
+            code: 'INVALID_LIMIT'
+          });
+        }
+        limit = Math.min(parsedLimit, 100); // Max 100
+      }
+
+      // Validation de is_public
+      let isPublic = undefined;
+      if (req.query.is_public !== undefined) {
+        if (req.query.is_public === 'true' || req.query.is_public === true) {
+          isPublic = true;
+        } else if (req.query.is_public === 'false' || req.query.is_public === false) {
+          isPublic = false;
         }
       }
 
       const filters = {
         status: req.query.status,
         category: req.query.category,
-        is_public: req.query.is_public,
+        is_public: isPublic,
         limit,
         page,
       };
 
-      const tenders = await TenderService.getAllTenders(filters);
+      const tenders = await TenderService.getAllTenders(filters, req.user?.id);
 
       res.status(200).json({
         success: true,
         count: tenders.length,
+        page,
+        limit,
         tenders,
       });
     } catch (error) {
       logger.error('Error fetching tenders:', error);
+      
+      // Gestion d'erreur spécifique
+      if (error.message?.includes('validation')) {
+        return res.status(400).json({
+          success: false,
+          error: error.message,
+          code: 'VALIDATION_ERROR'
+        });
+      }
+      
       const { errorResponse } = require('../../middleware/errorResponseFormatter');
       errorResponse(res, error, 'Error fetching tenders');
     }

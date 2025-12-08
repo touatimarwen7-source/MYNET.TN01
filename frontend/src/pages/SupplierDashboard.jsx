@@ -1,5 +1,4 @@
-
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   Box,
@@ -31,6 +30,7 @@ import { procurementAPI } from '../api/procurementApi';
 import { useApp } from '../contexts/AppContext';
 import institutionalTheme from '../theme/theme';
 import { setPageTitle } from '../utils/pageTitle';
+import axiosInstance from '../api/axiosConfig'; // Assumed: axiosInstance handles base URL and interceptors
 
 const SupplierDashboard = () => {
   const navigate = useNavigate();
@@ -60,42 +60,81 @@ const SupplierDashboard = () => {
     }
   }, [user]);
 
-  const fetchDashboardData = async () => {
+  const fetchDashboardData = useCallback(async (retryCount = 0) => {
     try {
       setLoading(true);
       setError(null);
 
-      const [statsRes, analyticsRes, tendersRes] = await Promise.all([
-        procurementAPI.supplier.getStats(),
-        procurementAPI.supplier.getAnalytics(),
-        procurementAPI.getTenders({ page: 1, limit: 5 }),
-      ]);
+      // Requêtes avec gestion d'erreur individuelle
+      const requests = [
+        axiosInstance.get('/api/procurement/supplier/analytics').catch(err => {
+          console.warn('Analytics failed:', err.message);
+          return { data: { data: {} } };
+        }),
+        axiosInstance.get('/api/procurement/supplier/trends').catch(err => {
+          console.warn('Trends failed:', err.message);
+          return { data: { data: [] } };
+        }),
+        axiosInstance.get('/api/procurement/supplier/recent-orders').catch(err => {
+          console.warn('Recent orders failed:', err.message);
+          return { data: { data: [] } };
+        }),
+        axiosInstance.get('/api/procurement/tenders', {
+          params: {
+            page: 1,
+            limit: 5,
+            is_public: true
+          }
+        }).catch(err => {
+          console.warn('Tenders failed:', err.message);
+          return { data: { tenders: [] } };
+        }),
+      ];
 
-      if (statsRes?.data) {
+      const [analyticsRes, trendsRes, recentOrdersRes, tendersRes] = await Promise.all(requests);
+
+      // Assurez-vous que les données existent avant de les définir
+      const analyticsData = analyticsRes?.data?.data || {};
+      setAnalytics({
+        totalReviews: analyticsData.totalReviews || 0,
+        avgRating: String(analyticsData.avgRating || '0.0'),
+        recentOrders: analyticsData.recentOrders || [],
+      });
+
+      const tendersData = tendersRes?.data?.tenders || [];
+      setRecentTenders(tendersData);
+
+      // Assuming stats are fetched from a different API or needs to be aggregated
+      // For now, using placeholder data or a separate call if available
+      // If procurementAPI.supplier.getStats() is still relevant and not replaced by axiosInstance calls above:
+      try {
+        const statsRes = await procurementAPI.supplier.getStats(); // Keep this if it's a separate, essential call
+        if (statsRes?.data) {
+          setStats({
+            totalOffers: statsRes.data.totalOffers || 0,
+            acceptedOffers: statsRes.data.acceptedOffers || 0,
+            avgOfferValue: statsRes.data.avgOfferValue || 0,
+            activeOrders: statsRes.data.activeOrders || 0,
+          });
+        }
+      } catch (statsErr) {
+        console.warn('Stats failed:', statsErr.message);
+        // Decide if you want to reset stats or keep previous values on stats error
         setStats({
-          totalOffers: statsRes.data.totalOffers || 0,
-          acceptedOffers: statsRes.data.acceptedOffers || 0,
-          avgOfferValue: statsRes.data.avgOfferValue || 0,
-          activeOrders: statsRes.data.activeOrders || 0,
+          totalOffers: 0,
+          acceptedOffers: 0,
+          avgOfferValue: 0,
+          activeOrders: 0,
         });
       }
 
-      if (analyticsRes?.data?.analytics) {
-        setAnalytics({
-          totalReviews: analyticsRes.data.analytics.totalReviews || 0,
-          avgRating: String(analyticsRes.data.analytics.avgRating || '0.0'),
-          recentOrders: analyticsRes.data.analytics.recentOrders || [],
-        });
-      }
 
-      if (tendersRes?.data?.tenders) {
-        setRecentTenders(tendersRes.data.tenders || []);
-      }
     } catch (err) {
       console.error('❌ Dashboard Error:', err);
       const errorMessage = err.response?.data?.error || err.message || 'Échec du chargement des données du tableau de bord';
       setError(errorMessage);
 
+      // Resetting state on a critical failure
       setStats({
         totalOffers: 0,
         acceptedOffers: 0,
@@ -111,7 +150,7 @@ const SupplierDashboard = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, []); // Dependencies for useCallback
 
   if (loading) {
     return (

@@ -3,7 +3,7 @@ const authMiddleware = require('../middleware/authMiddleware');
 const { buildPaginationQuery } = require('../utils/paginationHelper');
 const { asyncHandler } = require('../middleware/errorHandlingMiddleware');
 const { getPool } = require('../config/db'); // Assuming getPool is defined elsewhere for DB connection
-const logger = require('../config/logger'); // Assuming logger is configured elsewhere
+const { logger } = require('../utils/logger'); // Fixed: Use logger from utils
 
 const router = express.Router();
 const { validateIdMiddleware } = require('../middleware/validateIdMiddleware');

@@ -82,6 +82,10 @@ const swaggerSpec = require('./config/swagger');
 const { ErrorResponseFormatter } = require('./utils/errorHandler');
 const ServiceValidator = require('./utils/serviceValidator');
 const DatabaseErrorHandler = require('./utils/databaseErrorHandler');
+const { 
+  globalErrorHandler, 
+  notFoundHandler 
+} = require('./middleware/errorHandlingMiddleware');
 
 const app = express();
 

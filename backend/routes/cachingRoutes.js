@@ -10,6 +10,40 @@ const router = express.Router();
 const { validateIdMiddleware } = require('../middleware/validateIdMiddleware');
 const { verifyToken, checkRole } = require('../middleware/authMiddleware');
 const queryCacheManager = require('../utils/queryCacheManager');
+
+// Get cache statistics
+router.get('/stats', verifyToken, checkRole(['admin', 'super_admin']), async (req, res) => {
+  try {
+    const stats = queryCacheManager.getStats();
+    res.json({
+      success: true,
+      data: stats
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// Clear cache
+router.delete('/clear', verifyToken, checkRole(['admin', 'super_admin']), async (req, res) => {
+  try {
+    queryCacheManager.clear();
+    res.json({
+      success: true,
+      message: 'Cache cleared successfully'
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+module.exports = router;
 const performanceOptimizer = require('../utils/performanceOptimizer');
 
 /**

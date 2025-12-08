@@ -10,6 +10,11 @@
 
 const express = require('express');
 const router = express.Router();
+
+// Basic health check for this route
+router.get('/health', (req, res) => {
+  res.json({ status: 'ok', service: 'performance' });
+});
 const { validateIdMiddleware } = require('../middleware/validateIdMiddleware');
 const authMiddleware = require('../middleware/authMiddleware');
 const performanceMonitor = require('../utils/performanceMonitor');

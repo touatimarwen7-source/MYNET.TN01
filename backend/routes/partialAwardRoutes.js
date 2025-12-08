@@ -1,5 +1,10 @@
 const express = require('express');
 const router = express.Router();
+
+// Basic health check for this route
+router.get('/health', (req, res) => {
+  res.json({ status: 'ok', service: 'partial-awards' });
+});
 const { validateIdMiddleware } = require('../middleware/validateIdMiddleware');
 const { getPool } = require('../config/db');
 

@@ -1,10 +1,14 @@
-
 const express = require('express');
 const ClarificationController = require('../controllers/ClarificationController');
 const { authMiddleware, roleMiddleware } = require('../middleware/authMiddleware');
 const { validateSchema } = require('../middleware/adminMiddleware');
 
 const router = express.Router();
+
+// Basic health check for this route
+router.get('/health', (req, res) => {
+  res.json({ status: 'ok', service: 'clarifications' });
+});
 
 // Schema validation for clarification creation
 const clarificationSchema = {

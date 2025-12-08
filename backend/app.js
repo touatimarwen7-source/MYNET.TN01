@@ -334,43 +334,35 @@ app.use(globalErrorHandler);
 module.exports = app;
 module.exports.asyncHandler = asyncHandler;
 
-// TURN 3: NEW FEATUREROUTES
-app.use('/api/analytics', analyticsRoutes);
-app.use('/api/search/advanced', advancedSearchRoutes);
-app.use('/api/export', exportRoutes);
-app.use('/api/mfa', mfaRoutes);
-// Apply routes with error checking
-if (supplierAnalyticsRoutes) app.use('/api/supplier-analytics', supplierAnalyticsRoutes);
-if (bidAnalyticsRoutes) app.use('/api/bid-analytics', bidAnalyticsRoutes);
-if (bidComparisonRoutes) app.use('/api/bid-comparison', bidComparisonRoutes);
-if (performanceTrackingRoutes) app.use('/api/performance-tracking', performanceTrackingRoutes);
-if (notificationRoutes) app.use('/api/notifications', notificationRoutes);
+// TURN 3: NEW FEATUREROUTES - WITH COMPREHENSIVE SAFETY CHECKS
+const safeUseRoute = (path, route, name) => {
+  if (route && typeof route === 'function') {
+    app.use(path, route);
+    logger.info(`✅ ${name} routes loaded`);
+  } else {
+    logger.warn(`⚠️ ${name} routes not available (invalid export)`);
+  }
+};
 
-// Email service routes
-app.use('/api/email', emailRoutes);
-
-// 🔄 CRITICAL FIX #4: Backup management routes
-app.use('/api/backups', backupRoutes);
-
-// 🔐 PASSWORD RESET & EMAIL VERIFICATION ROUTES
-app.use('/api/auth/password-reset', passwordResetRoutes);
-
-// 📋 TENDER INQUIRIES & ADDENDA ROUTES
-app.use('/api/inquiries', inquiryRoutes);
-
-// 📊 OFFER OPENING & EVALUATION ROUTES
-app.use('/api/evaluation', offerEvaluationRoutes);
-
-// 🏆 TENDER MANAGEMENT ROUTES (Awards, Archives, Cancellation)
-app.use('/api/tender-management', tenderManagementRoutes);
+safeUseRoute('/api/analytics', analyticsRoutes, 'Analytics');
+safeUseRoute('/api/search/advanced', advancedSearchRoutes, 'Advanced Search');
+safeUseRoute('/api/export', exportRoutes, 'Export');
+safeUseRoute('/api/mfa', mfaRoutes, 'MFA');
+safeUseRoute('/api/supplier-analytics', supplierAnalyticsRoutes, 'Supplier Analytics');
+safeUseRoute('/api/bid-analytics', bidAnalyticsRoutes, 'Bid Analytics');
+safeUseRoute('/api/bid-comparison', bidComparisonRoutes, 'Bid Comparison');
+safeUseRoute('/api/performance-tracking', performanceTrackingRoutes, 'Performance Tracking');
+safeUseRoute('/api/notifications', notificationRoutes, 'Notifications');
+safeUseRoute('/api/email', emailRoutes, 'Email');
+safeUseRoute('/api/backups', backupRoutes, 'Backup Management');
+safeUseRoute('/api/auth/password-reset', passwordResetRoutes, 'Password Reset');
+safeUseRoute('/api/inquiries', inquiryRoutes, 'Tender Inquiries');
+safeUseRoute('/api/evaluation', offerEvaluationRoutes, 'Offer Evaluation');
+safeUseRoute('/api/tender-management', tenderManagementRoutes, 'Tender Management');
 
 // 🤖 AI RECOMMENDATIONS & ADVANCED ANALYTICS ROUTES
 const aiRecommendationsRoutes = require('./routes/aiRecommendationsRoutes');
-if (aiRecommendationsRoutes && typeof aiRecommendationsRoutes === 'function') {
-  app.use('/api/ai/recommendations', aiRecommendationsRoutes);
-} else {
-  logger.warn('⚠️ AI Recommendations routes not available');
-}
+safeUseRoute('/api/ai/recommendations', aiRecommendationsRoutes, 'AI Recommendations');
 
 // 🐌 SLOW ENDPOINT MONITORING - Track performance issues
 const { slowEndpointMonitor } = require('./middleware/slowEndpointMonitor');
@@ -378,35 +370,19 @@ app.use(slowEndpointMonitor());
 
 // 📋 CLARIFICATION ROUTES (مسارات الاستفسارات)
 const clarificationRoutes = require('./routes/clarificationRoutes');
-if (clarificationRoutes && typeof clarificationRoutes === 'function') {
-  app.use('/api/clarifications', clarificationRoutes);
-} else {
-  logger.warn('⚠️ Clarification routes not available');
-}
+safeUseRoute('/api/clarifications', clarificationRoutes, 'Clarifications');
 
 // 🏅 PARTIAL AWARD ROUTES (مسارات الترسية الجزئية)
 const partialAwardRoutes = require('./routes/partialAwardRoutes');
-if (partialAwardRoutes && typeof partialAwardRoutes === 'function') {
-  app.use('/api/partial-awards', partialAwardRoutes);
-} else {
-  logger.warn('⚠️ Partial Award routes not available');
-}
+safeUseRoute('/api/partial-awards', partialAwardRoutes, 'Partial Awards');
 
 // ⚡ PERFORMANCE MONITORING ROUTES (مراقبة الأداء)
 const performanceRoutes = require('./routes/performanceRoutes');
-if (performanceRoutes && typeof performanceRoutes === 'function') {
-  app.use('/api/performance', performanceRoutes);
-} else {
-  logger.warn('⚠️ Performance routes not available');
-}
+safeUseRoute('/api/performance', performanceRoutes, 'Performance Monitoring');
 
 // 💾 CACHE MANAGEMENT ROUTES (إدارة الذاكرة المؤقتة)
 const cachingRoutes = require('./routes/cachingRoutes');
-if (cachingRoutes && typeof cachingRoutes === 'function') {
-  app.use('/api/cache', cachingRoutes);
-} else {
-  logger.warn('⚠️ Caching routes not available');
-}
+safeUseRoute('/api/cache', cachingRoutes, 'Cache Management');
 
 // Initialize email service
 initializeEmailService();

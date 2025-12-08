@@ -1,5 +1,5 @@
-import { THEME_COLORS } from './themeHelpers';
-import { useState, useEffect } from 'react';
+
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import {
   AppBar,
@@ -17,24 +17,59 @@ import {
   List,
   ListItem,
   ListItemText,
+  Badge,
+  Divider,
+  Chip,
+  Fade,
+  Zoom,
+  Tooltip,
+  useScrollTrigger,
+  Slide,
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
 import LogoutIcon from '@mui/icons-material/Logout';
+import DashboardIcon from '@mui/icons-material/Dashboard';
+import PersonIcon from '@mui/icons-material/Person';
+import SecurityIcon from '@mui/icons-material/Security';
+import SettingsIcon from '@mui/icons-material/Settings';
+import NotificationsIcon from '@mui/icons-material/Notifications';
+import CloseIcon from '@mui/icons-material/Close';
 import tokenManager from '../services/tokenManager';
 import NotificationCenter from './NotificationCenter';
 import institutionalTheme from '../theme/theme';
 
+// Hide header on scroll down
+function HideOnScroll({ children }) {
+  const trigger = useScrollTrigger();
+  return (
+    <Slide appear={false} direction="down" in={!trigger}>
+      {children}
+    </Slide>
+  );
+}
+
 export default function UnifiedHeader() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [userRole, setUserRole] = useState(null);
   const [userName, setUserName] = useState('Utilisateur');
   const [searchQuery, setSearchQuery] = useState('');
   const [anchorEl, setAnchorEl] = useState(null);
+  const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
   const theme = institutionalTheme;
+
+  // Detect scroll for styling
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 10);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   useEffect(() => {
     const checkAuth = () => {
@@ -51,275 +86,502 @@ export default function UnifiedHeader() {
     return () => window.removeEventListener('authChanged', checkAuth);
   }, []);
 
-  const isPublicPage = ['/', '/about', '/features', '/pricing', '/contact'].includes(
-    location.pathname
+  const isPublicPage = useMemo(
+    () => ['/', '/about', '/features', '/pricing', '/contact'].includes(location.pathname),
+    [location.pathname]
   );
 
-  const publicLinks = [
-    { label: 'Accueil', href: '/' },
-    { label: 'À Propos', href: '/about' },
-    { label: 'Solutions', href: '/features' },
-    { label: 'Tarification', href: '/pricing' },
-    { label: 'Contact', href: '/contact' },
-  ];
+  const publicLinks = useMemo(
+    () => [
+      { label: 'Accueil', href: '/', icon: '🏠' },
+      { label: 'À Propos', href: '/about', icon: 'ℹ️' },
+      { label: 'Solutions', href: '/features', icon: '⚡' },
+      { label: 'Tarification', href: '/pricing', icon: '💰' },
+      { label: 'Contact', href: '/contact', icon: '📧' },
+    ],
+    []
+  );
 
-  const authenticatedLinks = [
-    { label: "Appels d'Offres", href: '/tenders' },
-    { label: 'Mon Profil', href: '/profile' },
-  ];
+  const authenticatedLinks = useMemo(
+    () => [
+      { label: "Appels d'Offres", href: '/tenders', icon: '📋' },
+      { label: 'Tableau de Bord', href: '/dashboard', icon: '📊' },
+    ],
+    []
+  );
 
   const shouldShowAuthLinks = isAuthenticated;
   const shouldShowPublicLinks = isPublicPage || !isAuthenticated;
 
-  const handleSearch = (e) => {
-    if (e.key === 'Enter' && searchQuery.trim()) {
-      navigate(`/search?q=${encodeURIComponent(searchQuery)}`);
-    }
-  };
+  const handleSearch = useCallback(
+    (e) => {
+      if (e.key === 'Enter' && searchQuery.trim()) {
+        navigate(`/tenders?search=${encodeURIComponent(searchQuery)}`);
+        setMobileSearchOpen(false);
+      }
+    },
+    [searchQuery, navigate]
+  );
 
-  const handleLogout = () => {
+  const handleLogout = useCallback(() => {
     tokenManager.clearTokens();
     window.dispatchEvent(new Event('authChanged'));
     navigate('/login');
     setAnchorEl(null);
-  };
+  }, [navigate]);
 
-  const handleProfileMenuOpen = (e) => {
+  const handleProfileMenuOpen = useCallback((e) => {
     setAnchorEl(e.currentTarget);
-  };
+  }, []);
 
-  const handleProfileMenuClose = () => {
+  const handleProfileMenuClose = useCallback(() => {
     setAnchorEl(null);
-  };
+  }, []);
 
-  const handleNavigate = (path) => {
-    navigate(path);
-    setMobileMenuOpen(false);
-  };
+  const handleNavigate = useCallback(
+    (path) => {
+      navigate(path);
+      setMobileMenuOpen(false);
+    },
+    [navigate]
+  );
 
-  const renderNavLinks = (links, isMobile = false) => {
-    return links.map((link) => (
-      <Button
-        key={link.href}
-        onClick={() => handleNavigate(link.href)}
-        sx={{
-          color:
-            location.pathname === link.href
-              ? theme.palette.primary.main
-              : theme.palette.text.primary,
-          fontWeight: location.pathname === link.href ? 600 : 500,
-          textTransform: 'none',
-          fontSize: '14px',
-          '&:hover': {
-            color: theme.palette.primary.main,
-            backgroundColor: 'transparent',
-          },
-          borderBottom: location.pathname === link.href ? '2px solid #0056B3' : 'none',
-          paddingBottom: '6px',
-        }}
-      >
-        {link.label}
-      </Button>
-    ));
-  };
+  const getRoleBadge = useCallback(() => {
+    const roleMap = {
+      buyer: { label: 'Acheteur', color: '#1976d2', icon: '🏢' },
+      supplier: { label: 'Fournisseur', color: '#2e7d32', icon: '🏭' },
+      admin: { label: 'Admin', color: '#d32f2f', icon: '👨‍💼' },
+      super_admin: { label: 'Super Admin', color: '#9c27b0', icon: '👑' },
+    };
+    return roleMap[userRole] || { label: 'Utilisateur', color: '#757575', icon: '👤' };
+  }, [userRole]);
 
-  return (
-    <AppBar
-      position="static"
-      sx={{
-        backgroundColor: THEME_COLORS.bgPaper,
-        color: theme.palette.text.primary,
-        borderBottom: '1px solid #e0e0e0',
-        boxShadow: 'none',
-      }}
-    >
-      <Toolbar
-        sx={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          padding: '12px 24px',
-          gap: '16px',
-        }}
-      >
-        {/* Logo */}
-        <Box
-          onClick={() => navigate('/')}
-          sx={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '8px',
-            cursor: 'pointer',
-            minWidth: '150px',
-            fontSize: '24px',
-            fontWeight: 600,
-            color: theme.palette.primary.main,
-            '&:hover': { color: '#0d47a1' },
-          }}
-        >
-          <span style={{ fontSize: '28px' }}>🌐</span>
-          <span>MyNet.tn</span>
-        </Box>
+  const roleBadge = getRoleBadge();
 
-        {/* Desktop Navigation */}
-        <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: '8px' }}>
-          {shouldShowAuthLinks && renderNavLinks(authenticatedLinks)}
-          {shouldShowPublicLinks && renderNavLinks(publicLinks)}
-        </Box>
-
-        {/* Search Bar */}
-        {isAuthenticated && (
-          <TextField
-            size="small"
-            placeholder="Rechercher..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            onKeyPress={handleSearch}
+  const renderNavLinks = useCallback(
+    (links) => {
+      return links.map((link) => (
+        <Tooltip key={link.href} title={link.label} arrow TransitionComponent={Zoom}>
+          <Button
+            onClick={() => handleNavigate(link.href)}
             sx={{
-              width: '200px',
-              display: { xs: 'none', sm: 'block' },
-              '& .MuiOutlinedInput-root': {
-                backgroundColor: '#f5f5f5',
-                '&:hover fieldset': { borderColor: '#bdbdbd' },
+              color:
+                location.pathname === link.href
+                  ? theme.palette.primary.main
+                  : theme.palette.text.primary,
+              fontWeight: location.pathname === link.href ? 600 : 500,
+              textTransform: 'none',
+              fontSize: '14px',
+              position: 'relative',
+              '&:hover': {
+                color: theme.palette.primary.main,
+                backgroundColor: 'transparent',
+              },
+              '&::after': {
+                content: '""',
+                position: 'absolute',
+                bottom: 0,
+                left: '50%',
+                transform: 'translateX(-50%)',
+                width: location.pathname === link.href ? '80%' : '0%',
+                height: '3px',
+                backgroundColor: theme.palette.primary.main,
+                borderRadius: '3px 3px 0 0',
+                transition: 'width 0.3s ease',
+              },
+              '&:hover::after': {
+                width: '80%',
               },
             }}
-            InputProps={{
-              endAdornment: <SearchIcon sx={{ fontSize: 18, color: '#9e9e9e' }} />,
-            }}
-          />
-        )}
+          >
+            <span style={{ marginRight: '6px' }}>{link.icon}</span>
+            {link.label}
+          </Button>
+        </Tooltip>
+      ));
+    },
+    [handleNavigate, location.pathname, theme]
+  );
 
-        {/* Right Actions */}
-        <Box sx={{ display: { xs: 'none', md: 'flex' }, alignItems: 'center', gap: '16px' }}>
-          {isAuthenticated ? (
-            <>
-              {/* Notification Center - Real-time Updates */}
-              <NotificationCenter />
-
+  return (
+    <HideOnScroll>
+      <AppBar
+        position="sticky"
+        sx={{
+          backgroundColor: scrolled ? 'rgba(255, 255, 255, 0.95)' : '#ffffff',
+          color: theme.palette.text.primary,
+          borderBottom: scrolled ? '2px solid #0056B3' : '1px solid #e0e0e0',
+          boxShadow: scrolled ? '0 4px 20px rgba(0,86,179,0.1)' : 'none',
+          backdropFilter: scrolled ? 'blur(10px)' : 'none',
+          transition: 'all 0.3s ease',
+        }}
+      >
+        <Toolbar
+          sx={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            padding: '12px 24px',
+            gap: '16px',
+            minHeight: { xs: '64px', md: '70px' },
+          }}
+        >
+          {/* Logo with Animation */}
+          <Zoom in timeout={500}>
+            <Box
+              onClick={() => navigate('/')}
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '10px',
+                cursor: 'pointer',
+                minWidth: '150px',
+                fontSize: '24px',
+                fontWeight: 700,
+                color: theme.palette.primary.main,
+                transition: 'transform 0.2s ease',
+                '&:hover': {
+                  transform: 'scale(1.05)',
+                  color: '#0d47a1',
+                },
+              }}
+            >
               <Box
-                onClick={handleProfileMenuOpen}
+                component="span"
                 sx={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '12px',
-                  cursor: 'pointer',
-                  padding: '8px 12px',
-                  borderRadius: '4px',
-                  '&:hover': { backgroundColor: '#f5f5f5' },
+                  fontSize: '32px',
+                  animation: 'rotate 3s linear infinite',
+                  '@keyframes rotate': {
+                    '0%': { transform: 'rotate(0deg)' },
+                    '100%': { transform: 'rotate(360deg)' },
+                  },
                 }}
               >
+                🌐
+              </Box>
+              <Box component="span" sx={{ letterSpacing: '0.5px' }}>
+                MyNet<span style={{ color: '#d32f2f' }}>.tn</span>
+              </Box>
+            </Box>
+          </Zoom>
+
+          {/* Desktop Navigation */}
+          <Fade in timeout={800}>
+            <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: '4px', flex: 1, justifyContent: 'center' }}>
+              {shouldShowAuthLinks && renderNavLinks(authenticatedLinks)}
+              {shouldShowPublicLinks && renderNavLinks(publicLinks)}
+            </Box>
+          </Fade>
+
+          {/* Search Bar - Desktop */}
+          {isAuthenticated && (
+            <Fade in timeout={1000}>
+              <TextField
+                size="small"
+                placeholder="🔍 Rechercher des appels d'offres..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                onKeyPress={handleSearch}
+                sx={{
+                  width: '250px',
+                  display: { xs: 'none', sm: 'block' },
+                  '& .MuiOutlinedInput-root': {
+                    backgroundColor: '#f8f9fa',
+                    borderRadius: '20px',
+                    transition: 'all 0.3s ease',
+                    '&:hover': {
+                      backgroundColor: '#e9ecef',
+                    },
+                    '&.Mui-focused': {
+                      backgroundColor: '#ffffff',
+                      boxShadow: '0 0 0 3px rgba(0,86,179,0.1)',
+                    },
+                    '&:hover fieldset': { borderColor: '#0056B3' },
+                  },
+                }}
+                InputProps={{
+                  endAdornment: <SearchIcon sx={{ fontSize: 18, color: '#9e9e9e' }} />,
+                }}
+              />
+            </Fade>
+          )}
+
+          {/* Right Actions */}
+          <Box sx={{ display: { xs: 'none', md: 'flex' }, alignItems: 'center', gap: '12px' }}>
+            {isAuthenticated ? (
+              <>
+                {/* Notification Center */}
+                <NotificationCenter />
+
+                {/* User Profile Menu */}
+                <Tooltip title="Mon Profil" arrow>
+                  <Box
+                    onClick={handleProfileMenuOpen}
+                    sx={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '12px',
+                      cursor: 'pointer',
+                      padding: '8px 16px',
+                      borderRadius: '24px',
+                      border: '2px solid transparent',
+                      transition: 'all 0.3s ease',
+                      '&:hover': {
+                        backgroundColor: '#f5f5f5',
+                        borderColor: theme.palette.primary.main,
+                      },
+                    }}
+                  >
+                    <Avatar
+                      sx={{
+                        width: 40,
+                        height: 40,
+                        backgroundColor: roleBadge.color,
+                        fontSize: '16px',
+                        fontWeight: 600,
+                        border: '2px solid white',
+                        boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
+                      }}
+                    >
+                      {userName.charAt(0).toUpperCase()}
+                    </Avatar>
+                    <Box sx={{ minWidth: '100px', maxWidth: '150px' }}>
+                      <Typography
+                        variant="body2"
+                        sx={{
+                          fontWeight: 600,
+                          color: theme.palette.text.primary,
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                          whiteSpace: 'nowrap',
+                        }}
+                      >
+                        {userName}
+                      </Typography>
+                      <Chip
+                        label={roleBadge.label}
+                        size="small"
+                        icon={<span>{roleBadge.icon}</span>}
+                        sx={{
+                          height: '20px',
+                          fontSize: '11px',
+                          backgroundColor: roleBadge.color,
+                          color: 'white',
+                          fontWeight: 600,
+                        }}
+                      />
+                    </Box>
+                  </Box>
+                </Tooltip>
+
+                <Menu
+                  anchorEl={anchorEl}
+                  open={Boolean(anchorEl)}
+                  onClose={handleProfileMenuClose}
+                  PaperProps={{
+                    sx: {
+                      mt: 1,
+                      minWidth: 220,
+                      borderRadius: '12px',
+                      boxShadow: '0 8px 24px rgba(0,0,0,0.12)',
+                      border: '1px solid #e0e0e0',
+                    },
+                  }}
+                  TransitionComponent={Fade}
+                >
+                  <MenuItem
+                    onClick={() => {
+                      navigate('/dashboard');
+                      handleProfileMenuClose();
+                    }}
+                    sx={{ gap: 1.5, py: 1.5 }}
+                  >
+                    <DashboardIcon fontSize="small" sx={{ color: theme.palette.primary.main }} />
+                    <Typography variant="body2">Tableau de Bord</Typography>
+                  </MenuItem>
+                  <MenuItem
+                    onClick={() => {
+                      navigate('/profile');
+                      handleProfileMenuClose();
+                    }}
+                    sx={{ gap: 1.5, py: 1.5 }}
+                  >
+                    <PersonIcon fontSize="small" sx={{ color: theme.palette.primary.main }} />
+                    <Typography variant="body2">Mon Profil</Typography>
+                  </MenuItem>
+                  <MenuItem
+                    onClick={() => {
+                      navigate('/profile');
+                      handleProfileMenuClose();
+                    }}
+                    sx={{ gap: 1.5, py: 1.5 }}
+                  >
+                    <SettingsIcon fontSize="small" sx={{ color: theme.palette.primary.main }} />
+                    <Typography variant="body2">Paramètres</Typography>
+                  </MenuItem>
+                  <MenuItem
+                    onClick={() => {
+                      navigate('/mfa-setup');
+                      handleProfileMenuClose();
+                    }}
+                    sx={{ gap: 1.5, py: 1.5 }}
+                  >
+                    <SecurityIcon fontSize="small" sx={{ color: theme.palette.primary.main }} />
+                    <Typography variant="body2">Sécurité</Typography>
+                  </MenuItem>
+                  <Divider sx={{ my: 1 }} />
+                  <MenuItem
+                    onClick={handleLogout}
+                    sx={{
+                      gap: 1.5,
+                      py: 1.5,
+                      color: '#d32f2f',
+                      '&:hover': { backgroundColor: '#ffebee' },
+                    }}
+                  >
+                    <LogoutIcon fontSize="small" />
+                    <Typography variant="body2" fontWeight={600}>
+                      Se Déconnecter
+                    </Typography>
+                  </MenuItem>
+                </Menu>
+              </>
+            ) : (
+              <Stack direction="row" gap={1.5}>
+                <Button
+                  variant="outlined"
+                  onClick={() => navigate('/login')}
+                  startIcon={<PersonIcon />}
+                  sx={{
+                    borderColor: theme.palette.primary.main,
+                    color: theme.palette.primary.main,
+                    textTransform: 'none',
+                    fontWeight: 600,
+                    borderRadius: '20px',
+                    px: 3,
+                    '&:hover': {
+                      borderColor: '#0d47a1',
+                      backgroundColor: '#e3f2fd',
+                    },
+                  }}
+                >
+                  Connexion
+                </Button>
+                <Button
+                  variant="contained"
+                  onClick={() => navigate('/register')}
+                  sx={{
+                    backgroundColor: theme.palette.primary.main,
+                    textTransform: 'none',
+                    fontWeight: 600,
+                    borderRadius: '20px',
+                    px: 3,
+                    boxShadow: '0 4px 12px rgba(0,86,179,0.3)',
+                    '&:hover': {
+                      backgroundColor: '#0d47a1',
+                      boxShadow: '0 6px 16px rgba(0,86,179,0.4)',
+                    },
+                  }}
+                >
+                  Inscription Gratuite
+                </Button>
+              </Stack>
+            )}
+          </Box>
+
+          {/* Mobile Actions */}
+          <Box sx={{ display: { xs: 'flex', md: 'none' }, alignItems: 'center', gap: 1 }}>
+            {isAuthenticated && (
+              <>
+                <IconButton
+                  onClick={() => setMobileSearchOpen(!mobileSearchOpen)}
+                  sx={{ color: theme.palette.primary.main }}
+                >
+                  {mobileSearchOpen ? <CloseIcon /> : <SearchIcon />}
+                </IconButton>
+                <NotificationCenter />
+              </>
+            )}
+            <IconButton
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              sx={{ color: theme.palette.text.primary }}
+            >
+              {mobileMenuOpen ? <CloseIcon /> : <MenuIcon />}
+            </IconButton>
+          </Box>
+        </Toolbar>
+
+        {/* Mobile Search Bar */}
+        {isAuthenticated && mobileSearchOpen && (
+          <Fade in>
+            <Box sx={{ px: 2, pb: 2, display: { xs: 'block', sm: 'none' } }}>
+              <TextField
+                fullWidth
+                size="small"
+                placeholder="🔍 Rechercher..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                onKeyPress={handleSearch}
+                autoFocus
+                sx={{
+                  '& .MuiOutlinedInput-root': {
+                    backgroundColor: '#f8f9fa',
+                    borderRadius: '20px',
+                  },
+                }}
+              />
+            </Box>
+          </Fade>
+        )}
+      </AppBar>
+
+      {/* Mobile Menu Drawer */}
+      <Drawer
+        anchor="right"
+        open={mobileMenuOpen}
+        onClose={() => setMobileMenuOpen(false)}
+        PaperProps={{
+          sx: {
+            width: '280px',
+            backgroundColor: '#fafafa',
+          },
+        }}
+      >
+        <Box sx={{ p: 3 }}>
+          {isAuthenticated && (
+            <>
+              <Box sx={{ mb: 3, textAlign: 'center' }}>
                 <Avatar
                   sx={{
-                    width: 36,
-                    height: 36,
-                    backgroundColor: theme.palette.primary.main,
-                    fontSize: '14px',
-                    fontWeight: 600,
+                    width: 60,
+                    height: 60,
+                    margin: '0 auto 12px',
+                    backgroundColor: roleBadge.color,
+                    fontSize: '24px',
                   }}
                 >
                   {userName.charAt(0).toUpperCase()}
                 </Avatar>
-                <Box sx={{ minWidth: '80px' }}>
-                  <Typography
-                    variant="body2"
-                    sx={{ fontWeight: 500, color: theme.palette.text.primary }}
-                  >
-                    {userName}
-                  </Typography>
-                  <Typography variant="caption" sx={{ color: THEME_COLORS.textSecondary }}>
-                    {userRole === 'buyer' ? 'Acheteur' : userRole === 'supplier' ? 'Fournisseur' : ''}
-                  </Typography>
-                </Box>
+                <Typography variant="h6" fontWeight={600}>
+                  {userName}
+                </Typography>
+                <Chip
+                  label={roleBadge.label}
+                  size="small"
+                  icon={<span>{roleBadge.icon}</span>}
+                  sx={{
+                    mt: 1,
+                    backgroundColor: roleBadge.color,
+                    color: 'white',
+                    fontWeight: 600,
+                  }}
+                />
               </Box>
-
-              <Menu
-                anchorEl={anchorEl}
-                open={Boolean(anchorEl)}
-                onClose={handleProfileMenuClose}
-                PaperProps={{
-                  sx: {
-                    boxShadow: 'none',
-                    border: '1px solid #e0e0e0',
-                  },
-                }}
-              >
-                <MenuItem
-                  onClick={() => {
-                    navigate('/profile');
-                    handleProfileMenuClose();
-                  }}
-                >
-                  Paramètres
-                </MenuItem>
-                <MenuItem
-                  onClick={() => {
-                    navigate('/security');
-                    handleProfileMenuClose();
-                  }}
-                >
-                  Sécurité
-                </MenuItem>
-                <MenuItem onClick={handleLogout} sx={{ color: THEME_COLORS.errorLight }}>
-                  <LogoutIcon sx={{ mr: 1, fontSize: 18 }} />
-                  Se Déconnecter
-                </MenuItem>
-              </Menu>
+              <Divider sx={{ mb: 2 }} />
             </>
-          ) : (
-            <Stack direction="row" gap={1}>
-              <Button
-                variant="outlined"
-                onClick={() => navigate('/login')}
-                sx={{
-                  borderColor: '#e0e0e0',
-                  color: theme.palette.text.primary,
-                  textTransform: 'none',
-                  fontWeight: 500,
-                  '&:hover': {
-                    borderColor: theme.palette.primary.main,
-                    color: theme.palette.primary.main,
-                    backgroundColor: '#f5f5f5',
-                  },
-                }}
-              >
-                Connexion
-              </Button>
-              <Button
-                variant="contained"
-                onClick={() => navigate('/register')}
-                sx={{
-                  backgroundColor: theme.palette.primary.main,
-                  textTransform: 'none',
-                  fontWeight: 500,
-                  '&:hover': {
-                    backgroundColor: '#0d47a1',
-                  },
-                }}
-              >
-                Inscription
-              </Button>
-            </Stack>
           )}
-        </Box>
 
-        {/* Mobile Menu Button */}
-        <IconButton
-          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          sx={{ display: { xs: 'flex', md: 'none' }, color: theme.palette.text.primary }}
-        >
-          <MenuIcon />
-        </IconButton>
-      </Toolbar>
-
-      {/* Mobile Menu */}
-      <Drawer
-        anchor="top"
-        open={mobileMenuOpen}
-        onClose={() => setMobileMenuOpen(false)}
-        PaperProps={{ sx: { marginTop: '64px' } }}
-      >
-        <Box sx={{ width: '100%', padding: '16px', backgroundColor: THEME_COLORS.bgPaper }}>
-          <List>
+          <List sx={{ p: 0 }}>
             {shouldShowAuthLinks &&
               authenticatedLinks.map((link) => (
                 <ListItem
@@ -327,14 +589,20 @@ export default function UnifiedHeader() {
                   key={link.href}
                   onClick={() => handleNavigate(link.href)}
                   sx={{
+                    mb: 1,
+                    borderRadius: '8px',
                     backgroundColor: location.pathname === link.href ? '#e3f2fd' : 'transparent',
                     color:
                       location.pathname === link.href
                         ? theme.palette.primary.main
                         : theme.palette.text.primary,
-                    borderLeft: location.pathname === link.href ? '4px solid #0056B3' : 'none',
+                    fontWeight: location.pathname === link.href ? 600 : 400,
+                    '&:hover': {
+                      backgroundColor: '#e3f2fd',
+                    },
                   }}
                 >
+                  <span style={{ marginRight: '12px', fontSize: '20px' }}>{link.icon}</span>
                   <ListItemText primary={link.label} />
                 </ListItem>
               ))}
@@ -345,44 +613,63 @@ export default function UnifiedHeader() {
                   key={link.href}
                   onClick={() => handleNavigate(link.href)}
                   sx={{
+                    mb: 1,
+                    borderRadius: '8px',
                     backgroundColor: location.pathname === link.href ? '#e3f2fd' : 'transparent',
                     color:
                       location.pathname === link.href
                         ? theme.palette.primary.main
                         : theme.palette.text.primary,
-                    borderLeft: location.pathname === link.href ? '4px solid #0056B3' : 'none',
+                    fontWeight: location.pathname === link.href ? 600 : 400,
+                    '&:hover': {
+                      backgroundColor: '#e3f2fd',
+                    },
                   }}
                 >
+                  <span style={{ marginRight: '12px', fontSize: '20px' }}>{link.icon}</span>
                   <ListItemText primary={link.label} />
                 </ListItem>
               ))}
           </List>
 
+          <Divider sx={{ my: 2 }} />
+
           {isAuthenticated ? (
-            <Stack gap={1} sx={{ marginTop: '16px' }}>
+            <Stack gap={1.5}>
               <Button
                 fullWidth
                 variant="outlined"
+                startIcon={<PersonIcon />}
                 onClick={() => {
                   navigate('/profile');
                   setMobileMenuOpen(false);
                 }}
+                sx={{ borderRadius: '20px', textTransform: 'none' }}
               >
-                Profil
+                Mon Profil
               </Button>
-              <Button fullWidth variant="contained" color="error" onClick={handleLogout}>
+              <Button
+                fullWidth
+                variant="contained"
+                color="error"
+                startIcon={<LogoutIcon />}
+                onClick={handleLogout}
+                sx={{ borderRadius: '20px', textTransform: 'none' }}
+              >
                 Se Déconnecter
               </Button>
             </Stack>
           ) : (
-            <Stack gap={1} sx={{ marginTop: '16px' }}>
+            <Stack gap={1.5}>
               <Button
                 fullWidth
                 variant="outlined"
+                startIcon={<PersonIcon />}
                 onClick={() => {
                   navigate('/login');
                   setMobileMenuOpen(false);
                 }}
+                sx={{ borderRadius: '20px', textTransform: 'none' }}
               >
                 Connexion
               </Button>
@@ -393,13 +680,14 @@ export default function UnifiedHeader() {
                   navigate('/register');
                   setMobileMenuOpen(false);
                 }}
+                sx={{ borderRadius: '20px', textTransform: 'none' }}
               >
-                Inscription
+                Inscription Gratuite
               </Button>
             </Stack>
           )}
         </Box>
       </Drawer>
-    </AppBar>
+    </HideOnScroll>
   );
 }

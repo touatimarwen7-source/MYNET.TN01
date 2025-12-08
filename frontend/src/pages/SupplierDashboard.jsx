@@ -126,7 +126,7 @@ const SupplierDashboard = () => {
         axiosInstance.get('/api/procurement/supplier/analytics'),
         axiosInstance.get('/api/procurement/supplier/trends'),
         axiosInstance.get('/api/procurement/supplier/recent-orders'),
-        axiosInstance.get('/api/procurement/tenders', { params: { limit: 5, status: 'open' } }),
+        axiosInstance.get('/api/procurement/tenders', { params: { page: 1, limit: 5 } }),
       ]);
 
       // Stats with safe fallbacks

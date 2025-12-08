@@ -69,7 +69,6 @@ const TenderSecuritySettings = lazy(() => import('./pages/TenderSecuritySettings
 const TenderPreferencesSettings = lazy(() => import('./pages/TenderPreferencesSettings'));
 const TeamManagement = lazy(() => import('./pages/TeamManagement'));
 const SupplierSearch = lazy(() => import('./pages/SupplierSearch'));
-const SupplierDashboard = lazy(() => import('./pages/SupplierDashboard'));
 const AdminGuide = lazy(() => import('./pages/AdminGuide'));
 const SubmitBid = lazy(() => import('./pages/SubmitBid'));
 const NotificationCenter = lazy(() => import('./pages/NotificationCenter'));

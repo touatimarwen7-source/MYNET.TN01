@@ -32,6 +32,7 @@ class ProfileController {
           preferred_categories,
           service_locations,
           minimum_budget,
+          maximum_budget,
           created_at,
           updated_at
         FROM users 
@@ -167,7 +168,7 @@ class ProfileController {
         return sendForbidden(res, 'Only suppliers can update preferences');
       }
 
-      const { preferred_categories, service_locations, minimum_budget } = req.body;
+      const { preferred_categories, service_locations, minimum_budget, maximum_budget } = req.body;
 
       const pool = getPool();
 
@@ -176,13 +177,15 @@ class ProfileController {
          SET preferred_categories = $1, 
              service_locations = $2, 
              minimum_budget = $3,
+             maximum_budget = $4,
              updated_at = CURRENT_TIMESTAMP
-         WHERE id = $4 AND role = 'supplier'
-         RETURNING id, preferred_categories, service_locations, minimum_budget`,
+         WHERE id = $5 AND role = 'supplier'
+         RETURNING id, preferred_categories, service_locations, minimum_budget, maximum_budget`,
         [
           JSON.stringify(preferred_categories || []),
           JSON.stringify(service_locations || []),
           minimum_budget || 0,
+          maximum_budget || 0,
           userId,
         ]
       );
@@ -195,6 +198,7 @@ class ProfileController {
         preferred_categories: JSON.parse(result.rows[0].preferred_categories),
         service_locations: JSON.parse(result.rows[0].service_locations),
         minimum_budget: result.rows[0].minimum_budget,
+        maximum_budget: result.rows[0].maximum_budget,
       }, 'Supplier preferences updated successfully');
     } catch (error) {
       logger.error('Error updating supplier preferences:', { 
@@ -219,7 +223,7 @@ class ProfileController {
         return sendForbidden(res, 'Only buyers can update preferences');
       }
 
-      const { preferred_categories, minimum_budget } = req.body;
+      const { preferred_categories, minimum_budget, maximum_budget } = req.body;
 
       const pool = getPool();
 
@@ -227,12 +231,14 @@ class ProfileController {
         `UPDATE users 
          SET preferred_categories = $1, 
              minimum_budget = $2,
+             maximum_budget = $3,
              updated_at = CURRENT_TIMESTAMP
-         WHERE id = $3 AND role = 'buyer'
-         RETURNING id, preferred_categories, minimum_budget`,
+         WHERE id = $4 AND role = 'buyer'
+         RETURNING id, preferred_categories, minimum_budget, maximum_budget`,
         [
           JSON.stringify(preferred_categories || []),
           minimum_budget || 0,
+          maximum_budget || 0,
           userId,
         ]
       );
@@ -244,6 +250,7 @@ class ProfileController {
       return sendOk(res, {
         preferred_categories: JSON.parse(result.rows[0].preferred_categories),
         minimum_budget: result.rows[0].minimum_budget,
+        maximum_budget: result.rows[0].maximum_budget,
       }, 'Buyer preferences updated successfully');
     } catch (error) {
       logger.error('Error updating buyer preferences:', { 
@@ -271,7 +278,7 @@ class ProfileController {
       const pool = getPool();
 
       const result = await pool.query(
-        `SELECT preferred_categories, minimum_budget 
+        `SELECT preferred_categories, minimum_budget, maximum_budget 
          FROM users WHERE id = $1 AND role = 'buyer'`,
         [userId]
       );
@@ -283,6 +290,7 @@ class ProfileController {
       return sendOk(res, {
         preferred_categories: JSON.parse(result.rows[0].preferred_categories || '[]'),
         minimum_budget: result.rows[0].minimum_budget || 0,
+        maximum_budget: result.rows[0].maximum_budget || 0,
       }, 'Buyer preferences retrieved successfully');
     } catch (error) {
       logger.error('Error getting buyer preferences:', { 
@@ -310,7 +318,7 @@ class ProfileController {
       const pool = getPool();
 
       const result = await pool.query(
-        `SELECT preferred_categories, service_locations, minimum_budget 
+        `SELECT preferred_categories, service_locations, minimum_budget, maximum_budget 
          FROM users WHERE id = $1 AND role = 'supplier'`,
         [userId]
       );
@@ -323,6 +331,7 @@ class ProfileController {
         preferred_categories: JSON.parse(result.rows[0].preferred_categories || '[]'),
         service_locations: JSON.parse(result.rows[0].service_locations || '[]'),
         minimum_budget: result.rows[0].minimum_budget || 0,
+        maximum_budget: result.rows[0].maximum_budget || 0,
       }, 'Supplier preferences retrieved successfully');
     } catch (error) {
       logger.error('Error getting supplier preferences:', { 

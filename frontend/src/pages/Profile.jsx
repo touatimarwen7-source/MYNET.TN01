@@ -60,6 +60,7 @@ export default function Profile({ user }) {
   const [serviceLocations, setServiceLocations] = useState([]);
   const [newLocation, setNewLocation] = useState('');
   const [minimumBudget, setMinimumBudget] = useState(0);
+  const [maximumBudget, setMaximumBudget] = useState(0);
 
   useEffect(() => {
     fetchProfile();
@@ -73,11 +74,16 @@ export default function Profile({ user }) {
       setProfile(userData);
       setFormData(userData);
 
-      // Load supplier preferences if supplier
+      // Load supplier preferences if supplier or buyer
       if (userData.role === 'supplier') {
         setPreferredCategories(userData.preferred_categories || []);
         setServiceLocations(userData.service_locations || []);
         setMinimumBudget(userData.minimum_budget || 0);
+        setMaximumBudget(userData.maximum_budget || 0);
+      } else if (userData.role === 'buyer') {
+        setPreferredCategories(userData.preferred_categories || []);
+        setMinimumBudget(userData.minimum_budget || 0);
+        setMaximumBudget(userData.maximum_budget || 0);
       }
 
       setError('');
@@ -146,12 +152,14 @@ export default function Profile({ user }) {
         await authAPI.updateBuyerPreferences({
           preferred_categories: preferredCategories,
           minimum_budget: minimumBudget,
+          maximum_budget: maximumBudget,
         });
       } else if (profile.role === 'supplier') {
         await authAPI.updateSupplierPreferences({
           preferred_categories: preferredCategories,
           service_locations: serviceLocations,
           minimum_budget: minimumBudget,
+          maximum_budget: maximumBudget,
         });
       }
       setSuccess('Préférences mises à jour avec succès');
@@ -462,16 +470,34 @@ export default function Profile({ user }) {
                     Plage de Budget Typique
                   </Typography>
                 </Box>
-                <TextField
-                  type="number"
-                  size="small"
-                  placeholder="0"
-                  value={minimumBudget}
-                  onChange={(e) => setMinimumBudget(parseFloat(e.target.value) || 0)}
-                  InputProps={{ inputProps: { min: 0 } }}
-                  fullWidth
-                  helperText="Budget moyen pour vos appels d'offres"
-                />
+                <Grid container spacing={2}>
+                  <Grid item xs={12} md={6}>
+                    <TextField
+                      type="number"
+                      size="small"
+                      label="Budget Minimum"
+                      placeholder="0"
+                      value={minimumBudget}
+                      onChange={(e) => setMinimumBudget(parseFloat(e.target.value) || 0)}
+                      InputProps={{ inputProps: { min: 0 } }}
+                      fullWidth
+                      helperText="Montant minimum"
+                    />
+                  </Grid>
+                  <Grid item xs={12} md={6}>
+                    <TextField
+                      type="number"
+                      size="small"
+                      label="Budget Maximum"
+                      placeholder="0"
+                      value={maximumBudget}
+                      onChange={(e) => setMaximumBudget(parseFloat(e.target.value) || 0)}
+                      InputProps={{ inputProps: { min: 0 } }}
+                      fullWidth
+                      helperText="Montant maximum"
+                    />
+                  </Grid>
+                </Grid>
               </Box>
 
               <Button
@@ -591,24 +617,42 @@ export default function Profile({ user }) {
 
               <Divider sx={{ marginBottom: '24px' }} />
 
-              {/* Minimum Budget */}
+              {/* Budget Range */}
               <Box sx={{ marginBottom: '24px' }}>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
                   <AttachMoneyIcon sx={{ color: theme.palette.primary.main }} />
                   <Typography sx={{ fontSize: '16px', fontWeight: 600, color: theme.palette.text.primary }}>
-                    Budget Minimum
+                    Fourchette de Budget
                   </Typography>
                 </Box>
-                <TextField
-                  type="number"
-                  size="small"
-                  placeholder="0"
-                  value={minimumBudget}
-                  onChange={(e) => setMinimumBudget(parseFloat(e.target.value) || 0)}
-                  InputProps={{ inputProps: { min: 0 } }}
-                  fullWidth
-                  helperText="Montant minimum pour les appels d'offres que vous souhaitez recevoir"
-                />
+                <Grid container spacing={2}>
+                  <Grid item xs={12} md={6}>
+                    <TextField
+                      type="number"
+                      size="small"
+                      label="Budget Minimum"
+                      placeholder="0"
+                      value={minimumBudget}
+                      onChange={(e) => setMinimumBudget(parseFloat(e.target.value) || 0)}
+                      InputProps={{ inputProps: { min: 0 } }}
+                      fullWidth
+                      helperText="Montant minimum souhaité"
+                    />
+                  </Grid>
+                  <Grid item xs={12} md={6}>
+                    <TextField
+                      type="number"
+                      size="small"
+                      label="Budget Maximum"
+                      placeholder="0"
+                      value={maximumBudget}
+                      onChange={(e) => setMaximumBudget(parseFloat(e.target.value) || 0)}
+                      InputProps={{ inputProps: { min: 0 } }}
+                      fullWidth
+                      helperText="Montant maximum gérable"
+                    />
+                  </Grid>
+                </Grid>
               </Box>
 
               <Button

@@ -76,7 +76,7 @@ router.get(
       }
 
       console.log('📊 Fetching dashboard stats for supplier:', supplierId);
-      
+
       const pool = getPool();
 
       const statsQuery = `
@@ -318,10 +318,10 @@ router.get('/tenders', async (req, res) => {
     // Validate and sanitize pagination parameters
     const rawPage = req.query.page;
     const rawLimit = req.query.limit;
-    
+
     let page = 1;
     let limit = 20;
-    
+
     // Safe parsing with fallbacks
     if (rawPage !== undefined && rawPage !== null && rawPage !== '') {
       const parsedPage = parseInt(rawPage, 10);
@@ -329,14 +329,14 @@ router.get('/tenders', async (req, res) => {
         page = parsedPage;
       }
     }
-    
+
     if (rawLimit !== undefined && rawLimit !== null && rawLimit !== '') {
       const parsedLimit = parseInt(rawLimit, 10);
       if (!isNaN(parsedLimit) && parsedLimit > 0) {
         limit = Math.min(parsedLimit, 100); // Max 100 items per page
       }
     }
-    
+
     const pool = getPool();
     const offset = (page - 1) * limit;
 
@@ -369,7 +369,7 @@ router.get('/tenders', async (req, res) => {
     });
   } catch (error) {
     console.error('Error fetching tenders:', error);
-    
+
     // Check if error is due to missing tables
     if (error.code === '42P01') {
       return res.status(503).json({
@@ -378,7 +378,7 @@ router.get('/tenders', async (req, res) => {
         message: 'Run: node backend/scripts/initDb.js'
       });
     }
-    
+
     return res.status(500).json({
       success: false,
       error: 'Erreur lors de la récupération des appels d\'offres',
@@ -890,7 +890,8 @@ router.get(
             COALESCE(AVG(r.rating), 0) as avg_rating,
             COUNT(DISTINCT r.id) FILTER (WHERE r.rating >= 4) as positive_reviews
           FROM reviews r
-          WHERE r.reviewed_user_id = $1 AND r.is_deleted = FALSE
+          LEFT JOIN offers o ON r.offer_id = o.id
+          WHERE o.supplier_id = $1 AND r.is_deleted = FALSE
         )
         SELECT * FROM offer_stats, revenue_stats, review_stats
       `;

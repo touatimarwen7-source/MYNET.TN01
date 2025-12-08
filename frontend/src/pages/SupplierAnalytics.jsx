@@ -15,6 +15,8 @@ import {
   TableRow,
   TableCell,
   Rating,
+  CircularProgress,
+  Alert,
 } from '@mui/material';
 import { procurementAPI } from '../api/procurementApi';
 import TrendingUpIcon from '@mui/icons-material/TrendingUp';
@@ -27,6 +29,7 @@ export default function SupplierAnalytics() {
   const theme = institutionalTheme;
   const [loading, setLoading] = useState(true);
   const [analytics, setAnalytics] = useState(null);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     fetchAnalytics();
@@ -35,12 +38,13 @@ export default function SupplierAnalytics() {
   const fetchAnalytics = async () => {
     try {
       setLoading(true);
+      setError(null); // Clear previous errors
       const [analyticsRes, trendsRes, ordersRes] = await Promise.all([
         procurementAPI.supplier.getAnalytics(),
         procurementAPI.supplier.getTrends('6 months'),
         procurementAPI.supplier.getRecentOrders(5)
       ]);
-      
+
       const analyticsData = analyticsRes.data?.analytics || {};
       const trendsData = trendsRes.data?.trends || [];
       const ordersData = ordersRes.data?.orders || [];
@@ -61,13 +65,28 @@ export default function SupplierAnalytics() {
           id: order.po_number,
           buyer: order.buyer_name,
           amount: parseFloat(order.total_amount),
-          status: order.status === 'confirmed' ? 'confirmée' : 
-                  order.status === 'delivered' ? 'livré' : 
+          status: order.status === 'confirmed' ? 'confirmée' :
+                  order.status === 'delivered' ? 'livré' :
                   order.status === 'in_transit' ? 'en_route' : order.status
         }))
       });
-    } catch (error) {
-      console.error('Erreur chargement analytics:', error);
+    } catch (err) {
+      console.error('Erreur chargement analytics:', err);
+      // Extract error message properly
+      const errorMessage = err.response?.data?.error || err.message || 'فشل تحميل التحليلات';
+      setError(errorMessage);
+
+      // Set safe defaults
+      setAnalytics({
+        kpis: {
+          totalOffers: 0,
+          acceptedOffers: 0,
+          averageRating: 0,
+          revenue: 0,
+        },
+        performanceByMonth: [],
+        recentOrders: []
+      });
     } finally {
       setLoading(false);
     }
@@ -112,185 +131,195 @@ export default function SupplierAnalytics() {
           Dashboard Analytics - Fournisseur
         </Typography>
 
-        {/* KPIs */}
-        <Grid container spacing={2} sx={{ marginBottom: '32px' }}>
-          <Grid xs={12} lg={3}>
-            <Card sx={{ border: '1px solid #e0e0e0' }}>
-              <CardContent>
-                <Stack spacing={1}>
-                  <Box
-                    sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
-                  >
-                    <Typography sx={{ fontSize: '12px', color: '#666' }}>Offres Totales</Typography>
-                    <AssignmentTurnedInIcon
-                      sx={{ color: theme.palette.primary.main, fontSize: '24px' }}
-                    />
-                  </Box>
-                  <Typography
-                    sx={{ fontSize: '28px', fontWeight: 700, color: theme.palette.primary.main }}
-                  >
-                    {analytics.kpis.totalOffers}
-                  </Typography>
-                  <Typography sx={{ fontSize: '12px', color: '#999' }}>
-                    {analytics.kpis.acceptedOffers} acceptées
-                  </Typography>
-                </Stack>
-              </CardContent>
-            </Card>
-          </Grid>
+        {error && (
+          <Alert severity="error" sx={{ mb: 3 }}>
+            {error}
+          </Alert>
+        )}
 
-          <Grid xs={12} lg={3}>
-            <Card sx={{ border: '1px solid #e0e0e0' }}>
-              <CardContent>
-                <Stack spacing={1}>
-                  <Box
-                    sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
-                  >
-                    <Typography sx={{ fontSize: '12px', color: '#666' }}>Note Moyenne</Typography>
-                    <StarIcon sx={{ color: '#f57c00', fontSize: '24px' }} />
-                  </Box>
-                  <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <Typography sx={{ fontSize: '28px', fontWeight: 700, color: '#f57c00' }}>
-                      {analytics.kpis.averageRating}
-                    </Typography>
-                    <Rating value={analytics.kpis.averageRating} readOnly size="small" />
-                  </Box>
-                </Stack>
-              </CardContent>
-            </Card>
-          </Grid>
+        {analytics && (
+          <>
+            {/* KPIs */}
+            <Grid container spacing={2} sx={{ marginBottom: '32px' }}>
+              <Grid xs={12} lg={3}>
+                <Card sx={{ border: '1px solid #e0e0e0' }}>
+                  <CardContent>
+                    <Stack spacing={1}>
+                      <Box
+                        sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
+                      >
+                        <Typography sx={{ fontSize: '12px', color: '#666' }}>Offres Totales</Typography>
+                        <AssignmentTurnedInIcon
+                          sx={{ color: theme.palette.primary.main, fontSize: '24px' }}
+                        />
+                      </Box>
+                      <Typography
+                        sx={{ fontSize: '28px', fontWeight: 700, color: theme.palette.primary.main }}
+                      >
+                        {analytics.kpis.totalOffers}
+                      </Typography>
+                      <Typography sx={{ fontSize: '12px', color: '#999' }}>
+                        {analytics.kpis.acceptedOffers} acceptées
+                      </Typography>
+                    </Stack>
+                  </CardContent>
+                </Card>
+              </Grid>
 
-          <Grid xs={12} lg={3}>
-            <Card sx={{ border: '1px solid #e0e0e0' }}>
-              <CardContent>
-                <Stack spacing={1}>
-                  <Box
-                    sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
-                  >
-                    <Typography sx={{ fontSize: '12px', color: '#666' }}>Revenu Total</Typography>
-                    <TrendingUpIcon sx={{ color: '#2e7d32', fontSize: '24px' }} />
-                  </Box>
-                  <Typography sx={{ fontSize: '28px', fontWeight: 700, color: '#2e7d32' }}>
-                    {(analytics.kpis.revenue / 1000).toFixed(1)}K TND
-                  </Typography>
-                </Stack>
-              </CardContent>
-            </Card>
-          </Grid>
+              <Grid xs={12} lg={3}>
+                <Card sx={{ border: '1px solid #e0e0e0' }}>
+                  <CardContent>
+                    <Stack spacing={1}>
+                      <Box
+                        sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
+                      >
+                        <Typography sx={{ fontSize: '12px', color: '#666' }}>Note Moyenne</Typography>
+                        <StarIcon sx={{ color: '#f57c00', fontSize: '24px' }} />
+                      </Box>
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <Typography sx={{ fontSize: '28px', fontWeight: 700, color: '#f57c00' }}>
+                          {analytics.kpis.averageRating}
+                        </Typography>
+                        <Rating value={analytics.kpis.averageRating} readOnly size="small" />
+                      </Box>
+                    </Stack>
+                  </CardContent>
+                </Card>
+              </Grid>
 
-          <Grid xs={12} lg={3}>
-            <Card sx={{ border: '1px solid #e0e0e0' }}>
-              <CardContent>
-                <Stack spacing={1}>
-                  <Box
-                    sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
-                  >
-                    <Typography sx={{ fontSize: '12px', color: '#666' }}>
-                      Taux Acceptation
-                    </Typography>
-                    <LocalShippingIcon sx={{ color: '#0288d1', fontSize: '24px' }} />
-                  </Box>
-                  <Typography sx={{ fontSize: '28px', fontWeight: 700, color: '#0288d1' }}>
-                    {Math.round((analytics.kpis.acceptedOffers / analytics.kpis.totalOffers) * 100)}
-                    %
-                  </Typography>
-                </Stack>
-              </CardContent>
-            </Card>
-          </Grid>
-        </Grid>
+              <Grid xs={12} lg={3}>
+                <Card sx={{ border: '1px solid #e0e0e0' }}>
+                  <CardContent>
+                    <Stack spacing={1}>
+                      <Box
+                        sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
+                      >
+                        <Typography sx={{ fontSize: '12px', color: '#666' }}>Revenu Total</Typography>
+                        <TrendingUpIcon sx={{ color: '#2e7d32', fontSize: '24px' }} />
+                      </Box>
+                      <Typography sx={{ fontSize: '28px', fontWeight: 700, color: '#2e7d32' }}>
+                        {(analytics.kpis.revenue / 1000).toFixed(1)}K TND
+                      </Typography>
+                    </Stack>
+                  </CardContent>
+                </Card>
+              </Grid>
 
-        {/* Performance Chart */}
-        <Card sx={{ marginBottom: '32px', border: '1px solid #e0e0e0' }}>
-          <CardContent>
-            <Typography
-              sx={{ fontWeight: 600, color: theme.palette.primary.main, marginBottom: '16px' }}
-            >
-              Performance Mensuelle
-            </Typography>
-            <Box
-              sx={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))',
-                gap: '16px',
-              }}
-            >
-              {analytics.performanceByMonth.map((month, i) => (
-                <Box
-                  key={i}
-                  sx={{ padding: '16px', backgroundColor: '#f5f5f5', borderRadius: '4px' }}
+              <Grid xs={12} lg={3}>
+                <Card sx={{ border: '1px solid #e0e0e0' }}>
+                  <CardContent>
+                    <Stack spacing={1}>
+                      <Box
+                        sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
+                      >
+                        <Typography sx={{ fontSize: '12px', color: '#666' }}>
+                          Taux Acceptation
+                        </Typography>
+                        <LocalShippingIcon sx={{ color: '#0288d1', fontSize: '24px' }} />
+                      </Box>
+                      <Typography sx={{ fontSize: '28px', fontWeight: 700, color: '#0288d1' }}>
+                        {analytics.kpis.totalOffers > 0 ? Math.round((analytics.kpis.acceptedOffers / analytics.kpis.totalOffers) * 100) : 0}
+                        %
+                      </Typography>
+                    </Stack>
+                  </CardContent>
+                </Card>
+              </Grid>
+            </Grid>
+
+            {/* Performance Chart */}
+            <Card sx={{ marginBottom: '32px', border: '1px solid #e0e0e0' }}>
+              <CardContent>
+                <Typography
+                  sx={{ fontWeight: 600, color: theme.palette.primary.main, marginBottom: '16px' }}
                 >
-                  <Typography sx={{ fontWeight: 600, marginBottom: '8px' }}>
-                    {month.month}
-                  </Typography>
-                  <Typography sx={{ fontSize: '14px', color: '#666' }}>
-                    Offres:{' '}
-                    <span style={{ fontWeight: 600, color: theme.palette.primary.main }}>
-                      {month.offers}
-                    </span>
-                  </Typography>
-                  <Typography sx={{ fontSize: '14px', color: '#666' }}>
-                    Acceptées:{' '}
-                    <span style={{ fontWeight: 600, color: '#2e7d32' }}>{month.accepted}</span>
-                  </Typography>
-                </Box>
-              ))}
-            </Box>
-          </CardContent>
-        </Card>
-
-        {/* Recent Orders */}
-        <Card sx={{ border: '1px solid #e0e0e0' }}>
-          <CardContent>
-            <Typography
-              sx={{ fontWeight: 600, color: theme.palette.primary.main, marginBottom: '16px' }}
-            >
-              Commandes Récentes
-            </Typography>
-            <Paper sx={{ border: '1px solid #e0e0e0' }}>
-              <Table>
-                <TableHead sx={{ backgroundColor: '#f5f5f5' }}>
-                  <TableRow>
-                    <TableCell sx={{ fontWeight: 600 }}>N° Commande</TableCell>
-                    <TableCell sx={{ fontWeight: 600 }}>Acheteur</TableCell>
-                    <TableCell sx={{ fontWeight: 600 }}>Montant</TableCell>
-                    <TableCell sx={{ fontWeight: 600 }}>Statut</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {analytics.recentOrders.map((order) => (
-                    <TableRow key={order.id} hover>
-                      <TableCell sx={{ color: theme.palette.primary.main, fontWeight: 600 }}>
-                        {order.id}
-                      </TableCell>
-                      <TableCell>{order.buyer}</TableCell>
-                      <TableCell>{order.amount.toLocaleString()} TND</TableCell>
-                      <TableCell>
-                        <Box
-                          sx={{
-                            display: 'inline-block',
-                            padding: '4px 12px',
-                            borderRadius: '4px',
-                            backgroundColor: order.status === 'livré' ? '#e8f5e9' : '#fff3e0',
-                            color: order.status === 'livré' ? '#2e7d32' : '#e65100',
-                            fontSize: '12px',
-                            fontWeight: 600,
-                          }}
-                        >
-                          {order.status === 'livré'
-                            ? 'Livrée'
-                            : order.status === 'en_route'
-                              ? 'En Route'
-                              : 'Confirmée'}
-                        </Box>
-                      </TableCell>
-                    </TableRow>
+                  Performance Mensuelle
+                </Typography>
+                <Box
+                  sx={{
+                    display: 'grid',
+                    gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))',
+                    gap: '16px',
+                  }}
+                >
+                  {analytics.performanceByMonth.map((month, i) => (
+                    <Box
+                      key={i}
+                      sx={{ padding: '16px', backgroundColor: '#f5f5f5', borderRadius: '4px' }}
+                    >
+                      <Typography sx={{ fontWeight: 600, marginBottom: '8px' }}>
+                        {month.month}
+                      </Typography>
+                      <Typography sx={{ fontSize: '14px', color: '#666' }}>
+                        Offres:{' '}
+                        <span style={{ fontWeight: 600, color: theme.palette.primary.main }}>
+                          {month.offers}
+                        </span>
+                      </Typography>
+                      <Typography sx={{ fontSize: '14px', color: '#666' }}>
+                        Acceptées:{' '}
+                        <span style={{ fontWeight: 600, color: '#2e7d32' }}>{month.accepted}</span>
+                      </Typography>
+                    </Box>
                   ))}
-                </TableBody>
-              </Table>
-            </Paper>
-          </CardContent>
-        </Card>
+                </Box>
+              </CardContent>
+            </Card>
+
+            {/* Recent Orders */}
+            <Card sx={{ border: '1px solid #e0e0e0' }}>
+              <CardContent>
+                <Typography
+                  sx={{ fontWeight: 600, color: theme.palette.primary.main, marginBottom: '16px' }}
+                >
+                  Commandes Récentes
+                </Typography>
+                <Paper sx={{ border: '1px solid #e0e0e0' }}>
+                  <Table>
+                    <TableHead sx={{ backgroundColor: '#f5f5f5' }}>
+                      <TableRow>
+                        <TableCell sx={{ fontWeight: 600 }}>N° Commande</TableCell>
+                        <TableCell sx={{ fontWeight: 600 }}>Acheteur</TableCell>
+                        <TableCell sx={{ fontWeight: 600 }}>Montant</TableCell>
+                        <TableCell sx={{ fontWeight: 600 }}>Statut</TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {analytics.recentOrders.map((order) => (
+                        <TableRow key={order.id} hover>
+                          <TableCell sx={{ color: theme.palette.primary.main, fontWeight: 600 }}>
+                            {order.id}
+                          </TableCell>
+                          <TableCell>{order.buyer}</TableCell>
+                          <TableCell>{order.amount.toLocaleString()} TND</TableCell>
+                          <TableCell>
+                            <Box
+                              sx={{
+                                display: 'inline-block',
+                                padding: '4px 12px',
+                                borderRadius: '4px',
+                                backgroundColor: order.status === 'livré' ? '#e8f5e9' : '#fff3e0',
+                                color: order.status === 'livré' ? '#2e7d32' : '#e65100',
+                                fontSize: '12px',
+                                fontWeight: 600,
+                              }}
+                            >
+                              {order.status === 'livré'
+                                ? 'Livrée'
+                                : order.status === 'en_route'
+                                  ? 'En Route'
+                                  : 'Confirmée'}
+                            </Box>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </Paper>
+              </CardContent>
+            </Card>
+          </>
+        )}
       </Container>
     </Box>
   );

@@ -81,13 +81,17 @@ async function initializeDb() {
       pool.on('error', (err, client) => {
         poolMetrics.errors++;
         // Use logger instead of console to prevent credential leaks
-        const logger = require('../utils/logger').logger;
-        logger.error('Database pool error', {
-          code: err.code,
-          errno: err.errno,
-          timestamp: new Date().toISOString()
-          // Do NOT log err.message as it may contain connection strings
-        });
+        try {
+          const logger = require('../utils/logger').logger;
+          logger.error('Database pool error', {
+            code: err.code,
+            errno: err.errno,
+            timestamp: new Date().toISOString()
+            // Do NOT log err.message as it may contain connection strings
+          });
+        } catch (logError) {
+          console.error('Database pool error:', err.code);
+        }
         
         // Automatic reconnection for network errors
         if (err.code === 'ECONNREFUSED' || err.code === 'ETIMEDOUT') {

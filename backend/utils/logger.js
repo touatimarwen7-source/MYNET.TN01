@@ -98,41 +98,25 @@ class Logger {
     return colors[level] || '';
   }
 
-  // Convenience methods
-  debug(message, data) {
-    this.log('DEBUG', message, data);
-  }
-  info(message, data) {
-    this.log('INFO', message, data);
-  }
-  warn(message, data) {
-    this.log('WARN', message, data);
-  }
-  error(message, data) {
-    this.log('ERROR', message, data);
-  }
-  fatal(message, data) {
-    this.log('FATAL', message, data);
-  }
-
   /**
    * Express middleware for request logging
    */
   requestMiddleware() {
+    const self = this;
     return (req, res, next) => {
       const start = Date.now();
       const originalEnd = res.end;
 
       res.end = function (...args) {
         const duration = Date.now() - start;
-        this.info(`${req.method} ${req.path} - ${res.statusCode} (${duration}ms)`, {
+        self.info(`${req.method} ${req.path} - ${res.statusCode} (${duration}ms)`, {
           method: req.method,
           path: req.path,
           status: res.statusCode,
           duration,
           userId: req.user?.id,
         });
-        originalEnd.apply(this, args);
+        originalEnd.apply(res, args);
       };
 
       next();

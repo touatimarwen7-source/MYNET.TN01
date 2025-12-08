@@ -21,6 +21,11 @@ async function bootstrap() {
   try {
     logger.info('🚀 Bootstrapping application...');
 
+    // Validate required dependencies
+    if (!eventBus) {
+      throw new Error('EventBus is not available');
+    }
+
     // Register core services
     container.singleton('eventBus', () => eventBus);
     

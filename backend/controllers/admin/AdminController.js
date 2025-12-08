@@ -457,7 +457,7 @@ class AdminController {
     }
   }
 
-  
+
 
   /**
    * Get user details
@@ -466,19 +466,19 @@ class AdminController {
     try {
       const { userId } = req.params;
       const pool = getPool();
-      
+
       const result = await pool.query(
         'SELECT id, email, role, is_verified, created_at FROM users WHERE id = $1 AND is_deleted = FALSE',
         [userId]
       );
-      
+
       if (result.rows.length === 0) {
         return res.status(404).json({
           success: false,
           error: 'User not found'
         });
       }
-      
+
       res.json({
         success: true,
         data: result.rows[0]
@@ -500,12 +500,12 @@ class AdminController {
       const { userId } = req.params;
       const { role } = req.body;
       const pool = getPool();
-      
+
       await pool.query(
         'UPDATE users SET role = $1, updated_at = CURRENT_TIMESTAMP WHERE id = $2',
         [role, userId]
       );
-      
+
       res.json({
         success: true,
         message: 'User role updated successfully'
@@ -526,12 +526,12 @@ class AdminController {
     try {
       const { userId } = req.params;
       const pool = getPool();
-      
+
       await pool.query(
         'UPDATE users SET is_active = FALSE, updated_at = CURRENT_TIMESTAMP WHERE id = $1',
         [userId]
       );
-      
+
       res.json({
         success: true,
         message: 'User blocked successfully'
@@ -552,12 +552,12 @@ class AdminController {
     try {
       const { userId } = req.params;
       const pool = getPool();
-      
+
       await pool.query(
         'UPDATE users SET is_active = TRUE, updated_at = CURRENT_TIMESTAMP WHERE id = $1',
         [userId]
       );
-      
+
       res.json({
         success: true,
         message: 'User unblocked successfully'
@@ -579,15 +579,15 @@ class AdminController {
       const { userId } = req.params;
       const bcrypt = require('bcryptjs');
       const pool = getPool();
-      
+
       const newPassword = Math.random().toString(36).slice(-8);
       const hashedPassword = await bcrypt.hash(newPassword, 10);
-      
+
       await pool.query(
         'UPDATE users SET password = $1, updated_at = CURRENT_TIMESTAMP WHERE id = $2',
         [hashedPassword, userId]
       );
-      
+
       res.json({
         success: true,
         message: 'Password reset successfully',

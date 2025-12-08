@@ -1,7 +1,7 @@
 import { Suspense, lazy } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { ThemeProvider } from '@mui/material/styles';
-import CssBaseline from '@mui/material/CssBaseline';
+import CssBaseline from '@mui/material/ CssBaseline';
 import { Box, CircularProgress, Container } from '@mui/material';
 import institutionalTheme from './theme/theme';
 import AlertStrip from './components/AlertStrip';
@@ -13,6 +13,7 @@ import { ToastContext } from './contexts/ToastContext';
 import { DarkModeProvider } from './contexts/DarkModeContext';
 import { SuperAdminProvider } from './contexts/SuperAdminContext';
 import { AppProvider, useApp } from './contexts/AppContext';
+import TokenManager from './utils/tokenManager'; // Assuming TokenManager is in './utils/tokenManager'
 
 // Core pages (eager load)
 import HomePage from './pages/HomePage';
@@ -124,7 +125,25 @@ const LoadingFallback = () => (
 
 // Inner App Component - uses AppContext
 function AppContent() {
-  const { user, authLoading, logout, addToast } = useApp();
+  const { user, authLoading, logout, addToast, setUser } = useApp(); // Destructure setUser
+
+  useEffect(() => {
+    const handleAuthChange = (event) => {
+      const userData = event.detail;
+      console.log('🔄 Auth changed event received:', userData);
+      setUser(userData);
+    };
+
+    // Check for user on mount
+    const storedUser = TokenManager.getUser();
+    if (storedUser && !user) {
+      console.log('📥 Loading user from storage:', storedUser);
+      setUser(storedUser);
+    }
+
+    window.addEventListener('authChanged', handleAuthChange);
+    return () => window.removeEventListener('authChanged', handleAuthChange);
+  }, [user, setUser]); // Added user and setUser as dependencies
 
   if (authLoading) {
     return <Box sx={{ padding: '20px', textAlign: 'center' }}>Chargement en cours...</Box>;

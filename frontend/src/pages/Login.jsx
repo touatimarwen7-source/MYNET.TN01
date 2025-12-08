@@ -67,12 +67,12 @@ export default function Login() {
       
       console.log('✅ Login successful, redirecting to dashboard');
       addToast('Connexion réussie', 'success', 2000);
+      
+      // Dispatch auth change event
       window.dispatchEvent(new CustomEvent('authChanged', { detail: userData }));
 
-      // Redirect to dashboard after short delay to ensure state is updated
-      setTimeout(() => {
-        navigate('/dashboard', { replace: true });
-      }, 100);
+      // Navigate immediately - React Router will handle the update
+      navigate('/dashboard', { replace: true });
       
     } catch (err) {
       console.error('❌ Login error:', err);

@@ -82,9 +82,9 @@ const swaggerSpec = require('./config/swagger');
 const { ErrorResponseFormatter } = require('./utils/errorHandler');
 const ServiceValidator = require('./utils/serviceValidator');
 const DatabaseErrorHandler = require('./utils/databaseErrorHandler');
-const { 
-  globalErrorHandler, 
-  notFoundHandler 
+const {
+  globalErrorHandler,
+  notFoundHandler
 } = require('./middleware/errorHandlingMiddleware');
 
 const app = express();
@@ -282,7 +282,7 @@ app.use('/api/company-profile', companyProfileRoutes);
 
 // Procurement & Supply
 app.use('/api/direct-supply', directSupplyRoutes);
-app.use('/api/purchase-orders', purchaseOrdersRoutes);
+app.use('/api/purchase-orders', require('./routes/purchaseOrdersRoutes'));
 
 // Communication
 app.use('/api/reviews', reviewsRoutes);
@@ -308,7 +308,7 @@ app.use(globalErrorHandler);
 module.exports = app;
 module.exports.asyncHandler = asyncHandler;
 
-// TURN 3: NEW FEATURE ROUTES
+// TURN 3: NEW FEATUREROUTES
 app.use('/api/analytics', analyticsRoutes);
 app.use('/api/search/advanced', advancedSearchRoutes);
 app.use('/api/export', exportRoutes);

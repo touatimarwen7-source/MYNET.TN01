@@ -263,9 +263,10 @@ router.get('/tenders', validatePagination, async (req, res) => {
     );
     const total = parseInt(totalResult.rows[0].count);
 
-    // Get paginated results
+    // Get paginated results with more fields
     const result = await pool.query(
-      `SELECT id, tender_number, title, category, budget_min, budget_max, deadline, status, is_public, buyer_id, created_at
+      `SELECT id, tender_number, title, description, category, budget_min, budget_max, 
+              currency, deadline, opening_date, status, is_public, buyer_id, created_at, publish_date
        FROM tenders
        WHERE is_deleted = FALSE AND is_public = TRUE
        ORDER BY created_at DESC
@@ -279,7 +280,8 @@ router.get('/tenders', validatePagination, async (req, res) => {
       pagination: { page, limit, total, pages: Math.ceil(total / limit) },
     });
   } catch (error) {
-    // Using the unified handleError which now uses errorResponse
+    console.error('Error fetching tenders:', error);
+    
     // Check if error is due to missing tables
     if (error.code === '42P01') {
       return res.status(503).json({

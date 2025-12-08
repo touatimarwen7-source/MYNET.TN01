@@ -51,34 +51,87 @@ export default function TenderDetail() {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
 
+  // State for the public tender view
+  const [tender, setTender] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+
   useEffect(() => {
     const userData = TokenManager.getUserFromToken();
     setUser(userData);
-    setPageTitle("Détails de l'Appel d'Offres");
+    // If user is logged in, set page title for detail view
+    if (userData) {
+      setPageTitle("Détails de l'Appel d'Offres");
+    } else {
+      // If not logged in, assume public view and set title accordingly
+      setPageTitle("Détails de l'Appel d'Offres");
+    }
   }, []);
 
-  // ✅ 2. استخدام الخطاف لجلب بيانات المناقصة والعروض
-  const {
-    data: tenderData,
-    loading: tenderLoading,
-    error: tenderError,
-  } = useFetchData(`/procurement/tenders/${id}`);
+  // Fetch tender details for public or logged-in user
+  useEffect(() => {
+    if (id) {
+      fetchTenderDetails();
+    }
+  }, [id]);
+
+  const fetchTenderDetails = async () => {
+    setLoading(true);
+    setError('');
+
+    try {
+      const response = await procurementAPI.getTender(id);
+
+      if (response.data.success) {
+        setTender(response.data.tender);
+        // Set page title based on fetched tender data
+        if (response.data.tender && response.data.tender.title) {
+          setPageTitle(`Détails: ${response.data.tender.title}`);
+        }
+      } else {
+        setError('فشل في تحميل تفاصيل المناقصة');
+      }
+    } catch (err) {
+      console.error('Error fetching tender:', err);
+      setError(err.response?.data?.error || 'حدث خطأ أثناء تحميل تفاصيل المناقصة');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const formatDate = (dateString) => {
+    if (!dateString) return 'غير محدد';
+    return new Date(dateString).toLocaleDateString('ar-TN', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    });
+  };
+
+  const formatCurrency = (amount, currency = 'TND') => {
+    if (amount === undefined || amount === null) return 'غير محدد';
+    // Ensure amount is treated as a number for toLocaleString
+    const numericAmount = parseFloat(amount);
+    if (isNaN(numericAmount)) return 'غير محدد';
+    return `${numericAmount.toLocaleString('ar-TN')} ${currency}`;
+  };
+
+  // ✅ 2. استخدام الخطاف لجلب بيانات المناقصة والعروض (فقط للمستخدمين المسجلين)
   const {
     data: offersData,
     loading: offersLoading,
     error: offersError,
   } = useFetchData(
     // جلب العروض فقط إذا كان المستخدم هو المشتري صاحب المناقصة
-    user?.role === 'buyer' && tenderData?.tender?.user_id === user.id
+    user?.role === 'buyer' && tender?.user_id === user.id
       ? `/procurement/tenders/${id}/offers`
       : null
   );
 
   // ✅ 3. دمج حالات التحميل والأخطاء والبيانات
-  const tender = tenderData?.tender;
   const offers = offersData?.offers || [];
-  const loading = tenderLoading || offersLoading;
-  const error = tenderError || offersError;
+  const isOffersLoading = offersLoading;
+  const isOffersError = offersError;
 
   const renderActionButtons = () => {
     if (!tender || !user) return null;
@@ -140,31 +193,46 @@ export default function TenderDetail() {
     return null;
   };
 
+  // Render loading state
   if (loading) {
     return (
-      <Container maxWidth="lg" sx={{ py: 4 }}>
-        <Skeleton variant="text" width="20%" height={40} />
-        <Skeleton variant="text" width="60%" height={60} />
-        <Skeleton variant="rectangular" height={300} sx={{ mt: 2 }} />
+      <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '60vh' }}>
+          <Box sx={{ textAlign: 'center' }}>
+            <CircularProgress size={60} />
+            <Typography variant="h6" sx={{ mt: 2 }}>
+              جاري تحميل تفاصيل المناقصة...
+            </Typography>
+          </Box>
+        </Box>
       </Container>
     );
   }
 
+  // Render error state
   if (error) {
     return (
-      <Container maxWidth="md" sx={{ py: 4 }}>
-        <Alert severity="error">{error}</Alert>
-        <Button startIcon={<ArrowBackIcon />} onClick={() => navigate('/dashboard')} sx={{ mt: 2 }}>
-          Retour au Tableau de Bord
+      <Container maxWidth="md" sx={{ mt: 4, mb: 4 }}>
+        <Alert severity="error" sx={{ mb: 3 }}>
+          {error}
+        </Alert>
+        <Button variant="outlined" onClick={() => navigate('/dashboard')} startIcon={<ArrowBackIcon />}>
+          العودة إلى لوحة التحكم
         </Button>
       </Container>
     );
   }
 
+  // Render tender not found
   if (!tender) {
     return (
-      <Container maxWidth="md" sx={{ py: 4 }}>
-        <Alert severity="info">Appel d'offres non trouvé.</Alert>
+      <Container maxWidth="md" sx={{ mt: 4, mb: 4 }}>
+        <Alert severity="warning" sx={{ mb: 3 }}>
+          المناقصة غير موجودة أو تم حذفها.
+        </Alert>
+        <Button variant="outlined" onClick={() => navigate('/dashboard')} startIcon={<ArrowBackIcon />}>
+          العودة إلى لوحة التحكم
+        </Button>
       </Container>
     );
   }
@@ -177,7 +245,7 @@ export default function TenderDetail() {
           onClick={() => navigate('/dashboard')}
           sx={{ mb: 3, color: theme.palette.primary.main }}
         >
-          Retour
+          العودة
         </Button>
 
         <Paper sx={{ p: 4, mb: 3, border: `1px solid ${theme.palette.divider}` }}>

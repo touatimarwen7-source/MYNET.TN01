@@ -229,6 +229,100 @@ class AdvancedAnalyticsService {
       return 'La concurrence est forte - considérez une offre agressive ou attendez une meilleure opportunité';
     }
   }
+
+  /**
+   * Get supplier performance metrics
+   */
+  static async getSupplierPerformance(db, supplierId, period = '6 months') {
+    try {
+      const query = `
+        SELECT 
+          COUNT(DISTINCT o.id) as total_offers,
+          COUNT(DISTINCT CASE WHEN o.status = 'awarded' THEN o.id END) as wins,
+          AVG(o.total_price) as avg_offer_price,
+          AVG(r.rating) as avg_rating,
+          COUNT(DISTINCT r.id) as total_reviews
+        FROM offers o
+        LEFT JOIN reviews r ON o.supplier_id = r.supplier_id
+        WHERE o.supplier_id = $1
+          AND o.created_at >= NOW() - INTERVAL '${period}'
+        GROUP BY o.supplier_id
+      `;
+
+      const result = await db.query(query, [supplierId]);
+
+      if (result.rows.length === 0) {
+        return {
+          success: true,
+          performance: {
+            totalOffers: 0,
+            wins: 0,
+            winRate: '0%',
+            avgOfferPrice: '0.00',
+            avgRating: '0.0',
+            totalReviews: 0
+          }
+        };
+      }
+
+      const data = result.rows[0];
+      const winRate = data.total_offers > 0 
+        ? ((data.wins / data.total_offers) * 100).toFixed(1)
+        : '0';
+
+      return {
+        success: true,
+        performance: {
+          totalOffers: parseInt(data.total_offers),
+          wins: parseInt(data.wins),
+          winRate: `${winRate}%`,
+          avgOfferPrice: parseFloat(data.avg_offer_price || 0).toFixed(2),
+          avgRating: parseFloat(data.avg_rating || 0).toFixed(1),
+          totalReviews: parseInt(data.total_reviews || 0)
+        }
+      };
+    } catch (error) {
+      console.error('Supplier Performance Error:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Get category statistics
+   */
+  static async getCategoryStats(db) {
+    try {
+      const query = `
+        SELECT 
+          category,
+          COUNT(*) as total_tenders,
+          AVG(budget_max) as avg_budget,
+          COUNT(DISTINCT buyer_id) as unique_buyers
+        FROM tenders
+        WHERE deleted_at IS NULL
+          AND created_at >= NOW() - INTERVAL '12 months'
+        GROUP BY category
+        ORDER BY total_tenders DESC
+      `;
+
+      const result = await db.query(query);
+
+      return {
+        success: true,
+        categories: result.rows.map(row => ({
+          category: row.category,
+          totalTenders: parseInt(row.total_tenders),
+          avgBudget: parseFloat(row.avg_budget || 0).toFixed(2),
+          uniqueBuyers: parseInt(row.unique_buyers)
+        }))
+      };
+    } catch (error) {
+      console.error('Category Stats Error:', error);
+      throw error;
+    }
+  }
 }
+
+module.exports = AdvancedAnalyticsService;
 
 module.exports = AdvancedAnalyticsService;

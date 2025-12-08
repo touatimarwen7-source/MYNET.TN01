@@ -228,6 +228,101 @@ class AIRecommendationService {
     if (score >= 45) return 'Bonne opportunité - Correspondance modérée';
     return 'Opportunité intéressante';
   }
+
+  /**
+   * Get similar tenders based on category and budget
+   */
+  static async getSimilarTenders(db, tenderId, limit = 5) {
+    try {
+      const query = `
+        WITH current_tender AS (
+          SELECT category, budget_max, location
+          FROM tenders
+          WHERE id = $1
+        )
+        SELECT 
+          t.id,
+          t.title,
+          t.category,
+          t.budget_max,
+          t.deadline,
+          t.status,
+          COUNT(o.id) as offer_count
+        FROM tenders t
+        LEFT JOIN offers o ON t.id = o.tender_id
+        CROSS JOIN current_tender ct
+        WHERE t.id != $1
+          AND t.status = 'open'
+          AND t.category = ct.category
+          AND t.budget_max BETWEEN ct.budget_max * 0.7 AND ct.budget_max * 1.3
+          AND t.deleted_at IS NULL
+        GROUP BY t.id, t.title, t.category, t.budget_max, t.deadline, t.status
+        ORDER BY t.created_at DESC
+        LIMIT $2
+      `;
+
+      const result = await db.query(query, [tenderId, limit]);
+
+      return {
+        success: true,
+        tenders: result.rows
+      };
+    } catch (error) {
+      console.error('Similar Tenders Error:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Get supplier recommendations for buyer
+   */
+  static async getTopSuppliers(db, category = null, limit = 10) {
+    try {
+      const query = `
+        SELECT 
+          u.id,
+          u.company_name,
+          cp.industry,
+          COUNT(DISTINCT o.id) as total_offers,
+          AVG(r.rating) as avg_rating,
+          COUNT(DISTINCT CASE WHEN o.status = 'awarded' THEN o.id END) as awards_won
+        FROM users u
+        LEFT JOIN company_profiles cp ON u.id = cp.user_id
+        LEFT JOIN offers o ON u.id = o.supplier_id
+        LEFT JOIN reviews r ON u.id = r.supplier_id
+        WHERE u.role = 'supplier'
+          AND u.is_verified = true
+          AND u.deleted_at IS NULL
+          ${category ? "AND cp.industry = $1" : ""}
+        GROUP BY u.id, u.company_name, cp.industry
+        HAVING COUNT(DISTINCT o.id) > 0
+        ORDER BY 
+          AVG(r.rating) DESC,
+          COUNT(DISTINCT CASE WHEN o.status = 'awarded' THEN o.id END) DESC
+        LIMIT ${category ? "$2" : "$1"}
+      `;
+
+      const params = category ? [category, limit] : [limit];
+      const result = await db.query(query, params);
+
+      return {
+        success: true,
+        suppliers: result.rows.map(row => ({
+          id: row.id,
+          companyName: row.company_name,
+          industry: row.industry,
+          totalOffers: row.total_offers,
+          avgRating: parseFloat(row.avg_rating || 0).toFixed(1),
+          awardsWon: row.awards_won
+        }))
+      };
+    } catch (error) {
+      console.error('Top Suppliers Error:', error);
+      throw error;
+    }
+  }
 }
+
+module.exports = AIRecommendationService;
 
 module.exports = AIRecommendationService;

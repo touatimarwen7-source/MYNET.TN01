@@ -112,4 +112,111 @@ router.get(
   }
 );
 
+// Get similar tenders
+router.get(
+  '/similar/:tenderId',
+  authMiddleware,
+  validateIdMiddleware('tenderId'),
+  cacheMiddleware(600),
+  async (req, res) => {
+    try {
+      const { tenderId } = req.params;
+      const { limit = 5 } = req.query;
+      const db = req.app.get('db');
+
+      const similar = await AIRecommendationService.getSimilarTenders(
+        db,
+        tenderId,
+        parseInt(limit)
+      );
+
+      res.json(similar);
+    } catch (error) {
+      console.error('Similar Tenders Error:', error);
+      res.status(500).json({ 
+        error: 'Échec de la récupération des appels d\'offres similaires',
+        message: error.message 
+      });
+    }
+  }
+);
+
+// Get top suppliers
+router.get(
+  '/top-suppliers',
+  authMiddleware,
+  cacheMiddleware(1800),
+  async (req, res) => {
+    try {
+      const { category, limit = 10 } = req.query;
+      const db = req.app.get('db');
+
+      const suppliers = await AIRecommendationService.getTopSuppliers(
+        db,
+        category,
+        parseInt(limit)
+      );
+
+      res.json(suppliers);
+    } catch (error) {
+      console.error('Top Suppliers Error:', error);
+      res.status(500).json({ 
+        error: 'Échec de la récupération des meilleurs fournisseurs',
+        message: error.message 
+      });
+    }
+  }
+);
+
+// Get supplier performance
+router.get(
+  '/supplier-performance/:supplierId',
+  authMiddleware,
+  validateIdMiddleware('supplierId'),
+  cacheMiddleware(900),
+  async (req, res) => {
+    try {
+      const { supplierId } = req.params;
+      const { period = '6 months' } = req.query;
+      const db = req.app.get('db');
+
+      const performance = await AdvancedAnalyticsService.getSupplierPerformance(
+        db,
+        supplierId,
+        period
+      );
+
+      res.json(performance);
+    } catch (error) {
+      console.error('Supplier Performance Error:', error);
+      res.status(500).json({ 
+        error: 'Échec de l\'analyse de performance',
+        message: error.message 
+      });
+    }
+  }
+);
+
+// Get category statistics
+router.get(
+  '/category-stats',
+  authMiddleware,
+  cacheMiddleware(3600),
+  async (req, res) => {
+    try {
+      const db = req.app.get('db');
+
+      const stats = await AdvancedAnalyticsService.getCategoryStats(db);
+
+      res.json(stats);
+    } catch (error) {
+      console.error('Category Stats Error:', error);
+      res.status(500).json({ 
+        error: 'Échec de l\'analyse des catégories',
+        message: error.message 
+      });
+    }
+  }
+);
+
 module.exports = router;

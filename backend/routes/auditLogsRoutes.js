@@ -121,4 +121,10 @@ router.get('/:id', validateIdMiddleware('id'), authMiddleware, asyncHandler(asyn
 // Export logs helper
 router.logAction = logAction;
 
+// This line was added to fix an undefined handler error by binding the controller method.
+router.get(
+  '/summary',
+  AuditLogController.getAuditSummary.bind(AuditLogController)
+);
+
 module.exports = router;

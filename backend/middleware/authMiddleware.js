@@ -1,4 +1,3 @@
-
 const AuthorizationGuard = require('../security/AuthorizationGuard');
 
 // Main authentication middleware
@@ -24,5 +23,8 @@ module.exports = {
   checkPermission: permissionMiddleware,
 };
 
-// Default export for backward compatibility
-module.exports.default = authMiddleware;
+// Export as default function
+module.exports = authMiddleware;
+
+// Also export named for flexibility
+module.exports.authMiddleware = authMiddleware;

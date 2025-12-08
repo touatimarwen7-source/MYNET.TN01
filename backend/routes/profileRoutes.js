@@ -1,4 +1,3 @@
-
 const express = require('express');
 const ProfileController = require('../controllers/user/ProfileController');
 const authMiddleware = require('../middleware/authMiddleware');

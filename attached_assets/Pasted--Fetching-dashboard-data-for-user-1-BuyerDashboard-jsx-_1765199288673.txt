@@ -1,0 +1,233 @@
+📊 Fetching dashboard data for user: 1
+BuyerDashboard.jsx:102 فشل تحميل الإحصائيات: AxiosError
+fetchDashboardData @ BuyerDashboard.jsx:102Understand this warning
+BuyerDashboard.jsx:117 فشل تحميل التحليلات: AxiosError
+fetchDashboardData @ BuyerDashboard.jsx:117Understand this warning
+BuyerDashboard.jsx:102 فشل تحميل الإحصائيات: AxiosError
+fetchDashboardData @ BuyerDashboard.jsx:102Understand this warning
+BuyerDashboard.jsx:117 فشل تحميل التحليلات: AxiosError
+fetchDashboardData @ BuyerDashboard.jsx:117Understand this warning
+client:736 Fetch API cannot load https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev:5000/. Refused to connect because it violates the document's Content Security Policy.
+ping @ client:736Understand this error
+client:736 Fetch API cannot load https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev:5000/. Refused to connect because it violates the document's Content Security Policy.
+ping @ client:736Understand this error
+client:736 Fetch API cannot load https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev:5000/. Refused to connect because it violates the document's Content Security Policy.
+ping @ client:736Understand this error
+client:736 Fetch API cannot load https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev:5000/. Refused to connect because it violates the document's Content Security Policy.
+ping @ client:736Understand this error
+client:736 Fetch API cannot load https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev:5000/. Refused to connect because it violates the document's Content Security Policy.
+ping @ client:736Understand this error
+client:736 Fetch API cannot load https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev:5000/. Refused to connect because it violates the document's Content Security Policy.
+ping @ client:736Understand this error
+client:736 Fetch API cannot load https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev:5000/. Refused to connect because it violates the document's Content Security Policy.
+ping @ client:736Understand this error
+client:736 Fetch API cannot load https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev:5000/. Refused to connect because it violates the document's Content Security Policy.
+ping @ client:736Understand this error
+client:736 Fetch API cannot load https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev:5000/. Refused to connect because it violates the document's Content Security Policy.
+ping @ client:736Understand this error
+client:736 Fetch API cannot load https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev:5000/. Refused to connect because it violates the document's Content Security Policy.
+ping @ client:736Understand this error
+client:736 Fetch API cannot load https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev:5000/. Refused to connect because it violates the document's Content Security Policy.
+ping @ client:736Understand this error
+client:736 Fetch API cannot load https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev:5000/. Refused to connect because it violates the document's Content Security Policy.
+ping @ client:736Understand this error
+client:736 Fetch API cannot load https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev:5000/. Refused to connect because it violates the document's Content Security Policy.
+ping @ client:736Understand this error
+client:736 Fetch API cannot load https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev:5000/. Refused to connect because it violates the document's Content Security Policy.
+ping @ client:736Understand this error
+client:736 Fetch API cannot load https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev:5000/. Refused to connect because it violates the document's Content Security Policy.
+ping @ client:736Understand this error
+client:736 Fetch API cannot load https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev:5000/. Refused to connect because it violates the document's Content Security Policy.
+ping @ client:736Understand this error
+client:736 Fetch API cannot load https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev:5000/. Refused to connect because it violates the document's Content Security Policy.
+ping @ client:736Understand this error
+client:736 Fetch API cannot load https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev:5000/. Refused to connect because it violates the document's Content Security Policy.
+ping @ client:736Understand this error
+client:736 Fetch API cannot load https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev:5000/. Refused to connect because it violates the document's Content Security Policy.
+ping @ client:736Understand this error
+client:736 Fetch API cannot load https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev:5000/. Refused to connect because it violates the document's Content Security Policy.
+ping @ client:736Understand this error
+client:736 Fetch API cannot load https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev:5000/. Refused to connect because it violates the document's Content Security Policy.
+ping @ client:736Understand this error
+client:736 Fetch API cannot load https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev:5000/. Refused to connect because it violates the document's Content Security Policy.
+ping @ client:736Understand this error
+client:736 Fetch API cannot load https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev:5000/. Refused to connect because it violates the document's Content Security Policy.
+ping @ client:736Understand this error
+client:736 Fetch API cannot load https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev:5000/. Refused to connect because it violates the document's Content Security Policy.
+ping @ client:736Understand this error
+client:736 Fetch API cannot load https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev:5000/. Refused to connect because it violates the document's Content Security Policy.
+ping @ client:736Understand this error
+client:736 Fetch API cannot load https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev:5000/. Refused to connect because it violates the document's Content Security Policy.
+ping @ client:736Understand this error
+client:736 Fetch API cannot load https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev:5000/. Refused to connect because it violates the document's Content Security Policy.
+ping @ client:736Understand this error
+client:736 Fetch API cannot load https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev:5000/. Refused to connect because it violates the document's Content Security Policy.
+ping @ client:736Understand this error
+client:736 Fetch API cannot load https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev:5000/. Refused to connect because it violates the document's Content Security Policy.
+ping @ client:736Understand this error
+client:736 Fetch API cannot load https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev:5000/. Refused to connect because it violates the document's Content Security Policy.
+ping @ client:736Understand this error
+client:736 Fetch API cannot load https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev:5000/. Refused to connect because it violates the document's Content Security Policy.
+ping @ client:736Understand this error
+client:736 Fetch API cannot load https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev:5000/. Refused to connect because it violates the document's Content Security Policy.
+ping @ client:736Understand this error
+api/procurement/tenders?page=1&limit=20:1  Failed to load resource: the server responded with a status of 400 (Bad Request)Understand this error
+react_jsx-dev-runtime.js?v=00805cc9:64 Warning: Failed prop type: Invalid prop `children` supplied to `ForwardRef(Alert2)`, expected a ReactNode.
+    at Alert2 (https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev/node_modules/.vite/deps/@mui_material.js?v=00805cc9:4368:17)
+    at TenderListOptimized (https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev/src/pages/TenderList.Optimized.jsx:37:35)
+    at RenderedRoute (https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev/node_modules/.vite/deps/react-router-dom.js?v=00805cc9:4108:5)
+    at Routes (https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev/node_modules/.vite/deps/react-router-dom.js?v=00805cc9:4578:5)
+    at Suspense
+    at main
+    at https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev/node_modules/.vite/deps/chunk-W772XLVY.js?v=00805cc9:3082:49
+    at Box3 (https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev/node_modules/.vite/deps/chunk-ERN5PUDO.js?v=00805cc9:707:19)
+    at div
+    at https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev/node_modules/.vite/deps/chunk-W772XLVY.js?v=00805cc9:3082:49
+    at Box3 (https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev/node_modules/.vite/deps/chunk-ERN5PUDO.js?v=00805cc9:707:19)
+    at Router (https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev/node_modules/.vite/deps/react-router-dom.js?v=00805cc9:4521:15)
+    at BrowserRouter (https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev/node_modules/.vite/deps/react-router-dom.js?v=00805cc9:5267:5)
+    at SuperAdminProvider (https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev/src/contexts/SuperAdminContext.jsx:20:38)
+    at DarkModeProvider (https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev/src/contexts/DarkModeContext.jsx:20:36)
+    at DefaultPropsProvider (https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev/node_modules/.vite/deps/chunk-W772XLVY.js?v=00805cc9:6679:3)
+    at RtlProvider (https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev/node_modules/.vite/deps/chunk-ERN5PUDO.js?v=00805cc9:1091:5)
+    at ThemeProvider (https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev/node_modules/.vite/deps/chunk-ERN5PUDO.js?v=00805cc9:1041:5)
+    at ThemeProvider2 (https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev/node_modules/.vite/deps/chunk-ERN5PUDO.js?v=00805cc9:1181:5)
+    at ThemeProvider (https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev/node_modules/.vite/deps/chunk-FPNHPTLY.js?v=00805cc9:327:12)
+    at ErrorBoundary (https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev/src/components/ErrorBoundary.jsx:20:5)
+    at AppContent (https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev/src/App.jsx:234:51)
+    at AppProvider (https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev/src/contexts/AppContext.jsx:28:31)
+    at App
+    at ToastProvider (https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev/src/contexts/ToastContext.jsx:20:33)
+    at AppProvider (https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev/src/contexts/AppContext.jsx:28:31)
+printWarning @ react_jsx-dev-runtime.js?v=00805cc9:64Understand this error
+2chunk-WRD5HZVH.js?v=00805cc9:9934 Uncaught Error: Objects are not valid as a React child (found: object with keys {message, code}). If you meant to render a collection of children, use an array instead.
+    at throwOnInvalidObjectType (chunk-WRD5HZVH.js?v=00805cc9:9934:17)
+    at reconcileChildFibers2 (chunk-WRD5HZVH.js?v=00805cc9:10564:15)
+    at reconcileChildren (chunk-WRD5HZVH.js?v=00805cc9:14290:37)
+    at updateHostComponent (chunk-WRD5HZVH.js?v=00805cc9:14807:11)
+    at beginWork (chunk-WRD5HZVH.js?v=00805cc9:15935:22)
+    at HTMLUnknownElement.callCallback2 (chunk-WRD5HZVH.js?v=00805cc9:3674:22)
+    at Object.invokeGuardedCallbackDev (chunk-WRD5HZVH.js?v=00805cc9:3699:24)
+    at invokeGuardedCallback (chunk-WRD5HZVH.js?v=00805cc9:3733:39)
+    at beginWork$1 (chunk-WRD5HZVH.js?v=00805cc9:19765:15)
+    at performUnitOfWork (chunk-WRD5HZVH.js?v=00805cc9:19198:20)Understand this error
+chunk-WRD5HZVH.js?v=00805cc9:14032 The above error occurred in the <div> component:
+
+    at div
+    at https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev/node_modules/.vite/deps/chunk-W772XLVY.js?v=00805cc9:3082:49
+    at div
+    at https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev/node_modules/.vite/deps/chunk-W772XLVY.js?v=00805cc9:3082:49
+    at Paper2 (https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev/node_modules/.vite/deps/@mui_material.js?v=00805cc9:2284:17)
+    at https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev/node_modules/.vite/deps/chunk-W772XLVY.js?v=00805cc9:3082:49
+    at Alert2 (https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev/node_modules/.vite/deps/@mui_material.js?v=00805cc9:4368:17)
+    at div
+    at https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev/node_modules/.vite/deps/chunk-W772XLVY.js?v=00805cc9:3082:49
+    at Box3 (https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev/node_modules/.vite/deps/chunk-ERN5PUDO.js?v=00805cc9:707:19)
+    at div
+    at https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev/node_modules/.vite/deps/chunk-W772XLVY.js?v=00805cc9:3082:49
+    at Container3 (https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev/node_modules/.vite/deps/chunk-ERN5PUDO.js?v=00805cc9:2116:19)
+    at TenderListOptimized (https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev/src/pages/TenderList.Optimized.jsx:37:35)
+    at RenderedRoute (https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev/node_modules/.vite/deps/react-router-dom.js?v=00805cc9:4108:5)
+    at Routes (https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev/node_modules/.vite/deps/react-router-dom.js?v=00805cc9:4578:5)
+    at Suspense
+    at main
+    at https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev/node_modules/.vite/deps/chunk-W772XLVY.js?v=00805cc9:3082:49
+    at Box3 (https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev/node_modules/.vite/deps/chunk-ERN5PUDO.js?v=00805cc9:707:19)
+    at div
+    at https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev/node_modules/.vite/deps/chunk-W772XLVY.js?v=00805cc9:3082:49
+    at Box3 (https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev/node_modules/.vite/deps/chunk-ERN5PUDO.js?v=00805cc9:707:19)
+    at Router (https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev/node_modules/.vite/deps/react-router-dom.js?v=00805cc9:4521:15)
+    at BrowserRouter (https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev/node_modules/.vite/deps/react-router-dom.js?v=00805cc9:5267:5)
+    at SuperAdminProvider (https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev/src/contexts/SuperAdminContext.jsx:20:38)
+    at DarkModeProvider (https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev/src/contexts/DarkModeContext.jsx:20:36)
+    at DefaultPropsProvider (https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev/node_modules/.vite/deps/chunk-W772XLVY.js?v=00805cc9:6679:3)
+    at RtlProvider (https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev/node_modules/.vite/deps/chunk-ERN5PUDO.js?v=00805cc9:1091:5)
+    at ThemeProvider (https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev/node_modules/.vite/deps/chunk-ERN5PUDO.js?v=00805cc9:1041:5)
+    at ThemeProvider2 (https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev/node_modules/.vite/deps/chunk-ERN5PUDO.js?v=00805cc9:1181:5)
+    at ThemeProvider (https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev/node_modules/.vite/deps/chunk-FPNHPTLY.js?v=00805cc9:327:12)
+    at ErrorBoundary (https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev/src/components/ErrorBoundary.jsx:20:5)
+    at AppContent (https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev/src/App.jsx:234:51)
+    at AppProvider (https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev/src/contexts/AppContext.jsx:28:31)
+    at App
+    at ToastProvider (https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev/src/contexts/ToastContext.jsx:20:33)
+    at AppProvider (https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev/src/contexts/AppContext.jsx:28:31)
+
+React will try to recreate this component tree from scratch using the error boundary you provided, ErrorBoundary.
+logCapturedError @ chunk-WRD5HZVH.js?v=00805cc9:14032Understand this error
+ErrorBoundary.jsx:38 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+componentDidCatch @ ErrorBoundary.jsx:38Understand this error
+ErrorBoundary.jsx:39 ⚠️ React Error Boundary Caught Error:
+componentDidCatch @ ErrorBoundary.jsx:39Understand this error
+ErrorBoundary.jsx:40 Error: Error: Objects are not valid as a React child (found: object with keys {message, code}). If you meant to render a collection of children, use an array instead.
+    at throwOnInvalidObjectType (chunk-WRD5HZVH.js?v=00805cc9:9934:17)
+    at reconcileChildFibers2 (chunk-WRD5HZVH.js?v=00805cc9:10564:15)
+    at reconcileChildren (chunk-WRD5HZVH.js?v=00805cc9:14290:37)
+    at updateHostComponent (chunk-WRD5HZVH.js?v=00805cc9:14807:11)
+    at beginWork (chunk-WRD5HZVH.js?v=00805cc9:15935:22)
+    at beginWork$1 (chunk-WRD5HZVH.js?v=00805cc9:19753:22)
+    at performUnitOfWork (chunk-WRD5HZVH.js?v=00805cc9:19198:20)
+    at workLoopSync (chunk-WRD5HZVH.js?v=00805cc9:19137:13)
+    at renderRootSync (chunk-WRD5HZVH.js?v=00805cc9:19116:15)
+    at recoverFromConcurrentError (chunk-WRD5HZVH.js?v=00805cc9:18736:28)
+componentDidCatch @ ErrorBoundary.jsx:40Understand this error
+ErrorBoundary.jsx:41 Component Stack: 
+    at div
+    at https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev/node_modules/.vite/deps/chunk-W772XLVY.js?v=00805cc9:3082:49
+    at div
+    at https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev/node_modules/.vite/deps/chunk-W772XLVY.js?v=00805cc9:3082:49
+    at Paper2 (https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev/node_modules/.vite/deps/@mui_material.js?v=00805cc9:2284:17)
+    at https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev/node_modules/.vite/deps/chunk-W772XLVY.js?v=00805cc9:3082:49
+    at Alert2 (https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev/node_modules/.vite/deps/@mui_material.js?v=00805cc9:4368:17)
+    at div
+    at https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev/node_modules/.vite/deps/chunk-W772XLVY.js?v=00805cc9:3082:49
+    at Box3 (https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev/node_modules/.vite/deps/chunk-ERN5PUDO.js?v=00805cc9:707:19)
+    at div
+    at https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev/node_modules/.vite/deps/chunk-W772XLVY.js?v=00805cc9:3082:49
+    at Container3 (https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev/node_modules/.vite/deps/chunk-ERN5PUDO.js?v=00805cc9:2116:19)
+    at TenderListOptimized (https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev/src/pages/TenderList.Optimized.jsx:37:35)
+    at RenderedRoute (https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev/node_modules/.vite/deps/react-router-dom.js?v=00805cc9:4108:5)
+    at Routes (https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev/node_modules/.vite/deps/react-router-dom.js?v=00805cc9:4578:5)
+    at Suspense
+    at main
+    at https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev/node_modules/.vite/deps/chunk-W772XLVY.js?v=00805cc9:3082:49
+    at Box3 (https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev/node_modules/.vite/deps/chunk-ERN5PUDO.js?v=00805cc9:707:19)
+    at div
+    at https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev/node_modules/.vite/deps/chunk-W772XLVY.js?v=00805cc9:3082:49
+    at Box3 (https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev/node_modules/.vite/deps/chunk-ERN5PUDO.js?v=00805cc9:707:19)
+    at Router (https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev/node_modules/.vite/deps/react-router-dom.js?v=00805cc9:4521:15)
+    at BrowserRouter (https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev/node_modules/.vite/deps/react-router-dom.js?v=00805cc9:5267:5)
+    at SuperAdminProvider (https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev/src/contexts/SuperAdminContext.jsx:20:38)
+    at DarkModeProvider (https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev/src/contexts/DarkModeContext.jsx:20:36)
+    at DefaultPropsProvider (https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev/node_modules/.vite/deps/chunk-W772XLVY.js?v=00805cc9:6679:3)
+    at RtlProvider (https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev/node_modules/.vite/deps/chunk-ERN5PUDO.js?v=00805cc9:1091:5)
+    at ThemeProvider (https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev/node_modules/.vite/deps/chunk-ERN5PUDO.js?v=00805cc9:1041:5)
+    at ThemeProvider2 (https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev/node_modules/.vite/deps/chunk-ERN5PUDO.js?v=00805cc9:1181:5)
+    at ThemeProvider (https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev/node_modules/.vite/deps/chunk-FPNHPTLY.js?v=00805cc9:327:12)
+    at ErrorBoundary (https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev/src/components/ErrorBoundary.jsx:20:5)
+    at AppContent (https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev/src/App.jsx:234:51)
+    at AppProvider (https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev/src/contexts/AppContext.jsx:28:31)
+    at App
+    at ToastProvider (https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev/src/contexts/ToastContext.jsx:20:33)
+    at AppProvider (https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev/src/contexts/AppContext.jsx:28:31)
+componentDidCatch @ ErrorBoundary.jsx:41Understand this error
+ErrorBoundary.jsx:42 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+componentDidCatch @ ErrorBoundary.jsx:42Understand this error
+client:736 Fetch API cannot load https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev:5000/. Refused to connect because it violates the document's Content Security Policy.
+ping @ client:736Understand this error
+client:736 Fetch API cannot load https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev:5000/. Refused to connect because it violates the document's Content Security Policy.
+ping @ client:736Understand this error
+client:736 Fetch API cannot load https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev:5000/. Refused to connect because it violates the document's Content Security Policy.
+ping @ client:736Understand this error
+client:736 Fetch API cannot load https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev:5000/. Refused to connect because it violates the document's Content Security Policy.
+ping @ client:736
+waitForSuccessfulPing @ client:755Understand this error
+client:736 Fetch API cannot load https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev:5000/. Refused to connect because it violates the document's Content Security Policy.
+ping @ client:736
+waitForSuccessfulPing @ client:755Understand this error
+client:736 Fetch API cannot load https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev:5000/. Refused to connect because it violates the document's Content Security Policy.
+ping @ client:736
+waitForSuccessfulPing @ client:755Understand this error
+client:736 Fetch API cannot load https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev:5000/. Refused to connect because it violates the document's Content Security Policy.
+ping @ client:736
+waitForSuccessfulPing @ client:755Understand this error
+client:736 Fetch API cannot load https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev:5000/. Refused to connect because it violates the document's Content Security Policy.

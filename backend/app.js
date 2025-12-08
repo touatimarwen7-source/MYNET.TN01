@@ -99,6 +99,8 @@ app.use(
           'http://localhost:3000',
           'http://localhost:5000',
           'ws://localhost:*',
+          'ws://*.replit.dev:*',
+          'wss://*.replit.dev:*',
           'wss:',
         ],
         frameAncestors: ["'self'"],

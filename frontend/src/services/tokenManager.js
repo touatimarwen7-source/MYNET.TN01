@@ -38,7 +38,7 @@ class TokenManager {
       return;
     }
 
-    // Normaliser userId et id
+    // Normalize userId and id
     const normalizedUser = {
       ...user,
       userId: user.userId || user.id,
@@ -52,7 +52,10 @@ class TokenManager {
 
     try {
       localStorage.setItem(this.USER_KEY, JSON.stringify(normalizedUser));
-      console.log('TokenManager: User data stored successfully');
+      // Reduce console spam - only log in development
+      if (import.meta.env.DEV) {
+        console.log('TokenManager: User data stored successfully');
+      }
     } catch (error) {
       console.error('TokenManager: Error storing user data:', error);
     }

@@ -59,9 +59,22 @@ const CreateTenderWizard = () => {
   const [showPreview, setShowPreview] = useState(false);
   const [showExit, setShowExit] = useState(false);
 
-  // Add error boundary check
+  // Error boundary check and component mount logging
   React.useEffect(() => {
-    console.log('CreateTenderWizard mounted successfully');
+    if (import.meta.env.DEV) {
+      console.log('✅ CreateTenderWizard mounted successfully');
+    }
+    
+    // Validate initial state
+    if (!formData) {
+      console.error('❌ CreateTenderWizard: formData is undefined');
+    }
+    
+    return () => {
+      if (import.meta.env.DEV) {
+        console.log('🔄 CreateTenderWizard unmounted');
+      }
+    };
   }, []);
 
   // Charger le brouillon au démarrage du composant

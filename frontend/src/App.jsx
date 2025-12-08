@@ -34,7 +34,7 @@ const FeaturesPage = lazy(() => import('./pages/FeaturesPage'));
 const PricingPage = lazy(() => import('./pages/PricingPage'));
 const ContactPage = lazy(() => import('./pages/ContactPage'));
 const TenderList = lazy(() => import('./pages/TenderList.Optimized'));
-const CreateTender = lazy(() => import('./pages/CreateTenderWizard'));
+const CreateTenderWizard = lazy(() => import('./pages/CreateTenderWizard'));
 const CreateBid = lazy(() => import('./pages/CreateBid'));
 const CreateSupplyRequest = lazy(() => import('./pages/CreateSupplyRequest'));
 const CreateInvoice = lazy(() => import('./pages/CreateInvoice'));
@@ -216,7 +216,7 @@ function AppContent() {
                         {/* ========== Tender Actions - Buyer ========== */}
                         <Route
                           path="/create-tender"
-                          element={user?.role === 'buyer' ? <CreateTender /> : <Navigate to="/tenders" />}
+                          element={user?.role === 'buyer' ? <CreateTenderWizard /> : <Navigate to="/tenders" />}
                         />
                         <Route
                           path="/tender/:tenderId/opening-report"

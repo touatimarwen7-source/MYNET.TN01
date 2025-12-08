@@ -422,6 +422,35 @@ const adminErrorHandler = (err, req, res, next) => {
   res.status(statusCode).json(errorResponse);
 };
 
+// ===== ADMIN ROLE CHECK =====
+/**
+ * Simple admin role verification middleware
+ */
+const isAdmin = (req, res, next) => {
+  try {
+    if (!req.user) {
+      return res.status(401).json({
+        success: false,
+        error: 'Authentication required',
+      });
+    }
+
+    if (!['super_admin', 'admin'].includes(req.user.role)) {
+      return res.status(403).json({
+        success: false,
+        error: 'Admin access required',
+      });
+    }
+
+    next();
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: 'Admin verification failed',
+    });
+  }
+};
+
 // ===== EXPORTS =====
 module.exports = {
   // Rate limiters
@@ -438,6 +467,7 @@ module.exports = {
   // Permission & security
   verifyAdminPermission,
   protectSensitiveData,
+  isAdmin,
 
   // Logging & monitoring
   logAdminAction,

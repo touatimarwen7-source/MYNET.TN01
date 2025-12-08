@@ -1,7 +1,7 @@
 // Supplier Analytics Dashboard - TURN 3 ENHANCEMENT
 const express = require('express');
 const router = express.Router();
-const authMiddleware = require('../middleware/authMiddleware');
+const { verifyToken } = require('../middleware/authMiddleware');
 const { validateIdMiddleware } = require('../middleware/validateIdMiddleware');
 const { validationMiddleware } = require('../middleware/validationMiddleware');
 
@@ -9,7 +9,7 @@ const { validationMiddleware } = require('../middleware/validationMiddleware');
 router.use(validationMiddleware);
 
 // Supplier dashboard overview
-router.get('/overview', authMiddleware, async (req, res) => {
+router.get('/overview', verifyToken, async (req, res) => {
   try {
     const db = req.app.get('db');
     const userId = req.user.id;
@@ -33,7 +33,7 @@ router.get('/overview', authMiddleware, async (req, res) => {
 });
 
 // Offer acceptance rate
-router.get('/acceptance-rate', authMiddleware, async (req, res) => {
+router.get('/acceptance-rate', verifyToken, async (req, res) => {
   try {
     const db = req.app.get('db');
     const userId = req.user.id;
@@ -54,7 +54,7 @@ router.get('/acceptance-rate', authMiddleware, async (req, res) => {
 });
 
 // Revenue by month
-router.get('/revenue-by-month', authMiddleware, async (req, res) => {
+router.get('/revenue-by-month', verifyToken, async (req, res) => {
   try {
     const db = req.app.get('db');
     const userId = req.user.id;
@@ -80,7 +80,7 @@ router.get('/revenue-by-month', authMiddleware, async (req, res) => {
 });
 
 // Recent reviews
-router.get('/recent-reviews', authMiddleware, async (req, res) => {
+router.get('/recent-reviews', verifyToken, async (req, res) => {
   try {
     const db = req.app.get('db');
     const userId = req.user.id;
@@ -110,7 +110,7 @@ router.get('/recent-reviews', authMiddleware, async (req, res) => {
 
 // Add a new route for testing validation middleware
 // For example, a route to get a specific offer by ID
-router.get('/offers/:id', authMiddleware, validateIdMiddleware, async (req, res) => {
+router.get('/offers/:id', verifyToken, validateIdMiddleware, async (req, res) => {
   try {
     const db = req.app.get('db');
     const userId = req.user.id;

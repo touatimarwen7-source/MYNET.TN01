@@ -54,6 +54,7 @@ const TenderAwarding = lazy(() => import('./pages/TenderAwarding'));
 const TeamPermissions = lazy(() => import('./pages/TeamPermissions'));
 const SupplierProductsManagement = lazy(() => import('./pages/SupplierProductsManagement'));
 const SupplierServicesManagement = lazy(() => import('./pages/SupplierServicesManagement'));
+const SupplierTeamManagement = lazy(() => import('./pages/SupplierTeamManagement'));
 const BidSubmission = lazy(() => import('./pages/BidSubmission'));
 const ContractManagement = lazy(() => import('./pages/ContractManagement'));
 const DeliveryManagement = lazy(() => import('./pages/DeliveryManagement'));

@@ -1,7 +1,7 @@
 import { Suspense, lazy, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { ThemeProvider } from '@mui/material/styles';
-import CssBaseline from '@mui/material/ CssBaseline';
+import CssBaseline from '@mui/material/CssBaseline';
 import { Box, CircularProgress, Container } from '@mui/material';
 import institutionalTheme from './theme/theme';
 import AlertStrip from './components/AlertStrip';
@@ -143,7 +143,7 @@ function AppContent() {
 
     window.addEventListener('authChanged', handleAuthChange);
     return () => window.removeEventListener('authChanged', handleAuthChange);
-  }, [user, setUser]); // Added user and setUser as dependencies
+  }, []); // setUser is stable, no need to include it
 
   if (authLoading) {
     return <Box sx={{ padding: '20px', textAlign: 'center' }}>Chargement en cours...</Box>;

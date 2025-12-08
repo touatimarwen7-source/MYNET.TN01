@@ -1,0 +1,41 @@
+Login.jsx:95 ❌ Login error: AxiosError {message: 'Network Error', name: 'AxiosError', code: 'ERR_NETWORK', config: {…}, request: XMLHttpRequest, …}
+(anonymous) @ Login.jsx:95
+await in (anonymous)
+(anonymous) @ useFormValidation.js:182
+handleSubmit @ Login.jsx:127
+callCallback2 @ chunk-WRD5HZVH.js?v=8cf20ecf:3674
+invokeGuardedCallbackDev @ chunk-WRD5HZVH.js?v=8cf20ecf:3699
+invokeGuardedCallback @ chunk-WRD5HZVH.js?v=8cf20ecf:3733
+invokeGuardedCallbackAndCatchFirstError @ chunk-WRD5HZVH.js?v=8cf20ecf:3736
+executeDispatch @ chunk-WRD5HZVH.js?v=8cf20ecf:7014
+processDispatchQueueItemsInOrder @ chunk-WRD5HZVH.js?v=8cf20ecf:7034
+processDispatchQueue @ chunk-WRD5HZVH.js?v=8cf20ecf:7043
+dispatchEventsForPlugins @ chunk-WRD5HZVH.js?v=8cf20ecf:7051
+(anonymous) @ chunk-WRD5HZVH.js?v=8cf20ecf:7174
+batchedUpdates$1 @ chunk-WRD5HZVH.js?v=8cf20ecf:18913
+batchedUpdates @ chunk-WRD5HZVH.js?v=8cf20ecf:3579
+dispatchEventForPluginEventSystem @ chunk-WRD5HZVH.js?v=8cf20ecf:7173
+dispatchEventWithEnableCapturePhaseSelectiveHydrationWithoutDiscreteEventReplay @ chunk-WRD5HZVH.js?v=8cf20ecf:5478
+dispatchEvent @ chunk-WRD5HZVH.js?v=8cf20ecf:5472
+dispatchDiscreteEvent @ chunk-WRD5HZVH.js?v=8cf20ecf:5449Understand this error
+Login.jsx:102 🔴 Backend Connection Error: Make sure backend is running on port 3000
+(anonymous) @ Login.jsx:102
+await in (anonymous)
+(anonymous) @ useFormValidation.js:182
+handleSubmit @ Login.jsx:127
+callCallback2 @ chunk-WRD5HZVH.js?v=8cf20ecf:3674
+invokeGuardedCallbackDev @ chunk-WRD5HZVH.js?v=8cf20ecf:3699
+invokeGuardedCallback @ chunk-WRD5HZVH.js?v=8cf20ecf:3733
+invokeGuardedCallbackAndCatchFirstError @ chunk-WRD5HZVH.js?v=8cf20ecf:3736
+executeDispatch @ chunk-WRD5HZVH.js?v=8cf20ecf:7014
+processDispatchQueueItemsInOrder @ chunk-WRD5HZVH.js?v=8cf20ecf:7034
+processDispatchQueue @ chunk-WRD5HZVH.js?v=8cf20ecf:7043
+dispatchEventsForPlugins @ chunk-WRD5HZVH.js?v=8cf20ecf:7051
+(anonymous) @ chunk-WRD5HZVH.js?v=8cf20ecf:7174
+batchedUpdates$1 @ chunk-WRD5HZVH.js?v=8cf20ecf:18913
+batchedUpdates @ chunk-WRD5HZVH.js?v=8cf20ecf:3579
+dispatchEventForPluginEventSystem @ chunk-WRD5HZVH.js?v=8cf20ecf:7173
+dispatchEventWithEnableCapturePhaseSelectiveHydrationWithoutDiscreteEventReplay @ chunk-WRD5HZVH.js?v=8cf20ecf:5478
+dispatchEvent @ chunk-WRD5HZVH.js?v=8cf20ecf:5472
+dispatchDiscreteEvent @ chunk-WRD5HZVH.js?v=8cf20ecf:5449Understand this error
+authApi.js:26  POST http://localhost:3000/auth/login net::ERR_CONNECTION_REFUSED

@@ -38,7 +38,7 @@ import institutionalTheme from '../theme/theme';
 import { setPageTitle } from '../utils/pageTitle';
 import TokenManager from '../services/tokenManager';
 import EnhancedTable from '../components/EnhancedTable';
-import axiosInstance from '../services/axiosInstance'; // Assuming axiosInstance is used for API calls
+import axiosInstance from '../services/axiosConfig';
 
 export default function AdminDashboard() {
   const navigate = useNavigate();

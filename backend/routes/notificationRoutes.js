@@ -1,12 +1,12 @@
 // Email Notifications & Real-time Updates - TURN 3 ENHANCEMENT
 const express = require('express');
-const authMiddleware = require('../middleware/authMiddleware');
+const { verifyToken } = require('../middleware/authMiddleware');
 const { buildPaginationQuery } = require('../utils/paginationHelper');
 const router = express.Router();
 const { validateIdMiddleware } = require('../middleware/validateIdMiddleware');
 
 // Create notification
-router.post('/', authMiddleware, async (req, res) => {
+router.post('/', verifyToken, async (req, res) => {
   try {
     const { recipient_id, type, subject, message, related_entity_id } = req.body;
     const db = req.app.get('db');
@@ -34,7 +34,7 @@ router.post('/', authMiddleware, async (req, res) => {
 });
 
 // Get user notifications
-router.get('/', authMiddleware, async (req, res) => {
+router.get('/', verifyToken, async (req, res) => {
   try {
     const db = req.app.get('db');
     const { limit, offset, sql } = buildPaginationQuery(req.query.limit, req.query.offset);
@@ -60,7 +60,7 @@ router.get('/', authMiddleware, async (req, res) => {
 router.put(
   '/:notificationId/read',
   validateIdMiddleware('notificationId'),
-  authMiddleware,
+  verifyToken,
   async (req, res) => {
     try {
       const { notificationId } = req.params;
@@ -77,5 +77,23 @@ router.put(
     }
   }
 );
+
+// Delete notification
+router.delete('/:id', validateIdMiddleware('id'), verifyToken, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const db = req.app.get('db');
+
+    const result = await db.query('DELETE FROM notifications WHERE id = $1 AND recipient_id = $2 RETURNING *', [id, req.user.id]);
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'Notification not found or not owned by user' });
+    }
+
+    res.json({ success: true });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
 
 module.exports = router;

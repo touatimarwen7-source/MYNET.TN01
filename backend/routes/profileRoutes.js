@@ -1,26 +1,91 @@
+
 const express = require('express');
 const ProfileController = require('../controllers/user/ProfileController');
 const authMiddleware = require('../middleware/authMiddleware');
+const { asyncHandler } = require('../middleware/errorHandlingMiddleware');
+const { sendOk, sendValidationError } = require('../utils/responseHelper');
 
 const router = express.Router();
-const { validateIdMiddleware } = require('../middleware/validateIdMiddleware');
-const { validationMiddleware } = require('../middleware/validationMiddleware');
-const { asyncHandler } = require('../middleware/errorHandlingMiddleware');
 
-router.put('/supplier/preferences', authMiddleware, (req, res) =>
-  ProfileController.updateSupplierPreferences(req, res)
+// ============================================================================
+// SUPPLIER PREFERENCES ROUTES
+// ============================================================================
+
+/**
+ * @route   PUT /api/profile/supplier/preferences
+ * @desc    Update supplier preferences (categories, locations, budget)
+ * @access  Private (Supplier only)
+ */
+router.put(
+  '/supplier/preferences',
+  authMiddleware,
+  asyncHandler(async (req, res) => {
+    const controller = new ProfileController();
+    return controller.updateSupplierPreferences(req, res);
+  })
 );
 
-router.get('/supplier/preferences', authMiddleware, (req, res) =>
-  ProfileController.getSupplierPreferences(req, res)
+/**
+ * @route   GET /api/profile/supplier/preferences
+ * @desc    Get supplier preferences
+ * @access  Private (Supplier only)
+ */
+router.get(
+  '/supplier/preferences',
+  authMiddleware,
+  asyncHandler(async (req, res) => {
+    const controller = new ProfileController();
+    return controller.getSupplierPreferences(req, res);
+  })
 );
 
-// ✅ FIX: Ensure ProfileController.updateProfile is a function
-router.put('/', authMiddleware, asyncHandler(async (req, res) => {
-  if (typeof ProfileController.updateProfile === 'function') {
-    return ProfileController.updateProfile(req, res);
-  }
-  throw new Error('ProfileController.updateProfile is not a function');
-}));
+// ============================================================================
+// PROFILE MANAGEMENT ROUTES
+// ============================================================================
+
+/**
+ * @route   GET /api/profile
+ * @desc    Get user profile
+ * @access  Private
+ */
+router.get(
+  '/',
+  authMiddleware,
+  asyncHandler(async (req, res) => {
+    const controller = new ProfileController();
+    
+    if (typeof controller.getProfile === 'function') {
+      return controller.getProfile(req, res);
+    }
+    
+    // Fallback: return basic user info
+    return sendOk(res, {
+      id: req.user.id,
+      email: req.user.email,
+      role: req.user.role,
+      company_name: req.user.company_name
+    }, 'Profile retrieved successfully');
+  })
+);
+
+/**
+ * @route   PUT /api/profile
+ * @desc    Update user profile
+ * @access  Private
+ */
+router.put(
+  '/',
+  authMiddleware,
+  asyncHandler(async (req, res) => {
+    const controller = new ProfileController();
+    
+    if (typeof controller.updateProfile === 'function') {
+      return controller.updateProfile(req, res);
+    }
+    
+    // Fallback error
+    return sendValidationError(res, [], 'Profile update not implemented');
+  })
+);
 
 module.exports = router;

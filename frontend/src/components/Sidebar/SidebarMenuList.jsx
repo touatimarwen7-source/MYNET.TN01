@@ -41,8 +41,17 @@ export default function SidebarMenuList({ menu = [] }) {
   const location = useLocation();
   const [expandedMenus, setExpandedMenus] = useState({});
 
+  // Comprehensive menu validation
+  const validatedMenu = useMemo(() => {
+    if (!menu || !Array.isArray(menu) || menu.length === 0) {
+      return [];
+    }
+    // Filter out invalid items
+    return menu.filter(item => item && item.id && (item.label || item.text));
+  }, [menu]);
+
   // Safety check for menu
-  if (!menu || !Array.isArray(menu) || menu.length === 0) {
+  if (validatedMenu.length === 0) {
     return (
       <Box sx={{ padding: '16px', textAlign: 'center', color: '#999' }}>
         <Typography variant="body2">Aucun menu disponible</Typography>
@@ -68,15 +77,12 @@ export default function SidebarMenuList({ menu = [] }) {
 
   return (
     <List sx={{ flex: 1, padding: '8px 0', overflowY: 'auto' }}>
-      {menu.map((item) => {
-        // Safety checks for menu item
-        if (!item || !item.id) {
-          console.warn('Invalid menu item:', item);
-          return null;
-        }
-
+      {validatedMenu.map((item) => {
+        // Get icon and determine structure
         const IconComponent = iconMap[item.id];
         const hasSubItems = Array.isArray(item.subItems) && item.subItems.length > 0;
+        const itemLabel = item.label || item.text;
+        const itemPath = item.path || item.link;
         
         return (
           <Box key={item.id}>
@@ -103,7 +109,7 @@ export default function SidebarMenuList({ menu = [] }) {
                     />
                   )}
                   <ListItemText
-                    primary={item.label}
+                    primary={itemLabel}
                     sx={{
                       margin: 0,
                       '& .MuiTypography-root': { fontSize: '14px', fontWeight: 500 },
@@ -115,10 +121,13 @@ export default function SidebarMenuList({ menu = [] }) {
                 {/* Submenu items */}
                 <Collapse in={expandedMenus[item.id]} timeout="auto" unmountOnExit>
                   <List component="div" disablePadding>
-                    {item.subItems.map((subItem, idx) => (
+                    {item.subItems.map((subItem, idx) => {
+                      const subPath = subItem.path || subItem.link;
+                      const subLabel = subItem.label || subItem.text;
+                      return (
                       <ListItemButton
                         key={idx}
-                        onClick={() => handleNavigation(subItem.path, subItem.label)}
+                        onClick={() => handleNavigation(subPath, subLabel)}
                         sx={{
                           paddingRight: '16px',
                           paddingTop: '8px',
@@ -128,12 +137,12 @@ export default function SidebarMenuList({ menu = [] }) {
                           marginTop: '2px',
                           marginBottom: '2px',
                           borderRadius: '4px',
-                          backgroundColor: isMenuItemActive(subItem.path)
+                          backgroundColor: isMenuItemActive(subPath)
                             ? '#e3f2fd'
                             : 'transparent',
-                          borderLeft: isMenuItemActive(subItem.path) ? '4px solid #0056B3' : 'none',
-                          paddingLeft: isMenuItemActive(subItem.path) ? '44px' : '48px',
-                          color: isMenuItemActive(subItem.path)
+                          borderLeft: isMenuItemActive(subPath) ? '4px solid #0056B3' : 'none',
+                          paddingLeft: isMenuItemActive(subPath) ? '44px' : '48px',
+                          color: isMenuItemActive(subPath)
                             ? theme.palette.primary.main
                             : '#616161',
                           '&:hover': {
@@ -143,29 +152,29 @@ export default function SidebarMenuList({ menu = [] }) {
                         }}
                       >
                         <ListItemText
-                          primary={subItem.label}
+                          primary={subLabel}
                           sx={{
                             margin: 0,
                             '& .MuiTypography-root': { fontSize: '13px', fontWeight: 400 },
                           }}
                         />
                       </ListItemButton>
-                    ))}
+                    )})}
                   </List>
                 </Collapse>
               </>
             ) : (
               /* Non-collapsible menu item */
               <ListItemButton
-                onClick={() => handleNavigation(item.path, item.label)}
+                onClick={() => handleNavigation(itemPath, itemLabel)}
                 sx={{
                   padding: '12px 16px',
                   margin: '4px 8px',
                   borderRadius: '4px',
-                  backgroundColor: isMenuItemActive(item.path) ? '#e3f2fd' : 'transparent',
-                  borderLeft: isMenuItemActive(item.path) ? '4px solid #0056B3' : 'none',
-                  paddingLeft: isMenuItemActive(item.path) ? '12px' : '16px',
-                  color: isMenuItemActive(item.path)
+                  backgroundColor: isMenuItemActive(itemPath) ? '#e3f2fd' : 'transparent',
+                  borderLeft: isMenuItemActive(itemPath) ? '4px solid #0056B3' : 'none',
+                  paddingLeft: isMenuItemActive(itemPath) ? '12px' : '16px',
+                  color: isMenuItemActive(itemPath)
                     ? theme.palette.primary.main
                     : theme.palette.text.primary,
                   '&:hover': {
@@ -184,7 +193,7 @@ export default function SidebarMenuList({ menu = [] }) {
                   />
                 )}
                 <ListItemText
-                  primary={item.label}
+                  primary={itemLabel}
                   sx={{ margin: 0, '& .MuiTypography-root': { fontSize: '14px', fontWeight: 500 } }}
                 />
               </ListItemButton>

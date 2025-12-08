@@ -35,11 +35,21 @@ export default function Sidebar({ user, onLogout }) {
   const { checkFeatureAccess, handleLockedFeatureClick, closeUpgradeModal, upgradeModal } =
     useSubscriptionTier(user?.subscription);
 
-  // Safe menu retrieval with fallback
-  const menu = user?.role ? getMenuByRole(user.role, user.permissions) : DEFAULT_MENU;
+  // Safe menu retrieval with comprehensive error handling
+  const getMenu = () => {
+    try {
+      if (!user?.role) {
+        return DEFAULT_MENU;
+      }
+      const menu = getMenuByRole(user.role, user.permissions);
+      return Array.isArray(menu) && menu.length > 0 ? menu : DEFAULT_MENU;
+    } catch (error) {
+      console.error('Error getting menu:', error);
+      return DEFAULT_MENU;
+    }
+  };
 
-  // Ensure menu is always an array
-  const safeMenu = Array.isArray(menu) ? menu : DEFAULT_MENU;
+  const safeMenu = getMenu();
 
   const drawerContent = (
     <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>

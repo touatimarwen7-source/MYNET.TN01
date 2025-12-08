@@ -91,16 +91,23 @@ export const AppProvider = ({ children }) => {
         throw new Error('Données utilisateur invalides');
       }
       
-      TokenManager.setUserData(userData);
+      // Store in TokenManager
+      TokenManager.setUser(userData);
+      
+      // Update state
       setUser(userData);
       setIsAuthenticated(true);
       setAuthError(null);
-      addToast('تم تسجيل الدخول بنجاح', 'success');
+      
+      // Dispatch event for cross-tab sync
+      window.dispatchEvent(new CustomEvent('authChanged', { detail: userData }));
+      
+      addToast('Connexion réussie', 'success');
       return true;
     } catch (error) {
       console.error('Login error in AppContext:', error);
       setAuthError(error.message);
-      addToast('خطأ في تسجيل الدخول', 'error');
+      addToast('Erreur de connexion', 'error');
       return false;
     }
   }, [addToast]);

@@ -21,16 +21,50 @@ import ArticleIcon from '@mui/icons-material/Article';
 import CodeIcon from '@mui/icons-material/Code';
 import SupervisedUserCircleIcon from '@mui/icons-material/SupervisedUserCircle';
 
-// بناء قائمة المساعد الإداري حسب صلاحياته
+/**
+ * Build admin menu based on permissions
+ */
 function buildAdminMenu(permissions) {
-  const baseMenu = [{ text: 'لوحة التحكم', icon: DashboardIcon, path: '/admin-dashboard' }];
+  const baseMenu = [
+    { 
+      id: 'dashboard',
+      label: 'Tableau de Bord', 
+      icon: DashboardIcon, 
+      path: '/admin-dashboard' 
+    }
+  ];
 
   const permissionMap = {
-    manage_users: { text: 'إدارة المستخدمين', icon: PeopleIcon, path: '/admin/users' },
-    view_users: { text: 'عرض المستخدمين', icon: PeopleIcon, path: '/admin/users' },
-    manage_tenders: { text: 'إدارة المناقصات', icon: GavelIcon, path: '/admin/tenders' },
-    view_reports: { text: 'التقارير', icon: AssessmentIcon, path: '/admin/reports' },
-    manage_settings: { text: 'الإعدادات', icon: SettingsIcon, path: '/admin/settings' },
+    manage_users: { 
+      id: 'users',
+      label: 'Gestion des Utilisateurs', 
+      icon: PeopleIcon, 
+      path: '/admin/users' 
+    },
+    view_users: { 
+      id: 'view-users',
+      label: 'Voir Utilisateurs', 
+      icon: PeopleIcon, 
+      path: '/admin/users' 
+    },
+    manage_tenders: { 
+      id: 'tenders',
+      label: 'Gestion des Appels', 
+      icon: GavelIcon, 
+      path: '/admin/tenders' 
+    },
+    view_reports: { 
+      id: 'reports',
+      label: 'Rapports', 
+      icon: AssessmentIcon, 
+      path: '/admin/reports' 
+    },
+    manage_settings: { 
+      id: 'settings',
+      label: 'Paramètres', 
+      icon: SettingsIcon, 
+      path: '/admin/settings' 
+    },
   };
 
   if (permissions && Array.isArray(permissions)) {
@@ -40,49 +74,51 @@ function buildAdminMenu(permissions) {
       }
     });
   } else {
-    // الصلاحيات الافتراضية للمساعد الإداري
+    // Default permissions for admin
     baseMenu.push(
-      { text: 'إدارة المستخدمين', icon: PeopleIcon, path: '/admin/users' },
-      { text: 'التقارير', icon: AssessmentIcon, path: '/admin/reports' },
-      { text: 'الإعدادات', icon: SettingsIcon, path: '/admin/settings' }
+      { id: 'users', label: 'Gestion des Utilisateurs', icon: PeopleIcon, path: '/admin/users' },
+      { id: 'reports', label: 'Rapports', icon: AssessmentIcon, path: '/admin/reports' },
+      { id: 'settings', label: 'Paramètres', icon: SettingsIcon, path: '/admin/settings' }
     );
   }
 
   return baseMenu;
 }
 
-// القوائم الثابتة لكل دور
+/**
+ * Menu definitions for each role
+ */
 const buyerMenu = [
-  { text: 'لوحة التحكم', icon: DashboardIcon, path: '/buyer-dashboard' },
-  { text: 'المناقصات', icon: GavelIcon, path: '/tenders' },
-  { text: 'إنشاء مناقصة', icon: GavelIcon, path: '/create-tender' },
-  { text: 'العروض', icon: LocalOfferIcon, path: '/buyer-active-tenders' },
-  { text: 'التقارير', icon: AssessmentIcon, path: '/financial-reports' },
-  { text: 'الملف الشخصي', icon: PersonIcon, path: '/profile' },
-  { text: 'الإعدادات', icon: SettingsIcon, path: '/settings' },
+  { id: 'dashboard', label: 'Tableau de Bord', icon: DashboardIcon, path: '/buyer-dashboard' },
+  { id: 'tenders', label: 'Appels d\'Offres', icon: GavelIcon, path: '/tenders' },
+  { id: 'create-tender', label: 'Créer un Appel', icon: GavelIcon, path: '/create-tender' },
+  { id: 'offers', label: 'Offres Reçues', icon: LocalOfferIcon, path: '/buyer-active-tenders' },
+  { id: 'reports', label: 'Rapports', icon: AssessmentIcon, path: '/financial-reports' },
+  { id: 'profile', label: 'Profil', icon: PersonIcon, path: '/profile' },
+  { id: 'settings', label: 'Paramètres', icon: SettingsIcon, path: '/settings' },
 ];
 
 const supplierMenu = [
-  { text: 'لوحة التحكم', icon: DashboardIcon, path: '/supplier-dashboard' },
-  { text: 'المناقصات المتاحة', icon: GavelIcon, path: '/tenders' },
-  { text: 'عروضي', icon: LocalOfferIcon, path: '/my-offers' },
-  { text: 'الفواتير', icon: ShoppingCartIcon, path: '/supplier-invoices' },
-  { text: 'الملف الشخصي', icon: PersonIcon, path: '/profile' },
-  { text: 'الإعدادات', icon: SettingsIcon, path: '/settings' },
+  { id: 'dashboard', label: 'Tableau de Bord', icon: DashboardIcon, path: '/supplier-dashboard' },
+  { id: 'tenders', label: 'Appels Disponibles', icon: GavelIcon, path: '/tenders' },
+  { id: 'offers', label: 'Mes Offres', icon: LocalOfferIcon, path: '/my-offers' },
+  { id: 'invoices', label: 'Factures', icon: ShoppingCartIcon, path: '/supplier-invoices' },
+  { id: 'profile', label: 'Profil', icon: PersonIcon, path: '/profile' },
+  { id: 'settings', label: 'Paramètres', icon: SettingsIcon, path: '/settings' },
 ];
 
 const superAdminMenu = [
-  { text: 'لوحة التحكم', icon: DashboardIcon, path: '/super-admin' },
-  { text: 'مركز التحكم الكامل', icon: AdminPanelSettingsIcon, path: '/super-admin' },
-  { text: 'إدارة المستخدمين', icon: PeopleIcon, path: '/super-admin/users' },
-  { text: 'الأدوار والصلاحيات', icon: SecurityIcon, path: '/super-admin/roles' },
-  { text: 'المساعدون الإداريون', icon: SupervisedUserCircleIcon, path: '/super-admin/assistants' },
-  { text: 'التحليلات المتقدمة', icon: BarChartIcon, path: '/super-admin/analytics' },
-  { text: 'إدارة الملفات', icon: FolderIcon, path: '/super-admin/files' },
-  { text: 'الإشعارات', icon: NotificationsIcon, path: '/super-admin/notifications' },
-  { text: 'إدارة المحتوى', icon: ArticleIcon, path: '/super-admin/content' },
-  { text: 'محرر الصفحات', icon: CodeIcon, path: '/super-admin/page-editor' },
-  { text: 'التحكم بالميزات', icon: SettingsIcon, path: '/super-admin/features' },
+  { id: 'dashboard', label: 'Tableau de Bord', icon: DashboardIcon, path: '/super-admin' },
+  { id: 'control', label: 'Centre de Contrôle', icon: AdminPanelSettingsIcon, path: '/super-admin' },
+  { id: 'users', label: 'Gestion Utilisateurs', icon: PeopleIcon, path: '/super-admin/users' },
+  { id: 'roles', label: 'Rôles et Permissions', icon: SecurityIcon, path: '/super-admin/roles' },
+  { id: 'assistants', label: 'Assistants Admin', icon: SupervisedUserCircleIcon, path: '/super-admin/assistants' },
+  { id: 'analytics', label: 'Analyses Avancées', icon: BarChartIcon, path: '/super-admin/analytics' },
+  { id: 'files', label: 'Gestion Fichiers', icon: FolderIcon, path: '/super-admin/files' },
+  { id: 'notifications', label: 'Notifications', icon: NotificationsIcon, path: '/super-admin/notifications' },
+  { id: 'content', label: 'Gestion Contenu', icon: ArticleIcon, path: '/super-admin/content' },
+  { id: 'editor', label: 'Éditeur Pages', icon: CodeIcon, path: '/super-admin/page-editor' },
+  { id: 'features', label: 'Contrôle Features', icon: SettingsIcon, path: '/super-admin/features' },
 ];
 
 const adminMenu = buildAdminMenu(null);
@@ -93,7 +129,7 @@ const adminMenu = buildAdminMenu(null);
  * @param {Array} permissions - Optional admin permissions array
  * @returns {Array} Menu configuration for the role
  */
-export const getMenuByRole = (role, permissions = null) => {
+export function getMenuByRole(role, permissions = null) {
   if (!role || typeof role !== 'string') {
     console.warn('Invalid role provided to getMenuByRole:', role);
     return buyerMenu;
@@ -115,7 +151,7 @@ export const getMenuByRole = (role, permissions = null) => {
       console.warn('Unknown role, using buyer menu as fallback:', role);
       return buyerMenu;
   }
-};
+}
 
-// للتوافق مع الكود القديم - تصدير القوائم
+// Export menus for compatibility
 export { buyerMenu, supplierMenu, superAdminMenu, adminMenu };

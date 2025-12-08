@@ -63,19 +63,17 @@ export default function Login() {
         throw new Error('Données utilisateur manquantes');
       }
       
-      // Store user data
-      TokenManager.setUser(userData);
+      console.log('✅ Login successful, user data:', userData);
       
-      console.log('✅ Login successful, user data stored:', userData);
+      // Use AppContext login which handles everything
+      const success = login(userData);
       
-      // Dispatch auth change event with small delay to ensure state update
-      setTimeout(() => {
-        window.dispatchEvent(new CustomEvent('authChanged', { detail: userData }));
-        addToast('Connexion réussie', 'success', 2000);
-        
-        // Navigate after state update
-        navigate('/dashboard', { replace: true });
-      }, 100);
+      if (success) {
+        // Small delay to ensure state propagation
+        setTimeout(() => {
+          navigate('/dashboard', { replace: true });
+        }, 50);
+      }
       
     } catch (err) {
       console.error('❌ Login error:', err);

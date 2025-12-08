@@ -239,14 +239,6 @@ function AppContent() {
                           }
                         />
 
-                        {/* Unified Dashboard for All Roles */}
-                        <Route
-                          path="/dashboard"
-                          element={
-                            user ? <UnifiedDashboard /> : <Navigate to="/login" />
-                          }
-                        />
-
                         {/* Legacy Buyer Dashboard - Redirect to Unified */}
                         <Route
                           path="/buyer-dashboard"
@@ -255,6 +247,14 @@ function AppContent() {
                         <Route
                           path="/supplier-dashboard"
                           element={<Navigate to="/dashboard" replace />}
+                        />
+
+                        {/* Unified Dashboard for All Roles */}
+                        <Route
+                          path="/dashboard"
+                          element={
+                            user ? <UnifiedDashboard /> : <Navigate to="/login" />
+                          }
                         />
 
                         {/* Buyer Routes */}
@@ -320,14 +320,7 @@ function AppContent() {
                             )
                           }
                         />
-                        <Route
-                          path="/security"
-                          element={user ? <Profile /> : <Navigate to="/login" />}
-                        />
-                        <Route
-                          path="/preferences"
-                          element={user ? <Profile /> : <Navigate to="/login" />}
-                        />
+                        
                         <Route
                           path="/team-permissions"
                           element={
@@ -378,7 +371,7 @@ function AppContent() {
                           path="/supplier-reports"
                           element={
                             user?.role === 'supplier' ? (
-                              <SupplierDashboard />
+                              <SupplierAnalytics />
                             ) : (
                               <Navigate to="/tenders" />
                             )
@@ -562,28 +555,6 @@ function AppContent() {
                         <Route
                           path="/message/:messageId"
                           element={user ? <MessageDetail /> : <Navigate to="/login" />}
-                        />
-
-                        {/* Supply Requests & Invoices */}
-                        <Route
-                          path="/my-supply-requests"
-                          element={
-                            user?.role === 'buyer' ? (
-                              <MySupplyRequests />
-                            ) : (
-                              <Navigate to="/tenders" />
-                            )
-                          }
-                        />
-                        <Route
-                          path="/supplier-requests"
-                          element={
-                            user?.role === 'supplier' ? (
-                              <SupplierRequests />
-                            ) : (
-                              <Navigate to="/tenders" />
-                            )
-                          }
                         />
 
                         {/* Analytics - Priority 3 */}
@@ -819,16 +790,6 @@ function AppContent() {
                           element={<Navigate to="/super-admin/archive" />}
                         />
                         <Route path="/admin/users" element={<Navigate to="/super-admin/users" />} />
-                        <Route
-                          path="/user-management"
-                          element={
-                            user?.role === 'super_admin' ? (
-                              <UserManagement />
-                            ) : (
-                              <Navigate to="/tenders" />
-                            )
-                          }
-                        />
 
                         {/* Email Notifications */}
                         <Route
@@ -864,50 +825,8 @@ function AppContent() {
                           }
                         />
                         <Route
-                          path="/direct-supply-request"
-                          element={
-                            user?.role === 'buyer' ? (
-                              <DirectSupplyRequest />
-                            ) : (
-                              <Navigate to="/tenders" />
-                            )
-                          }
-                        />
-                        <Route
-                          path="/my-supply-requests"
-                          element={
-                            user?.role === 'buyer' ? (
-                              <MySupplyRequests />
-                            ) : (
-                              <Navigate to="/tenders" />
-                            )
-                          }
-                        />
-                        <Route
-                          path="/supplier-requests"
-                          element={
-                            user?.role === 'supplier' ? (
-                              <SupplierRequests />
-                            ) : (
-                              <Navigate to="/tenders" />
-                            )
-                          }
-                        />
-                        <Route
                           path="/supplier-reviews/:supplierId"
                           element={user ? <SupplierReviews /> : <Navigate to="/login" />}
-                        />
-                        <Route
-                          path="/inbox"
-                          element={user ? <Inbox /> : <Navigate to="/login" />}
-                        />
-                        <Route
-                          path="/compose"
-                          element={user ? <Compose /> : <Navigate to="/login" />}
-                        />
-                        <Route
-                          path="/message/:messageId"
-                          element={user ? <MessageDetail /> : <Navigate to="/login" />}
                         />
                         <Route
                           path="/purchase-orders"

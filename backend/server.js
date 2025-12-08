@@ -10,12 +10,18 @@ async function startServer() {
     // Kill any existing process on port 3000
     try {
       const { execSync } = require('child_process');
-      execSync(`pkill -f "node.*server.js" || true`, { stdio: 'ignore' });
+      // Try to kill processes more aggressively
+      try {
+        execSync(`fuser -k 3000/tcp 2>/dev/null || true`, { stdio: 'ignore' });
+      } catch (e) {
+        // fuser might not be available, try pkill
+        execSync(`pkill -f "node.*server.js" 2>/dev/null || true`, { stdio: 'ignore' });
+      }
       console.log('✅ Cleaned up existing processes');
-      // Wait a bit for cleanup
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      // Wait for cleanup
+      await new Promise(resolve => setTimeout(resolve, 2000));
     } catch (e) {
-      // Ignore cleanup errors
+      console.log('⚠️ Could not clean up processes:', e.message);
     }
 
     console.log('========================================');

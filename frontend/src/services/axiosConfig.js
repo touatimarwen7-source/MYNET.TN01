@@ -48,16 +48,21 @@ const getApiBaseUrl = () => {
   }
   
   if (typeof window !== 'undefined') {
-    const isReplit = window.location.hostname.includes('replit.dev');
+    const hostname = window.location.hostname;
+    const isReplit = hostname.includes('replit.dev') || hostname.includes('repl.co');
     
     if (isReplit) {
-      // في Replit: استخدم HTTP مع نفس الـ hostname
-      const hostname = window.location.hostname.split(':')[0];
-      return `http://${hostname}:3000/api`;
+      // في Replit: استخدم نفس الـ hostname مع البورت 3000
+      return `http://${hostname.split(':')[0]}:3000/api`;
     }
     
-    // في التطوير المحلي
-    return 'http://localhost:3000/api';
+    // في التطوير المحلي - استخدم نفس الـ hostname
+    if (hostname === 'localhost' || hostname === '127.0.0.1') {
+      return 'http://localhost:3000/api';
+    }
+    
+    // استخدم الـ IP الحالي
+    return `http://${hostname}:3000/api`;
   }
   
   return 'http://localhost:3000/api';

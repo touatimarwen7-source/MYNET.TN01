@@ -12,9 +12,14 @@ const getBaseURL = () => {
     return window.location.origin.replace(':5000', ':3000').replace(':80', ':3000');
   }
 
-  // Development: use 0.0.0.0 instead of localhost
+  // Development: try backend on multiple possible URLs
   if (import.meta.env.DEV) {
-    return 'http://0.0.0.0:3000';
+    // Check if we can reach the backend
+    const hostname = window.location.hostname;
+    if (hostname === 'localhost' || hostname === '127.0.0.1') {
+      return 'http://localhost:3000';
+    }
+    return `http://${hostname}:3000`;
   }
 
   // Fallback

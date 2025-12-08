@@ -40,113 +40,113 @@ export default function SupplierDashboard() {
   const theme = institutionalTheme;
 
   useEffect(() => {
-    setPageTitle('لوحة تحكم المورد - MyNet.tn');
+    setPageTitle('Tableau de Bord Fournisseur - MyNet.tn');
   }, []);
 
   const stats = [
     { 
-      label: 'العروض المقدمة', 
+      label: 'Offres Soumises', 
       value: 18, 
       change: 12.5,
       trend: 'up',
       icon: OfferIcon, 
       color: theme.palette.primary.main,
-      subtitle: '+3 هذا الشهر'
+      subtitle: '+3 ce mois'
     },
     { 
-      label: 'معدل الفوز', 
+      label: 'Taux de Victoire', 
       value: '73%', 
       change: 5.2,
       trend: 'up',
       icon: WonIcon, 
       color: theme.palette.success.main,
-      subtitle: '13 من 18 عرض'
+      subtitle: '13 sur 18 offres'
     },
     { 
-      label: 'الإيرادات المتوقعة', 
+      label: 'Revenus Prévus', 
       value: '1.8M TND', 
       change: 18.3,
       trend: 'up',
       icon: RevenueIcon, 
       color: theme.palette.info.main,
-      subtitle: 'من العروض الفائزة'
+      subtitle: 'Des offres gagnées'
     },
     { 
-      label: 'التقييم العام', 
+      label: 'Note Globale', 
       value: '4.8/5', 
       change: 3.1,
       trend: 'up',
       icon: ReviewsIcon, 
       color: theme.palette.warning.main,
-      subtitle: 'من 42 تقييم'
+      subtitle: 'Sur 42 avis'
     },
   ];
 
   const offerStatusData = [
-    { name: 'فائز', value: 13, color: theme.palette.success.main },
-    { name: 'قيد التقييم', value: 3, color: theme.palette.warning.main },
-    { name: 'مرفوض', value: 2, color: theme.palette.error.main },
+    { name: 'Gagnant', value: 13, color: theme.palette.success.main },
+    { name: 'En Évaluation', value: 3, color: theme.palette.warning.main },
+    { name: 'Rejeté', value: 2, color: theme.palette.error.main },
   ];
 
   const monthlyRevenue = [
-    { month: 'يناير', revenue: 240, offers: 3 },
-    { month: 'فبراير', revenue: 380, offers: 5 },
-    { month: 'مارس', revenue: 520, offers: 6 },
-    { month: 'أبريل', revenue: 290, offers: 4 },
-    { month: 'مايو', revenue: 650, offers: 8 },
-    { month: 'يونيو', revenue: 480, offers: 5 },
+    { month: 'Janvier', revenue: 240, offers: 3 },
+    { month: 'Février', revenue: 380, offers: 5 },
+    { month: 'Mars', revenue: 520, offers: 6 },
+    { month: 'Avril', revenue: 290, offers: 4 },
+    { month: 'Mai', revenue: 650, offers: 8 },
+    { month: 'Juin', revenue: 480, offers: 5 },
   ];
 
   const recentOffers = [
     { 
       id: 1, 
-      tender: 'توريد معدات مكتبية', 
+      tender: 'Fourniture équipements bureau', 
       amount: '145,000 TND',
-      status: 'فائز', 
+      status: 'Gagnant', 
       date: '2025-01-05',
       rating: 5
     },
     { 
       id: 2, 
-      tender: 'خدمات صيانة شاملة', 
+      tender: 'Services maintenance complète', 
       amount: '280,000 TND',
-      status: 'قيد التقييم', 
+      status: 'En Évaluation', 
       date: '2025-01-03',
       rating: null
     },
     { 
       id: 3, 
-      tender: 'شراء أجهزة كمبيوتر', 
+      tender: 'Achat ordinateurs', 
       amount: '420,000 TND',
-      status: 'فائز', 
+      status: 'Gagnant', 
       date: '2024-12-28',
       rating: 4.5
     },
   ];
 
   const tableColumns = [
-    { key: 'tender', label: 'المناقصة' },
-    { key: 'amount', label: 'قيمة العرض' },
+    { key: 'tender', label: 'Appel d\'Offre' },
+    { key: 'amount', label: 'Montant Offre' },
     { 
       key: 'status', 
-      label: 'الحالة',
+      label: 'Statut',
       render: (val) => (
         <Chip 
           label={val} 
           size="small"
           color={
-            val === 'فائز' ? 'success' : 
-            val === 'قيد التقييم' ? 'warning' : 
+            val === 'Gagnant' ? 'success' : 
+            val === 'En Évaluation' ? 'warning' : 
             'error'
           }
           sx={{ fontWeight: 600 }}
         />
       )
     },
-    { key: 'date', label: 'التاريخ' },
+    { key: 'date', label: 'Date' },
     {
       key: 'rating',
-      label: 'التقييم',
+      label: 'Note',
       render: (val) => val ? <Rating value={val} readOnly size="small" /> : <Typography variant="caption">-</Typography>
     },
   ];
@@ -210,10 +210,10 @@ export default function SupplierDashboard() {
                 mb: 1 
               }}
             >
-              لوحة تحكم المورد
+              Tableau de Bord Fournisseur
             </Typography>
             <Typography variant="body2" color="textSecondary">
-              إدارة احترافية للعروض والمنتجات
+              Gestion professionnelle des offres et produits
             </Typography>
           </Box>
           <Button
@@ -230,7 +230,7 @@ export default function SupplierDashboard() {
               fontWeight: 600
             }}
           >
-            تصفح المناقصات
+            Parcourir les Appels d'Offres
           </Button>
         </Stack>
       </Box>
@@ -295,7 +295,7 @@ export default function SupplierDashboard() {
                     {Math.abs(stat.change)}%
                   </Typography>
                   <Typography variant="body2" color="textSecondary">
-                    عن الشهر الماضي
+                    vs mois dernier
                   </Typography>
                 </Stack>
               </CardContent>
@@ -311,7 +311,7 @@ export default function SupplierDashboard() {
           <Card sx={{ border: '1px solid', borderColor: theme.palette.divider, boxShadow: 'none' }}>
             <CardContent sx={{ p: 3 }}>
               <Typography variant="h6" sx={{ fontWeight: 600, mb: 3 }}>
-                الإيرادات والعروض الشهرية
+                Revenus et Offres Mensuels
               </Typography>
               <ResponsiveContainer width="100%" height={300}>
                 <BarChart data={monthlyRevenue}>
@@ -320,8 +320,8 @@ export default function SupplierDashboard() {
                   <YAxis stroke={theme.palette.text.secondary} />
                   <ChartTooltip />
                   <Legend />
-                  <Bar dataKey="revenue" fill={theme.palette.primary.main} name="الإيرادات (آلاف)" />
-                  <Bar dataKey="offers" fill={theme.palette.success.main} name="عدد العروض" />
+                  <Bar dataKey="revenue" fill={theme.palette.primary.main} name="Revenus (milliers)" />
+                  <Bar dataKey="offers" fill={theme.palette.success.main} name="Nombre d'offres" />
                 </BarChart>
               </ResponsiveContainer>
             </CardContent>
@@ -333,7 +333,7 @@ export default function SupplierDashboard() {
           <Card sx={{ border: '1px solid', borderColor: theme.palette.divider, boxShadow: 'none' }}>
             <CardContent sx={{ p: 3 }}>
               <Typography variant="h6" sx={{ fontWeight: 600, mb: 3 }}>
-                حالة العروض
+                Statut des Offres
               </Typography>
               <ResponsiveContainer width="100%" height={300}>
                 <PieChart>
@@ -363,7 +363,7 @@ export default function SupplierDashboard() {
       <Card sx={{ border: '1px solid', borderColor: theme.palette.divider, boxShadow: 'none', mb: 4 }}>
         <CardContent sx={{ p: 3 }}>
           <Typography variant="h6" sx={{ fontWeight: 600, mb: 3 }}>
-            إجراءات سريعة
+            Actions Rapides
           </Typography>
           <Grid container spacing={2}>
             {quickActions.map((action, idx) => (
@@ -408,7 +408,7 @@ export default function SupplierDashboard() {
         <CardContent sx={{ p: 3 }}>
           <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 3 }}>
             <Typography variant="h6" sx={{ fontWeight: 600 }}>
-              العروض الأخيرة
+              Offres Récentes
             </Typography>
             <Button
               variant="outlined"
@@ -416,7 +416,7 @@ export default function SupplierDashboard() {
               onClick={() => navigate('/my-offers')}
               sx={{ textTransform: 'none' }}
             >
-              عرض الكل
+              Voir Tout
             </Button>
           </Stack>
           <EnhancedTable

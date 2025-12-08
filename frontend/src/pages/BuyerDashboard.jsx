@@ -57,7 +57,7 @@ export default function BuyerDashboard() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
-    setPageTitle('لوحة تحكم المشتري');
+    setPageTitle('Tableau de Bord Acheteur');
     fetchDashboardData();
   }, []);
 
@@ -77,8 +77,8 @@ export default function BuyerDashboard() {
         });
       }
     } catch (err) {
-      console.error('خطأ في جلب بيانات لوحة التحكم:', err);
-      setError('فشل تحميل البيانات. يرجى المحاولة مرة أخرى.');
+      console.error('Erreur lors du chargement des données du tableau de bord:', err);
+      setError('Échec du chargement des données. Veuillez réessayer.');
       setStats({
         activeTenders: 0,
         totalOffers: 0,
@@ -91,48 +91,48 @@ export default function BuyerDashboard() {
   };
 
   const menuItems = [
-    { text: 'لوحة التحكم', icon: <DashboardIcon />, path: '/buyer-dashboard' },
-    { text: 'المناقصات', icon: <GavelIcon />, path: '/tenders' },
-    { text: 'إنشاء مناقصة', icon: <AddIcon />, path: '/create-tender' },
-    { text: 'العروض المستلمة', icon: <LocalOfferIcon />, path: '/buyer-active-tenders' },
-    { text: 'التقارير المالية', icon: <AssessmentIcon />, path: '/financial-reports' },
-    { text: 'الميزانيات', icon: <AccountBalanceIcon />, path: '/budgets' },
-    { text: 'إدارة الفريق', icon: <PeopleIcon />, path: '/team-management' },
-    { text: 'الملف الشخصي', icon: <PersonIcon />, path: '/profile' },
-    { text: 'الإعدادات', icon: <SettingsIcon />, path: '/settings' },
+    { text: 'Tableau de Bord', icon: <DashboardIcon />, path: '/buyer-dashboard' },
+    { text: 'Appels d\'Offres', icon: <GavelIcon />, path: '/tenders' },
+    { text: 'Créer un Appel', icon: <AddIcon />, path: '/create-tender' },
+    { text: 'Offres Reçues', icon: <LocalOfferIcon />, path: '/buyer-active-tenders' },
+    { text: 'Rapports Financiers', icon: <AssessmentIcon />, path: '/financial-reports' },
+    { text: 'Budgets', icon: <AccountBalanceIcon />, path: '/budgets' },
+    { text: 'Gestion d\'Équipe', icon: <PeopleIcon />, path: '/team-management' },
+    { text: 'Profil', icon: <PersonIcon />, path: '/profile' },
+    { text: 'Paramètres', icon: <SettingsIcon />, path: '/settings' },
   ];
 
   const dashboardCards = [
     {
-      title: 'المناقصات النشطة',
+      title: 'Appels d\'Offres Actifs',
       value: stats.activeTenders,
       icon: Description,
       color: institutionalTheme.palette.primary.main,
-      subtitle: 'Active',
+      subtitle: 'En cours',
       action: () => navigate('/buyer-active-tenders'),
     },
     {
-      title: 'إجمالي العروض',
+      title: 'Total des Offres',
       value: stats.totalOffers,
       icon: TrendingUp,
       color: institutionalTheme.palette.info.main,
-      subtitle: 'Total Offers',
+      subtitle: 'Offres reçues',
       action: () => navigate('/buyer/offers'),
     },
     {
-      title: 'المناقصات المكتملة',
+      title: 'Appels Complétés',
       value: stats.completedTenders,
       icon: CheckCircle,
       color: institutionalTheme.palette.success.main,
-      subtitle: 'Completed',
+      subtitle: 'Terminés',
       action: () => navigate('/buyer/completed-tenders'),
     },
     {
-      title: 'التقييمات المعلقة',
+      title: 'Évaluations en Attente',
       value: stats.pendingEvaluations,
       icon: Schedule,
       color: institutionalTheme.palette.warning.main,
-      subtitle: 'Pending',
+      subtitle: 'À traiter',
       action: () => navigate('/buyer/evaluations'),
     },
   ];
@@ -264,7 +264,7 @@ export default function BuyerDashboard() {
                 color: institutionalTheme.palette.primary.main,
               }}
             >
-              لوحة تحكم المشتري
+              Tableau de Bord Acheteur
             </Typography>
             <Button
               variant="contained"
@@ -277,7 +277,7 @@ export default function BuyerDashboard() {
                 },
               }}
             >
-              إنشاء مناقصة جديدة
+              Créer un Nouvel Appel d'Offre
             </Button>
           </Box>
 
@@ -335,7 +335,7 @@ export default function BuyerDashboard() {
           <Card sx={{ mt: 4, border: '1px solid', borderColor: institutionalTheme.palette.divider, boxShadow: 'none' }}>
             <CardContent sx={{ p: 3 }}>
               <Typography variant="h6" sx={{ fontWeight: 600, mb: 3 }}>
-                إجراءات سريعة
+                Actions Rapides
               </Typography>
               <Grid container spacing={2}>
                 <Grid item xs={12} sm={6} md={4}>
@@ -361,10 +361,10 @@ export default function BuyerDashboard() {
                         <AddIcon sx={{ color: institutionalTheme.palette.primary.main }} />
                       </Avatar>
                       <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>
-                        إنشاء مناقصة جديدة
+                        Créer un Nouvel Appel d'Offre
                       </Typography>
                       <Typography variant="caption" color="textSecondary">
-                        ابدأ مناقصة جديدة
+                        Lancer une nouvelle procédure
                       </Typography>
                     </Stack>
                   </Paper>
@@ -392,10 +392,10 @@ export default function BuyerDashboard() {
                         <GavelIcon sx={{ color: institutionalTheme.palette.info.main }} />
                       </Avatar>
                       <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>
-                        المناقصات النشطة
+                        Appels d'Offres Actifs
                       </Typography>
                       <Typography variant="caption" color="textSecondary">
-                        عرض وإدارة المناقصات
+                        Voir et gérer les appels
                       </Typography>
                     </Stack>
                   </Paper>
@@ -423,10 +423,10 @@ export default function BuyerDashboard() {
                         <AssessmentIcon sx={{ color: institutionalTheme.palette.success.main }} />
                       </Avatar>
                       <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>
-                        التقارير والتحليلات
+                        Rapports et Analyses
                       </Typography>
                       <Typography variant="caption" color="textSecondary">
-                        تحليلات مفصلة
+                        Analyses détaillées
                       </Typography>
                     </Stack>
                   </Paper>

@@ -48,7 +48,7 @@ export default function AdminDashboard() {
   const [permissions, setPermissions] = useState([]);
 
   useEffect(() => {
-    setPageTitle('لوحة تحكم المساعد الإداري - MyNet.tn');
+    setPageTitle('Tableau de Bord Assistant Administrateur - MyNet.tn');
     const userData = TokenManager.getUser();
     setUser(userData);
     setPermissions(userData?.permissions || ['view_users', 'view_reports']);
@@ -56,89 +56,89 @@ export default function AdminDashboard() {
 
   const stats = [
     { 
-      label: 'إجمالي المستخدمين', 
+      label: 'Total Utilisateurs', 
       value: 342, 
       change: 8.2,
       icon: UsersIcon, 
       color: theme.palette.primary.main,
-      subtitle: '+28 هذا الشهر'
+      subtitle: '+28 ce mois'
     },
     { 
-      label: 'المناقصات النشطة', 
+      label: 'Appels d\'Offres Actifs', 
       value: 67, 
       change: 12.5,
       icon: TendersIcon, 
       color: theme.palette.success.main,
-      subtitle: '45 قيد التقييم'
+      subtitle: '45 en évaluation'
     },
     { 
-      label: 'التقارير اليوم', 
+      label: 'Rapports Aujourd\'hui', 
       value: 12, 
       change: -3.1,
       icon: ReportsIcon, 
       color: theme.palette.warning.main,
-      subtitle: '8 مكتملة'
+      subtitle: '8 complétés'
     },
     { 
-      label: 'معدل النشاط', 
+      label: 'Taux d\'Activité', 
       value: '87%', 
       change: 5.3,
       icon: TrendingUp, 
       color: theme.palette.info.main,
-      subtitle: 'أداء ممتاز'
+      subtitle: 'Performance excellente'
     },
   ];
 
   const activityData = [
-    { day: 'السبت', users: 280, tenders: 45 },
-    { day: 'الأحد', users: 310, tenders: 52 },
-    { day: 'الاثنين', users: 290, tenders: 48 },
-    { day: 'الثلاثاء', users: 320, tenders: 55 },
-    { day: 'الأربعاء', users: 305, tenders: 51 },
-    { day: 'الخميس', users: 330, tenders: 58 },
-    { day: 'الجمعة', users: 270, tenders: 42 },
+    { day: 'Lundi', users: 290, tenders: 48 },
+    { day: 'Mardi', users: 320, tenders: 55 },
+    { day: 'Mercredi', users: 305, tenders: 51 },
+    { day: 'Jeudi', users: 330, tenders: 58 },
+    { day: 'Vendredi', users: 270, tenders: 42 },
+    { day: 'Samedi', users: 280, tenders: 45 },
+    { day: 'Dimanche', users: 310, tenders: 52 },
   ];
 
   const recentActivities = [
     { 
       id: 1, 
       type: 'user', 
-      message: 'مستخدم جديد تم تسجيله', 
-      user: 'أحمد محمد',
-      time: 'منذ 5 دقائق',
+      message: 'Nouvel utilisateur enregistré', 
+      user: 'Ahmed Mohamed',
+      time: 'Il y a 5 minutes',
       status: 'success'
     },
     { 
       id: 2, 
       type: 'tender', 
-      message: 'مناقصة جديدة تم إنشاؤها', 
-      user: 'شركة النجاح',
-      time: 'منذ 15 دقيقة',
+      message: 'Nouvel appel d\'offre créé', 
+      user: 'Société Succès',
+      time: 'Il y a 15 minutes',
       status: 'info'
     },
     { 
       id: 3, 
       type: 'report', 
-      message: 'تقرير شهري جاهز', 
-      user: 'النظام',
-      time: 'منذ ساعة',
+      message: 'Rapport mensuel prêt', 
+      user: 'Système',
+      time: 'Il y a 1 heure',
       status: 'warning'
     },
     { 
       id: 4, 
       type: 'security', 
-      message: 'محاولة دخول مشبوهة', 
-      user: 'نظام الأمان',
-      time: 'منذ 2 ساعة',
+      message: 'Tentative de connexion suspecte', 
+      user: 'Système de sécurité',
+      time: 'Il y a 2 heures',
       status: 'error'
     },
   ];
 
   const systemHealth = [
-    { name: 'قاعدة البيانات', status: 'healthy', value: 98 },
-    { name: 'الخادم', status: 'healthy', value: 95 },
+    { name: 'Base de Données', status: 'healthy', value: 98 },
+    { name: 'Serveur', status: 'healthy', value: 95 },
     { name: 'API', status: 'healthy', value: 99 },
-    { name: 'التخزين', status: 'warning', value: 75 },
+    { name: 'Stockage', status: 'warning', value: 75 },
   ];
 
   const quickActions = [
@@ -229,17 +229,17 @@ export default function AdminDashboard() {
             mb: 1 
           }}
         >
-          لوحة تحكم المساعد الإداري
+          Tableau de Bord Assistant Administrateur
         </Typography>
-        <Typography variant="body2" color="textSecondary">
-          مرحباً {user.username || user.email} - إدارة شاملة للنظام
+<Typography variant="body2" color="textSecondary">
+          Bienvenue {user.username || user.email} - Gestion complète du système
         </Typography>
       </Box>
 
       {/* Permissions Notice */}
       {permissions.length > 0 && (
         <Alert severity="info" sx={{ mb: 3 }}>
-          <strong>الصلاحيات المتاحة:</strong> {permissions.join('، ')}
+          <strong>Permissions disponibles:</strong> {permissions.join(', ')}
         </Alert>
       )}
 
@@ -311,7 +311,7 @@ export default function AdminDashboard() {
           <Card sx={{ border: '1px solid', borderColor: theme.palette.divider, boxShadow: 'none' }}>
             <CardContent sx={{ p: 3 }}>
               <Typography variant="h6" sx={{ fontWeight: 600, mb: 3 }}>
-                نشاط المستخدمين والمناقصات (آخر 7 أيام)
+                Activité Utilisateurs et Appels d'Offres (7 derniers jours)
               </Typography>
               <ResponsiveContainer width="100%" height={300}>
                 <RechartsBarChart data={activityData}>
@@ -319,8 +319,8 @@ export default function AdminDashboard() {
                   <XAxis dataKey="day" stroke={theme.palette.text.secondary} />
                   <YAxis stroke={theme.palette.text.secondary} />
                   <ChartTooltip />
-                  <Bar dataKey="users" fill={theme.palette.primary.main} name="المستخدمون" />
-                  <Bar dataKey="tenders" fill={theme.palette.success.main} name="المناقصات" />
+                  <Bar dataKey="users" fill={theme.palette.primary.main} name="Utilisateurs" />
+                  <Bar dataKey="tenders" fill={theme.palette.success.main} name="Appels d'Offres" />
                 </RechartsBarChart>
               </ResponsiveContainer>
             </CardContent>
@@ -332,7 +332,7 @@ export default function AdminDashboard() {
           <Card sx={{ border: '1px solid', borderColor: theme.palette.divider, boxShadow: 'none' }}>
             <CardContent sx={{ p: 3 }}>
               <Typography variant="h6" sx={{ fontWeight: 600, mb: 3 }}>
-                صحة النظام
+                Santé du Système
               </Typography>
               <Stack spacing={2}>
                 {systemHealth.map((item, idx) => (
@@ -340,7 +340,7 @@ export default function AdminDashboard() {
                     <Stack direction="row" justifyContent="space-between" sx={{ mb: 1 }}>
                       <Typography variant="body2">{item.name}</Typography>
                       <Chip 
-                        label={item.status === 'healthy' ? 'سليم' : 'تحذير'}
+                        label={item.status === 'healthy' ? 'Sain' : 'Avertissement'}
                         size="small"
                         color={item.status === 'healthy' ? 'success' : 'warning'}
                       />
@@ -369,7 +369,7 @@ export default function AdminDashboard() {
       <Card sx={{ border: '1px solid', borderColor: theme.palette.divider, boxShadow: 'none', mb: 4 }}>
         <CardContent sx={{ p: 3 }}>
           <Typography variant="h6" sx={{ fontWeight: 600, mb: 3 }}>
-            إجراءات سريعة
+            Actions Rapides
           </Typography>
           {availableActions.length > 0 ? (
             <Grid container spacing={2}>
@@ -409,7 +409,7 @@ export default function AdminDashboard() {
             </Grid>
           ) : (
             <Alert severity="warning">
-              لا توجد صلاحيات متاحة. يرجى التواصل مع المدير الأعلى.
+              Aucune permission disponible. Veuillez contacter le Super Administrateur.
             </Alert>
           )}
         </CardContent>
@@ -419,7 +419,7 @@ export default function AdminDashboard() {
       <Card sx={{ border: '1px solid', borderColor: theme.palette.divider, boxShadow: 'none' }}>
         <CardContent sx={{ p: 3 }}>
           <Typography variant="h6" sx={{ fontWeight: 600, mb: 3 }}>
-            النشاط الأخير
+            Activité Récente
           </Typography>
           <List>
             {recentActivities.map((activity, idx) => (

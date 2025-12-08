@@ -10,36 +10,38 @@ import {
   Typography,
   Stack,
   Chip,
+  Alert,
+  CircularProgress,
+  Grid,
+  Tab,
+  Tabs,
+  Avatar,
+  Divider,
+  IconButton,
+  Paper,
   List,
   ListItem,
   ListItemIcon,
   ListItemText,
-  Alert,
-  CircularProgress,
-  Paper,
-  Grid,
-  Tab,
-  Tabs,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  Select,
-  MenuItem,
-  FormControl,
-  InputLabel,
 } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import SaveIcon from '@mui/icons-material/Save';
 import CancelIcon from '@mui/icons-material/Cancel';
 import VerifiedIcon from '@mui/icons-material/Verified';
-import HistoryIcon from '@mui/icons-material/History';
+import BusinessIcon from '@mui/icons-material/Business';
+import EmailIcon from '@mui/icons-material/Email';
+import PhoneIcon from '@mui/icons-material/Phone';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
+import CategoryIcon from '@mui/icons-material/Category';
+import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import DeleteIcon from '@mui/icons-material/Delete';
+import AddIcon from '@mui/icons-material/Add';
 import { authAPI } from '../api';
 import { setPageTitle } from '../utils/pageTitle';
 
 export default function Profile({ user }) {
   const theme = institutionalTheme;
+
   useEffect(() => {
     setPageTitle('Mon Profil Professionnel');
   }, []);
@@ -50,41 +52,40 @@ export default function Profile({ user }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
-  const [interests, setInterests] = useState([]);
-  const [newInterest, setNewInterest] = useState('');
-  const [alerts, setAlerts] = useState([]);
-  const [showAlertForm, setShowAlertForm] = useState(false);
-  const [alertData, setAlertData] = useState({ type: 'tender', keyword: '' });
-  const [activity, setActivity] = useState([]);
   const [tabValue, setTabValue] = useState(0);
+
+  // Supplier preferences states
+  const [preferredCategories, setPreferredCategories] = useState([]);
+  const [newCategory, setNewCategory] = useState('');
+  const [serviceLocations, setServiceLocations] = useState([]);
+  const [newLocation, setNewLocation] = useState('');
+  const [minimumBudget, setMinimumBudget] = useState(0);
 
   useEffect(() => {
     fetchProfile();
-    fetchActivity();
   }, []);
 
   const fetchProfile = async () => {
     setLoading(true);
     try {
       const response = await authAPI.getProfile();
-      setProfile(response.data.user);
-      setFormData(response.data.user);
-      setInterests(response.data.user.interests || []);
-      setAlerts(response.data.user.alerts || []);
+      const userData = response.data.data || response.data.user || response.data;
+      setProfile(userData);
+      setFormData(userData);
+
+      // Load supplier preferences if supplier
+      if (userData.role === 'supplier') {
+        setPreferredCategories(userData.preferred_categories || []);
+        setServiceLocations(userData.service_locations || []);
+        setMinimumBudget(userData.minimum_budget || 0);
+      }
+
+      setError('');
     } catch (err) {
       setError(err.response?.data?.error || 'Erreur lors de la récupération du profil');
     } finally {
       setLoading(false);
     }
-  };
-
-  const fetchActivity = async () => {
-    try {
-      const response = await authAPI.getActivity?.();
-      if (response?.data) {
-        setActivity(response.data.activity || []);
-      }
-    } catch (err) {}
   };
 
   const handleChange = (e) => {
@@ -100,49 +101,64 @@ export default function Profile({ user }) {
 
     try {
       const response = await authAPI.updateProfile(formData);
-      setProfile(response.data.user);
+      const userData = response.data.data || response.data.user || response.data;
+      setProfile(userData);
       setEditing(false);
-      setSuccess('Les modifications ont été enregistrées avec succès');
+      setSuccess('Profil mis à jour avec succès');
+      setTimeout(() => setSuccess(''), 3000);
     } catch (err) {
-      setError(err.response?.data?.error || "Erreur lors de l'enregistrement des modifications");
+      setError(err.response?.data?.error || "Erreur lors de l'enregistrement");
     } finally {
       setLoading(false);
     }
   };
 
-  const addInterest = () => {
-    if (newInterest.trim() && !interests.includes(newInterest)) {
-      setInterests([...interests, newInterest]);
-      setNewInterest('');
+  // Supplier preferences handlers
+  const addCategory = () => {
+    if (newCategory.trim() && !preferredCategories.includes(newCategory.trim())) {
+      setPreferredCategories([...preferredCategories, newCategory.trim()]);
+      setNewCategory('');
     }
   };
 
-  const removeInterest = (index) => {
-    setInterests(interests.filter((_, i) => i !== index));
+  const removeCategory = (index) => {
+    setPreferredCategories(preferredCategories.filter((_, i) => i !== index));
   };
 
-  const addAlert = () => {
-    if (alertData.keyword.trim()) {
-      const newAlert = {
-        id: Date.now(),
-        ...alertData,
-        created_at: new Date().toLocaleDateString('fr-FR'),
-      };
-      setAlerts([...alerts, newAlert]);
-      setAlertData({ type: 'tender', keyword: '' });
-      setShowAlertForm(false);
+  const addLocation = () => {
+    if (newLocation.trim() && !serviceLocations.includes(newLocation.trim())) {
+      setServiceLocations([...serviceLocations, newLocation.trim()]);
+      setNewLocation('');
     }
   };
 
-  const removeAlert = (id) => {
-    setAlerts(alerts.filter((a) => a.id !== id));
+  const removeLocation = (index) => {
+    setServiceLocations(serviceLocations.filter((_, i) => i !== index));
   };
 
-  if (loading) {
+  const saveSupplierPreferences = async () => {
+    setLoading(true);
+    setError('');
+    setSuccess('');
+
+    try {
+      await authAPI.updateSupplierPreferences({
+        preferred_categories: preferredCategories,
+        service_locations: serviceLocations,
+        minimum_budget: minimumBudget,
+      });
+      setSuccess('Préférences mises à jour avec succès');
+      setTimeout(() => setSuccess(''), 3000);
+    } catch (err) {
+      setError(err.response?.data?.error || 'Erreur lors de la mise à jour des préférences');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (loading && !profile) {
     return (
-      <Box
-        sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '60vh' }}
-      >
+      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '60vh' }}>
         <CircularProgress sx={{ color: theme.palette.primary.main }} />
       </Box>
     );
@@ -157,466 +173,317 @@ export default function Profile({ user }) {
   }
 
   return (
-    <Box sx={{ backgroundColor: '#fafafa', paddingY: '40px' }}>
+    <Box sx={{ backgroundColor: '#fafafa', paddingY: '40px', minHeight: '100vh' }}>
       <Container maxWidth="lg">
         {/* Header */}
-        <Box
-          sx={{
-            marginBottom: '32px',
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-          }}
-        >
-          <Box>
-            <Typography
-              variant="h2"
-              sx={{ fontSize: '32px', fontWeight: 500, color: theme.palette.text.primary }}
-            >
-              Mon Profil Professionnel
-            </Typography>
-            <Typography sx={{ color: '#616161', marginTop: '8px' }}>
-              Gérez vos informations de compte et vos paramètres professionnels
-            </Typography>
-          </Box>
-          <Button
-            variant="contained"
-            startIcon={editing ? <CancelIcon /> : <EditIcon />}
-            onClick={() => setEditing(!editing)}
-            sx={{
-              backgroundColor: editing ? '#f57c00' : theme.palette.primary.main,
-              textTransform: 'none',
-              fontWeight: 600,
-              '&:hover': {
-                backgroundColor: editing ? '#e65100' : '#0d47a1',
-              },
-            }}
-          >
-            {editing ? 'Annuler' : 'Modifier'}
-          </Button>
+        <Box sx={{ marginBottom: '32px' }}>
+          <Typography variant="h2" sx={{ fontSize: '32px', fontWeight: 600, color: theme.palette.text.primary, marginBottom: '8px' }}>
+            Mon Profil Professionnel
+          </Typography>
+          <Typography sx={{ color: '#616161' }}>
+            Gérez vos informations de compte et vos paramètres professionnels
+          </Typography>
         </Box>
 
-        {error && (
-          <Alert severity="error" sx={{ marginBottom: '24px' }}>
-            {error}
-          </Alert>
-        )}
-        {success && (
-          <Alert severity="success" sx={{ marginBottom: '24px' }}>
-            {success}
-          </Alert>
-        )}
+        {error && <Alert severity="error" sx={{ marginBottom: '24px' }}>{error}</Alert>}
+        {success && <Alert severity="success" sx={{ marginBottom: '24px' }}>{success}</Alert>}
 
-        {/* Profile Card */}
+        {/* Profile Header Card */}
         <Card sx={{ marginBottom: '32px', border: '1px solid #e0e0e0' }}>
           <CardContent sx={{ padding: '32px' }}>
-            <Box sx={{ display: 'flex', alignItems: 'center', marginBottom: '32px', gap: '24px' }}>
-              <Box
-                sx={{
-                  width: '80px',
-                  height: '80px',
-                  borderRadius: '50%',
-                  backgroundColor: theme.palette.primary.main,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  color: 'white',
-                  fontSize: '32px',
-                  fontWeight: 600,
-                }}
-              >
-                {profile.full_name ? profile.full_name.charAt(0).toUpperCase() : 'U'}
-              </Box>
-              <Box>
-                <Typography
-                  variant="h3"
-                  sx={{ fontSize: '24px', fontWeight: 600, color: theme.palette.text.primary }}
-                >
-                  {profile.full_name || profile.username}
-                </Typography>
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '8px' }}>
-                  <Chip
-                    label={
-                      profile.role === 'buyer'
-                        ? 'Acheteur'
-                        : profile.role === 'supplier'
-                          ? 'Fournisseur'
-                          : 'Administrateur'
-                    }
-                    sx={{
-                      backgroundColor: theme.palette.primary.main,
-                      color: 'white',
-                      fontWeight: 600,
-                    }}
-                  />
-                  {profile.is_verified && (
-                    <Chip
-                      icon={<VerifiedIcon />}
-                      label="Vérifié"
-                      sx={{ backgroundColor: '#2e7d32', color: 'white', fontWeight: 600 }}
-                    />
-                  )}
-                </Box>
-              </Box>
-            </Box>
-
-            {!editing ? (
-              <Grid container spacing={2}>
-                <Grid size={{ xs: 12, md: 6 }}>
-                  <Typography
-                    sx={{
-                      fontSize: '12px',
-                      fontWeight: 600,
-                      color: '#616161',
-                      textTransform: 'uppercase',
-                      marginBottom: '8px',
-                    }}
-                  >
-                    Email
-                  </Typography>
-                  <Typography
-                    sx={{ fontSize: '16px', color: theme.palette.text.primary, fontWeight: 500 }}
-                  >
-                    {profile.email}
-                  </Typography>
-                </Grid>
-                <Grid size={{ xs: 12, md: 6 }}>
-                  <Typography
-                    sx={{
-                      fontSize: '12px',
-                      fontWeight: 600,
-                      color: '#616161',
-                      textTransform: 'uppercase',
-                      marginBottom: '8px',
-                    }}
-                  >
-                    Téléphone
-                  </Typography>
-                  <Typography
-                    sx={{ fontSize: '16px', color: theme.palette.text.primary, fontWeight: 500 }}
-                  >
-                    {profile.phone || '—'}
-                  </Typography>
-                </Grid>
-                <Grid size={{ xs: 12, md: 6 }}>
-                  <Typography
-                    sx={{
-                      fontSize: '12px',
-                      fontWeight: 600,
-                      color: '#616161',
-                      textTransform: 'uppercase',
-                      marginBottom: '8px',
-                    }}
-                  >
-                    Entreprise
-                  </Typography>
-                  <Typography
-                    sx={{ fontSize: '16px', color: theme.palette.text.primary, fontWeight: 500 }}
-                  >
-                    {profile.company_name || '—'}
-                  </Typography>
-                </Grid>
-                <Grid size={{ xs: 12, md: 6 }}>
-                  <Typography
-                    sx={{
-                      fontSize: '12px',
-                      fontWeight: 600,
-                      color: '#616161',
-                      textTransform: 'uppercase',
-                      marginBottom: '8px',
-                    }}
-                  >
-                    Enregistrement
-                  </Typography>
-                  <Typography
-                    sx={{ fontSize: '16px', color: theme.palette.text.primary, fontWeight: 500 }}
-                  >
-                    {profile.company_registration || '—'}
-                  </Typography>
-                </Grid>
-              </Grid>
-            ) : (
-              <Box
-                component="form"
-                onSubmit={handleSubmit}
-                sx={{ display: 'flex', flexDirection: 'column', gap: '16px' }}
-              >
-                <TextField
-                  fullWidth
-                  label="Email"
-                  name="email"
-                  value={formData.email || ''}
-                  onChange={handleChange}
-                  disabled
-                />
-                <TextField
-                  fullWidth
-                  label="Nom Complet"
-                  name="full_name"
-                  value={formData.full_name || ''}
-                  onChange={handleChange}
-                />
-                <TextField
-                  fullWidth
-                  label="Téléphone"
-                  name="phone"
-                  value={formData.phone || ''}
-                  onChange={handleChange}
-                />
-                <TextField
-                  fullWidth
-                  label="Entreprise"
-                  name="company_name"
-                  value={formData.company_name || ''}
-                  onChange={handleChange}
-                />
-                <TextField
-                  fullWidth
-                  label="Numéro d'Enregistrement"
-                  name="company_registration"
-                  value={formData.company_registration || ''}
-                  onChange={handleChange}
-                />
-                <Button
-                  variant="contained"
-                  type="submit"
-                  startIcon={<SaveIcon />}
+            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '24px' }}>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
+                <Avatar
                   sx={{
-                    backgroundColor: '#2e7d32',
-                    textTransform: 'none',
+                    width: '80px',
+                    height: '80px',
+                    backgroundColor: theme.palette.primary.main,
+                    fontSize: '32px',
                     fontWeight: 600,
-                    '&:hover': { backgroundColor: '#1b5e20' },
                   }}
                 >
-                  Enregistrer
-                </Button>
+                  {profile.company_name ? profile.company_name.charAt(0).toUpperCase() : profile.email.charAt(0).toUpperCase()}
+                </Avatar>
+                <Box>
+                  <Typography variant="h3" sx={{ fontSize: '24px', fontWeight: 600, color: theme.palette.text.primary }}>
+                    {profile.company_name || profile.email}
+                  </Typography>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '8px' }}>
+                    <Chip
+                      label={profile.role === 'buyer' ? 'Acheteur' : profile.role === 'supplier' ? 'Fournisseur' : 'Administrateur'}
+                      sx={{ backgroundColor: theme.palette.primary.main, color: 'white', fontWeight: 600 }}
+                    />
+                    {profile.is_verified && (
+                      <Chip icon={<VerifiedIcon />} label="Vérifié" sx={{ backgroundColor: '#2e7d32', color: 'white', fontWeight: 600 }} />
+                    )}
+                  </Box>
+                </Box>
               </Box>
-            )}
+              <Button
+                variant="contained"
+                startIcon={editing ? <CancelIcon /> : <EditIcon />}
+                onClick={() => setEditing(!editing)}
+                sx={{
+                  backgroundColor: editing ? '#f57c00' : theme.palette.primary.main,
+                  textTransform: 'none',
+                  fontWeight: 600,
+                  '&:hover': { backgroundColor: editing ? '#e65100' : '#0d47a1' },
+                }}
+              >
+                {editing ? 'Annuler' : 'Modifier'}
+              </Button>
+            </Box>
           </CardContent>
         </Card>
 
         {/* Tabs */}
         <Box sx={{ borderBottom: '1px solid #e0e0e0', marginBottom: '24px' }}>
           <Tabs value={tabValue} onChange={(e, v) => setTabValue(v)}>
-            <Tab label="Secteurs d'Intérêt" />
-            <Tab label="Alertes de Recherche" />
-            <Tab label="Historique d'Activité" />
+            <Tab label="Informations Générales" />
+            {profile.role === 'supplier' && <Tab label="Préférences Fournisseur" />}
           </Tabs>
         </Box>
 
-        {/* Tab 1: Interests */}
+        {/* Tab 0: General Information */}
         {tabValue === 0 && (
           <Card sx={{ border: '1px solid #e0e0e0' }}>
-            <CardContent sx={{ padding: '24px' }}>
-              <Typography
-                variant="h4"
-                sx={{
-                  fontSize: '18px',
-                  fontWeight: 600,
-                  color: theme.palette.text.primary,
-                  marginBottom: '16px',
-                }}
-              >
-                Secteurs d'Intérêt
-              </Typography>
-              <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '24px' }}>
-                {interests.length === 0 ? (
-                  <Typography sx={{ color: '#999', fontStyle: 'italic' }}>
-                    Aucun secteur défini
-                  </Typography>
-                ) : (
-                  interests.map((interest, idx) => (
-                    <Chip
-                      key={idx}
-                      label={interest}
-                      onDelete={() => removeInterest(idx)}
-                      sx={{ backgroundColor: '#e3f2fd', color: theme.palette.primary.main }}
-                    />
-                  ))
-                )}
-              </Box>
-              <Box sx={{ display: 'flex', gap: '8px' }}>
-                <TextField
-                  size="small"
-                  placeholder="Ajouter un secteur..."
-                  value={newInterest}
-                  onChange={(e) => setNewInterest(e.target.value)}
-                  onKeyPress={(e) => e.key === 'Enter' && addInterest()}
-                />
-                <Button
-                  variant="contained"
-                  onClick={addInterest}
-                  sx={{
-                    backgroundColor: '#2e7d32',
-                    textTransform: 'none',
-                    fontWeight: 600,
-                  }}
-                >
-                  Ajouter
-                </Button>
-              </Box>
-            </CardContent>
-          </Card>
-        )}
+            <CardContent sx={{ padding: '32px' }}>
+              {!editing ? (
+                <Grid container spacing={3}>
+                  <Grid item xs={12} md={6}>
+                    <Paper sx={{ padding: '16px', backgroundColor: '#f5f5f5' }}>
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '8px' }}>
+                        <EmailIcon sx={{ color: theme.palette.primary.main }} />
+                        <Typography sx={{ fontSize: '12px', fontWeight: 600, color: '#616161', textTransform: 'uppercase' }}>
+                          Email
+                        </Typography>
+                      </Box>
+                      <Typography sx={{ fontSize: '16px', color: theme.palette.text.primary, fontWeight: 500 }}>
+                        {profile.email}
+                      </Typography>
+                    </Paper>
+                  </Grid>
 
-        {/* Tab 2: Alerts */}
-        {tabValue === 1 && (
-          <Card sx={{ border: '1px solid #e0e0e0' }}>
-            <CardContent sx={{ padding: '24px' }}>
-              <Box
-                sx={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  marginBottom: '16px',
-                }}
-              >
-                <Typography
-                  variant="h4"
-                  sx={{ fontSize: '18px', fontWeight: 600, color: theme.palette.text.primary }}
-                >
-                  Alertes de Recherche
-                </Typography>
-                <Button
-                  variant="contained"
-                  onClick={() => setShowAlertForm(!showAlertForm)}
-                  sx={{
-                    backgroundColor: theme.palette.primary.main,
-                    textTransform: 'none',
-                    fontWeight: 600,
-                  }}
-                >
-                  {showAlertForm ? 'Annuler' : 'Nouvelle Alerte'}
-                </Button>
-              </Box>
+                  <Grid item xs={12} md={6}>
+                    <Paper sx={{ padding: '16px', backgroundColor: '#f5f5f5' }}>
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '8px' }}>
+                        <PhoneIcon sx={{ color: theme.palette.primary.main }} />
+                        <Typography sx={{ fontSize: '12px', fontWeight: 600, color: '#616161', textTransform: 'uppercase' }}>
+                          Téléphone
+                        </Typography>
+                      </Box>
+                      <Typography sx={{ fontSize: '16px', color: theme.palette.text.primary, fontWeight: 500 }}>
+                        {profile.phone || '—'}
+                      </Typography>
+                    </Paper>
+                  </Grid>
 
-              {showAlertForm && (
-                <Box
-                  sx={{
-                    backgroundColor: '#f5f5f5',
-                    padding: '16px',
-                    borderRadius: '4px',
-                    marginBottom: '16px',
-                  }}
-                >
-                  <FormControl fullWidth size="small" sx={{ marginBottom: '12px' }}>
-                    <InputLabel>Type</InputLabel>
-                    <Select
-                      value={alertData.type}
-                      label="Type"
-                      onChange={(e) => setAlertData({ ...alertData, type: e.target.value })}
-                    >
-                      <MenuItem value="tender">Appel d'Offres</MenuItem>
-                      <MenuItem value="supplier">Fournisseur</MenuItem>
-                    </Select>
-                  </FormControl>
-                  <TextField
-                    fullWidth
-                    size="small"
-                    placeholder="Mot-clé..."
-                    value={alertData.keyword}
-                    onChange={(e) => setAlertData({ ...alertData, keyword: e.target.value })}
-                    sx={{ marginBottom: '12px' }}
-                  />
+                  <Grid item xs={12} md={6}>
+                    <Paper sx={{ padding: '16px', backgroundColor: '#f5f5f5' }}>
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '8px' }}>
+                        <BusinessIcon sx={{ color: theme.palette.primary.main }} />
+                        <Typography sx={{ fontSize: '12px', fontWeight: 600, color: '#616161', textTransform: 'uppercase' }}>
+                          Entreprise
+                        </Typography>
+                      </Box>
+                      <Typography sx={{ fontSize: '16px', color: theme.palette.text.primary, fontWeight: 500 }}>
+                        {profile.company_name || '—'}
+                      </Typography>
+                    </Paper>
+                  </Grid>
+
+                  <Grid item xs={12} md={6}>
+                    <Paper sx={{ padding: '16px', backgroundColor: '#f5f5f5' }}>
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '8px' }}>
+                        <LocationOnIcon sx={{ color: theme.palette.primary.main }} />
+                        <Typography sx={{ fontSize: '12px', fontWeight: 600, color: '#616161', textTransform: 'uppercase' }}>
+                          Ville
+                        </Typography>
+                      </Box>
+                      <Typography sx={{ fontSize: '16px', color: theme.palette.text.primary, fontWeight: 500 }}>
+                        {profile.city || '—'}
+                      </Typography>
+                    </Paper>
+                  </Grid>
+
+                  <Grid item xs={12}>
+                    <Paper sx={{ padding: '16px', backgroundColor: '#f5f5f5' }}>
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '8px' }}>
+                        <LocationOnIcon sx={{ color: theme.palette.primary.main }} />
+                        <Typography sx={{ fontSize: '12px', fontWeight: 600, color: '#616161', textTransform: 'uppercase' }}>
+                          Adresse Complète
+                        </Typography>
+                      </Box>
+                      <Typography sx={{ fontSize: '16px', color: theme.palette.text.primary, fontWeight: 500 }}>
+                        {profile.address || '—'}
+                      </Typography>
+                    </Paper>
+                  </Grid>
+                </Grid>
+              ) : (
+                <Box component="form" onSubmit={handleSubmit} sx={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                  <TextField fullWidth label="Email" name="email" value={formData.email || ''} onChange={handleChange} disabled />
+                  <TextField fullWidth label="Nom de l'entreprise" name="company_name" value={formData.company_name || ''} onChange={handleChange} />
+                  <TextField fullWidth label="Téléphone" name="phone" value={formData.phone || ''} onChange={handleChange} />
+                  <TextField fullWidth label="Ville" name="city" value={formData.city || ''} onChange={handleChange} />
+                  <TextField fullWidth label="Code Postal" name="postal_code" value={formData.postal_code || ''} onChange={handleChange} />
+                  <TextField fullWidth label="Pays" name="country" value={formData.country || ''} onChange={handleChange} />
+                  <TextField fullWidth label="Adresse" name="address" multiline rows={3} value={formData.address || ''} onChange={handleChange} />
+                  <TextField fullWidth label="Matricule Fiscal" name="tax_id" value={formData.tax_id || ''} onChange={handleChange} />
+
                   <Button
                     variant="contained"
-                    onClick={addAlert}
+                    type="submit"
+                    disabled={loading}
+                    startIcon={loading ? <CircularProgress size={20} /> : <SaveIcon />}
                     sx={{
                       backgroundColor: '#2e7d32',
                       textTransform: 'none',
                       fontWeight: 600,
+                      '&:hover': { backgroundColor: '#1b5e20' },
                     }}
                   >
-                    Créer Alerte
+                    Enregistrer
                   </Button>
                 </Box>
               )}
-
-              <Stack spacing={2}>
-                {alerts.length === 0 ? (
-                  <Typography sx={{ color: '#999', fontStyle: 'italic' }}>
-                    Aucune alerte configurée
-                  </Typography>
-                ) : (
-                  alerts.map((alert) => (
-                    <Paper key={alert.id} sx={{ padding: '12px', backgroundColor: '#f5f5f5' }}>
-                      <Box
-                        sx={{
-                          display: 'flex',
-                          justifyContent: 'space-between',
-                          alignItems: 'center',
-                        }}
-                      >
-                        <Box>
-                          <Typography sx={{ fontWeight: 600, color: theme.palette.text.primary }}>
-                            {alert.keyword}
-                          </Typography>
-                          <Typography sx={{ fontSize: '12px', color: '#616161' }}>
-                            {alert.type === 'tender' ? "Appel d'Offres" : 'Fournisseur'} •{' '}
-                            {alert.created_at}
-                          </Typography>
-                        </Box>
-                        <Button
-                          size="small"
-                          startIcon={<DeleteIcon />}
-                          onClick={() => removeAlert(alert.id)}
-                          sx={{ color: '#c62828' }}
-                        >
-                          Supprimer
-                        </Button>
-                      </Box>
-                    </Paper>
-                  ))
-                )}
-              </Stack>
             </CardContent>
           </Card>
         )}
 
-        {/* Tab 3: Activity */}
-        {tabValue === 2 && (
+        {/* Tab 1: Supplier Preferences */}
+        {tabValue === 1 && profile.role === 'supplier' && (
           <Card sx={{ border: '1px solid #e0e0e0' }}>
-            <CardContent sx={{ padding: '24px' }}>
-              <Typography
-                variant="h4"
+            <CardContent sx={{ padding: '32px' }}>
+              <Typography variant="h4" sx={{ fontSize: '20px', fontWeight: 600, color: theme.palette.text.primary, marginBottom: '24px' }}>
+                Préférences de Fournisseur
+              </Typography>
+
+              <Divider sx={{ marginBottom: '24px' }} />
+
+              {/* Preferred Categories */}
+              <Box sx={{ marginBottom: '32px' }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
+                  <CategoryIcon sx={{ color: theme.palette.primary.main }} />
+                  <Typography sx={{ fontSize: '16px', fontWeight: 600, color: theme.palette.text.primary }}>
+                    Catégories Préférées
+                  </Typography>
+                </Box>
+                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '16px' }}>
+                  {preferredCategories.length === 0 ? (
+                    <Typography sx={{ color: '#999', fontStyle: 'italic' }}>Aucune catégorie définie</Typography>
+                  ) : (
+                    preferredCategories.map((category, idx) => (
+                      <Chip
+                        key={idx}
+                        label={category}
+                        onDelete={() => removeCategory(idx)}
+                        sx={{ backgroundColor: '#e3f2fd', color: theme.palette.primary.main }}
+                      />
+                    ))
+                  )}
+                </Box>
+                <Box sx={{ display: 'flex', gap: '8px' }}>
+                  <TextField
+                    size="small"
+                    placeholder="Ajouter une catégorie..."
+                    value={newCategory}
+                    onChange={(e) => setNewCategory(e.target.value)}
+                    onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addCategory())}
+                    fullWidth
+                  />
+                  <Button
+                    variant="contained"
+                    onClick={addCategory}
+                    startIcon={<AddIcon />}
+                    sx={{ backgroundColor: theme.palette.primary.main, textTransform: 'none', fontWeight: 600, minWidth: '120px' }}
+                  >
+                    Ajouter
+                  </Button>
+                </Box>
+              </Box>
+
+              <Divider sx={{ marginBottom: '24px' }} />
+
+              {/* Service Locations */}
+              <Box sx={{ marginBottom: '32px' }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
+                  <LocationOnIcon sx={{ color: theme.palette.primary.main }} />
+                  <Typography sx={{ fontSize: '16px', fontWeight: 600, color: theme.palette.text.primary }}>
+                    Zones de Service
+                  </Typography>
+                </Box>
+                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '16px' }}>
+                  {serviceLocations.length === 0 ? (
+                    <Typography sx={{ color: '#999', fontStyle: 'italic' }}>Aucune zone définie</Typography>
+                  ) : (
+                    serviceLocations.map((location, idx) => (
+                      <Chip
+                        key={idx}
+                        label={location}
+                        onDelete={() => removeLocation(idx)}
+                        sx={{ backgroundColor: '#fff3e0', color: '#f57c00' }}
+                      />
+                    ))
+                  )}
+                </Box>
+                <Box sx={{ display: 'flex', gap: '8px' }}>
+                  <TextField
+                    size="small"
+                    placeholder="Ajouter une zone..."
+                    value={newLocation}
+                    onChange={(e) => setNewLocation(e.target.value)}
+                    onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addLocation())}
+                    fullWidth
+                  />
+                  <Button
+                    variant="contained"
+                    onClick={addLocation}
+                    startIcon={<AddIcon />}
+                    sx={{ backgroundColor: '#f57c00', textTransform: 'none', fontWeight: 600, minWidth: '120px' }}
+                  >
+                    Ajouter
+                  </Button>
+                </Box>
+              </Box>
+
+              <Divider sx={{ marginBottom: '24px' }} />
+
+              {/* Minimum Budget */}
+              <Box sx={{ marginBottom: '24px' }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
+                  <AttachMoneyIcon sx={{ color: theme.palette.primary.main }} />
+                  <Typography sx={{ fontSize: '16px', fontWeight: 600, color: theme.palette.text.primary }}>
+                    Budget Minimum
+                  </Typography>
+                </Box>
+                <TextField
+                  type="number"
+                  size="small"
+                  placeholder="0"
+                  value={minimumBudget}
+                  onChange={(e) => setMinimumBudget(parseFloat(e.target.value) || 0)}
+                  InputProps={{ inputProps: { min: 0 } }}
+                  fullWidth
+                  helperText="Montant minimum pour les appels d'offres que vous souhaitez recevoir"
+                />
+              </Box>
+
+              <Button
+                variant="contained"
+                onClick={saveSupplierPreferences}
+                disabled={loading}
+                startIcon={loading ? <CircularProgress size={20} /> : <SaveIcon />}
                 sx={{
-                  fontSize: '18px',
+                  backgroundColor: '#2e7d32',
+                  textTransform: 'none',
                   fontWeight: 600,
-                  color: theme.palette.text.primary,
-                  marginBottom: '16px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '8px',
+                  '&:hover': { backgroundColor: '#1b5e20' },
+                  width: '100%',
                 }}
               >
-                <HistoryIcon sx={{ color: theme.palette.primary.main }} />
-                Historique d'Activité
-              </Typography>
-              <List>
-                {activity.length === 0 ? (
-                  <Typography sx={{ color: '#999', fontStyle: 'italic', padding: '16px' }}>
-                    Aucune activité disponible
-                  </Typography>
-                ) : (
-                  activity.slice(0, 10).map((activity_item, idx) => (
-                    <ListItem key={idx}>
-                      <ListItemIcon sx={{ minWidth: 40, color: theme.palette.primary.main }}>
-                        {activity_item.type === 'login'
-                          ? '📥'
-                          : activity_item.type === 'update'
-                            ? '📝'
-                            : activity_item.type === 'tender'
-                              ? '📄'
-                              : '🎯'}
-                      </ListItemIcon>
-                      <ListItemText
-                        primary={activity_item.description || activity_item.type}
-                        secondary={new Date(activity_item.created_at).toLocaleDateString('fr-FR')}
-                      />
-                    </ListItem>
-                  ))
-                )}
-              </List>
+                Enregistrer les Préférences
+              </Button>
             </CardContent>
           </Card>
         )}

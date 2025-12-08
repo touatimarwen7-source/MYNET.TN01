@@ -1,4 +1,3 @@
-
 /**
  * Authentication API
  * Handles login, register, password reset, email verification
@@ -17,4 +16,8 @@ export const authAPI = {
   verifyEmail: (data) => axiosInstance.post('/auth/verify-email', data),
   resendVerificationEmail: (data) => axiosInstance.post('/auth/resend-verification', data),
   getActivity: () => axiosInstance.get('/auth/activity'),
+
+  // Supplier preferences
+  getSupplierPreferences: () => axiosInstance.get('/auth/profile/supplier/preferences'),
+  updateSupplierPreferences: (preferences) => axiosInstance.put('/auth/profile/supplier/preferences', preferences),
 };

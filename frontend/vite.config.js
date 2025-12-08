@@ -9,12 +9,15 @@ export default defineConfig({
     strictPort: false,
     hmr: {
       overlay: true,
-      timeout: 30000,
+      timeout: 60000,
       clientPort: 5000,
+      protocol: 'ws',
+      host: 'localhost',
     },
     watch: {
       usePolling: true,
-      interval: 1000,
+      interval: 2000,
+      ignored: ['**/node_modules/**', '**/dist/**', '**/.git/**'],
     },
     headers: {
       'X-Frame-Options': 'SAMEORIGIN',

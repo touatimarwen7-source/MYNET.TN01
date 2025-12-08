@@ -189,31 +189,24 @@ class TokenManager {
     }
   }
 
-  static restoreFromStorage() {
+  restoreFromStorage() {
     try {
-      // Try sessionStorage first
-      const stored = sessionStorage.getItem('auth_user');
-      if (stored) {
-        const parsed = JSON.parse(stored);
-        this.userData = parsed;
-        return parsed;
-      }
-
-      // Fallback to localStorage
-      const localStored = localStorage.getItem('auth_user');
-      if (localStored) {
-        const parsed = JSON.parse(localStored);
-        this.userData = parsed;
-        // Restore to sessionStorage
-        sessionStorage.setItem('auth_user', localStored);
-        return parsed;
+      // Check localStorage for user data (primary storage)
+      const userJson = localStorage.getItem(this.USER_KEY);
+      if (userJson) {
+        const user = JSON.parse(userJson);
+        if (user && (user.userId || user.id)) {
+          if (import.meta.env.DEV) {
+            console.log('TokenManager: User restored from storage');
+          }
+          return user;
+        }
       }
     } catch (e) {
       console.error('TokenManager: Failed to restore from storage:', e);
       // Clear corrupted data
       this.clearTokens();
     }
-    console.log('TokenManager: No user data in storage');
     return null;
   }
 }

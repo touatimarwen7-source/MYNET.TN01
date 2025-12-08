@@ -72,10 +72,11 @@ export default function BuyerDashboard() {
     fetchDashboardData();
   }, [userId]); // Dependency array includes userId
 
-  const fetchDashboardData = async () => {
+  const fetchDashboardData = async (retryCount = 0) => {
     if (!userId) {
       console.warn('⚠️ No userId available, skipping dashboard fetch');
       setLoading(false);
+      setError('معرف المستخدم غير متوفر. الرجاء تسجيل الدخول مرة أخرى.');
       return;
     }
 
@@ -129,9 +130,37 @@ export default function BuyerDashboard() {
       }
 
     } catch (err) {
-      // This catch block might be redundant with Promise.allSettled but kept for safety
       console.error('❌ Dashboard data fetch error:', err);
-      setError('Erreur lors du chargement des données');
+      
+      // Retry logic for network errors
+      if (retryCount < 2 && (err.code === 'ECONNABORTED' || err.message.includes('Network Error'))) {
+        console.log(`⚠️ Retrying... (${retryCount + 1}/2)`);
+        setTimeout(() => fetchDashboardData(retryCount + 1), 1000 * (retryCount + 1));
+        return;
+      }
+      
+      // Set user-friendly error messages
+      let errorMsg = 'خطأ في تحميل البيانات';
+      if (err.response?.status === 401) {
+        errorMsg = 'انتهت صلاحية الجلسة. الرجاء تسجيل الدخول مرة أخرى.';
+      } else if (err.response?.status === 503) {
+        errorMsg = 'الخدمة غير متاحة حالياً. الرجاء المحاولة لاحقاً.';
+      } else if (err.code === 'ECONNABORTED') {
+        errorMsg = 'انتهت مهلة الطلب. تحقق من اتصال الإنترنت.';
+      } else if (err.response?.data?.error) {
+        errorMsg = err.response.data.error;
+      }
+      
+      setError(errorMsg);
+      
+      // Set default values to prevent blank page
+      setStats({
+        activeTenders: 0,
+        totalOffers: 0,
+        completedTenders: 0,
+        pendingEvaluations: 0,
+      });
+      setAnalytics({});
     } finally {
       setLoading(false);
     }

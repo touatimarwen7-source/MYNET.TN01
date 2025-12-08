@@ -143,7 +143,8 @@ function AppContent() {
     const storedUser = TokenManager.getUser();
     if (storedUser && !user) {
       console.log('📥 Loading user from storage:', storedUser);
-      setUser(storedUser);
+      // User is already loaded from TokenManager in AppContext
+      // No need to set it again here
     }
 
     window.addEventListener('authChanged', handleAuthChange);

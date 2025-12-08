@@ -465,25 +465,46 @@ const updateAdminPermissions = async (req, res) => { // Placeholder
 };
 
 module.exports = {
-  getHealthDashboard,
-  getDashboard,
-  getAllUsers,
-  getUser, // Keep explicit getUser
-  getUserDetails: getUser, // Alias for consistency, assuming getUser is meant to be detailed
-  getStatistics,
-  verifyUser,
-  toggleUserStatus, // This is the generic function
-  createAdminHelper,
-  updateAdminPermissions,
-  // Aliases for update/block/unblock user to potentially use a more generic toggleUserStatus if desired, or keep as is.
-  // Keeping the original functions as they are more specific.
-  // If a generic toggle was intended for all, the below would be used.
-  // updateUserRole: toggleUserStatus, // This would be incorrect if updateUserRole has different logic
-  // blockUser: toggleUserStatus, // This would be incorrect if blockUser has different logic
-  // unblockUser: toggleUserStatus, // This would be incorrect if unblockUser has different logic
-  resetUserPassword: async (req, res) => {
-    // This was originally intended to be implemented but the actual logic is missing.
-    // For now, returning a 501 Not Implemented as per the change.
-    res.status(501).json({ success: false, message: 'Not implemented yet' });
-  },
+  getHealthDashboard: exports.getHealthDashboard,
+  getDashboard: exports.getDashboard,
+  getAllUsers: exports.getAllUsers,
+  getUserDetails: exports.getUserDetails,
+  updateUserRole: exports.updateUserRole,
+  blockUser: exports.blockUser,
+  unblockUser: exports.unblockUser,
+  resetUserPassword: exports.resetUserPassword,
+  getAllPages: exports.getAllPages,
+  getPageById: exports.getPageById,
+  createPage: exports.createPage,
+  updatePage: exports.updatePage,
+  updatePagePartial: exports.updatePagePartial,
+  deletePage: exports.deletePage,
+  getAllFiles: exports.getAllFiles,
+  getAllMedia: exports.getAllMedia,
+  uploadFile: exports.uploadFile,
+  uploadBulkFiles: exports.uploadBulkFiles,
+  updateFileMetadata: exports.updateFileMetadata,
+  deleteFile: exports.deleteFile,
+  deleteBulkFiles: exports.deleteBulkFiles,
+  getAllImages: exports.getAllImages,
+  uploadImage: exports.uploadImage,
+  updateImage: exports.updateImage,
+  deleteImage: exports.deleteImage,
+  getAllDocuments: exports.getAllDocuments,
+  uploadDocument: exports.uploadDocument,
+  updateDocument: exports.updateDocument,
+  deleteDocument: exports.deleteDocument,
+  getSystemConfig: exports.getSystemConfig,
+  updateSystemConfig: exports.updateSystemConfig,
+  toggleMaintenance: exports.toggleMaintenance,
+  clearCache: exports.clearCache,
+  restartSystem: exports.restartSystem,
+  getAnalyticsStats: exports.getAnalyticsStats,
+  getRecentActivities: exports.getRecentActivities,
+  getUserStatistics: exports.getUserStatistics,
+  exportAuditLogs: exports.exportAuditLogs,
+  syncContent: exports.syncContent,
+  getContentStats: exports.getContentStats,
+  backupContent: exports.backupContent,
+  restoreContent: exports.restoreContent,
 };

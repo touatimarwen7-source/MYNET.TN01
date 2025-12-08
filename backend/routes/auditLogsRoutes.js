@@ -1,11 +1,20 @@
 const express = require('express');
 const authMiddleware = require('../middleware/authMiddleware');
 const { buildPaginationQuery } = require('../utils/paginationHelper');
+const { asyncHandler } = require('../middleware/errorHandlingMiddleware');
 
 const router = express.Router();
 const { validateIdMiddleware } = require('../middleware/validateIdMiddleware');
 
-// Log an action (used internally)
+/**
+ * Log an action to audit logs (used internally by other modules)
+ * @param {Object} db - Database connection pool
+ * @param {number} userId - User ID performing the action
+ * @param {string} action - Action performed
+ * @param {string} entityType - Type of entity affected
+ * @param {number} entityId - ID of entity affected
+ * @param {Object} details - Additional details about the action
+ */
 const logAction = async (db, userId, action, entityType, entityId, details = {}) => {
   try {
     await db.query(
@@ -15,11 +24,13 @@ const logAction = async (db, userId, action, entityType, entityId, details = {})
     `,
       [userId, action, entityType, entityId, JSON.stringify(details)]
     );
-  } catch (error) {}
+  } catch (error) {
+    // Silently fail - don't block main operations if audit logging fails
+  }
 };
 
 // Get audit logs (admin only)
-router.get('/', authMiddleware, async (req, res) => {
+router.get('/', authMiddleware, asyncHandler(async (req, res) => {
   try {
     const { entity_type, user_id } = req.query;
     const { limit, offset, sql } = buildPaginationQuery(req.query.limit, req.query.offset);
@@ -49,33 +60,26 @@ router.get('/', authMiddleware, async (req, res) => {
 
     const result = await db.query(query, params);
     res.json(result.rows);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
+}));
 
 // Get user activity
-router.get('/user/:userId', validateIdMiddleware('userId'), authMiddleware, async (req, res) => {
-  try {
-    const { userId } = req.params;
-    const { limit, offset, sql } = buildPaginationQuery(req.query.limit, req.query.offset);
-    const db = req.app.get('db');
+router.get('/user/:userId', validateIdMiddleware('userId'), authMiddleware, asyncHandler(async (req, res) => {
+  const { userId } = req.params;
+  const { limit, offset, sql } = buildPaginationQuery(req.query.limit, req.query.offset);
+  const db = req.app.get('db');
 
-    const result = await db.query(
-      `
-      SELECT * FROM audit_logs 
-      WHERE user_id = $1
-      ORDER BY created_at DESC
-      ${sql}
-    `,
-      [userId, limit, offset]
-    );
+  const result = await db.query(
+    `
+    SELECT * FROM audit_logs 
+    WHERE user_id = $1
+    ORDER BY created_at DESC
+    ${sql}
+  `,
+    [userId, limit, offset]
+  );
 
-    res.json(result.rows);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
+  res.json(result.rows);
+}));
 
 // Export logs helper
 router.logAction = logAction;

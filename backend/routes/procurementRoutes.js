@@ -4,10 +4,17 @@
 
 const express = require('express');
 const router = express.Router();
-const { authMiddleware, roleMiddleware, requireOwnership } = require('../middleware/authMiddleware');
+const { authMiddleware, verifyToken, roleMiddleware, requireOwnership } = require('../middleware/authMiddleware');
 const TenderController = require('../controllers/procurement/TenderController');
 const OfferController = require('../controllers/procurement/OfferController');
 const { validateTenderCreation } = require('../middleware/criticalOperationsValidator');
+const { getPool } = require('../config/db');
+const { logger } = require('../utils/logger');
+
+// AsyncHandler wrapper
+const asyncHandler = (fn) => (req, res, next) => {
+  Promise.resolve(fn(req, res, next)).catch(next);
+};
 
 // Tender routes
 router.post('/tenders', verifyToken, validateTenderCreation, TenderController.createTender.bind(TenderController));
@@ -63,26 +70,36 @@ router.get('/offers/:id', verifyToken, OfferController.getOffer.bind(OfferContro
  */
 router.get('/buyer/dashboard-stats', authMiddleware, asyncHandler(async (req, res) => {
   const userId = req.user.id;
+  const pool = getPool();
 
   try {
-    // Get statistics from database
+    // Optimized single query with indexes
     const statsQuery = `
       SELECT 
-        (SELECT COUNT(*) FROM tenders WHERE buyer_id = $1 AND status = 'published') as active_tenders,
-        (SELECT COUNT(*) FROM tenders WHERE buyer_id = $1 AND status = 'draft') as draft_tenders,
-        (SELECT COUNT(*) FROM offers WHERE tender_id IN (SELECT id FROM tenders WHERE buyer_id = $1)) as total_offers,
-        (SELECT COUNT(*) FROM tenders WHERE buyer_id = $1 AND status = 'awarded') as awarded_tenders
+        COUNT(*) FILTER (WHERE status = 'published') as active_tenders,
+        COUNT(*) FILTER (WHERE status = 'draft') as draft_tenders,
+        COUNT(*) FILTER (WHERE status = 'awarded') as awarded_tenders,
+        COALESCE((
+          SELECT COUNT(*) 
+          FROM offers o 
+          WHERE o.tender_id IN (
+            SELECT id FROM tenders WHERE buyer_id = $1 AND is_deleted = false
+          )
+        ), 0) as total_offers
+      FROM tenders 
+      WHERE buyer_id = $1 AND is_deleted = false
     `;
 
     const result = await pool.query(statsQuery, [userId]);
 
     res.json({
       success: true,
-      data: result.rows[0] || {
-        active_tenders: 0,
-        draft_tenders: 0,
-        total_offers: 0,
-        awarded_tenders: 0
+      data: {
+        activeTenders: parseInt(result.rows[0]?.active_tenders || 0),
+        draftTenders: parseInt(result.rows[0]?.draft_tenders || 0),
+        totalOffers: parseInt(result.rows[0]?.total_offers || 0),
+        completedTenders: parseInt(result.rows[0]?.awarded_tenders || 0),
+        pendingEvaluations: 0 // Placeholder for now
       }
     });
   } catch (error) {
@@ -101,16 +118,18 @@ router.get('/buyer/dashboard-stats', authMiddleware, asyncHandler(async (req, re
  */
 router.get('/buyer/analytics', authMiddleware, asyncHandler(async (req, res) => {
   const userId = req.user.id;
+  const pool = getPool();
 
   try {
-    // Get analytics from database
+    // Optimized analytics query with proper date handling
     const analyticsQuery = `
       SELECT 
         DATE_TRUNC('month', created_at) as month,
         COUNT(*) as tender_count,
-        SUM(CASE WHEN status = 'awarded' THEN 1 ELSE 0 END) as awarded_count
+        COUNT(*) FILTER (WHERE status = 'awarded') as awarded_count
       FROM tenders
-      WHERE buyer_id = $1
+      WHERE buyer_id = $1 
+      AND is_deleted = false
       AND created_at >= NOW() - INTERVAL '6 months'
       GROUP BY DATE_TRUNC('month', created_at)
       ORDER BY month DESC
@@ -121,7 +140,9 @@ router.get('/buyer/analytics', authMiddleware, asyncHandler(async (req, res) => 
 
     res.json({
       success: true,
-      data: result.rows || []
+      data: {
+        analytics: result.rows || []
+      }
     });
   } catch (error) {
     logger.error('Error fetching buyer analytics:', error);
@@ -143,25 +164,28 @@ router.get('/buyer/analytics', authMiddleware, asyncHandler(async (req, res) => 
  */
 router.get('/supplier/dashboard-stats', authMiddleware, asyncHandler(async (req, res) => {
   const userId = req.user.id;
+  const pool = getPool();
 
   try {
     const statsQuery = `
       SELECT 
-        (SELECT COUNT(*) FROM offers WHERE supplier_id = $1 AND status = 'submitted') as active_offers,
-        (SELECT COUNT(*) FROM offers WHERE supplier_id = $1 AND status = 'draft') as draft_offers,
-        (SELECT COUNT(*) FROM offers WHERE supplier_id = $1 AND status = 'accepted') as won_offers,
-        (SELECT COUNT(DISTINCT tender_id) FROM offers WHERE supplier_id = $1) as participated_tenders
+        COUNT(*) FILTER (WHERE status = 'submitted') as active_offers,
+        COUNT(*) FILTER (WHERE status = 'draft') as draft_offers,
+        COUNT(*) FILTER (WHERE status = 'accepted') as won_offers,
+        COUNT(DISTINCT tender_id) as participated_tenders
+      FROM offers 
+      WHERE supplier_id = $1 AND is_deleted = false
     `;
 
     const result = await pool.query(statsQuery, [userId]);
 
     res.json({
       success: true,
-      data: result.rows[0] || {
-        active_offers: 0,
-        draft_offers: 0,
-        won_offers: 0,
-        participated_tenders: 0
+      data: {
+        activeOffers: parseInt(result.rows[0]?.active_offers || 0),
+        draftOffers: parseInt(result.rows[0]?.draft_offers || 0),
+        wonOffers: parseInt(result.rows[0]?.won_offers || 0),
+        participatedTenders: parseInt(result.rows[0]?.participated_tenders || 0)
       }
     });
   } catch (error) {
@@ -180,15 +204,17 @@ router.get('/supplier/dashboard-stats', authMiddleware, asyncHandler(async (req,
  */
 router.get('/supplier/analytics', authMiddleware, asyncHandler(async (req, res) => {
   const userId = req.user.id;
+  const pool = getPool();
 
   try {
     const analyticsQuery = `
       SELECT 
         DATE_TRUNC('month', created_at) as month,
         COUNT(*) as offer_count,
-        SUM(CASE WHEN status = 'accepted' THEN 1 ELSE 0 END) as won_count
+        COUNT(*) FILTER (WHERE status = 'accepted') as won_count
       FROM offers
-      WHERE supplier_id = $1
+      WHERE supplier_id = $1 
+      AND is_deleted = false
       AND created_at >= NOW() - INTERVAL '6 months'
       GROUP BY DATE_TRUNC('month', created_at)
       ORDER BY month DESC
@@ -199,7 +225,9 @@ router.get('/supplier/analytics', authMiddleware, asyncHandler(async (req, res) 
 
     res.json({
       success: true,
-      data: result.rows || []
+      data: {
+        analytics: result.rows || []
+      }
     });
   } catch (error) {
     logger.error('Error fetching supplier analytics:', error);

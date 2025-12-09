@@ -1,12 +1,12 @@
-
 const express = require('express');
 const router = express.Router();
-const { verifyToken } = require('../middleware/authMiddleware');
+const { authMiddleware, roleMiddleware, requireOwnership } = require('../middleware/authMiddleware');
 const TenderController = require('../controllers/procurement/TenderController');
 const OfferController = require('../controllers/procurement/OfferController');
+const { validateTenderCreation } = require('../middleware/criticalOperationsValidator');
 
 // Tender routes
-router.post('/tenders', verifyToken, TenderController.createTender.bind(TenderController));
+router.post('/tenders', verifyToken, validateTenderCreation, TenderController.createTender.bind(TenderController));
 router.get('/tenders', (req, res, next) => {
   // Normaliser et valider les paramètres de pagination
   try {
@@ -36,8 +36,8 @@ router.get('/tenders', (req, res, next) => {
   }
 }, TenderController.getAllTenders.bind(TenderController));
 router.get('/tenders/:id', TenderController.getTender.bind(TenderController));
-router.put('/tenders/:id', verifyToken, TenderController.updateTender.bind(TenderController));
-router.delete('/tenders/:id', verifyToken, TenderController.deleteTender.bind(TenderController));
+router.put('/tenders/:id', verifyToken, requireOwnership, TenderController.updateTender.bind(TenderController));
+router.delete('/tenders/:id', verifyToken, requireOwnership, TenderController.deleteTender.bind(TenderController));
 router.post('/tenders/:id/publish', verifyToken, TenderController.publishTender.bind(TenderController));
 router.post('/tenders/:id/close', verifyToken, TenderController.closeTender.bind(TenderController));
 router.post('/tenders/:id/award', verifyToken, TenderController.awardTender.bind(TenderController));

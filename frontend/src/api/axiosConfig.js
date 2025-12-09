@@ -2,7 +2,7 @@
 import axios from 'axios';
 
 // Use direct backend URL instead of proxy
-const backendURL = import.meta.env.VITE_BACKEND_URL || 'http://0.0.0.0:3000/api';
+const backendURL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:3000/api';
 
 const axiosInstance = axios.create({
   baseURL: backendURL,

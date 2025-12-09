@@ -10,12 +10,13 @@ export default defineConfig({
   server: {
     host: '0.0.0.0',
     port: 5000,
-    strictPort: false,
+    strictPort: true,
     hmr: {
-      overlay: true,
-      timeout: 5000,
+      protocol: 'ws',
+      host: '0.0.0.0',
+      port: 5000,
       clientPort: 443,
-      protocol: 'wss',
+      timeout: 30000,
     },
     watch: {
       usePolling: false,
@@ -35,7 +36,6 @@ export default defineConfig({
         target: 'http://0.0.0.0:3000',
         changeOrigin: true,
         secure: false,
-        ws: false,
         configure: (proxy, options) => {
           proxy.on('error', (err, req, res) => {
             console.error('⚠️ Proxy error:', err.message);

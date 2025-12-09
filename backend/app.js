@@ -202,9 +202,7 @@ app.use(requestLoggingMiddleware);
 // 🚀 ENHANCED RATE LIMITING with per-user + IP tracking
 let enhancedRateLimiting;
 try {
-  // Import the specific object from the module
-  const rateLimitingModule = require('./middleware/enhancedRateLimiting');
-  enhancedRateLimiting = rateLimitingModule.enhancedRateLimiting;
+  enhancedRateLimiting = require('./middleware/enhancedRateLimiting');
 
   // Validate module structure
   if (!enhancedRateLimiting || typeof enhancedRateLimiting !== 'object') {

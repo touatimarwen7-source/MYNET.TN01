@@ -86,11 +86,13 @@ async function initializeDb() {
           logger.error('Database pool error', {
             code: err.code,
             errno: err.errno,
-            timestamp: new Date().toISOString()
+            timestamp: new Date().toISOString(),
+            severity: err.severity || 'ERROR'
             // Do NOT log err.message as it may contain connection strings
           });
         } catch (logError) {
-          console.error('Database pool error:', err.code);
+          // Fallback to minimal console logging
+          console.error('Database pool error - code:', err.code);
         }
         
         // Automatic reconnection for network errors

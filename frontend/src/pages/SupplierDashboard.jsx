@@ -78,6 +78,11 @@ export default function SupplierDashboard() {
       return;
     }
 
+    // Prevent multiple simultaneous fetches
+    if (loading && retryCount === 0) {
+      return;
+    }
+
     setLoading(true);
     setError(null);
 

@@ -1,20 +1,21 @@
 
-// API Base URL - Replit optimized configuration
-const getBackendUrl = () => {
-  // في بيئة المتصفح، استخدم window.location للحصول على العنوان الصحيح
+// API Base URL - Replit Environment Configuration
+const API_BASE_URL = (() => {
+  // في بيئة المتصفح (Replit Webview)
   if (typeof window !== 'undefined') {
+    // استخدام نفس protocol و hostname للـ Frontend والـ Backend
     const protocol = window.location.protocol; // http: أو https:
-    const hostname = window.location.hostname; // العنوان الفعلي
+    const hostname = window.location.hostname; // العنوان الفعلي من Replit
     
-    // إنشاء URL للـ Backend على نفس الـ hostname مع port 3000
+    // إنشاء URL للـ Backend API
     const backendUrl = `${protocol}//${hostname}:3000/api`;
     
     console.log('✅ Backend URL configured:', backendUrl);
     return backendUrl;
   }
   
-  // Fallback (لن يحدث في المتصفح)
+  // Fallback (لن يستخدم في المتصفح)
   return 'http://localhost:3000/api';
-};
+})();
 
-export const API_BASE_URL = getBackendUrl();
+export { API_BASE_URL };

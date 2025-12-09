@@ -16,6 +16,7 @@ const corsOptions = {
     // Allow Replit origins
     const replitPattern = /\.replit\.dev$/;
     const replitCodePattern = /\.replit\.codes$/;
+    const rikerPattern = /\.riker\.replit\.dev$/;
 
     // Allow localhost and development origins
     const allowedOrigins = [
@@ -23,6 +24,8 @@ const corsOptions = {
       'http://localhost:3000',
       'http://0.0.0.0:5000',
       'http://0.0.0.0:3000',
+      'http://127.0.0.1:5000',
+      'http://127.0.0.1:3000',
       'https://localhost:5000',
       'https://localhost:3000',
     ];
@@ -30,8 +33,8 @@ const corsOptions = {
     // Allow if no origin (mobile apps, Postman, etc.)
     if (!origin) return callback(null, true);
 
-    // Allow Replit domains
-    if (replitPattern.test(origin) || replitCodePattern.test(origin)) {
+    // Allow Replit domains (including riker)
+    if (replitPattern.test(origin) || replitCodePattern.test(origin) || rikerPattern.test(origin)) {
       return callback(null, true);
     }
 

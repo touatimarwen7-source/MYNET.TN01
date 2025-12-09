@@ -1,8 +1,11 @@
 
 import axios from 'axios';
 
+// Use direct backend URL instead of proxy
+const backendURL = import.meta.env.VITE_BACKEND_URL || 'http://0.0.0.0:3000/api';
+
 const axiosInstance = axios.create({
-  baseURL: '/api',
+  baseURL: backendURL,
   headers: {
     'Content-Type': 'application/json',
   },
@@ -10,7 +13,7 @@ const axiosInstance = axios.create({
   withCredentials: true,
 });
 
-console.log('✅ Axios configured with baseURL: /api');
+console.log('✅ Axios configured with backend URL:', backendURL);
 
 // Add token to requests
 axiosInstance.interceptors.request.use(

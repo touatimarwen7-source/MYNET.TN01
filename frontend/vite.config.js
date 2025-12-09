@@ -12,11 +12,10 @@ export default defineConfig({
     port: 5000,
     strictPort: true,
     hmr: {
-      protocol: 'ws',
-      host: '0.0.0.0',
-      port: 5000,
+      protocol: 'wss',
       clientPort: 443,
       timeout: 30000,
+      overlay: true,
     },
     watch: {
       usePolling: false,

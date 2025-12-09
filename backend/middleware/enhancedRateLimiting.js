@@ -155,7 +155,7 @@ const exportLimiter = rateLimit({
  * Advanced Rate Limiting Middleware
  * Provides comprehensive rate limiting with user and IP tracking
  */
-function advancedRateLimitMiddleware(req, res, next) {
+const advancedRateLimitMiddleware = function(req, res, next) {
   try {
     // Track for metrics
     const key = req.user ? `user:${req.user.id}` : req.ip || 'unknown';

@@ -70,6 +70,7 @@ export default function SupplierDashboard() {
     return user.userId || user.id || user.user_id;
   }, [user]);
 
+  // Define fetchDashboardData before using it in useEffect
   const fetchDashboardData = useCallback(async (retryCount = 0) => {
     if (!userId) {
       console.warn('⚠️ No userId available, skipping dashboard fetch');

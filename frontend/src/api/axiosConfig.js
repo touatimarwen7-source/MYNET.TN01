@@ -127,34 +127,29 @@ axiosInstance.interceptors.response.use(
       return Promise.reject(error);
     }
 
-    // Gestion 401 - Token expiré
-    if (error.response.status === 401 && !originalRequest._retry) {
+    // Handle 401 errors with token refresh attempt
+    if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
 
       try {
         const refreshToken = tokenManager.getRefreshToken();
+        if (refreshToken) {
+          // Attempt token refresh (implement this endpoint in backend)
+          const response = await axiosInstance.post('/auth/refresh', { refreshToken });
+          const { token } = response.data;
 
-        if (!refreshToken) {
-          tokenManager.clearTokens();
-          window.location.href = '/login';
-          return Promise.reject(error);
+          tokenManager.setToken(token);
+          originalRequest.headers['Authorization'] = `Bearer ${token}`;
+
+          return axiosInstance(originalRequest);
         }
-
-        const response = await axios.post(`${API_BASE_URL}/api/auth/refresh-token`, {
-          refreshToken,
-        });
-
-        const { accessToken } = response.data;
-        tokenManager.setAccessToken(accessToken);
-
-        originalRequest.headers.Authorization = `Bearer ${accessToken}`;
-        return axiosInstance(originalRequest);
       } catch (refreshError) {
         console.error('Token refresh failed:', refreshError);
-        tokenManager.clearTokens();
-        window.location.href = '/login';
-        return Promise.reject(refreshError);
       }
+
+      // If refresh fails, redirect to login
+      tokenManager.clearTokens();
+      window.location.href = '/login';
     }
 
     // Gestion 400 - Erreurs de validation

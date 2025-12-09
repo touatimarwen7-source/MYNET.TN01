@@ -119,19 +119,23 @@ export const AppProvider = ({ children }) => {
   /**
    * Handle user logout
    */
-  const logout = useCallback(() => {
+  const logout = useCallback(async () => {
     try {
-      TokenManager.clearTokens();
-      setUser(null);
-      setIsAuthenticated(false);
-      setAuthError(null);
-      addToast('تم تسجيل الخروج بنجاح', 'success');
-      return true;
+      // Assuming authApi.logout() is an async function that handles server-side logout
+      // If it's not, you might need to remove this or adapt it.
+      // await authApi.logout();
     } catch (error) {
-      setAuthError(error.message);
-      return false;
+      console.error('Logout error:', error);
+      // Continue with local cleanup even if server logout fails
+    } finally {
+      setUser(null);
+      TokenManager.clearTokens();
+      // These might be redundant if TokenManager handles everything, but kept for explicit clarity
+      // localStorage.removeItem('auth_token'); // Assuming TokenManager uses localStorage
+      // localStorage.removeItem('user_data'); // Assuming TokenManager uses localStorage
     }
   }, []);
+
 
   /**
    * Update user profile

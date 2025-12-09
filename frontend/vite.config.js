@@ -2,11 +2,25 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
 export default defineConfig({
-  plugins: [react()],
+  plugins: [
+    react({
+      fastRefresh: true,
+      babel: {
+        plugins: [
+          ['@babel/plugin-transform-react-jsx', { runtime: 'automatic' }]
+        ]
+      }
+    })
+  ],
   server: {
     host: '0.0.0.0',
     port: 5000,
     strictPort: true,
+    watch: {
+      usePolling: false,
+      interval: 1000,
+      ignored: ['**/node_modules/**', '**/dist/**', '**/logs/**']
+    },
     allowedHosts: [
       '.replit.dev',
       '.repl.co',
@@ -14,10 +28,10 @@ export default defineConfig({
     ],
     hmr: {
       protocol: 'wss',
-      host: undefined, // Let Vite auto-detect
+      host: undefined,
       port: 443,
-      timeout: 30000, // Increase timeout to 30 seconds
-      overlay: false, // Disable error overlay to reduce console spam
+      timeout: 30000,
+      overlay: false,
       clientPort: 443,
     },
   },

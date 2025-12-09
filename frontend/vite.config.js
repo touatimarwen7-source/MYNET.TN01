@@ -21,21 +21,31 @@ export default defineConfig({
     ],
     proxy: {
       '/api': {
-        target: 'http://0.0.0.0:3000',
+        target: 'http://localhost:3000',
         changeOrigin: true,
         secure: false,
         ws: true,
         timeout: 30000,
         proxyTimeout: 30000,
         configure: (proxy, _options) => {
-          proxy.on('error', (err, _req, _res) => {
-            console.error('❌ Proxy error:', err.message);
+          proxy.on('error', (err, req, res) => {
+            console.error('❌ Vite Proxy Error:', {
+              message: err.message,
+              url: req.url,
+              method: req.method
+            });
+            res.writeHead(500, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify({ 
+              error: 'Proxy Error', 
+              message: 'Backend is not reachable',
+              details: err.message 
+            }));
           });
           proxy.on('proxyReq', (proxyReq, req, _res) => {
-            console.log('📤 Sending to backend:', req.method, req.url, '→', proxyReq.path);
+            console.log('📤 Vite → Backend:', req.method, req.url);
           });
           proxy.on('proxyRes', (proxyRes, req, _res) => {
-            console.log('📥 Backend response:', proxyRes.statusCode, req.url);
+            console.log('📥 Backend → Vite:', proxyRes.statusCode, req.url);
           });
         },
       }

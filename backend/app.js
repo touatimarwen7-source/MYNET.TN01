@@ -55,6 +55,14 @@ const corsOptions = {
   optionsSuccessStatus: 204,
 };
 
+// Log CORS requests for debugging
+app.use((req, res, next) => {
+  if (req.path.startsWith('/api')) {
+    console.log(`📨 Incoming request: ${req.method} ${req.path} from ${req.headers.origin || 'no-origin'}`);
+  }
+  next();
+});
+
 app.use(cors(corsOptions));
 
 // Enhanced security with Content Security Policy (CSP)

@@ -46,14 +46,16 @@ async function startServer() {
         process.exit(1);
       }
 
-      console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+      console.log('\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
       console.log('🚀 MyNet.tn Backend Server Started Successfully');
       console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-      console.log(`📍 Server Address: http://${HOST}:${PORT}`);
-      console.log(`📚 API Documentation: http://${HOST}:${PORT}/api-docs`);
-      console.log(`🏥 Health Check: http://${HOST}:${PORT}/health`);
+      console.log(`📍 Server Address: http://0.0.0.0:${PORT}`);
+      console.log(`📍 Localhost Address: http://localhost:${PORT}`);
+      console.log(`📚 API Documentation: http://0.0.0.0:${PORT}/api-docs`);
+      console.log(`🏥 Health Check: http://0.0.0.0:${PORT}/health`);
       console.log(`🌍 Environment: ${process.env.NODE_ENV || 'development'}`);
-      console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+      console.log(`✅ Ready to accept Vite proxy connections on localhost:${PORT}`);
+      console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n');
     });
 
     // Handle server errors

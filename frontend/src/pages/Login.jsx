@@ -31,82 +31,42 @@ export default function Login() {
     setApiError('');
 
     try {
-      console.log('🔐 Attempting login for:', values.email);
       const response = await authAPI.login(values);
+      const data = response.data;
 
-      // axiosConfig wraps response in { data: actualResponse }
-      const loginData = response.data || response;
-
-      console.log('📥 Login response received:', {
-        hasData: !!loginData,
-        hasToken: !!loginData?.accessToken,
-        hasUser: !!loginData?.user
-      });
-
-      if (!loginData) {
-        console.error('❌ Invalid server response');
-        throw new Error('Réponse du serveur invalide');
+      if (!data?.accessToken || !data?.user) {
+        throw new Error('Réponse invalide du serveur');
       }
 
-      if (!loginData.accessToken) {
-        console.error('❌ No access token received');
-        throw new Error('Pas de token reçu du serveur');
+      // Store tokens
+      localStorage.setItem('token', data.accessToken);
+      if (data.refreshToken) {
+        localStorage.setItem('refreshToken', data.refreshToken);
       }
 
-      // Store tokens securely
-      TokenManager.setAccessToken(loginData.accessToken);
+      // Store user data
+      const userData = {
+        ...data.user,
+        userId: data.user.id || data.user.userId
+      };
+      localStorage.setItem('user', JSON.stringify(userData));
 
-      const refreshToken = loginData.refreshToken || loginData.refreshTokenId;
-      if (refreshToken) {
-        TokenManager.setRefreshToken(refreshToken);
-      }
+      // Login to context
+      login(userData);
+      addToast('Connexion réussie', 'success');
 
-      const userData = loginData.user;
-      if (!userData || (!userData.userId && !userData.id)) {
-        console.error('❌ No user data received');
-        throw new Error('Données utilisateur manquantes');
-      }
-
-      // Normalize userId (backend may send 'id' instead of 'userId')
-      userData.userId = userData.userId || userData.id;
-
-      console.log('✅ Login successful, user data:', userData);
-
-      // Use AppContext login which handles everything
-      const success = login(userData);
-
-      if (success) {
-        addToast('Connexion réussie', 'success', 2000);
-
-        // Navigate based on user role
-        setTimeout(() => {
-          const role = userData.role?.toLowerCase();
-          if (role === 'super_admin' || role === 'superadmin') {
-            navigate('/super-admin', { replace: true });
-          } else {
-            navigate('/dashboard', { replace: true });
-          }
-        }, 100);
+      // Navigate
+      const role = userData.role?.toLowerCase();
+      if (role === 'super_admin' || role === 'admin') {
+        navigate('/super-admin', { replace: true });
       } else {
-        throw new Error('Échec de la connexion');
+        navigate('/dashboard', { replace: true });
       }
 
     } catch (error) {
-      console.error('❌ Login error:', error);
-
-      // ✅ معالجة محسّنة لأخطاء الشبكة
-      if (error.code === 'ERR_NETWORK' || error.code === 'ERR_CONNECTION_REFUSED' || error.message === 'Network Error') {
-        const backendMessage = '⚠️ فشل الاتصال بالخادم. يرجى التأكد من تشغيل Backend على Port 3000.';
-        setApiError(backendMessage);
-        addToast(backendMessage, 'error');
-        console.error('🔴 Backend Connection Error: Make sure backend is running on port 3000');
-        return;
-      }
-
-      const errorData = error.response?.data;
-      const errorMessage = errorData?.message || errorData?.error || 'Erreur de connexion. Vérifiez vos identifiants.';
+      const errorMessage = error.response?.data?.message || error.response?.data?.error || 'Email ou mot de passe incorrect';
       setApiError(errorMessage);
-      addToast(errorMessage, 'error', 3000);
+      addToast(errorMessage, 'error');
     }
   });
 

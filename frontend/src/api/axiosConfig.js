@@ -1,5 +1,4 @@
 
-// Axios configuration
 import axios from 'axios';
 import { API_BASE_URL } from './constants';
 
@@ -8,11 +7,11 @@ const axiosInstance = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
-  timeout: 30000,
+  timeout: 10000,
   withCredentials: true,
 });
 
-// Request interceptor
+// Add token to requests
 axiosInstance.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('token');
@@ -24,7 +23,7 @@ axiosInstance.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// Response interceptor
+// Handle 401 errors
 axiosInstance.interceptors.response.use(
   (response) => response,
   (error) => {

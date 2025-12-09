@@ -1,3 +1,15 @@
+const express = require('express');
+const helmet = require('helmet');
+const morgan = require('morgan');
+const cors = require('cors');
+const compression = require('compression');
+const path = require('path');
+const rateLimit = require('express-rate-limit');
+const { logger } = require('./utils/logger');
+
+// Initialize Express app
+const app = express();
+
 // Enhanced CORS configuration for Replit
 const corsOptions = {
   origin: (origin, callback) => {

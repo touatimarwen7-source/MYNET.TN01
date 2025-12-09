@@ -211,7 +211,7 @@ export default function SupplierDashboard() {
     if (!id) {
       console.warn('⚠️ User object exists but no ID found');
       setError('Identifiant utilisateur manquant. Veuillez vous reconnecter.');
-      setLoading(false); // Ensure loading is set to false if no ID
+      setLoading(false);
       return;
     }
 
@@ -223,3 +223,250 @@ export default function SupplierDashboard() {
   }, [user, fetchDashboardData]);
 
   const handleRefresh = () => {
+    fetchDashboardData();
+  };
+
+  const menuItems = [
+    { icon: <DashboardIcon />, text: 'Tableau de Bord', path: '/supplier-dashboard' },
+    { icon: <LocalOfferIcon />, text: 'Mes Offres', path: '/my-offers' },
+    { icon: <GavelIcon />, text: 'Appels d\'Offres', path: '/tenders' },
+    { icon: <InventoryIcon />, text: 'Catalogue', path: '/supplier-catalog' },
+    { icon: <AssessmentIcon />, text: 'Analytiques', path: '/supplier-analytics' },
+    { icon: <SettingsIcon />, text: 'Paramètres', path: '/account-settings' },
+  ];
+
+  if (loading) {
+    return (
+      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}>
+        <CircularProgress />
+      </Box>
+    );
+  }
+
+  return (
+    <Box sx={{ display: 'flex', minHeight: '100vh', backgroundColor: '#f5f5f5' }}>
+      <Drawer
+        variant="temporary"
+        open={menuOpen}
+        onClose={() => setMenuOpen(false)}
+        sx={{
+          width: DRAWER_WIDTH,
+          flexShrink: 0,
+          '& .MuiDrawer-paper': {
+            width: DRAWER_WIDTH,
+            boxSizing: 'border-box',
+            backgroundColor: institutionalTheme.palette.primary.main,
+            color: 'white',
+          },
+        }}
+      >
+        <Box sx={{ p: 2, display: 'flex', alignItems: 'center', gap: 1 }}>
+          <Avatar sx={{ bgcolor: 'white', color: institutionalTheme.palette.primary.main }}>
+            <PersonIcon />
+          </Avatar>
+          <Box>
+            <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>
+              {user?.companyName || user?.username || 'Fournisseur'}
+            </Typography>
+            <Typography variant="caption">Fournisseur</Typography>
+          </Box>
+        </Box>
+        <List>
+          {menuItems.map((item, index) => (
+            <ListItemButton
+              key={index}
+              onClick={() => {
+                navigate(item.path);
+                setMenuOpen(false);
+              }}
+            >
+              <ListItemIcon sx={{ color: 'white' }}>{item.icon}</ListItemIcon>
+              <ListItemText primary={item.text} />
+            </ListItemButton>
+          ))}
+        </List>
+      </Drawer>
+
+      <Box sx={{ flexGrow: 1 }}>
+        <Paper
+          elevation={0}
+          sx={{
+            p: 2,
+            mb: 3,
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            backgroundColor: 'white',
+          }}
+        >
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+            <IconButton onClick={() => setMenuOpen(true)}>
+              <MenuIcon />
+            </IconButton>
+            <Typography variant="h5" sx={{ fontWeight: 600 }}>
+              Tableau de Bord Fournisseur
+            </Typography>
+          </Box>
+          <Button
+            variant="outlined"
+            startIcon={<AssessmentIcon />}
+            onClick={handleRefresh}
+            disabled={loading}
+          >
+            Actualiser
+          </Button>
+        </Paper>
+
+        <Container maxWidth="xl">
+          {error && (
+            <Alert severity="error" sx={{ mb: 3 }}>
+              {error}
+            </Alert>
+          )}
+
+          <Grid container spacing={3}>
+            <Grid item xs={12} sm={6} md={3}>
+              <Card>
+                <CardContent>
+                  <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <Box>
+                      <Typography variant="h4" sx={{ fontWeight: 700, color: institutionalTheme.palette.primary.main }}>
+                        {stats.totalOffers}
+                      </Typography>
+                      <Typography variant="body2" color="text.secondary">
+                        Total Offres
+                      </Typography>
+                    </Box>
+                    <AssignmentIcon sx={{ fontSize: 40, color: institutionalTheme.palette.primary.main, opacity: 0.3 }} />
+                  </Box>
+                </CardContent>
+              </Card>
+            </Grid>
+
+            <Grid item xs={12} sm={6} md={3}>
+              <Card>
+                <CardContent>
+                  <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <Box>
+                      <Typography variant="h4" sx={{ fontWeight: 700, color: '#2e7d32' }}>
+                        {stats.acceptedOffers}
+                      </Typography>
+                      <Typography variant="body2" color="text.secondary">
+                        Offres Acceptées
+                      </Typography>
+                    </Box>
+                    <TrendingUpIcon sx={{ fontSize: 40, color: '#2e7d32', opacity: 0.3 }} />
+                  </Box>
+                </CardContent>
+              </Card>
+            </Grid>
+
+            <Grid item xs={12} sm={6} md={3}>
+              <Card>
+                <CardContent>
+                  <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <Box>
+                      <Typography variant="h4" sx={{ fontWeight: 700, color: '#f57c00' }}>
+                        {stats.avgOfferValue.toLocaleString()} DT
+                      </Typography>
+                      <Typography variant="body2" color="text.secondary">
+                        Valeur Moyenne
+                      </Typography>
+                    </Box>
+                    <StarIcon sx={{ fontSize: 40, color: '#f57c00', opacity: 0.3 }} />
+                  </Box>
+                </CardContent>
+              </Card>
+            </Grid>
+
+            <Grid item xs={12} sm={6} md={3}>
+              <Card>
+                <CardContent>
+                  <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <Box>
+                      <Typography variant="h4" sx={{ fontWeight: 700, color: '#1976d2' }}>
+                        {stats.activeOrders}
+                      </Typography>
+                      <Typography variant="body2" color="text.secondary">
+                        Commandes Actives
+                      </Typography>
+                    </Box>
+                    <LocalShippingIcon sx={{ fontSize: 40, color: '#1976d2', opacity: 0.3 }} />
+                  </Box>
+                </CardContent>
+              </Card>
+            </Grid>
+
+            <Grid item xs={12} md={8}>
+              <Card>
+                <CardContent>
+                  <Typography variant="h6" sx={{ fontWeight: 600, mb: 2 }}>
+                    Appels d'Offres Récents
+                  </Typography>
+                  {recentTenders.length > 0 ? (
+                    <Stack spacing={2}>
+                      {recentTenders.map((tender) => (
+                        <Paper
+                          key={tender.id}
+                          sx={{
+                            p: 2,
+                            cursor: 'pointer',
+                            '&:hover': { backgroundColor: '#f5f5f5' },
+                          }}
+                          onClick={() => navigate(`/tenders/${tender.id}`)}
+                        >
+                          <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>
+                            {tender.title}
+                          </Typography>
+                          <Typography variant="body2" color="text.secondary">
+                            {tender.description}
+                          </Typography>
+                          <Box sx={{ display: 'flex', gap: 2, mt: 1 }}>
+                            <Typography variant="caption">
+                              Budget: {tender.budget?.toLocaleString()} DT
+                            </Typography>
+                            <Typography variant="caption">
+                              Échéance: {new Date(tender.deadline).toLocaleDateString('fr-FR')}
+                            </Typography>
+                          </Box>
+                        </Paper>
+                      ))}
+                    </Stack>
+                  ) : (
+                    <Typography variant="body2" color="text.secondary">
+                      Aucun appel d'offres récent
+                    </Typography>
+                  )}
+                </CardContent>
+              </Card>
+            </Grid>
+
+            <Grid item xs={12} md={4}>
+              <Card>
+                <CardContent>
+                  <Typography variant="h6" sx={{ fontWeight: 600, mb: 2 }}>
+                    Analytiques
+                  </Typography>
+                  <Stack spacing={2}>
+                    <Box>
+                      <Typography variant="body2" color="text.secondary">
+                        Total Avis
+                      </Typography>
+                      <Typography variant="h6">{analytics.totalReviews}</Typography>
+                    </Box>
+                    <Box>
+                      <Typography variant="body2" color="text.secondary">
+                        Note Moyenne
+                      </Typography>
+                      <Typography variant="h6">{analytics.avgRating} / 5.0</Typography>
+                    </Box>
+                  </Stack>
+                </CardContent>
+              </Card>
+            </Grid>
+          </Grid>
+        </Container>
+      </Box>
+    </Box>
+  );
+}

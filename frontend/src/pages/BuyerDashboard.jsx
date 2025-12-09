@@ -83,28 +83,6 @@ export default function BuyerDashboard() {
     return user.userId || user.id || user.user_id;
   }, [user]);
 
-
-  useEffect(() => {
-    setPageTitle('Tableau de Bord Acheteur');
-    
-    // Only fetch if user is authenticated and has an ID
-    if (!user) {
-      setLoading(false);
-      return;
-    }
-    
-    const id = user.id || user.userId;
-    if (!id) {
-      console.warn('⚠️ User object exists but no ID found');
-      setLoading(false);
-      setError('Identifiant utilisateur manquant. Veuillez vous reconnecter.');
-      return;
-    }
-    
-    console.log('📊 Fetching dashboard data for user:', id);
-    fetchDashboardData();
-  }, [user?.id, user?.userId, fetchDashboardData]); // Include fetchDashboardData
-
   const fetchDashboardData = useCallback(async (retryCount = 0) => {
     if (!userId) {
       console.warn('⚠️ No userId available, skipping dashboard fetch');
@@ -198,6 +176,27 @@ export default function BuyerDashboard() {
       setLoading(false);
     }
   }, [userId, navigate]);
+
+  useEffect(() => {
+    setPageTitle('Tableau de Bord Acheteur');
+    
+    // Only fetch if user is authenticated and has an ID
+    if (!user) {
+      setLoading(false);
+      return;
+    }
+    
+    const id = user.id || user.userId;
+    if (!id) {
+      console.warn('⚠️ User object exists but no ID found');
+      setLoading(false);
+      setError('Identifiant utilisateur manquant. Veuillez vous reconnecter.');
+      return;
+    }
+    
+    console.log('📊 Fetching dashboard data for user:', id);
+    fetchDashboardData();
+  }, [user?.id, user?.userId, fetchDashboardData]);
 
   const menuItems = [
     { text: 'Tableau de Bord', icon: <DashboardIcon />, path: '/buyer-dashboard' },

@@ -1,0 +1,86 @@
+successfully
+2BuyerDashboard.jsx:106 Uncaught ReferenceError: Cannot access 'fetchDashboardData' before initialization
+    at BuyerDashboard (BuyerDashboard.jsx:106:31)
+    at renderWithHooks (chunk-WRD5HZVH.js?v=5d9cf40f:11548:26)
+    at mountIndeterminateComponent (chunk-WRD5HZVH.js?v=5d9cf40f:14926:21)
+    at beginWork (chunk-WRD5HZVH.js?v=5d9cf40f:15914:22)
+    at HTMLUnknownElement.callCallback2 (chunk-WRD5HZVH.js?v=5d9cf40f:3674:22)
+    at Object.invokeGuardedCallbackDev (chunk-WRD5HZVH.js?v=5d9cf40f:3699:24)
+    at invokeGuardedCallback (chunk-WRD5HZVH.js?v=5d9cf40f:3733:39)
+    at beginWork$1 (chunk-WRD5HZVH.js?v=5d9cf40f:19765:15)
+    at performUnitOfWork (chunk-WRD5HZVH.js?v=5d9cf40f:19198:20)
+    at workLoopSync (chunk-WRD5HZVH.js?v=5d9cf40f:19137:13)Understand this error
+chunk-WRD5HZVH.js?v=5d9cf40f:14032 The above error occurred in the <BuyerDashboard> component:
+
+    at BuyerDashboard (https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev/src/pages/BuyerDashboard.jsx:65:20)
+    at RenderedRoute (https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev/node_modules/.vite/deps/react-router-dom.js?v=5d9cf40f:4108:5)
+    at Routes (https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev/node_modules/.vite/deps/react-router-dom.js?v=5d9cf40f:4578:5)
+    at Suspense
+    at main
+    at https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev/node_modules/.vite/deps/chunk-FATRWE7K.js?v=5d9cf40f:1449:49
+    at Box3 (https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev/node_modules/.vite/deps/chunk-HESC4EBZ.js?v=5d9cf40f:705:19)
+    at div
+    at https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev/node_modules/.vite/deps/chunk-FATRWE7K.js?v=5d9cf40f:1449:49
+    at Box3 (https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev/node_modules/.vite/deps/chunk-HESC4EBZ.js?v=5d9cf40f:705:19)
+    at Router (https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev/node_modules/.vite/deps/react-router-dom.js?v=5d9cf40f:4521:15)
+    at BrowserRouter (https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev/node_modules/.vite/deps/react-router-dom.js?v=5d9cf40f:5267:5)
+    at SuperAdminProvider (https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev/src/contexts/SuperAdminContext.jsx:20:38)
+    at DarkModeProvider (https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev/src/contexts/DarkModeContext.jsx:20:36)
+    at DefaultPropsProvider (https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev/node_modules/.vite/deps/chunk-FATRWE7K.js?v=5d9cf40f:7453:3)
+    at RtlProvider (https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev/node_modules/.vite/deps/chunk-HESC4EBZ.js?v=5d9cf40f:1089:5)
+    at ThemeProvider (https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev/node_modules/.vite/deps/chunk-HESC4EBZ.js?v=5d9cf40f:1039:5)
+    at ThemeProvider2 (https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev/node_modules/.vite/deps/chunk-HESC4EBZ.js?v=5d9cf40f:1179:5)
+    at ThemeProvider (https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev/node_modules/.vite/deps/chunk-BXPIJZNB.js?v=5d9cf40f:325:12)
+    at ErrorBoundary (https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev/src/components/ErrorBoundary.jsx:20:5)
+    at AppContent (https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev/src/App.jsx:241:51)
+    at AppProvider (https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev/src/contexts/AppContext.jsx:29:31)
+    at App
+    at ToastProvider (https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev/src/contexts/ToastContext.jsx:20:33)
+    at AppProvider (https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev/src/contexts/AppContext.jsx:29:31)
+
+React will try to recreate this component tree from scratch using the error boundary you provided, ErrorBoundary.
+logCapturedError @ chunk-WRD5HZVH.js?v=5d9cf40f:14032Understand this error
+ErrorBoundary.jsx:38 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+componentDidCatch @ ErrorBoundary.jsx:38Understand this error
+ErrorBoundary.jsx:39 ⚠️ React Error Boundary Caught Error:
+componentDidCatch @ ErrorBoundary.jsx:39Understand this error
+ErrorBoundary.jsx:40 Error: ReferenceError: Cannot access 'fetchDashboardData' before initialization
+    at BuyerDashboard (BuyerDashboard.jsx:106:31)
+    at renderWithHooks (chunk-WRD5HZVH.js?v=5d9cf40f:11548:26)
+    at mountIndeterminateComponent (chunk-WRD5HZVH.js?v=5d9cf40f:14926:21)
+    at beginWork (chunk-WRD5HZVH.js?v=5d9cf40f:15914:22)
+    at beginWork$1 (chunk-WRD5HZVH.js?v=5d9cf40f:19753:22)
+    at performUnitOfWork (chunk-WRD5HZVH.js?v=5d9cf40f:19198:20)
+    at workLoopSync (chunk-WRD5HZVH.js?v=5d9cf40f:19137:13)
+    at renderRootSync (chunk-WRD5HZVH.js?v=5d9cf40f:19116:15)
+    at recoverFromConcurrentError (chunk-WRD5HZVH.js?v=5d9cf40f:18736:28)
+    at performConcurrentWorkOnRoot (chunk-WRD5HZVH.js?v=5d9cf40f:18684:30)
+componentDidCatch @ ErrorBoundary.jsx:40Understand this error
+ErrorBoundary.jsx:41 Component Stack: 
+    at BuyerDashboard (https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev/src/pages/BuyerDashboard.jsx:65:20)
+    at RenderedRoute (https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev/node_modules/.vite/deps/react-router-dom.js?v=5d9cf40f:4108:5)
+    at Routes (https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev/node_modules/.vite/deps/react-router-dom.js?v=5d9cf40f:4578:5)
+    at Suspense
+    at main
+    at https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev/node_modules/.vite/deps/chunk-FATRWE7K.js?v=5d9cf40f:1449:49
+    at Box3 (https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev/node_modules/.vite/deps/chunk-HESC4EBZ.js?v=5d9cf40f:705:19)
+    at div
+    at https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev/node_modules/.vite/deps/chunk-FATRWE7K.js?v=5d9cf40f:1449:49
+    at Box3 (https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev/node_modules/.vite/deps/chunk-HESC4EBZ.js?v=5d9cf40f:705:19)
+    at Router (https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev/node_modules/.vite/deps/react-router-dom.js?v=5d9cf40f:4521:15)
+    at BrowserRouter (https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev/node_modules/.vite/deps/react-router-dom.js?v=5d9cf40f:5267:5)
+    at SuperAdminProvider (https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev/src/contexts/SuperAdminContext.jsx:20:38)
+    at DarkModeProvider (https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev/src/contexts/DarkModeContext.jsx:20:36)
+    at DefaultPropsProvider (https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev/node_modules/.vite/deps/chunk-FATRWE7K.js?v=5d9cf40f:7453:3)
+    at RtlProvider (https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev/node_modules/.vite/deps/chunk-HESC4EBZ.js?v=5d9cf40f:1089:5)
+    at ThemeProvider (https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev/node_modules/.vite/deps/chunk-HESC4EBZ.js?v=5d9cf40f:1039:5)
+    at ThemeProvider2 (https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev/node_modules/.vite/deps/chunk-HESC4EBZ.js?v=5d9cf40f:1179:5)
+    at ThemeProvider (https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev/node_modules/.vite/deps/chunk-BXPIJZNB.js?v=5d9cf40f:325:12)
+    at ErrorBoundary (https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev/src/components/ErrorBoundary.jsx:20:5)
+    at AppContent (https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev/src/App.jsx:241:51)
+    at AppProvider (https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev/src/contexts/AppContext.jsx:29:31)
+    at App
+    at ToastProvider (https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev/src/contexts/ToastContext.jsx:20:33)
+    at AppProvider (https://ffc44f4e-1b0d-4db9-8f13-744af476d3fc-00-2vnyhv14egn7v.riker.replit.dev/src/contexts/AppContext.jsx:29:31)
+componentDidCatch @ ErrorBoundary.jsx:41Understand this error
+ErrorBoundary.jsx:42 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━

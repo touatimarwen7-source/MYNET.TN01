@@ -1,3 +1,4 @@
+
 // API Base URL - دعم بيئات مختلفة
 const getBackendUrl = () => {
   // 1. استخدام المتغير البيئي إذا كان موجوداً
@@ -6,9 +7,10 @@ const getBackendUrl = () => {
   }
 
   // 2. في بيئة Replit، استخدم window.location
-  if (window.location.hostname.includes('replit')) {
+  if (typeof window !== 'undefined' && window.location.hostname.includes('replit')) {
     const protocol = window.location.protocol;
     const hostname = window.location.hostname;
+    // استخدام نفس hostname للواجهة والخادم
     return `${protocol}//${hostname}:3000/api`;
   }
 

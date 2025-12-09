@@ -23,7 +23,6 @@ export default defineConfig({
       usePolling: false,
       ignored: ['**/node_modules/**', '**/dist/**']
     },
-    // ✅ Vite Proxy Configuration - الحل الجذري
     proxy: {
       '/api': {
         target: 'http://0.0.0.0:3000',

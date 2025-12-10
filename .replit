@@ -82,7 +82,7 @@ localPort = 45467
 externalPort = 6800
 
 [workflows]
-runButton = "🚀 Production"
+runButton = "🚀 Start Application"
 
 [[workflows.workflow]]
 name = "Project"
@@ -286,6 +286,32 @@ mode = "parallel"
 [[workflows.workflow.tasks]]
 task = "shell.exec"
 args = "cd backend && npm install && node server.js"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "cd frontend && npm run dev -- --host 0.0.0.0 --port 5000"
+
+[[workflows.workflow]]
+name = "🚀 Start Application"
+author = 49972067
+mode = "parallel"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "cd backend && node server.js"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "cd frontend && npm run dev -- --host 0.0.0.0 --port 5000"
+
+[[workflows.workflow]]
+name = "🛠️ Development Mode"
+author = 49972067
+mode = "parallel"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "cd backend && npm run dev"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"

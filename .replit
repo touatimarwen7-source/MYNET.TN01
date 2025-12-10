@@ -82,7 +82,7 @@ localPort = 45467
 externalPort = 6800
 
 [workflows]
-runButton = "🚀 MyNet Production"
+runButton = "🚀 Production"
 
 [[workflows.workflow]]
 name = "Project"
@@ -277,3 +277,16 @@ mode = "sequential"
 [[workflows.workflow.tasks]]
 task = "shell.exec"
 args = "cd frontend && npm run dev"
+
+[[workflows.workflow]]
+name = "🚀 Production"
+author = 49972067
+mode = "parallel"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "cd backend && node server.js"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "cd frontend && npm run dev -- --host 0.0.0.0 --port 5000"

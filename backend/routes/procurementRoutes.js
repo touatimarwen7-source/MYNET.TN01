@@ -7,6 +7,108 @@
  * tags:
  *   name: Procurement
  *   description: Gestion des appels d'offres et des offres
+ * 
+ * /api/procurement/tenders:
+ *   post:
+ *     summary: Créer un nouvel appel d'offres
+ *     tags: [Procurement]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Tender'
+ *           example:
+ *             title: "Fourniture de matériel informatique"
+ *             description: "Achat de 50 ordinateurs portables"
+ *             category: "Informatique"
+ *             budget_min: 50000
+ *             budget_max: 100000
+ *             deadline: "2025-02-15T23:59:59Z"
+ *             opening_date: "2025-02-16T10:00:00Z"
+ *     responses:
+ *       201:
+ *         description: Tender créé avec succès
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Tender'
+ *       400:
+ *         description: Données invalides
+ *       401:
+ *         description: Non authentifié
+ *   get:
+ *     summary: Obtenir la liste des tenders
+ *     tags: [Procurement]
+ *     parameters:
+ *       - in: query
+ *         name: status
+ *         schema:
+ *           type: string
+ *           enum: [draft, published, closed, awarded]
+ *         description: Filtrer par statut
+ *       - in: query
+ *         name: category
+ *         schema:
+ *           type: string
+ *         description: Filtrer par catégorie
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           default: 1
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           default: 10
+ *     responses:
+ *       200:
+ *         description: Liste des tenders
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Tender'
+ * 
+ * /api/procurement/tenders/{id}:
+ *   get:
+ *     summary: Obtenir un tender par ID
+ *     tags: [Procurement]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Détails du tender
+ *       404:
+ *         description: Tender introuvable
+ * 
+ * /api/procurement/offers:
+ *   post:
+ *     summary: Soumettre une offre
+ *     tags: [Procurement]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Offer'
+ *     responses:
+ *       201:
+ *         description: Offre créée
+ *       400:
+ *         description: Données invalides
+ *       401:
+ *         description: Non authentifié
  */
 
 const express = require('express');

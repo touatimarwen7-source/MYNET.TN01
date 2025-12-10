@@ -56,13 +56,13 @@
     }
   ],
   "ignorePatterns": [
-    "node_modules/",
-    "dist/",
-    "build/",
-    "coverage/",
+    "node_modules/**",
+    "dist/**",
+    "build/**",
+    "coverage/**",
     "*.config.js",
-    ".next/",
-    ".vite/"
+    ".next/**",
+    ".vite/**"
   ]
 }
 

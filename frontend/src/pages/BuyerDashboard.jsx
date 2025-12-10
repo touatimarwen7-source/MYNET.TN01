@@ -48,17 +48,17 @@ const DRAWER_WIDTH = 240;
 
 /**
  * 🎯 Buyer Dashboard - Enhanced with Security & Analytics
- * 
+ *
  * @component BuyerDashboard
  * @description Main dashboard for buyer users displaying tender statistics,
  * analytics, and quick actions. Includes error handling with retry logic
  * and comprehensive loading states.
- * 
+ *
  * @requires TokenManager - For user authentication data
  * @requires procurementApi - For fetching dashboard statistics
- * 
+ *
  * @returns {JSX.Element} Rendered buyer dashboard with stats and analytics
- * 
+ *
  * @example
  * // Route configuration
  * <Route path="/buyer-dashboard" element={<BuyerDashboard />} />
@@ -493,7 +493,7 @@ export default function BuyerDashboard() {
                         borderColor: institutionalTheme.palette.primary.main,
                         backgroundColor: `${institutionalTheme.palette.primary.main}08`,
                         transform: 'translateY(-2px)',
-                      }}
+                      }
                     }}
                     onClick={() => navigate('/create-tender')}
                   >
@@ -524,7 +524,7 @@ export default function BuyerDashboard() {
                         borderColor: institutionalTheme.palette.info.main,
                         backgroundColor: `${institutionalTheme.palette.info.main}08`,
                         transform: 'translateY(-2px)',
-                      }}
+                      }
                     }}
                     onClick={() => navigate('/buyer-active-tenders')}
                   >
@@ -555,7 +555,7 @@ export default function BuyerDashboard() {
                         borderColor: institutionalTheme.palette.success.main,
                         backgroundColor: `${institutionalTheme.palette.success.main}08`,
                         transform: 'translateY(-2px)',
-                      }}
+                      }
                     }}
                     onClick={() => navigate('/buyer-analytics')}
                   >

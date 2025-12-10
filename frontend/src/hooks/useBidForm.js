@@ -20,7 +20,8 @@ export const useBidForm = () => {
     attachments: [],
   });
   const [loading, setLoading] = useState(true);
-  import { procurementAPI, bidAPI } from '../api';
+  import procurementAPI from '../api/procurementApi';
+  import bidAPI from '../api/bidApi';
   const [submitting, setSubmitting] = useState(false);
   const [errors, setErrors] = useState({});
 

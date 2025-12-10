@@ -67,7 +67,10 @@ export default function Login() {
       console.error('❌ Login error:', error);
       let errorMessage = 'Email ou mot de passe incorrect';
       
-      if (error.response) {
+      if (error.code === 'ECONNABORTED' || error.message?.includes('timeout')) {
+        // Timeout error
+        errorMessage = 'Le serveur met trop de temps à répondre. Veuillez réessayer dans quelques instants.';
+      } else if (error.response) {
         // Server responded with error
         errorMessage = error.response.data?.message || error.response.data?.error || errorMessage;
       } else if (error.request) {

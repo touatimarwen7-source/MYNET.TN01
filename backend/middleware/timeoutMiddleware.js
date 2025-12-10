@@ -5,8 +5,8 @@
 
 const GLOBAL_TIMEOUT = parseInt(process.env.REQUEST_TIMEOUT) || 30000; // 30 seconds
 const API_ENDPOINT_TIMEOUTS = {
-  '/api/auth/login': 15000,
-  '/api/auth/register': 20000,
+  '/api/auth/login': 30000,
+  '/api/auth/register': 30000,
   '/api/procurement/tenders': 20000,
   '/api/procurement/offers': 20000,
   '/api/admin': 25000,

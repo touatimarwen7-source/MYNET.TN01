@@ -1,4 +1,3 @@
-
 const fs = require('fs');
 const path = require('path');
 const KeyManagementService = require('../security/KeyManagementService');
@@ -45,7 +44,7 @@ class SimpleAuthService {
             is_verified: true,
           },
         ];
-        
+
         fs.writeFileSync(this.usersFilePath, JSON.stringify(defaultUsers, null, 2));
         return defaultUsers;
       }
@@ -69,18 +68,18 @@ class SimpleAuthService {
   async authenticate(email, password) {
     try {
       console.log('🔍 SimpleAuthService: Authenticating user:', email);
-      
+
       // Reload users to ensure fresh data
       this.users = this.loadUsers();
       console.log('📁 Total users loaded:', this.users.length);
-      
+
       if (!email || !password) {
         console.log('❌ Missing email or password');
         return null;
       }
 
       const user = this.users.find(u => u.email.toLowerCase() === email.toLowerCase());
-      
+
       if (!user) {
         console.log('❌ User not found:', email);
         console.log('Available users:', this.users.map(u => u.email));
@@ -159,7 +158,7 @@ class SimpleAuthService {
   async getUserById(userId) {
     const user = this.users.find(u => u.id === userId);
     if (!user) return null;
-    
+
     const { password: _, ...userWithoutPassword } = user;
     return userWithoutPassword;
   }
